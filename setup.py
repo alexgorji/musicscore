@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='music_score',
     version='0.0.0',
-    packages=['music_score'],
+    packages=[],
     url='',
     license='',
     author='aligorji',
