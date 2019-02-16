@@ -1,0 +1,9 @@
+image: python:3.7-stretch
+
+before_script:
+  - pip3 install --upgrade pip
+  - pip3 install -r requirements.txt .
+
+build:
+  script:
+    - nosetests
