@@ -1,0 +1,13 @@
+image: python:3.7-stretch
+
+before_script:
+  - git clone http://gitlab+deploy-token-45605:WnuF4M-GEKMdwNQqi82y@gitlab.com/alexgorji/musicxml.git
+  - pip3 install --upgrade pip
+  - pip3 install -r requirements.txt .
+  - cd musicxml
+  - pip3 install -r requirements.txt .
+  - cd ../musicscore
+
+build:
+  script:
+    - nosetests

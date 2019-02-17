@@ -1,5 +1,6 @@
-from py_musicxml.elements.xml_note import *
+from musicscore.musicxml.elements.xml_note import *
 from unittest import TestCase
+
 
 class XMLTest(TestCase):
     def setUp(self):
@@ -12,7 +13,3 @@ class XMLTest(TestCase):
 </note>
 '''
         self.assertEqual(self.n.to_string(), result)
-
-
-
-
