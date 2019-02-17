@@ -6,7 +6,12 @@ class XMLTest(TestCase):
         self.n = XMLNote(XMLRest(), 2)
 
     def test_xml(self):
-        print(self.n.to_string())
+        result = '''<note>
+  <rest/>
+  <duration>2</duration>
+</note>
+'''
+        self.assertEqual(self.n.to_string(), result)
 
 
 
