@@ -8,6 +8,7 @@ before_script:
   - pip3 install -r requirements.txt .
   - ls
   - cd ..
+  - cd musicscore
   - ls
 
 build:
