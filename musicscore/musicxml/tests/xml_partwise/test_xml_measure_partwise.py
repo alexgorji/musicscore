@@ -35,10 +35,10 @@ class TestMeasurePartwise(TestCase):
         for child in note.get_children():
             child.include_in_test = False
         # attributes = self.measure.add_child(XMLAttributes())
-        self.measure.add_attribute(XMLTime(3, 4))
-        self.measure.add_attribute(XMLDivisions(3))
+        self.measure.add_xml_attribute(XMLTime(3, 4))
+        self.measure.add_xml_attribute(XMLDivisions(3))
         with self.assertRaises(TypeError):
-            self.measure.add_attribute(None)
+            self.measure.add_xml_attribute(None)
         note = self.measure.add_music_data(XMLNote(XMLPitch(), 10))
         for child in note.get_children():
             child.include_in_test = False

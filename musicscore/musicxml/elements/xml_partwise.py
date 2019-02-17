@@ -16,13 +16,13 @@ class XMLMeasurePartwise(XMLMeasureAbstract):
             raise TypeError('child must be of type XMLMusicData not {}'.format(type(child)))
         return self.add_child(child)
 
-    def add_attribute(self, child):
+    def add_xml_attribute(self, child):
         if not isinstance(self.get_children()[-1], XMLAttributes):
-            attributes = self.add_child(XMLAttributes())
+            xml_attributes = self.add_child(XMLAttributes())
         else:
-            attributes = self.get_children()[-1]
+            xml_attributes = self.get_children()[-1]
 
-        return attributes.add_child(child)
+        return xml_attributes.add_child(child)
 
 
 class XMLPartPartwise(XMLPartAbstract):
@@ -41,5 +41,17 @@ class XMLScorePartwise(XMLScoreAbstract):
 
     def __init__(self):
         XMLScoreAbstract.__init__(self, tag='score-partwise')
+
+    def write(self, path):
+        xmlversion = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
+        doctype = '<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">\n'
+
+        path += '.xml'
+        output_file = open(path, 'w')
+        output_file.write(xmlversion)
+        output_file.write(doctype)
+        output_file.write(self.to_string())
+        output_file.close()
+        print('writing finished')
 
 

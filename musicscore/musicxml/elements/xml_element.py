@@ -32,14 +32,15 @@ class XMLElementGroup(Tree):
     def __repr__(self):
         return '{} instance {} at {}'.format(self.__class__.__name__, self.tag, hex(id(self)))
 
+    # todo: rename siblings
     def get_siblings(self):
         return self._siblings
 
     def __getitem__(self, item):
         return self.get_siblings()[item]
 
-    def __iter__(self):
-        return iter(self.get_siblings())
+    # def __iter__(self):
+    #     return iter(self.get_siblings())
 
     def add_sibling(self, sibling=None):
         if sibling is None:
@@ -266,14 +267,3 @@ class XMLElement(Tree):
         xml = self._to_xml()
         return et.tounicode(xml, pretty_print=True)
 
-    def write(self, path):
-        xmlversion = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
-        doctype = '<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">\n'
-
-        path += '.xml'
-        output_file = open(path, 'w')
-        output_file.write(xmlversion)
-        output_file.write(doctype)
-        output_file.write(self.to_string())
-        output_file.close()
-        print('writing finished')

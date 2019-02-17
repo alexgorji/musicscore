@@ -4,7 +4,6 @@ from musicscore.musicxml.elements.xml_timewise import XMLScoreTimewise
 
 class Score(object):
     """"""
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._partwise = None
@@ -31,14 +30,14 @@ class Score(object):
         self._timewise = value
 
 
-class Partwise(object):
+class Partwise(XMLScorePartwise):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
-class Timewise(object):
+class Timewise(XMLScoreTimewise):
     """"""
 
     def __init__(self, *args, **kwargs):
