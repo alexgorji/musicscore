@@ -6,6 +6,7 @@ before_script:
   - pip3 install -r requirements.txt .
   - cd py_musicxml
   - pip3 install -r requirements.txt .
+  - cd ..
 
 
 build:
