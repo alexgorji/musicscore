@@ -3,9 +3,10 @@ import warnings
 
 from musicscore.musicxml.basic_functions import replace_dash
 from musicscore.musicxml.exceptions import AfterInitializationError
+from musicscore.tree.tree import Tree
 
 
-class XMLElementGroup(object):
+class XMLElementGroup(Tree):
     """
     a group of XMLElements with the same tag as siblings
     each sibling can be accessed with a valid index
@@ -40,7 +41,7 @@ class XMLElementGroup(object):
     def __iter__(self):
         return iter(self.get_siblings())
 
-    def append_sibling(self, sibling=None):
+    def add_sibling(self, sibling=None):
         if sibling is None:
             sibling = XMLElement(self.tag)
         if not isinstance(sibling, XMLElement):
@@ -57,7 +58,7 @@ class XMLElementGroup(object):
         self._siblings.clear()
 
 
-class XMLElement(object):
+class XMLElement(Tree):
     _ATTRIBUTES = ('id', 'part-name', 'number', 'print-object', 'default-x', 'default-y', 'relative-x', 'relative-y')
     _CHILDREN_TYPES = []
     _CHILDREN_ORDERED = False
@@ -66,16 +67,10 @@ class XMLElement(object):
         super().__init__(*args, **kwargs)
         self._tag = None
         self._text = None
-        self._up = None
-        self._children = [].copy()
         self._attributes = {}.copy()
         self.tag = tag
         self._test_mode = False
         self._include_in_test = True
-
-    @property
-    def up(self):
-        return self._up
 
     @property
     def tag(self):
@@ -160,9 +155,6 @@ class XMLElement(object):
     def __repr__(self):
         return '{} instance {} at {}'.format(self.__class__.__name__, self.tag, hex(id(self)))
 
-    def get_children(self):
-        return self._children
-
     def add_child(self, child):
         _type_error = True
         for child_type in self._CHILDREN_TYPES:
@@ -175,9 +167,6 @@ class XMLElement(object):
         child._up = self
         self.sort_children()
         return child
-
-    def remove_child(self, child):
-        self._children.remove(child)
 
     def find_child_by_tag(self, tag):
         return next((child for child in self._children if child.tag == tag), None)
@@ -208,9 +197,6 @@ class XMLElement(object):
             if not isinstance(new_child, type):
                 raise ValueError('new_child must be of type {}'.format(type))
             self.add_child(new_child)
-
-    def clear_children(self):
-        self._children.clear()
 
     def _get_sorted_children(self):
         output = [].copy()

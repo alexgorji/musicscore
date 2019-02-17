@@ -6,8 +6,8 @@ class TestMode(TestCase):
     def setUp(self):
         self.xml_note = XMLNote(event=XMLPitch('E', 2, 3), duration=2)
         self.xml_note.lyric = XMLLyricGroup()
-        self.xml_note.lyric.append_sibling(XMLLyric('lyric 1'))
-        self.xml_note.lyric.append_sibling(XMLLyric('lyric 2'))
+        self.xml_note.lyric.add_sibling(XMLLyric('lyric 1'))
+        self.xml_note.lyric.add_sibling(XMLLyric('lyric 2'))
         self.xml_note.duration = 10
 
     def test_mode(self):

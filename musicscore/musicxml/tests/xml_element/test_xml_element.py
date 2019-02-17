@@ -53,8 +53,8 @@ class TestXMLElement(TestCase):
                 super().__init__('child-2')
 
         children = [Child1(), Child2()]
-        children[1].append_sibling(Sibling())
-        children[1].append_sibling(Sibling())
+        children[1].add_sibling(Sibling())
+        children[1].add_sibling(Sibling())
 
         for child in children:
             self.xml.add_child(child)
