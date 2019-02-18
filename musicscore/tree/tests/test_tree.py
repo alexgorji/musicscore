@@ -7,5 +7,6 @@ class TestTree(TestCase):
         self.tree = Tree()
 
     def test_tree(self):
-        self.tree.add_child(Tree())
-        print(self.tree.get_children())
+        child = self.tree.add_child(Tree())
+        self.assertTrue(self.tree.is_root())
+        self.assertEqual(child.up, self.tree)
