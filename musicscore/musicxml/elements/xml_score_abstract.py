@@ -7,8 +7,8 @@ class XMLMeasureAbstract(XMLElement):
 
     _CHILDREN_TYPES = [XMLAttributes]
 
-    def __init__(self, number):
-        super().__init__('measure')
+    def __init__(self, number, *args, **kwargs):
+        super().__init__('measure', *args, **kwargs)
         self._number = None
         self.number = number
 
@@ -26,8 +26,8 @@ class XMLPartAbstract(XMLElement):
 
     _CHILDREN_TYPES = []
 
-    def __init__(self, id):
-        super().__init__('part')
+    def __init__(self, id, *args, **kwargs):
+        super().__init__('part', *args, **kwargs)
         self._id = None
         self.id = id
 
@@ -45,8 +45,8 @@ class XMLScoreAbstract(XMLElement):
 
     _CHILDREN_TYPES = [XMLPartList]
 
-    def __init__(self, tag):
-        super().__init__(tag)
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag, *args, **kwargs)
         self._part_list = XMLPartList()
         self.add_child(self._part_list)
 

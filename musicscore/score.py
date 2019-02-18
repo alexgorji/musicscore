@@ -1,5 +1,5 @@
 from musicscore.musicxml.elements.xml_partwise import XMLScorePartwise, XMLMeasurePartwise, XMLPartPartwise
-from musicscore.musicxml.elements.xml_timewise import XMLScoreTimewise
+from musicscore.musicxml.elements.xml_timewise import XMLScoreTimewise, XMLMeasureTimewise
 
 
 class Score(object):
@@ -35,6 +35,20 @@ class Partwise(XMLScorePartwise):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._parts = [].copy()
+        
+    @property
+    def parts(self):
+        return self._parts
+
+    @parts.setter
+    def parts(self, value):
+        if not isinstance(value, list):
+            raise TypeError('parts.value must be of type list not{}'.format(type(value)))
+        for element in value:
+            if not isinstance(element, XMLPartTimewise):
+                raise TypeError('parts.value.element  must be of type XMLPartTimewise not{}'.format(type(element)))
+        self._parts = value
 
 
 class Timewise(XMLScoreTimewise):
@@ -42,6 +56,20 @@ class Timewise(XMLScoreTimewise):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._measures = [].copy()
+
+    @property
+    def measures(self):
+        return self._measures
+
+    @measures.setter
+    def measures(self, value):
+        if not isinstance(value, list):
+            raise TypeError('measures.value must be of type list not{}'.format(type(value)))
+        for element in value:
+            if not isinstance(element, XMLMeasureTimewise):
+                raise TypeError('measures.value.element  must be of type XMLMeasureTimewise not{}'.format(type(element)))
+        self._measures = value
 
 # class Score(XMLScorePartwise):
 #     """"""

@@ -8,8 +8,8 @@ class XMLMeasurePartwise(XMLMeasureAbstract):
     _CHILDREN_TYPES = [XMLMusicData]
     _CHILDREN_TYPES.extend(XMLMeasureAbstract._CHILDREN_TYPES)
 
-    def __init__(self, number):
-        super().__init__(number=number)
+    def __init__(self, number, *args, **kwargs):
+        super().__init__(number=number, *args, **kwargs)
 
     def add_music_data(self, child):
         if not isinstance(child, XMLMusicData):
@@ -30,8 +30,8 @@ class XMLPartPartwise(XMLPartAbstract):
     _CHILDREN_TYPES = [XMLMeasurePartwise]
     _CHILDREN_TYPES.extend(XMLPartAbstract._CHILDREN_TYPES)
 
-    def __init__(self, id):
-        super().__init__(id=id)
+    def __init__(self, id, *args, **kwargs):
+        super().__init__(id=id, *args, **kwargs)
 
 
 class XMLScorePartwise(XMLScoreAbstract):
@@ -39,8 +39,8 @@ class XMLScorePartwise(XMLScoreAbstract):
     _CHILDREN_TYPES = [XMLPartPartwise]
     _CHILDREN_TYPES.extend(XMLScoreAbstract._CHILDREN_TYPES)
 
-    def __init__(self):
-        XMLScoreAbstract.__init__(self, tag='score-partwise')
+    def __init__(self, *args, **kwargs):
+        XMLScoreAbstract.__init__(self, tag='score-partwise', *args, **kwargs)
 
     def write(self, path):
         xmlversion = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'

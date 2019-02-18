@@ -29,8 +29,8 @@ readily than the other.
 
 
 class XMLEvent(XMLElement):
-    def __init__(self, tag):
-        super().__init__(tag=tag)
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag,  *args, **kwargs)
 
 
 class XMLStep(XMLElement, Step):
