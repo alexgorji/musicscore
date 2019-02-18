@@ -1,4 +1,4 @@
-from musicscore.musicxml.basic_functions import replace_dash
+from musicscore.basic_functions import replace_dash
 from musicscore.musicxml.elements.xml_element import XMLElement
 
 

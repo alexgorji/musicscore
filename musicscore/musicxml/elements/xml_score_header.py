@@ -1,5 +1,6 @@
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.simple_type import YesNo
+from musicscore.basic_functions import is_empty
 
 
 class XMLPartName(XMLElement):
@@ -7,9 +8,7 @@ class XMLPartName(XMLElement):
         super().__init__(tag='part-name')
         self._name = None
         self.name = name
-        self._print_object = 'yes'
-
-        self.set_attribute('print-object', 'yes')
+        self.print_object = 'no'
 
     @property
     def name(self):
@@ -18,11 +17,14 @@ class XMLPartName(XMLElement):
     @name.setter
     def name(self, value):
         self._name = value
-        self.text = self.name
+        if self.name is None or is_empty(self.name):
+            self.text = 'none'
+        else:
+            self.text = self.name
 
     @property
     def print_object(self):
-        return self._print_object
+        return self.get_attribute('print-object')
 
     @print_object.setter
     def print_object(self, value):

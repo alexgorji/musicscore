@@ -1,5 +1,5 @@
 from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.elements.xml_score_header import XMLPartList
+from musicscore.musicxml.elements.xml_score_header import XMLPartList, XMLScorePart
 from musicscore.musicxml.elements.xml_attributes import XMLAttributes
 
 
@@ -49,7 +49,13 @@ class XMLScoreAbstract(XMLElement):
         super().__init__(tag, *args, **kwargs)
         self._part_list = XMLPartList()
         self.add_child(self._part_list)
+        
+    @property
+    def part_list(self):
+        return self._part_list
 
     def add_score_part(self, value):
+        if not isinstance(value, XMLScorePart):
+            raise TypeError('value of add_score_part must be of type XMLScorePart not {}'.format(type(value)))
         self._part_list.add_score_part(value)
 

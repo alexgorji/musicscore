@@ -1,7 +1,7 @@
 from lxml import etree as et
 import warnings
 
-from musicscore.musicxml.basic_functions import replace_dash
+from musicscore.basic_functions import replace_dash
 from musicscore.musicxml.exceptions import AfterInitializationError
 from musicscore.tree.tree import Tree
 
