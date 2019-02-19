@@ -1,11 +1,12 @@
 from unittest import TestCase
 from musicscore.score import Part
 
-Part.reset_ids()
 
 class TestGeneratePartId(TestCase):
 
     def test_generate_part_id(self):
+        Part.reset_ids()
+
         def get_id(number):
             for i in range(number):
                 part = Part()
