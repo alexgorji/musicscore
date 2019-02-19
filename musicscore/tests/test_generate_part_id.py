@@ -1,6 +1,7 @@
 from unittest import TestCase
 from musicscore.score import Part
 
+Part.reset_ids()
 
 class TestGeneratePartId(TestCase):
 
@@ -13,6 +14,7 @@ class TestGeneratePartId(TestCase):
         part = Part(id='p10')
         get_id(1)
         result = ['p1', 'p2', 'p3', 'p10', 'p4']
-        self.assertEqual(part._ids, ['p1', 'p2', 'p3', 'p10', 'p4'])
+        print(part._ids)
+        self.assertEqual(part._ids, result)
         with self.assertRaises(ValueError):
             part = Part(id='p4')

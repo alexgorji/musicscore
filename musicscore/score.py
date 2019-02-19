@@ -3,7 +3,6 @@ from musicscore.musicxml.elements.xml_timewise import XMLScoreTimewise, XMLMeasu
 from musicscore.musicxml.elements.xml_score_header import XMLScorePart, XMLPartName
 
 
-
 class Measure(XMLMeasureTimewise):
     _auto_index = 0
 
@@ -20,13 +19,9 @@ class Part(XMLPartPartwise):
     _auto_index = 0
     _ids = [].copy()
 
-    def generate_id(self):
-        id = 'p' + str(self._auto_index + 1)
-        self._auto_index += 1
-
-        if id in self._ids:
-            id = self.generate_id()
-        return id
+    @staticmethod
+    def reset_ids():
+        _ids = [].copy()
 
     def __init__(self, id=None, name=None, *args, **kwargs):
         if id is None:
@@ -38,7 +33,13 @@ class Part(XMLPartPartwise):
         self._score_part = XMLScorePart(id=self.id)
         self._score_part.part_name = XMLPartName(name)
 
+    def generate_id(self):
+        id = 'p' + str(self._auto_index + 1)
+        self._auto_index += 1
 
+        if id in self._ids:
+            id = self.generate_id()
+        return id
 
     @property
     def name(self):
@@ -47,7 +48,7 @@ class Part(XMLPartPartwise):
     @name.setter
     def name(self, value):
         self._score_part.part_name.name = value
-        
+
     @property
     def print_object(self):
         return self._score_part.part_name.print_object
