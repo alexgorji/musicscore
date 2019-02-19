@@ -10,12 +10,12 @@ class TestGeneratePartId(TestCase):
         def get_id(number):
             for i in range(number):
                 part = Part()
-
+        get_id(1)
+        Part.reset_ids()
         get_id(3)
         part = Part(id='p10')
         get_id(1)
         result = ['p1', 'p2', 'p3', 'p10', 'p4']
-        print(part._ids)
         self.assertEqual(part._ids, result)
         with self.assertRaises(ValueError):
             part = Part(id='p4')

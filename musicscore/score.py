@@ -21,7 +21,7 @@ class Part(XMLPartPartwise):
 
     @staticmethod
     def reset_ids():
-        _ids = [].copy()
+        Part._ids = [].copy()
 
     def __init__(self, id=None, name=None, *args, **kwargs):
         if id is None:
