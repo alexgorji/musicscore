@@ -3,7 +3,7 @@
 <score-partwise>
   <part-list>
     <score-part id="P1">
-      <part-name print-object="yes">part</part-name>
+      <part-name print-object="no">part</part-name>
     </score-part>
   </part-list>
   <part id="P1">
