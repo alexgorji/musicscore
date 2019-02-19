@@ -1,6 +1,6 @@
 from musicscore.musicxml.elements.xml_partwise import XMLScorePartwise, XMLPartPartwise
 from musicscore.musicxml.elements.xml_timewise import XMLScoreTimewise, XMLMeasureTimewise
-from musicscore.musicxml.elements.xml_score_header import XMLScorePart, XMLPartName
+from musicscore.musicxml.elements.xml_score_header import XMLScorePart, XMLPartName, XMLPartList
 
 
 class Measure(XMLMeasureTimewise):
@@ -17,11 +17,11 @@ class Measure(XMLMeasureTimewise):
 
 class Part(XMLPartPartwise):
     _auto_index = 0
-    _ids = [].copy()
+    _ids = []
 
     @staticmethod
     def reset_ids():
-        Part._ids = [].copy()
+        Part._ids = []
 
     def __init__(self, id=None, name=None, *args, **kwargs):
         if id is None:
@@ -60,9 +60,9 @@ class Part(XMLPartPartwise):
 
 class Score(object):
     """"""
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        Part.reset_ids()
         self._partwise = Partwise()
         self._timewise = Timewise()
 
@@ -91,9 +91,10 @@ class Score(object):
     def add_part(self, part=None):
         if part is None:
             part = Part()
-        self.partwise.parts.append(part)
-        self.partwise.add_score_part(part._score_part)
-        self.timewise.add_score_part(part._score_part)
+        if not isinstance(part, Part):
+            raise TypeError('part must be of type Part not{}'.format(type(part)))
+        self.partwise._add_part(part)
+        # self.timewise.add_part(part)
 
     def add_measure(self, measure=None):
         if measure is None:
@@ -106,21 +107,26 @@ class Partwise(XMLScorePartwise):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._parts = [].copy()
         self._score = None
+        self._parts = []
 
-    @property
-    def parts(self):
-        return self._parts
+    def _add_part(self, part):
+        self.add_child(part)
+        self._parts.append(part)
+        part_list = self.add_child(XMLPartList())
+        part_list.add_child(part._score_part)
+        self.add_child(part)
 
-    @parts.setter
-    def parts(self, value):
-        if not isinstance(value, list):
-            raise TypeError('parts.value must be of type list not{}'.format(type(value)))
-        for element in value:
-            if not isinstance(element, XMLPartPartwise):
-                raise TypeError('parts.value.element  must be of type XMLPartTimewise not{}'.format(type(element)))
-        self._parts = value
+
+    #
+    # @parts.setter
+    # def parts(self, value):
+    #     if not isinstance(value, list):
+    #         raise TypeError('parts.value must be of type list not{}'.format(type(value)))
+    #     for element in value:
+    #         if not isinstance(element, XMLPartPartwise):
+    #             raise TypeError('parts.value.element  must be of type XMLPartTimewise not{}'.format(type(element)))
+    #     self._parts = value
 
     @property
     def score(self):
@@ -138,7 +144,7 @@ class Timewise(XMLScoreTimewise):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._measures = [].copy()
+        self._measures = []
         self._score = None
 
     @property

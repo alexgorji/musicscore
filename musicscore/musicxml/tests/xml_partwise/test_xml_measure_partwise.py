@@ -42,8 +42,14 @@ class TestMeasurePartwise(TestCase):
         note = self.measure.add_music_data(XMLNote(XMLPitch(), 10))
         for child in note.get_children():
             child.include_in_test = False
-        result = '''<measure number="1">
-  <note/>
+        result = '''<measure>
+  <note>
+    <pitch>
+      <step/>
+      <octave/>
+    </pitch>
+    <duration/>
+  </note>
   <attributes>
     <divisions/>
     <time>
@@ -51,7 +57,13 @@ class TestMeasurePartwise(TestCase):
       <beat-type/>
     </time>
   </attributes>
-  <note/>
+  <note>
+    <pitch>
+      <step/>
+      <octave/>
+    </pitch>
+    <duration/>
+  </note>
 </measure>
 '''
         self.assertEqual(self.measure.to_string(), result)

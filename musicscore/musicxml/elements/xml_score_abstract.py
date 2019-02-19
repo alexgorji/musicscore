@@ -44,6 +44,7 @@ class XMLPartAbstract(XMLElement):
 class XMLScoreAbstract(XMLElement):
 
     _CHILDREN_TYPES = [XMLPartList]
+    _CHILDREN_ORDERED = True
 
     def __init__(self, tag, *args, **kwargs):
         super().__init__(tag, *args, **kwargs)
@@ -57,5 +58,5 @@ class XMLScoreAbstract(XMLElement):
     def add_score_part(self, value):
         if not isinstance(value, XMLScorePart):
             raise TypeError('value of add_score_part must be of type XMLScorePart not {}'.format(type(value)))
-        self._part_list.add_score_part(value)
+        self.part_list.add_score_part(value)
 

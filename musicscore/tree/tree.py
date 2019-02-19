@@ -5,7 +5,7 @@ class Tree(object):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._children = [].copy()
+        self._children = []
         self._up = None
 
     @property

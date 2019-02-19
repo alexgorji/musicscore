@@ -36,8 +36,8 @@ class XMLPartPartwise(XMLPartAbstract):
 
 class XMLScorePartwise(XMLScoreAbstract):
 
-    _CHILDREN_TYPES = [XMLPartPartwise]
-    _CHILDREN_TYPES.extend(XMLScoreAbstract._CHILDREN_TYPES)
+    _CHILDREN_TYPES = XMLScoreAbstract._CHILDREN_TYPES
+    _CHILDREN_TYPES.append(XMLPartPartwise)
 
     def __init__(self, *args, **kwargs):
         XMLScoreAbstract.__init__(self, tag='score-partwise', *args, **kwargs)

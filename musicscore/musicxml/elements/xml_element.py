@@ -17,7 +17,7 @@ class XMLElementGroup(Tree):
         self._tag = None
         self.tag = tag
         self._up = None
-        self._siblings = [].copy()
+        self._siblings = []
 
     @property
     def tag(self):
@@ -68,10 +68,10 @@ class XMLElement(Tree):
         super().__init__(*args, **kwargs)
         self._tag = None
         self._text = None
-        self._attributes = {}.copy()
+        self._attributes = {}
         self.tag = tag
-        self._test_mode = False
-        self._include_in_test = True
+        self._test_mode = None
+        # self._include_in_test = True
 
     @property
     def tag(self):
@@ -94,7 +94,13 @@ class XMLElement(Tree):
 
     @property
     def test_mode(self):
-        return self._test_mode
+        if self._test_mode is None:
+            if not self.is_root():
+                return self.up.test_mode
+            else:
+                return False
+        else:
+            return self._test_mode
 
     @test_mode.setter
     def test_mode(self, value):
@@ -102,26 +108,26 @@ class XMLElement(Tree):
         If test_mode is True children will appear without text and attributes.
         Default is False.
         """
-        if not isinstance(value, bool):
-            raise TypeError('test mode must be boolean')
+        if value is not None and not isinstance(value, bool):
+            raise TypeError('test mode must be boolean or None')
         self._test_mode = value
 
-    @property
-    def include_in_test(self):
-        return self._include_in_test
-
-    @include_in_test.setter
-    def include_in_test(self, value):
-        """
-        If include_in_test is False module will not appear as a child in a test.
-        If module is root include_in_test does not have an effect. In this case a warning is issued.
-        Default is True.
-        """
-        if not isinstance(value, bool):
-            raise TypeError('include_in_test must be boolean.')
-        if self.up is None:
-            warnings.warn('root {} can not be excluded from test. False for include_in_test is ignored!'.format(self))
-        self._include_in_test = value
+    # @property
+    # def include_in_test(self):
+    #     return self._include_in_test
+    #
+    # @include_in_test.setter
+    # def include_in_test(self, value):
+    #     """
+    #     If include_in_test is False module will not appear as a child in a test.
+    #     If module is root include_in_test does not have an effect. In this case a warning is issued.
+    #     Default is True.
+    #     """
+    #     if not isinstance(value, bool):
+    #         raise TypeError('include_in_test must be boolean.')
+    #     if self.up is None:
+    #         warnings.warn('root {} can not be excluded from test. False for include_in_test is ignored!'.format(self))
+    #     self._include_in_test = value
 
     def get_attributes(self):
         return self._attributes
@@ -133,7 +139,7 @@ class XMLElement(Tree):
         def sort_function(x):
             return self._ATTRIBUTES.index(x)
 
-        sorted_attributes = {}.copy()
+        sorted_attributes = {}
         for key in sorted(self._attributes, key=sort_function):
             sorted_attributes[key] = self._attributes[key]
         self._attributes = sorted_attributes
@@ -200,7 +206,7 @@ class XMLElement(Tree):
             self.add_child(new_child)
 
     def _get_sorted_children(self):
-        output = [].copy()
+        output = []
         if self._CHILDREN_ORDERED is True:
             for child_type in self._CHILDREN_TYPES:
                 child = self.find_child_by_type(child_type)
@@ -211,7 +217,7 @@ class XMLElement(Tree):
         return output
 
     def sort_children(self):
-        sorted = [].copy()
+        sorted = []
         if self._CHILDREN_ORDERED is True:
             for child_type in self._CHILDREN_TYPES:
                 child = self.find_child_by_type(child_type)
@@ -219,34 +225,48 @@ class XMLElement(Tree):
                     sorted.append(child)
                     self._children.remove(child)
 
+        if len(self._children) != 0:
+            warnings.warn(
+                'length of sorted children of {} is smaller than its children. Remaining not sorted children are: {}'.format(
+                    self, self._children))
         sorted.extend(self._children)
         self._children = sorted
 
-    def _to_xml(self, test_mode=False):
+    def _to_xml(self):
         xml = et.Element(_tag=self.tag)
 
         def set_attributes():
             for key in self.get_attributes().keys():
                 xml.set(key, str(self.get_attributes()[key]))
 
+        # def set_children():
+        #     for child in self.get_children():
+        #         if isinstance(child, XMLElement):
+        #             child.test_mode = self.test_mode
+        #             if child.include_in_test is True:
+        #                 xml.append(child._to_xml(test_mode=self.test_mode))
+        #         elif isinstance(child, XMLElementGroup):
+        #             for sibling in child:
+        #                 if sibling.include_in_test is True:
+        #                     sibling.test_mode = self.test_mode
+        #                     if sibling.include_in_test is True:
+        #                         xml.append(sibling._to_xml(test_mode=self.test_mode))
+        #         else:
+        #             raise TypeError('child {} must be of type XMLElement or XMLElementgroup'.format(child))
+
         def set_children():
             for child in self.get_children():
                 if isinstance(child, XMLElement):
-                    child.test_mode = self.test_mode
-                    if child.include_in_test is True:
-                        xml.append(child._to_xml(test_mode=self.test_mode))
+                    xml.append(child._to_xml())
                 elif isinstance(child, XMLElementGroup):
                     for sibling in child:
-                        if sibling.include_in_test is True:
-                            sibling.test_mode = self.test_mode
-                            if sibling.include_in_test is True:
-                                xml.append(sibling._to_xml(test_mode=self.test_mode))
+                        xml.append(sibling._to_xml())
                 else:
                     raise TypeError('child {} must be of type XMLElement or XMLElementgroup'.format(child))
 
         set_children()
         # Attention: method's test_mode and self.test_mode are different.
-        if test_mode is False:
+        if self.test_mode is False:
             xml.text = self.text
             set_attributes()
 
@@ -266,4 +286,3 @@ class XMLElement(Tree):
     def to_string(self):
         xml = self._to_xml()
         return et.tounicode(xml, pretty_print=True)
-
