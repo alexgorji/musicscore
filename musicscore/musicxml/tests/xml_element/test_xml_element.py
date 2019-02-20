@@ -1,5 +1,5 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.xml_element import XMLElement, XMLElementGroup
+from musicscore.musicxml.elements.xml_element import XMLElement
 from lxml import etree as et
 
 
@@ -7,7 +7,7 @@ class TestXMLElement(TestCase):
 
     def setUp(self):
         self.xml = XMLElement('root')
-        self.xml._CHILDREN_TYPES = [XMLElement, XMLElementGroup]
+        self.xml._CHILDREN_TYPES = [XMLElement]
 
     def test_tag(self):
         self.assertEqual(self.xml.tag, 'root')

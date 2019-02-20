@@ -1,6 +1,6 @@
 from musicscore.musicxml.types.complex_type import Empty, EmptyPlacement
 from musicscore.musicxml.types.simple_type import Step, Octave, Alter, PositiveDevisions, NoteTypeValue
-from musicscore.musicxml.elements.xml_element import XMLElement, XMLElementGroup
+from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.elements.xml_music_data import XMLMusicData
 
 """
@@ -30,7 +30,7 @@ readily than the other.
 
 class XMLEvent(XMLElement):
     def __init__(self, tag, *args, **kwargs):
-        super().__init__(tag=tag,  *args, **kwargs)
+        super().__init__(tag=tag, *args, **kwargs)
 
 
 class XMLStep(XMLElement, Step):
@@ -166,26 +166,15 @@ class XMLDot(EmptyPlacement):
         super().__init__(tag='dot')
 
 
-class XMLDotGroup(XMLElementGroup):
-    def __init__(self):
-        super().__init__(tag='dot')
-
-
 class XMLLyric(XMLElement):
     def __init__(self, text):
         super().__init__(tag='lyric')
         self.text = text
 
 
-class XMLLyricGroup(XMLElementGroup):
-    # TODO: LYRIC is still a dummy
-    def __init__(self):
-        super().__init__(tag='lyric')
-
-
 class XMLNoteAbstract(XMLMusicData):
     # _CHILDREN_TYPES_ORDER = [XMLFullNote, XMLDuration, XMLTie, XMLType, XMLDots, XMLAccidental, XMLTimeModification, XMLNoteHead, XMLNotations, XMLLyrics]
-    _CHILDREN_TYPES = [XMLChord, XMLEvent, XMLDuration, XMLType, XMLLyricGroup]
+    _CHILDREN_TYPES = [XMLChord, XMLEvent, XMLDuration, XMLType, XMLLyric]
     _CHILDREN_ORDERED = True
 
     def __init__(self, event, *args, **kwargs):

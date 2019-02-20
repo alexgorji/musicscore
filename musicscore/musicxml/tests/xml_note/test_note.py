@@ -1,5 +1,5 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.xml_note import XMLNote, XMLPitch, XMLLyricGroup, XMLLyric, XMLType
+from musicscore.musicxml.elements.xml_note import XMLNote, XMLPitch, XMLLyric, XMLType
 
 
 class TestXMLNote(TestCase):
