@@ -133,6 +133,16 @@ class XMLElement(Tree):
             raise TypeError('optional.value must be of type bool not{}'.format(type(value)))
         self._optional = value
 
+    def __getattr__(self, item):
+        tag = replace_dash(item)
+        found_children = self.get_children_by_tag(tag)
+        if len(found_children) == 0:
+            raise AttributeError('object "{}" has no attribute "{}"'.format(type(self).__name__, item))
+
+        if len(found_children) == 1:
+            return found_children[0]
+        else:
+            return found_children
 
     def get_attributes(self):
         return self._attributes
@@ -178,7 +188,10 @@ class XMLElement(Tree):
             raise TypeError('child can only be of type(s): {} not {}'.format(self._CHILDREN_TYPES, type(child)))
 
     def get_children_by_type(self, type_):
-        return [child for child in self.get_children() if type(child) == type_]
+        return [child for child in self.get_children() if isinstance(child, type_)]
+
+    def get_children_by_tag(self, tag):
+        return [child for child in self.get_children() if child.tag == tag]
 
     def _check_multiple_children(self, child):
         if child.multiple is False:
@@ -227,8 +240,8 @@ class XMLElement(Tree):
         sorted_ = []
 
         for child_type in self._CHILDREN_TYPES:
-            child = self.find_child_by_type(child_type)
-            if child is not None:
+            child_list = self.get_children_by_type(child_type)
+            for child in child_list:
                 sorted_.append(child)
                 self._children.remove(child)
 

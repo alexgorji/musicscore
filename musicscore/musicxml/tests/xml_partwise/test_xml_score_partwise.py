@@ -12,16 +12,20 @@ class TestXMLScorePartwise(TestCase):
         self.score = XMLScorePartwise()
 
     def test_score_header(self):
-        print(self.score.to_string())
         self.score.add_child(XMLPartList())
-        print(self.score.to_string())
         self.score.add_child(XMLPartPartwise(id=1))
         with self.assertRaises(ChildAlreadyExists):
             self.score.add_child(XMLPartList())
-
-        print(self.score.to_string())
         self.score.add_child(XMLPartPartwise(id=2))
-        print(self.score.to_string())
+        self.score.test_mode = True
+        result = '''<score-partwise>
+  <part-list/>
+  <part/>
+  <part/>
+</score-partwise>
+'''
+        self.assertEqual(self.score.to_string(), result)
+
 
 #     def setUp(self):
 #         self.score = XMLScorePartwise()

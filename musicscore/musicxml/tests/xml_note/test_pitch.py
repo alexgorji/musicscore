@@ -11,7 +11,7 @@ class TestPitch(TestCase):
         self.assertEqual(self.pitch.to_string(), result)
 
     def test_arguments(self):
-        pitch = XMLPitch(XMLStep('D'), alter=XMLAlter(1.5), octave=XMLOctave(7))
+        pitch = XMLPitch(XMLStep('D'), octave=XMLOctave(7), alter=XMLAlter(1.5))
         result = '<pitch>\n  <step>D</step>\n  <alter>1.5</alter>\n  <octave>7</octave>\n</pitch>\n'
         self.assertEqual(pitch.to_string(), result)
 

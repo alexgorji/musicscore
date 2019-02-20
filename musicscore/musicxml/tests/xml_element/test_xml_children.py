@@ -71,3 +71,15 @@ class TestAddChildren(TestCase):
         e._sort_children()
         result = [C, A, A, B]
         self.assertEqual([type(child) for child in e.get_children()], result)
+
+    def test_access_child(self):
+        e = E()
+        e.add_child(A())
+        e.add_child(B())
+        e.add_child(A())
+        e.add_child(C())
+
+        self.assertEqual([type(child) for child in e.a], [A, A])
+        self.assertEqual(type(e.b), B)
+        with self.assertRaises(AttributeError):
+            print(e.d)

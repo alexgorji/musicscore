@@ -1,13 +1,13 @@
 import re
 
 
-def replace_dash(tag):
-    if '-' in tag:
-        output = re.sub(r'-', '_', tag)
+def replace_dash(name):
+    if '-' in name:
+        return re.sub(r'-', '_', name)
+    elif '_' in name:
+        return re.sub(r'_', '-', name)
     else:
-        output = tag
-
-    return output
+        return name
 
 
 def is_empty(string):
