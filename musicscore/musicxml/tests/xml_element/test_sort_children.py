@@ -1,5 +1,5 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.xml_element import XMLElement, XMLElementGroup
+from musicscore.musicxml.elements.xml_element import XMLElement
 
 
 class A(XMLElement):
@@ -9,19 +9,12 @@ class A(XMLElement):
         super().__init__(tag='a', *args, **kwargs)
 
 
-class B(XMLElementGroup):
+class B(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='b', *args, **kwargs)
-
-
-class BGroup(XMLElementGroup):
-    """"""
-    _CHILDREN_TYPES = [B]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='bg', *args, **kwargs)
+        self.multiple = True
 
 
 class C(XMLElement):
@@ -40,7 +33,7 @@ class D(XMLElement):
 
 class E(XMLElement):
     """"""
-    _CHILDREN_TYPES = [BGroup, C, A]
+    _CHILDREN_TYPES = [B, C, A]
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='e', *args, **kwargs)
@@ -49,6 +42,14 @@ class E(XMLElement):
 class TestSortChildren(TestCase):
 
     def test_add_child(self):
+        e = E()
+        e.add_child(C())
+        with self.assertRaises(TypeError):
+            e.add_child(D())
+        self.assertEqual(len(e.get_children()), 1)
+        self.assertEqual(type(e.get_children()[0]), C)
+
+    def test_add_multiple_child(self):
         e = E()
         e.add_child(C())
         with self.assertRaises(TypeError):

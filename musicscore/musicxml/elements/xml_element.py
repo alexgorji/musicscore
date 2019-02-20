@@ -71,7 +71,8 @@ class XMLElement(Tree):
         self._attributes = {}
         self.tag = tag
         self._test_mode = None
-        # self._include_in_test = True
+        self._multiple = False
+        self._optional = True
 
     @property
     def tag(self):
@@ -112,22 +113,25 @@ class XMLElement(Tree):
             raise TypeError('test mode must be boolean or None')
         self._test_mode = value
 
-    # @property
-    # def include_in_test(self):
-    #     return self._include_in_test
-    #
-    # @include_in_test.setter
-    # def include_in_test(self, value):
-    #     """
-    #     If include_in_test is False module will not appear as a child in a test.
-    #     If module is root include_in_test does not have an effect. In this case a warning is issued.
-    #     Default is True.
-    #     """
-    #     if not isinstance(value, bool):
-    #         raise TypeError('include_in_test must be boolean.')
-    #     if self.up is None:
-    #         warnings.warn('root {} can not be excluded from test. False for include_in_test is ignored!'.format(self))
-    #     self._include_in_test = value
+    @property
+    def multiple(self):
+        return self._multiple
+
+    @multiple.setter
+    def multiple(self, value):
+        if not isinstance(value, bool):
+            raise TypeError('multiple.value must be of type bool not{}'.format(type(value)))
+
+    @property
+    def optional(self):
+        return self._optional
+
+    @optional.setter
+    def optional(self, value):
+        if not isinstance(value, bool):
+            raise TypeError('optional.value must be of type bool not{}'.format(type(value)))
+        self._optional = value
+        self._multiple = value
 
     def get_attributes(self):
         return self._attributes
