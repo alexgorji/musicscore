@@ -183,13 +183,13 @@ class XMLLyricGroup(XMLElementGroup):
         super().__init__(tag='lyric')
 
 
-class XMLNoteAbstract(XMLElement, XMLMusicData):
+class XMLNoteAbstract(XMLMusicData):
     # _CHILDREN_TYPES_ORDER = [XMLFullNote, XMLDuration, XMLTie, XMLType, XMLDots, XMLAccidental, XMLTimeModification, XMLNoteHead, XMLNotations, XMLLyrics]
     _CHILDREN_TYPES = [XMLChord, XMLEvent, XMLDuration, XMLType, XMLLyricGroup]
     _CHILDREN_ORDERED = True
 
-    def __init__(self, event):
-        XMLElement.__init__(self, tag='note')
+    def __init__(self, event, *args, **kwargs):
+        super().__init__(tag='note', *args, **kwargs)
         self._event = None
         self.event = event
         self._type = None

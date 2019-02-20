@@ -7,6 +7,7 @@ class A(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='a', *args, **kwargs)
+        self.multiple = True
 
 
 class B(XMLElement):
@@ -14,7 +15,6 @@ class B(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='b', *args, **kwargs)
-        self.multiple = True
 
 
 class C(XMLElement):

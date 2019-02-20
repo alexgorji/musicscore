@@ -30,6 +30,7 @@ class Part(XMLPartPartwise):
             raise ValueError('part id {} already exists.'.format(id))
         self._ids.append(id)
         super().__init__(id=id, *args, **kwargs)
+        self.multiple = True
         self._score_part = XMLScorePart(id=self.id)
         self._score_part.part_name = XMLPartName(name)
 

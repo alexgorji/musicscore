@@ -2,6 +2,11 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.elements.xml_music_data import XMLMusicData
 from musicscore.musicxml.types.simple_type import PositiveDevisions, ClefSign, StaffLine
 
+# class XMLAttribute(XMLElement):
+#     """"""
+#     def __init__(self, tag, *args, **kwargs):
+#         super().__init__(tag, *args, **kwargs)
+
 
 class XMLDivisions(XMLElement, PositiveDevisions):
     """
@@ -13,6 +18,7 @@ class XMLDivisions(XMLElement, PositiveDevisions):
     while retaining the full power of a fractional representation.
     If maximum compatibility with Standard MIDI 1.0 files is important, do not have the divisions value exceed 16383.
     """
+
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='divisions', value=value, *args, **kwargs)
         self.text = value
@@ -44,9 +50,8 @@ class XMLTime(XMLElement):
     _CHILDREN_TYPES = [XMLBeats, XMLBeatType]
     _CHILDREN_ORDERED = True
 
-
-    def __init__(self, beats, beat_type):
-        super().__init__(tag='time')
+    def __init__(self, beats, beat_type, *args, **kwargs):
+        super().__init__(tag='time', *args, **kwargs)
         self._beats = None
         self._beat_type = None
         self.beats = beats
@@ -87,6 +92,7 @@ class XMLClef(XMLElement):
     Clefs appear at the start of each system unless the print-object attribute has been set to "no" or
     the additional attribute has been set to "yes"
     """
+
     class XMLSign(XMLElement, ClefSign):
         def __init__(self, value, *args, **kwargs):
             super().__init__(tag='sign', value=value, *args, **kwargs)
@@ -124,7 +130,7 @@ class XMLClef(XMLElement):
         self._set_child(self.XMLLine, 'line', value)
 
 
-class XMLAttributes(XMLElement, XMLMusicData):
+class XMLAttributes(XMLElement):
     """
     The attributes element contains musical information that typically changes on measure boundaries.
     This includes key and time signatures, clefs, transpositions, and staving.
@@ -136,4 +142,4 @@ class XMLAttributes(XMLElement, XMLMusicData):
     _CHILDREN_ORDERED = True
 
     def __init__(self):
-        XMLElement.__init__(self, tag='attributes')
+        super().__init__(tag='attributes')

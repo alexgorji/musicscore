@@ -3,6 +3,7 @@ from musicscore.musicxml.elements.xml_partwise import XMLScorePartwise, XMLPartP
 from musicscore.musicxml.elements.xml_score_header import XMLScorePart
 from musicscore.musicxml.elements.xml_note import XMLNote, XMLPitch
 from musicscore.musicxml.elements.xml_attributes import XMLTime, XMLClef, XMLDivisions, XMLAttributes
+from musicscore.musicxml.elements.xml_score_header import XMLPartList
 
 import os
 path = os.path.abspath(__file__).split('.')[0]
@@ -12,7 +13,8 @@ class TestXMLScorePartwise(TestCase):
     def setUp(self):
         self.score = XMLScorePartwise()
         part_id = 'P1'
-        self.score.add_score_part(XMLScorePart(id=part_id))
+        part_list = self.score.add_child(XMLPartList())
+        part_list.add_child(XMLScorePart(id=part_id))
         part = self.score.add_child(XMLPartPartwise(id=part_id))
         measure = self.make_measure()
         part.add_child(measure)

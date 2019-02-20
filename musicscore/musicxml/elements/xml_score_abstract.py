@@ -28,6 +28,7 @@ class XMLPartAbstract(XMLElement):
 
     def __init__(self, id, *args, **kwargs):
         super().__init__('part', *args, **kwargs)
+        self.multiple = True
         self._id = None
         self.id = id
 
@@ -48,15 +49,13 @@ class XMLScoreAbstract(XMLElement):
 
     def __init__(self, tag, *args, **kwargs):
         super().__init__(tag, *args, **kwargs)
-        self._part_list = XMLPartList()
-        self.add_child(self._part_list)
+        self._part_list = None
         
     @property
     def part_list(self):
         return self._part_list
 
-    def add_score_part(self, value):
-        if not isinstance(value, XMLScorePart):
-            raise TypeError('value of add_score_part must be of type XMLScorePart not {}'.format(type(value)))
-        self.part_list.add_score_part(value)
+    @part_list.setter
+    def part_list(self, value):
+        self._set_child(XMLPartList, 'part-list', value)
 

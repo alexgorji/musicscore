@@ -31,15 +31,15 @@ class TestMeasurePartwise(TestCase):
 
     def test_measure_music_data(self):
         self.measure.test_mode = True
-        note = self.measure.add_music_data(XMLNote(XMLPitch(), 10))
+        note = self.measure.add_child(XMLNote(XMLPitch(), 10))
         for child in note.get_children():
             child.include_in_test = False
-        # attributes = self.measure.add_child(XMLAttributes())
-        self.measure.add_xml_attribute(XMLTime(3, 4))
-        self.measure.add_xml_attribute(XMLDivisions(3))
+        attributes = self.measure.add_child(XMLAttributes())
+        attributes.add_child(XMLTime(3, 4))
+        attributes.add_child(XMLDivisions(3))
         with self.assertRaises(TypeError):
-            self.measure.add_xml_attribute(None)
-        note = self.measure.add_music_data(XMLNote(XMLPitch(), 10))
+            self.measure.add_child(None)
+        note = self.measure.add_child(XMLNote(XMLPitch(), 10))
         for child in note.get_children():
             child.include_in_test = False
         result = '''<measure>

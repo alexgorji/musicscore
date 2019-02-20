@@ -2,7 +2,7 @@ from lxml import etree as et
 import warnings
 
 from musicscore.basic_functions import replace_dash
-from musicscore.musicxml.exceptions import AfterInitializationError
+from musicscore.musicxml.exceptions import AfterInitializationError, ChildAlreadyExists
 from musicscore.tree.tree import Tree
 
 
@@ -121,6 +121,7 @@ class XMLElement(Tree):
     def multiple(self, value):
         if not isinstance(value, bool):
             raise TypeError('multiple.value must be of type bool not{}'.format(type(value)))
+        self._multiple = value
 
     @property
     def optional(self):
@@ -131,7 +132,7 @@ class XMLElement(Tree):
         if not isinstance(value, bool):
             raise TypeError('optional.value must be of type bool not{}'.format(type(value)))
         self._optional = value
-        self._multiple = value
+
 
     def get_attributes(self):
         return self._attributes
@@ -166,7 +167,8 @@ class XMLElement(Tree):
     def __repr__(self):
         return '{} instance {} at {}'.format(self.__class__.__name__, self.tag, hex(id(self)))
 
-    def add_child(self, child):
+    def _check_childtype(self, child):
+        # isisntance or type()? isinstance checks super types too.
         _type_error = True
         for child_type in self._CHILDREN_TYPES:
             if isinstance(child, child_type):
@@ -174,9 +176,21 @@ class XMLElement(Tree):
                 break
         if _type_error is True:
             raise TypeError('child can only be of type(s): {} not {}'.format(self._CHILDREN_TYPES, type(child)))
+
+    def get_children_of_type(self, type_):
+        return [child for child in self.get_children() if type(child) == type_]
+
+    def _check_multiple_children(self, child):
+        if child.multiple is False:
+            existing_children = self.get_children_of_type(type(child))
+            if len(existing_children) != 0:
+                raise ChildAlreadyExists(child)
+
+    def add_child(self, child):
+        self._check_childtype(child)
+        self._check_multiple_children(child)
         self._children.append(child)
         child._up = self
-        self.sort_children()
         return child
 
     def find_child_by_tag(self, tag):
@@ -220,7 +234,7 @@ class XMLElement(Tree):
             warnings.warn('length of sorted children is smaller thant children')
         return output
 
-    def sort_children(self):
+    def _sort_children(self):
         sorted_ = []
         if self._CHILDREN_ORDERED is True:
             for child_type in self._CHILDREN_TYPES:
@@ -236,6 +250,7 @@ class XMLElement(Tree):
         self._children = sorted_
 
     def _to_xml(self):
+        self._sort_children()
         xml = et.Element(_tag=self.tag)
 
         def set_attributes():

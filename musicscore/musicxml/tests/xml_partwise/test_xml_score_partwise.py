@@ -4,6 +4,7 @@ from musicscore.musicxml.elements.xml_score_header import XMLPartList
 from musicscore.musicxml.elements.xml_score_header import XMLScorePart
 from musicscore.musicxml.elements.xml_note import XMLNote, XMLPitch
 from musicscore.musicxml.elements.xml_attributes import XMLTime, XMLClef, XMLDivisions, XMLAttributes
+from musicscore.musicxml.exceptions import ChildAlreadyExists
 
 
 class TestXMLScorePartwise(TestCase):
@@ -15,8 +16,9 @@ class TestXMLScorePartwise(TestCase):
         self.score.add_child(XMLPartList())
         print(self.score.to_string())
         self.score.add_child(XMLPartPartwise(id=1))
-        print(self.score.to_string())
-        self.score.add_child(XMLPartList())
+        with self.assertRaises(ChildAlreadyExists):
+            self.score.add_child(XMLPartList())
+
         print(self.score.to_string())
         self.score.add_child(XMLPartPartwise(id=2))
         print(self.score.to_string())
