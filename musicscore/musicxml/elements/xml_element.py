@@ -177,12 +177,12 @@ class XMLElement(Tree):
         if _type_error is True:
             raise TypeError('child can only be of type(s): {} not {}'.format(self._CHILDREN_TYPES, type(child)))
 
-    def get_children_of_type(self, type_):
+    def get_children_by_type(self, type_):
         return [child for child in self.get_children() if type(child) == type_]
 
     def _check_multiple_children(self, child):
         if child.multiple is False:
-            existing_children = self.get_children_of_type(type(child))
+            existing_children = self.get_children_by_type(type(child))
             if len(existing_children) != 0:
                 raise ChildAlreadyExists(child)
 
@@ -223,34 +223,26 @@ class XMLElement(Tree):
                 raise ValueError('new_child must be of type {}'.format(type))
             self.add_child(new_child)
 
-    def _get_sorted_children(self):
-        output = []
-        if self._CHILDREN_ORDERED is True:
-            for child_type in self._CHILDREN_TYPES:
-                child = self.find_child_by_type(child_type)
-                if child is not None:
-                    output.append(child)
-        if len(output) < len(self.get_children()):
-            warnings.warn('length of sorted children is smaller thant children')
-        return output
-
     def _sort_children(self):
         sorted_ = []
-        if self._CHILDREN_ORDERED is True:
-            for child_type in self._CHILDREN_TYPES:
-                child = self.find_child_by_type(child_type)
-                if child is not None:
-                    sorted_.append(child)
-                    self._children.remove(child)
-            if len(self._children) != 0:
-                warnings.warn(
-                    'length of sorted children of {} is smaller than its children. Remaining not sorted children are: {}'.format(
-                        self, self._children))
+
+        for child_type in self._CHILDREN_TYPES:
+            child = self.find_child_by_type(child_type)
+            if child is not None:
+                sorted_.append(child)
+                self._children.remove(child)
+
+        if len(self._children) != 0:
+            warnings.warn(
+                'length of sorted children of {} is smaller than its children. Remaining not sorted children are: {}'.format(
+                    self, self._children))
+
         sorted_.extend(self._children)
         self._children = sorted_
 
     def _to_xml(self):
-        self._sort_children()
+        if self._CHILDREN_ORDERED is True:
+            self._sort_children()
         xml = et.Element(_tag=self.tag)
 
         def set_attributes():
