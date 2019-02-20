@@ -4,11 +4,11 @@ from musicscore.basic_functions import is_empty
 
 
 class XMLPartName(XMLElement):
-    def __init__(self, name):
+    def __init__(self, name, print_object='no'):
         super().__init__(tag='part-name')
         self._name = None
         self.name = name
-        self.print_object = 'no'
+        self.print_object = print_object
 
     @property
     def name(self):
@@ -42,6 +42,7 @@ class XMLScorePart(XMLElement):
         self.set_attribute('id', id)
         self._part_name = None
         self.part_name = part_name
+        self.multiple = True
 
     @property
     def part_name(self):

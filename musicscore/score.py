@@ -1,6 +1,7 @@
 from musicscore.musicxml.elements.xml_partwise import XMLScorePartwise, XMLPartPartwise
 from musicscore.musicxml.elements.xml_timewise import XMLScoreTimewise, XMLMeasureTimewise
 from musicscore.musicxml.elements.xml_score_header import XMLScorePart, XMLPartName, XMLPartList
+from musicscore.musicxml.exceptions import ChildAlreadyExists
 
 
 class Measure(XMLMeasureTimewise):
@@ -23,7 +24,7 @@ class Part(XMLPartPartwise):
     def reset_ids():
         Part._ids = []
 
-    def __init__(self, id=None, name=None, *args, **kwargs):
+    def __init__(self, id=None, name=None, print_object='no', *args, **kwargs):
         if id is None:
             id = self.generate_id()
         elif id in self._ids:
@@ -32,7 +33,7 @@ class Part(XMLPartPartwise):
         super().__init__(id=id, *args, **kwargs)
         self.multiple = True
         self._score_part = XMLScorePart(id=self.id)
-        self._score_part.part_name = XMLPartName(name)
+        self._score_part.part_name = XMLPartName(name=name, print_object=print_object)
 
     def generate_id(self):
         id = 'p' + str(self._auto_index + 1)
@@ -61,6 +62,7 @@ class Part(XMLPartPartwise):
 
 class Score(object):
     """"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         Part.reset_ids()
@@ -109,25 +111,14 @@ class Partwise(XMLScorePartwise):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._score = None
-        self._parts = []
 
     def _add_part(self, part):
         self.add_child(part)
-        self._parts.append(part)
-        part_list = self.add_child(XMLPartList())
-        part_list.add_child(part._score_part)
-        self.add_child(part)
-
-
-    #
-    # @parts.setter
-    # def parts(self, value):
-    #     if not isinstance(value, list):
-    #         raise TypeError('parts.value must be of type list not{}'.format(type(value)))
-    #     for element in value:
-    #         if not isinstance(element, XMLPartPartwise):
-    #             raise TypeError('parts.value.element  must be of type XMLPartTimewise not{}'.format(type(element)))
-    #     self._parts = value
+        try:
+            self.add_child(XMLPartList())
+        except ChildAlreadyExists:
+            pass
+        self.part_list.add_child(part._score_part)
 
     @property
     def score(self):

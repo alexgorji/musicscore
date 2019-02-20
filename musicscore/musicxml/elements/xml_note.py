@@ -73,7 +73,7 @@ class XMLPitch(XMLEvent):
 
     @step.setter
     def step(self, value):
-        self._set_child(XMLStep,'step', value)
+        self._set_child(XMLStep, 'step', value)
 
     @property
     def alter(self):

@@ -49,13 +49,4 @@ class XMLScoreAbstract(XMLElement):
 
     def __init__(self, tag, *args, **kwargs):
         super().__init__(tag, *args, **kwargs)
-        self._part_list = None
-        
-    @property
-    def part_list(self):
-        return self._part_list
-
-    @part_list.setter
-    def part_list(self, value):
-        self._set_child(XMLPartList, 'part-list', value)
 
