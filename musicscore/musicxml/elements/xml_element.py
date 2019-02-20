@@ -6,6 +6,16 @@ from musicscore.musicxml.exceptions import AfterInitializationError, ChildAlread
 from musicscore.tree.tree import Tree
 
 
+
+class FrozenClass(object):
+    __is_frozen = True
+
+    def __setattr__(self, key, value):
+        if self.__is_frozen and not hasattr(self, key):
+            raise TypeError('{} is a frozen class'.format(self))
+        object.__setattr__(self, key, value)
+
+
 # class XMLElementGroup(Tree):
 #     """
 #     a group of XMLElements with the same tag as siblings
@@ -280,10 +290,10 @@ class XMLElement(Tree):
 
         return xml
 
-    def _set_child(self, type, tag, value):
+    def _set_child(self, type_, tag, value):
 
-        if value is not None and not isinstance(value, type):
-            value = type(value)
+        if value is not None and not isinstance(value, type_):
+            value = type_(value)
 
         self.replace_old_child_by_tag(tag=tag, new_child=value)
 

@@ -73,7 +73,7 @@ class XMLPitch(XMLEvent):
 
     @step.setter
     def step(self, value):
-        self._set_child(XMLStep, 'step', value)
+        self._set_child(XMLStep,'step', value)
 
     @property
     def alter(self):
@@ -169,6 +169,7 @@ class XMLDot(EmptyPlacement):
 class XMLLyric(XMLElement):
     def __init__(self, text):
         super().__init__(tag='lyric')
+        self.multiple = True
         self.text = text
 
 
@@ -181,9 +182,7 @@ class XMLNoteAbstract(XMLMusicData):
         super().__init__(tag='note', *args, **kwargs)
         self._event = None
         self.event = event
-        self._type = None
         self._chord = None
-        self._lyric = None
 
     @property
     def event(self):
@@ -208,22 +207,6 @@ class XMLNoteAbstract(XMLMusicData):
         elif value is True:
             value = XMLChord()
         self._set_child(XMLChord, 'chord', value)
-
-    @property
-    def type(self):
-        return self._type
-
-    @type.setter
-    def type(self, value):
-        self._set_child(XMLType, 'type', value)
-
-    @property
-    def lyric(self):
-        return self._lyric
-
-    @lyric.setter
-    def lyric(self, value):
-        self._set_child(XMLLyricGroup, 'lyric', value)
 
 
 class XMLNote(XMLNoteAbstract):
