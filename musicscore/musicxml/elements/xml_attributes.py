@@ -107,7 +107,7 @@ class XMLClef(XMLElement):
     _CHILDREN_ORDERED = True
 
     def __init__(self, sign, line):
-        XMLElement.__init__(self, tag='clef')
+        super().__init__(tag='clef')
         self._sign = None
         self._line = None
         self.sign = sign

@@ -23,7 +23,7 @@ class TestXMLScorePart(TestCase):
 class TestXMLPartList(TestCase):
     def setUp(self):
         self.part_list = XMLPartList()
-        self.part_list.add_score_part(XMLScorePart(id=1))
+        self.part_list.add_child(XMLScorePart(id=1))
 
     def test_xml_part_list(self):
         result = '<part-list>\n  <score-part id="1">\n    <part-name print-object="no">part</part-name>\n  </score-part>\n</part-list>\n'

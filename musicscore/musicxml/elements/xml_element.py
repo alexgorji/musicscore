@@ -82,7 +82,7 @@ class XMLElement(Tree):
         self.tag = tag
         self._test_mode = None
         self._multiple = False
-        self._optional = True
+
 
     @property
     def tag(self):
@@ -132,16 +132,6 @@ class XMLElement(Tree):
         if not isinstance(value, bool):
             raise TypeError('multiple.value must be of type bool not{}'.format(type(value)))
         self._multiple = value
-
-    @property
-    def optional(self):
-        return self._optional
-
-    @optional.setter
-    def optional(self, value):
-        if not isinstance(value, bool):
-            raise TypeError('optional.value must be of type bool not{}'.format(type(value)))
-        self._optional = value
 
     def __getattr__(self, item):
         tag = replace_dash(item)

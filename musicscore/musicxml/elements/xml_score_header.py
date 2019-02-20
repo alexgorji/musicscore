@@ -29,12 +29,10 @@ class XMLPartName(XMLElement):
     @print_object.setter
     def print_object(self, value):
         YesNo(value)
-        self._print_object = value
         self.set_attribute('print-object', value)
 
 
 class XMLScorePart(XMLElement):
-
     _CHILDREN_TYPES = [XMLPartName]
 
     def __init__(self, id, part_name='part'):
@@ -54,11 +52,7 @@ class XMLScorePart(XMLElement):
 
 
 class XMLPartList(XMLElement):
-
     _CHILDREN_TYPES = [XMLScorePart]
 
     def __init__(self):
         super().__init__(tag='part-list')
-
-    def add_score_part(self, value):
-        self._set_child(XMLScorePart, 'score-part', value)
