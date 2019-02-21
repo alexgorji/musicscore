@@ -1,21 +1,21 @@
 from unittest import TestCase
-from musicscore.score import Part
+from musicscore.old_score import PartPartwise
 
 
 class TestGeneratePartId(TestCase):
 
     def test_generate_part_id(self):
-        Part.reset_ids()
+        PartPartwise.reset_ids()
 
         def get_id(number):
             for i in range(number):
-                part = Part()
+                part = PartPartwise()
         get_id(1)
-        Part.reset_ids()
+        PartPartwise.reset_ids()
         get_id(3)
-        part = Part(id='p10')
+        part = PartPartwise(id='p10')
         get_id(1)
         result = ['p1', 'p2', 'p3', 'p10', 'p4']
         self.assertEqual(part._ids, result)
         with self.assertRaises(ValueError):
-            part = Part(id='p4')
+            part = PartPartwise(id='p4')
