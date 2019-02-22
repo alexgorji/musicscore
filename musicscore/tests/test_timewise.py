@@ -12,7 +12,7 @@ class TestTimewise(XMLTest):
     def test_add_part(self):
         self.timewise.add_part()
         self.timewise.add_part(print_object='yes', name='oboe')
-        resutl = '''<score-timewise>
+        result = '''<score-timewise>
   <part-list>
     <score-part id="p1">
       <part-name print-object="no">none</part-name>
@@ -23,7 +23,7 @@ class TestTimewise(XMLTest):
   </part-list>
 </score-timewise>
 '''
-        self.assertEqual(self.timewise.to_string(), resutl)
+        self.assertEqual(self.timewise.to_string(), result)
 
     def test_add_measure_part(self):
         self.timewise.add_measure()
