@@ -22,13 +22,7 @@ class TestTimewise(TestCase):
 '''
         self.assertEqual(self.timewise.to_string(), resutl)
 
-    def test_add_measure(self):
+    def test_add_measure_part(self):
         self.timewise.add_measure()
-        self.timewise.add_measure()
-        result = '''<score-timewise>
-  <part-list/>
-  <measure number="1"/>
-  <measure number="2"/>
-</score-timewise>
-'''
-        self.assertEqual(self.timewise.to_string(), result)
+        self.timewise.add_part()
+        print(self.timewise.to_string())

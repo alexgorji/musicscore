@@ -37,7 +37,8 @@ class XMLScorePart(XMLElement):
 
     def __init__(self, id, part_name='part'):
         super().__init__(tag='score-part')
-        self.set_attribute('id', id)
+        self._id = None
+        self.id = id
         self._part_name = None
         self.part_name = part_name
         self.multiple = True
@@ -49,6 +50,16 @@ class XMLScorePart(XMLElement):
     @part_name.setter
     def part_name(self, value):
         self._set_child(XMLPartName, 'part-name', value)
+
+
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, value):
+        self._id = value
+        self.set_attribute('id', self.id)
 
 
 class XMLPartList(XMLElement):
