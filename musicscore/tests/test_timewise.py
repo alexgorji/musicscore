@@ -1,8 +1,11 @@
-from unittest import TestCase
+from musicscore.xml_test import XMLTest
 from musicscore.timewise import Timwise
+import os
+path = os.path.abspath(__file__).split('.')[0]
 
 
-class TestTimewise(TestCase):
+class TestTimewise(XMLTest):
+
     def setUp(self):
         self.timewise = Timwise()
 
@@ -27,23 +30,6 @@ class TestTimewise(TestCase):
         self.timewise.add_part()
         self.timewise.add_part()
         self.timewise.add_measure()
-        result = '''<score-timewise>
-  <part-list>
-    <score-part id="p1">
-      <part-name print-object="no">none</part-name>
-    </score-part>
-    <score-part id="p2">
-      <part-name print-object="no">none</part-name>
-    </score-part>
-  </part-list>
-  <measure number="1">
-    <part id="p1"/>
-    <part id="p2"/>
-  </measure>
-  <measure number="2">
-    <part id="p1"/>
-    <part id="p2"/>
-  </measure>
-</score-timewise>
-'''
-        self.assertEqual(self.timewise.to_string(), result)
+        self.timewise.write(path)
+        self.assert_template(path)
+

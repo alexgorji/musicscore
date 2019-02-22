@@ -43,6 +43,16 @@ class XMLScoreTimewise(XMLScoreAbstract):
     def __init__(self, *args, **kwargs):
         XMLScoreAbstract.__init__(self, tag='score-timewise', *args, **kwargs)
 
+    def write(self, path):
+        xmlversion = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
+        doctype = '<!DOCTYPE score-timewise PUBLIC "-//Recordare//DTD MusicXML 3.0 Timewise//EN" "http://www.musicxml.org/dtds/timewise.dtd">\n'
 
+        path += '.xml'
+        output_file = open(path, 'w')
+        output_file.write(xmlversion)
+        output_file.write(doctype)
+        output_file.write(self.to_string())
+        output_file.close()
+        print('writing finished')
 
 
