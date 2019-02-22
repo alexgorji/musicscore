@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-timewise PUBLIC "-//Recordare//DTD MusicXML 3.0 Timewise//EN" "http://www.musicxml.org/dtds/timewise.dtd">
+<score-timewise>
+  <part-list>
+    <score-part id="p1">
+      <part-name print-object="no">none</part-name>
+    </score-part>
+    <score-part id="p2">
+      <part-name print-object="no">none</part-name>
+    </score-part>
+  </part-list>
+  <measure number="1">
+    <part id="p1"/>
+    <part id="p2"/>
+  </measure>
+  <measure number="2">
+    <part id="p1"/>
+    <part id="p2"/>
+  </measure>
+</score-timewise>

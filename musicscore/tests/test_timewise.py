@@ -30,6 +30,8 @@ class TestTimewise(XMLTest):
         self.timewise.add_part()
         self.timewise.add_part()
         self.timewise.add_measure()
+
         self.timewise.write(path)
+
         self.assert_template(path)
 
