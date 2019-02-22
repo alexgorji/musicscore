@@ -19,6 +19,9 @@ class Timwise(XMLScoreTimewise):
     def get_measures(self):
         return self.get_children_by_type(type_=XMLMeasureTimewise)
 
+    def get_parts(self):
+        return self._part_list.get_children()
+
     def add_part(self, name='none', print_object='no'):
         new_score_part = self._generate_score_part()
         new_score_part.get_children()[0].name = name
@@ -27,9 +30,10 @@ class Timwise(XMLScoreTimewise):
         for measure in self.get_measures():
             measure.add_child(XMLPartTimewise(id=new_score_part.id))
 
-
     def add_measure(self):
         new_measure = XMLMeasureTimewise(number=0)
         self.add_child(new_measure)
         new_measure.number = self.get_children().index(new_measure)
+        for part in self.get_parts():
+            new_measure.add_child(XMLPartTimewise(id=part.id))
         return new_measure
