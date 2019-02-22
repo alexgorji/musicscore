@@ -32,12 +32,13 @@ class XMLMeasureTimewise(XMLMeasureAbstract):
 
     def __init__(self, number, *args, **kwargs):
         super().__init__(number=number, *args, **kwargs)
+        self.multiple = True
 
 
 class XMLScoreTimewise(XMLScoreAbstract):
 
-    _CHILDREN_TYPES = [XMLMeasureTimewise]
-    _CHILDREN_TYPES.extend(XMLScoreAbstract._CHILDREN_TYPES)
+    _CHILDREN_TYPES = XMLScoreAbstract._CHILDREN_TYPES
+    _CHILDREN_TYPES.append(XMLMeasureTimewise)
 
     def __init__(self, *args, **kwargs):
         XMLScoreAbstract.__init__(self, tag='score-timewise', *args, **kwargs)

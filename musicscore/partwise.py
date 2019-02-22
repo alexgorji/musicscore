@@ -22,7 +22,7 @@ class Partwise(XMLScorePartwise):
 
         self.part_list.add_child(part.score_part)
         self.add_child(part)
-        pass
+        return part
 
 
 class PartPartwise(XMLPartPartwise):
@@ -71,3 +71,20 @@ class PartPartwise(XMLPartPartwise):
     @property
     def score_part(self):
         return self._score_part
+
+    def add_measure(self, measure=None):
+        if measure is None:
+            measure = MeasurePartwise()
+        if not isinstance(measure, MeasurePartwise):
+            raise TypeError('measure must be of type MeasurePartwise not{}'.format(type(measure)))
+        self.add_child(measure)
+        measure.number = self.get_children().index(measure) + 1
+        return measure
+
+
+class MeasurePartwise(XMLMeasurePartwise):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(number=0, *args, **kwargs)
+        self.multiple = True
+
