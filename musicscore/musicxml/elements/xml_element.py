@@ -6,59 +6,6 @@ from musicscore.musicxml.exceptions import AfterInitializationError, ChildAlread
 from musicscore.tree.tree import Tree
 
 
-# class XMLElementGroup(Tree):
-#     """
-#     a group of XMLElements with the same tag as siblings
-#     each sibling can be accessed with a valid index
-#     """
-#
-#     def __init__(self, tag, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self._tag = None
-#         self.tag = tag
-#         self._up = None
-#         self._siblings = []
-#
-#     @property
-#     def tag(self):
-#         return self._tag
-#
-#     @tag.setter
-#     def tag(self, value):
-#         if self._tag is not None:
-#             raise AfterInitializationError(self.tag)
-#         self._tag = value
-#
-#     def __repr__(self):
-#         return '{} instance {} at {}'.format(self.__class__.__name__, self.tag, hex(id(self)))
-#
-#     # todo: rename siblings
-#     def get_siblings(self):
-#         return self._siblings
-#
-#     def __getitem__(self, item):
-#         return self.get_siblings()[item]
-#
-#     # def __iter__(self):
-#     #     return iter(self.get_siblings())
-#
-#     def add_sibling(self, sibling=None):
-#         if sibling is None:
-#             sibling = XMLElement(self.tag)
-#         if not isinstance(sibling, XMLElement):
-#             raise TypeError('Sibling must be of type XMLElement and not {}'.format(type(sibling)))
-#         if sibling.tag != self.tag:
-#             raise ValueError('Sibling must have the same tag as XMLElementGroup: {}'.format(self.tag))
-#         sibling._up = self._up
-#         self._siblings.append(sibling)
-#
-#     def remove_sibling(self, sibling):
-#         self._siblings.remove(sibling)
-#
-#     def clear_siblings(self):
-#         self._siblings.clear()
-
-
 class XMLElement(Tree):
     _ATTRIBUTES = ('id', 'part-name', 'number', 'print-object', 'default-x', 'default-y', 'relative-x', 'relative-y')
     _CHILDREN_TYPES = []
@@ -66,6 +13,7 @@ class XMLElement(Tree):
 
     def __init__(self, tag, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._value = None
         self._tag = None
         self._text = None
         self._attributes = {}
@@ -83,14 +31,24 @@ class XMLElement(Tree):
             raise AfterInitializationError(self.tag)
         self._tag = value
 
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, v):
+        self._value = v
+
+
     @property
     def text(self):
-        return self._text
+        if self.value is not None:
+            return str(self.value)
 
     @text.setter
-    def text(self, value):
-        if value is not None:
-            self._text = str(value)
+    def text(self, v):
+        self.value = v
 
     @property
     def test_mode(self):

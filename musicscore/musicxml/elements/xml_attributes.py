@@ -22,14 +22,7 @@ class XMLDivisions(XMLElement, PositiveDevisions):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='divisions', value=value, *args, **kwargs)
-
-    @property
-    def text(self):
-        return str(self.value)
-
-    @text.setter
-    def text(self, v):
-        self.value = v
+        self.text = value
 
 
 class XMLTime(XMLElement):

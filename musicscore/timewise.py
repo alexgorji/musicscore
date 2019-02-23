@@ -1,6 +1,6 @@
 from musicscore.musicxml.elements.xml_timewise import XMLMeasureTimewise, XMLPartTimewise, XMLScoreTimewise
 from musicscore.musicxml.elements.xml_score_header import XMLScorePart, XMLPartList, XMLPartName
-from musicscore.musicxml.elements.xml_note import XMLNote
+from musicscore.musicxml.elements.xml_note import XMLNote, XMLType
 from musicscore.musicxml.types.simple_type import PositiveDecimal
 from musicscore.musicxml.elements.xml_attributes import XMLAttributes, XMLDivisions
 from quicktions import Fraction
@@ -20,8 +20,62 @@ class Note(XMLNote):
 
     @quarter_duration.setter
     def quarter_duration(self, value):
-        PositiveDecimal(value)
-        self._quarter_duration = value
+        if value <= 0:
+            raise ValueError('quarter_duration must be a positive number or fraction not {}'.format(value))
+        self._quarter_duration = Fraction(value).limit_denominator(12)
+
+    def update_type(self):
+        """get type of a Note() depending on its quantized duration and return it [whole, half, quarter, eighth, 16th, 32nd, 64th]"""
+        durations = {(1, 12): '32nd',
+                     (1, 11): '32nd',
+                     (2, 11): '16th',
+                     (3, 11): '16th',
+                     (4, 11): 'eighth',
+                     (6, 11): 'eighth',
+                     (8, 11): 'quarter',
+                     (1, 10): '32nd',
+                     (3, 10): '16th',
+                     (1, 9): '32nd',
+                     (2, 9): '16th',
+                     (4, 9): 'eighth',
+                     (8, 9): 'quarter',
+                     (1, 8): '32nd',
+                     (3, 8): '16th',
+                     (7, 8): 'eighth',
+                     (1, 7): '16th',
+                     (2, 7): 'eighth',
+                     (3, 7): 'eighth',
+                     (4, 7): 'quarter',
+                     (6, 7): 'quarter',
+                     (1, 6): '16th',
+                     (1, 5): '16th',
+                     (2, 5): 'eighth',
+                     (3, 5): 'eighth',
+                     (4, 5): 'quarter',
+                     (1, 4): '16th',
+                     (2, 4): 'eighth',
+                     (3, 4): 'eighth',
+                     (7, 4): 'quarter',
+                     (1, 3): 'eighth',
+                     (2, 3): 'quarter',
+                     (3, 2): 'quarter',
+                     (1, 2): 'eighth',
+                     (1, 1): 'quarter',
+                     (2, 1): 'half',
+                     (3, 1): 'half',
+                     (4, 1): 'whole',
+                     (6, 1): 'whole',
+                     (8, 1): 'breve'}
+
+        try:
+            note_type = self.get_children_by_type(XMLType)[0]
+        except Exception as msg:
+            print(msg)
+            note_type = self.add_child(XMLType('quarter'))
+
+        note_type.value = durations[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
+
+
 
 
 class Measure(XMLMeasureTimewise):
@@ -46,8 +100,9 @@ class Part(XMLPartTimewise):
         return self.get_children_by_type(Note)
 
     def get_divisions(self):
-        duration_denominators = [Fraction(note.quarter_duration).limit_denominator(20).denominator for note in
+        duration_denominators = [note.quarter_duration.denominator for note in
                                  self.get_notes()]
+
         if len(duration_denominators) == 0:
             return 1
         elif len(duration_denominators) == 1:
@@ -106,7 +161,7 @@ class Timwise(XMLScoreTimewise):
         measure = self.get_measures()[measure_number - 1]
         part = measure.get_part(part_number)
         part.add_child(note)
-
         duration = part.get_divisions() * note.quarter_duration
         note.duration = int(duration)
         part.update_divisions()
+        note.update_type()
