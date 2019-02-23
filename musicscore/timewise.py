@@ -23,6 +23,10 @@ class Note(XMLNote):
             raise ValueError('quarter_duration must be a positive number or fraction not {}'.format(value))
         self._quarter_duration = Fraction(value).limit_denominator(12)
 
+    def update_duration(self):
+        duration = self.up.get_divisions() * self.quarter_duration
+        self.duration = int(duration)
+
     def update_type(self):
         """get type of a Note() depending on its quantized duration and return it [whole, half, quarter, eighth, 16th, 32nd, 64th]"""
         _types = {(1, 12): '32nd',
@@ -135,6 +139,7 @@ class Part(XMLPartTimewise):
     def update_divisions(self):
         # todo: it must be possible to set attributes like this:
         # self.attributes.divisions = 3
+
         attributes = self.get_children_by_type(XMLAttributes)[0]
         divisions = attributes.get_children_by_type(XMLDivisions)[0]
         divisions.value = self.get_divisions()
@@ -182,8 +187,7 @@ class Timwise(XMLScoreTimewise):
         measure = self.get_measures()[measure_number - 1]
         part = measure.get_part(part_number)
         part.add_child(note)
-        duration = part.get_divisions() * note.quarter_duration
-        note.duration = int(duration)
+        note.update_duration()
         part.update_divisions()
         note.update_type()
         note.update_dot()
