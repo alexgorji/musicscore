@@ -1,5 +1,6 @@
 from musicscore.xml_test import XMLTest
-from musicscore.timewise import Timwise
+from musicscore.timewise import Timwise, Note
+from musicscore.musicxml.elements.xml_note import XMLPitch, XMLType, XMLDot
 import os
 path = os.path.abspath(__file__).split('.')[0]
 
@@ -30,8 +31,16 @@ class TestTimewise(XMLTest):
         self.timewise.add_part()
         self.timewise.add_part()
         self.timewise.add_measure()
+        note = Note(XMLPitch('D'), quarter_duration=1.5)
+        note.add_child(XMLDot())
+        note.add_child(XMLType('quarter'))
+        self.timewise.add_note(measure_number=1, part_number=2, note=note)
+        note = Note(XMLPitch('E', alter=-1, octave=5), quarter_duration=2)
+        note.add_child(XMLType('half'))
+        self.timewise.add_note(measure_number=1, part_number=2, note=note)
 
         self.timewise.write(path)
-
         self.assert_template(path)
+
+
 

@@ -5,8 +5,8 @@ from musicscore.musicxml.elements.xml_attributes import XMLAttributes
 
 class XMLPartTimewise(XMLPartAbstract):
 
-    _CHILDREN_TYPES = [XMLMusicData]
-    _CHILDREN_TYPES.extend(XMLPartAbstract._CHILDREN_TYPES)
+    _CHILDREN_TYPES = XMLPartAbstract._CHILDREN_TYPES
+    _CHILDREN_TYPES.extend([XMLAttributes, XMLMusicData])
 
     def __init__(self, id, *args, **kwargs):
         super().__init__(id=id, *args, **kwargs)

@@ -2,6 +2,7 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.elements.xml_music_data import XMLMusicData
 from musicscore.musicxml.types.simple_type import PositiveDevisions, ClefSign, StaffLine
 
+
 # class XMLAttribute(XMLElement):
 #     """"""
 #     def __init__(self, tag, *args, **kwargs):
@@ -21,7 +22,14 @@ class XMLDivisions(XMLElement, PositiveDevisions):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='divisions', value=value, *args, **kwargs)
-        self.text = value
+
+    @property
+    def text(self):
+        return str(self.value)
+
+    @text.setter
+    def text(self, v):
+        self.value = v
 
 
 class XMLTime(XMLElement):

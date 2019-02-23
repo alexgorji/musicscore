@@ -162,20 +162,20 @@ class XMLDot(EmptyPlacement):
     It is ignored for notes that appear on a staff space
     """
 
-    def __init__(self):
-        super().__init__(tag='dot')
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='dot', *args, **kwargs)
 
 
 class XMLLyric(XMLElement):
-    def __init__(self, text):
-        super().__init__(tag='lyric')
+    def __init__(self, text, *args, **kwargs):
+        super().__init__(tag='lyric', *args, **kwargs)
         self.multiple = True
         self.text = text
 
 
 class XMLNoteAbstract(XMLMusicData):
-    # _CHILDREN_TYPES_ORDER = [XMLFullNote, XMLDuration, XMLTie, XMLType, XMLDots, XMLAccidental, XMLTimeModification, XMLNoteHead, XMLNotations, XMLLyrics]
-    _CHILDREN_TYPES = [XMLChord, XMLEvent, XMLDuration, XMLType, XMLLyric]
+    # _CHILDREN_TYPES_ORDER = [XMLFullNote, XMLDuration, XMLTie, XMLType, XMLDot, XMLAccidental, XMLTimeModification, XMLNoteHead, XMLNotations, XMLLyrics]
+    _CHILDREN_TYPES = [XMLChord, XMLEvent, XMLDuration, XMLType, XMLDot, XMLLyric]
     _CHILDREN_ORDERED = True
 
     def __init__(self, event, *args, **kwargs):
@@ -210,8 +210,8 @@ class XMLNoteAbstract(XMLMusicData):
 
 
 class XMLNote(XMLNoteAbstract):
-    def __init__(self, event, duration):
-        XMLNoteAbstract.__init__(self, event=event)
+    def __init__(self, event, duration, *args, **kwargs):
+        super().__init__(event=event, *args, **kwargs)
         self._duration = None
         self.duration = duration
 

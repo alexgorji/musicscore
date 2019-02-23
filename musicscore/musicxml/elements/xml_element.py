@@ -167,7 +167,6 @@ class XMLElement(Tree):
         return '{} instance {} at {}'.format(self.__class__.__name__, self.tag, hex(id(self)))
 
     def _check_childtype(self, child):
-        # isisntance or type()? isinstance checks super types too.
         _type_error = True
         for child_type in self._CHILDREN_TYPES:
             if isinstance(child, child_type):

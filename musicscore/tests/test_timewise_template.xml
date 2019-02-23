@@ -10,8 +10,34 @@
     </score-part>
   </part-list>
   <measure number="1">
-    <part id="p1"/>
-    <part id="p2"/>
+    <part id="p1">
+      <attributes>
+        <divisions>4</divisions>
+      </attributes>
+    </part>
+    <part id="p2">
+      <attributes>
+        <divisions>2</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot/>
+      </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <type>half</type>
+      </note>
+    </part>
   </measure>
   <measure number="2">
     <part id="p1"/>
