@@ -1,5 +1,5 @@
 from unittest import TestCase
-from musicscore.old_score import PartPartwise
+from musicscore.partwise import PartPartwise
 
 
 class TestGeneratePartId(TestCase):

@@ -4,7 +4,7 @@ from musicscore.musicxml.elements.xml_note import XMLNote, XMLType, XMLDot
 from musicscore.musicxml.elements.xml_attributes import XMLAttributes, XMLDivisions
 from quicktions import Fraction
 from musicscore.basic_functions import lcm
-
+from musicscore.midi import Midi
 
 class Note(XMLNote):
     """"""
@@ -194,6 +194,9 @@ class Timwise(XMLScoreTimewise):
         measure = self.get_children_by_type(Measure)[measure_number - 1]
         part = measure.get_part(part_number)
         part.add_child(note)
+
+    def add_midi(self, midi=Midi(60), duration=1):
+        pass
 
     def clean(self):
         for measure in self.get_children_by_type(Measure):
