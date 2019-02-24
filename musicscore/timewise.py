@@ -144,9 +144,12 @@ class Part(XMLPartTimewise):
 
     def clean(self):
         self.quantize()
+
         self.update_divisions()
+
         for note in self.get_children_by_type(Note):
             note.update_duration()
+
         for note in self.get_children_by_type(Note):
             note.update_type()
             note.update_dot()
