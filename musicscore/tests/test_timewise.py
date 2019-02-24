@@ -1,6 +1,7 @@
 from musicscore.xml_test import XMLTest
-from musicscore.timewise import Timwise, Note
-from musicscore.musicxml.elements.xml_note import XMLPitch, XMLType, XMLDot
+from musicscore.timewise import Timwise, Note, Measure, Part
+from musicscore.musicxml.elements.xml_note import XMLPitch
+from musicscore.midi import Midi
 import os
 path = os.path.abspath(__file__).split('.')[0]
 
@@ -49,6 +50,36 @@ class TestTimewise(XMLTest):
             self.timewise.add_note(3, 1, note)
         with self.assertRaises(IndexError):
             self.timewise.add_note(1, 3, note)
+
+    def test_add_midi(self):
+        self.timewise.add_part()
+        self.timewise.add_measure()
+        self.timewise.add_midi(1, 1, Midi(70))
+        result = '''<score-timewise>
+  <part-list>
+    <score-part id="p1">
+      <part-name print-object="no">none</part-name>
+    </score-part>
+  </part-list>
+  <measure number="1">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+      </note>
+    </part>
+  </measure>
+</score-timewise>
+'''
+        self.assertEqual(self.timewise.to_string(), result)
+
+
 
 
 

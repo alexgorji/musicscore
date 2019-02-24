@@ -40,7 +40,15 @@
     </part>
   </measure>
   <measure number="2">
-    <part id="p1"/>
-    <part id="p2"/>
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+    </part>
+    <part id="p2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+    </part>
   </measure>
 </score-timewise>

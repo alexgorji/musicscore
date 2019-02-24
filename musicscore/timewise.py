@@ -6,6 +6,7 @@ from quicktions import Fraction
 from musicscore.basic_functions import lcm
 from musicscore.midi import Midi
 
+
 class Note(XMLNote):
     """"""
 
@@ -110,9 +111,6 @@ class Measure(XMLMeasureTimewise):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def get_part(self, part_number=1):
-        return self.get_children_by_type(Part)[part_number - 1]
-
 
 class Part(XMLPartTimewise):
     """"""
@@ -120,7 +118,7 @@ class Part(XMLPartTimewise):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         attributes = self.add_child(XMLAttributes())
-        attributes.add_child(XMLDivisions(4))
+        attributes.add_child(XMLDivisions(1))
 
     def get_divisions(self):
         duration_denominators = [note.quarter_duration.denominator for note in
@@ -185,18 +183,19 @@ class Timwise(XMLScoreTimewise):
         self.add_child(new_measure)
         new_measure.number = len(self.get_children()) - 1
         for score_part in self.get_score_parts():
-            new_measure.add_child(XMLPartTimewise(id=score_part.id))
+            new_measure.add_child(Part(id=score_part.id))
         return new_measure
 
     def add_note(self, measure_number, part_number, note):
         if not isinstance(note, Note):
             raise TypeError('add_note note must be of type Note not {}'.format(type(note)))
         measure = self.get_children_by_type(Measure)[measure_number - 1]
-        part = measure.get_part(part_number)
+        part = measure.get_children_by_type(Part)[part_number - 1]
         part.add_child(note)
 
-    def add_midi(self, midi=Midi(60), duration=1):
-        pass
+    def add_midi(self, measure_number, part_number, midi=Midi(60), quarter_duration=1):
+        note = Note(event=midi.get_pitch_rest(), quarter_duration=quarter_duration)
+        self.add_note(measure_number, part_number, note)
 
     def clean(self):
         for measure in self.get_children_by_type(Measure):
