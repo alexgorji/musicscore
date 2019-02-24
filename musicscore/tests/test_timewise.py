@@ -32,11 +32,11 @@ class TestTimewise(XMLTest):
         self.timewise.add_part()
         self.timewise.add_measure()
         note = Note(XMLPitch('D'), quarter_duration=1.5)
-        # note.add_child(XMLDot())
         self.timewise.add_note(measure_number=1, part_number=2, note=note)
         note = Note(XMLPitch('E', alter=-1, octave=5), quarter_duration=2)
         self.timewise.add_note(measure_number=1, part_number=2, note=note)
 
+        self.timewise.clean()
         self.timewise.write(path)
         self.assert_template(path)
 
