@@ -6,8 +6,11 @@ from musicscore.musicxml.exceptions import AfterInitializationError, ChildAlread
 from musicscore.tree.tree import Tree
 
 
+
 class XMLElement(Tree):
-    _ATTRIBUTES = ('id', 'part-name', 'number', 'print-object', 'default-x', 'default-y', 'relative-x', 'relative-y')
+    _ATTRIBUTES = (
+    'id', 'part-name', 'number', 'print-object', 'default-x', 'default-y', 'relative-x', 'relative-y', 'font-family',
+    'font-size', 'font-weight', 'font-style')
     _CHILDREN_TYPES = []
     _CHILDREN_ORDERED = False
 
@@ -31,7 +34,6 @@ class XMLElement(Tree):
             raise AfterInitializationError(self.tag)
         self._tag = value
 
-
     @property
     def value(self):
         return self._value
@@ -39,7 +41,6 @@ class XMLElement(Tree):
     @value.setter
     def value(self, v):
         self._value = v
-
 
     @property
     def text(self):

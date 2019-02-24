@@ -3,8 +3,8 @@ from musicscore.musicxml.attributes.print_style import Position
 
 
 class Positioned(Position):
-    def __init__(self):
-        super().__init__(tag='positioned')
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='positioned', *args, **kwargs)
 
 
 class PositionTest(TestCase):

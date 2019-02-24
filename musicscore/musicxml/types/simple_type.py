@@ -1,5 +1,8 @@
 class SimpleType(object):
-    def __init__(self, value):
+    permitted = ()
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._value = None
         self.value = value
 
@@ -9,7 +12,8 @@ class SimpleType(object):
 
     @value.setter
     def value(self, v):
-        raise Exception('value.setter must be overwritten by child')
+        if v is not None and v not in self.permitted:
+            raise ValueError('{}.value {} must be None or in {}'.format(self.__class__.__name__, v, self.permitted))
 
     def __repr__(self):
         return str(self.value)
@@ -22,8 +26,9 @@ class Decimal(SimpleType):
     """
     Decimal.value can be a float, int or None.
     """
-    def __init__(self, value):
-        super().__init__(value)
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -33,8 +38,8 @@ class Decimal(SimpleType):
 
 
 class Integer(SimpleType):
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -44,8 +49,8 @@ class Integer(SimpleType):
 
 
 class NonNegativeDecimal(SimpleType):
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -57,8 +62,8 @@ class NonNegativeDecimal(SimpleType):
 
 
 class PositiveDecimal(SimpleType):
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -70,8 +75,8 @@ class PositiveDecimal(SimpleType):
 
 
 class PositiveInteger(SimpleType):
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -88,8 +93,8 @@ class PositiveInteger(SimpleType):
 class Step(SimpleType):
     permitted = ('A', 'B', 'C', 'D', 'E', 'F', 'G')
 
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -99,8 +104,8 @@ class Step(SimpleType):
 
 
 class Alter(SimpleType):
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -111,8 +116,8 @@ class Alter(SimpleType):
 
 
 class Octave(SimpleType):
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -133,8 +138,8 @@ class Divisions(Integer):
     It is preferred that these be integer values both for MIDI interoperability and to avoid roundoff errors.
     """
 
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
 
 class Tenths(Decimal):
@@ -150,8 +155,8 @@ class Tenths(Decimal):
     Tenths allows the value None.
     """
 
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
 
 class PositiveDevisions(PositiveInteger):
@@ -159,8 +164,8 @@ class PositiveDevisions(PositiveInteger):
     The positive-divisions type restricts divisions values to positive numbers.
     """
 
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
 
 class ClefSign(SimpleType):
@@ -172,8 +177,8 @@ class ClefSign(SimpleType):
     """
     permitted = ('G', 'F', 'C', 'percussion', 'TAB', 'jianpu', 'none')
 
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -192,8 +197,8 @@ class StaffLine(PositiveInteger):
     3 for the C sign (alto clef) and 5 for TAB (on a 6-line staff).
     """
 
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
 
 class NoteTypeValue(SimpleType):
@@ -202,11 +207,12 @@ class NoteTypeValue(SimpleType):
     shortest) to maxima (longest)
     """
     permitted = (
-    '1024th', '512th', '256th', '128th', '64th', '32nd', '16th', 'eighth', 'quarter', 'half', 'whole', 'breve', 'long',
-    'maxima')
+        '1024th', '512th', '256th', '128th', '64th', '32nd', '16th', 'eighth', 'quarter', 'half', 'whole', 'breve',
+        'long',
+        'maxima')
 
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -218,11 +224,24 @@ class NoteTypeValue(SimpleType):
 class YesNo(SimpleType):
     permitted = ('yes', 'no')
 
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
         if v not in self.permitted:
-            raise ValueError('YesNo.value {} must yes or no'.format(v))
+            raise ValueError('YesNo.value {} must be yes or no'.format(v))
         self._value = v
+
+
+class FontWeightType(SimpleType):
+    permitted = ('normal', 'bold')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
+
+
+class FontSizeType(Decimal):
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)

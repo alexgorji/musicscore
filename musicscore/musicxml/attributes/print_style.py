@@ -1,33 +1,29 @@
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
-from musicscore.musicxml.types.simple_type import Tenths
+from musicscore.musicxml.types.simple_type import Tenths, FontWeightType, FontSizeType
 
 
 class DefaultX(AttributeAbstract):
-    def __init__(self, default_x=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.type_tester = Tenths
-        self.generate_attribute('default-x', default_x)
+    def __init__(self, tag,  default_x=None, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+        self.generate_attribute('default-x', default_x, Tenths)
 
 
 class DefaultY(AttributeAbstract):
-    def __init__(self, default_y=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.type_tester = Tenths
-        self.generate_attribute('default-y', default_y)
+    def __init__(self, tag, default_y=None, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+        self.generate_attribute('default-y', default_y, Tenths)
 
 
 class RelativeX(AttributeAbstract):
-    def __init__(self, relative_x=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.type_tester = Tenths
-        self.generate_attribute('relative-x', relative_x)
+    def __init__(self, tag, relative_x=None, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+        self.generate_attribute('relative-x', relative_x, Tenths)
 
 
 class RelativeY(AttributeAbstract):
-    def __init__(self, relative_y=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.type_tester = Tenths
-        self.generate_attribute('relative-y', relative_y)
+    def __init__(self, tag, relative_y=None, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+        self.generate_attribute('relative-y', relative_y, Tenths)
 
 
 class Position(DefaultX, DefaultY, RelativeX, RelativeY):
@@ -79,6 +75,36 @@ class Position(DefaultX, DefaultY, RelativeX, RelativeY):
     tenths of a staff resized by the staff-size element.
     """
 
-    def __init__(self, default_x=None, default_y=None, relative_x=None, relative_y=None, *args, **kwargs):
-        super().__init__(default_x=default_x, default_y=default_y, relative_x=relative_x, relative_y=relative_y,
+    def __init__(self, tag, default_x=None, default_y=None, relative_x=None, relative_y=None, *args, **kwargs):
+        super().__init__(tag=tag, default_x=default_x, default_y=default_y, relative_x=relative_x, relative_y=relative_y,
                          *args, **kwargs)
+
+
+class FontWeight(AttributeAbstract):
+    """"""
+
+    def __init__(self, tag, font_weight=None, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+
+        self.generate_attribute('font-weight', font_weight, FontWeightType)
+
+class FontSize(AttributeAbstract):
+    """"""
+
+    def __init__(self, tag, font_size=None, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+        self.generate_attribute('font-size', font_size, FontSizeType)
+
+
+class Font(FontWeight, FontSize):
+    """	The font entity gathers together attributes for determining the font within a directive or direction.
+    They are based on the text styles for Cascading Style Sheets. The font-family is a comma-separated list
+    of font names. These can be specific font styles such as Maestro or Opus, or one of several generic font styles:
+    music, engraved, handwritten, text, serif, sans-serif, handwritten, cursive, fantasy, and monospace. The music,
+    engraved, and handwritten values refer to music fonts; the rest refer to text fonts. The fantasy style refers to
+    decorative text such as found in older German-style printing. The font-style can be normal or italic. The
+    font-size can be one of the CSS sizes (xx-small, x-small, small, medium, large, x-large, xx-large) or a numeric
+    point size. The font-weight can be normal or bold. The default is application-dependent, but is a text font vs. """
+
+    def __init__(self, tag, font_weight=None, font_size=None, *args, **kwargs):
+        super().__init__(tag=tag, font_weight=font_weight, font_size=font_size, *args, **kwargs)

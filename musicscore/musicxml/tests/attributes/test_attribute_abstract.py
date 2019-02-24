@@ -13,8 +13,7 @@ class TestAttributeAbstract(TestCase):
         self.attribute_sub = AttributeSub()
 
     def test_attribute_abstract(self):
-        self.attribute_sub.type_tester = Tenths
-        self.attribute_sub.generate_attribute(attribute_name='print-object', attribute_value=2)
+        self.attribute_sub.generate_attribute(attribute_name='print-object', attribute_value=2, type_=Tenths)
         self.assertEqual(self.attribute_sub.print_object, 2)
         with self.assertRaises(TypeError):
             self.attribute_sub.print_object = 'b'

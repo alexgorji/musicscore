@@ -1,7 +1,7 @@
 from musicscore.musicxml.elements.xml_timewise import XMLMeasureTimewise, XMLPartTimewise, XMLScoreTimewise
 from musicscore.musicxml.elements.xml_score_header import XMLScorePart, XMLPartList, XMLPartName
 from musicscore.musicxml.elements.xml_note import XMLNote, XMLType, XMLDot
-from musicscore.musicxml.elements.xml_attributes import XMLAttributes, XMLDivisions
+from musicscore.musicxml.elements.xml_attributes import XMLAttributes, XMLDivisions, XMLTime
 from quicktions import Fraction
 from musicscore.basic_functions import lcm
 from musicscore.midi import Midi
@@ -108,8 +108,17 @@ class Note(XMLNote):
 class Measure(XMLMeasureTimewise):
     """"""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, time=(4, 4), *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._time = None
+
+    @property
+    def time(self):
+        return self._time
+
+    @time.setter
+    def time(self, value):
+        self._time = value
 
 
 class Part(XMLPartTimewise):
