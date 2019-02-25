@@ -1,10 +1,10 @@
 from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.elements.xml_score_header import XMLPartList, XMLScorePart
+from musicscore.musicxml.elements.xml_score_header import XMLPartList
 from musicscore.musicxml.elements.xml_attributes import XMLAttributes
+from musicscore.musicxml.attributes.group_measure import Width
 
 
-class XMLMeasureAbstract(XMLElement):
-
+class XMLMeasureAbstract(Width):
     _CHILDREN_TYPES = [XMLAttributes]
 
     def __init__(self, number, *args, **kwargs):
@@ -23,7 +23,6 @@ class XMLMeasureAbstract(XMLElement):
 
 
 class XMLPartAbstract(XMLElement):
-
     _CHILDREN_TYPES = []
 
     def __init__(self, id, *args, **kwargs):
@@ -43,10 +42,8 @@ class XMLPartAbstract(XMLElement):
 
 
 class XMLScoreAbstract(XMLElement):
-
     _CHILDREN_TYPES = [XMLPartList]
     _CHILDREN_ORDERED = True
 
     def __init__(self, tag, *args, **kwargs):
         super().__init__(tag, *args, **kwargs)
-

@@ -247,3 +247,10 @@ class CommaSeparatedText(SimpleType):
             raise ValueError(
                 '{}.value {} must match the following pattern: {}'.format(self.__class__.__name__,
                                                                           v, self.pattern))
+
+
+class RightLeftMiddle(SimpleType):
+    permitted = ('right', 'left', 'middle')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)

@@ -1,7 +1,7 @@
 from musicscore.basic_functions import replace_dash
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.simple_type import Tenths, FontSizeType, FontWeightType, FontStyleType, YesNo, \
-    CommaSeparatedText
+    CommaSeparatedText, RightLeftMiddle
 
 
 class AttributeAbstract(XMLElement):
