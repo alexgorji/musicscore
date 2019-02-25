@@ -1,6 +1,7 @@
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.elements.xml_music_data import XMLMusicData
 from musicscore.musicxml.types.simple_type import PositiveDevisions, ClefSign, StaffLine
+from musicscore.musicxml.attributes.print_object import PrintObject
 
 
 # class XMLAttribute(XMLElement):
@@ -25,7 +26,7 @@ class XMLDivisions(XMLElement, PositiveDevisions):
         self.text = value
 
 
-class XMLTime(XMLElement):
+class XMLTime(PrintObject):
     """
     Time signatures are represented by the beats element for the numerator and the beat-type element for the denominator.
     """
@@ -35,8 +36,8 @@ class XMLTime(XMLElement):
         The beats element indicates the number of beats, as found in the numerator of a time signature.
         """
 
-        def __init__(self, value):
-            super().__init__(tag='beats')
+        def __init__(self, value, *args, **kwargs):
+            super().__init__(tag='beats', *args, **kwargs)
             self.text = value
 
     class XMLBeatType(XMLElement):
@@ -44,8 +45,8 @@ class XMLTime(XMLElement):
         The beat-type element indicates the beat unit, as found in the denominator of a time signature.
         """
 
-        def __init__(self, value):
-            super().__init__(tag='beat-type')
+        def __init__(self, value, *args, **kwargs):
+            super().__init__(tag='beat-type', *args, **kwargs)
             self.text = value
 
     _CHILDREN_TYPES = [XMLBeats, XMLBeatType]
