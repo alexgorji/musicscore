@@ -1,3 +1,6 @@
+import re
+
+
 class SimpleType(object):
     permitted = ()
 
@@ -82,7 +85,7 @@ class PositiveInteger(SimpleType):
     def value(self, v):
         Integer(v)
         if v < 1:
-            raise TypeError('value {} must a be positive.'.format(v))
+            raise ValueError('value {} must a be positive.'.format(v))
 
         self._value = v
 
@@ -95,12 +98,6 @@ class Step(SimpleType):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value, *args, **kwargs)
-
-    @SimpleType.value.setter
-    def value(self, v):
-        if v not in self.permitted:
-            raise ValueError('Step.value {} must be in {}'.format(v, self.permitted))
-        self._value = v
 
 
 class Alter(SimpleType):
@@ -180,12 +177,6 @@ class ClefSign(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value, *args, **kwargs)
 
-    @SimpleType.value.setter
-    def value(self, v):
-        if v not in self.permitted:
-            raise ValueError('ClefSign.value {} must be in {}'.format(v, self.permitted))
-        self._value = v
-
 
 class StaffLine(PositiveInteger):
     """
@@ -214,24 +205,12 @@ class NoteTypeValue(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value, *args, **kwargs)
 
-    @SimpleType.value.setter
-    def value(self, v):
-        if v not in self.permitted:
-            raise ValueError('Step.value {} must be in {}'.format(v, self.permitted))
-        self._value = v
-
 
 class YesNo(SimpleType):
     permitted = ('yes', 'no')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value, *args, **kwargs)
-
-    @SimpleType.value.setter
-    def value(self, v):
-        if v not in self.permitted:
-            raise ValueError('YesNo.value {} must be yes or no'.format(v))
-        self._value = v
 
 
 class FontWeightType(SimpleType):
@@ -245,3 +224,26 @@ class FontSizeType(Decimal):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value, *args, **kwargs)
+
+
+class FontStyleType(SimpleType):
+    permitted = ('normal', 'italic')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
+
+
+class CommaSeparatedText(SimpleType):
+    pattern = '[^,]+(, ?[^,]+)*'
+    p = re.compile(pattern)
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        m = self.p.match(v)
+        if m is None or m.span()[1] != len(v):
+            raise ValueError(
+                '{}.value {} must match the following pattern: {}'.format(self.__class__.__name__,
+                                                                          v, self.pattern))

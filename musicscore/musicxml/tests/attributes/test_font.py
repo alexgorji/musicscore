@@ -16,11 +16,16 @@ class TestFont(TestCase):
     def test_font(self):
         self.font.font_weight = 'normal'
         self.font.font_size = 10
-        result = '''<pitch font-size="10" font-weight="normal">
+
+        with self.assertRaises(TypeError):
+            self.font.font_size = 'b'
+
+        self.font.font_style = 'italic'
+        self.font.font_family = 'Arial, Times'
+
+        result = '''<pitch font-family="Arial, Times" font-size="10" font-weight="normal" font-style="italic">
   <step>C</step>
   <octave>4</octave>
 </pitch>
 '''
         self.assertEqual(self.font.to_string(), result)
-        with self.assertRaises(TypeError):
-            self.font.font_size = 'b'

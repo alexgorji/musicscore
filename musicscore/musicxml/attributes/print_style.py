@@ -2,7 +2,7 @@ from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 
 
 class DefaultX(AttributeAbstract):
-    def __init__(self, tag,  default_x=None, *args, **kwargs):
+    def __init__(self, tag, default_x=None, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
         self.generate_attribute('default-x', default_x, 'Tenths')
 
@@ -75,7 +75,8 @@ class Position(DefaultX, DefaultY, RelativeX, RelativeY):
     """
 
     def __init__(self, tag, default_x=None, default_y=None, relative_x=None, relative_y=None, *args, **kwargs):
-        super().__init__(tag=tag, default_x=default_x, default_y=default_y, relative_x=relative_x, relative_y=relative_y,
+        super().__init__(tag=tag, default_x=default_x, default_y=default_y, relative_x=relative_x,
+                         relative_y=relative_y,
                          *args, **kwargs)
 
 
@@ -87,6 +88,7 @@ class FontWeight(AttributeAbstract):
 
         self.generate_attribute('font-weight', font_weight, 'FontWeightType')
 
+
 class FontSize(AttributeAbstract):
     """"""
 
@@ -95,7 +97,23 @@ class FontSize(AttributeAbstract):
         self.generate_attribute('font-size', font_size, 'FontSizeType')
 
 
-class Font(FontWeight, FontSize):
+class FontStyle(AttributeAbstract):
+    """"""
+
+    def __init__(self, tag, font_style=None, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+        self.generate_attribute('font-style', font_style, 'FontStyleType')
+
+
+class FontFamily(AttributeAbstract):
+    """"""
+
+    def __init__(self, tag, font_family=None, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+        self.generate_attribute('font-family', font_family, 'CommaSeparatedText')
+
+
+class Font(FontSize, FontWeight, FontStyle, FontFamily):
     """	The font entity gathers together attributes for determining the font within a directive or direction.
     They are based on the text styles for Cascading Style Sheets. The font-family is a comma-separated list
     of font names. These can be specific font styles such as Maestro or Opus, or one of several generic font styles:
@@ -105,5 +123,6 @@ class Font(FontWeight, FontSize):
     font-size can be one of the CSS sizes (xx-small, x-small, small, medium, large, x-large, xx-large) or a numeric
     point size. The font-weight can be normal or bold. The default is application-dependent, but is a text font vs. """
 
-    def __init__(self, tag, font_weight=None, font_size=None, *args, **kwargs):
-        super().__init__(tag=tag, font_weight=font_weight, font_size=font_size, *args, **kwargs)
+    def __init__(self, tag, font_weight=None, font_size=None, font_style=None, font_family=None, *args, **kwargs):
+        super().__init__(tag=tag, font_weight=font_weight, font_size=font_size, font_style=font_style,
+                         font_family=font_family, *args, **kwargs)
