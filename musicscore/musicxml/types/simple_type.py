@@ -234,7 +234,7 @@ class FontStyleType(SimpleType):
 
 
 class CommaSeparatedText(SimpleType):
-    pattern = '[^,]+(, ?[^,]+)*'
+    pattern = r'^[^,]+(, ?[^,]+)*$'
     p = re.compile(pattern)
 
     def __init__(self, value, *args, **kwargs):
@@ -243,7 +243,7 @@ class CommaSeparatedText(SimpleType):
     @SimpleType.value.setter
     def value(self, v):
         m = self.p.match(v)
-        if m is None or m.span()[1] != len(v):
+        if m is None:
             raise ValueError(
                 '{}.value {} must match the following pattern: {}'.format(self.__class__.__name__,
                                                                           v, self.pattern))
@@ -254,3 +254,27 @@ class RightLeftMiddle(SimpleType):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value, *args, **kwargs)
+
+
+class BarStyleType(SimpleType):
+    permitted = ('regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy', 'heavy-light', 'heavy-heavy',
+                 'tick', 'short' 'none')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
+
+
+class ColorType(SimpleType):
+    pattern = r'^#[\dA-F]{6}([\dA-F][\dA-F])?$'
+    p = re.compile(pattern)
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        m = self.p.match(v)
+        if m is None:
+            raise ValueError(
+                '{}.value {} must match the following pattern: {}'.format(self.__class__.__name__,
+                                                                          v, self.pattern))
