@@ -9,7 +9,7 @@ from musicscore.tree.tree import Tree
 class XMLElement(Tree):
     _ATTRIBUTES = (
         'id', 'part-name', 'number', 'location', 'print-object', 'default-x', 'default-y', 'relative-x', 'relative-y',
-        'font-family', 'font-size', 'font-weight', 'font-style')
+        'font-family', 'font-size', 'font-weight', 'font-style', 'color')
     _CHILDREN_TYPES = []
     _CHILDREN_ORDERED = False
 
