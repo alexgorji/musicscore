@@ -149,7 +149,7 @@ class Part(XMLPartTimewise):
         for note in self.get_children_by_type(Note):
             note.quarter_duration = Fraction(note.quarter_duration).limit_denominator(12)
 
-    def clean(self):
+    def finish(self):
         self.quantize()
 
         self.update_divisions()
@@ -206,7 +206,7 @@ class Timwise(XMLScoreTimewise):
         note = Note(event=midi.get_pitch_rest(), quarter_duration=quarter_duration)
         self.add_note(measure_number, part_number, note)
 
-    def clean(self):
+    def finish(self):
         for measure in self.get_children_by_type(Measure):
             for part in measure.get_children_by_type(Part):
-                part.clean()
+                part.finish()
