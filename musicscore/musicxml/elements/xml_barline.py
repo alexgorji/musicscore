@@ -16,6 +16,8 @@ class XMLBarStyle(XMLElement, BarStyleType):
     def __init__(self, value=None, *args, **kwargs):
         super().__init__(tag='bar-style', value=value, *args, **kwargs)
 
+
+
 class XMLBarline(BarlineAttributes):
     """If a barline is other than a normal single barline, it should be represented by a barline type that describes it.
     This includes information about repeats and multiple endings, as well as line style. Barline data is on the same
@@ -34,5 +36,6 @@ class XMLBarline(BarlineAttributes):
     """
     _CHILDREN_TYPES = [XMLBarStyle]
     _CHILDREN_ORDERED = True
+
     def __init__(self, *args, **kwargs):
         super().__init__(tag='barline', *args, **kwargs)

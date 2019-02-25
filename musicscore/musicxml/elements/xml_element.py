@@ -13,11 +13,12 @@ class XMLElement(Tree):
     _CHILDREN_TYPES = []
     _CHILDREN_ORDERED = False
 
-    def __init__(self, tag, *args, **kwargs):
+    def __init__(self, tag, text=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._value = None
+        # self._value = None
         self._tag = None
         self._text = None
+        self.text = text
         self._attributes = {}
         self.tag = tag
         self._test_mode = None
@@ -33,22 +34,24 @@ class XMLElement(Tree):
             raise AfterInitializationError(self.tag)
         self._tag = value
 
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, v):
-        self._value = v
+    # @property
+    # def value(self):
+    #     return self._value
+    #
+    # @value.setter
+    # def value(self, v):
+    #     self._value = v
 
     @property
     def text(self):
-        if self.value is not None:
-            return str(self.value)
+        if self._text is not None:
+            return str(self._text)
+        else:
+            return None
 
     @text.setter
     def text(self, v):
-        self.value = v
+        self._text = v
 
     @property
     def test_mode(self):
@@ -220,8 +223,15 @@ class XMLElement(Tree):
 
         set_children()
 
+        # todo
         if self.test_mode is False:
-            xml.text = self.text
+            try:
+                self.text = self.value
+            except AttributeError as err:
+                pass
+
+            if self.text is not None:
+                xml.text = str(self.text)
             set_attributes()
 
         return xml

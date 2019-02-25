@@ -1,13 +1,7 @@
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.elements.xml_music_data import XMLMusicData
-from musicscore.musicxml.types.simple_type import PositiveDevisions, ClefSign, StaffLine
+from musicscore.musicxml.types.simple_type import PositiveDevisions, ClefSign, StaffLine, PositiveInteger
 from musicscore.musicxml.attributes.print_object import PrintObject
-
-
-# class XMLAttribute(XMLElement):
-#     """"""
-#     def __init__(self, tag, *args, **kwargs):
-#         super().__init__(tag, *args, **kwargs)
 
 
 class XMLDivisions(XMLElement, PositiveDevisions):
@@ -23,7 +17,7 @@ class XMLDivisions(XMLElement, PositiveDevisions):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='divisions', value=value, *args, **kwargs)
-        self.text = value
+
 
 
 class XMLTime(PrintObject):
@@ -31,23 +25,23 @@ class XMLTime(PrintObject):
     Time signatures are represented by the beats element for the numerator and the beat-type element for the denominator.
     """
 
-    class XMLBeats(XMLElement):
+    class XMLBeats(XMLElement, PositiveInteger):
         """
         The beats element indicates the number of beats, as found in the numerator of a time signature.
         """
 
         def __init__(self, value, *args, **kwargs):
-            super().__init__(tag='beats', *args, **kwargs)
-            self.text = value
+            super().__init__(tag='beats', value=value, *args, **kwargs)
 
-    class XMLBeatType(XMLElement):
+
+    class XMLBeatType(XMLElement, PositiveInteger):
         """
         The beat-type element indicates the beat unit, as found in the denominator of a time signature.
         """
 
         def __init__(self, value, *args, **kwargs):
-            super().__init__(tag='beat-type', *args, **kwargs)
-            self.text = value
+            super().__init__(tag='beat-type', value=value, *args, **kwargs)
+
 
     _CHILDREN_TYPES = [XMLBeats, XMLBeatType]
     _CHILDREN_ORDERED = True
@@ -98,12 +92,12 @@ class XMLClef(XMLElement):
     class XMLSign(XMLElement, ClefSign):
         def __init__(self, value, *args, **kwargs):
             super().__init__(tag='sign', value=value, *args, **kwargs)
-            self.text = value
+
 
     class XMLLine(XMLElement, StaffLine):
         def __init__(self, value, *args, **kwargs):
             super().__init__(tag='line', value=value, *args, **kwargs)
-            self.text = value
+
 
     _CHILDREN_TYPES = [XMLSign, XMLLine]
     _CHILDREN_ORDERED = True

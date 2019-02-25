@@ -23,7 +23,8 @@ readily than the other.
         (grace, ((%full-note;, (tie, tie?)?) | (cue, %full-note;))) |
         (cue, %full-note;, duration) |
         (%full-note;, duration, (tie, tie?)?)
-    ), instrument?, %editorial-voice;, type?, dot*, accidental?, time-modification?, stem?, notehead?, notehead-text?, staff?, beam*, notations*, lyric*, play?
+    ), instrument?, %editorial-voice;, type?, dot*, accidental?, time-modification?, stem?, notehead?, notehead-text?, 
+    staff?, beam*, notations*, lyric*, play?
 )
 """
 
@@ -36,19 +37,19 @@ class XMLEvent(XMLElement):
 class XMLStep(XMLElement, Step):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='step', value=value, *args, **kwargs)
-        self.text = value
+
 
 
 class XMLAlter(XMLElement, Alter):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='alter', value=value, *args, **kwargs)
-        self.text = value
+
 
 
 class XMLOctave(XMLElement, Octave):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='octave', value=value, *args, **kwargs)
-        self.text = value
+
 
 
 class XMLPitch(XMLEvent):
@@ -95,13 +96,13 @@ class XMLPitch(XMLEvent):
 class XMLDisplayStep(XMLElement, Step):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='display-step', value=value, *args, **kwargs)
-        self.text = value
+
 
 
 class XMLDisplayOctave(XMLElement, Octave):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='display-octave', value=value, *args, **kwargs)
-        self.text = value
+
 
 
 class XMLRest(XMLEvent):
@@ -146,13 +147,12 @@ class XMLChord(Empty):
 class XMLDuration(XMLElement, PositiveDevisions):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='duration', value=value, *args, **kwargs)
-        self.text = value
 
 
 class XMLType(XMLElement, NoteTypeValue):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='type', value=value, *args, **kwargs)
-        self.text = value
+
 
 
 class XMLDot(EmptyPlacement):

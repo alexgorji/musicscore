@@ -19,7 +19,10 @@ class TestBaredXML(TestCase):
     def test_barstyled_xml(self):
         bared = Bared('light-light')
         # bared.value = 'regular'
-        bared.value = 'bla'
-        print(bared.to_string())
+        with self.assertRaises(ValueError):
+            bared.value = 'bla'
+        result = '''<test_bar>light-light</test_bar>
+'''
+        self.assertEqual(bared.to_string(), result)
 
 

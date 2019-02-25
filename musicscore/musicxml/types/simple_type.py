@@ -17,6 +17,8 @@ class SimpleType(object):
     def value(self, v):
         if v is not None and v not in self.permitted:
             raise ValueError('{}.value {} must be None or in {}'.format(self.__class__.__name__, v, self.permitted))
+        self._value = v
+        self._text = v
 
     def __repr__(self):
         return str(self.value)
@@ -31,7 +33,7 @@ class Decimal(SimpleType):
     """
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -42,7 +44,7 @@ class Decimal(SimpleType):
 
 class Integer(SimpleType):
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -53,7 +55,7 @@ class Integer(SimpleType):
 
 class NonNegativeDecimal(SimpleType):
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -66,7 +68,7 @@ class NonNegativeDecimal(SimpleType):
 
 class PositiveDecimal(SimpleType):
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -79,7 +81,7 @@ class PositiveDecimal(SimpleType):
 
 class PositiveInteger(SimpleType):
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -90,6 +92,16 @@ class PositiveInteger(SimpleType):
         self._value = v
 
 
+class String(SimpleType):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if not isinstance(v, str):
+            raise TypeError('value {} must a be string'.format(v))
+
+
 # ///////////////
 
 
@@ -97,12 +109,12 @@ class Step(SimpleType):
     permitted = ('A', 'B', 'C', 'D', 'E', 'F', 'G')
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class Alter(SimpleType):
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -114,7 +126,7 @@ class Alter(SimpleType):
 
 class Octave(SimpleType):
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -136,7 +148,7 @@ class Divisions(Integer):
     """
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class Tenths(Decimal):
@@ -153,7 +165,7 @@ class Tenths(Decimal):
     """
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class PositiveDevisions(PositiveInteger):
@@ -162,7 +174,7 @@ class PositiveDevisions(PositiveInteger):
     """
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class ClefSign(SimpleType):
@@ -175,7 +187,7 @@ class ClefSign(SimpleType):
     permitted = ('G', 'F', 'C', 'percussion', 'TAB', 'jianpu', 'none')
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class StaffLine(PositiveInteger):
@@ -189,7 +201,7 @@ class StaffLine(PositiveInteger):
     """
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class NoteTypeValue(SimpleType):
@@ -203,34 +215,34 @@ class NoteTypeValue(SimpleType):
         'maxima')
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class YesNo(SimpleType):
     permitted = ('yes', 'no')
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class FontWeightType(SimpleType):
     permitted = ('normal', 'bold')
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class FontSizeType(Decimal):
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class FontStyleType(SimpleType):
     permitted = ('normal', 'italic')
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class CommaSeparatedText(SimpleType):
@@ -238,7 +250,7 @@ class CommaSeparatedText(SimpleType):
     p = re.compile(pattern)
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -247,13 +259,14 @@ class CommaSeparatedText(SimpleType):
             raise ValueError(
                 '{}.value {} must match the following pattern: {}'.format(self.__class__.__name__,
                                                                           v, self.pattern))
+        self._value = v
 
 
 class RightLeftMiddle(SimpleType):
     permitted = ('right', 'left', 'middle')
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class BarStyleType(SimpleType):
@@ -261,7 +274,7 @@ class BarStyleType(SimpleType):
                  'tick', 'short' 'none')
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
 
 class ColorType(SimpleType):
@@ -269,7 +282,7 @@ class ColorType(SimpleType):
     p = re.compile(pattern)
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
+        super().__init__(value=value, *args, **kwargs)
 
     @SimpleType.value.setter
     def value(self, v):
@@ -278,3 +291,4 @@ class ColorType(SimpleType):
             raise ValueError(
                 '{}.value {} must match the following pattern: {}'.format(self.__class__.__name__,
                                                                           v, self.pattern))
+        self._value = v

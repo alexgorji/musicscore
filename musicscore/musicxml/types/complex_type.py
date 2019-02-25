@@ -20,7 +20,8 @@ class Empty(ComplexType, XMLElement):
 
     @XMLElement.text.setter
     def text(self, value):
-        raise Exception('Empty cannot have text.')
+        if value is not None:
+            raise Exception('Empty cannot have text.')
 
 
 # class EmptyPlacement(Empty, PrintStyle, Placement):
