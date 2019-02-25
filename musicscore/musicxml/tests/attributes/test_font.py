@@ -14,7 +14,13 @@ class TestFont(TestCase):
         self.font = XMLWithFont()
 
     def test_font(self):
-        print(self.font.to_string())
         self.font.font_weight = 'normal'
         self.font.font_size = 10
-        print(self.font.to_string())
+        result = '''<pitch font-size="10" font-weight="normal">
+  <step>C</step>
+  <octave>4</octave>
+</pitch>
+'''
+        self.assertEqual(self.font.to_string(), result)
+        with self.assertRaises(TypeError):
+            self.font.font_size = 'b'

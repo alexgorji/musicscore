@@ -1,29 +1,28 @@
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
-from musicscore.musicxml.types.simple_type import Tenths, FontWeightType, FontSizeType
 
 
 class DefaultX(AttributeAbstract):
     def __init__(self, tag,  default_x=None, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-        self.generate_attribute('default-x', default_x, Tenths)
+        self.generate_attribute('default-x', default_x, 'Tenths')
 
 
 class DefaultY(AttributeAbstract):
     def __init__(self, tag, default_y=None, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-        self.generate_attribute('default-y', default_y, Tenths)
+        self.generate_attribute('default-y', default_y, 'Tenths')
 
 
 class RelativeX(AttributeAbstract):
     def __init__(self, tag, relative_x=None, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-        self.generate_attribute('relative-x', relative_x, Tenths)
+        self.generate_attribute('relative-x', relative_x, 'Tenths')
 
 
 class RelativeY(AttributeAbstract):
     def __init__(self, tag, relative_y=None, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-        self.generate_attribute('relative-y', relative_y, Tenths)
+        self.generate_attribute('relative-y', relative_y, 'Tenths')
 
 
 class Position(DefaultX, DefaultY, RelativeX, RelativeY):
@@ -86,14 +85,14 @@ class FontWeight(AttributeAbstract):
     def __init__(self, tag, font_weight=None, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
 
-        self.generate_attribute('font-weight', font_weight, FontWeightType)
+        self.generate_attribute('font-weight', font_weight, 'FontWeightType')
 
 class FontSize(AttributeAbstract):
     """"""
 
     def __init__(self, tag, font_size=None, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-        self.generate_attribute('font-size', font_size, FontSizeType)
+        self.generate_attribute('font-size', font_size, 'FontSizeType')
 
 
 class Font(FontWeight, FontSize):

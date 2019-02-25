@@ -33,7 +33,7 @@ class Decimal(SimpleType):
     @SimpleType.value.setter
     def value(self, v):
         if v is not None and not isinstance(v, float) and not isinstance(v, int):
-            raise TypeError('value {} must a be a float, int or None'.format(v))
+            raise TypeError('value {} of {} must a be a float, int or None'.format(v, self.__class__.__name__))
         self._value = v
 
 

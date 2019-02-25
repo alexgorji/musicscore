@@ -8,11 +8,9 @@ class AttributeAbstract(XMLElement):
         super().__init__(tag=tag, *args, **kwargs)
         self.type_tester = None
 
-    def generate_attribute(self, attribute_name, attribute_value, type_=None):
+    def generate_attribute(self, attribute_name, attribute_value, type_string=None):
         property_name = replace_dash(attribute_name)
 
-        if type_ is not None:
-            type_ = type_.__name__
         exec('def getter(self): return self.get_attribute("{}")'.format(attribute_name))
         exec('''def setter(self, value): 
     if value is None:
@@ -20,7 +18,7 @@ class AttributeAbstract(XMLElement):
     else:
         if {} is not None:
             {}(value)
-        self.set_attribute('{}', value)'''.format(attribute_name, type_, type_, attribute_name))
+        self.set_attribute('{}', value)'''.format(attribute_name, type_string, type_string, attribute_name))
         exec('AttributeAbstract.{} = property(getter, setter)'.format(property_name))
         if isinstance(attribute_value, str):
             exec('self.{} = "{}"'.format(property_name, attribute_value))
