@@ -14,8 +14,12 @@ class TestDivisions(TestCase):
         self.divisions.value = 2
         result = '''<divisions>2</divisions>
 '''
-        self.assertEqual(self.divisions.to_string(), result)
+
+        with self.assertWarns(Warning):
+            self.assertEqual(self.divisions.to_string(), result)
+
         self.divisions.text = 3
         result = '''<divisions>2</divisions>
 '''
-        self.assertEqual(self.divisions.to_string(), result)
+        with self.assertWarns(Warning):
+            self.assertEqual(self.divisions.to_string(), result)

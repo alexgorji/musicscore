@@ -14,7 +14,7 @@ class TestXMLElement(TestCase):
 
     def test_text(self):
         self.xml.text = 2
-        self.assertEqual(self.xml.text, '2')
+        self.assertEqual(self.xml.text, 2)
 
     def test_add_child(self):
         child = 'child'

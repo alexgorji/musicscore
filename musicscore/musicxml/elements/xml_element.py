@@ -44,10 +44,7 @@ class XMLElement(Tree):
 
     @property
     def text(self):
-        if self._text is not None:
-            return str(self._text)
-        else:
-            return None
+        return self._text
 
     @text.setter
     def text(self, v):
@@ -226,8 +223,14 @@ class XMLElement(Tree):
         # todo
         if self.test_mode is False:
             try:
+                if self.text is not None and self.value is not None and self.text != self.value:
+                    warnings.warn('WARNING: {} has different not None values of self.value {} and self.text {}. self.value overwrites self.text'.format(self, self.value, self.text))
+            except AttributeError:
+                pass
+
+            try:
                 self.text = self.value
-            except AttributeError as err:
+            except AttributeError:
                 pass
 
             if self.text is not None:
