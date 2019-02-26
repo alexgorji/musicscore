@@ -1,5 +1,4 @@
 from musicscore.musicxml.attributes.print_style import Color
-from musicscore.musicxml.elements.xml_element import XMLElement
 from unittest import TestCase
 
 

@@ -140,3 +140,11 @@ class Color(AttributeAbstract):
     def __init__(self, tag, color=None, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
         self.generate_attribute('color', color, 'ColorType')
+
+
+class PrintStyle(Position, Font, Color):
+    def __init__(self, tag, default_x=None, default_y=None, relative_x=None, relative_y=None, font_weight=None,
+                 font_size=None, font_style=None, font_family=None, color=None, *args, **kwargs):
+        super().__init__(tag=tag, default_x=default_x, default_y=default_y, relative_x=relative_x,
+                         relative_y=relative_y, font_weight=font_weight, font_size=font_size, font_style=font_style,
+                         font_family=font_family, color=color, *args, **kwargs)

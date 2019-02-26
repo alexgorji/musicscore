@@ -34,14 +34,6 @@ class XMLElement(Tree):
             raise AfterInitializationError(self.tag)
         self._tag = value
 
-    # @property
-    # def value(self):
-    #     return self._value
-    #
-    # @value.setter
-    # def value(self, v):
-    #     self._value = v
-
     @property
     def text(self):
         return self._text
@@ -224,7 +216,9 @@ class XMLElement(Tree):
         if self.test_mode is False:
             try:
                 if self.text is not None and self.value is not None and self.text != self.value:
-                    warnings.warn('WARNING: {} has different not None values of self.value {} and self.text {}. self.value overwrites self.text'.format(self, self.value, self.text))
+                    warnings.warn(
+                        'WARNING: {} has different not None values of self.value {} and self.text {}. self.value overwrites self.text'.format(
+                            self, self.value, self.text))
             except AttributeError:
                 pass
 
