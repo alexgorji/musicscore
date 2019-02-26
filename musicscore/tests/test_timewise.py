@@ -1,4 +1,4 @@
-from musicscore.xml_test import XMLTest
+from musicscore.musicxml.tests.xml_test import XMLTest
 from musicscore.timewise import Timwise, Note, Measure, Part
 from musicscore.musicxml.elements.xml_note import XMLPitch
 from musicscore.midi import Midi
