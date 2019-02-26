@@ -1,10 +1,10 @@
 from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.attributes.attribute_example import AttibuteExample
+from musicscore.musicxml.attributes.attribute_example import AttributeExample
 
 
 class XMLExampleChild1(XMLElement):
     """
-    some documenation
+    some documentation
     """
 
     def __init__(self, *args, **kwargs):
@@ -13,7 +13,7 @@ class XMLExampleChild1(XMLElement):
 
 class XMLExampleChild2(XMLElement):
     """
-    some documenation
+    some documentation
     """
 
     def __init__(self, *args, **kwargs):
@@ -21,11 +21,11 @@ class XMLExampleChild2(XMLElement):
         self.multiple = True
 
 
-class XMLExample(XMLElement, AttibuteExample):
+class XMLExample(XMLElement, AttributeExample):
     """
-    some documenation
+    some documentation
     """
-    _ATTRIBUTES = ('attribute-example')
+    _ATTRIBUTES = ['attribute-example']
     _CHILDREN_TYPES = [XMLExampleChild1, XMLExampleChild2]
     _CHILDREN_ORDERED = True
 

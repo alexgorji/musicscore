@@ -1,7 +1,7 @@
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 
 
-class AttibuteExample(AttributeAbstract):
+class AttributeExample(AttributeAbstract):
     """"""
 
     def __init__(self, attribute_example=None, *args, **kwargs):

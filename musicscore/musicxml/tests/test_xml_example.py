@@ -1,4 +1,4 @@
-from musicscore.musicxml.xml_example import XMLExample, XMLExampleChild1, XMLExampleChild2
+from musicscore.musicxml.elements.xml_example import XMLExample, XMLExampleChild1, XMLExampleChild2
 from musicscore.musicxml.exceptions import ChildAlreadyExists
 from unittest import TestCase
 
