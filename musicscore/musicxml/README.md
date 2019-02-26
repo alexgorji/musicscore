@@ -1,80 +1,76 @@
-Each Musicxml Element must be a subclass of musicscore.musicxml.element.xml_element.XMLElement
+Define XMLElement as a subclass of XMLElement with an appropriate tag:
+```python
+from musicscore.musicxml.elements.xml_element import XMLElement
 
-Attributes are always assigned via subclasses of musicscore.musicxml.attributes.attribute_abstract AttributeAbstract
-
-**XMLElement._Attributes** is a list of all possible attributes in the desired order
-
-If an Element is a subclass of AttributeAbstract it cannot inherit from XMLElement directly anymore
-(XMLExample(XMLElement, AttributeExample) will give an error duo to inheritance conflicts)
-
-Each Class must have super() with *args and **kwargs
+class XMLExample(XMLElement):
+    """
+    copy of musicxml documentaion
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='example', *args, **kwargs)
+```
 <br>
 <br>
-<br>
-Example: 
-(in musicscore.musicxml.attributes.print_style.py)
+
+**ADDING ATTRIBUTES**
+
+Add a type for attribute in folder types to simple_type.py (as a subclass of SimpleType) or complex_type.py (as a subclass of ComplexType) if needed
+```python
+from musicscore.musicxml.types.simple_type import SimpleType
+class ExampleType(SimpleType):
+    permitted = ('one', 'two', 'three')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+```
+
+Define one or more attribute(s) in folder attributes.
+
 ```python
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
-class Color(AttributeAbstract):
+class AttibuteExample(AttributeAbstract):
     """
-    copy of musicxml documentation about color
+    some documentation if needed
     """
 
-    def __init__(self, tag, color=None, *args, **kwargs):
-        super().__init__(tag=tag, *args, **kwargs)
-        self.generate_attribute('color', color, 'ColorType')
+    def __init__(self, attribute_example=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute('attribute-example', attribute_example, "ExampleType")
 ```
-*musicscore.musicxml.types.simple_type.py*
+<br>
+
+Make your XMLElement a subclass of defined Attribute and attribute tag[s] to _ATTRIBUTES in the desired order. Be carefull of overwriting inherited _ATTIRBUTES!
 ```python
-from musicscore.musicxml.types.simple_type import SimpleType
-import re
-class ColorType(SimpleType):
-    pattern = r'^#[\dA-F]{6}([\dA-F][\dA-F])?$'
-    p = re.compile(pattern)
+from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.attributes.attribute_example import AttibuteExample
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
 
-    @SimpleType.value.setter
-    def value(self, v):
-        m = self.p.match(v)
-        if m is None:
-            raise ValueError(
-                '{}.value {} must match the following pattern: {}'.format(self.__class__.__name__,
-                                                                          v, self.pattern))
+class XMLExample(XMLElement, AttibuteExample):
+    """
+    copy of musicxml documentaion
+    """
+    _ATTRIBUTES = ['attribute-example']
+    def __init__(self, attribute_example=None, *args, **kwargs):
+        super().__init__(tag='example', attribute_example=attribute_example, *args, **kwargs)
 ```
-
-Example:
-
-*musicscore.musicxml.types.simple_type.py*
-```python
-from musicscore.musicxml.types.simple_type import SimpleType
-class BarStyleType(SimpleType):
-    permitted = ('regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy', 'heavy-light', 'heavy-heavy',
-                 'tick', 'short' 'none')
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(value, *args, **kwargs)
-```
+<br>
+By now you have to have written also some tests in tests folder.
 
 ```python
-from musicscore.musicxml.attributes.barline import BarlineAttributes
-from musicscore.musicxml.types.simple_type import BarStyleType
-class Barline(BarlineAttributes):
-    """
-    copy of musicxml documentation about Barline
-    """
-    class BarStyle(BarStyleType):
-        """
-        copy of musicxml documentation about Bar-Style
-        """
-        def __init__(self, *args, **kwargs):
-            super().__init__(tag='bar-style', *args, **kwargs)
-    
-    _CHILDREN_TYPES = [BarStyle]
-    _CHILDREN_ORDERED = True
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='barline', *args, **kwargs)
+from musicscore.musicxml.xml_example import XMLExample
+from unittest import TestCase
 
+
+class TestExample(TestCase):
+    def setUp(self):
+        self.example = XMLExample()
+
+    def test_example(self):
+        with self.assertRaises(ValueError):
+            self.example.attribute_example = 2
+        self.example.attribute_example = 'one'
+        self.example.value = 2
+        result = '''<example attribute-example="one">2</example>
+'''
+        self.assertEqual(self.example.to_string(), result)
 ```
-    

@@ -26,6 +26,13 @@ class SimpleType(object):
 
 # ///////////////
 
+class ExampleType(SimpleType):
+    permitted = ('one', 'two', 'three')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 
 class Decimal(SimpleType):
     """

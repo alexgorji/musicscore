@@ -33,6 +33,7 @@ class XMLBarline(XMLElement, BarlineAttributes):
         %optional-unique-id;
      >
     """
+    _ATTRIBUTES = BarlineAttributes._ATTRIBUTES
     _CHILDREN_TYPES = [XMLBarStyle]
     _CHILDREN_ORDERED = True
 

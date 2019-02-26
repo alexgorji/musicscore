@@ -23,6 +23,7 @@ class XMLTime(XMLElement, PrintObject):
     """
     Time signatures are represented by the beats element for the numerator and the beat-type element for the denominator.
     """
+    _ATTRIBUTES = ['print-object']
 
     class XMLBeats(XMLElement, PositiveInteger):
         """

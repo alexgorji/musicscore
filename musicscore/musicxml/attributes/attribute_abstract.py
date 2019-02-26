@@ -1,13 +1,6 @@
 from musicscore.basic_functions import replace_dash
-from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.types.simple_type import Tenths, FontSizeType, FontWeightType, FontStyleType, YesNo, \
-    CommaSeparatedText, RightLeftMiddle, ColorType
-
-
-# class AttributeAbstract(XMLElement):
-#     def __init__(self, tag, *args, **kwargs):
-#         super().__init__(tag=tag, *args, **kwargs)
-#         self.type_tester = None
+from musicscore.musicxml.types.simple_type import *
+from musicscore.musicxml.types.complex_type import *
 
 class AttributeAbstract(object):
     def __init__(self, *args, **kwargs):

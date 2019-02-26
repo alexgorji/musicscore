@@ -5,6 +5,7 @@ from unittest import TestCase
 
 class Colored(XMLElement, Color):
     """"""
+    _ATTRIBUTES = ['color']
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='color_test', *args, **kwargs)

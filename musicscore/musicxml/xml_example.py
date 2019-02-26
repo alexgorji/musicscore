@@ -1,9 +1,12 @@
 from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.attributes.print_style import Position
+from musicscore.musicxml.attributes.attribute_example import AttibuteExample
 
 
-class XMLExample(XMLElement, Position):
-    """"""
+class XMLExample(XMLElement, AttibuteExample):
+    """
+    some documenation
+    """
+    _ATTRIBUTES = ('attribute-example')
 
-    def __init__(self, default_x=10, *args, **kwargs):
-        super().__init__(tag='example', default_x=default_x, *args, **kwargs)
+    def __init__(self, attribute_example=None, *args, **kwargs):
+        super().__init__(tag='example', attribute_example=attribute_example, *args, **kwargs)

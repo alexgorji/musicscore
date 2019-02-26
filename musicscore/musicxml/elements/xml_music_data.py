@@ -12,6 +12,7 @@ class XMLMusicData(XMLElement):
         super().__init__(tag, *args, **kwargs)
         self.multiple = True
 
+
 class XMLBackup(XMLMusicData):
     """"""
 

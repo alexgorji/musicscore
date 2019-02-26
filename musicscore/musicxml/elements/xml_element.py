@@ -7,9 +7,7 @@ from musicscore.tree.tree import Tree
 
 
 class XMLElement(Tree):
-    _ATTRIBUTES = (
-        'id', 'part-name', 'number', 'location', 'print-object', 'default-x', 'default-y', 'relative-x', 'relative-y',
-        'font-family', 'font-size', 'font-weight', 'font-style', 'color')
+    _ATTRIBUTES = []
     _CHILDREN_TYPES = []
     _CHILDREN_ORDERED = False
 
@@ -105,8 +103,8 @@ class XMLElement(Tree):
     def set_attribute(self, attribute_name, attribute_value):
 
         if attribute_name not in self._ATTRIBUTES:
-            raise ValueError('{}.set_attribute: attribute_name: {} is not in XMLElement._ATTRIBUTES'.format(type(self),
-                                                                                                            attribute_name))
+            raise ValueError('{}.set_attribute: attribute_name: {} is not in {}._ATTRIBUTES'.format(type(self),
+                                                                                                            attribute_name, self.__class__.__name__))
         self.get_attributes()[attribute_name] = attribute_value
         self._sort_attributes()
 

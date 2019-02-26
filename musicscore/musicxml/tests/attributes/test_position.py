@@ -4,6 +4,8 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 
 
 class Positioned(XMLElement, Position):
+    _ATTRIBUTES = ['default-x', 'default-y', 'relative-x', 'relative-y']
+
     def __init__(self, *args, **kwargs):
         super().__init__(tag='positioned', *args, **kwargs)
 
@@ -41,8 +43,3 @@ class PositionTest(TestCase):
         result = '''<positioned default-x="5" default-y="3" relative-y="2"/>
 '''
         self.assertEqual(self.positioned.to_string(), result)
-
-
-
-
-

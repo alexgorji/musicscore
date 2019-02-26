@@ -4,6 +4,8 @@ from musicscore.musicxml.attributes.print_object import PrintObject
 
 
 class XMLPartName(XMLElement, PrintObject):
+    _ATTRIBUTES = ['print-object']
+
     def __init__(self, name, print_object='no'):
         super().__init__(tag='part-name', print_object=print_object)
         self._name = None
@@ -23,6 +25,7 @@ class XMLPartName(XMLElement, PrintObject):
 
 
 class XMLScorePart(XMLElement):
+    _ATTRIBUTES = ('id')
     _CHILDREN_TYPES = [XMLPartName]
 
     def __init__(self, id, part_name='part'):
@@ -40,7 +43,6 @@ class XMLScorePart(XMLElement):
     @part_name.setter
     def part_name(self, value):
         self._set_child(XMLPartName, 'part-name', value)
-
 
     @property
     def id(self):
