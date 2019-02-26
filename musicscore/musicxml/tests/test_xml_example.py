@@ -1,9 +1,10 @@
-from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.attributes.print_style import Position
+from musicscore.musicxml.xml_example import XMLExample
+from unittest import TestCase
 
 
-# class XMLExample(XMLElement, Position):
-#     """"""
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(tag='example', *args, **kwargs)
+class TestExample(TestCase):
+    def setUp(self):
+        self.example = XMLExample()
+
+    def test_example(self):
+        print(self.example.to_string())

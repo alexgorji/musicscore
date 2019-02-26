@@ -1,8 +1,9 @@
 from unittest import TestCase
 from musicscore.musicxml.attributes.print_style import Position
+from musicscore.musicxml.elements.xml_element import XMLElement
 
 
-class Positioned(Position):
+class Positioned(XMLElement, Position):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='positioned', *args, **kwargs)
 

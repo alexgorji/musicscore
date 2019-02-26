@@ -3,7 +3,7 @@ from musicscore.basic_functions import is_empty
 from musicscore.musicxml.attributes.print_object import PrintObject
 
 
-class XMLPartName(PrintObject):
+class XMLPartName(XMLElement, PrintObject):
     def __init__(self, name, print_object='no'):
         super().__init__(tag='part-name', print_object=print_object)
         self._name = None

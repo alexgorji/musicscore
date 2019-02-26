@@ -17,8 +17,7 @@ class XMLBarStyle(XMLElement, BarStyleType):
         super().__init__(tag='bar-style', value=value, *args, **kwargs)
 
 
-
-class XMLBarline(BarlineAttributes):
+class XMLBarline(XMLElement, BarlineAttributes):
     """If a barline is other than a normal single barline, it should be represented by a barline type that describes it.
     This includes information about repeats and multiple endings, as well as line style. Barline data is on the same
     level as the other musical data in a score - a child of a measure in a partwise score, or a part in a timewise

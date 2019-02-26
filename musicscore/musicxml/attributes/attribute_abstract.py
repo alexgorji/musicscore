@@ -4,10 +4,14 @@ from musicscore.musicxml.types.simple_type import Tenths, FontSizeType, FontWeig
     CommaSeparatedText, RightLeftMiddle, ColorType
 
 
-class AttributeAbstract(XMLElement):
-    def __init__(self, tag, *args, **kwargs):
-        super().__init__(tag=tag, *args, **kwargs)
-        self.type_tester = None
+# class AttributeAbstract(XMLElement):
+#     def __init__(self, tag, *args, **kwargs):
+#         super().__init__(tag=tag, *args, **kwargs)
+#         self.type_tester = None
+
+class AttributeAbstract(object):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def generate_attribute(self, attribute_name, attribute_value, type_string=None):
         property_name = replace_dash(attribute_name)

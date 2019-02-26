@@ -11,11 +11,11 @@ class Location(AttributeAbstract):
     print, bookmark, and link elements.
     """
 
-    def __init__(self, tag, location=None, *args, **kwargs):
-        super().__init__(tag=tag, *args, **kwargs)
+    def __init__(self,  location=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.generate_attribute('location', location, "RightLeftMiddle")
 
 
 class BarlineAttributes(Location):
-    def __init__(self, tag, location=None, *args, **kwargs):
-        super().__init__(tag=tag, *args, **kwargs)
+    def __init__(self, location=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)

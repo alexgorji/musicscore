@@ -14,11 +14,11 @@ class XMLElement(Tree):
     _CHILDREN_ORDERED = False
 
     def __init__(self, tag, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._tag = None
-        self._text = None
         self._attributes = {}
+        self._tag = None
         self.tag = tag
+        super().__init__(*args, **kwargs)
+        self._text = None
         self._test_mode = None
         self._multiple = False
 

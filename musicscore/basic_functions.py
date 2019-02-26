@@ -1,6 +1,7 @@
 import re
 import functools
 
+
 def replace_dash(name):
     if '-' in name:
         return re.sub(r'-', '_', name)
@@ -11,7 +12,7 @@ def replace_dash(name):
 
 
 def is_empty(string):
-    if re.sub('\s', '', string) == '':
+    if re.sub(r'\s', '', string) == '':
         return True
     else:
         return False

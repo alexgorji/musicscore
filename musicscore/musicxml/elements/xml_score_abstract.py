@@ -4,7 +4,7 @@ from musicscore.musicxml.elements.xml_attributes import XMLAttributes
 from musicscore.musicxml.attributes.group_measure import Width
 
 
-class XMLMeasureAbstract(Width):
+class XMLMeasureAbstract(XMLElement, Width):
     _CHILDREN_TYPES = [XMLAttributes]
 
     def __init__(self, number, *args, **kwargs):

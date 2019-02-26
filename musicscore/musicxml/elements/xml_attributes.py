@@ -19,8 +19,7 @@ class XMLDivisions(XMLElement, PositiveDevisions):
         super().__init__(tag='divisions', value=value, *args, **kwargs)
 
 
-
-class XMLTime(PrintObject):
+class XMLTime(XMLElement, PrintObject):
     """
     Time signatures are represented by the beats element for the numerator and the beat-type element for the denominator.
     """
@@ -33,7 +32,6 @@ class XMLTime(PrintObject):
         def __init__(self, value, *args, **kwargs):
             super().__init__(tag='beats', value=value, *args, **kwargs)
 
-
     class XMLBeatType(XMLElement, PositiveInteger):
         """
         The beat-type element indicates the beat unit, as found in the denominator of a time signature.
@@ -41,7 +39,6 @@ class XMLTime(PrintObject):
 
         def __init__(self, value, *args, **kwargs):
             super().__init__(tag='beat-type', value=value, *args, **kwargs)
-
 
     _CHILDREN_TYPES = [XMLBeats, XMLBeatType]
     _CHILDREN_ORDERED = True
@@ -93,11 +90,9 @@ class XMLClef(XMLElement):
         def __init__(self, value, *args, **kwargs):
             super().__init__(tag='sign', value=value, *args, **kwargs)
 
-
     class XMLLine(XMLElement, StaffLine):
         def __init__(self, value, *args, **kwargs):
             super().__init__(tag='line', value=value, *args, **kwargs)
-
 
     _CHILDREN_TYPES = [XMLSign, XMLLine]
     _CHILDREN_ORDERED = True
