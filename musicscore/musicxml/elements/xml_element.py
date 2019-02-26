@@ -13,12 +13,10 @@ class XMLElement(Tree):
     _CHILDREN_TYPES = []
     _CHILDREN_ORDERED = False
 
-    def __init__(self, tag, text=None, *args, **kwargs):
+    def __init__(self, tag, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self._value = None
         self._tag = None
         self._text = None
-        self.text = text
         self._attributes = {}
         self.tag = tag
         self._test_mode = None
@@ -36,11 +34,17 @@ class XMLElement(Tree):
 
     @property
     def text(self):
-        return self._text
+        try:
+            return self.value
+        except AttributeError:
+            return self._text
 
     @text.setter
     def text(self, v):
-        self._text = v
+        try:
+            self.value = v
+        except AttributeError:
+            self._text = v
 
     @property
     def test_mode(self):
@@ -214,19 +218,6 @@ class XMLElement(Tree):
 
         # todo
         if self.test_mode is False:
-            try:
-                if self.text is not None and self.value is not None and self.text != self.value:
-                    warnings.warn(
-                        'WARNING: {} has different not None values of self.value {} and self.text {}. self.value overwrites self.text'.format(
-                            self, self.value, self.text))
-            except AttributeError:
-                pass
-
-            try:
-                self.text = self.value
-            except AttributeError:
-                pass
-
             if self.text is not None:
                 xml.text = str(self.text)
             set_attributes()

@@ -13,5 +13,7 @@ class TestDuration(TestCase):
         self.duration.value = 2
         result = '''<duration>2</duration>
 '''
-        with self.assertWarns(Warning):
-            self.assertEqual(self.duration.to_string(), result)
+        self.duration.text = 3
+        result = '''<duration>3</duration>
+'''
+        self.assertEqual(self.duration.to_string(), result)
