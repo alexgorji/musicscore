@@ -1,4 +1,5 @@
-from musicscore.musicxml.xml_example import XMLExample
+from musicscore.musicxml.xml_example import XMLExample, XMLExampleChild1, XMLExampleChild2
+from musicscore.musicxml.exceptions import ChildAlreadyExists
 from unittest import TestCase
 
 
@@ -14,3 +15,16 @@ class TestExample(TestCase):
         result = '''<example attribute-example="one">2</example>
 '''
         self.assertEqual(self.example.to_string(), result)
+        self.example.value = None
+        self.example.add_child(XMLExampleChild2())
+        self.example.add_child(XMLExampleChild1())
+        self.example.add_child(XMLExampleChild2())
+        result = '''<example attribute-example="one">
+  <example-child-1/>
+  <example-child-2/>
+  <example-child-2/>
+</example>
+'''
+        self.assertEqual(self.example.to_string(), result)
+        with self.assertRaises(ChildAlreadyExists):
+            self.example.add_child(XMLExampleChild1())
