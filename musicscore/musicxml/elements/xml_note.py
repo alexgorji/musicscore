@@ -39,17 +39,14 @@ class XMLStep(XMLElement, Step):
         super().__init__(tag='step', value=value, *args, **kwargs)
 
 
-
 class XMLAlter(XMLElement, Alter):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='alter', value=value, *args, **kwargs)
 
 
-
 class XMLOctave(XMLElement, Octave):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='octave', value=value, *args, **kwargs)
-
 
 
 class XMLPitch(XMLEvent):
@@ -98,11 +95,9 @@ class XMLDisplayStep(XMLElement, Step):
         super().__init__(tag='display-step', value=value, *args, **kwargs)
 
 
-
 class XMLDisplayOctave(XMLElement, Octave):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='display-octave', value=value, *args, **kwargs)
-
 
 
 class XMLRest(XMLEvent):
@@ -152,7 +147,6 @@ class XMLDuration(XMLElement, PositiveDevisions):
 class XMLType(XMLElement, NoteTypeValue):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='type', value=value, *args, **kwargs)
-
 
 
 class XMLDot(EmptyPlacement):
