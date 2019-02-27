@@ -3,31 +3,6 @@ from musicscore.musicxml.types.simple_type import Step, Octave, Alter, PositiveD
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.elements.xml_music_data import XMLMusicData
 
-"""
-Notes are the most common type of MusicXML musicxml. The
-MusicXML format keeps the MuseData distinction between
-elements used for sound information and elements used for
-notation information (e.g., tie is used for sound, tied for
-notation). Thus grace notes do not have a duration element.
-Cue notes have a duration element, as do forward elements,
-but no tie elements. Having these two types of information
-available can make interchange considerably easier, as
-some programs handle one type of information much more
-readily than the other.
-"""
-
-"""
-%full-note; --> (chord?, (pitch | unpitched | rest))
-(
-    (
-        (grace, ((%full-note;, (tie, tie?)?) | (cue, %full-note;))) |
-        (cue, %full-note;, duration) |
-        (%full-note;, duration, (tie, tie?)?)
-    ), instrument?, %editorial-voice;, type?, dot*, accidental?, time-modification?, stem?, notehead?, notehead-text?, 
-    staff?, beam*, notations*, lyric*, play?
-)
-"""
-
 
 class XMLEvent(XMLElement):
     def __init__(self, tag, *args, **kwargs):
@@ -204,6 +179,22 @@ class XMLNoteAbstract(XMLMusicData):
 
 
 class XMLNote(XMLNoteAbstract):
+    """
+    Notes are the most common type of MusicXML musicxml. The MusicXML format keeps the MuseData distinction between
+    elements used for sound information and elements used for notation information (e.g., tie is used for sound, tied
+    for notation). Thus grace notes do not have a duration element. Cue notes have a duration element, as do forward
+    elements,  but no tie elements. Having these two types of information  available can make interchange considerably
+    easier, as some programs handle one type of information much more readily than the other.
+%full-note; --> (chord?, (pitch | unpitched | rest))
+(
+    (
+        (grace, ((%full-note;, (tie, tie?)?) | (cue, %full-note;))) |
+        (cue, %full-note;, duration) |
+        (%full-note;, duration, (tie, tie?)?)
+    ), instrument?, %editorial-voice;, type?, dot*, accidental?, time-modification?, stem?, notehead?, notehead-text?,
+    staff?, beam*, notations*, lyric*, play?
+)
+    """
     def __init__(self, event, duration, *args, **kwargs):
         super().__init__(event=event, *args, **kwargs)
         self._duration = None
