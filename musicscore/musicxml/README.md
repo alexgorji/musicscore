@@ -76,7 +76,7 @@ class TestExample(TestCase):
 ```
 <br>
 
-**ADDING ATTRIBUTES**
+**ADDING CHILDREN**
 
 Define XMLChildren classes as above.<br>
 Add Children Types to _CHILDREN_TYPES .<br>
