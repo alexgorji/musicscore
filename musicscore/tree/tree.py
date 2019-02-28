@@ -12,6 +12,7 @@ class Tree(object):
     def up(self):
         return self._up
 
+    @property
     def is_root(self):
         if self._up is None:
             return True
@@ -33,3 +34,21 @@ class Tree(object):
 
     def clear_children(self):
         self._children.clear()
+
+    @property
+    def is_leaf(self):
+        if len(self.get_children()) == 0:
+            return True
+        else:
+            return False
+
+    def get_leaves(self):
+        output = self.get_children()
+        for index, child in enumerate(output):
+            if not child.is_leaf:
+                output[index] = child.get_leaves()
+        return output
+
+
+    def parse_list(self, l):
+        pass

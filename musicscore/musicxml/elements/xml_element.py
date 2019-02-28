@@ -47,7 +47,7 @@ class XMLElement(Tree):
     @property
     def test_mode(self):
         if self._test_mode is None:
-            if not self.is_root():
+            if not self.is_root:
                 return self.up.test_mode
             else:
                 return False
