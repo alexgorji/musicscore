@@ -1,6 +1,7 @@
 from unittest import TestCase
 from musicscore.dtd.dtd import Sequence, Choice, Element, Group
-from musicscore.dtd.note import Grace, FullNote, Cue, Duration, Instrument, EditorialVoice, Type, Dot, Accidental, TimeModification, Stem, Notehead, NotheadText, Staff, Beam, Notations, Play, Lyric, Tie
+from musicscore.dtd.note import Grace, FullNote, Cue, Duration, Instrument, EditorialVoice, Type, Dot, Accidental, \
+    TimeModification, Stem, Notehead, NotheadText, Staff, Beam, Notations, Play, Lyric, Tie
 
 
 class TestDTDTree(TestCase):
@@ -51,3 +52,6 @@ class TestDTDTree(TestCase):
                 Element(Play, 0)
             )
         )
+
+    def test_dtd_leaves(self):
+        print(self.dtd.get_leaves())
