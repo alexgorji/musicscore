@@ -48,7 +48,3 @@ class Tree(object):
             if not child.is_leaf:
                 output[index] = child.get_leaves()
         return output
-
-
-    def parse_list(self, l):
-        pass

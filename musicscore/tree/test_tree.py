@@ -17,7 +17,8 @@ class TestTree(TestCase):
         child_3 = self.tree.add_child(Tree())
         child_4 = child_2.add_child(Tree())
         child_5 = child_2.add_child(Tree())
-        print(child_2.is_leaf)
-        print(child_4.is_leaf)
-        print(self.tree.get_leaves())
+        self.assertFalse(child_2.is_leaf)
+        self.assertTrue(child_4.is_leaf)
+        result = [child_1, [child_4, child_5], child_3]
+        self.assertEqual(self.tree.get_leaves(), result)
 

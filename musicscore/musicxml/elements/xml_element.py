@@ -236,3 +236,10 @@ class XMLElement(Tree):
     def to_string(self):
         xml = self._to_xml()
         return et.tounicode(xml, pretty_print=True)
+
+
+class XMLElementGroup(Tree):
+    """"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
