@@ -65,18 +65,18 @@ class TestDTDTree(TestCase):
         choice = Choice(sequence_1, sequence_2)
 
         all_nodes = self.dtd.dump()
-        all_nodes.reverse()
+        # all_nodes.reverse()
 
         output = [self.dtd.clone()]
-        print(output)
 
         for node in all_nodes:
-            if not node.is_root:
-                if isinstance(node.up, Choice):
-                    print(node.id)
-                    print(node.up)
+            if isinstance(node, Choice):
+                for i in range(len(node.get_children()) - 1):
                     output.append(self.dtd.clone())
 
+        for clone in output:
+            for node in clone.traverse():
+                pass
         print(len(output))
 
         # for el in choice.get_layer(2):
