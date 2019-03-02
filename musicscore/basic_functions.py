@@ -36,3 +36,16 @@ def lcm(l):
         return lcm_
 
     return functools.reduce(lambda x, y: _lcm(x, y), l)
+
+
+def flatten(x):
+    if hasattr(x, "__iter__"):
+        result = []
+        for el in x:
+            if hasattr(el, "__iter__") and not isinstance(el, str):
+                result.extend(flatten(el))
+            else:
+                result.append(el)
+        return result
+    else:
+        return [x]

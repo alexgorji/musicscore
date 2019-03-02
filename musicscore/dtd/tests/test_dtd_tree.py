@@ -54,4 +54,23 @@ class TestDTDTree(TestCase):
         )
 
     def test_dtd_leaves(self):
-        print(self.dtd.get_leaves())
+        leaves = self.dtd.get_leaves(key=lambda child: (type(child).__name__, child._type.__name__))
+        # print(leaves)
+
+    def test_expane(self):
+        sequence_1 = Sequence(Element(Beam), Element(Play), Element(Notehead))
+        sequence_2 = Sequence(Element(Stem), Element(Lyric))
+        choice = Choice(sequence_1, sequence_2)
+        # for el in choice.get_layer(2):
+        #     print(el.id)
+        # for el in choice.traverse():
+        #     print(el.id)
+        # print(sequence_1.expand())
+
+        # print(choice.expand())
+
+
+        # choice = Choice(Element(Beam), Element(Play))
+        # dtd = Sequence(Element(Stem), choice, Element(Notehead))
+        # print(choice.expand())
+        # print(dtd.expand())
