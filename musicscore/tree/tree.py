@@ -1,5 +1,5 @@
 from musicscore.basic_functions import flatten
-
+import copy
 
 class Tree(object):
     """
@@ -84,6 +84,12 @@ class Tree(object):
             for grand_child in child.traverse():
                 yield grand_child
 
+    def dump(self):
+        output = []
+        for node in self.traverse():
+            output.append(node)
+        return output
+
     def get_distance(self, reference=None):
         if reference is None:
             reference = self.get_root()
@@ -115,6 +121,14 @@ class Tree(object):
             return output
         else:
             return [key(child) for child in output]
+
+    def clone(self):
+        cloned = copy.copy(self.get_root())
+        cloned._children = []
+        for child in self.get_children():
+            cloned.add_child(child.clone())
+        return cloned
+
 
     # def get_number_of_layers(self):
     #     if self.is_leaf:

@@ -3,6 +3,8 @@ from musicscore.dtd.dtd import Sequence, Choice, Element, Group
 from musicscore.dtd.note import Grace, FullNote, Cue, Duration, Instrument, EditorialVoice, Type, Dot, Accidental, \
     TimeModification, Stem, Notehead, NotheadText, Staff, Beam, Notations, Play, Lyric, Tie
 
+import copy
+
 
 class TestDTDTree(TestCase):
     def setUp(self):
@@ -57,10 +59,26 @@ class TestDTDTree(TestCase):
         leaves = self.dtd.get_leaves(key=lambda child: (type(child).__name__, child._type.__name__))
         # print(leaves)
 
-    def test_expane(self):
+    def test_expand(self):
         sequence_1 = Sequence(Element(Beam), Element(Play), Element(Notehead))
         sequence_2 = Sequence(Element(Stem), Element(Lyric))
         choice = Choice(sequence_1, sequence_2)
+
+        all_nodes = self.dtd.dump()
+        all_nodes.reverse()
+
+        output = [self.dtd.clone()]
+        print(output)
+
+        for node in all_nodes:
+            if not node.is_root:
+                if isinstance(node.up, Choice):
+                    print(node.id)
+                    print(node.up)
+                    output.append(self.dtd.clone())
+
+        print(len(output))
+
         # for el in choice.get_layer(2):
         #     print(el.id)
         # for el in choice.traverse():
@@ -68,7 +86,6 @@ class TestDTDTree(TestCase):
         # print(sequence_1.expand())
 
         # print(choice.expand())
-
 
         # choice = Choice(Element(Beam), Element(Play))
         # dtd = Sequence(Element(Stem), choice, Element(Notehead))

@@ -39,6 +39,9 @@ class TestTree(TestCase):
         child_5 = child_2.add_child(Tree())
         child_6 = child_5.add_child(Tree())
         result = [[1], [2, 1], [2, 2, 1], [3]]
+        # print(self.tree.dump())
+        # print(self.tree.dump())
+        # print(self.tree.dump())
         # print(child_6.get_number_of_layers())
-        print(self.tree.get_layer(2, key=lambda child: child.id))
+        # print(self.tree.get_layer(2, key=lambda child: child.id))
         # self.assertEqual(self.tree.get_layer(3, lambda child: child.id), result)
