@@ -64,20 +64,33 @@ class TestDTDTree(TestCase):
         sequence_2 = Sequence(Element(Stem), Element(Lyric))
         choice = Choice(sequence_1, sequence_2)
 
-        all_nodes = self.dtd.dump()
-        # all_nodes.reverse()
-
-        output = [self.dtd.clone()]
-
-        for node in all_nodes:
+        # all_nodes = self.dtd.dump()
+        # # all_nodes.reverse()
+        #
+        # output = [self.dtd.clone()]
+        def expand(node):
             if isinstance(node, Choice):
-                for i in range(len(node.get_children()) - 1):
-                    output.append(self.dtd.clone())
+                if node.is_root:
+                    return node.get_children()
+                else:
+                    output = []
+                    for child in node.get_children():
+                        output.append(choice.clone(except_nodes=[node]))
+                    return output
 
-        for clone in output:
-            for node in clone.traverse():
-                pass
-        print(len(output))
+
+        # for node in all_nodes:
+        #     if isinstance(node, Choice):
+        #         for i in range(len(node.get_children()) - 1):
+        #             output.append(output[-1])
+        #         for i in range(len(node.get_children())):
+        #             pass
+        #             output[-1 - i].substitute_node(node.get_children()[-1 - i])
+
+
+
+
+        # print(len(output))
 
         # for el in choice.get_layer(2):
         #     print(el.id)

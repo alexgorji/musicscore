@@ -39,7 +39,18 @@ class TestTree(TestCase):
         child_5 = child_2.add_child(Tree())
         child_6 = child_5.add_child(Tree())
         result = [[1], [2, 1], [2, 2, 1], [3]]
+        # print(child_5.__dict__, child_5.clone().__dict__)
+
+    def test_clone(self):
+        child_1 = self.tree.add_child(Tree())
+        child_2 = self.tree.add_child(Tree())
+        child_3 = self.tree.add_child(Tree())
+        child_4 = child_2.add_child(Tree())
+        child_5 = child_2.add_child(Tree())
+        child_6 = child_5.add_child(Tree())
         # print(self.tree.dump())
+        cloned = self.tree.clone(except_nodes=[child_3])
+        # print(cloned.dump())
         # print(self.tree.dump())
         # print(self.tree.dump())
         # print(child_6.get_number_of_layers())

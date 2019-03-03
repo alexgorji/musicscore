@@ -122,12 +122,26 @@ class Tree(object):
         else:
             return [key(child) for child in output]
 
-    def clone(self):
-        cloned = copy.copy(self.get_root())
-        cloned._children = []
-        for child in self.get_children():
-            cloned.add_child(child.clone())
-        return cloned
+    def clone(self, except_nodes=[]):
+        if self not in except_nodes:
+            cloned = copy.copy(self)
+            cloned._children = []
+            for child in self.get_children():
+                cloned.add_child(child.clone(except_nodes=except_nodes))
+            return cloned
+        else:
+            return self
+
+    def substitute_node(self, new_node):
+        if self.is_root:
+            raise Exception('substituting root')
+        else:
+            index = self.up.get_children().index(self)
+            self.up.get_children()[index] = new_node
+
+
+
+
 
 
     # def get_number_of_layers(self):
