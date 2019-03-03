@@ -1,4 +1,3 @@
-from musicscore.musicxml.types.simple_type import PositiveInteger
 from musicscore.tree.tree import Tree
 
 
