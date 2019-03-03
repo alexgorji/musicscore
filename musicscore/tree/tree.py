@@ -132,6 +132,17 @@ class Tree(object):
         else:
             return self
 
+    def goto(self, id):
+
+        if id == [0]:
+            return self
+
+        if len(id) == 1:
+            return self.get_children()[id[0] - 1]
+
+        return self.goto(id[:1]).goto(id[1:])
+
+
     def substitute_node(self, new_node):
         if self.is_root:
             raise Exception('substituting root')

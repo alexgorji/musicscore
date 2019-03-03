@@ -95,13 +95,15 @@ class Choice(DTDNode):
         # print('inititalizing {} {}'.format('Choice', self))
         super().__init__(children=children, min_occurrence=min_occurrence, max_occurrence=max_occurrence)
 
-    # def expand(self):
-    #
-    #     output = []
-    #     if self.min_occurrence == 1 and self.max_occurrence == 1:
-    #         for child in self.get_children():
-    #             output.append([child.expand()])
-    #     return output
+    def expand(self):
+        if not self.get_children():
+            return []
+        else:
+            x = self.get_children()[0]
+            xs = self.get_children()[1:]
+            ex = x.expand()
+            exs = Choice(*xs).expand()
+            return ex + exs
 
 
 class Sequence(DTDNode):
@@ -110,16 +112,16 @@ class Sequence(DTDNode):
     def __init__(self, *children):
         # print('inititalizing {} {} with children {}'.format('Sequence', self, children))
         super().__init__(children=children, min_occurrence=1, max_occurrence=1)
-    #
-    # def expand(self):
-    #     tmp = []
-    #     children = self.get_children()
-    #     tmp
-    #     for child in children
-    #     for child in self.get_children():
-    #
-    #         expended = child.expand()
-    #         tmp.append(child.expand())
+
+    def expand(self):
+        if not self.get_children():
+            return [[]]
+        else:
+            x = self.get_children()[0]
+            xs = self.get_children()[1:]
+            ex = x.expand()
+            exs = Sequence(*xs).expand()
+            return [a + b for a in ex for b in exs]
 
 
 class Element(DTDLeaf):
@@ -129,6 +131,9 @@ class Element(DTDLeaf):
         # print('inititalizing {} {} type {}'.format('Element', self, type_.__name__))
         super().__init__(type_, min_occurrence=min_occurrence, max_occurrence=max_occurrence, **kwargs)
 
+    def expand(self):
+        return [[self]]
+
 
 class Group(DTDLeaf):
     """"""
@@ -136,3 +141,6 @@ class Group(DTDLeaf):
     def __init__(self, type_, min_occurrence=1, max_occurrence=1, *args, **kwargs):
         # print('inititalizing {} {} type {}'.format('Group', self, type_.__name__))
         super().__init__(type_, min_occurrence=min_occurrence, max_occurrence=max_occurrence, *args, **kwargs)
+
+    def expand(self):
+        return [[self]]

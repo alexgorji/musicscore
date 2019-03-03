@@ -1,9 +1,7 @@
 from unittest import TestCase
-from musicscore.dtd.dtd import Sequence, Choice, Element, Group
+from musicscore.dtd.dtd import Sequence, Choice, Element, Group, DTDLeaf
 from musicscore.dtd.note import Grace, FullNote, Cue, Duration, Instrument, EditorialVoice, Type, Dot, Accidental, \
     TimeModification, Stem, Notehead, NotheadText, Staff, Beam, Notations, Play, Lyric, Tie
-
-import copy
 
 
 class TestDTDTree(TestCase):
@@ -55,52 +53,19 @@ class TestDTDTree(TestCase):
             )
         )
 
-    def test_dtd_leaves(self):
-        leaves = self.dtd.get_leaves(key=lambda child: (type(child).__name__, child._type.__name__))
-        # print(leaves)
-
     def test_expand(self):
-        sequence_1 = Sequence(Element(Beam), Element(Play), Element(Notehead))
-        sequence_2 = Sequence(Element(Stem), Element(Lyric))
-        choice = Choice(sequence_1, sequence_2)
 
-        # all_nodes = self.dtd.dump()
-        # # all_nodes.reverse()
-        #
-        # output = [self.dtd.clone()]
-        def expand(node):
-            if isinstance(node, Choice):
-                if node.is_root:
-                    return node.get_children()
-                else:
-                    output = []
-                    for child in node.get_children():
-                        output.append(choice.clone(except_nodes=[node]))
-                    return output
+        result = [['Grace', 'FullNote', 'Instrument', 'EditorialVoice', 'Type', 'Dot', 'Accidental', 'TimeModification',
+                   'Stem', 'Notehead', 'NotheadText', 'Staff', 'Beam', 'Notations', 'Lyric', 'Play'],
+                  ['Grace', 'FullNote', 'Tie', 'Instrument', 'EditorialVoice', 'Type', 'Dot', 'Accidental',
+                   'TimeModification', 'Stem', 'Notehead', 'NotheadText', 'Staff', 'Beam', 'Notations', 'Lyric',
+                   'Play'], ['Grace', 'Cue', 'FullNote', 'Instrument', 'EditorialVoice', 'Type', 'Dot', 'Accidental',
+                             'TimeModification', 'Stem', 'Notehead', 'NotheadText', 'Staff', 'Beam', 'Notations',
+                             'Lyric', 'Play'],
+                  ['Cue', 'FullNote', 'Duration', 'Instrument', 'EditorialVoice', 'Type', 'Dot', 'Accidental',
+                   'TimeModification', 'Stem', 'Notehead', 'NotheadText', 'Staff', 'Beam', 'Notations', 'Lyric',
+                   'Play'], ['FullNote', 'Duration', 'Tie', 'Instrument', 'EditorialVoice', 'Type', 'Dot', 'Accidental',
+                             'TimeModification', 'Stem', 'Notehead', 'NotheadText', 'Staff', 'Beam', 'Notations',
+                             'Lyric', 'Play']]
 
-
-        # for node in all_nodes:
-        #     if isinstance(node, Choice):
-        #         for i in range(len(node.get_children()) - 1):
-        #             output.append(output[-1])
-        #         for i in range(len(node.get_children())):
-        #             pass
-        #             output[-1 - i].substitute_node(node.get_children()[-1 - i])
-
-
-
-
-        # print(len(output))
-
-        # for el in choice.get_layer(2):
-        #     print(el.id)
-        # for el in choice.traverse():
-        #     print(el.id)
-        # print(sequence_1.expand())
-
-        # print(choice.expand())
-
-        # choice = Choice(Element(Beam), Element(Play))
-        # dtd = Sequence(Element(Stem), choice, Element(Notehead))
-        # print(choice.expand())
-        # print(dtd.expand())
+        self.assertEqual([[node._type.__name__ for node in possibility] for possibility in self.dtd.expand()], result)
