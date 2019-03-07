@@ -1,20 +1,37 @@
 from musicscore.tree.tree import Tree
 
 
+class ChildTypeDTDConflict(Exception):
+    def __init__(self, child):
+        msg = 'child of type {} cannot be added due to DTD Type conflicts'.format(type(child))
+        super().__init__(msg)
+
+
+class ChildOccurrenceDTDConflict(Exception):
+    def __init__(self, child):
+        msg = 'child of type {} cannot be added due to DTD Occurrence conflicts'.format(type(child))
+        super().__init__(msg)
+
+
+class ChildIsNotOptional(Exception):
+    def __init__(self, node):
+        msg = 'child of type {} is due to  DTD Occurrence not optional'.format(node.type_)
+        super().__init__(msg)
+
+
 class DTDTree(Tree):
     def __init__(self, *args, **kwargs):
-        # print('inititalizing {} {}'.format('DTDTree', self))
         super().__init__(*args, **kwargs)
 
 
 class DTDNode(DTDTree):
     def __init__(self, children=[], min_occurrence=1, max_occurrence=1, *args, **kwargs):
-        # print('inititalizing {} {}'.format('DTDNode', self))
         super().__init__(**kwargs)
         self._min_occurrence = None
         self._max_occurrence = None
         self.min_occurrence = min_occurrence
         self.max_occurrence = max_occurrence
+        self._possibility_index = 0
         for child in children:
             if not isinstance(child, DTDTree):
                 raise TypeError(
@@ -50,15 +67,56 @@ class DTDNode(DTDTree):
     def expand(self):
         return self
 
-    # def get_possibilities(self):
-    #     output = []
-    #     if isinstance(self, Choice) and self.min_occurrence == 1 and self.max_occurrence == 1:
-    #         output
+    def next(self):
+        try:
+            self._possibility_index += 1
+            return self.expand()[self._possibility_index]
+
+        except IndexError:
+            raise StopIteration()
+
+    def get_current_combination(self):
+        return self.expand()[self._possibility_index]
+
+    def get_current_node(self, child):
+        return self.get_current_combination()[
+            [node.type_ for node in self.get_current_combination()].index(type(child))]
+
+    def check_max_occurrence(self, occurrence):
+        if self.max_occurrence is not None and occurrence > self.max_occurrence:
+            return False
+        return True
+
+    def check_child_type(self, parent, child):
+        while type(child) not in [node.type_ for node in self.get_current_combination()]:
+            try:
+                self.next()
+                for sibling in parent.get_children():
+                    try:
+                        self.check_child_type(parent, sibling)
+                    except ChildTypeDTDConflict:
+                        raise ChildTypeDTDConflict(child)
+            except StopIteration:
+                raise ChildTypeDTDConflict(child)
+
+    def check_child_max_occurrence(self, parent, child):
+        occurrence = len(parent.get_children_by_type(type(child)))
+        dtd_node = self.get_current_node(child)
+        while dtd_node.check_max_occurrence(occurrence + 1) is False:
+            try:
+                self.next()
+                for sibling in parent.get_children():
+                    try:
+                        self.check_child_max_occurrence(parent, sibling)
+                    except ChildOccurrenceDTDConflict:
+                        raise ChildOccurrenceDTDConflict(child)
+            except StopIteration:
+                raise ChildOccurrenceDTDConflict(child)
+            dtd_node = self.get_current_node(child)
 
 
 class DTDLeaf(DTDNode):
     def __init__(self, type_, min_occurrence=1, max_occurrence=1, *args, **kwargs):
-        # print('inititalizing {} {} type {}'.format('DTDLeaf', self, type_.__name__))
         super().__init__(min_occurrence=min_occurrence, max_occurrence=max_occurrence, *args, **kwargs)
         self._type = None
         self.type_ = type_
@@ -76,22 +134,11 @@ class DTDLeaf(DTDNode):
     def add_child(self, child):
         raise Exception('DTDLeaf can have no children')
 
-    # _current_siblings = []
-    # def get_siblings(self):
-    #     # upwards
-    #     parent = self.up
-    #     if isinstance(parent, Sequence):
-    #         self._current_siblings.extend(parent.get_children())
-    #     elif isinstance(parent, Choice):
-    #         if parent.min_occurrence == 1 and parent.max_occurrence == 1:
-    #             pass
-
 
 class Choice(DTDNode):
     """"""
 
     def __init__(self, *children, min_occurrence=1, max_occurrence=1):
-        # print('inititalizing {} {}'.format('Choice', self))
         super().__init__(children=children, min_occurrence=min_occurrence, max_occurrence=max_occurrence)
 
     def expand(self):
@@ -109,7 +156,6 @@ class Sequence(DTDNode):
     """"""
 
     def __init__(self, *children):
-        # print('inititalizing {} {} with children {}'.format('Sequence', self, children))
         super().__init__(children=children, min_occurrence=1, max_occurrence=1)
 
     def expand(self):
@@ -127,7 +173,6 @@ class Element(DTDLeaf):
     """"""
 
     def __init__(self, type_, min_occurrence=1, max_occurrence=1, **kwargs):
-        # print('inititalizing {} {} type {}'.format('Element', self, type_.__name__))
         super().__init__(type_, min_occurrence=min_occurrence, max_occurrence=max_occurrence, **kwargs)
 
     def expand(self):
@@ -138,7 +183,6 @@ class Group(DTDLeaf):
     """"""
 
     def __init__(self, type_, min_occurrence=1, max_occurrence=1, *args, **kwargs):
-        # print('inititalizing {} {} type {}'.format('Group', self, type_.__name__))
         super().__init__(type_, min_occurrence=min_occurrence, max_occurrence=max_occurrence, *args, **kwargs)
 
     def expand(self):

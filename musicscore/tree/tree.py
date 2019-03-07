@@ -1,6 +1,7 @@
 from musicscore.basic_functions import flatten
 import copy
 
+
 class Tree(object):
     """
     A simple Tree class
@@ -132,16 +133,15 @@ class Tree(object):
         else:
             return self
 
-    def goto(self, id):
+    def goto(self, id_):
 
-        if id == [0]:
+        if id_ == [0]:
             return self
 
-        if len(id) == 1:
-            return self.get_children()[id[0] - 1]
+        if len(id_) == 1:
+            return self.get_children()[id_[0] - 1]
 
-        return self.goto(id[:1]).goto(id[1:])
-
+        return self.goto(id_[:1]).goto(id_[1:])
 
     def substitute_node(self, new_node):
         if self.is_root:
@@ -149,11 +149,6 @@ class Tree(object):
         else:
             index = self.up.get_children().index(self)
             self.up.get_children()[index] = new_node
-
-
-
-
-
 
     # def get_number_of_layers(self):
     #     if self.is_leaf:

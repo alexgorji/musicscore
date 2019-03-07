@@ -1,4 +1,4 @@
-from musicscore.dtd.dtd import Element, Group, Sequence, Choice
+from musicscore.dtd.dtd import Element, Group, Sequence, Choice, ChildIsNotOptional
 from musicscore.musicxml.elements.xml_element import XMLElement, XMLElementGroup
 
 
@@ -193,7 +193,7 @@ class Note(XMLElement):
                 )
             ),
             Element(Instrument, 0),
-            Group(EditorialVoice),
+            Group(EditorialVoice, 0),
             Element(Type, 0),
             Element(Dot, 0, None),
             Element(Accidental, 0),
@@ -211,5 +211,25 @@ class Note(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='note', *args, **kwargs)
+
+    def reset_children(self):
+        self.clear_children()
+        self._DTD._possibility_index = 0
+
+    def add_child(self, child):
+        self._DTD.check_child_type(self, child)
+        self._DTD.check_child_max_occurrence(self, child)
+        self._children.append(child)
+        return child
+
+    def close(self):
+        current_dtd = self._DTD.get_current_combination()
+        sorted_children = []
+
+        for node in current_dtd:
+            selected = self.get_children_by_type(node.type_)
+            if len(selected) == 0 and node.min_occurrence != 0:
+                raise ChildIsNotOptional(node)
+
 
 

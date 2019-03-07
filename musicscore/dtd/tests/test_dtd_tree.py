@@ -69,3 +69,13 @@ class TestDTDTree(TestCase):
                              'Lyric', 'Play']]
 
         self.assertEqual([[node._type.__name__ for node in possibility] for possibility in self.dtd.expand()], result)
+
+        with self.assertRaises(StopIteration):
+
+            for i in range(6):
+                if i == 0:
+                    possibility = self.dtd.get_current_combination()
+                else:
+                    possibility = self.dtd.next()
+                # print([node._type.__name__ for node in possibility])
+

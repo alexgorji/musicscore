@@ -104,7 +104,8 @@ class XMLElement(Tree):
 
         if attribute_name not in self._ATTRIBUTES:
             raise ValueError('{}.set_attribute: attribute_name: {} is not in {}._ATTRIBUTES'.format(type(self),
-                                                                                                            attribute_name, self.__class__.__name__))
+                                                                                                    attribute_name,
+                                                                                                    self.__class__.__name__))
         self.get_attributes()[attribute_name] = attribute_value
         self._sort_attributes()
 
@@ -119,6 +120,15 @@ class XMLElement(Tree):
         return '{} instance {} at {}'.format(self.__class__.__name__, self.tag, hex(id(self)))
 
     def _check_childtype(self, child):
+        _type_error = True
+        for child_type in self._CHILDREN_TYPES:
+            if isinstance(child, child_type):
+                _type_error = False
+                break
+        if _type_error is True:
+            raise TypeError('child can only be of type(s): {} not {}'.format(self._CHILDREN_TYPES, type(child)))
+
+    def _check_child_type2(self, child):
         _type_error = True
         for child_type in self._CHILDREN_TYPES:
             if isinstance(child, child_type):
@@ -142,6 +152,13 @@ class XMLElement(Tree):
     def add_child(self, child):
         self._check_childtype(child)
         self._check_multiple_children(child)
+        self._children.append(child)
+        child._up = self
+        return child
+
+    def add_child2(self, child):
+        self._check_child_type2(child)
+        self._check_multiple_children2(child)
         self._children.append(child)
         child._up = self
         return child
