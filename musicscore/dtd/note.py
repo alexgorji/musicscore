@@ -46,7 +46,7 @@ class Instrument(XMLElement):
 
 class EditorialVoice(XMLElementGroup):
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='instrument', *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class Type(XMLElement):
@@ -161,52 +161,49 @@ class Note(XMLElement):
     The pizzicato attribute is used when just this note is sounded pizzicato, vs. the pizzicato element which
     changes overall playback between pizzicato and arco.
     """
-
-    _DTD = (
-        Sequence(
-            Choice(
-                Sequence(
-                    Element(Grace),
-                    Choice(
-                        Sequence(
-                            Group(FullNote)
-                        ),
-                        Sequence(
-                            Group(FullNote),
-                            Element(Tie, 0, 2)
-                        ),
-                        Sequence(
-                            Element(Cue),
-                            Group(FullNote)
-                        )
+    _DTD = Sequence(
+        Choice(
+            Sequence(
+                Element(Grace),
+                Choice(
+                    Sequence(
+                        Group(FullNote)
+                    ),
+                    Sequence(
+                        Group(FullNote),
+                        Element(Tie, 0, 2)
+                    ),
+                    Sequence(
+                        Element(Cue),
+                        Group(FullNote)
                     )
-                ),
-                Sequence(
-                    Element(Cue),
-                    Group(FullNote),
-                    Group(Duration)
-                ),
-                Sequence(
-                    Group(FullNote),
-                    Group(Duration),
-                    Element(Tie, 0, 2)
                 )
             ),
-            Element(Instrument, 0),
-            Group(EditorialVoice, 0),
-            Element(Type, 0),
-            Element(Dot, 0, None),
-            Element(Accidental, 0),
-            Element(TimeModification, 0, None),
-            Element(Stem, 0),
-            Element(Notehead, 0),
-            Element(NotheadText, 0),
-            Group(Staff, 0),
-            Element(Beam, 0, 8),
-            Element(Notations, 0, None),
-            Element(Lyric, 0, None),
-            Element(Play, 0)
-        )
+            Sequence(
+                Element(Cue),
+                Group(FullNote),
+                Group(Duration)
+            ),
+            Sequence(
+                Group(FullNote),
+                Group(Duration),
+                Element(Tie, 0, 2)
+            )
+        ),
+        Element(Instrument, 0),
+        Group(EditorialVoice, 0),
+        Element(Type, 0),
+        Element(Dot, 0, None),
+        Element(Accidental, 0),
+        Element(TimeModification, 0, None),
+        Element(Stem, 0),
+        Element(Notehead, 0),
+        Element(NotheadText, 0),
+        Group(Staff, 0),
+        Element(Beam, 0, 8),
+        Element(Notations, 0, None),
+        Element(Lyric, 0, None),
+        Element(Play, 0)
     )
 
     def __init__(self, *args, **kwargs):
@@ -222,14 +219,8 @@ class Note(XMLElement):
         self._children.append(child)
         return child
 
+    def sort_children(self):
+        self._DTD.sort_children(self)
+
     def close(self):
-        current_dtd = self._DTD.get_current_combination()
-        sorted_children = []
-
-        for node in current_dtd:
-            selected = self.get_children_by_type(node.type_)
-            if len(selected) == 0 and node.min_occurrence != 0:
-                raise ChildIsNotOptional(node)
-
-
-
+        self._DTD.close(self)

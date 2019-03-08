@@ -79,3 +79,5 @@ class TestDTDTree(TestCase):
                     possibility = self.dtd.next()
                 # print([node._type.__name__ for node in possibility])
 
+
+

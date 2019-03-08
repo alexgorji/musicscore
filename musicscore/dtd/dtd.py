@@ -114,6 +114,23 @@ class DTDNode(DTDTree):
                 raise ChildOccurrenceDTDConflict(child)
             dtd_node = self.get_current_node(child)
 
+    def sort_children(self, xmltree):
+        current_combination = self.get_current_combination()
+        new_children = []
+        for node in current_combination:
+            if not isinstance(node.up, Sequence):
+                raise Exception('node.up is of type {} and not Sequence'.format(type(node.up)))
+            new_children.extend(xmltree.get_children_by_type(node.type_))
+        return new_children
+
+    def close(self, xmltree):
+        current_combination = self.get_current_combination()
+
+        for node in current_combination:
+            selected = xmltree.get_children_by_type(node.type_)
+            if len(selected) == 0 and node.min_occurrence != 0:
+                raise ChildIsNotOptional(node)
+
 
 class DTDLeaf(DTDNode):
     def __init__(self, type_, min_occurrence=1, max_occurrence=1, *args, **kwargs):
@@ -142,14 +159,28 @@ class Choice(DTDNode):
         super().__init__(children=children, min_occurrence=min_occurrence, max_occurrence=max_occurrence)
 
     def expand(self):
-        if not self.get_children():
-            return []
+        if (self.min_occurrence, self.max_occurrence) == (1, 1):
+            if not self.get_children():
+                return []
+            else:
+                x = self.get_children()[0]
+                xs = self.get_children()[1:]
+                ex = x.expand()
+                exs = Choice(*xs).expand()
+                return ex + exs
+        elif (self.min_occurrence, self.max_occurrence) == (0, None):
+            if not self.get_children():
+                return [[]]
+            else:
+                x = self.get_children()[0]
+                xs = self.get_children()[1:]
+                ex = x.expand()
+                exs = Sequence(*xs).expand()
+                return [a + b for a in ex for b in exs]
         else:
-            x = self.get_children()[0]
-            xs = self.get_children()[1:]
-            ex = x.expand()
-            exs = Choice(*xs).expand()
-            return ex + exs
+            raise ValueError(
+                'Choice with min_occurrence {} and max_occurrence {} is not valid'.format(self.min_occurrence,
+                                                                                          self.max_occurrence))
 
 
 class Sequence(DTDNode):

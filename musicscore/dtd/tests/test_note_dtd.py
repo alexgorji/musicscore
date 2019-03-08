@@ -28,4 +28,17 @@ class TestNoteDTD(TestCase):
         self.note.add_child(Tie())
         self.note.add_child(Tie())
         self.note.close()
+        # print(self.note.get_children())
+
+    def test_sort_children(self):
+        self.note.reset_children()
+        self.note.add_child(FullNote())
+        self.note.add_child(Duration())
+        self.note.add_child(Beam())
+        self.note.add_child(Beam())
+        self.note.add_child(Tie())
+        self.note.add_child(Tie())
+        self.note.sort_children()
         print(self.note.get_children())
+
+
