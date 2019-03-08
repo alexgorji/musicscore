@@ -121,7 +121,7 @@ class DTDNode(DTDTree):
             if not isinstance(node.up, Sequence):
                 raise Exception('node.up is of type {} and not Sequence'.format(type(node.up)))
             new_children.extend(xmltree.get_children_by_type(node.type_))
-        return new_children
+        xmltree._children = new_children
 
     def close(self, xmltree):
         current_combination = self.get_current_combination()

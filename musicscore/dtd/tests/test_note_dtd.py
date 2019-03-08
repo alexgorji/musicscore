@@ -33,12 +33,13 @@ class TestNoteDTD(TestCase):
     def test_sort_children(self):
         self.note.reset_children()
         self.note.add_child(FullNote())
-        self.note.add_child(Duration())
-        self.note.add_child(Beam())
         self.note.add_child(Beam())
         self.note.add_child(Tie())
+        self.note.add_child(Beam())
+        self.note.add_child(Duration())
         self.note.add_child(Tie())
         self.note.sort_children()
-        print(self.note.get_children())
+        result = ['FullNote', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
+        self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
 
 

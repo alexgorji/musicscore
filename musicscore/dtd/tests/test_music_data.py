@@ -1,5 +1,5 @@
 from unittest import TestCase
-from musicscore.dtd.music_data import MusicData
+from musicscore.dtd.music_data import MusicData, Direction
 
 
 class TestMusicData(TestCase):
@@ -7,4 +7,4 @@ class TestMusicData(TestCase):
         self.music_data = MusicData()
 
     def set_add_child(self):
-        pass
+        self.music_data.add_child(Direction)
