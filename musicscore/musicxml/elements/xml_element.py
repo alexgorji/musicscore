@@ -128,15 +128,6 @@ class XMLElement(Tree):
         if _type_error is True:
             raise TypeError('child can only be of type(s): {} not {}'.format(self._CHILDREN_TYPES, type(child)))
 
-    def _check_child_type2(self, child):
-        _type_error = True
-        for child_type in self._CHILDREN_TYPES:
-            if isinstance(child, child_type):
-                _type_error = False
-                break
-        if _type_error is True:
-            raise TypeError('child can only be of type(s): {} not {}'.format(self._CHILDREN_TYPES, type(child)))
-
     def get_children_by_type(self, type_):
         return [child for child in self.get_children() if isinstance(child, type_)]
 
@@ -156,12 +147,6 @@ class XMLElement(Tree):
         child._up = self
         return child
 
-    def add_child2(self, child):
-        self._check_child_type2(child)
-        self._check_multiple_children2(child)
-        self._children.append(child)
-        child._up = self
-        return child
 
     def find_child_by_tag(self, tag):
         return next((child for child in self._children if child.tag == tag), None)
@@ -260,3 +245,6 @@ class XMLElementGroup(Tree):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def get_children_by_type(self, type_):
+        return [child for child in self.get_children() if isinstance(child, type_)]

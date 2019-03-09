@@ -19,6 +19,12 @@ class ChildIsNotOptional(Exception):
         super().__init__(msg)
 
 
+class DTDConflict(Exception):
+    def __init__(self):
+        msg = 'DTD conflicts exist'
+        super().__init__(msg)
+
+
 class DTDTree(Tree):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -114,6 +120,14 @@ class DTDNode(DTDTree):
                 raise ChildOccurrenceDTDConflict(child)
             dtd_node = self.get_current_node(child)
 
+    def check_children(self, xmltree):
+        children = xmltree.get_children()
+        xmltree._children = []
+        for child in children:
+            self.check_child_type(xmltree, child)
+            self.check_child_max_occurrence(xmltree, child)
+            xmltree._children.append(child)
+
     def sort_children(self, xmltree):
         current_combination = self.get_current_combination()
         new_children = []
@@ -123,13 +137,25 @@ class DTDNode(DTDTree):
             new_children.extend(xmltree.get_children_by_type(node.type_))
         xmltree._children = new_children
 
-    def close(self, xmltree):
+    def check_non_optional(self, xmltree):
         current_combination = self.get_current_combination()
 
         for node in current_combination:
             selected = xmltree.get_children_by_type(node.type_)
             if len(selected) == 0 and node.min_occurrence != 0:
                 raise ChildIsNotOptional(node)
+
+    def close(self, xmltree):
+        try:
+            self.check_non_optional(xmltree)
+            # print('{} closed with DTD types: {}'.format(xmltree, [node.type_.__name__ for node in self.get_current_combination()]))
+        except ChildIsNotOptional as e:
+            try:
+                self.next()
+                self.check_children(xmltree)
+                self.close(xmltree)
+            except StopIteration:
+                raise e
 
 
 class DTDLeaf(DTDNode):
