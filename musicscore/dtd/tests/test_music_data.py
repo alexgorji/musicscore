@@ -1,5 +1,5 @@
 from unittest import TestCase
-from musicscore.dtd.music_data import MusicData, Direction
+from musicscore.dtd.music_data import MusicData, Direction, Backup
 from musicscore.dtd.note import Note, Duration
 from musicscore.dtd.dtd import ChildOccurrenceDTDConflict, ChildTypeDTDConflict, ChildIsNotOptional
 
@@ -13,14 +13,14 @@ class TestMusicData(TestCase):
         self.music_data.add_child(Note())
         with self.assertRaises(ChildTypeDTDConflict):
             self.music_data.add_child(Duration())
-        print(self.music_data.get_children())
-        # self.music_data.sort_children()
-    #
-    # def test_add_child_max_occurrence(self):
-    #     self.note.reset_children()
-    #     self.music_data.add_child(Direction)
-    #     with self.assertRaises(ChildOccurrenceDTDConflict):
-    #         self.note.add_child(FullNote())
+
+    def test_add_child_max_occurrence(self):
+        # self.music_data.reset_children()
+        self.music_data.add_child(Direction())
+        self.music_data.add_child(Direction())
+        self.music_data.add_child(Note())
+        self.music_data.add_child(Backup())
+
     #
     # def test_close(self):
     #     self.note.reset_children()
@@ -36,15 +36,12 @@ class TestMusicData(TestCase):
     #     with self.assertRaises(ChildIsNotOptional):
     #         self.note.close()
     #
-    # def test_sort_children(self):
-    #     self.note.reset_children()
-    #     self.note.add_child(FullNote())
-    #     self.note.add_child(Beam())
-    #     self.note.add_child(Tie())
-    #     self.note.add_child(Beam())
-    #     self.note.add_child(Duration())
-    #     self.note.add_child(Tie())
-    #     self.note.sort_children()
-    #     result = ['FullNote', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
-    #     self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
-    #     self.note.close()
+    def test_sort_children(self):
+        # self.music_data.reset_children()
+        self.music_data.add_child(Direction())
+        self.music_data.add_child(Direction())
+        self.music_data.add_child(Note())
+        self.music_data.add_child(Backup())
+        # result = ['FullNote', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
+        # self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
+        # self.music_data.sort_children()

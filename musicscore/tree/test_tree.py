@@ -56,3 +56,23 @@ class TestTree(TestCase):
         # print(child_6.get_number_of_layers())
         # print(self.tree.get_layer(2, key=lambda child: child.id))
         # self.assertEqual(self.tree.get_layer(3, lambda child: child.id), result)
+
+    def test_find_leaf(self):
+        child_1 = self.tree.add_child(Tree())
+        child_2 = self.tree.add_child(Tree())
+        child_3 = self.tree.add_child(Tree())
+        child_4 = child_2.add_child(Tree())
+        child_5 = child_2.add_child(Tree())
+        child_6 = child_5.add_child(Tree())
+        condition = lambda leaf: True if leaf == child_6 else False
+        self.assertEqual(self.tree.find_leaf(condition=condition), child_6)
+
+    def test_branch(self):
+        child_1 = self.tree.add_child(Tree())
+        child_2 = self.tree.add_child(Tree())
+        child_3 = self.tree.add_child(Tree())
+        child_4 = child_2.add_child(Tree())
+        child_5 = child_2.add_child(Tree())
+        child_6 = child_5.add_child(Tree())
+        result = [self.tree, child_2, child_5, child_6]
+        self.assertEqual(child_6.get_branch(), result)

@@ -8,7 +8,7 @@ class TestNoteDTD(TestCase):
         self.note = Note()
 
     def test_add_child_type(self):
-        self.note.reset_children()
+        # self.note.reset_children()
         self.note.add_child(FullNote())
         self.note.add_child(Grace())
         with self.assertRaises(ChildTypeDTDConflict):
@@ -20,7 +20,7 @@ class TestNoteDTD(TestCase):
             self.note.add_child(FullNote())
 
     def test_close(self):
-        self.note.reset_children()
+        # self.note.reset_children()
         self.note.add_child(FullNote())
         self.note.add_child(Grace())
         self.note.close()
@@ -34,7 +34,7 @@ class TestNoteDTD(TestCase):
             self.note.close()
 
     def test_sort_children(self):
-        self.note.reset_children()
+        # self.note.reset_children()
         self.note.add_child(FullNote())
         self.note.add_child(Beam())
         self.note.add_child(Tie())

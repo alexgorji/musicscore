@@ -59,6 +59,15 @@ class Tree(object):
     def clear_children(self):
         self._children.clear()
 
+    def get_branch(self):
+        output = [self]
+        node = self
+        while node.up is not None:
+            output.append(node.up)
+            node = node.up
+        output.reverse()
+        return output
+
     @property
     def is_leaf(self):
         if len(self.get_children()) == 0:
@@ -149,6 +158,17 @@ class Tree(object):
         else:
             index = self.up.get_children().index(self)
             self.up.get_children()[index] = new_node
+
+    def find_leaf(self, condition):
+        for leaf in flatten(self.get_leaves()):
+            if condition(leaf) is True:
+                return leaf
+        return False
+
+    def repair_parenthood(self):
+        for node in self.traverse():
+            for child in node.get_children():
+                child._up = node
 
     # def get_number_of_layers(self):
     #     if self.is_leaf:

@@ -77,20 +77,26 @@ class DTDNode(DTDTree):
         try:
             self._possibility_index += 1
             return self.expand()[self._possibility_index]
-
-        except IndexError:
+        except IndexError as e:
             raise StopIteration()
 
     def get_current_combination(self):
         return self.expand()[self._possibility_index]
 
     def get_current_node(self, child):
+        # print('get_current_node:combination', self.get_current_combination())
         return self.get_current_combination()[
             [node.type_ for node in self.get_current_combination()].index(type(child))]
 
     def check_max_occurrence(self, occurrence):
+        # print('check_max_occurrence: self:{}, self.up: {}'.format(self, self.up))
+        # print(self.up, self.up.min_occurrence, self.up.max_occurrence)
+        if isinstance(self.up, Choice) and self.up.min_occurrence == 0 and self.up.max_occurrence is None:
+            return True
+
         if self.max_occurrence is not None and occurrence > self.max_occurrence:
             return False
+
         return True
 
     def check_child_type(self, parent, child):
@@ -105,15 +111,16 @@ class DTDNode(DTDTree):
             except StopIteration:
                 raise ChildTypeDTDConflict(child)
 
-    def check_child_max_occurrence(self, parent, child):
-        occurrence = len(parent.get_children_by_type(type(child)))
+    def check_child_max_occurrence(self, xmltree, child):
+        occurrence = len(xmltree.get_children_by_type(type(child)))
         dtd_node = self.get_current_node(child)
+        # print('check_child_max_occurrence, child: {}, dtd_node: {}'.format(child, dtd_node))
         while dtd_node.check_max_occurrence(occurrence + 1) is False:
             try:
                 self.next()
-                for sibling in parent.get_children():
+                for sibling in xmltree.get_children():
                     try:
-                        self.check_child_max_occurrence(parent, sibling)
+                        self.check_child_max_occurrence(xmltree, sibling)
                     except ChildOccurrenceDTDConflict:
                         raise ChildOccurrenceDTDConflict(child)
             except StopIteration:
@@ -131,10 +138,17 @@ class DTDNode(DTDTree):
     def sort_children(self, xmltree):
         current_combination = self.get_current_combination()
         new_children = []
-        for node in current_combination:
-            if not isinstance(node.up, Sequence):
-                raise Exception('node.up is of type {} and not Sequence'.format(type(node.up)))
-            new_children.extend(xmltree.get_children_by_type(node.type_))
+        parents = list(set([node.up for node in current_combination]))
+        print(parents)
+        for parent in parents:
+            if isinstance(parent, Sequence):
+                for node in parent.get_children():
+                    new_children.extend(xmltree.get_children_by_type(node.type_))
+            elif isinstance(parent, Choice) and parent.min_occurrence == 0 and parent.max_occurrence == None:
+                pass
+            else:
+                raise Exception('DTD.sort_children: node.up is of wrong type')
+
         xmltree._children = new_children
 
     def check_non_optional(self, xmltree):
@@ -144,6 +158,9 @@ class DTDNode(DTDTree):
             selected = xmltree.get_children_by_type(node.type_)
             if len(selected) == 0 and node.min_occurrence != 0:
                 raise ChildIsNotOptional(node)
+
+    def prune_branch(self, branch):
+        pass
 
     def close(self, xmltree):
         try:
@@ -187,26 +204,29 @@ class Choice(DTDNode):
     def expand(self):
         if (self.min_occurrence, self.max_occurrence) == (1, 1):
             if not self.get_children():
-                return []
+                output = []
             else:
                 x = self.get_children()[0]
                 xs = self.get_children()[1:]
                 ex = x.expand()
                 exs = Choice(*xs).expand()
-                return ex + exs
+                output = ex + exs
+
         elif (self.min_occurrence, self.max_occurrence) == (0, None):
             if not self.get_children():
-                return [[]]
+                output = [[]]
             else:
                 x = self.get_children()[0]
                 xs = self.get_children()[1:]
                 ex = x.expand()
-                exs = Sequence(*xs).expand()
-                return [a + b for a in ex for b in exs]
+                exs = Choice(*xs, min_occurrence=0, max_occurrence=None).expand()
+                output = [a + b for a in ex for b in exs]
         else:
             raise ValueError(
                 'Choice with min_occurrence {} and max_occurrence {} is not valid'.format(self.min_occurrence,
                                                                                           self.max_occurrence))
+        self.repair_parenthood()
+        return output
 
 
 class Sequence(DTDNode):
@@ -217,13 +237,15 @@ class Sequence(DTDNode):
 
     def expand(self):
         if not self.get_children():
-            return [[]]
+            output = [[]]
         else:
             x = self.get_children()[0]
             xs = self.get_children()[1:]
             ex = x.expand()
             exs = Sequence(*xs).expand()
-            return [a + b for a in ex for b in exs]
+            output= [a + b for a in ex for b in exs]
+        self.repair_parenthood()
+        return output
 
 
 class Element(DTDLeaf):
@@ -233,7 +255,9 @@ class Element(DTDLeaf):
         super().__init__(type_, min_occurrence=min_occurrence, max_occurrence=max_occurrence, **kwargs)
 
     def expand(self):
+        self.repair_parenthood()
         return [[self]]
+
 
 
 class Group(DTDLeaf):
@@ -243,4 +267,5 @@ class Group(DTDLeaf):
         super().__init__(type_, min_occurrence=min_occurrence, max_occurrence=max_occurrence, *args, **kwargs)
 
     def expand(self):
+        self.repair_parenthood()
         return [[self]]

@@ -1,6 +1,6 @@
 from musicscore.dtd.dtd import Element, Group, Sequence, Choice, ChildIsNotOptional
 from musicscore.musicxml.elements.xml_element import XMLElement, XMLElementGroup
-
+import copy
 
 class Grace(XMLElement):
     """"""
@@ -208,19 +208,20 @@ class Note(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='note', *args, **kwargs)
+        self.dtd = copy.copy(self._DTD)
 
     def reset_children(self):
         self.clear_children()
-        self._DTD._possibility_index = 0
+        self.dtd._possibility_index = 0
 
     def add_child(self, child):
-        self._DTD.check_child_type(self, child)
-        self._DTD.check_child_max_occurrence(self, child)
+        self.dtd.check_child_type(self, child)
+        self.dtd.check_child_max_occurrence(self, child)
         self._children.append(child)
         return child
 
     def sort_children(self):
-        self._DTD.sort_children(self)
+        self.dtd.sort_children(self)
 
     def close(self):
-        self._DTD.close(self)
+        self.dtd.close(self)
