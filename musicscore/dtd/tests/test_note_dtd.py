@@ -41,7 +41,7 @@ class TestNoteDTD(TestCase):
         self.note.add_child(Beam())
         self.note.add_child(Duration())
         self.note.add_child(Tie())
-        self.note.sort_children()
+        # self.note.sort_children()
+        self.note.close()
         result = ['FullNote', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
-        self.note.close()
