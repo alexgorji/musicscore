@@ -1,4 +1,4 @@
-from musicscore.dtd.note import Note, FullNote, Grace, Duration, Beam, Tie
+from musicscore.dtd.note import Note, FullNote, Grace, Duration, Beam, Tie, Chord, Pitch, Rest
 from musicscore.dtd.dtd import ChildOccurrenceDTDConflict, ChildTypeDTDConflict, ChildIsNotOptional
 from unittest import TestCase
 
@@ -19,6 +19,7 @@ class TestNoteDTD(TestCase):
         with self.assertRaises(ChildOccurrenceDTDConflict):
             self.note.add_child(FullNote())
 
+    #
     def test_close(self):
         # self.note.reset_children()
         self.note.add_child(FullNote())
@@ -34,14 +35,39 @@ class TestNoteDTD(TestCase):
             self.note.close()
 
     def test_sort_children(self):
-        # self.note.reset_children()
         self.note.add_child(FullNote())
         self.note.add_child(Beam())
         self.note.add_child(Tie())
         self.note.add_child(Beam())
         self.note.add_child(Duration())
         self.note.add_child(Tie())
-        # self.note.sort_children()
         self.note.close()
         result = ['FullNote', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
+
+    def test_full_note(self):
+        full_note = FullNote()
+        pitch = full_note.add_child(Pitch())
+        chord = full_note.add_child(Chord())
+
+        full_note.close()
+        result = [chord, pitch]
+        self.assertEqual(full_note.get_children(), result)
+        with self.assertRaises(ChildTypeDTDConflict):
+            full_note.add_child(Rest())
+
+    def test_to_string(self):
+        full_note = FullNote()
+        full_note.add_child(Pitch())
+        full_note.add_child(Chord())
+        full_note.close()
+
+        self.note.add_child(full_note)
+        self.note.add_child(Beam())
+        self.note.add_child(Tie())
+        self.note.add_child(Beam())
+        self.note.add_child(Duration())
+        self.note.add_child(Tie())
+        self.note.close()
+    #     result = ['FullNote', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
+        print(self.note.to_string())

@@ -2,6 +2,7 @@ from musicscore.dtd.dtd import Element, Group, Sequence, Choice, ChildIsNotOptio
 from musicscore.musicxml.elements.xml_element import XMLElement, XMLElementGroup
 import copy
 
+
 class Grace(XMLElement):
     """"""
 
@@ -9,8 +10,62 @@ class Grace(XMLElement):
         super().__init__(tag='grace', *args, **kwargs)
 
 
-class FullNote(XMLElementGroup):
+class Chord(XMLElement):
+    """
+    The chord element indicates that this note is an additional chord tone with the preceding note. The duration of
+    this note can be no longer than the preceding note. In MuseData, a missing duration indicates the same length as
+    the previous note, but the MusicXML format requires a duration for chord notes too
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='chord', *args, **kwargs)
+
+
+class Pitch(XMLElement):
     """"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='pitch', *args, **kwargs)
+
+
+class Unpitched(XMLElement):
+    """"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='unpitched', *args, **kwargs)
+
+
+class Rest(XMLElement):
+    """"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='rest', *args, **kwargs)
+
+
+class FullNote(XMLElementGroup):
+    """The full-note group is a sequence of the common note elements between cue/grace notes and regular (full) notes:
+    pitch, chord, and rest information, but not duration (cue and grace notes do not have duration encoded). Unpitched
+    elements are used for unpitched percussion, speaking voice, and other musical elements lacking determinate pitch
+    	<xs:group name="full-note">
+		<xs:sequence>
+			<xs:element name="chord" type="empty" minOccurs="0">
+			</xs:element>
+			<xs:choice>
+				<xs:element name="pitch" type="pitch"/>
+				<xs:element name="unpitched" type="unpitched"/>
+				<xs:element name="rest" type="rest"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+    """
+    _DTD = Sequence(
+        Element(Chord, min_occurrence=0),
+        Choice(
+            Element(Pitch),
+            Element(Unpitched),
+            Element(Rest)
+        )
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

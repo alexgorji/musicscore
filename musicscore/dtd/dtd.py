@@ -137,14 +137,20 @@ class DTDNode(DTDTree):
     #     choices = [(index, node) for (index, node) in enumerate(branch) if
     #                isinstance(node, Choice) and node.min_occurrence == 1 and node.max_occurrence == 1]
     #     for index, choice in choices:
-    #         if choice.is_root:
-    #             raise Exception()
     #         if choice.is_leaf:
     #             raise Exception()
-    #         parent = choice.up
-    #         child = branch[index + 1]
-    #         child._up = parent
-    #         parent._children[parent._children.index(choice)] = child
+    #         for child in choice.get_children():
+    #             if child != branch[index + 1]:
+    #                 child._up = None
+    #         choice._children = [branch[index + 1]]
+    #         # if choice.is_root:
+    #         #     raise Exception()
+    #         # if choice.is_leaf:
+    #         #     raise Exception()
+    #         # parent = choice.up
+    #         # child = branch[index + 1]
+    #         # child._up = parent
+    #         # parent._children[parent._children.index(choice)] = child
 
     def sort_children(self, xmltree):
         current_combination = self.get_current_combination()
@@ -156,14 +162,19 @@ class DTDNode(DTDTree):
                 for node in parent.get_children():
                     if isinstance(node, DTDLeaf):
                         new_children.extend(xmltree.get_children_by_type(node.type_))
-            elif isinstance(parent, Choice) and parent.min_occurrence == 0 and parent.max_occurrence == None:
-                for child in xmltree.get_children():
-                    for t in [ch.type_ for ch in parent.get_children()]:
-                        if isinstance(child, t):
+            elif isinstance(parent, Choice):
+                if parent.min_occurrence == 0 and parent.max_occurrence == None:
+                    for child in xmltree.get_children():
+                        for t in [ch.type_ for ch in parent.get_children()]:
+                            if isinstance(child, t):
+                                new_children.append(child)
+                                break
+                elif parent.min_occurrence == 1 and parent.max_occurrence == 1:
+                    for child in xmltree.get_children():
+                        if type(child) in [node.type_ for node in parent.get_children()]:
                             new_children.append(child)
-                            break
             else:
-                raise Exception('DTD.sort_children: node.up is of wrong type')
+                raise Exception('DTD.sort_children: parent is of wrong type {}'.format(type(parent)))
 
         xmltree._children = new_children
 

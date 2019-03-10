@@ -81,20 +81,4 @@ class MusicData(XMLElementGroup):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.dtd = copy.copy(self._DTD)
 
-    def reset_children(self):
-        self.clear_children()
-        self.dtd._possibility_index = 0
-
-    def add_child(self, child):
-        self.dtd.check_child_type(self, child)
-        self.dtd.check_child_max_occurrence(self, child)
-        self._children.append(child)
-        return child
-
-    def sort_children(self):
-        self.dtd.sort_children(self)
-
-    def close(self):
-        self.dtd.close(self)

@@ -1,12 +1,40 @@
 from lxml import etree as et
 import warnings
+import copy
 
 from musicscore.basic_functions import replace_dash
 from musicscore.musicxml.exceptions import AfterInitializationError, ChildAlreadyExists
 from musicscore.tree.tree import Tree
 
 
-class XMLElement(Tree):
+class XMLTree(Tree):
+    _DTD = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.dtd = copy.copy(self._DTD)
+
+    def reset_children(self):
+        self.clear_children()
+        self.dtd._possibility_index = 0
+
+    def add_child(self, child):
+        self.dtd.check_child_type(self, child)
+        self.dtd.check_child_max_occurrence(self, child)
+        self._children.append(child)
+        return child
+
+    def sort_children(self):
+        self.dtd.sort_children(self)
+
+    def close(self):
+        self.dtd.close(self)
+
+    def get_children_by_type(self, type_):
+        return [child for child in self.get_children() if isinstance(child, type_)]
+
+
+class XMLElement(XMLTree):
     _ATTRIBUTES = []
     _CHILDREN_TYPES = []
     _CHILDREN_ORDERED = False
@@ -119,7 +147,7 @@ class XMLElement(Tree):
     def __repr__(self):
         return '{} instance {} at {}'.format(self.__class__.__name__, self.tag, hex(id(self)))
 
-    def _check_childtype(self, child):
+    def _check_child_type(self, child):
         _type_error = True
         for child_type in self._CHILDREN_TYPES:
             if isinstance(child, child_type):
@@ -141,12 +169,11 @@ class XMLElement(Tree):
                 raise ChildAlreadyExists(child)
 
     def add_child(self, child):
-        self._check_childtype(child)
+        self._check_child_type(child)
         self._check_multiple_children(child)
         self._children.append(child)
         child._up = self
         return child
-
 
     def find_child_by_tag(self, tag):
         return next((child for child in self._children if child.tag == tag), None)
@@ -209,7 +236,10 @@ class XMLElement(Tree):
                 if isinstance(child, XMLElement):
                     xml.append(child._to_xml())
                 elif isinstance(child, XMLElementGroup):
-                    for sibling in child:
+                    print(child)
+                    print(child.get_children())
+                    for sibling in child.get_children():
+                        print('sibling', sibling)
                         xml.append(sibling._to_xml())
                 else:
                     raise TypeError('child {} must be of type XMLElement or XMLElementgroup'.format(child))
@@ -240,11 +270,8 @@ class XMLElement(Tree):
         return et.tounicode(xml, pretty_print=True)
 
 
-class XMLElementGroup(Tree):
+class XMLElementGroup(XMLTree):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    def get_children_by_type(self, type_):
-        return [child for child in self.get_children() if isinstance(child, type_)]
