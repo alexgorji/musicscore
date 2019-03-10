@@ -1,4 +1,4 @@
-from musicscore.dtd.note import Note, FullNote, Grace, Duration, Beam, Tie, Chord, Pitch, Rest
+from musicscore.dtd.note import Note, FullNote, Grace, Duration, Beam, Tie, Chord, Pitch, Rest, DurationGroup
 from musicscore.dtd.dtd import ChildOccurrenceDTDConflict, ChildTypeDTDConflict, ChildIsNotOptional
 from unittest import TestCase
 
@@ -8,20 +8,17 @@ class TestNoteDTD(TestCase):
         self.note = Note()
 
     def test_add_child_type(self):
-        # self.note.reset_children()
         self.note.add_child(FullNote())
         self.note.add_child(Grace())
         with self.assertRaises(ChildTypeDTDConflict):
-            self.note.add_child(Duration())
+            self.note.add_child(Duration(1))
 
     def test_add_child_max_occurrence(self):
         self.note.add_child(FullNote())
         with self.assertRaises(ChildOccurrenceDTDConflict):
             self.note.add_child(FullNote())
 
-    #
     def test_close(self):
-        # self.note.reset_children()
         self.note.add_child(FullNote())
         self.note.add_child(Grace())
         self.note.close()
@@ -39,10 +36,10 @@ class TestNoteDTD(TestCase):
         self.note.add_child(Beam())
         self.note.add_child(Tie())
         self.note.add_child(Beam())
-        self.note.add_child(Duration())
+        self.note.add_child(DurationGroup())
         self.note.add_child(Tie())
         self.note.close()
-        result = ['FullNote', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
+        result = ['FullNote', 'DurationGroup', 'Tie', 'Tie', 'Beam', 'Beam']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
 
     def test_full_note(self):
@@ -62,12 +59,24 @@ class TestNoteDTD(TestCase):
         full_note.add_child(Chord())
         full_note.close()
 
+        duration_group = DurationGroup()
+        duration_group.add_child(Duration(1))
+
         self.note.add_child(full_note)
         self.note.add_child(Beam())
         self.note.add_child(Tie())
         self.note.add_child(Beam())
-        self.note.add_child(Duration())
+        self.note.add_child(duration_group)
         self.note.add_child(Tie())
         self.note.close()
-    #     result = ['FullNote', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
-        print(self.note.to_string())
+        result = '''<note>
+  <chord/>
+  <pitch/>
+  <duration>1</duration>
+  <tie/>
+  <tie/>
+  <beam/>
+  <beam/>
+</note>
+'''
+        self.assertEqual(self.note.to_string(), result)

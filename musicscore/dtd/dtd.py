@@ -1,4 +1,5 @@
 from musicscore.tree.tree import Tree
+from musicscore.musicxml.elements.xml_element import XMLElement, XMLElementGroup
 
 
 class ChildTypeDTDConflict(Exception):
@@ -131,26 +132,6 @@ class DTDNode(DTDTree):
             self.check_child_type(xmltree, child)
             self.check_child_max_occurrence(xmltree, child)
             xmltree._children.append(child)
-
-    # def prune_choice(self, leaf):
-    #     branch = leaf.get_branch()
-    #     choices = [(index, node) for (index, node) in enumerate(branch) if
-    #                isinstance(node, Choice) and node.min_occurrence == 1 and node.max_occurrence == 1]
-    #     for index, choice in choices:
-    #         if choice.is_leaf:
-    #             raise Exception()
-    #         for child in choice.get_children():
-    #             if child != branch[index + 1]:
-    #                 child._up = None
-    #         choice._children = [branch[index + 1]]
-    #         # if choice.is_root:
-    #         #     raise Exception()
-    #         # if choice.is_leaf:
-    #         #     raise Exception()
-    #         # parent = choice.up
-    #         # child = branch[index + 1]
-    #         # child._up = parent
-    #         # parent._children[parent._children.index(choice)] = child
 
     def sort_children(self, xmltree):
         current_combination = self.get_current_combination()
@@ -291,6 +272,8 @@ class Group(DTDLeaf):
     """"""
 
     def __init__(self, type_, min_occurrence=1, max_occurrence=1, *args, **kwargs):
+        # if not isinstance(type_, XMLElementGroup):
+        #     raise TypeError('Group must have a type_ which is a descendant of XMLElementGroup not {}'.format(type_))
         super().__init__(type_, min_occurrence=min_occurrence, max_occurrence=max_occurrence, *args, **kwargs)
 
     def expand(self):

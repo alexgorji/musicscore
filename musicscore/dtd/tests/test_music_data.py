@@ -12,7 +12,7 @@ class TestMusicData(TestCase):
         self.music_data.add_child(Direction())
         self.music_data.add_child(Note())
         with self.assertRaises(ChildTypeDTDConflict):
-            self.music_data.add_child(Duration())
+            self.music_data.add_child(Duration(1))
 
     def test_add_child_max_occurrence(self):
         self.music_data.add_child(Direction())

@@ -2,6 +2,8 @@ from musicscore.dtd.dtd import Element, Group, Sequence, Choice, ChildIsNotOptio
 from musicscore.musicxml.elements.xml_element import XMLElement, XMLElementGroup
 import copy
 
+from musicscore.musicxml.types.simple_type import PositiveDevisions
+
 
 class Grace(XMLElement):
     """"""
@@ -85,8 +87,27 @@ class Cue(XMLElement):
         super().__init__(tag='cue', *args, **kwargs)
 
 
-class Duration(XMLElementGroup):
-    """"""
+# type="positive-divisions">
+class Duration(XMLElement, PositiveDevisions):
+    """
+    Duration is a positive number specified in division units. This is the intended duration vs. notated duration
+    (for instance, swing eighths vs. even eighths, or differences in dotted notes in Baroque-era music). Differences
+    in duration specific to an interpretation or performance should use the note element's attack and release
+    attributes
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='duration', value=value, *args, **kwargs)
+
+
+class DurationGroup(XMLElementGroup):
+    """The duration element is defined within a group due to its uses within the note, figure-bass, backup, and
+    forward elements.
+    """
+
+    _DTD = Sequence(
+        Element(Duration)
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -237,11 +258,11 @@ class Note(XMLElement):
             Sequence(
                 Element(Cue),
                 Group(FullNote),
-                Group(Duration)
+                Group(DurationGroup)
             ),
             Sequence(
                 Group(FullNote),
-                Group(Duration),
+                Group(DurationGroup),
                 Element(Tie, 0, 2)
             )
         ),

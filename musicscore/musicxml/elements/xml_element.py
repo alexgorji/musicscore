@@ -14,10 +14,6 @@ class XMLTree(Tree):
         super().__init__(*args, **kwargs)
         self.dtd = copy.copy(self._DTD)
 
-    def reset_children(self):
-        self.clear_children()
-        self.dtd._possibility_index = 0
-
     def add_child(self, child):
         self.dtd.check_child_type(self, child)
         self.dtd.check_child_max_occurrence(self, child)
@@ -156,9 +152,6 @@ class XMLElement(XMLTree):
         if _type_error is True:
             raise TypeError('child can only be of type(s): {} not {}'.format(self._CHILDREN_TYPES, type(child)))
 
-    def get_children_by_type(self, type_):
-        return [child for child in self.get_children() if isinstance(child, type_)]
-
     def get_children_by_tag(self, tag):
         return [child for child in self.get_children() if child.tag == tag]
 
@@ -236,10 +229,7 @@ class XMLElement(XMLTree):
                 if isinstance(child, XMLElement):
                     xml.append(child._to_xml())
                 elif isinstance(child, XMLElementGroup):
-                    print(child)
-                    print(child.get_children())
                     for sibling in child.get_children():
-                        print('sibling', sibling)
                         xml.append(sibling._to_xml())
                 else:
                     raise TypeError('child {} must be of type XMLElement or XMLElementgroup'.format(child))
