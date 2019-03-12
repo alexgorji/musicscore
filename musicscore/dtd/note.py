@@ -1,18 +1,18 @@
-from musicscore.dtd.dtd import Element, Group, Sequence, Choice, ChildIsNotOptional
-from musicscore.musicxml.elements.xml_element import XMLElement, XMLElementGroup
+from musicscore.dtd.dtd import Element, Group, Sequence, Choice
+from musicscore.musicxml.elements.xml_element import XMLElementGroup, XMLElement2
 import copy
 
 from musicscore.musicxml.types.simple_type import PositiveDevisions, Step, Alter, Octave
 
 
-class Grace(XMLElement):
+class Grace(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='grace', *args, **kwargs)
 
 
-class Chord(XMLElement):
+class Chord(XMLElement2):
     """
     The chord element indicates that this note is an additional chord tone with the preceding note. The duration of
     this note can be no longer than the preceding note. In MuseData, a missing duration indicates the same length as
@@ -23,23 +23,23 @@ class Chord(XMLElement):
         super().__init__(tag='chord', *args, **kwargs)
 
 
-class XMLStep(XMLElement, Step):
+class XMLStep(XMLElement2, Step):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='step', value=value, *args, **kwargs)
 
 
 # type="semitones"
-class XMLAlter(XMLElement, Alter):
+class XMLAlter(XMLElement2, Alter):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='alter', value=value, *args, **kwargs)
 
 
-class XMLOctave(XMLElement, Octave):
+class XMLOctave(XMLElement2, Octave):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='octave', value=value, *args, **kwargs)
 
 
-class XMLPitch(XMLElement):
+class XMLPitch(XMLElement2):
     """
     Pitch is represented as a combination of the step of the diatonic scale, the chromatic alteration, and the octave.
     """
@@ -49,40 +49,48 @@ class XMLPitch(XMLElement):
         Element(XMLOctave)
     )
 
-    def __init__(self, step=XMLStep('C'), alter=None, octave=XMLOctave(4), *args, **kwargs):
-        super().__init__(tag='pitch', *args, **kwargs)
-        self.dtd = copy.copy(self._DTD)
+    def __init__(self, step=XMLStep('C'), alter=None, octave=XMLOctave(4)):
+        super().__init__(tag='pitch')
+        self._step = None
+        self.step = step
+        self._alter = None
+        self.alter = alter
+        self._octave = None
+        self.octave = octave
 
-        self.add_child(step)
-        self.add_child(octave)
-        if alter is not None:
-            self.add_child(alter)
+    @property
+    def step(self):
+        return self._step
 
-    def reset_children(self):
-        self.clear_children()
-        self.dtd._possibility_index = 0
+    @step.setter
+    def step(self, value):
+        self._set_child(XMLStep, 'step', value)
 
-    def add_child(self, child):
-        self.dtd.check_child_type(self, child)
-        self.dtd.check_child_max_occurrence(self, child)
-        self._children.append(child)
-        return child
+    @property
+    def alter(self):
+        return self._alter
 
-    def sort_children(self):
-        self.dtd.sort_children(self)
+    @alter.setter
+    def alter(self, value):
+        self._set_child(XMLAlter, 'alter', value)
 
-    def close(self):
-        self.dtd.close(self)
+    @property
+    def octave(self):
+        return self._octave
+
+    @octave.setter
+    def octave(self, value):
+        self._set_child(XMLOctave, 'octave', value)
 
 
-class Unpitched(XMLElement):
+class Unpitched(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='unpitched', *args, **kwargs)
 
 
-class Rest(XMLElement):
+class Rest(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -118,14 +126,14 @@ class FullNote(XMLElementGroup):
         super().__init__(*args, **kwargs)
 
 
-class Tie(XMLElement):
+class Tie(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='tie', *args, **kwargs)
 
 
-class Cue(XMLElement):
+class Cue(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -133,7 +141,7 @@ class Cue(XMLElement):
 
 
 # type="positive-divisions">
-class Duration(XMLElement, PositiveDevisions):
+class Duration(XMLElement2, PositiveDevisions):
     """
     Duration is a positive number specified in division units. This is the intended duration vs. notated duration
     (for instance, swing eighths vs. even eighths, or differences in dotted notes in Baroque-era music). Differences
@@ -158,7 +166,7 @@ class DurationGroup(XMLElementGroup):
         super().__init__(*args, **kwargs)
 
 
-class Instrument(XMLElement):
+class Instrument(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -170,49 +178,49 @@ class EditorialVoice(XMLElementGroup):
         super().__init__(*args, **kwargs)
 
 
-class Type(XMLElement):
+class Type(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='type', *args, **kwargs)
 
 
-class Dot(XMLElement):
+class Dot(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='dot', *args, **kwargs)
 
 
-class Accidental(XMLElement):
+class Accidental(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='accidental', *args, **kwargs)
 
 
-class TimeModification(XMLElement):
+class TimeModification(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='time-modification', *args, **kwargs)
 
 
-class Stem(XMLElement):
+class Stem(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='stem', *args, **kwargs)
 
 
-class Notehead(XMLElement):
+class Notehead(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='notehead', *args, **kwargs)
 
 
-class NotheadText(XMLElement):
+class NotheadText(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -226,35 +234,35 @@ class Staff(XMLElementGroup):
         super().__init__(*args, **kwargs)
 
 
-class Beam(XMLElement):
+class Beam(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='beam', *args, **kwargs)
 
 
-class Notations(XMLElement):
+class Notations(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='notations', *args, **kwargs)
 
 
-class Lyric(XMLElement):
+class Lyric(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='lyric', *args, **kwargs)
 
 
-class Play(XMLElement):
+class Play(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='play', *args, **kwargs)
 
 
-class Note(XMLElement):
+class Note(XMLElement2):
     """
     Notes are the most common type of MusicXML data. The MusicXML format keeps the MuseData distinction between
     elements used for sound information and elements used for notation information (e.g., tie is used for sound,
@@ -331,18 +339,3 @@ class Note(XMLElement):
         super().__init__(tag='note', *args, **kwargs)
         self.dtd = copy.copy(self._DTD)
 
-    def reset_children(self):
-        self.clear_children()
-        self.dtd._possibility_index = 0
-
-    def add_child(self, child):
-        self.dtd.check_child_type(self, child)
-        self.dtd.check_child_max_occurrence(self, child)
-        self._children.append(child)
-        return child
-
-    def sort_children(self):
-        self.dtd.sort_children(self)
-
-    def close(self):
-        self.dtd.close(self)
