@@ -33,7 +33,6 @@ class ExampleType(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-
 class Decimal(SimpleType):
     """
     Decimal.value can be a float, int or None.
@@ -298,4 +297,20 @@ class ColorType(SimpleType):
             raise ValueError(
                 '{}.value {} must match the following pattern: {}'.format(self.__class__.__name__,
                                                                           v, self.pattern))
+        self._value = v
+
+
+class Percent(Decimal):
+    """
+    The percent type specifies a percentage from 0 to 100.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v >= 100 or v <= 0:
+            raise ValueError(
+                '{}.value {} must be a percentage from 0 to 100'.format(self.__class__.__name__, v))
         self._value = v

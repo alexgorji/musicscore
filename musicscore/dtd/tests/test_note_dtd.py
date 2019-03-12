@@ -1,4 +1,5 @@
-from musicscore.dtd.note import Note, FullNote, Grace, Duration, Beam, Tie, Chord, XMLPitch, Rest, DurationGroup
+from musicscore.dtd.note import Note, FullNote, Grace, Duration, Beam, Tie, Chord, XMLPitch, XMLRest, DurationGroup, \
+    DisplayStepOctave, XMLDisplayOctave, XMLDisplayStep
 from musicscore.dtd.dtd import ChildOccurrenceDTDConflict, ChildTypeDTDConflict, ChildIsNotOptional
 from unittest import TestCase
 
@@ -51,7 +52,30 @@ class TestNoteDTD(TestCase):
         result = [chord, pitch]
         self.assertEqual(full_note.get_children(), result)
         with self.assertRaises(ChildTypeDTDConflict):
-            full_note.add_child(Rest())
+            full_note.add_child(XMLRest())
+
+    def test_grace(self):
+        full_note = FullNote()
+        full_note.add_child(XMLPitch())
+        full_note.close()
+        self.note.add_child(full_note)
+        grace = Grace()
+        grace.slash = 'yes'
+        grace.make_time = 101
+        with self.assertRaises(ValueError):
+            grace.steal_time_following = 120
+
+        grace.steal_time_following = 90
+        self.note.add_child(grace)
+        result = '''<note>
+  <grace slash="yes" make-time="101" steal-time-following="90"/>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+</note>
+'''
+        self.assertEqual(self.note.to_string(), result)
 
     def test_to_string(self):
         full_note = FullNote()
@@ -69,7 +93,6 @@ class TestNoteDTD(TestCase):
         self.note.add_child(duration_group)
         self.note.add_child(Tie())
         self.note.close()
-        print(self.note.to_string())
         result = '''<note>
   <chord/>
   <pitch>
@@ -84,3 +107,21 @@ class TestNoteDTD(TestCase):
 </note>
 '''
         self.assertEqual(self.note.to_string(), result)
+
+    def test_rest(self):
+        full_note = FullNote()
+        rest = full_note.add_child(XMLRest())
+        display_step_octave = DisplayStepOctave()
+        display_step_octave.add_child(XMLDisplayOctave(4))
+        display_step_octave.add_child(XMLDisplayStep('B'))
+        display_step_octave.close()
+        rest.add_child(display_step_octave)
+        full_note.close()
+
+        duration_group = DurationGroup()
+        duration_group.add_child(Duration(1))
+
+        self.note.add_child(full_note)
+        self.note.add_child(duration_group)
+
+        print(self.note.to_string())

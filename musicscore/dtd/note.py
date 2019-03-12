@@ -1,12 +1,20 @@
 from musicscore.dtd.dtd import Element, Group, Sequence, Choice
+from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
 from musicscore.musicxml.elements.xml_element import XMLElementGroup, XMLElement2
 import copy
 
 from musicscore.musicxml.types.simple_type import PositiveDevisions, Step, Alter, Octave
 
 
-class Grace(XMLElement2):
-    """"""
+class Grace(XMLElement2, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):
+    """
+    documentation>The grace type indicates the presence of a grace note. The slash attribute for a grace note is yes
+    for slashed eighth notes. The other grace note attributes come from MuseData sound suggestions. The
+    steal-time-previous attribute indicates the percentage of time to steal from the previous note for the grace note.
+    The steal-time-following attribute indicates the percentage of time to steal from the following note for the grace
+    note, as for appoggiaturas. The make-time attribute indicates to make time, not steal time; the units are in
+    real-time divisions for the grace note.
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='grace', *args, **kwargs)
@@ -90,11 +98,46 @@ class Unpitched(XMLElement2):
         super().__init__(tag='unpitched', *args, **kwargs)
 
 
-class Rest(XMLElement2):
-    """"""
+class XMLDisplayStep(XMLElement2, Step):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='display-step', value=value, *args, **kwargs)
+
+
+class XMLDisplayOctave(XMLElement2, Octave):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='display-octave', value=value, *args, **kwargs)
+
+
+class DisplayStepOctave(XMLElementGroup):
+    """
+    The display-step-octave group contains the sequence of elements used by both the rest and unpitched elements. This
+    group is used to place rests and unpitched elements on the staff without implying that these elements have pitch.
+    Positioning follows the current clef. If percussion clef is used, the display-step and display-octave elements are
+    interpreted as if in treble clef, with a G in octave 4 on line 2. If not present, the note is placed on the middle
+    line of the staff, generally used for a one-line staff.
+    """
+    _DTD = Sequence(
+        Element(XMLDisplayStep),
+        Element(XMLDisplayOctave)
+    )
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='rest', *args, **kwargs)
+        super().__init__(*args, **kwargs)
+
+
+class XMLRest(XMLElement2):
+    """
+    The rest element indicates notated rests or silences. Rest elements are usually empty, but placement on the staff
+    can be specified using display-step and  display-octave elements. If the measure attribute is set to yes, this
+    indicates this is a complete measure rest.
+    """
+
+    _DTD = Sequence(
+        Group(DisplayStepOctave, min_occurrence=0)
+    )
+
+    def __init__(self):
+        super().__init__(tag='rest')
 
 
 class FullNote(XMLElementGroup):
@@ -118,7 +161,7 @@ class FullNote(XMLElementGroup):
         Choice(
             Element(XMLPitch),
             Element(Unpitched),
-            Element(Rest)
+            Element(XMLRest)
         )
     )
 
@@ -338,4 +381,3 @@ class Note(XMLElement2):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='note', *args, **kwargs)
         self.dtd = copy.copy(self._DTD)
-

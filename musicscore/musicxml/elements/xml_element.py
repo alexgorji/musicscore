@@ -324,12 +324,13 @@ class XMLElement2(XMLTree):
 
     def set_attribute(self, attribute_name, attribute_value):
 
-        if attribute_name not in self._ATTRIBUTES:
-            raise ValueError('{}.set_attribute: attribute_name: {} is not in {}._ATTRIBUTES'.format(type(self),
-                                                                                                    attribute_name,
-                                                                                                    self.__class__.__name__))
+        # if attribute_name not in self._ATTRIBUTES:
+        #     raise ValueError('{}.set_attribute: attribute_name: {} is not in {}._ATTRIBUTES'.format(type(self),
+        #                                                                                             attribute_name,
+        #                                                                                             self.__class__.__name__))
         self.get_attributes()[attribute_name] = attribute_value
-        self._sort_attributes()
+
+        # self._sort_attributes()
 
     def remove_attribute(self, attribute):
         if attribute in self.get_attributes().keys():
