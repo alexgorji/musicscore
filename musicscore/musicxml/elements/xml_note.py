@@ -1,3 +1,4 @@
+from musicscore.dtd.dtd import Sequence, Element
 from musicscore.musicxml.types.complex_type import Empty, EmptyPlacement
 from musicscore.musicxml.types.simple_type import Step, Octave, Alter, PositiveDevisions, NoteTypeValue
 from musicscore.musicxml.elements.xml_element import XMLElement
@@ -14,6 +15,7 @@ class XMLStep(XMLElement, Step):
         super().__init__(tag='step', value=value, *args, **kwargs)
 
 
+# type="semitones"
 class XMLAlter(XMLElement, Alter):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='alter', value=value, *args, **kwargs)
@@ -25,9 +27,7 @@ class XMLOctave(XMLElement, Octave):
 
 
 class XMLPitch(XMLEvent):
-    """
-    pitch(step, alter?, octave)
-    """
+
     _CHILDREN_TYPES = [XMLStep, XMLAlter, XMLOctave]
     _CHILDREN_ORDERED = True
 
@@ -195,6 +195,7 @@ class XMLNote(XMLNoteAbstract):
     staff?, beam*, notations*, lyric*, play?
 )
     """
+
     def __init__(self, event, duration, *args, **kwargs):
         super().__init__(event=event, *args, **kwargs)
         self._duration = None

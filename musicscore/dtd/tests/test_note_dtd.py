@@ -1,4 +1,4 @@
-from musicscore.dtd.note import Note, FullNote, Grace, Duration, Beam, Tie, Chord, Pitch, Rest, DurationGroup
+from musicscore.dtd.note import Note, FullNote, Grace, Duration, Beam, Tie, Chord, XMLPitch, Rest, DurationGroup
 from musicscore.dtd.dtd import ChildOccurrenceDTDConflict, ChildTypeDTDConflict, ChildIsNotOptional
 from unittest import TestCase
 
@@ -44,7 +44,7 @@ class TestNoteDTD(TestCase):
 
     def test_full_note(self):
         full_note = FullNote()
-        pitch = full_note.add_child(Pitch())
+        pitch = full_note.add_child(XMLPitch())
         chord = full_note.add_child(Chord())
 
         full_note.close()
@@ -55,7 +55,7 @@ class TestNoteDTD(TestCase):
 
     def test_to_string(self):
         full_note = FullNote()
-        full_note.add_child(Pitch())
+        full_note.add_child(XMLPitch())
         full_note.add_child(Chord())
         full_note.close()
 
@@ -69,9 +69,13 @@ class TestNoteDTD(TestCase):
         self.note.add_child(duration_group)
         self.note.add_child(Tie())
         self.note.close()
+        print(self.note.to_string())
         result = '''<note>
   <chord/>
-  <pitch/>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
   <duration>1</duration>
   <tie/>
   <tie/>

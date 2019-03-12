@@ -2,7 +2,7 @@ from musicscore.dtd.dtd import Element, Group, Sequence, Choice, ChildIsNotOptio
 from musicscore.musicxml.elements.xml_element import XMLElement, XMLElementGroup
 import copy
 
-from musicscore.musicxml.types.simple_type import PositiveDevisions
+from musicscore.musicxml.types.simple_type import PositiveDevisions, Step, Alter, Octave
 
 
 class Grace(XMLElement):
@@ -23,11 +23,56 @@ class Chord(XMLElement):
         super().__init__(tag='chord', *args, **kwargs)
 
 
-class Pitch(XMLElement):
-    """"""
+class XMLStep(XMLElement, Step):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='step', value=value, *args, **kwargs)
 
-    def __init__(self, *args, **kwargs):
+
+# type="semitones"
+class XMLAlter(XMLElement, Alter):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='alter', value=value, *args, **kwargs)
+
+
+class XMLOctave(XMLElement, Octave):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='octave', value=value, *args, **kwargs)
+
+
+class XMLPitch(XMLElement):
+    """
+    Pitch is represented as a combination of the step of the diatonic scale, the chromatic alteration, and the octave.
+    """
+    _DTD = Sequence(
+        Element(XMLStep),
+        Element(XMLAlter, min_occurrence=0),
+        Element(XMLOctave)
+    )
+
+    def __init__(self, step=XMLStep('C'), alter=None, octave=XMLOctave(4), *args, **kwargs):
         super().__init__(tag='pitch', *args, **kwargs)
+        self.dtd = copy.copy(self._DTD)
+
+        self.add_child(step)
+        self.add_child(octave)
+        if alter is not None:
+            self.add_child(alter)
+
+    def reset_children(self):
+        self.clear_children()
+        self.dtd._possibility_index = 0
+
+    def add_child(self, child):
+        self.dtd.check_child_type(self, child)
+        self.dtd.check_child_max_occurrence(self, child)
+        self._children.append(child)
+        return child
+
+    def sort_children(self):
+        self.dtd.sort_children(self)
+
+    def close(self):
+        self.dtd.close(self)
 
 
 class Unpitched(XMLElement):
@@ -63,7 +108,7 @@ class FullNote(XMLElementGroup):
     _DTD = Sequence(
         Element(Chord, min_occurrence=0),
         Choice(
-            Element(Pitch),
+            Element(XMLPitch),
             Element(Unpitched),
             Element(Rest)
         )
