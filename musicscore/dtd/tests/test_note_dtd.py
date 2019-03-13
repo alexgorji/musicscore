@@ -1,9 +1,6 @@
-from musicscore.dtd.note import Note, FullNote, Grace, Duration, Beam, Tie, Chord, Pitch, Rest, DurationGroup, \
-    DisplayStepOctave, DisplayOctave, DisplayStep
+from musicscore.dtd.note import Note, Grace, Duration, Beam, Tie, Chord, Pitch, Rest, DisplayOctave, DisplayStep
 from musicscore.dtd.dtd import ChildOccurrenceDTDConflict, ChildTypeDTDConflict, ChildIsNotOptional
 from unittest import TestCase
-
-from musicscore.musicxml.elements.xml_note import XMLDuration
 
 
 class TestNoteDTD(TestCase):
@@ -46,7 +43,6 @@ class TestNoteDTD(TestCase):
         self.note.close()
         result = ['Pitch', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
-
 
     def test_grace(self):
         self.note.add_child(Pitch())
