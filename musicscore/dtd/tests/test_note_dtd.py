@@ -1,7 +1,9 @@
-from musicscore.dtd.note import Note, FullNote, Grace, Duration, Beam, Tie, Chord, XMLPitch, XMLRest, DurationGroup, \
-    DisplayStepOctave, XMLDisplayOctave, XMLDisplayStep
+from musicscore.dtd.note import Note, FullNote, Grace, Duration, Beam, Tie, Chord, Pitch, Rest, DurationGroup, \
+    DisplayStepOctave, DisplayOctave, DisplayStep
 from musicscore.dtd.dtd import ChildOccurrenceDTDConflict, ChildTypeDTDConflict, ChildIsNotOptional
 from unittest import TestCase
+
+from musicscore.musicxml.elements.xml_note import XMLDuration
 
 
 class TestNoteDTD(TestCase):
@@ -9,56 +11,45 @@ class TestNoteDTD(TestCase):
         self.note = Note()
 
     def test_add_child_type(self):
-        self.note.add_child(FullNote())
+        self.note.add_child(Pitch())
         self.note.add_child(Grace())
         with self.assertRaises(ChildTypeDTDConflict):
             self.note.add_child(Duration(1))
 
     def test_add_child_max_occurrence(self):
-        self.note.add_child(FullNote())
+        self.note.add_child(Pitch())
+
         with self.assertRaises(ChildOccurrenceDTDConflict):
-            self.note.add_child(FullNote())
+            self.note.add_child(Pitch())
 
     def test_close(self):
-        self.note.add_child(FullNote())
+        self.note.add_child(Rest())
         self.note.add_child(Grace())
         self.note.close()
-        result = ['Grace', 'FullNote', 'Instrument', 'EditorialVoice', 'Type', 'Dot', 'Accidental', 'TimeModification',
-                  'Stem', 'Notehead', 'NotheadText', 'Staff', 'Beam', 'Notations', 'Lyric', 'Play']
+        # print([node.type_.__name__ for node in self.note._DTD.get_current_combination()])
+        result = ['Grace', 'Chord', 'Pitch', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification', 'Stem',
+                  'Notehead', 'NotheadText', 'Beam', 'Notations', 'Lyric', 'Play']
         self.assertEqual([node.type_.__name__ for node in self.note._DTD.get_current_combination()], result)
 
         self.note.reset_children()
-        self.note.add_child(FullNote())
+        self.note.add_child(Rest())
         with self.assertRaises(ChildIsNotOptional):
             self.note.close()
 
     def test_sort_children(self):
-        self.note.add_child(FullNote())
+        self.note.add_child(Pitch())
         self.note.add_child(Beam())
         self.note.add_child(Tie())
         self.note.add_child(Beam())
-        self.note.add_child(DurationGroup())
+        self.note.add_child(Duration(1))
         self.note.add_child(Tie())
         self.note.close()
-        result = ['FullNote', 'DurationGroup', 'Tie', 'Tie', 'Beam', 'Beam']
+        result = ['Pitch', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
 
-    def test_full_note(self):
-        full_note = FullNote()
-        pitch = full_note.add_child(XMLPitch())
-        chord = full_note.add_child(Chord())
-
-        full_note.close()
-        result = [chord, pitch]
-        self.assertEqual(full_note.get_children(), result)
-        with self.assertRaises(ChildTypeDTDConflict):
-            full_note.add_child(XMLRest())
 
     def test_grace(self):
-        full_note = FullNote()
-        full_note.add_child(XMLPitch())
-        full_note.close()
-        self.note.add_child(full_note)
+        self.note.add_child(Pitch())
         grace = Grace()
         grace.slash = 'yes'
         grace.make_time = 101
@@ -78,20 +69,13 @@ class TestNoteDTD(TestCase):
         self.assertEqual(self.note.to_string(), result)
 
     def test_to_string(self):
-        full_note = FullNote()
-        full_note.add_child(XMLPitch())
-        full_note.add_child(Chord())
-        full_note.close()
-
-        duration_group = DurationGroup()
-        duration_group.add_child(Duration(1))
-
-        self.note.add_child(full_note)
+        self.note.add_child(Pitch())
         self.note.add_child(Beam())
         self.note.add_child(Tie())
         self.note.add_child(Beam())
-        self.note.add_child(duration_group)
+        self.note.add_child(Duration(1))
         self.note.add_child(Tie())
+        self.note.add_child(Chord())
         self.note.close()
         result = '''<note>
   <chord/>
@@ -109,19 +93,16 @@ class TestNoteDTD(TestCase):
         self.assertEqual(self.note.to_string(), result)
 
     def test_rest(self):
-        full_note = FullNote()
-        rest = full_note.add_child(XMLRest())
-        display_step_octave = DisplayStepOctave()
-        display_step_octave.add_child(XMLDisplayOctave(4))
-        display_step_octave.add_child(XMLDisplayStep('B'))
-        display_step_octave.close()
-        rest.add_child(display_step_octave)
-        full_note.close()
-
-        duration_group = DurationGroup()
-        duration_group.add_child(Duration(1))
-
-        self.note.add_child(full_note)
-        self.note.add_child(duration_group)
-
-        print(self.note.to_string())
+        rest = self.note.add_child(Rest())
+        self.note.add_child(Duration(1))
+        rest.add_child(DisplayOctave(4))
+        rest.add_child(DisplayStep('B'))
+        result = '''<note>
+  <rest>
+    <display-octave>4</display-octave>
+    <display-step>B</display-step>
+  </rest>
+  <duration>1</duration>
+</note>
+'''
+        self.assertEqual(self.note.to_string(), result)

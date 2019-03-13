@@ -1,31 +1,31 @@
 from unittest import TestCase
-from musicscore.dtd.note import XMLPitch, XMLStep, XMLAlter, XMLOctave
+from musicscore.dtd.note import Pitch, Step, Alter, Octave
 
 
 class TestPitch(TestCase):
     def setUp(self):
-        self.pitch = XMLPitch()
+        self.pitch = Pitch()
 
     def test_to_string(self):
         result = '<pitch>\n  <step>C</step>\n  <octave>4</octave>\n</pitch>\n'
         self.assertEqual(self.pitch.to_string(), result)
 
     def test_arguments(self):
-        pitch = XMLPitch(XMLStep('D'), octave=XMLOctave(7), alter=XMLAlter(1.5))
+        pitch = Pitch(Step('D'), octave=Octave(7), alter=Alter(1.5))
         pitch.close()
         result = '<pitch>\n  <step>D</step>\n  <alter>1.5</alter>\n  <octave>7</octave>\n</pitch>\n'
         self.assertEqual(pitch.to_string(), result)
 
     def test_change_alter(self):
-        self.pitch.alter = XMLAlter(-1)
+        self.pitch.alter = Alter(-1)
         result = '<pitch>\n  <step>C</step>\n  <alter>-1</alter>\n  <octave>4</octave>\n</pitch>\n'
         self.assertEqual(self.pitch.to_string(), result)
-        self.pitch.alter = XMLAlter(1)
+        self.pitch.alter = Alter(1)
         self.pitch.close()
         result = '<pitch>\n  <step>C</step>\n  <alter>1</alter>\n  <octave>4</octave>\n</pitch>\n'
         self.assertEqual(self.pitch.to_string(), result)
 
     def test_set_children(self):
-        pitch = XMLPitch(step='E')
+        pitch = Pitch(step='E')
         result = '<pitch>\n  <step>E</step>\n  <octave>4</octave>\n</pitch>\n'
         self.assertEqual(pitch.to_string(), result)

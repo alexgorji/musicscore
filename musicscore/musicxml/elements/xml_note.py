@@ -1,6 +1,6 @@
 from musicscore.dtd.dtd import Sequence, Element
 from musicscore.musicxml.types.complex_type import Empty, EmptyPlacement
-from musicscore.musicxml.types.simple_type import Step, Octave, Alter, PositiveDevisions, NoteTypeValue
+from musicscore.musicxml.types.simple_type import TypeStep, TypeOctave, TypeAlter, PositiveDevisions, NoteTypeValue
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.elements.xml_music_data import XMLMusicData
 
@@ -10,28 +10,28 @@ class XMLEvent(XMLElement):
         super().__init__(tag=tag, *args, **kwargs)
 
 
-class XMLStep(XMLElement, Step):
+class XMLTypeStep(XMLElement, TypeStep):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='step', value=value, *args, **kwargs)
 
 
 # type="semitones"
-class XMLAlter(XMLElement, Alter):
+class XMLAlter(XMLElement, TypeAlter):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='alter', value=value, *args, **kwargs)
 
 
-class XMLOctave(XMLElement, Octave):
+class XMLOctave(XMLElement, TypeOctave):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='octave', value=value, *args, **kwargs)
 
 
 class XMLPitch(XMLEvent):
 
-    _CHILDREN_TYPES = [XMLStep, XMLAlter, XMLOctave]
+    _CHILDREN_TYPES = [XMLTypeStep, XMLAlter, XMLOctave]
     _CHILDREN_ORDERED = True
 
-    def __init__(self, step=XMLStep('C'), alter=None, octave=XMLOctave(4)):
+    def __init__(self, step=XMLTypeStep('C'), alter=None, octave=XMLOctave(4)):
         super().__init__(tag='pitch')
         self._step = None
         self.step = step
@@ -46,7 +46,7 @@ class XMLPitch(XMLEvent):
 
     @step.setter
     def step(self, value):
-        self._set_child(XMLStep, 'step', value)
+        self._set_child(XMLTypeStep, 'step', value)
 
     @property
     def alter(self):
@@ -65,12 +65,12 @@ class XMLPitch(XMLEvent):
         self._set_child(XMLOctave, 'octave', value)
 
 
-class XMLDisplayStep(XMLElement, Step):
+class XMLDisplayTypeStep(XMLElement, TypeStep):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='display-step', value=value, *args, **kwargs)
 
 
-class XMLDisplayOctave(XMLElement, Octave):
+class XMLDisplayOctave(XMLElement, TypeOctave):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='display-octave', value=value, *args, **kwargs)
 
@@ -82,7 +82,7 @@ class XMLRest(XMLEvent):
     display-octave elements.
     If the measure attribute is set to yes, this indicates this is a complete measure rest.
     """
-    _CHILDREN_TYPES = [XMLDisplayStep, XMLDisplayOctave]
+    _CHILDREN_TYPES = [XMLDisplayTypeStep, XMLDisplayOctave]
     _CHILDREN_ORDERED = True
 
     def __init__(self, display_step=None, display_octave=None):
@@ -98,7 +98,7 @@ class XMLRest(XMLEvent):
 
     @display_step.setter
     def display_step(self, value):
-        self._set_child(XMLDisplayStep, 'display-step', value)
+        self._set_child(XMLDisplayTypeStep, 'display-step', value)
 
     @property
     def display_octave(self):

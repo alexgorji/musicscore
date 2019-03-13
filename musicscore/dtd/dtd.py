@@ -85,7 +85,6 @@ class DTDNode(DTDTree):
         return self.expand()[self._possibility_index]
 
     def get_current_node(self, child):
-        # print('get_current_node:combination', self.get_current_combination())
         return self.get_current_combination()[
             [node.type_ for node in self.get_current_combination()].index(type(child))]
 
@@ -112,7 +111,11 @@ class DTDNode(DTDTree):
 
     def check_child_max_occurrence(self, xmltree, child):
         occurrence = len(xmltree.get_children_by_type(type(child)))
-        dtd_node = self.get_current_node(child)
+        try:
+            dtd_node = self.get_current_node(child)
+        except ValueError:
+            raise ChildOccurrenceDTDConflict(child)
+
         while dtd_node.check_max_occurrence(occurrence + 1) is False:
             try:
                 self.next()
@@ -268,15 +271,25 @@ class Element(DTDLeaf):
         return output
 
 
-class Group(DTDLeaf):
+class Group(DTDNode):
     """"""
 
-    def __init__(self, type_, min_occurrence=1, max_occurrence=1, *args, **kwargs):
-        # if not isinstance(type_, XMLElementGroup):
-        #     raise TypeError('Group must have a type_ which is a descendant of XMLElementGroup not {}'.format(type_))
-        super().__init__(type_, min_occurrence=min_occurrence, max_occurrence=max_occurrence, *args, **kwargs)
+    def __init__(self, sequence, min_occurrence=1, max_occurrence=1,  **kwargs):
+        if not isinstance(sequence, Sequence):
+            raise TypeError('Group must be a Sequence')
+        self.sequence = sequence
+        super().__init__(min_occurrence=min_occurrence, max_occurrence=max_occurrence, **kwargs)
 
     def expand(self):
-        output = [[self]]
+        if not self.sequence.get_children():
+            output = [[]]
+        else:
+            x = self.sequence.get_children()[0]
+            xs = self.sequence.get_children()[1:]
+            ex = x.expand()
+            exs = Sequence(*xs).expand()
+            output = [a + b for a in ex for b in exs]
         self.repair_parenthood()
         return output
+
+

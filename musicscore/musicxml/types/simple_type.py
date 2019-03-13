@@ -111,14 +111,14 @@ class String(SimpleType):
 # ///////////////
 
 
-class Step(SimpleType):
+class TypeStep(SimpleType):
     permitted = ('A', 'B', 'C', 'D', 'E', 'F', 'G')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
 
-class Alter(SimpleType):
+class TypeAlter(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
@@ -130,7 +130,7 @@ class Alter(SimpleType):
         self._value = v
 
 
-class Octave(SimpleType):
+class TypeOctave(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
