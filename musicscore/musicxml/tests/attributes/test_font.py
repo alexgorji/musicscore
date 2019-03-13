@@ -6,6 +6,7 @@ from unittest import TestCase
 
 class XMLWithFont(Pitch, Font):
     _ATTRIBUTES = ['font-family', 'font-size', 'font-weight', 'font-style']
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

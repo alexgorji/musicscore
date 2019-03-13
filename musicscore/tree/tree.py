@@ -24,15 +24,15 @@ class Tree(object):
             return False
 
     @property
-    def id(self):
+    def index(self):
         if self.is_root:
-            _id = [0]
+            _index = [0]
         elif self.get_distance() == 1:
-            _id = [self.up.get_children().index(self) + 1]
+            _index = [self.up.get_children().index(self) + 1]
         else:
-            _id = self.up.id
-            _id.append(self.up.get_children().index(self) + 1)
-        return _id
+            _index = self.up.index
+            _index.append(self.up.get_children().index(self) + 1)
+        return _index
 
     def get_root(self):
         if self.is_root:

@@ -29,7 +29,7 @@ class TestTree(TestCase):
         child_4 = child_2.add_child(Tree())
         child_5 = child_2.add_child(Tree())
 
-        self.assertEqual(child_5.id, [2, 2])
+        self.assertEqual(child_5.index, [2, 2])
 
     def test_get_layer(self):
         child_1 = self.tree.add_child(Tree())

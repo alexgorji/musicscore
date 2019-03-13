@@ -78,6 +78,7 @@ class SenzaMisura(XMLElement2):
 # 		<xs:attribute name="separator" type="time-separator"/>
 # 		<xs:attributeGroup ref="print-style-align"/>
 
+# , OptionalUniqueId
 class Time(XMLElement2, PrintObject, OptionalUniqueId):
     """
     Time signatures are represented by the beats element for the numerator and the beat-type element for the

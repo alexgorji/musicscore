@@ -1,11 +1,13 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.attributes import Time
+from musicscore.musicxml.elements.attributes import Time, Beats, BeatType
 
 
 class TestTime(TestCase):
 
     def setUp(self):
-        self.time = Time(3, 2)
+        self.time = Time()
+        self.time.add_child(Beats(3))
+        self.time.add_child(BeatType(4))
 
     def test_time(self):
         result = '''<time>

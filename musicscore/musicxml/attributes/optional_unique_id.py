@@ -11,4 +11,4 @@ class OptionalUniqueId(AttributeAbstract):
 
     def __init__(self, id=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('id', id, "str")
+        self.generate_attribute('id', id, 'String')

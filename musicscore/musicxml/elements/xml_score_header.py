@@ -45,13 +45,13 @@ class XMLScorePart(XMLElement):
         self._set_child(XMLPartName, 'part-name', value)
 
     @property
-    def id(self):
+    def index(self):
         return self._id
 
-    @id.setter
+    @index.setter
     def id(self, value):
         self._id = value
-        self.set_attribute('id', self.id)
+        self.set_attribute('id', self.index)
 
 
 class XMLPartList(XMLElement):
