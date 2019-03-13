@@ -1,4 +1,4 @@
-from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.elements.xml_element import XMLElement, XMLElement2
 
 
 class ComplexType(object):
@@ -7,7 +7,7 @@ class ComplexType(object):
 
 
 # TODO: add exception for attributes
-class Empty(ComplexType, XMLElement):
+class Empty(ComplexType, XMLElement2):
     """
     Empty is a type of XMLElement with no children, no text and no attributes
     """

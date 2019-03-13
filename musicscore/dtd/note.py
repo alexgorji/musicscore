@@ -3,7 +3,8 @@ from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, S
 from musicscore.musicxml.elements.xml_element import XMLElement2
 import copy
 
-from musicscore.musicxml.types.simple_type import PositiveDevisions, TypeStep, TypeAlter, TypeOctave
+from musicscore.musicxml.types.complex_type import Empty
+from musicscore.musicxml.types.simple_type import PositiveDevisions, TypeStep, TypeAlter, TypeOctave, NoteTypeValue
 
 
 class Grace(XMLElement2, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):
@@ -20,7 +21,7 @@ class Grace(XMLElement2, StealTimePrevious, StealTimeFollowing, MakeTime, Slash)
         super().__init__(tag='grace', *args, **kwargs)
 
 
-class Chord(XMLElement2):
+class Chord(Empty):
     """
     The chord element indicates that this note is an additional chord tone with the preceding note. The duration of
     this note can be no longer than the preceding note. In MuseData, a missing duration indicates the same length as
@@ -108,21 +109,12 @@ class DisplayOctave(XMLElement2, TypeOctave):
         super().__init__(tag='display-octave', value=value, *args, **kwargs)
 
 
-# class DisplayStepOctave(XMLElementGroup):
-#     """
-#     The display-step-octave group contains the sequence of elements used by both the rest and unpitched elements. This
-#     group is used to place rests and unpitched elements on the staff without implying that these elements have pitch.
-#     Positioning follows the current clef. If percussion clef is used, the display-step and display-octave elements are
-#     interpreted as if in treble clef, with a G in octave 4 on line 2. If not present, the note is placed on the middle
-#     line of the staff, generally used for a one-line staff.
-#     """
-#     _DTD = Sequence(
-#         Element(XMLDisplayStep),
-#         Element(XMLDisplayOctave)
-#     )
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
+"""
+The display-step-octave group contains the sequence of elements used by both the rest and unpitched elements. This
+group is used to place rests and unpitched elements on the staff without implying that these elements have pitch.
+Positioning follows the current clef. If percussion clef is used, the display-step and display-octave elements are
+interpreted as if in treble clef, with a G in octave 4 on line 2. If not present, the note is placed on the middle
+line"""
 
 DisplayStepOctave = Sequence(
     Element(DisplayStep),
@@ -149,6 +141,11 @@ class Rest(XMLElement2):
         super().__init__(tag='rest')
 
 
+"""
+The full-note group is a sequence of the common note elements between cue/grace notes and regular (full) notes:
+pitch, chord, and rest information, but not duration (cue and grace notes do not have duration encoded). Unpitched
+elements are used for unpitched percussion, speaking voice, and other musical elements lacking determinate pitch.
+"""
 FullNote = Sequence(
     Element(Chord, min_occurrence=0),
     Choice(
@@ -157,36 +154,6 @@ FullNote = Sequence(
         Element(Rest)
     )
 )
-
-
-#
-# class FullNote(DTDNode):
-#     """The full-note group is a sequence of the common note elements between cue/grace notes and regular (full) notes:
-#     pitch, chord, and rest information, but not duration (cue and grace notes do not have duration encoded). Unpitched
-#     elements are used for unpitched percussion, speaking voice, and other musical elements lacking determinate pitch
-#     	<xs:group name="full-note">
-# 		<xs:sequence>
-# 			<xs:element name="chord" type="empty" minOccurs="0">
-# 			</xs:element>
-# 			<xs:choice>
-# 				<xs:element name="pitch" type="pitch"/>
-# 				<xs:element name="unpitched" type="unpitched"/>
-# 				<xs:element name="rest" type="rest"/>
-# 			</xs:choice>
-# 		</xs:sequence>
-# 	</xs:group>
-#     """
-#     _DTD = Sequence(
-#         Element(Chord, min_occurrence=0),
-#         Choice(
-#             Element(XMLPitch),
-#             Element(Unpitched),
-#             Element(XMLRest)
-#         )
-#     )
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
 
 
 class Tie(XMLElement2):
@@ -203,7 +170,6 @@ class Cue(XMLElement2):
         super().__init__(tag='cue', *args, **kwargs)
 
 
-# type="positive-divisions">
 class Duration(XMLElement2, PositiveDevisions):
     """
     Duration is a positive number specified in division units. This is the intended duration vs. notated duration
@@ -212,23 +178,15 @@ class Duration(XMLElement2, PositiveDevisions):
     attributes
     """
 
-    def __init__(self, value, *args, **kwargs):
+    def __init__(self, value=1, *args, **kwargs):
         super().__init__(tag='duration', value=value, *args, **kwargs)
 
 
-# class DurationGroup(XMLElementGroup):
-#     """The duration element is defined within a group due to its uses within the note, figure-bass, backup, and
-#     forward elements.
-#     """
-#
-#     _DTD = Sequence(
-#         Element(Duration)
-#     )
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-
+"""The duration element is defined within a group due to its uses within the note, figure-bass, backup, and
+forward elements.
+"""
 DurationGroup = Sequence(
+
     Element(Duration)
 )
 
@@ -243,13 +201,7 @@ class Instrument(XMLElement2):
 EditorialVoice = Sequence()
 
 
-#
-# class EditorialVoice(XMLElement2):
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-
-
-class Type(XMLElement2):
+class Type(XMLElement2, NoteTypeValue):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -297,12 +249,6 @@ class NotheadText(XMLElement2):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='notehead-text', *args, **kwargs)
 
-
-# class Staff(XMLElementGroup):
-#     """"""
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
 
 Staff = Sequence()
 

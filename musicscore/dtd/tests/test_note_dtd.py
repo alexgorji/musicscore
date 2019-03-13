@@ -1,4 +1,4 @@
-from musicscore.dtd.note import Note, Grace, Duration, Beam, Tie, Chord, Pitch, Rest, DisplayOctave, DisplayStep
+from musicscore.dtd.note import Note, Grace, Duration, Beam, Tie, Chord, Pitch, Rest, DisplayOctave, DisplayStep, Type
 from musicscore.dtd.dtd import ChildOccurrenceDTDConflict, ChildTypeDTDConflict, ChildIsNotOptional
 from unittest import TestCase
 
@@ -6,6 +6,13 @@ from unittest import TestCase
 class TestNoteDTD(TestCase):
     def setUp(self):
         self.note = Note()
+
+    def test_add_chord(self):
+        ch = self.note.add_child(Chord())
+        self.note.add_child(Pitch())
+        self.note.add_child(Grace())
+        with self.assertRaises(Exception):
+            ch.add_child(Rest())
 
     def test_add_child_type(self):
         self.note.add_child(Pitch())
@@ -23,7 +30,6 @@ class TestNoteDTD(TestCase):
         self.note.add_child(Rest())
         self.note.add_child(Grace())
         self.note.close()
-        # print([node.type_.__name__ for node in self.note._DTD.get_current_combination()])
         result = ['Grace', 'Chord', 'Pitch', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification', 'Stem',
                   'Notehead', 'NotheadText', 'Beam', 'Notations', 'Lyric', 'Play']
         self.assertEqual([node.type_.__name__ for node in self.note._DTD.get_current_combination()], result)
@@ -99,6 +105,21 @@ class TestNoteDTD(TestCase):
     <display-step>B</display-step>
   </rest>
   <duration>1</duration>
+</note>
+'''
+        self.assertEqual(self.note.to_string(), result)
+
+    def test_type(self):
+        self.note.add_child(Pitch())
+        self.note.add_child(Duration())
+        self.note.add_child(Type(value='quarter'))
+        result = '''<note>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>1</duration>
+  <type>quarter</type>
 </note>
 '''
         self.assertEqual(self.note.to_string(), result)

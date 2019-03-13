@@ -27,19 +27,19 @@ class TestTimewise(XMLTest):
 '''
         self.assertEqual(self.timewise.to_string(), result)
 
-    def test_add_measure_part(self):
-        self.timewise.add_measure()
-        self.timewise.add_part()
-        self.timewise.add_part()
-        self.timewise.add_measure()
-        note = Note(XMLPitch('D'), quarter_duration=1.5)
-        self.timewise.add_note(measure_number=1, part_number=2, note=note)
-        note = Note(XMLPitch('E', alter=-1, octave=5), quarter_duration=2)
-        self.timewise.add_note(measure_number=1, part_number=2, note=note)
-
-        self.timewise.finish()
-        self.timewise.write(path)
-        self.assert_template(path)
+    # def test_add_measure_part(self):
+    #     self.timewise.add_measure()
+    #     self.timewise.add_part()
+    #     self.timewise.add_part()
+    #     self.timewise.add_measure()
+    #     note = Note(XMLPitch('D'), quarter_duration=1.5)
+    #     self.timewise.add_note(measure_number=1, part_number=2, note=note)
+    #     note = Note(XMLPitch('E', alter=-1, octave=5), quarter_duration=2)
+    #     self.timewise.add_note(measure_number=1, part_number=2, note=note)
+    #
+    #     self.timewise.finish()
+    #     self.timewise.write(path)
+    #     self.assert_template(path)
 
     def test_add_note(self):
         self.timewise.add_measure()
