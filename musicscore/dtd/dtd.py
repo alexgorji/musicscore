@@ -93,8 +93,7 @@ class DTDNode(DTDTree):
             return True
 
         if isinstance(self.up, Sequence) and not (self.up.max_occurrence == 1):
-            raise NotImplementedError(
-                'self.up.max_occurrence {}'.format(self.up.min_occurrence, self.up.max_occurrence))
+            self.max_occurence = self.up.max_occurrence
 
         if self.max_occurrence is not None and occurrence > self.max_occurrence:
             return False

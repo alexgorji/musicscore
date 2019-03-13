@@ -7,7 +7,7 @@ class TestTime(TestCase):
     def setUp(self):
         self.time = Time()
         self.time.add_child(Beats(3))
-        self.time.add_child(BeatType(4))
+        self.time.add_child(BeatType(2))
 
     def test_time(self):
         result = '''<time>
