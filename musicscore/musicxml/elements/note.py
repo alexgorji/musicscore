@@ -1,10 +1,11 @@
-from musicscore.dtd.dtd import Element, Group, Sequence, Choice, DTDNode
+from musicscore.dtd.dtd import Element, Group, Sequence, Choice
 from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
+from musicscore.musicxml.elements.fullnote import FullNote
 from musicscore.musicxml.elements.xml_element import XMLElement2
 import copy
 
-from musicscore.musicxml.types.complex_type import Empty
-from musicscore.musicxml.types.simple_type import PositiveDevisions, TypeStep, TypeAlter, TypeOctave, NoteTypeValue
+from musicscore.musicxml.types.complex_type import EmptyPlacement
+from musicscore.musicxml.types.simple_type import PositiveDivisions, NoteTypeValue
 
 
 class Grace(XMLElement2, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):
@@ -21,139 +22,7 @@ class Grace(XMLElement2, StealTimePrevious, StealTimeFollowing, MakeTime, Slash)
         super().__init__(tag='grace', *args, **kwargs)
 
 
-class Chord(Empty):
-    """
-    The chord element indicates that this note is an additional chord tone with the preceding note. The duration of
-    this note can be no longer than the preceding note. In MuseData, a missing duration indicates the same length as
-    the previous note, but the MusicXML format requires a duration for chord notes too
-    """
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='chord', *args, **kwargs)
-
-
-class Step(XMLElement2, TypeStep):
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='step', value=value, *args, **kwargs)
-
-
 # type="semitones"
-class Alter(XMLElement2, TypeAlter):
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='alter', value=value, *args, **kwargs)
-
-
-class Octave(XMLElement2, TypeOctave):
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='octave', value=value, *args, **kwargs)
-
-
-class Pitch(XMLElement2):
-    """
-    Pitch is represented as a combination of the step of the diatonic scale, the chromatic alteration, and the octave.
-    """
-    _DTD = Sequence(
-        Element(Step),
-        Element(Alter, min_occurrence=0),
-        Element(Octave)
-    )
-
-    def __init__(self, step=Step('C'), alter=None, octave=Octave(4)):
-        super().__init__(tag='pitch')
-        self._step = None
-        self.step = step
-        self._alter = None
-        self.alter = alter
-        self._octave = None
-        self.octave = octave
-
-    @property
-    def step(self):
-        return self._step
-
-    @step.setter
-    def step(self, value):
-        self._set_child(Step, 'step', value)
-
-    @property
-    def alter(self):
-        return self._alter
-
-    @alter.setter
-    def alter(self, value):
-        self._set_child(Alter, 'alter', value)
-
-    @property
-    def octave(self):
-        return self._octave
-
-    @octave.setter
-    def octave(self, value):
-        self._set_child(Octave, 'octave', value)
-
-
-class Unpitched(XMLElement2):
-    """"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='unpitched', *args, **kwargs)
-
-
-class DisplayStep(XMLElement2, TypeStep):
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='display-step', value=value, *args, **kwargs)
-
-
-class DisplayOctave(XMLElement2, TypeOctave):
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='display-octave', value=value, *args, **kwargs)
-
-
-"""
-The display-step-octave group contains the sequence of elements used by both the rest and unpitched elements. This
-group is used to place rests and unpitched elements on the staff without implying that these elements have pitch.
-Positioning follows the current clef. If percussion clef is used, the display-step and display-octave elements are
-interpreted as if in treble clef, with a G in octave 4 on line 2. If not present, the note is placed on the middle
-line"""
-
-DisplayStepOctave = Sequence(
-    Element(DisplayStep),
-    Element(DisplayOctave)
-)
-
-
-class Rest(XMLElement2):
-    """
-    The rest element indicates notated rests or silences. Rest elements are usually empty, but placement on the staff
-    can be specified using display-step and  display-octave elements. If the measure attribute is set to yes, this
-    indicates this is a complete measure rest.
-    """
-
-    # _DTD = Sequence(
-    #     Group(DisplayStepOctave, min_occurrence=0)
-    # )
-
-    _DTD = Sequence(
-        Group(DisplayStepOctave)
-    )
-
-    def __init__(self):
-        super().__init__(tag='rest')
-
-
-"""
-The full-note group is a sequence of the common note elements between cue/grace notes and regular (full) notes:
-pitch, chord, and rest information, but not duration (cue and grace notes do not have duration encoded). Unpitched
-elements are used for unpitched percussion, speaking voice, and other musical elements lacking determinate pitch.
-"""
-FullNote = Sequence(
-    Element(Chord, min_occurrence=0),
-    Choice(
-        Element(Pitch),
-        Element(Unpitched),
-        Element(Rest)
-    )
-)
 
 
 class Tie(XMLElement2):
@@ -170,7 +39,7 @@ class Cue(XMLElement2):
         super().__init__(tag='cue', *args, **kwargs)
 
 
-class Duration(XMLElement2, PositiveDevisions):
+class Duration(XMLElement2, PositiveDivisions):
     """
     Duration is a positive number specified in division units. This is the intended duration vs. notated duration
     (for instance, swing eighths vs. even eighths, or differences in dotted notes in Baroque-era music). Differences
@@ -208,8 +77,11 @@ class Type(XMLElement2, NoteTypeValue):
         super().__init__(tag='type', *args, **kwargs)
 
 
-class Dot(XMLElement2):
-    """"""
+class Dot(EmptyPlacement):
+    """
+    One dot element is used for each dot of prolongation. The placement element is used to specify whether the dot
+    should appear above or below the staff line. It is ignored for notes that appear on a staff space.
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='dot', *args, **kwargs)
@@ -268,10 +140,71 @@ class Notations(XMLElement2):
 
 
 class Lyric(XMLElement2):
-    """"""
+    """
+    The lyric type represents text underlays for lyrics, based on Humdrum with support for other formats. Two text
+    elements that are not separated by an elision element are part of the same syllable, but may have different text
+    formatting. The MusicXML XSD is more strict than the DTD in enforcing this by disallowing a second syllabic element
+    unless preceded by an elision element. The lyric number indicates multiple lines, though a name can be used as well
+    (as in Finale's verse / chorus / section specification).
 
-    def __init__(self, *args, **kwargs):
+    Justification is center by default; placement is below by default. The print-object attribute can override a note's
+    print-lyric attribute in cases where only some lyrics on a note are printed, as when lyrics for later verses are printed
+    in a block of text rather than with each note. The time-only attribute precisely specifies which lyrics are to be sung
+    which time through a repeated section.
+    	<xs:complexType name="lyric">
+		<xs:sequence>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element name="syllabic" type="syllabic" minOccurs="0"/>
+					<xs:element name="text" type="text-element-data"/>
+					<xs:sequence minOccurs="0" maxOccurs="unbounded">
+						<xs:sequence minOccurs="0">
+							<xs:element name="elision" type="elision"/>
+							<xs:element name="syllabic" type="syllabic" minOccurs="0"/>
+						</xs:sequence>
+						<xs:element name="text" type="text-element-data"/>
+					</xs:sequence>
+					<xs:element name="extend" type="extend" minOccurs="0"/>
+				</xs:sequence>
+				<xs:element name="extend" type="extend"/>
+				<xs:element name="laughing" type="empty">
+					<xs:annotation>
+						<xs:documentation>The laughing element is taken from Humdrum.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="humming" type="empty">
+					<xs:annotation>
+						<xs:documentation>The humming element is taken from Humdrum.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+			<xs:element name="end-line" type="empty" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The end-line element comes from RP-017 for Standard MIDI File Lyric meta-events. It facilitates lyric display for Karaoke and similar applications.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="end-paragraph" type="empty" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The end-paragraph element comes from RP-017 for Standard MIDI File Lyric meta-events. It facilitates lyric display for Karaoke and similar applications.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:group ref="editorial"/>
+		</xs:sequence>
+		<xs:attribute name="number" type="xs:NMTOKEN"/>
+		<xs:attribute name="name" type="xs:token"/>
+		<xs:attributeGroup ref="justify"/>
+		<xs:attributeGroup ref="position"/>
+		<xs:attributeGroup ref="placement"/>
+		<xs:attributeGroup ref="color"/>
+		<xs:attributeGroup ref="print-object"/>
+		<xs:attribute name="time-only" type="time-only"/>
+		<xs:attributeGroup ref="optional-unique-id"/>
+	</xs:complexType>
+    """
+
+    def __init__(self, text, *args, **kwargs):
         super().__init__(tag='lyric', *args, **kwargs)
+        self.text = text
 
 
 class Play(XMLElement2):

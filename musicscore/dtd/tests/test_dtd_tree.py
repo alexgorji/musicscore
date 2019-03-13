@@ -1,9 +1,6 @@
 from unittest import TestCase
-from musicscore.dtd.dtd import Sequence, Choice, Element, Group, DTDLeaf
-from musicscore.dtd.note import Grace, FullNote, Cue, Duration, Instrument, EditorialVoice, Type, Dot, Accidental, \
-    TimeModification, Stem, Notehead, NotheadText, Staff, Beam, Notations, Play, Lyric, Tie, DurationGroup, Note, \
-    Rest
-from musicscore.musicxml.elements.xml_note import XMLDuration
+from musicscore.musicxml.elements.note import Duration, Note
+from musicscore.musicxml.elements.fullnote import Rest
 
 
 class TestDTDTree(TestCase):

@@ -1,10 +1,10 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.xml_note import XMLDuration
+from musicscore.musicxml.elements.note import Duration
 
 
 class TestDuration(TestCase):
     def setUp(self):
-        self.duration = XMLDuration(10)
+        self.duration = Duration(10)
 
     def test_duration(self):
         result = '''<duration>10</duration>

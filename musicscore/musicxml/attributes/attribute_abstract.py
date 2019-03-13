@@ -1,6 +1,6 @@
 from musicscore.basic_functions import replace_dash
 from musicscore.musicxml.types.simple_type import *
-from musicscore.musicxml.types.complex_type import *
+# from musicscore.musicxml.types.complex_type import *
 
 
 class AttributeAbstract(object):

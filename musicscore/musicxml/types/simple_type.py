@@ -16,7 +16,7 @@ class SimpleType(object):
     @value.setter
     def value(self, v):
         if v is not None and v not in self.permitted:
-            raise ValueError('{}.value {} must be None or in {}'.format(self.__class__.__name__, v, self.permitted))
+            raise ValueError('{}.value {} must be None or in {} '.format(self.__class__.__name__, v, self.permitted))
         self._value = v
         self._text = v
 
@@ -174,7 +174,7 @@ class Tenths(Decimal):
         super().__init__(value=value, *args, **kwargs)
 
 
-class PositiveDevisions(PositiveInteger):
+class PositiveDivisions(PositiveInteger):
     """
     The positive-divisions type restricts divisions values to positive numbers.
     """
@@ -314,3 +314,105 @@ class Percent(Decimal):
             raise ValueError(
                 '{}.value {} must be a percentage from 0 to 100'.format(self.__class__.__name__, v))
         self._value = v
+
+
+class TypeSemitones(Decimal):
+    """
+    The semitones type is a number representing semitones, used for chromatic alteration. A value of -1 corresponds to
+    a flat and a value of 1 to a sharp. Decimal values like 0.5 (quarter tone sharp) are used for microtones.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+# /////////////// KEY
+
+class SmulfGlyphName(SimpleType):
+    """
+    The smufl-glyph-name type is used for attributes that reference a specific Standard Music Font Layout (SMuFL)
+    character. The value is a SMuFL canonical glyph name, not a code point. For instance, the value for a standard piano
+    pedal mark would be keyboardPedalPed, not U+E650.
+    <xs:restriction base="xs:NMTOKEN"/>
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class SmulfAccidentalGlyphName(SmulfGlyphName):
+    """
+    The smufl-accidental-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) accidental
+    character. The value is a SMuFL canonical glyph name that starts with acc.
+	<xs:restriction base="smufl-glyph-name">
+		<xs:pattern value="acc\c+"/>
+	</xs:restriction>
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class TypeAccidentalValue(SimpleType):
+    """
+    The accidental-value type represents notated accidentals supported by MusicXML. In the MusicXML 2.0 DTD this was a
+    string with values that could be included. The XSD strengthens the data typing to an enumerated list. The quarter- a
+    nd three-quarters- accidentals are Tartini-style quarter-tone accidentals. The -down and -up accidentals are
+     quarter-tone accidentals that include arrows pointing down or up. The slash- accidentals are used in Turkish
+     classical music. The numbered sharp and flat accidentals are superscripted versions of the accidental signs, used
+     in Turkish folk music. The sori and koron accidentals are microtonal sharp and flat accidentals used in Iranian
+     and Persian music.
+    """
+    permitted = ["sharp", "natural", "flat", "double-sharp", "sharp-sharp", "flat-flat", "natural-sharp",
+                 "natural-flat", "quarter-flat", "quarter-sharp", "three-quarters-flat", "three-quarters-sharp",
+                 "sharp-down", "sharp-up", "natural-down", "natural-up", "flat-down", "flat-up", "triple-sharp",
+                 "triple-flat", "slash-quarter-sharp", "slash-sharp", "slash-flat", "double-slash-flat", "sharp-1",
+                 "sharp-2", "sharp-3", "sharp-5", "flat-1", "flat-2", "flat-3", "flat-4", "sori", "karon"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class CancelLocation(SimpleType):
+    """
+    The cancel-location type is used to indicate where a key signature cancellation appears relative to a new key
+    signature: to the left, to the right, or before the barline and to the left. It is left by default. For mid-measure
+    key elements, a cancel-location of before-barline should be treated like a cancel-location of left.
+    """
+    permitted = ['left', 'right', 'before-barline']
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeFifths(Integer):
+    """
+    The fifths type represents the number of flats or sharps in a traditional key signature. Negative numbers are used
+    for flats and positive numbers for sharps, reflecting the key's placement within the circle of fifths
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeMode(SimpleType):
+    """
+    The mode type is used to specify major/minor and other mode distinctions. Valid mode values include major, minor,
+    dorian, phrygian, lydian, mixolydian, aeolian, ionian, locrian, and none
+    """
+    permitted = ['major', 'minor', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'aeolian', 'ionian', 'locrian', 'none']
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class SymbolSize(SimpleType):
+    """
+    The symbol-size type is used to distinguish between full, cue sized, grace cue sized, and oversized symbols.
+    """
+    permitted = ["full", "cue", "grace-cue", "large"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)

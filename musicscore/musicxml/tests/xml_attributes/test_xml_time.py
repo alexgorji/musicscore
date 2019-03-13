@@ -1,11 +1,11 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.xml_attributes import XMLTime
+from musicscore.musicxml.elements.attributes import Time
 
 
 class TestTime(TestCase):
 
     def setUp(self):
-        self.time = XMLTime(3, 2)
+        self.time = Time(3, 2)
 
     def test_time(self):
         result = '''<time>

@@ -1,7 +1,6 @@
 from musicscore.musicxml.elements.xml_element import XMLElement, XMLElementGroup
-from musicscore.dtd.dtd import Group, Sequence, Choice, Element
-from musicscore.dtd.note import Note
-import copy
+from musicscore.dtd.dtd import Sequence, Choice, Element
+from musicscore.musicxml.elements.note import Note
 
 
 class Backup(XMLElement):
@@ -60,25 +59,18 @@ class Bookmark(XMLElement):
         super().__init__(tag='bookmark', *args, **kwargs)
 
 
-class MusicData(XMLElementGroup):
-    """"""
-
-    _DTD = Sequence(
-        Choice(
-            Element(Note),
-            Element(Backup),
-            Element(Forward),
-            Element(Direction),
-            Element(Attributes),
-            Element(Sound),
-            Element(Barline),
-            Element(Link),
-            Element(Bookmark),
-            min_occurrence=0,
-            max_occurrence=None
-        )
+MusicData = Sequence(
+    Choice(
+        Element(Note),
+        Element(Backup),
+        Element(Forward),
+        Element(Direction),
+        Element(Attributes),
+        Element(Sound),
+        Element(Barline),
+        Element(Link),
+        Element(Bookmark),
+        min_occurrence=0,
+        max_occurrence=None
     )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
+)

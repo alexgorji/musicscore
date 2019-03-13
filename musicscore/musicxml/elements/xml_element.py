@@ -14,17 +14,45 @@ class XMLTree(Tree):
         super().__init__(*args, **kwargs)
         self.dtd = copy.copy(self._DTD)
 
+    def find_child_by_tag(self, tag):
+        return next((child for child in self._children if child.tag == tag), None)
+
+    def remove_old_child_by_tag(self, tag):
+        old_child = self.find_child_by_tag(tag)
+        if old_child is not None:
+            self.remove_child(old_child)
+
+    def replace_old_child_by_tag(self, tag, new_child):
+        self.remove_old_child_by_tag(tag)
+        if new_child is not None:
+            if new_child.tag != tag:
+                raise ValueError('new_child must have the tag {}'.format(tag))
+            self.add_child(new_child)
+
+    def _set_child(self, type_, tag, value):
+
+        if value is not None and not isinstance(value, type_):
+            value = type_(value)
+
+        self.replace_old_child_by_tag(tag=tag, new_child=value)
+
+        name = '_' + replace_dash(tag)
+
+        self.__setattr__(name, value)
+
     def add_child(self, child):
         self.dtd.check_child_type(self, child)
         self.dtd.check_child_max_occurrence(self, child)
         self._children.append(child)
+        child._up = self
         return child
 
     def sort_children(self):
         self.dtd.sort_children(self)
 
     def close(self):
-        self.dtd.close(self)
+        if self.dtd:
+            self.dtd.close(self)
 
     def get_children_by_type(self, type_):
         return [child for child in self.get_children() if isinstance(child, type_)]
@@ -98,16 +126,16 @@ class XMLElement(XMLTree):
             raise TypeError('multiple.value must be of type bool not{}'.format(type(value)))
         self._multiple = value
 
-    def __getattr__(self, item):
-        tag = replace_dash(item)
-        found_children = self.get_children_by_tag(tag)
-        if len(found_children) == 0:
-            raise AttributeError('object "{}" has no attribute "{}"'.format(type(self).__name__, item))
-
-        if len(found_children) == 1:
-            return found_children[0]
-        else:
-            return found_children
+    # def __getattr__(self, item):
+    #     tag = replace_dash(item)
+    #     found_children = self.get_children_by_tag(tag)
+    #     if len(found_children) == 0:
+    #         raise AttributeError('object "{}" has no attribute "{}"'.format(type(self).__name__, item))
+    #
+    #     if len(found_children) == 1:
+    #         return found_children[0]
+    #     else:
+    #         return found_children
 
     def get_attributes(self):
         return self._attributes
@@ -261,6 +289,7 @@ class XMLElement(XMLTree):
 
 
 class XMLElement2(XMLTree):
+    _ATTRIBUTES = None
 
     def __init__(self, tag, *args, **kwargs):
         self._attributes = {}
@@ -323,14 +352,14 @@ class XMLElement2(XMLTree):
         self._attributes = sorted_attributes
 
     def set_attribute(self, attribute_name, attribute_value):
-
-        # if attribute_name not in self._ATTRIBUTES:
-        #     raise ValueError('{}.set_attribute: attribute_name: {} is not in {}._ATTRIBUTES'.format(type(self),
-        #                                                                                             attribute_name,
-        #                                                                                             self.__class__.__name__))
+        if self._ATTRIBUTES is not None:
+            if attribute_name not in self._ATTRIBUTES:
+                raise ValueError('{}.set_attribute: attribute_name: {} is not in {}._ATTRIBUTES'.format(type(self),
+                                                                                                        attribute_name,
+                                                                                                        self.__class__.__name__))
         self.get_attributes()[attribute_name] = attribute_value
-
-        # self._sort_attributes()
+        if self._ATTRIBUTES is not None:
+            self._sort_attributes()
 
     def remove_attribute(self, attribute):
         if attribute in self.get_attributes().keys():
@@ -341,32 +370,6 @@ class XMLElement2(XMLTree):
 
     def __repr__(self):
         return '{} instance {} at {}'.format(self.__class__.__name__, self.tag, hex(id(self)))
-
-    def find_child_by_tag(self, tag):
-        return next((child for child in self._children if child.tag == tag), None)
-
-    def remove_old_child_by_tag(self, tag):
-        old_child = self.find_child_by_tag(tag)
-        if old_child is not None:
-            self.remove_child(old_child)
-
-    def replace_old_child_by_tag(self, tag, new_child):
-        self.remove_old_child_by_tag(tag)
-        if new_child is not None:
-            if new_child.tag != tag:
-                raise ValueError('new_child must have the tag {}'.format(tag))
-            self.add_child(new_child)
-
-    def _set_child(self, type_, tag, value):
-
-        if value is not None and not isinstance(value, type_):
-            value = type_(value)
-
-        self.replace_old_child_by_tag(tag=tag, new_child=value)
-
-        name = '_' + replace_dash(tag)
-
-        self.__setattr__(name, value)
 
     def _to_xml(self):
 

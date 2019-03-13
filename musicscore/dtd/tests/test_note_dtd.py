@@ -1,4 +1,5 @@
-from musicscore.dtd.note import Note, Grace, Duration, Beam, Tie, Chord, Pitch, Rest, DisplayOctave, DisplayStep, Type
+from musicscore.musicxml.elements.note import Note, Grace, Duration, Beam, Tie, Type, Lyric
+from musicscore.musicxml.elements.fullnote import Chord, Pitch, DisplayStep, DisplayOctave, Rest
 from musicscore.dtd.dtd import ChildOccurrenceDTDConflict, ChildTypeDTDConflict, ChildIsNotOptional
 from unittest import TestCase
 
@@ -123,3 +124,17 @@ class TestNoteDTD(TestCase):
 </note>
 '''
         self.assertEqual(self.note.to_string(), result)
+
+    def test_lyrics(self):
+        self.note.add_child(Lyric('lyric 1'))
+        self.note.add_child(Lyric('lyric 2'))
+        result = '''<note>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>1</duration>
+  <lyric>lyric 1</lyric>
+  <lyric>lyric 2</lyric>
+</note>
+'''

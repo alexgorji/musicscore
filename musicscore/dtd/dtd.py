@@ -92,6 +92,10 @@ class DTDNode(DTDTree):
         if isinstance(self.up, Choice) and self.up.min_occurrence == 0 and self.up.max_occurrence is None:
             return True
 
+        if isinstance(self.up, Sequence) and not (self.up.max_occurrence == 1):
+            raise NotImplementedError(
+                'self.up.max_occurrence {}'.format(self.up.min_occurrence, self.up.max_occurrence))
+
         if self.max_occurrence is not None and occurrence > self.max_occurrence:
             return False
 
@@ -168,6 +172,10 @@ class DTDNode(DTDTree):
         for node in current_combination:
             if isinstance(node.up, Choice) and node.up.min_occurrence == 0 and node.up.max_occurrence is None:
                 pass
+            elif isinstance(node.up, Sequence) and node.up.min_occurrence == 0:
+                pass
+            elif isinstance(node.up, Sequence) and node.up.min_occurrence != 1:
+                raise NotImplementedError('node.up.min_occurrence={}'.format(node.up.min_occurrence))
             else:
                 selected = xmltree.get_children_by_type(node.type_)
                 if len(selected) == 0 and node.min_occurrence != 0:
@@ -243,17 +251,18 @@ class Choice(DTDNode):
 class Sequence(DTDNode):
     """"""
 
-    def __init__(self, *children):
-        super().__init__(children=children, min_occurrence=1, max_occurrence=1)
+    def __init__(self, *children, min_occurrence=1, max_occurrence=1):
+        super().__init__(children=children, min_occurrence=min_occurrence, max_occurrence=max_occurrence)
 
     def expand(self):
+
         if not self.get_children():
             output = [[]]
         else:
             x = self.get_children()[0]
             xs = self.get_children()[1:]
             ex = x.expand()
-            exs = Sequence(*xs).expand()
+            exs = Sequence(*xs, min_occurrence=self.min_occurrence, max_occurrence=self.max_occurrence).expand()
             output = [a + b for a in ex for b in exs]
         self.repair_parenthood()
         return output
@@ -274,22 +283,23 @@ class Element(DTDLeaf):
 class Group(DTDNode):
     """"""
 
-    def __init__(self, sequence, min_occurrence=1, max_occurrence=1,  **kwargs):
+    def __init__(self, sequence, min_occurrence=1, max_occurrence=1):
         if not isinstance(sequence, Sequence):
             raise TypeError('Group must be a Sequence')
         self.sequence = sequence
-        super().__init__(min_occurrence=min_occurrence, max_occurrence=max_occurrence, **kwargs)
+        super().__init__(min_occurrence=min_occurrence, max_occurrence=max_occurrence)
 
     def expand(self):
-        if not self.sequence.get_children():
-            output = [[]]
-        else:
-            x = self.sequence.get_children()[0]
-            xs = self.sequence.get_children()[1:]
-            ex = x.expand()
-            exs = Sequence(*xs).expand()
-            output = [a + b for a in ex for b in exs]
-        self.repair_parenthood()
-        return output
-
-
+        self.sequence.min_occurrence = self.min_occurrence
+        self.sequence.max_occurrence = self.max_occurrence
+        return self.sequence.expand()
+        # if not self.sequence.get_children():
+        #     output = [[]]
+        # else:
+        #     x = self.sequence.get_children()[0]
+        #     xs = self.sequence.get_children()[1:]
+        #     ex = x.expand()
+        #     exs = Sequence(*xs).expand()
+        #     output = [a + b for a in ex for b in exs]
+        # self.repair_parenthood()
+        # return output

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from musicscore.dtd.note import Pitch, Step, Alter, Octave
+from musicscore.musicxml.elements.fullnote import Step, Alter, Octave, Pitch
 
 
 class TestPitch(TestCase):

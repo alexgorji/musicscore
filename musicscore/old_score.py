@@ -1,5 +1,5 @@
 from musicscore.musicxml.elements.xml_partwise import XMLScorePartwise, XMLPartPartwise, XMLMeasurePartwise
-from musicscore.musicxml.elements.xml_timewise import XMLScoreTimewise, XMLMeasureTimewise
+from musicscore.musicxml.elements.xml_timewise import ScoreTimewise, MeasureTimewise
 from musicscore.musicxml.elements.xml_score_header import XMLScorePart, XMLPartName, XMLPartList
 from musicscore.musicxml.exceptions import ChildAlreadyExists
 
@@ -15,7 +15,7 @@ from musicscore.musicxml.exceptions import ChildAlreadyExists
 #     def __init__(self, *args, **kwargs):
 #         super().__init__(number=self.generate_number(), *args, **kwargs)
 
-class Measure(XMLMeasureTimewise):
+class Measure(MeasureTimewise):
     _auto_index = 0
 
     def generate_number(self):

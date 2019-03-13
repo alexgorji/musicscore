@@ -1,11 +1,11 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.xml_attributes import XMLDivisions
+from musicscore.musicxml.elements.attributes import Divisions
 
 
 class TestDivisions(TestCase):
 
     def setUp(self):
-        self.divisions = XMLDivisions(1)
+        self.divisions = Divisions(1)
 
     def test_divisions(self):
         result = '''<divisions>1</divisions>

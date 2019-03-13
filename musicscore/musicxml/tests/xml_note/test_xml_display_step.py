@@ -1,9 +1,10 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.xml_note import XMLDisplayTypeStep
+from musicscore.musicxml.elements.fullnote import DisplayStep
+
 
 class TestDisplayStep(TestCase):
     def setUp(self):
-        self.display_step = XMLDisplayTypeStep(value='C')
+        self.display_step = DisplayStep(value='C')
 
     def test_display_step(self):
         result = '''<display-step>C</display-step>

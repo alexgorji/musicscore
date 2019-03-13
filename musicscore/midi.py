@@ -1,4 +1,4 @@
-from musicscore.musicxml.elements.xml_note import XMLRest, XMLPitch
+from musicscore.musicxml.elements.fullnote import Pitch, Rest
 
 
 class Midi(object):
@@ -179,6 +179,6 @@ class Midi(object):
 
     def get_pitch_rest(self):
         if self.value == 0:
-            return XMLRest()
+            return Rest()
         else:
-            return XMLPitch(*self.get_pitch_name())
+            return Pitch(*self.get_pitch_name())

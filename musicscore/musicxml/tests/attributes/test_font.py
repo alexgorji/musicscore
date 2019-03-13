@@ -1,12 +1,11 @@
 from musicscore.musicxml.attributes.print_style import Font
-from musicscore.musicxml.elements.xml_note import XMLPitch
+from musicscore.musicxml.elements.fullnote import Pitch
 
 from unittest import TestCase
 
 
-class XMLWithFont(XMLPitch, Font):
+class XMLWithFont(Pitch, Font):
     _ATTRIBUTES = ['font-family', 'font-size', 'font-weight', 'font-style']
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -16,8 +15,8 @@ class TestFont(TestCase):
         self.font = XMLWithFont()
 
     def test_font(self):
-        self.font.font_weight = 'normal'
-        self.font.font_size = 10
+        self.font.font_weight = 'bold'
+        self.font.font_size = 8
 
         with self.assertRaises(TypeError):
             self.font.font_size = 'b'
@@ -25,7 +24,7 @@ class TestFont(TestCase):
         self.font.font_style = 'italic'
         self.font.font_family = 'Arial, Times'
 
-        result = '''<pitch font-family="Arial, Times" font-size="10" font-weight="normal" font-style="italic">
+        result = '''<pitch font-family="Arial, Times" font-size="8" font-weight="bold" font-style="italic">
   <step>C</step>
   <octave>4</octave>
 </pitch>
