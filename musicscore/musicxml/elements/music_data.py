@@ -1,58 +1,58 @@
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.dtd.dtd import Sequence, Choice, Element
 from musicscore.musicxml.elements.note import Note
 
 
-class Backup(XMLElement2):
+class Backup(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='backup', *args, **kwargs)
 
 
-class Forward(XMLElement2):
+class Forward(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='forward', *args, **kwargs)
 
 
-class Direction(XMLElement2):
+class Direction(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='direction', *args, **kwargs)
 
 
-class Attributes(XMLElement2):
+class Attributes(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='attributes', *args, **kwargs)
 
 
-class Sound(XMLElement2):
+class Sound(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='sound', *args, **kwargs)
 
 
-class Barline(XMLElement2):
+class Barline(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='barline', *args, **kwargs)
 
 
-class Link(XMLElement2):
+class Link(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='link', *args, **kwargs)
 
 
-class Bookmark(XMLElement2):
+class Bookmark(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):

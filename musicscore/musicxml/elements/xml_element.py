@@ -293,7 +293,7 @@ class XMLTree(Tree):
 #         return et.tounicode(xml, pretty_print=True)
 
 
-class XMLElement2(XMLTree):
+class XMLElement(XMLTree):
     _ATTRIBUTES = None
 
     def __init__(self, tag, *args, **kwargs):
@@ -387,7 +387,7 @@ class XMLElement2(XMLTree):
 
         def set_children():
             for child in self.get_children():
-                if isinstance(child, XMLElement2):
+                if isinstance(child, XMLElement):
                     xml.append(child._to_xml())
                 elif isinstance(child, XMLElementGroup):
                     for sibling in child.get_children():

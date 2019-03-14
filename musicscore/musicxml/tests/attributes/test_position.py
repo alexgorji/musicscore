@@ -1,9 +1,9 @@
 from unittest import TestCase
 from musicscore.musicxml.attributes.position import Position
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 
 
-class Positioned(XMLElement2, Position):
+class Positioned(XMLElement, Position):
     _ATTRIBUTES = ['default-x', 'default-y', 'relative-x', 'relative-y']
 
     def __init__(self, *args, **kwargs):

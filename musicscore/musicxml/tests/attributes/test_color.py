@@ -1,9 +1,9 @@
 from musicscore.musicxml.attributes.print_style import Color
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 from unittest import TestCase
 
 
-class Colored(XMLElement2, Color):
+class Colored(XMLElement, Color):
     """"""
     # _ATTRIBUTES = ['color']
 

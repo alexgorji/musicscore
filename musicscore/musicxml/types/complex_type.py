@@ -4,18 +4,18 @@ from musicscore.musicxml.attributes.level_display import LevelDisplay
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.print_object import PrintObject
 from musicscore.musicxml.attributes.print_style import PrintStyle
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.simple_type import TypeStep, TypeAlter, TypeSemitones, TypeAccidentalValue, TypeMode, \
     TypeFifths, TypeOctave
 
 
-class ComplexType(XMLElement2):
+class ComplexType(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
 # TODO: add exception for attributes
-class Empty(ComplexType, XMLElement2):
+class Empty(ComplexType, XMLElement):
     """
     Empty is a type of XMLElement with no children, no text and no attributes
     """
@@ -26,7 +26,7 @@ class Empty(ComplexType, XMLElement2):
     def add_child(self, child):
         raise Exception('Empty cannot have children.')
 
-    @XMLElement2.text.setter
+    @XMLElement.text.setter
     def text(self, value):
         if value is not None:
             raise Exception('Empty cannot have text.')
@@ -98,14 +98,14 @@ class Cancel(TypeCancel):
         super().__init__(value=value, *args, **kwargs)
 
 
-class Fifths(XMLElement2, TypeFifths):
+class Fifths(XMLElement, TypeFifths):
     """"""
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
 
-class Mode(XMLElement2, TypeMode):
+class Mode(XMLElement, TypeMode):
     """"""
 
     def __init__(self, value, *args, **kwargs):
@@ -123,7 +123,7 @@ TraditionalKey = Sequence(
 )
 
 
-class KeyStep(XMLElement2, TypeStep):
+class KeyStep(XMLElement, TypeStep):
     """
     Non-traditional key signatures can be represented using the Humdrum/Scot concept of a list of altered tones.
     The key-step element indicates the pitch step to be altered, represented using the same names as in the step
@@ -134,7 +134,7 @@ class KeyStep(XMLElement2, TypeStep):
         super().__init__(value=value, *args, **kwargs)
 
 
-class KeyAlter(XMLElement2, TypeSemitones):
+class KeyAlter(XMLElement, TypeSemitones):
     """
     Non-traditional key signatures can be represented using the Humdrum/Scot concept of a list of altered tones.
     The key-step element indicates the pitch step to be altered, represented using the same names as in the step

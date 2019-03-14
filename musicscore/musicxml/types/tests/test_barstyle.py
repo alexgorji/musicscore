@@ -1,9 +1,9 @@
 from musicscore.musicxml.types.simple_type import BarStyleType
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 from unittest import TestCase
 
 
-class Bared(XMLElement2, BarStyleType):
+class Bared(XMLElement, BarStyleType):
 
     def __init__(self, value=None, *args, **kwargs):
         super().__init__(tag='test_bar', value=value, *args, **kwargs)

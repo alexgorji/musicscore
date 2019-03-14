@@ -1,14 +1,14 @@
 from musicscore.dtd.dtd import Element, GroupReference, Sequence, Choice
 from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
 from musicscore.musicxml.elements.fullnote import FullNote
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 import copy
 
 from musicscore.musicxml.types.complex_type import EmptyPlacement
 from musicscore.musicxml.types.simple_type import PositiveDivisions, NoteTypeValue
 
 
-class Grace(XMLElement2, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):
+class Grace(XMLElement, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):
     """
     documentation>The grace type indicates the presence of a grace note. The slash attribute for a grace note is yes
     for slashed eighth notes. The other grace note attributes come from MuseData sound suggestions. The
@@ -25,21 +25,21 @@ class Grace(XMLElement2, StealTimePrevious, StealTimeFollowing, MakeTime, Slash)
 # type="semitones"
 
 
-class Tie(XMLElement2):
+class Tie(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='tie', *args, **kwargs)
 
 
-class Cue(XMLElement2):
+class Cue(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='cue', *args, **kwargs)
 
 
-class Duration(XMLElement2, PositiveDivisions):
+class Duration(XMLElement, PositiveDivisions):
     """
     Duration is a positive number specified in division units. This is the intended duration vs. notated duration
     (for instance, swing eighths vs. even eighths, or differences in dotted notes in Baroque-era music). Differences
@@ -60,7 +60,7 @@ DurationGroup = Sequence(
 )
 
 
-class Instrument(XMLElement2):
+class Instrument(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -70,7 +70,7 @@ class Instrument(XMLElement2):
 EditorialVoice = Sequence()
 
 
-class Type(XMLElement2, NoteTypeValue):
+class Type(XMLElement, NoteTypeValue):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -87,35 +87,35 @@ class Dot(EmptyPlacement):
         super().__init__(tag='dot', *args, **kwargs)
 
 
-class Accidental(XMLElement2):
+class Accidental(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='accidental', *args, **kwargs)
 
 
-class TimeModification(XMLElement2):
+class TimeModification(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='time-modification', *args, **kwargs)
 
 
-class Stem(XMLElement2):
+class Stem(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='stem', *args, **kwargs)
 
 
-class Notehead(XMLElement2):
+class Notehead(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='notehead', *args, **kwargs)
 
 
-class NotheadText(XMLElement2):
+class NotheadText(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -125,21 +125,21 @@ class NotheadText(XMLElement2):
 Staff = Sequence()
 
 
-class Beam(XMLElement2):
+class Beam(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='beam', *args, **kwargs)
 
 
-class Notations(XMLElement2):
+class Notations(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='notations', *args, **kwargs)
 
 
-class Lyric(XMLElement2):
+class Lyric(XMLElement):
     """
     The lyric type represents text underlays for lyrics, based on Humdrum with support for other formats. Two text
     elements that are not separated by an elision element are part of the same syllable, but may have different text
@@ -207,14 +207,14 @@ class Lyric(XMLElement2):
         self.text = text
 
 
-class Play(XMLElement2):
+class Play(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='play', *args, **kwargs)
 
 
-class Note(XMLElement2):
+class Note(XMLElement):
     """
     Notes are the most common type of MusicXML data. The MusicXML format keeps the MuseData distinction between
     elements used for sound information and elements used for notation information (e.g., tie is used for sound,

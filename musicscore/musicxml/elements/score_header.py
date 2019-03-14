@@ -1,42 +1,42 @@
 from musicscore.dtd.dtd import Sequence, Element, GroupReference, Choice
 from musicscore.musicxml.elements.editorial import Editorial
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.basic_functions import is_empty
 from musicscore.musicxml.attributes.part_name_text import PartNameText
 from musicscore.musicxml.types.complex_type import ComplexType
 
 
-class Work(XMLElement2):
+class Work(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='work', *args, **kwargs)
         raise NotImplementedError()
 
 
-class MovementNumber(XMLElement2):
+class MovementNumber(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='movement-number', *args, **kwargs)
         raise NotImplementedError()
 
 
-class MovementTitle(XMLElement2):
+class MovementTitle(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='movement-title', *args, **kwargs)
         raise NotImplementedError()
 
 
-class Identification(XMLElement2):
+class Identification(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='identification', *args, **kwargs)
         raise NotImplementedError()
 
 
-class Defaults(XMLElement2):
+class Defaults(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='defaults', *args, **kwargs)
         raise NotImplementedError()
 
 
-class Credit(XMLElement2):
+class Credit(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='credit', *args, **kwargs)
         raise NotImplementedError()
@@ -71,13 +71,13 @@ class PartName(TypePartName):
             self.text = self.name
 
 
-class PartNameDisplay(XMLElement2):
+class PartNameDisplay(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='part-name-display', *args, **kwargs)
         raise NotImplementedError()
 
 
-class PartAbbreviation(XMLElement2):
+class PartAbbreviation(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -85,7 +85,7 @@ class PartAbbreviation(XMLElement2):
         raise NotImplementedError()
 
 
-class PartAbbreviationDisplay(XMLElement2):
+class PartAbbreviationDisplay(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -93,7 +93,7 @@ class PartAbbreviationDisplay(XMLElement2):
         raise NotImplementedError()
 
 
-class Group(XMLElement2):
+class Group(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -101,7 +101,7 @@ class Group(XMLElement2):
         raise NotImplementedError()
 
 
-class ScoreInstrument(XMLElement2):
+class ScoreInstrument(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -109,7 +109,7 @@ class ScoreInstrument(XMLElement2):
         raise NotImplementedError()
 
 
-class MidiDevice(XMLElement2):
+class MidiDevice(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -117,7 +117,7 @@ class MidiDevice(XMLElement2):
         raise NotImplementedError()
 
 
-class MidiInstrument(XMLElement2):
+class MidiInstrument(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -180,7 +180,7 @@ ScorePartGroup = Sequence(
 )
 
 
-class GroupName(XMLElement2):
+class GroupName(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -188,7 +188,7 @@ class GroupName(XMLElement2):
         raise NotImplementedError()
 
 
-class GroupNameDisplay(XMLElement2):
+class GroupNameDisplay(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -196,7 +196,7 @@ class GroupNameDisplay(XMLElement2):
         raise NotImplementedError()
 
 
-class GroupAbbreviation(XMLElement2):
+class GroupAbbreviation(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -204,7 +204,7 @@ class GroupAbbreviation(XMLElement2):
         raise NotImplementedError()
 
 
-class GroupAbbreviationDisplay(XMLElement2):
+class GroupAbbreviationDisplay(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -212,7 +212,7 @@ class GroupAbbreviationDisplay(XMLElement2):
         raise NotImplementedError()
 
 
-class GroupSymbol(XMLElement2):
+class GroupSymbol(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -220,7 +220,7 @@ class GroupSymbol(XMLElement2):
         raise NotImplementedError()
 
 
-class GroupTime(XMLElement2):
+class GroupTime(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):

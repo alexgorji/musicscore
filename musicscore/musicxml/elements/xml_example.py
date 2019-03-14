@@ -1,9 +1,9 @@
 from musicscore.dtd.dtd import Sequence, Element
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.attributes.attribute_example import AttributeExample
 
 
-class XMLExampleChild1(XMLElement2):
+class XMLExampleChild1(XMLElement):
     """
     some documentation
     """
@@ -12,7 +12,7 @@ class XMLExampleChild1(XMLElement2):
         super().__init__(tag='example-child-1', *args, **kwargs)
 
 
-class XMLExampleChild2(XMLElement2):
+class XMLExampleChild(XMLElement):
     """
     some documentation
     """
@@ -21,14 +21,14 @@ class XMLExampleChild2(XMLElement2):
         super().__init__(tag='example-child-2', *args, **kwargs)
 
 
-class XMLExample(XMLElement2, AttributeExample):
+class XMLExample(XMLElement, AttributeExample):
     """
     some documentation
     """
     _ATTRIBUTES = ['attribute-example']
     _DTD = Sequence(
         Element(XMLExampleChild1, min_occurrence=0),
-        Element(XMLExampleChild2, min_occurrence=0, max_occurrence=None)
+        Element(XMLExampleChild, min_occurrence=0, max_occurrence=None)
 
     )
 

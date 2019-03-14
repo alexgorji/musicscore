@@ -1,11 +1,11 @@
 from unittest import TestCase
 
 from musicscore.dtd.dtd import Sequence, Element, ChildOccurrenceDTDConflict, ChildTypeDTDConflict
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.exceptions import ChildAlreadyExists
 
 
-class A(XMLElement2):
+class A(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -13,28 +13,28 @@ class A(XMLElement2):
         self.multiple = True
 
 
-class B(XMLElement2):
+class B(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='b', *args, **kwargs)
 
 
-class C(XMLElement2):
+class C(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='c', *args, **kwargs)
 
 
-class D(XMLElement2):
+class D(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='d', *args, **kwargs)
 
 
-class E(XMLElement2):
+class E(XMLElement):
     """"""
     _DTD=Sequence(
         Element(C),

@@ -1,5 +1,5 @@
 from musicscore.dtd.dtd import ChildOccurrenceDTDConflict
-from musicscore.musicxml.elements.xml_example import XMLExample, XMLExampleChild1, XMLExampleChild2
+from musicscore.musicxml.elements.xml_example import XMLExample, XMLExampleChild1, XMLExampleChild
 
 from unittest import TestCase
 
@@ -17,9 +17,9 @@ class TestExample(TestCase):
 '''
         self.assertEqual(self.example.to_string(), result)
         self.example.value = None
-        self.example.add_child(XMLExampleChild2())
+        self.example.add_child(XMLExampleChild())
         self.example.add_child(XMLExampleChild1())
-        self.example.add_child(XMLExampleChild2())
+        self.example.add_child(XMLExampleChild())
         result = '''<example attribute-example="one">
   <example-child-1/>
   <example-child-2/>

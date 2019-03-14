@@ -1,10 +1,10 @@
-from musicscore.musicxml.elements.xml_barline import XMLBarline, XMLBarStyle
+from musicscore.musicxml.elements.barline import Barline, BarStyle
 from unittest import TestCase
 
 
 class TestBarline(TestCase):
     def setUp(self):
-        self.barline = XMLBarline()
+        self.barline = Barline()
 
     def test_barline(self):
         self.barline.location = 'left'
@@ -16,7 +16,8 @@ class TestBarline(TestCase):
             self.barline.location = 'bla'
 
         with self.assertRaises(ValueError):
-            self.barline.add_child(XMLBarStyle('bla'))
+            # self.barline.add_child(BarStyle())
+            self.barline.add_child(BarStyle('bla'))
 
 
 

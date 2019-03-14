@@ -1,13 +1,13 @@
 from musicscore.dtd.dtd import Sequence, GroupReference, Element, Choice
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.elements.editorial import Editorial
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complex_type import TypeKey
 from musicscore.musicxml.types.simple_type import PositiveDivisions, ClefSign, StaffLine, PositiveInteger
 from musicscore.musicxml.attributes.print_object import PrintObject
 
 
-class Divisions(XMLElement2, PositiveDivisions):
+class Divisions(XMLElement, PositiveDivisions):
     """
     Musical notation duration is commonly represented as fractions.
     The divisions element indicates how many divisions per quarter note are used to indicate a note's duration.
@@ -33,7 +33,7 @@ class Key(TypeKey):
         super().__init__(tag='key', value=value, *args, **kwargs)
 
 
-class Beats(XMLElement2, PositiveInteger):
+class Beats(XMLElement, PositiveInteger):
     """
     The beats element indicates the number of beats, as found in the numerator of a time signature.
     """
@@ -42,7 +42,7 @@ class Beats(XMLElement2, PositiveInteger):
         super().__init__(tag='beats', value=value, *args, **kwargs)
 
 
-class BeatType(XMLElement2, PositiveInteger):
+class BeatType(XMLElement, PositiveInteger):
     """
     The beat-type element indicates the beat unit, as found in the denominator of a time signature.
     """
@@ -57,7 +57,7 @@ TimeSignature = Sequence(
 )
 
 
-class Interchangeable(XMLElement2):
+class Interchangeable(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -65,7 +65,7 @@ class Interchangeable(XMLElement2):
         raise NotImplementedError()
 
 
-class SenzaMisura(XMLElement2):
+class SenzaMisura(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -79,7 +79,7 @@ class SenzaMisura(XMLElement2):
 # 		<xs:attributeGroup ref="print-style-align"/>
 
 # , OptionalUniqueId
-class Time(XMLElement2, PrintObject, OptionalUniqueId):
+class Time(XMLElement, PrintObject, OptionalUniqueId):
     """
     Time signatures are represented by the beats element for the numerator and the beat-type element for the
     denominator. The symbol attribute is used indicate common and cut time symbols as well as a single number display.
@@ -102,7 +102,7 @@ class Time(XMLElement2, PrintObject, OptionalUniqueId):
         super().__init__(tag='time', *args, **kwargs)
 
 
-class Staves(XMLElement2):
+class Staves(XMLElement):
     """
     The staves element is used if there is more than one staff represented in the given part (e.g., 2 staves for typical
     piano parts). If absent, a value of 1 is assumed. Staves are ordered from top to bottom in a part in numerical
@@ -119,7 +119,7 @@ class Staves(XMLElement2):
         raise NotImplementedError()
 
 
-class PartSymbol(XMLElement2):
+class PartSymbol(XMLElement):
     """
     The part-symbol element indicates how a symbol for a multi-staff part is indicated in the score.
     """
@@ -129,7 +129,7 @@ class PartSymbol(XMLElement2):
         raise NotImplementedError()
 
 
-class Instruments(XMLElement2):
+class Instruments(XMLElement):
     """
     <xs:element name="instruments" type="xs:nonNegativeInteger" minOccurs="0">
       <xs:annotation>
@@ -143,7 +143,7 @@ class Instruments(XMLElement2):
         raise NotImplementedError()
 
 
-class Clef(XMLElement2):
+class Clef(XMLElement):
     """
     Clefs are represented by a combination of sign, line, and clef-octave-change elements.
     The optional number attribute refers to staff numbers within the part.
@@ -162,11 +162,11 @@ class Clef(XMLElement2):
     the additional attribute has been set to "yes"
     """
 
-    class Sign(XMLElement2, ClefSign):
+    class Sign(XMLElement, ClefSign):
         def __init__(self, value, *args, **kwargs):
             super().__init__(tag='sign', value=value, *args, **kwargs)
 
-    class Line(XMLElement2, StaffLine):
+    class Line(XMLElement, StaffLine):
         def __init__(self, value, *args, **kwargs):
             super().__init__(tag='line', value=value, *args, **kwargs)
 
@@ -194,7 +194,7 @@ class Clef(XMLElement2):
         self._set_child(self.XMLLine, 'line', value)
 
 
-class StaffDetails(XMLElement2):
+class StaffDetails(XMLElement):
     """
     <xs:element name="staff-details" type="staff-details" minOccurs="0" maxOccurs="unbounded">
       <xs:annotation>
@@ -208,7 +208,7 @@ class StaffDetails(XMLElement2):
         raise NotImplementedError()
 
 
-class Transpose(XMLElement2):
+class Transpose(XMLElement):
     """
     """
 
@@ -217,7 +217,7 @@ class Transpose(XMLElement2):
         raise NotImplementedError()
 
 
-class Directive(XMLElement2):
+class Directive(XMLElement):
     """
     """
 
@@ -226,7 +226,7 @@ class Directive(XMLElement2):
         raise NotImplementedError()
 
 
-class MeasureStyle(XMLElement2):
+class MeasureStyle(XMLElement):
     """
     """
 
@@ -235,7 +235,7 @@ class MeasureStyle(XMLElement2):
         raise NotImplementedError()
 
 
-class Attributes(XMLElement2):
+class Attributes(XMLElement):
     """
     The attributes element contains musical information that typically changes on measure boundaries. This includes key
     and time signatures, clefs, transpositions, and staving. When attributes are changed mid-measure, it affects the

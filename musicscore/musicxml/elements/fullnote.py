@@ -1,30 +1,30 @@
 from musicscore.dtd.dtd import Sequence, Element, Choice, GroupReference
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complex_type import Empty
 from musicscore.musicxml.types.simple_type import TypeStep, TypeAlter, TypeOctave
 
 
-class Step(XMLElement2, TypeStep):
+class Step(XMLElement, TypeStep):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='step', value=value, *args, **kwargs)
 
 
-class Alter(XMLElement2, TypeAlter):
+class Alter(XMLElement, TypeAlter):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='alter', value=value, *args, **kwargs)
 
 
-class Octave(XMLElement2, TypeOctave):
+class Octave(XMLElement, TypeOctave):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='octave', value=value, *args, **kwargs)
 
 
-class DisplayStep(XMLElement2, TypeStep):
+class DisplayStep(XMLElement, TypeStep):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='display-step', value=value, *args, **kwargs)
 
 
-class DisplayOctave(XMLElement2, TypeOctave):
+class DisplayOctave(XMLElement, TypeOctave):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='display-octave', value=value, *args, **kwargs)
 
@@ -41,7 +41,7 @@ DisplayStepOctave = Sequence(
 )
 
 
-class Event(XMLElement2):
+class Event(XMLElement):
     """"""
 
     def __init__(self, tag, *args, **kwargs):

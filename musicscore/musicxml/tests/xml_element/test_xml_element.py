@@ -1,14 +1,14 @@
 from unittest import TestCase
 
 from musicscore.dtd.dtd import DTDError
-from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.elements.xml_element import XMLElement
 from lxml import etree as et
 
 
 class TestXMLElement(TestCase):
 
     def setUp(self):
-        self.xml = XMLElement2('root')
+        self.xml = XMLElement('root')
         # self.xml._CHILDREN_TYPES = [XMLElement2]
 
     def test_tag(self):

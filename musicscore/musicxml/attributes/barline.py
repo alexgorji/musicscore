@@ -1,4 +1,5 @@
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 
 
 class Location(AttributeAbstract):
@@ -11,12 +12,36 @@ class Location(AttributeAbstract):
     print, bookmark, and link elements.
     """
 
-    def __init__(self, location=None, *args, **kwargs):
+    def __init__(self, location='right', *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.generate_attribute('location', location, "RightLeftMiddle")
 
 
-class BarlineAttributes(Location):
+# xs:token: Der lexikalische und der Werteraum von xs:token sind die Menge aller Strings nach Whitespace-Ersetzung,
+# d.h., nachdem jedes Vorkommen von #x9 (Tab), #xA (Linefeed) und #xD (Carriage Return) durch ein #x20 (Leerzeichen)
+# ersetzt und dann Whitespace zusammengefaßt (d.h., unmittelbar aufeinanderfolgende Leerzeichen werden durch ein
+# einzelnes ersetzt, und führende oder am Ende stehende Leerzeichen werden entfernt) wurde.
+#
+# Einfacher ausgedrückt, ist xs:token der geeignetste Datentyp für Strings, bei denen es nicht auf Whitespace ankommt.
+class Segno(AttributeAbstract):
+    def __init__(self, segno=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute('segno', segno, "String")
+
+
+class Coda(AttributeAbstract):
+    def __init__(self, coda=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute('coda', coda, "String")
+
+
+class Divisions(AttributeAbstract):
+    def __init__(self, divisions=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute('divisions', divisions, "Divisions")
+
+
+class BarlineAttributes(Location, Segno, Coda, Divisions, OptionalUniqueId):
 
     def __init__(self, location=None, *args, **kwargs):
         super().__init__(location=location, *args, **kwargs)
