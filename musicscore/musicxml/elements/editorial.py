@@ -9,7 +9,7 @@
 		</xs:sequence>
 	</xs:group>
 """
-from musicscore.dtd.dtd import Group, Sequence, Element
+from musicscore.dtd.dtd import GroupReference, Sequence, Element
 from musicscore.musicxml.types.complex_type import TypeLevel
 
 Footnote = Sequence(
@@ -36,7 +36,7 @@ Level = Sequence(
 The editorial group specifies editorial information for a musical element.
 """
 Editorial = Sequence(
-    Group(Footnote, min_occurrence=0),
-    Group(Level, min_occurrence=0)
+    GroupReference(Footnote, min_occurrence=0),
+    GroupReference(Level, min_occurrence=0)
 
 )

@@ -1,4 +1,4 @@
-from musicscore.dtd.dtd import Sequence, Element, Choice, Group
+from musicscore.dtd.dtd import Sequence, Element, Choice, GroupReference
 from musicscore.musicxml.elements.xml_element import XMLElement2
 from musicscore.musicxml.types.complex_type import Empty
 from musicscore.musicxml.types.simple_type import TypeStep, TypeAlter, TypeOctave
@@ -107,7 +107,7 @@ class Rest(Event):
     """
 
     _DTD = Sequence(
-        Group(DisplayStepOctave, min_occurrence=0)
+        GroupReference(DisplayStepOctave, min_occurrence=0)
     )
 
     def __init__(self):

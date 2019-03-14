@@ -302,7 +302,7 @@ class Element(DTDLeaf):
         return output
 
 
-class Group(DTDNode):
+class GroupReference(DTDNode):
     """"""
 
     def __init__(self, child, min_occurrence=1, max_occurrence=1):

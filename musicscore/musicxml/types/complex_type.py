@@ -1,4 +1,4 @@
-from musicscore.dtd.dtd import Sequence, Choice, Group, Element
+from musicscore.dtd.dtd import Sequence, Choice, GroupReference, Element
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 from musicscore.musicxml.attributes.level_display import LevelDisplay
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
@@ -222,8 +222,8 @@ class TypeKey(ComplexType, KeyNumberAttribute, PrintStyle, PrintObject,
     _DTD = (
         Sequence(
             Choice(
-                Group(TraditionalKey),
-                Group(NonTraditionalKey, min_occurrence=0, max_occurrence=None)
+                GroupReference(TraditionalKey),
+                GroupReference(NonTraditionalKey, min_occurrence=0, max_occurrence=None)
             ),
             Element(KeyOctave, min_occurrence=0, max_occurrence=None)
 

@@ -1,4 +1,4 @@
-from musicscore.dtd.dtd import Sequence, Element, Group, Choice
+from musicscore.dtd.dtd import Sequence, Element, GroupReference, Choice
 from musicscore.musicxml.elements.editorial import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement2
 from musicscore.basic_functions import is_empty
@@ -93,7 +93,7 @@ class PartAbbreviationDisplay(XMLElement2):
         raise NotImplementedError()
 
 
-class PartGroup(XMLElement2):
+class Group(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -139,7 +139,7 @@ class TypeScorePart(ComplexType):
         Element(PartNameDisplay, min_occurrence=0),
         Element(PartAbbreviation, min_occurrence=0),
         Element(PartAbbreviationDisplay, min_occurrence=0),
-        Element(PartGroup, min_occurrence=0, max_occurrence=None),
+        Element(Group, min_occurrence=0, max_occurrence=None),
         Element(ScoreInstrument, min_occurrence=0, max_occurrence=None),
         Sequence(
             Element(MidiDevice, min_occurrence=0),
@@ -275,7 +275,7 @@ class TypePartGroup(ComplexType):
         Element(GroupAbbreviationDisplay, min_occurrence=0),
         Element(GroupSymbol, min_occurrence=0),
         Element(GroupTime, min_occurrence=0),
-        Group(Editorial)
+        GroupReference(Editorial)
 
     )
 
@@ -309,11 +309,11 @@ class TypePartList(ComplexType):
     which they appear in the part-list.
     """
     _DTD = Sequence(
-        Group(PartGroupGroup, min_occurrence=0, max_occurrence=None),
-        Group(ScorePartGroup),
+        GroupReference(PartGroupGroup, min_occurrence=0, max_occurrence=None),
+        GroupReference(ScorePartGroup),
         Choice(
-            Group(PartGroupGroup),
-            Group(ScorePartGroup),
+            GroupReference(PartGroupGroup),
+            GroupReference(ScorePartGroup),
             min_occurrence=0, max_occurrence=None
         )
     )

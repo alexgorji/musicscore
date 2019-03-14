@@ -1,5 +1,5 @@
 from unittest import TestCase
-from musicscore.musicxml.attributes.print_style import Position
+from musicscore.musicxml.attributes.position import Position
 from musicscore.musicxml.elements.xml_element import XMLElement2
 
 

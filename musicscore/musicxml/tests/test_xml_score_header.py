@@ -1,5 +1,5 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.xml_score_header import PartName, ScorePart, PartList
+from musicscore.musicxml.elements.score_header import PartName, ScorePart, PartList
 
 
 class TestXMLPartName(TestCase):

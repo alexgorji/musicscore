@@ -1,9 +1,10 @@
 from musicscore.basic_functions import replace_dash
 from musicscore.musicxml.types.simple_type import *
-# from musicscore.musicxml.types.complex_type import *
 
 
 class AttributeAbstract(object):
+    _ATTRIBUTES = []
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -24,4 +25,5 @@ class AttributeAbstract(object):
         else:
             exec('self.{} = {}'.format(property_name, attribute_value))
 
+        AttributeAbstract._ATTRIBUTES.insert(0, attribute_name)
         return property_name

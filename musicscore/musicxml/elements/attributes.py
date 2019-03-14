@@ -1,4 +1,4 @@
-from musicscore.dtd.dtd import Sequence, Group, Element, Choice
+from musicscore.dtd.dtd import Sequence, GroupReference, Element, Choice
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.elements.editorial import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement2
@@ -92,7 +92,7 @@ class Time(XMLElement2, PrintObject, OptionalUniqueId):
 
     _DTD = Choice(
         Sequence(
-            Group(TimeSignature, max_occurrence=None),
+            GroupReference(TimeSignature, max_occurrence=None),
             Element(Interchangeable, min_occurrence=0)
         ),
         Element(SenzaMisura)
@@ -244,7 +244,7 @@ class Attributes(XMLElement2):
     music in score order, not in MusicXML document order
     """
     _DTD = Sequence(
-        Group(Editorial),
+        GroupReference(Editorial),
         Element(Divisions, min_occurrence=0),
         Element(Key, min_occurrence=0, max_occurrence=None),
         Element(Time, min_occurrence=0, max_occurrence=None),

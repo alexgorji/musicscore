@@ -1,4 +1,4 @@
-from musicscore.dtd.dtd import Element, Group, Sequence, Choice
+from musicscore.dtd.dtd import Element, GroupReference, Sequence, Choice
 from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
 from musicscore.musicxml.elements.fullnote import FullNote
 from musicscore.musicxml.elements.xml_element import XMLElement2
@@ -248,31 +248,31 @@ class Note(XMLElement2):
                 Element(Grace),
                 Choice(
                     Sequence(
-                        Group(FullNote)
+                        GroupReference(FullNote)
                     ),
                     Sequence(
-                        Group(FullNote),
+                        GroupReference(FullNote),
                         Element(Tie, 0, 2)
                     ),
                     Sequence(
                         Element(Cue),
-                        Group(FullNote)
+                        GroupReference(FullNote)
                     )
                 )
             ),
             Sequence(
                 Element(Cue),
-                Group(FullNote),
-                Group(DurationGroup)
+                GroupReference(FullNote),
+                GroupReference(DurationGroup)
             ),
             Sequence(
-                Group(FullNote),
-                Group(DurationGroup),
+                GroupReference(FullNote),
+                GroupReference(DurationGroup),
                 Element(Tie, 0, 2)
             )
         ),
         Element(Instrument, 0),
-        Group(EditorialVoice, 0),
+        GroupReference(EditorialVoice, 0),
         Element(Type, 0),
         Element(Dot, 0, None),
         Element(Accidental, 0),
@@ -280,7 +280,7 @@ class Note(XMLElement2):
         Element(Stem, 0),
         Element(Notehead, 0),
         Element(NotheadText, 0),
-        Group(Staff, 0),
+        GroupReference(Staff, 0),
         Element(Beam, 0, 8),
         Element(Notations, 0, None),
         Element(Lyric, 0, None),
