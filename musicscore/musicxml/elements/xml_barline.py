@@ -18,6 +18,9 @@ class XMLBarStyle(XMLElement2, BarStyleType):
         super().__init__(tag='bar-style', value=value, *args, **kwargs)
 
 
+
+
+
 class XMLBarline(XMLElement2, BarlineAttributes):
     """
          <xs:complexType name="barline">
@@ -43,9 +46,9 @@ class XMLBarline(XMLElement2, BarlineAttributes):
          <xs:attributeGroup ref="optional-unique-id"/>
      </xs:complexType>
      """
-    _ATTRIBUTES = BarlineAttributes._ATTRIBUTES
-    _CHILDREN_TYPES = [XMLBarStyle]
-    _CHILDREN_ORDERED = True
+    # _ATTRIBUTES = BarlineAttributes._ATTRIBUTES
+    # _CHILDREN_TYPES = [XMLBarStyle]
+    # _CHILDREN_ORDERED = True
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='barline', *args, **kwargs)

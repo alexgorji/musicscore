@@ -17,7 +17,6 @@ class Location(AttributeAbstract):
 
 
 class BarlineAttributes(Location):
-    _ATTRIBUTES = ['location']
 
     def __init__(self, location=None, *args, **kwargs):
         super().__init__(location=location, *args, **kwargs)

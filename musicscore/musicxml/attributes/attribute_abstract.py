@@ -3,10 +3,11 @@ from musicscore.musicxml.types.simple_type import *
 
 
 class AttributeAbstract(object):
-    _ATTRIBUTES = []
+    # _ATTRIBUTES = []
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._ATTRIBUTES = []
 
     def generate_attribute(self, attribute_name, attribute_value, type_string=None):
         property_name = replace_dash(attribute_name)
@@ -24,6 +25,5 @@ class AttributeAbstract(object):
             exec('self.{} = "{}"'.format(property_name, attribute_value))
         else:
             exec('self.{} = {}'.format(property_name, attribute_value))
-
-        AttributeAbstract._ATTRIBUTES.insert(0, attribute_name)
+        self._ATTRIBUTES.insert(0, attribute_name)
         return property_name

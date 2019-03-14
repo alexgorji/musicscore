@@ -98,8 +98,6 @@ class Time(XMLElement2, PrintObject, OptionalUniqueId):
         Element(SenzaMisura)
     )
 
-    # _ATTRIBUTES = ['print-object']
-
     def __init__(self, *args, **kwargs):
         super().__init__(tag='time', *args, **kwargs)
 

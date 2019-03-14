@@ -1,21 +1,12 @@
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 
 
-class FontWeight(AttributeAbstract):
+class FontFamily(AttributeAbstract):
     """"""
 
-    def __init__(self, font_weight=None, *args, **kwargs):
+    def __init__(self, font_family=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self.generate_attribute('font-weight', font_weight, 'FontWeightType')
-
-
-class FontSize(AttributeAbstract):
-    """"""
-
-    def __init__(self, font_size=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.generate_attribute('font-size', font_size, 'FontSizeType')
+        self.generate_attribute('font-family', font_family, 'CommaSeparatedText')
 
 
 class FontStyle(AttributeAbstract):
@@ -26,15 +17,24 @@ class FontStyle(AttributeAbstract):
         self.generate_attribute('font-style', font_style, 'FontStyleType')
 
 
-class FontFamily(AttributeAbstract):
+class FontSize(AttributeAbstract):
     """"""
 
-    def __init__(self, font_family=None, *args, **kwargs):
+    def __init__(self, font_size=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('font-family', font_family, 'CommaSeparatedText')
+        self.generate_attribute('font-size', font_size, 'FontSizeType')
 
 
-class Font(FontSize, FontWeight, FontStyle, FontFamily):
+class FontWeight(AttributeAbstract):
+    """"""
+
+    def __init__(self, font_weight=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.generate_attribute('font-weight', font_weight, 'FontWeightType')
+
+
+class Font(FontFamily, FontStyle, FontSize, FontWeight):
     """	The font entity gathers together attributes for determining the font within a directive or direction.
     They are based on the text styles for Cascading Style Sheets. The font-family is a comma-separated list
     of font names. These can be specific font styles such as Maestro or Opus, or one of several generic font styles:

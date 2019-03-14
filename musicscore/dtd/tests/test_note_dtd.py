@@ -62,7 +62,7 @@ class TestNoteDTD(TestCase):
         grace.steal_time_following = 90
         self.note.add_child(grace)
         result = '''<note>
-  <grace slash="yes" make-time="101" steal-time-following="90"/>
+  <grace steal-time-following="90" make-time="101" slash="yes"/>
   <pitch>
     <step>C</step>
     <octave>4</octave>
