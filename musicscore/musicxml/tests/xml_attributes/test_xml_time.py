@@ -1,5 +1,5 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.attributes import Time, Beats, BeatType
+from musicscore.musicxml.elements.attributes import Time, Beats, BeatType, SenzaMisura
 
 
 class TestTime(TestCase):
@@ -43,3 +43,8 @@ class TestTime(TestCase):
         self.assertEqual(self.time.to_string(), result)
         with self.assertRaises(ValueError):
             self.time.print_object = 'bla'
+
+    def test_senza_misura(self):
+        self.time.reset_children()
+        with self.assertRaises(NotImplementedError):
+            self.time.add_child(SenzaMisura())

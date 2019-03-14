@@ -1,13 +1,15 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.xml_element import XMLElement
+
+from musicscore.dtd.dtd import DTDError
+from musicscore.musicxml.elements.xml_element import XMLElement2
 from lxml import etree as et
 
 
 class TestXMLElement(TestCase):
 
     def setUp(self):
-        self.xml = XMLElement('root')
-        self.xml._CHILDREN_TYPES = [XMLElement]
+        self.xml = XMLElement2('root')
+        # self.xml._CHILDREN_TYPES = [XMLElement2]
 
     def test_tag(self):
         self.assertEqual(self.xml.tag, 'root')
@@ -18,12 +20,12 @@ class TestXMLElement(TestCase):
 
     def test_add_child(self):
         child = 'child'
-        with self.assertRaises(TypeError):
+        with self.assertRaises(DTDError):
             self.xml.add_child(child)
-
-        child = XMLElement('child')
-        self.xml.add_child(child)
-        self.assertEqual(self.xml.get_children(), [child])
+        #
+        # child = XMLElement2('child')
+        # self.xml.add_child(child)
+        # self.assertEqual(self.xml.get_children(), [child])
 
     # def test_remove_old_child_by_tag(self):
     #     children = [XMLElement('child-1'), XMLElement('child-2')]

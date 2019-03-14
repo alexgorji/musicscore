@@ -4,11 +4,12 @@ from musicscore.musicxml.attributes.level_display import LevelDisplay
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.print_object import PrintObject
 from musicscore.musicxml.attributes.print_style import PrintStyle
-from musicscore.musicxml.elements.xml_element import XMLElement, XMLElement2
-from musicscore.musicxml.types.simple_type import TypeStep, TypeAlter, TypeSemitones, TypeAccidentalValue, TypeMode, TypeFifths, TypeOctave
+from musicscore.musicxml.elements.xml_element import XMLElement2
+from musicscore.musicxml.types.simple_type import TypeStep, TypeAlter, TypeSemitones, TypeAccidentalValue, TypeMode, \
+    TypeFifths, TypeOctave
 
 
-class ComplexType(object):
+class ComplexType(XMLElement2):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -25,7 +26,7 @@ class Empty(ComplexType, XMLElement2):
     def add_child(self, child):
         raise Exception('Empty cannot have children.')
 
-    @XMLElement.text.setter
+    @XMLElement2.text.setter
     def text(self, value):
         if value is not None:
             raise Exception('Empty cannot have text.')
@@ -40,6 +41,7 @@ class EmptyPlacement(Empty, PrintStyle):
 
     def __init__(self, tag, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
+
 
 class Reference(AttributeAbstract):
     def __init__(self, reference=None, *args, **kwargs):
@@ -63,6 +65,7 @@ class TypeLevel(ComplexType, Reference, LevelDisplay):
 		</xs:simpleContent>
 	</xs:complexType>
     """
+
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
@@ -75,7 +78,7 @@ class Location(AttributeAbstract):
         self.generate_attribute('location', location, 'CancelLocation')
 
 
-class TypeCancel(XMLElement2, ComplexType, TypeFifths, Location):
+class TypeCancel(ComplexType, TypeFifths, Location):
     """
     A cancel element indicates that the old key signature should be cancelled before the new one appears. This will
     always happen when changing to C major or A minor and need not be specified then. The cancel value matches the
@@ -209,7 +212,7 @@ class KeyNumberAttribute(AttributeAbstract):
         self.generate_attribute('number', cancel, 'StaffNumber')
 
 
-class TypeKey(XMLElement2, ComplexType, KeyNumberAttribute, PrintStyle, PrintObject,
+class TypeKey(ComplexType, KeyNumberAttribute, PrintStyle, PrintObject,
               OptionalUniqueId):
     """
     The key type represents a key signature. Both traditional and non-traditional key signatures are supported.

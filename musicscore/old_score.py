@@ -1,6 +1,6 @@
 from musicscore.musicxml.elements.xml_partwise import XMLScorePartwise, XMLPartPartwise, XMLMeasurePartwise
 from musicscore.musicxml.elements.xml_timewise import ScoreTimewise, MeasureTimewise
-from musicscore.musicxml.elements.xml_score_header import XMLScorePart, XMLPartName, XMLPartList
+from musicscore.musicxml.elements.xml_score_header import XMLScorePart, PartName, XMLPartList
 from musicscore.musicxml.exceptions import ChildAlreadyExists
 
 
@@ -45,7 +45,7 @@ class PartPartwise(XMLPartPartwise):
         super().__init__(id=id, *args, **kwargs)
         self.multiple = True
         self._score_part = XMLScorePart(id=self.id)
-        self._score_part.part_name = XMLPartName(name=name, print_object=print_object)
+        self._score_part.part_name = PartName(name=name, print_object=print_object)
 
     def generate_id(self):
         id = 'p' + str(self._auto_index + 1)

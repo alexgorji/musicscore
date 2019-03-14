@@ -102,8 +102,8 @@ class TestNoteDTD(TestCase):
         rest.add_child(DisplayStep('B'))
         result = '''<note>
   <rest>
-    <display-octave>4</display-octave>
     <display-step>B</display-step>
+    <display-octave>4</display-octave>
   </rest>
   <duration>1</duration>
 </note>

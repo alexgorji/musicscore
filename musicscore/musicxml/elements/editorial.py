@@ -10,7 +10,6 @@
 	</xs:group>
 """
 from musicscore.dtd.dtd import Group, Sequence, Element
-from musicscore.musicxml.elements.xml_element import XMLElement2
 from musicscore.musicxml.types.complex_type import TypeLevel
 
 Footnote = Sequence(
@@ -18,7 +17,7 @@ Footnote = Sequence(
 )
 
 
-class Level(XMLElement2, TypeLevel):
+class Level(TypeLevel):
     """"""
 
     def __init__(self, *args, **kwargs):

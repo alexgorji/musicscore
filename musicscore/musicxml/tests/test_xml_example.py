@@ -1,5 +1,6 @@
+from musicscore.dtd.dtd import ChildOccurrenceDTDConflict
 from musicscore.musicxml.elements.xml_example import XMLExample, XMLExampleChild1, XMLExampleChild2
-from musicscore.musicxml.exceptions import ChildAlreadyExists
+
 from unittest import TestCase
 
 
@@ -26,5 +27,5 @@ class TestExample(TestCase):
 </example>
 '''
         self.assertEqual(self.example.to_string(), result)
-        with self.assertRaises(ChildAlreadyExists):
+        with self.assertRaises(ChildOccurrenceDTDConflict):
             self.example.add_child(XMLExampleChild1())

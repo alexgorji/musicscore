@@ -1,9 +1,9 @@
 from unittest import TestCase
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
-from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.elements.xml_element import XMLElement2
 
 
-class AttributeSub(XMLElement, AttributeAbstract):
+class AttributeSub(XMLElement2, AttributeAbstract):
     def __init__(self):
         super().__init__(tag='attribute-sub')
 

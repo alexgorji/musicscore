@@ -1,9 +1,9 @@
 from musicscore.musicxml.attributes.barline import BarlineAttributes
 from musicscore.musicxml.types.simple_type import BarStyleType
-from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.elements.xml_element import XMLElement2
 
 
-class XMLBarStyle(XMLElement, BarStyleType):
+class XMLBarStyle(XMLElement2, BarStyleType):
     """Bar-style contains style information. Choices are regular, dotted, dashed, heavy, light-light, light-heavy,
     heavy-light, heavy-heavy, tick (a short stroke through the top line), short (a partial barline between the 2nd
     and 4th lines), and none.
@@ -17,7 +17,7 @@ class XMLBarStyle(XMLElement, BarStyleType):
         super().__init__(tag='bar-style', value=value, *args, **kwargs)
 
 
-class XMLBarline(XMLElement, BarlineAttributes):
+class XMLBarline(XMLElement2, BarlineAttributes):
     """If a barline is other than a normal single barline, it should be represented by a barline type that describes it.
     This includes information about repeats and multiple endings, as well as line style. Barline data is on the same
     level as the other musical data in a score - a child of a measure in a partwise score, or a part in a timewise

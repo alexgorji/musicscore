@@ -159,8 +159,13 @@ class Tree(object):
             index = self.up.get_children().index(self)
             self.up.get_children()[index] = new_node
 
-    def find_leaf(self, condition):
+
+    def traverse_leaves(self):
         for leaf in flatten(self.get_leaves()):
+            yield leaf
+
+    def find_leaf(self, condition):
+        for leaf in self.traverse_leaves():
             if condition(leaf) is True:
                 return leaf
         return False

@@ -1,9 +1,11 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.xml_element import XMLElement
+
+from musicscore.dtd.dtd import Sequence, Element, ChildOccurrenceDTDConflict, ChildTypeDTDConflict
+from musicscore.musicxml.elements.xml_element import XMLElement2
 from musicscore.musicxml.exceptions import ChildAlreadyExists
 
 
-class A(XMLElement):
+class A(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -11,30 +13,34 @@ class A(XMLElement):
         self.multiple = True
 
 
-class B(XMLElement):
+class B(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='b', *args, **kwargs)
 
 
-class C(XMLElement):
+class C(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='c', *args, **kwargs)
 
 
-class D(XMLElement):
+class D(XMLElement2):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='d', *args, **kwargs)
 
 
-class E(XMLElement):
+class E(XMLElement2):
     """"""
-    _CHILDREN_TYPES = [C, A, B]
+    _DTD=Sequence(
+        Element(C),
+        Element(A, max_occurrence=None),
+        Element(B)
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='e', *args, **kwargs)
@@ -45,7 +51,7 @@ class TestAddChildren(TestCase):
     def test_add_child(self):
         e = E()
         e.add_child(C())
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ChildTypeDTDConflict):
             e.add_child(D())
         self.assertEqual(len(e.get_children()), 1)
         self.assertEqual(type(e.get_children()[0]), C)
@@ -54,13 +60,18 @@ class TestAddChildren(TestCase):
         e = E()
         e.add_child(A())
         e.add_child(C())
-        with self.assertRaises(ChildAlreadyExists):
-            e.add_child(C())
         e.add_child(A())
         e.add_child(A())
         self.assertEqual(len(e.get_children_by_type(A)), 3)
         self.assertEqual(len(e.get_children_by_type(C)), 1)
         self.assertEqual(len(e.get_children_by_type(D)), 0)
+
+    def test_non_multiple_child(self):
+        e = E()
+        e.add_child(C())
+        with self.assertRaises(ChildOccurrenceDTDConflict):
+            e.add_child(C())
+
 
     def test_sort_children(self):
         e = E()
@@ -68,7 +79,7 @@ class TestAddChildren(TestCase):
         e.add_child(B())
         e.add_child(A())
         e.add_child(C())
-        e._sort_children()
+        e.sort_children()
         result = [C, A, A, B]
         self.assertEqual([type(child) for child in e.get_children()], result)
 
