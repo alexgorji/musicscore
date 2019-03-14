@@ -1,5 +1,4 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.note import Note
 from musicscore.musicxml.elements.fullnote import DisplayStep, DisplayOctave, Rest
 
 

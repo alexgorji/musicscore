@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from musicscore.dtd.dtd import DTDError
+from musicscore.dtd.dtd import DTDError, Sequence, Element
 from musicscore.musicxml.elements.xml_element import XMLElement
 from lxml import etree as et
 
@@ -9,7 +9,6 @@ class TestXMLElement(TestCase):
 
     def setUp(self):
         self.xml = XMLElement('root')
-        # self.xml._CHILDREN_TYPES = [XMLElement2]
 
     def test_tag(self):
         self.assertEqual(self.xml.tag, 'root')
@@ -23,7 +22,7 @@ class TestXMLElement(TestCase):
         with self.assertRaises(DTDError):
             self.xml.add_child(child)
         #
-        # child = XMLElement2('child')
+        # child = XMLElement('child')
         # self.xml.add_child(child)
         # self.assertEqual(self.xml.get_children(), [child])
 

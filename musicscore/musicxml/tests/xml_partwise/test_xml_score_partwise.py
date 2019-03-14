@@ -2,7 +2,7 @@
 # from musicscore.musicxml.elements.xml_partwise import XMLScorePartwise, XMLPartPartwise, XMLMeasurePartwise
 # from musicscore.musicxml.elements.xml_score_header import XMLPartList
 # from musicscore.musicxml.elements.xml_score_header import XMLScorePart
-# from musicscore.musicxml.elements.xml_note import XMLNote, XMLPitch
+# from musicscore.musicxml.elements.note import XMLNote, XMLPitch
 # from musicscore.musicxml.elements.attributes import Time, XMLClef, Divisions, Attributes
 # from musicscore.musicxml.exceptions import ChildAlreadyExists
 #
