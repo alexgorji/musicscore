@@ -13,23 +13,23 @@ class TestXMLPartName(TestCase):
 
 class TestXMLScorePart(TestCase):
     def setUp(self):
-        self.score_part = ScorePart(id=1)
+        self.score_part = ScorePart(id='p1')
         self.score_part.add_child(PartName(name="part"))
 
     def test_xml_score_part(self):
-        result = '<score-part id="1">\n  <part-name>part</part-name>\n</score-part>\n'
+        result = '<score-part id="p1">\n  <part-name>part</part-name>\n</score-part>\n'
         self.assertEqual(self.score_part.to_string(), result)
 
 
 class TestXMLPartList(TestCase):
     def setUp(self):
         self.part_list = PartList()
-        score_part = ScorePart(id=1)
+        score_part = ScorePart(id='p1')
         score_part.add_child(PartName(name="part"))
         self.part_list.add_child(score_part)
 
     def test_xml_part_list(self):
-        result = '<part-list>\n  <score-part id="1">\n    <part-name>part</part-name>\n  </score-part>\n</part-list>\n'
+        result = '<part-list>\n  <score-part id="p1">\n    <part-name>part</part-name>\n  </score-part>\n</part-list>\n'
         self.assertEqual(self.part_list.to_string(), result)
 
 
