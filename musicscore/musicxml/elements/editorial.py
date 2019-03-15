@@ -1,14 +1,3 @@
-"""
-	<xs:group name="editorial">
-		<xs:annotation>
-			<xs:documentation>The editorial group specifies editorial information for a musical element.</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:group ref="footnote" minOccurs="0"/>
-			<xs:group ref="level" minOccurs="0"/>
-		</xs:sequence>
-	</xs:group>
-"""
 from musicscore.dtd.dtd import GroupReference, Sequence, Element
 from musicscore.musicxml.types.complex_type import TypeLevel
 

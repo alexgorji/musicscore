@@ -108,6 +108,41 @@ class String(SimpleType):
             raise TypeError('value {} must a be string'.format(v))
 
 
+# todo xs:Token
+class Token(String):
+    """
+    Der lexikalische und der Werteraum von xs:token sind die Menge aller Strings nach Whitespace-Ersetzung,
+    d.h., nachdem jedes Vorkommen von #x9 (Tab), #xA (Linefeed) und #xD (Carriage Return) durch ein #x20 (Leerzeichen)
+    ersetzt und dann Whitespace zusammengefaßt (d.h., unmittelbar aufeinanderfolgende Leerzeichen werden durch ein
+    einzelnes ersetzt, und führende oder am Ende stehende Leerzeichen werden entfernt) wurde.
+
+    Einfacher ausgedrückt, ist xs:token der geeignetste Datentyp für Strings, bei denen es nicht auf Whitespace ankommt.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+# todo xs:ID
+class ID(String):
+    """
+
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+# todo xs:IDREF
+class IDREF(String):
+    """
+
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 # ///////////////
 
 
@@ -251,7 +286,7 @@ class FontStyleType(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class CommaSeparatedText(SimpleType):
+class CommaSeparatedText(Token):
     pattern = r'^[^,]+(, ?[^,]+)*$'
     p = re.compile(pattern)
 
@@ -283,7 +318,7 @@ class BarStyleType(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class ColorType(SimpleType):
+class ColorType(Token):
     pattern = r'^#[\dA-F]{6}([\dA-F][\dA-F])?$'
     p = re.compile(pattern)
 
@@ -310,7 +345,7 @@ class Percent(Decimal):
 
     @SimpleType.value.setter
     def value(self, v):
-        if v >= 100 or v <= 0:
+        if v > 100 or v < 0:
             raise ValueError(
                 '{}.value {} must be a percentage from 0 to 100'.format(self.__class__.__name__, v))
         self._value = v
@@ -328,7 +363,7 @@ class TypeSemitones(Decimal):
 
 # /////////////// KEY
 
-class SmulfGlyphName(SimpleType):
+class SmulfGlyphName(Token):
     """
     The smufl-glyph-name type is used for attributes that reference a specific Standard Music Font Layout (SMuFL)
     character. The value is a SMuFL canonical glyph name, not a code point. For instance, the value for a standard piano
@@ -416,3 +451,29 @@ class SymbolSize(SimpleType):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
+
+
+class MeasureText(Token):
+    """
+    The measure-text type is used for the text attribute of measure elements. It has at least one character. The
+    implicit attribute of the measure element should be set to "yes" rather than setting the text attribute to an empty
+    string.
+    	<xs:simpleType name="measure-text">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+    """
+
+    def __init__(self, value='1', *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if len(v) < 1:
+            raise ValueError(
+                '{}.value {} must have at least one character'.format(self.__class__.__name__, v))
+        self._value = v

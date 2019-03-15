@@ -17,22 +17,16 @@ class Location(AttributeAbstract):
         self.generate_attribute('location', location, "RightLeftMiddle")
 
 
-# xs:token: Der lexikalische und der Werteraum von xs:token sind die Menge aller Strings nach Whitespace-Ersetzung,
-# d.h., nachdem jedes Vorkommen von #x9 (Tab), #xA (Linefeed) und #xD (Carriage Return) durch ein #x20 (Leerzeichen)
-# ersetzt und dann Whitespace zusammengefaßt (d.h., unmittelbar aufeinanderfolgende Leerzeichen werden durch ein
-# einzelnes ersetzt, und führende oder am Ende stehende Leerzeichen werden entfernt) wurde.
-#
-# Einfacher ausgedrückt, ist xs:token der geeignetste Datentyp für Strings, bei denen es nicht auf Whitespace ankommt.
 class Segno(AttributeAbstract):
     def __init__(self, segno=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('segno', segno, "String")
+        self.generate_attribute('segno', segno, 'Token')
 
 
 class Coda(AttributeAbstract):
     def __init__(self, coda=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('coda', coda, "String")
+        self.generate_attribute('coda', coda, 'Token')
 
 
 class Divisions(AttributeAbstract):
