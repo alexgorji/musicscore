@@ -143,6 +143,16 @@ class Instruments(XMLElement):
         raise NotImplementedError()
 
 
+class Sign(XMLElement, ClefSign):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='sign', value=value, *args, **kwargs)
+
+
+class Line(XMLElement, StaffLine):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='line', value=value, *args, **kwargs)
+
+
 class Clef(XMLElement):
     """
     Clefs are represented by a combination of sign, line, and clef-octave-change elements.
@@ -161,37 +171,13 @@ class Clef(XMLElement):
     Clefs appear at the start of each system unless the print-object attribute has been set to "no" or
     the additional attribute has been set to "yes"
     """
+    _DTD = Sequence(
+        Element(Sign),
+        Element(Line)
+    )
 
-    class Sign(XMLElement, ClefSign):
-        def __init__(self, value, *args, **kwargs):
-            super().__init__(tag='sign', value=value, *args, **kwargs)
-
-    class Line(XMLElement, StaffLine):
-        def __init__(self, value, *args, **kwargs):
-            super().__init__(tag='line', value=value, *args, **kwargs)
-
-    def __init__(self, sign, line):
-        super().__init__(tag='clef')
-        self._sign = None
-        self._line = None
-        self.sign = sign
-        self.line = line
-
-    @property
-    def sign(self):
-        return self._sign
-
-    @sign.setter
-    def sign(self, value):
-        self._set_child(self.XMLSign, 'sign', value)
-
-    @property
-    def line(self):
-        return self._line
-
-    @line.setter
-    def line(self, value):
-        self._set_child(self.XMLLine, 'line', value)
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='clef', *args, **kwargs)
 
 
 class StaffDetails(XMLElement):

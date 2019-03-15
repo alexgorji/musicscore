@@ -1,4 +1,5 @@
 from musicscore.dtd.dtd import Sequence, Element, Choice, GroupReference
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complex_type import Empty
 from musicscore.musicxml.types.simple_type import TypeStep, TypeAlter, TypeOctave
@@ -99,7 +100,13 @@ class Unpitched(Event):
         super().__init__(tag='unpitched', *args, **kwargs)
 
 
-class Rest(Event):
+class Measure(AttributeAbstract):
+    def __init__(self, measure=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute('measure', measure, 'YesNo')
+
+
+class Rest(Event, Measure):
     """
     The rest element indicates notated rests or silences. Rest elements are usually empty, but placement on the staff
     can be specified using display-step and  display-octave elements. If the measure attribute is set to yes, this
@@ -110,8 +117,8 @@ class Rest(Event):
         GroupReference(DisplayStepOctave, min_occurrence=0)
     )
 
-    def __init__(self):
-        super().__init__(tag='rest')
+    def __init__(self, measure=None, *args, **kwargs):
+        super().__init__(tag='rest', measure=measure, *args, **kwargs)
 
 
 class Chord(Empty):

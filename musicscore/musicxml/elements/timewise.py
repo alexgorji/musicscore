@@ -80,13 +80,17 @@ from musicscore.dtd.dtd import Sequence, GroupReference, Element
 from musicscore.musicxml.attributes.document_attributes import DocumentAttributes
 from musicscore.musicxml.attributes.measure_attributes import MeasureAttributes
 from musicscore.musicxml.attributes.part_attributes import PartAttributes
+from musicscore.musicxml.elements.attributes import Attributes
 from musicscore.musicxml.elements.music_data import MusicData
 from musicscore.musicxml.elements.score_header import ScoreHeader
 from musicscore.musicxml.elements.xml_element import XMLElement
 
 
 class Part(XMLElement, PartAttributes):
-    _DTD = GroupReference(MusicData)
+    _DTD = Sequence(
+        Element(Attributes),
+        GroupReference(MusicData)
+    )
 
     def __init__(self, id, *args, **kwargs):
         super().__init__(tag='part', id=id, *args, **kwargs)
