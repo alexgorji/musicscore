@@ -1,4 +1,4 @@
-from musicscore.midi import Midi
+from musicscore.musictree.midi import Midi
 from unittest import TestCase
 
 class TestMidi(TestCase):

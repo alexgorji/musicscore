@@ -4,7 +4,7 @@ import copy
 
 from musicscore.basic_functions import replace_dash
 from musicscore.dtd.dtd import DTDError
-from musicscore.musicxml.exceptions import AfterInitializationError, ChildAlreadyExists
+from musicscore.musicxml.exceptions import AfterInitializationError
 from musicscore.tree.tree import Tree
 
 
