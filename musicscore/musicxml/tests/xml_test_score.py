@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 
-class XMLTest(TestCase):
+class TestScore(TestCase):
     """"""
 
     def __init__(self, *args, **kwargs):

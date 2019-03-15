@@ -16,7 +16,6 @@ class TestBarline(TestCase):
             self.barline.location = 'bla'
 
         with self.assertRaises(ValueError):
-            # self.barline.add_child(BarStyle())
             self.barline.add_child(BarStyle('bla'))
 
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-timewise PUBLIC "-//Recordare//DTD MusicXML 3.0 Timewise//EN" "http://www.musicxml.org/dtds/timewise.dtd">
+<score-timewise version="3.0">
+  <part-list>
+    <score-part id="P1">
+      <part-name>Oboe</part-name>
+      <part-abbreviation>Ob.</part-abbreviation>
+    </score-part>
+  </part-list>
+  <measure number="1">
+    <part id="P1">
+      <attributes>
+        <divisions>2</divisions>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <rest measure="yes"/>
+        <duration>8</duration>
+      </note>
+    </part>
+  </measure>
+  <measure number="2">
+    <part id="P1">
+      <attributes>
+        <divisions>2</divisions>
+      </attributes>
+      <note>
+        <rest measure="yes"/>
+        <duration>8</duration>
+      </note>
+    </part>
+  </measure>
+</score-timewise>

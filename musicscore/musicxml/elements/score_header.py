@@ -1,5 +1,5 @@
 from musicscore.dtd.dtd import Sequence, Element, GroupReference, Choice
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, String
 from musicscore.musicxml.elements.editorial import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.basic_functions import is_empty
@@ -10,42 +10,44 @@ from musicscore.musicxml.types.complex_type import ComplexType
 class Work(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='work', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('Work')
 
 
 class MovementNumber(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='movement-number', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('MovementNumber')
 
 
 class MovementTitle(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='movement-title', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('MovementTitle')
 
 
 class Identification(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='identification', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('Identification')
 
 
 class Defaults(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='defaults', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('Defaults')
 
 
 class Credit(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='credit', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('Credit')
 
 
 class TypePartName(ComplexType, PartNameText):
     """
-    documentation>The part-name type describes the name or abbreviation of a score-part element. Formatting attributes for the part-name element are deprecated in Version 2.0 in favor of the new part-name-display and part-abbreviation-display elements.
+    The part-name type describes the name or abbreviation of a score-part element. Formatting attributes for the
+    part-name element are deprecated in Version 2.0 in favor of the new part-name-display and part-abbreviation-display
+    elements.
     """
 
     def __init__(self, tag, *args, **kwargs):
@@ -75,15 +77,14 @@ class PartName(TypePartName):
 class PartNameDisplay(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='part-name-display', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('PartNameDisplay')
 
 
-class PartAbbreviation(XMLElement):
+class PartAbbreviation(TypePartName, String):
     """"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='part-abbreviation', *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='part-abbreviation', value=value, *args, **kwargs)
 
 
 class PartAbbreviationDisplay(XMLElement):
@@ -91,7 +92,7 @@ class PartAbbreviationDisplay(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='part-abbreviation-display', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('PartAbbreviationDisplay')
 
 
 class Group(XMLElement):
@@ -99,7 +100,7 @@ class Group(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='group', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('Group')
 
 
 class ScoreInstrument(XMLElement):
@@ -107,7 +108,7 @@ class ScoreInstrument(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='score-instrument', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('ScoreInstrument')
 
 
 class MidiDevice(XMLElement):
@@ -115,7 +116,7 @@ class MidiDevice(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='midi-device', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('MidiDevice')
 
 
 class MidiInstrument(XMLElement):
@@ -123,7 +124,7 @@ class MidiInstrument(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='midi-instrument', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('MidiInstrument')
 
 
 class Id(AttributeAbstract):
@@ -181,7 +182,7 @@ class GroupName(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='group-name', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('GroupName')
 
 
 class GroupNameDisplay(XMLElement):
@@ -189,7 +190,7 @@ class GroupNameDisplay(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='group-name-display', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('GroupNameDisplay')
 
 
 class GroupAbbreviation(XMLElement):
@@ -197,7 +198,7 @@ class GroupAbbreviation(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='group-abbreviation', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('GroupAbbreviation')
 
 
 class GroupAbbreviationDisplay(XMLElement):
@@ -205,7 +206,7 @@ class GroupAbbreviationDisplay(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='group-abbreviation-display', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('GroupAbbreviationDisplay')
 
 
 class GroupSymbol(XMLElement):
@@ -213,7 +214,7 @@ class GroupSymbol(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='group-symbol', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('GroupSymbol')
 
 
 class GroupTime(XMLElement):
@@ -221,7 +222,7 @@ class GroupTime(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='group-time', *args, **kwargs)
-        raise NotImplementedError()
+        raise NotImplementedError('GroupTime')
 
 
 class TypePartGroup(ComplexType):

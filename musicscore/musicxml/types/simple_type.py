@@ -106,6 +106,7 @@ class String(SimpleType):
     def value(self, v):
         if not isinstance(v, str):
             raise TypeError('value {} must a be string'.format(v))
+        self._value = v
 
 
 # todo xs:Token
