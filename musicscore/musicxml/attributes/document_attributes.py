@@ -2,19 +2,27 @@ from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 
 
 class Version(AttributeAbstract):
-    """
-    The color type indicates the color of an element. Color may be represented as hexadecimal RGB triples, as in HTML,
-    or as hexadecimal ARGB tuples, with the A indicating alpha of transparency. An alpha value of 00 is totally
-    transparent; FF is totally opaque. If RGB is used, the A value is assumed to be FF.  For instance, the RGB value
-    "#800080" represents purple. An ARGB value of "#40800080" would be a transparent purple.  As in SVG 1.1, colors are
-    defined in terms of the sRGB color space (IEC 61966).
-    """
-
-    def __init__(self, version, *args, **kwargs):
+    def __init__(self, version='1.0', *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.generate_attribute('version', version, 'Token')
 
 
 class DocumentAttributes(Version):
+    """
+    The document-attributes attribute group is used to specify the attributes for an entire MusicXML document. Currently
+    this is used for the version attribute.
+
+    The version attribute was added in Version 1.1 for the score-partwise and score-timewise documents. It provides an
+    easier way to get version information than through the MusicXML public ID. The default value is 1.0 to make it
+    possible for programs that handle later versions to distinguish earlier version files reliably. Programs that write
+    MusicXML 1.1 or later files should set this attribute.
+    """
     def __init__(self, version='1.0', *args, **kwargs):
         super().__init__(version=version, *args, **kwargs)
+
+# class FontSize(AttributeAbstract):
+#     """"""
+#
+#     def __init__(self, font_size=None, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.generate_attribute('font-size', font_size, 'FontSizeType')

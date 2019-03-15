@@ -1,4 +1,5 @@
 from musicscore.dtd.dtd import Sequence, Element, GroupReference, Choice
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 from musicscore.musicxml.elements.editorial import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.basic_functions import is_empty
@@ -125,7 +126,13 @@ class MidiInstrument(XMLElement):
         raise NotImplementedError()
 
 
-class TypeScorePart(ComplexType):
+class Id(AttributeAbstract):
+    def __init__(self, id, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute('id', id, "ID")
+
+
+class TypeScorePart(ComplexType, Id):
     """
     Each MusicXML part corresponds to a track in a Standard MIDI Format 1 file. The score-instrument elements are used
     when there are multiple instruments per track. The midi-device element is used to make a MIDI device or port
@@ -149,18 +156,7 @@ class TypeScorePart(ComplexType):
     )
 
     def __init__(self, tag, id, *args, **kwargs):
-        super().__init__(tag=tag, *args, **kwargs)
-        self._id = None
-        self.id = id
-
-    @property
-    def id(self):
-        return self._id
-
-    @id.setter
-    def id(self, value):
-        self._id = value
-        self.set_attribute('id', self.id)
+        super().__init__(tag=tag, id=id, *args, **kwargs)
 
 
 class ScorePart(TypeScorePart):

@@ -88,14 +88,17 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 class Part(XMLElement, PartAttributes):
     _DTD = GroupReference(MusicData)
 
+    def __init__(self, id, *args, **kwargs):
+        super().__init__(tag='part', id=id, *args, **kwargs)
+
 
 class Measure(XMLElement, MeasureAttributes):
     _DTD = Sequence(
         Element(Part, max_occurrence=None)
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='measure', *args, **kwargs)
+    def __init__(self, number, *args, **kwargs):
+        super().__init__(tag='measure', number=number, *args, **kwargs)
 
 
 class ScoreTimewise(XMLElement, DocumentAttributes):
@@ -111,3 +114,16 @@ class ScoreTimewise(XMLElement, DocumentAttributes):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='score-timewise', *args, **kwargs)
+
+    def write(self, path):
+        xmlversion = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
+        doctype = '<!DOCTYPE score-timewise PUBLIC "-//Recordare//DTD MusicXML {} Timewise//EN" "http://www.musicxml.org/dtds/timewise.dtd">\n'.format(
+            self.version)
+
+        path += '.xml'
+        output_file = open(path, 'w')
+        output_file.write(xmlversion)
+        output_file.write(doctype)
+        output_file.write(self.to_string())
+        output_file.close()
+        print('writing finished')

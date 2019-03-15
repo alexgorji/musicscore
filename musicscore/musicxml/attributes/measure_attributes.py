@@ -61,7 +61,7 @@ class MeasureAttributes(Number, Text, Implicit, NonControlling, Width, OptionalU
     to barline or system end.
     """
 
-    def __init__(self, number, text=None, implicit=None, non_controlling=None, width=None, optional_unique_id=None,
+    def __init__(self, number, text=None, implicit=None, non_controlling=None, width=None, id=None,
                  *args, **kwargs):
         super().__init__(number=number, text=text, implicit=implicit, non_controlling=non_controlling, width=width,
-                         optional_unique_id=optional_unique_id, *args, **kwargs)
+                         id=id, *args, **kwargs)
