@@ -122,14 +122,15 @@ class TreeTime(Time):
         super().__init__(**kwargs)
         self.pars_arguments(time_signature)
 
-    def pars_arguments(self, time_signature):
-        if len(time_signature) == 1 and time_signature[0] == 'senza_misura':
+    def pars_arguments(self, time_signatures):
+        if len(time_signatures) == 1 and time_signatures[0] == 'senza_misura':
             self.add_child(SenzaMisura())
-        elif len(time_signature) == 2:
-            self.set_time_signature(time_signature)
+        elif len(time_signatures) % 2 == 0:
+            for time_signature in zip(time_signatures[0::2], time_signatures[1::2]):
+                self.set_time_signature(time_signature)
         else:
             raise MusicTreeError(
-                'TreeTime can have senza_misura or (beats, beat_type) as arguments not {}'.format(time_signature))
+                'TreeTime can have senza_misura or (beats, beat_type)* as arguments not {}'.format(time_signature))
 
     def set_time_signature(self, time_signature):
         (beats, beat_type) = time_signature

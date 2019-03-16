@@ -7,10 +7,12 @@ from musicscore.musictree.timewise import TreeTime
 class TestTreeTime(TestCase):
 
     def test_tree_time(self):
-        time = TreeTime(3, 4)
+        time = TreeTime(3, 4, 1, 8)
         result = '''<time>
   <beats>3</beats>
   <beat-type>4</beat-type>
+  <beats>1</beats>
+  <beat-type>8</beat-type>
 </time>
 '''
         self.assertEqual(time.to_string(), result)
