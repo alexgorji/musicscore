@@ -1,12 +1,11 @@
-# from musicscore.musicxml.elements.xml_timewise import MeasureTimewise, PartTimewise, ScoreTimewise
-# from musicscore.musicxml.elements.xml_score_header import XMLScorePart, XMLPartList, XMLPartName
-# from musicscore.musicxml.elements.note import Note, Type, Dot
-# from musicscore.musicxml.elements.fullnote import Event, Rest
-# from musicscore.musicxml.elements.attributes import Attributes, Divisions, Time
-# from quicktions import Fraction
-# from musicscore.basic_functions import lcm
-# from musicscore.midi import Midi
-#
+from musicscore.musictree.exceptions import MusicTreeError
+from musicscore.musicxml.elements.note import Note, Type, Dot
+from musicscore.musicxml.elements.fullnote import Event, Rest
+from musicscore.musicxml.elements.attributes import Attributes, Divisions, Time, SenzaMisura, Beats, BeatType
+from quicktions import Fraction
+from musicscore.basic_functions import lcm
+
+
 #
 # class MusicNote(Note):
 #     """"""
@@ -115,9 +114,34 @@
 #
 #         for i in range(_dot):
 #             self.add_child(Dot())
+
+
+class TreeTime(Time):
+
+    def __init__(self, *time_signature, **kwargs):
+        super().__init__(**kwargs)
+        self.pars_arguments(time_signature)
+
+    def pars_arguments(self, time_signature):
+        if len(time_signature) == 1 and time_signature[0] == 'senza_misura':
+            self.add_child(SenzaMisura())
+        elif len(time_signature) == 2:
+            self.set_time_signature(time_signature)
+        else:
+            raise MusicTreeError(
+                'TreeTime can have senza_misura or (beats, beat_type) as arguments not {}'.format(time_signature))
+
+    def set_time_signature(self, time_signature):
+        (beats, beat_type) = time_signature
+        self.add_child(Beats(beats))
+        permitted = (1, 2, 4, 8, 16, 32, 64)
+        if beat_type not in permitted:
+            raise MusicTreeError('beat_type {} must be in {}'.format(beats, permitted))
+        else:
+            self.add_child(BeatType(beat_type))
+
 #
-#
-# class Measure(MeasureTimewise):
+# class TreeMeasure(MeasureTimewise):
 #     """"""
 #
 #     def __init__(self, time=(4, 4), *args, **kwargs):
@@ -196,11 +220,11 @@
 #         new_score_part.get_children_by_type(XMLPartName)[0].name = name
 #         new_score_part.get_children_by_type(XMLPartName)[0].print_object = print_object
 #         self._part_list.add_child(new_score_part)
-#         for measure in self.get_children_by_type(Measure):
+#         for measure in self.get_children_by_type(TreeMeasure):
 #             measure.add_child(Part(id=new_score_part.id))
 #
 #     def add_measure(self):
-#         new_measure = Measure(number=0)
+#         new_measure = TreeMeasure(number=0)
 #         self.add_child(new_measure)
 #         new_measure.number = len(self.get_children()) - 1
 #         for score_part in self.get_score_parts():
@@ -210,7 +234,7 @@
 #     def add_note(self, measure_number, part_number, note):
 #         if not isinstance(note, MusicNote):
 #             raise TypeError('add_note note must be of type Note not {}'.format(type(note)))
-#         measure = self.get_children_by_type(Measure)[measure_number - 1]
+#         measure = self.get_children_by_type(TreeMeasure)[measure_number - 1]
 #         part = measure.get_children_by_type(Part)[part_number - 1]
 #         part.add_child(note)
 #
@@ -219,6 +243,6 @@
 #         self.add_note(measure_number, part_number, note)
 #
 #     def finish(self):
-#         for measure in self.get_children_by_type(Measure):
+#         for measure in self.get_children_by_type(TreeMeasure):
 #             for part in measure.get_children_by_type(Part):
 #                 part.finish()

@@ -1,3 +1,4 @@
+from musicscore.basic_functions import roundrobin
 from musicscore.tree.tree import Tree
 import copy
 
@@ -151,14 +152,24 @@ class DTDNode(DTDTree):
         parents = list(dict.fromkeys([node.up for node in current_combination]))
         for parent in parents:
             if isinstance(parent, Sequence):
-                for node in parent.get_children():
-                    if isinstance(node, DTDLeaf):
-                        children = xmltree.get_children_by_type(node.type_)
-                        for child in children:
-                            xmltree.remove_child(child)
-                        new_children.extend(children)
+                if isinstance(parent.up, GroupReference) and parent.up.max_occurrence != 1:
+                    # print([node.type_.__name__ if isinstance(node, Element) else node for node in current_combination])
+                    # print(parent)
+                    # print([node.type_.__name__ if isinstance(node, Element) else node for node in parent.get_children()])
+                    list_of_children = [xmltree.get_children_by_type(child.type_) for child in parent.get_children()]
+                    sorted_children = list(roundrobin(*list_of_children))
+                    new_children.extend(sorted_children)
+                else:
+                    for node in parent.get_children():
+                        if isinstance(node, Element):
+                            children = xmltree.get_children_by_type(node.type_)
+                            for child in children:
+                                xmltree.remove_child(child)
+                            new_children.extend(children)
+                        elif isinstance(node, GroupReference):
+                            pass
             elif isinstance(parent, Choice):
-                if parent.min_occurrence == 0 and parent.max_occurrence == None:
+                if parent.min_occurrence == 0 and parent.max_occurrence is None:
                     for child in xmltree.get_children():
                         for t in [ch.type_ for ch in parent.get_children()]:
                             if isinstance(child, t):

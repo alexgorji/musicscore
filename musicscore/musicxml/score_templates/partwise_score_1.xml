@@ -13,6 +13,8 @@
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
+          <beats>3</beats>
+          <beat-type>8</beat-type>
         </time>
         <clef>
           <sign>G</sign>

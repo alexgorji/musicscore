@@ -8,9 +8,10 @@ class TestTreeNote(TestCase):
         self.note = TreeNote()
 
     def test_quarter_duration(self):
-        print(self.note.get_children())
         self.note.add_child(Duration(self.note.quarter_duration))
-        print(self.note.get_children())
+        result = ['Rest', 'Duration']
+        self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
         self.note.quarter_duration = 0
         self.note.sort_children()
-        print(self.note.get_children())
+        result = ['Grace', 'Rest']
+        self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)

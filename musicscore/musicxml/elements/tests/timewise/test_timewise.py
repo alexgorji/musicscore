@@ -1,5 +1,3 @@
-from unittest import TestCase
-
 from musicscore.musicxml.elements.attributes import Attributes, Time, Beats, BeatType, Divisions, Clef, Sign, Line
 from musicscore.musicxml.elements.fullnote import Rest
 from musicscore.musicxml.elements.note import Note, Duration
@@ -8,7 +6,7 @@ from musicscore.musicxml.elements.timewise import ScoreTimewise, Measure, Part
 
 import os
 
-from musicscore.musicxml.tests.xml_test_score import TestScore
+from musicscore.musicxml.score_templates.xml_test_score import TestScore
 
 path = os.path.abspath(__file__).split('.')[0]
 
