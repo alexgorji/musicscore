@@ -17,6 +17,8 @@ class TestTreeTime(TestCase):
 '''
         self.assertEqual(time.to_string(), result)
 
+        self.assertEqual(time.quarter_duration, 3.5)
+
         with self.assertRaises(MusicTreeError):
             TreeTime(4, 3)
 

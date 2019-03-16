@@ -120,14 +120,19 @@ class TreeTime(Time):
 
     def __init__(self, *time_signature, **kwargs):
         super().__init__(**kwargs)
+        self._quarter_duration = None
         self.pars_arguments(time_signature)
 
     def pars_arguments(self, time_signatures):
         if len(time_signatures) == 1 and time_signatures[0] == 'senza_misura':
             self.add_child(SenzaMisura())
+            self._quarter_duration = None
         elif len(time_signatures) % 2 == 0:
+            self._quarter_duration = 0
             for time_signature in zip(time_signatures[0::2], time_signatures[1::2]):
                 self.set_time_signature(time_signature)
+                (beats, beat_type) = time_signature
+                self._quarter_duration += beats / beat_type * 4
         else:
             raise MusicTreeError(
                 'TreeTime can have senza_misura or (beats, beat_type)* as arguments not {}'.format(time_signature))
@@ -140,6 +145,10 @@ class TreeTime(Time):
             raise MusicTreeError('beat_type {} must be in {}'.format(beats, permitted))
         else:
             self.add_child(BeatType(beat_type))
+
+    @property
+    def quarter_duration(self):
+        return self._quarter_duration
 
 #
 # class TreeMeasure(MeasureTimewise):
