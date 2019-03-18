@@ -2,7 +2,7 @@ from musicscore.musicxml.elements.attributes import Attributes, Time, Beats, Bea
 from musicscore.musicxml.elements.fullnote import Rest
 from musicscore.musicxml.elements.note import Note, Duration
 from musicscore.musicxml.elements.score_header import PartList, ScorePart, PartName, PartAbbreviation
-from musicscore.musicxml.elements.timewise import ScoreTimewise, Measure, Part
+from musicscore.musicxml.elements.timewise import Score, Measure, Part
 
 import os
 
@@ -13,7 +13,7 @@ path = os.path.abspath(__file__).split('.')[0]
 
 class TestTimewise(TestScore):
     def setUp(self):
-        self.score = ScoreTimewise()
+        self.score = Score()
         self.score.version = '3.0'
         part_list = self.score.add_child(PartList())
         score_part = part_list.add_child(ScorePart(id='P1'))

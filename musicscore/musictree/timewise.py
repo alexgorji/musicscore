@@ -1,11 +1,3 @@
-from musicscore.musictree.exceptions import MusicTreeError
-from musicscore.musicxml.elements.note import Note, Type, Dot
-from musicscore.musicxml.elements.fullnote import Event, Rest
-from musicscore.musicxml.elements.attributes import Attributes, Divisions, Time, SenzaMisura, Beats, BeatType
-from quicktions import Fraction
-from musicscore.basic_functions import lcm
-
-
 #
 # class MusicNote(Note):
 #     """"""
@@ -114,6 +106,14 @@ from musicscore.basic_functions import lcm
 #
 #         for i in range(_dot):
 #             self.add_child(Dot())
+from musicscore.musictree.exceptions import MusicTreeError
+from musicscore.musictree.midi import Midi
+from musicscore.musictree.musicnote import TreeNote
+from musicscore.musicxml.elements.attributes import Attributes, Divisions, Time, SenzaMisura, Beats, BeatType
+from quicktions import Fraction
+from musicscore.basic_functions import lcm
+import musicscore.musicxml.elements.timewise as timewise
+from musicscore.musicxml.elements.score_header import PartList, ScorePart, PartName
 
 
 class TreeTime(Time):
@@ -135,7 +135,7 @@ class TreeTime(Time):
                 self._quarter_duration += beats / beat_type * 4
         else:
             raise MusicTreeError(
-                'TreeTime can have senza_misura or (beats, beat_type)* as arguments not {}'.format(time_signature))
+                'TreeTime can have senza_misura or (beats, beat_type)* as arguments not {}'.format(time_signatures))
 
     def set_time_signature(self, time_signature):
         (beats, beat_type) = time_signature
@@ -150,109 +150,110 @@ class TreeTime(Time):
     def quarter_duration(self):
         return self._quarter_duration
 
-#
-# class TreeMeasure(MeasureTimewise):
-#     """"""
-#
-#     def __init__(self, time=(4, 4), *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self._time = None
-#
-#     @property
-#     def time(self):
-#         return self._time
-#
-#     @time.setter
-#     def time(self, value):
-#         self._time = value
-#
-#
-# class Part(PartTimewise):
-#     """"""
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         attributes = self.add_child(Attributes())
-#         attributes.add_child(Divisions(1))
-#
-#     def get_divisions(self):
-#         duration_denominators = [note.quarter_duration.denominator for note in
-#                                  self.get_children_by_type(MusicNote)]
-#
-#         if len(duration_denominators) == 0:
-#             return 1
-#         elif len(duration_denominators) == 1:
-#             return duration_denominators[0]
-#         else:
-#             return lcm(duration_denominators)
-#
-#     def update_divisions(self):
-#         attributes = self.get_children_by_type(Attributes)[0]
-#         divisions = attributes.get_children_by_type(Divisions)[0]
-#         divisions.value = self.get_divisions()
-#
-#     def quantize(self):
-#         for note in self.get_children_by_type(MusicNote):
-#             note.quarter_duration = Fraction(note.quarter_duration).limit_denominator(12)
-#
-#     def finish(self):
-#         self.quantize()
-#
-#         self.update_divisions()
-#
-#         for note in self.get_children_by_type(MusicNote):
-#             note.update_duration()
-#
-#         for note in self.get_children_by_type(MusicNote):
-#             note.update_type()
-#             note.update_dot()
-#
-#
-# class Timwise(ScoreTimewise):
-#     """"""
-#
-#     _auto_part_number = 1
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self._part_list = self.add_child(XMLPartList())
-#
-#     def _generate_score_part(self):
-#         id = 'p' + str(self._auto_part_number)
-#         self._auto_part_number += 1
-#         return XMLScorePart(id=id)
-#
-#     def get_score_parts(self):
-#         return self._part_list.get_children()
-#
-#     def add_part(self, name='none', print_object='no'):
-#         new_score_part = self._generate_score_part()
-#         new_score_part.get_children_by_type(XMLPartName)[0].name = name
-#         new_score_part.get_children_by_type(XMLPartName)[0].print_object = print_object
-#         self._part_list.add_child(new_score_part)
-#         for measure in self.get_children_by_type(TreeMeasure):
-#             measure.add_child(Part(id=new_score_part.id))
-#
-#     def add_measure(self):
-#         new_measure = TreeMeasure(number=0)
-#         self.add_child(new_measure)
-#         new_measure.number = len(self.get_children()) - 1
-#         for score_part in self.get_score_parts():
-#             new_measure.add_child(Part(id=score_part.id))
-#         return new_measure
-#
-#     def add_note(self, measure_number, part_number, note):
-#         if not isinstance(note, MusicNote):
-#             raise TypeError('add_note note must be of type Note not {}'.format(type(note)))
-#         measure = self.get_children_by_type(TreeMeasure)[measure_number - 1]
-#         part = measure.get_children_by_type(Part)[part_number - 1]
-#         part.add_child(note)
-#
-#     def add_midi(self, measure_number, part_number, midi=Midi(60), quarter_duration=1):
-#         note = MusicNote(event=midi.get_pitch_rest(), quarter_duration=quarter_duration)
-#         self.add_note(measure_number, part_number, note)
-#
-#     def finish(self):
-#         for measure in self.get_children_by_type(TreeMeasure):
-#             for part in measure.get_children_by_type(Part):
-#                 part.finish()
+
+class TreeMeasure(timewise.Measure):
+    """"""
+
+    def __init__(self, time=(4, 4), *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.time = time
+        self._time = None
+
+    @property
+    def time(self):
+        return self._time
+
+    @time.setter
+    def time(self, value):
+        self._time = value
+
+
+class Part(timewise.Part):
+    """"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        attributes = self.add_child(Attributes())
+        attributes.add_child(Divisions(1))
+
+    def get_divisions(self):
+        duration_denominators = [note.quarter_duration.denominator for note in
+                                 self.get_children_by_type(TreeNote)]
+
+        if len(duration_denominators) == 0:
+            return 1
+        elif len(duration_denominators) == 1:
+            return duration_denominators[0]
+        else:
+            return lcm(duration_denominators)
+
+    def update_divisions(self):
+        attributes = self.get_children_by_type(Attributes)[0]
+        divisions = attributes.get_children_by_type(Divisions)[0]
+        divisions.value = self.get_divisions()
+
+    def quantize(self):
+        for note in self.get_children_by_type(TreeNote):
+            note.quarter_duration = Fraction(note.quarter_duration).limit_denominator(12)
+
+    def finish(self):
+        self.quantize()
+
+        self.update_divisions()
+
+        for note in self.get_children_by_type(TreeNote):
+            note.update_duration()
+
+        for note in self.get_children_by_type(TreeNote):
+            note.update_type()
+            note.update_dot()
+
+
+class TreeScoreTimewise(timewise.Score):
+    """"""
+
+    _auto_part_number = 1
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._part_list = self.add_child(PartList())
+
+    def _generate_score_part(self):
+        id_ = 'p' + str(self._auto_part_number)
+        self._auto_part_number += 1
+        return ScorePart(id=id_)
+
+    def get_score_parts(self):
+        return self._part_list.get_children()
+
+    def add_part(self, name='none', print_object='no'):
+        new_score_part = self._generate_score_part()
+        new_score_part.get_children_by_type(PartName)[0].name = name
+        new_score_part.get_children_by_type(PartName)[0].print_object = print_object
+        self._part_list.add_child(new_score_part)
+        for measure in self.get_children_by_type(TreeMeasure):
+            measure.add_child(Part(id=new_score_part.id))
+
+    def add_measure(self):
+        new_measure = TreeMeasure(number=0)
+        self.add_child(new_measure)
+        new_measure.number = len(self.get_children()) - 1
+        for score_part in self.get_score_parts():
+            new_measure.add_child(Part(id=score_part.id))
+        return new_measure
+
+    def add_note(self, measure_number, part_number, note):
+        if not isinstance(note, TreeNote):
+            raise TypeError('add_note note must be of type Note not {}'.format(type(note)))
+        measure = self.get_children_by_type(TreeMeasure)[measure_number - 1]
+        part = measure.get_children_by_type(Part)[part_number - 1]
+        part.add_child(note)
+
+    def add_midi(self, measure_number, part_number, midi=Midi(60), quarter_duration=1):
+        note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=quarter_duration)
+        self.add_note(measure_number, part_number, note)
+
+    def finish(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(Part):
+                part.finish()

@@ -105,7 +105,7 @@ class Measure(XMLElement, MeasureAttributes):
         super().__init__(tag='measure', number=number, *args, **kwargs)
 
 
-class ScoreTimewise(XMLElement, DocumentAttributes):
+class Score(XMLElement, DocumentAttributes):
     """
     The score-timewise element is the root element for a timewise MusicXML score. It includes a score-header group
     followed by a series of measures with parts inside. The document-attributes attribute group includes the version
