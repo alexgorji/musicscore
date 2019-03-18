@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from musicscore.musictree.exceptions import MusicTreeError
-from musicscore.musictree.timewise import TreeTime
+from musicscore.musictree.treetimewise import TreeTime
 
 
 class TestTreeTime(TestCase):

@@ -108,7 +108,7 @@
 #             self.add_child(Dot())
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.midi import Midi
-from musicscore.musictree.musicnote import TreeNote
+from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements.attributes import Attributes, Divisions, Time, SenzaMisura, Beats, BeatType
 from quicktions import Fraction
 from musicscore.basic_functions import lcm
@@ -228,16 +228,16 @@ class TreeScoreTimewise(timewise.Score):
 
     def add_part(self, name='none', print_object='no'):
         new_score_part = self._generate_score_part()
-        new_score_part.get_children_by_type(PartName)[0].name = name
-        new_score_part.get_children_by_type(PartName)[0].print_object = print_object
+        part_name = new_score_part.add_child(PartName(name = name))
+        part_name.print_object = print_object
         self._part_list.add_child(new_score_part)
         for measure in self.get_children_by_type(TreeMeasure):
             measure.add_child(Part(id=new_score_part.id))
 
     def add_measure(self):
-        new_measure = TreeMeasure(number=0)
+        new_measure = TreeMeasure(number='0')
         self.add_child(new_measure)
-        new_measure.number = len(self.get_children()) - 1
+        new_measure.number = str(len(self.get_children()) - 1)
         for score_part in self.get_score_parts():
             new_measure.add_child(Part(id=score_part.id))
         return new_measure

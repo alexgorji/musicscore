@@ -22,7 +22,8 @@ class ChildOccurrenceDTDConflict(DTDError):
 
 class ChildIsNotOptional(DTDError):
     def __init__(self, node, xmltree):
-        msg = 'child of type {} is due to DTD Occurrence not optional for {}'.format(node.type_.__name__, type(xmltree).__name__)
+        msg = 'child of type {} is due to DTD Occurrence not optional for {}'.format(node.type_.__name__,
+                                                                                     type(xmltree).__name__)
         super().__init__(msg)
 
 
@@ -90,9 +91,19 @@ class DTDNode(DTDTree):
     def get_current_combination(self):
         return self.expand()[self._possibility_index]
 
+    def type_in_combination(self, ch):
+        for index, t in enumerate([node.type_ for node in self.get_current_combination()]):
+            if isinstance(ch, t):
+                return [True, index]
+        return [False, None]
+
     def get_current_node(self, child):
-        return self.get_current_combination()[
-            [node.type_ for node in self.get_current_combination()].index(type(child))]
+        index = self.type_in_combination(child)[1]
+        if index is None:
+            raise IndexError()
+        else:
+            return self.get_current_combination()[index]
+
 
     def check_max_occurrence(self, occurrence):
         if isinstance(self.up, Choice) and self.up.min_occurrence == 0 and self.up.max_occurrence is None:
@@ -107,7 +118,8 @@ class DTDNode(DTDTree):
         return True
 
     def check_child_type(self, parent, child):
-        while type(child) not in [node.type_ for node in self.get_current_combination()]:
+
+        while not self.type_in_combination(child)[0]:
             try:
                 self.next()
                 for sibling in parent.get_children():
@@ -122,7 +134,7 @@ class DTDNode(DTDTree):
         occurrence = len(xmltree.get_children_by_type(type(child)))
         try:
             dtd_node = self.get_current_node(child)
-        except ValueError:
+        except IndexError:
             raise ChildOccurrenceDTDConflict(child)
 
         while dtd_node.check_max_occurrence(occurrence + 1) is False:
