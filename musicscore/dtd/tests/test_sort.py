@@ -44,7 +44,7 @@ class TestSort(TestCase):
         self.add_note(1)
         self.dtd_1.add_child(Barline())
 
-        self.dtd_1.sort_children_2()
+        self.dtd_1.sort_children()
         result = ['Duration', 'Barline', 'Note', 'Direction', 'Backup', 'Note', 'Barline', 'Chord']
         self.assertEqual([type(child).__name__ for child in self.dtd_1.get_children()], result)
 

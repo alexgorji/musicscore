@@ -24,7 +24,7 @@ class TestSortSequence1(TestCase):
     def test_sort_sequence1(self):
         self.foo1.add_child(Barline())
         self.foo1.add_child(Duration(2))
-        self.foo1.sort_children_2()
+        self.foo1.sort_children()
         result = ['Duration', 'Barline']
         self.assertEqual([type(child).__name__ for child in self.foo1.get_children()], result)
 
@@ -48,7 +48,7 @@ class TestSortSequence2(TestCase):
         self.foo2.add_child(Duration(2))
         self.foo2.add_child(Duration(3))
         self.foo2.add_child(Barline())
-        self.foo2.sort_children_2()
+        self.foo2.sort_children()
         result = ['Duration', 'Barline', 'Duration', 'Barline']
         self.assertEqual([type(child).__name__ for child in self.foo2.get_children()], result)
 
@@ -74,7 +74,7 @@ class TestSortSequence3(TestCase):
         self.foo3.add_child(BeatType(2))
         self.foo3.add_child(Duration(2))
         self.foo3.add_child(Beats(2))
-        self.foo3.sort_children_2()
+        self.foo3.sort_children()
         result = ['Duration', 'Barline', 'Beats', 'BeatType', 'Beats', 'BeatType']
         self.assertEqual([type(child).__name__ for child in self.foo3.get_children()], result)
 
@@ -103,6 +103,6 @@ class TestSortSequence4(TestCase):
         self.foo4.add_child(BeatType(2))
         self.foo4.add_child(Duration(2))
         self.foo4.add_child(Beats(2))
-        self.foo4.sort_children_2()
+        self.foo4.sort_children()
         result = ['Barline', 'Duration', 'Beats', 'BeatType', 'Beats', 'BeatType']
         self.assertEqual([type(child).__name__ for child in self.foo4.get_children()], result)

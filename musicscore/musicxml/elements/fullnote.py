@@ -138,7 +138,7 @@ pitch, chord, and rest information, but not duration (cue and grace notes do not
 elements are used for unpitched percussion, speaking voice, and other musical elements lacking determinate pitch.
 """
 
-FullNote = Sequence(
+FullNote: Sequence = Sequence(
     Element(Chord, min_occurrence=0),
     Choice(
         Element(Pitch),

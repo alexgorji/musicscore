@@ -79,7 +79,7 @@ class TestAddChildren(TestCase):
         e.add_child(B())
         e.add_child(A())
         e.add_child(C())
-        e.sort_children_2()
+        e.sort_children()
         result = [C, A, A, B]
         self.assertEqual([type(child) for child in e.get_children()], result)
 

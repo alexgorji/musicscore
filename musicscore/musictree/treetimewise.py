@@ -243,7 +243,7 @@ class TreeScoreTimewise(timewise.Score):
         return new_measure
 
     def add_note(self, measure_number, part_number, note):
-        print('adding note', note)
+        # print('adding note', note)
         if not isinstance(note, TreeNote):
             raise TypeError('add_note note must be of type Note not {}'.format(type(note)))
         measure = self.get_children_by_type(TreeMeasure)[measure_number - 1]
