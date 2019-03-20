@@ -68,6 +68,28 @@ class Tree(object):
         output.reverse()
         return output
 
+    def get_common_ancestor(self, *other_nodes):
+        for other_node in other_nodes:
+            if self.get_root() != other_node.get_root():
+                raise Exception('{} has not the same root'.format(other_node))
+
+        me_branch = self.get_branch()[:]
+        other_branches = [other_node.get_branch()[:] for other_node in other_nodes]
+
+        for node in reversed(me_branch):
+            node_in_all_branches = True
+            for branch in other_branches:
+                if node not in branch:
+                    node_in_all_branches = False
+                    break
+            if node_in_all_branches:
+                return node
+
+        # intersection = list(set(a) - (set(a) - set(b)))
+        # print(a)
+        # print(b)
+        # print(intersection)
+
     @property
     def is_leaf(self):
         if len(self.get_children()) == 0:
@@ -158,7 +180,6 @@ class Tree(object):
         else:
             index = self.up.get_children().index(self)
             self.up.get_children()[index] = new_node
-
 
     def traverse_leaves(self):
         for leaf in flatten(self.get_leaves()):

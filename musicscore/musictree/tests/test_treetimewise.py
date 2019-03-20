@@ -1,6 +1,9 @@
 from unittest import TestCase
 
+from musicscore.musictree.midi import Midi
+from musicscore.musictree.treenote import TreeNote
 from musicscore.musictree.treetimewise import TreeScoreTimewise
+from musicscore.musicxml.elements.fullnote import Pitch
 
 
 class TestTreeTimewise(TestCase):
@@ -10,4 +13,26 @@ class TestTreeTimewise(TestCase):
         self.score.add_part('one')
 
     def test_score(self):
+        result = '''<score-timewise version="1.0">
+  <part-list>
+    <score-part id="p1">
+      <part-name print-object="no">one</part-name>
+    </score-part>
+  </part-list>
+  <measure number="1">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+    </part>
+  </measure>
+</score-timewise>
+'''
+        self.assertEqual(self.score.to_string(), result)
+
+    def test_add_note(self):
+        self.score.add_note(1, 1, TreeNote())
+        self.score.add_note(1, 1, TreeNote())
+        # self.score.add_note(1, 1, TreeNote(event=Midi(61).get_pitch_rest(), quarter_duration=2))
+        # self.score.add_note(1, 1, TreeNote(event=Midi(63).get_pitch_rest(), quarter_duration=1.5))
         print(self.score.to_string())

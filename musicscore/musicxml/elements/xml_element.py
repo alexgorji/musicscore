@@ -14,6 +14,8 @@ class XMLTree(Tree):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.dtd = copy.copy(self._DTD)
+        self._sorted = False
+        self._sorted_children = []
 
     def find_child_by_tag(self, tag):
         return next((child for child in self._children if child.tag == tag), None)
@@ -52,6 +54,13 @@ class XMLTree(Tree):
 
     def sort_children(self):
         self.dtd.sort_children(self)
+
+    def sort_children_2(self):
+        current_combination = self.dtd.get_current_combination()
+        common_ancestor = current_combination[0].get_common_ancestor(*current_combination[1:])
+        common_ancestor.sort_children_2(self)
+        # self.dtd.sort_children_2(self)
+        self._children = self._sorted_children
 
     def close(self):
         if self.dtd:

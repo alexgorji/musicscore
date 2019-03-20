@@ -76,3 +76,13 @@ class TestTree(TestCase):
         child_6 = child_5.add_child(Tree())
         result = [self.tree, child_2, child_5, child_6]
         self.assertEqual(child_6.get_branch(), result)
+
+    def test_common_ancestor(self):
+        child_1 = self.tree.add_child(Tree())
+        child_2 = self.tree.add_child(Tree())
+        child_3 = self.tree.add_child(Tree())
+        child_4 = child_2.add_child(Tree())
+        child_5 = child_2.add_child(Tree())
+        child_6 = child_5.add_child(Tree())
+        self.assertEqual(child_6.get_common_ancestor(child_4), child_2)
+        self.assertEqual(child_6.get_common_ancestor(child_6, child_3), self.tree)

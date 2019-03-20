@@ -73,8 +73,8 @@ EditorialVoice = Sequence()
 class Type(XMLElement, NoteTypeValue):
     """"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='type', *args, **kwargs)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='type', value=value, *args, **kwargs)
 
 
 class Dot(EmptyPlacement):
@@ -115,7 +115,7 @@ class Notehead(XMLElement):
         super().__init__(tag='notehead', *args, **kwargs)
 
 
-class NotheadText(XMLElement):
+class NoteheadText(XMLElement):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -279,7 +279,7 @@ class Note(XMLElement):
         Element(TimeModification, 0, None),
         Element(Stem, 0),
         Element(Notehead, 0),
-        Element(NotheadText, 0),
+        Element(NoteheadText, 0),
         GroupReference(Staff, 0),
         Element(Beam, 0, 8),
         Element(Notations, 0, None),

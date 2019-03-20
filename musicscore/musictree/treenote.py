@@ -55,6 +55,13 @@ class TreeNote(Note):
             pass
         self._event = self.add_child(value)
 
+    def update_duration(self, divisions):
+        try:
+            self.duration.value = int(self.quarter_duration * divisions)
+        except AttributeError:
+            self.add_child(Duration())
+            self.duration.value = int(self.quarter_duration * divisions)
+
     def update_type(self):
         """get type of a Note() depending on its quantized duration and return it [whole, half, quarter, eighth, 16th,
         32nd, 64th]"""
@@ -99,12 +106,13 @@ class TreeNote(Note):
                   (6, 1): 'whole',
                   (8, 1): 'breve'}
 
+        value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
+
         try:
             note_type = self.get_children_by_type(Type)[0]
+            note_type.value = value
         except IndexError:
-            note_type = self.add_child(Type())
-
-        note_type.value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
+            self.add_child(Type(value))
 
     def update_dot(self):
         _dot = 0
