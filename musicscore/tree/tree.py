@@ -164,15 +164,15 @@ class Tree(object):
         else:
             return self
 
-    def goto(self, id_):
+    def goto(self, index):
 
-        if id_ == [0]:
+        if index == [0]:
             return self
 
         if len(id_) == 1:
-            return self.get_children()[id_[0] - 1]
+            return self.get_children()[index[0] - 1]
 
-        return self.goto(id_[:1]).goto(id_[1:])
+        return self.goto(index[:1]).goto(index[1:])
 
     def substitute_node(self, new_node):
         if self.is_root:
@@ -192,9 +192,11 @@ class Tree(object):
         return False
 
     def repair_parenthood(self):
-        for node in self.traverse():
-            for child in node.get_children():
-                child._up = node
+        for child in self.get_children():
+            child._up = self
+        # for node in self.traverse():
+        #     for child in node.get_children():
+        #         child._up = node
 
     # def get_number_of_layers(self):
     #     if self.is_leaf:

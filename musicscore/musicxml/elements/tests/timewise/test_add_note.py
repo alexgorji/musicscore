@@ -20,8 +20,18 @@ class TestAddNote(TestCase):
         note = Note()
         note.add_child(Rest())
         note.add_child(Duration(2))
-        self.part.add_child(note)
-        print(self.part.get_children())
-        self.part.sort_children()
-        print(self.part.get_children())
-        # print(self.part.to_string())
+        # self.part.add_child(note)
+        # print(self.part.get_children())
+        # self.part.sort_children()
+        # print(self.part.get_children())
+        result = '''<part id="p1">
+  <attributes>
+    <divisions>1</divisions>
+  </attributes>
+  <note>
+    <rest/>
+    <duration>2</duration>
+  </note>
+</part>
+'''
+        self.assertEqual(self.part.to_string(), result)

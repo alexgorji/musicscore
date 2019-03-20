@@ -249,7 +249,7 @@ class TreeScoreTimewise(timewise.Score):
         measure = self.get_children_by_type(TreeMeasure)[measure_number - 1]
         part = measure.get_children_by_type(Part)[part_number - 1]
         n = part.add_child(note)
-        print('{} added'.format(n))
+        # print('{} added'.format(n))
         part.quantize()
         divisions = part.get_divisions()
         note.update_duration(divisions=divisions)

@@ -1,6 +1,7 @@
 from musicscore.basic_functions import roundrobin, flatten
 from musicscore.tree.tree import Tree
 import copy
+import warnings
 
 
 class DTDError(Exception):
@@ -78,6 +79,11 @@ class DTDNode(DTDTree):
             raise ValueError('max_occurrence.value must be positive'.format(type(value)))
         self._max_occurrence = value
 
+    def __repr__(self):
+        if isinstance(self, Element):
+            return '{} type {} at {}'.format(self.__class__.__name__, self.type_.__name__, hex(id(self)))
+        return '{} at {}'.format(self.__class__.__name__, hex(id(self)))
+
     def expand(self):
         return self
 
@@ -85,7 +91,7 @@ class DTDNode(DTDTree):
         try:
             self._possibility_index += 1
             return self.expand()[self._possibility_index]
-        except IndexError as e:
+        except IndexError:
             raise StopIteration()
 
     def get_current_combination(self):
@@ -103,9 +109,27 @@ class DTDNode(DTDTree):
                 return True
         return False
 
+    def reduce_group_references(self):
+        for node in self.traverse():
+            if isinstance(node, GroupReference) and len(node.get_children()) == 1 and isinstance(node.get_children()[0],
+                                                                                                 Sequence) and len(
+                node.get_children()[0].get_children()) == 1 and isinstance(node.get_children()[0].get_children()[0],
+                                                                           Element):
+
+                el = node.get_children()[0].get_children()[0]
+                new_parent = el.up.up.up
+                el._up = new_parent
+                new_parent._children = [el if child == node else child for child in new_parent.get_children()]
+
     def dtd_filter_children(self, xmltree):
         filtered_children = [child for child in xmltree.get_children() if self.check_dtd_type(child)]
         return filtered_children
+
+    def non_element_dtd_children(self):
+        for dtd_child in self.get_children():
+            if not isinstance(dtd_child, Element):
+                return True
+        return False
 
     def get_current_node(self, child):
         index = self.type_in_combination(child)[1]
@@ -166,43 +190,6 @@ class DTDNode(DTDTree):
             self.check_child_max_occurrence(xmltree, child)
             xmltree._children.append(child)
 
-    # def sort_children_2(self, xmltree):
-    #     current_combination = self.get_current_combination()
-    #     common_ancestor = current_combination[0].get_common_ancestor(*current_combination[1:])
-    #     common_ancestor.sort_children_2(xmltree)
-
-    def sort_children(self, xmltree):
-        current_combination = self.get_current_combination()
-        new_children = []
-
-        parents = list(dict.fromkeys([node.up for node in current_combination]))
-        for parent in parents:
-            if isinstance(parent, Sequence):
-                if isinstance(parent.up, GroupReference) and parent.up.max_occurrence != 1:
-                    list_of_children = [xmltree.get_children_by_type(child.type_) for child in parent.get_children()]
-                    sorted_children = list(roundrobin(*list_of_children))
-                    new_children.extend(sorted_children)
-                else:
-                    for node in parent.get_children():
-                        if isinstance(node, Element):
-                            children = xmltree.get_children_by_type(node.type_)
-                            for child in children:
-                                xmltree.remove_child(child)
-                            new_children.extend(children)
-            elif isinstance(parent, Choice):
-                if parent.min_occurrence == 0 and parent.max_occurrence is None:
-                    for child in xmltree.get_children():
-                        new_children.append(child)
-                elif parent.min_occurrence == 1 and parent.max_occurrence == 1:
-                    for child in xmltree.get_children():
-                        if type(child) in [node.type_ for node in parent.get_children()]:
-                            xmltree.remove_child(child)
-                            new_children.append(child)
-            else:
-                raise Exception('DTD.sort_children: parent is of wrong type {}'.format(type(parent)))
-
-        xmltree._children = new_children
-
     def check_non_optional(self, xmltree):
         current_combination = self.get_current_combination()
         for node in current_combination:
@@ -227,7 +214,8 @@ class DTDNode(DTDTree):
                 self.close(xmltree)
             except StopIteration:
                 raise e
-        self.sort_children(xmltree)
+
+        xmltree.sort_children()
 
     def repair_occurrences(self):
         for branch in [leaf.get_branch() for leaf in self.traverse_leaves()]:
@@ -295,21 +283,44 @@ class Choice(DTDNode):
         self.repair_occurrences()
         return output
 
-    def sort_children_2(self, xmltree):
+    def sort_children(self, xmltree):
+        # print('sorting {} with children {}'.format(self, self.get_children()))
+        # print()
         if self.min_occurrence == 0 and self.max_occurrence is None:
-            for dtd_child in self.get_children():
-                if not isinstance(dtd_child, Element):
-                    raise DTDError(
-                        'sort still not possible for Choice with min_occurrence 0 and max_occurrence None if '
-                        'non Element DTDChild exists')
-            for child in self.dtd_filter_children(xmltree):
-                if child not in xmltree._sorted_children:
-                    xmltree._sorted_children.append(child)
+
+            def find_current_dtd_child(child):
+                current_combination = xmltree.dtd.get_current_combination()
+                for dtd_child in current_combination:
+                    if isinstance(child, dtd_child.type_):
+                        return dtd_child
+
+            if not self.non_element_dtd_children():
+                for child in self.dtd_filter_children(xmltree):
+                    if child not in xmltree._sorted_children:
+                        xmltree._sorted_children.append(child)
+            else:
+                # todo if children are Groups with only ONE Element
+
+                warnings.warn(
+                    '{} {} sort still not possible for Choice with min_occurrence 0 and max_occurrence None if non Element DTDChild exists'.format(
+                        self, self.get_leaves()))
+
+
 
         elif self.min_occurrence == 1 and self.max_occurrence == 1:
-            for child in self.dtd_filter_children(xmltree):
-                if child not in xmltree._sorted_children:
-                    xmltree._sorted_children.append(child)
+
+            def get_current_child():
+                current_branches = [node.get_branch() for node in xmltree.dtd.get_current_combination()]
+                for ch in self.get_children():
+                    for branch in current_branches:
+                        if ch in branch:
+                            return ch
+
+            current_child = get_current_child()
+            if current_child:
+                current_child.sort_children(xmltree)
+            else:
+                pass
         else:
             raise DTDError()
 
@@ -334,21 +345,13 @@ class Sequence(DTDNode):
         self.repair_occurrences()
         return output
 
-    def sort_children_2(self, xmltree):
-
-        def non_element_dtd_children():
-            for dtd_child in self.get_children():
-                if not isinstance(dtd_child, Element):
-                    return True
-            return False
+    def sort_children(self, xmltree):
+        # print('sorting {} with children {}'.format(self, self.get_children()))
+        # print()
 
         # if all dtd_children are Elements. Sequence can have max_occurrence larger than 1
-        if not non_element_dtd_children():
+        if not self.non_element_dtd_children():
             list_of_children = [xmltree.get_children_by_type(child.type_) for child in self.get_children()]
-            # print(list_of_children)
-            # list_of_children = self.dtd_filter_children(xmltree)
-            # # list_of_children = [xmltree.get_children_by_type(child.type_) for child in self.get_children()]
-            # print(list_of_children)
             if self.max_occurrence is None or self.max_occurrence > 1:
                 sorted_children = list(roundrobin(*list_of_children))
                 xmltree._sorted_children.extend(sorted_children)
@@ -361,7 +364,7 @@ class Sequence(DTDNode):
                 raise DTDError('sorting of Sequence is still not possible if max_occurrence is larger than 1 and non '
                                'Element children exist')
             for dtd_child in self.get_children():
-                dtd_child.sort_children_2(xmltree)
+                dtd_child.sort_children(xmltree)
 
 
 class Element(DTDLeaf):
@@ -376,7 +379,9 @@ class Element(DTDLeaf):
         self.repair_occurrences()
         return output
 
-    def sort_children_2(self, xmltree):
+    def sort_children(self, xmltree):
+        # print('sorting', self)
+        # print()
         children = xmltree.get_children_by_type(self.type_)
         children = [child for child in children if child not in xmltree._sorted_children]
         children = children[:self.max_occurrence]
@@ -389,14 +394,12 @@ class GroupReference(DTDNode):
     def __init__(self, child, min_occurrence=1, max_occurrence=1):
         self.child = copy.deepcopy(child)
         super().__init__(children=[self.child], min_occurrence=min_occurrence, max_occurrence=max_occurrence)
-        # self.child.min_occurrence = self.min_occurrence
-        # self.child.max_occurrence = self.max_occurrence
 
     def expand(self):
         output = self.child.expand()
-        self.repair_parenthood()
-        self.repair_occurrences()
         return output
 
-    def sort_children_2(self, xmltree):
-        self.child.sort_children_2(xmltree)
+    def sort_children(self, xmltree):
+        # print('sorting {} with children {}'.format(self, self.get_children()))
+        # print()
+        self.child.sort_children(xmltree)

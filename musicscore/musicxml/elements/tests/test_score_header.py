@@ -31,5 +31,3 @@ class TestXMLPartList(TestCase):
     def test_xml_part_list(self):
         result = '<part-list>\n  <score-part id="p1">\n    <part-name>part</part-name>\n  </score-part>\n</part-list>\n'
         self.assertEqual(self.part_list.to_string(), result)
-
-
