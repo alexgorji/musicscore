@@ -1,6 +1,7 @@
 from musicscore.musictree.midi import Midi
 from unittest import TestCase
 
+
 class TestMidi(TestCase):
     def test_midi(self):
         midi = Midi(60)
@@ -39,4 +40,3 @@ class TestMidi(TestCase):
 </pitch>
 '''
         self.assertEqual(midi.get_pitch_rest().to_string(), result)
-

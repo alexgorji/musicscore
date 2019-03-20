@@ -217,6 +217,7 @@ class TreeScoreTimewise(timewise.Score):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._part_list = self.add_child(PartList())
+        self.version = '3.0'
 
     def _generate_score_part(self):
         id_ = 'p' + str(self._auto_part_number)

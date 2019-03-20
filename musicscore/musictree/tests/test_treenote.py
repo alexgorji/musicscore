@@ -12,9 +12,6 @@ class TestTreeNote(TestCase):
         result = ['Rest', 'Duration']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
         self.note.quarter_duration = 0
-        # print([type(child).__name__ for child in self.note.get_children()])
-        # self.note.close()
-        # print([child.type_.__name__ for child in self.note.dtd.get_current_combination()])
         self.note.sort_children()
         result = ['Grace', 'Rest']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
@@ -24,4 +21,5 @@ class TestTreeNote(TestCase):
         self.note.update_duration(4)
 
         self.assertEqual(self.note.duration.value, 8)
+
 

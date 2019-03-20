@@ -13,7 +13,7 @@ class TestTreeTimewise(TestCase):
         self.score.add_part('one')
 
     def test_score(self):
-        result = '''<score-timewise version="1.0">
+        result = '''<score-timewise version="3.0">
   <part-list>
     <score-part id="p1">
       <part-name print-object="no">one</part-name>
@@ -33,6 +33,6 @@ class TestTreeTimewise(TestCase):
     def test_add_note(self):
         self.score.add_note(1, 1, TreeNote())
         self.score.add_note(1, 1, TreeNote())
-        # self.score.add_note(1, 1, TreeNote(event=Midi(61).get_pitch_rest(), quarter_duration=2))
+        self.score.add_note(1, 1, TreeNote(event=Midi(61).get_pitch_rest(), quarter_duration=2))
         # self.score.add_note(1, 1, TreeNote(event=Midi(63).get_pitch_rest(), quarter_duration=1.5))
         print(self.score.to_string())
