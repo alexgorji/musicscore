@@ -1,111 +1,3 @@
-#
-# class MusicNote(Note):
-#     """"""
-#
-#     def __init__(self, event=Rest(), quarter_duration=1, *args, **kwargs):
-#         super().__init__(duration=None, *args, **kwargs)
-#         self.quarter_duration = quarter_duration
-#         self.event = event
-#
-#     @property
-#     def quarter_duration(self):
-#         return self._quarter_duration
-#
-#     @quarter_duration.setter
-#     def quarter_duration(self, value):
-#         if value <= 0:
-#             raise ValueError('quarter_duration must be a positive number or fraction not {}'.format(value))
-#         self._quarter_duration = value
-#
-#     @property
-#     def event(self):
-#         return self._event
-#
-#     @event.setter
-#     def event(self, value):
-#         if not isinstance(value, Event):
-#             raise TypeError('event.value must be of type  not{}'.format(type(value)))
-#         self._event = self.add_child(value)
-#
-#     def update_duration(self):
-#         duration = self.up.get_divisions() * self.quarter_duration
-#         self.duration = int(duration)
-#
-#     def update_type(self):
-#         """get type of a Note() depending on its quantized duration and return it [whole, half, quarter, eighth, 16th, 32nd, 64th]"""
-#         _types = {(1, 12): '32nd',
-#                   (1, 11): '32nd',
-#                   (2, 11): '16th',
-#                   (3, 11): '16th',
-#                   (4, 11): 'eighth',
-#                   (6, 11): 'eighth',
-#                   (8, 11): 'quarter',
-#                   (1, 10): '32nd',
-#                   (3, 10): '16th',
-#                   (1, 9): '32nd',
-#                   (2, 9): '16th',
-#                   (4, 9): 'eighth',
-#                   (8, 9): 'quarter',
-#                   (1, 8): '32nd',
-#                   (3, 8): '16th',
-#                   (7, 8): 'eighth',
-#                   (1, 7): '16th',
-#                   (2, 7): 'eighth',
-#                   (3, 7): 'eighth',
-#                   (4, 7): 'quarter',
-#                   (6, 7): 'quarter',
-#                   (1, 6): '16th',
-#                   (1, 5): '16th',
-#                   (2, 5): 'eighth',
-#                   (3, 5): 'eighth',
-#                   (4, 5): 'quarter',
-#                   (1, 4): '16th',
-#                   (2, 4): 'eighth',
-#                   (3, 4): 'eighth',
-#                   (7, 4): 'quarter',
-#                   (1, 3): 'eighth',
-#                   (2, 3): 'quarter',
-#                   (3, 2): 'quarter',
-#                   (1, 2): 'eighth',
-#                   (1, 1): 'quarter',
-#                   (2, 1): 'half',
-#                   (3, 1): 'half',
-#                   (4, 1): 'whole',
-#                   (6, 1): 'whole',
-#                   (8, 1): 'breve'}
-#
-#         try:
-#             note_type = self.get_children_by_type(Type)[0]
-#         except IndexError:
-#             note_type = self.add_child(Type('quarter'))
-#
-#         note_type.value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
-#
-#     def update_dot(self):
-#         _dot = 0
-#         if self.quarter_duration.numerator % 3 == 0:
-#             _dot = 1
-#         elif self.quarter_duration == Fraction(1, 2) and (
-#                 self.up.divisions == 3 or self.up.divisions == 6 or self.up.divisions == 12):
-#             _dot = 1
-#         elif self.quarter_duration == Fraction(1, 4) and (
-#                 self.up.divisions == 3 or self.up.divisions == 6 or self.up.divisions == 12):
-#             _dot = 1
-#         elif (self.quarter_duration == Fraction(3, 9) or self.quarter_duration == Fraction(6,
-#                                                                                            9)) and self.up.divisions == 9:
-#             _dot = 1
-#         elif self.quarter_duration == Fraction(7, 8):
-#             _dot = 2
-#         elif self.quarter_duration == Fraction(7, 4):
-#             _dot = 2
-#         else:
-#             _dot = 0
-#
-#         for dot in self.get_children_by_type(Dot):
-#             self.remove_child(dot)
-#
-#         for i in range(_dot):
-#             self.add_child(Dot())
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treenote import TreeNote
@@ -113,6 +5,7 @@ from musicscore.musicxml.elements.attributes import Attributes, Divisions, Time,
 from quicktions import Fraction
 from musicscore.basic_functions import lcm
 import musicscore.musicxml.elements.timewise as timewise
+from musicscore.musicxml.elements.fullnote import Pitch
 from musicscore.musicxml.elements.score_header import PartList, ScorePart, PartName
 
 
@@ -175,6 +68,7 @@ class Part(timewise.Part):
         super().__init__(*args, **kwargs)
         attributes = self.add_child(Attributes())
         attributes.add_child(Divisions(1))
+        self._accidental_steps = []
 
     def get_divisions(self):
         duration_denominators = [note.quarter_duration.denominator for note in
@@ -192,6 +86,20 @@ class Part(timewise.Part):
         divisions = attributes.get_children_by_type(Divisions)[0]
         divisions.value = self.get_divisions()
 
+    def update_accidentals(self, mode):
+        if mode == 'normal':
+            self._accidental_steps = []
+            pitched_notes = [note for note in self.get_children_by_type(TreeNote) if isinstance(note.event, Pitch)]
+            for note in pitched_notes:
+                if note.pitch.alter.value != 0 and note.pitch.step.value not in self._accidental_steps:
+                    note.accidental.show = True
+                    self._accidental_steps.append(note.pitch.step.value)
+                elif note.pitch.alter.value == 0 and note.pitch.step.value in self._accidental_steps:
+                    self._accidental_steps.remove(note.pitch.step.value)
+                    note.accidental.show = True
+        else:
+            raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
+
     def quantize(self):
         for note in self.get_children_by_type(TreeNote):
             note.quarter_duration = Fraction(note.quarter_duration).limit_denominator(12)
@@ -201,8 +109,10 @@ class Part(timewise.Part):
 
         self.update_divisions()
 
+        self.update_accidentals(mode='normal')
+
         for note in self.get_children_by_type(TreeNote):
-            note.update_duration()
+            note.update_duration(self.get_divisions())
 
         for note in self.get_children_by_type(TreeNote):
             note.update_type()
@@ -229,7 +139,7 @@ class TreeScoreTimewise(timewise.Score):
 
     def add_part(self, name='none', print_object='no'):
         new_score_part = self._generate_score_part()
-        part_name = new_score_part.add_child(PartName(name = name))
+        part_name = new_score_part.add_child(PartName(name=name))
         part_name.print_object = print_object
         self._part_list.add_child(new_score_part)
         for measure in self.get_children_by_type(TreeMeasure):
@@ -244,13 +154,11 @@ class TreeScoreTimewise(timewise.Score):
         return new_measure
 
     def add_note(self, measure_number, part_number, note):
-        # print('adding note', note)
         if not isinstance(note, TreeNote):
             raise TypeError('add_note note must be of type Note not {}'.format(type(note)))
         measure = self.get_children_by_type(TreeMeasure)[measure_number - 1]
         part = measure.get_children_by_type(Part)[part_number - 1]
-        n = part.add_child(note)
-        # print('{} added'.format(n))
+        part.add_child(note)
         part.quantize()
         divisions = part.get_divisions()
         note.update_duration(divisions=divisions)

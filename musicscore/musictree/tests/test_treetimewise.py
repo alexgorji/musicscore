@@ -3,6 +3,8 @@ from unittest import TestCase
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musictree.treetimewise import TreeScoreTimewise
+import os
+path = os.path.abspath(__file__).split('.')[0]
 
 
 class TestTreeTimewise(TestCase):
@@ -33,6 +35,7 @@ class TestTreeTimewise(TestCase):
         self.score.add_note(1, 1, TreeNote())
         self.score.add_note(1, 1, TreeNote())
         self.score.add_note(1, 1, TreeNote(event=Midi(61).get_pitch_rest(), quarter_duration=2))
+        self.score.finish()
         # self.score.add_note(1, 1, TreeNote(event=Midi(63).get_pitch_rest(), quarter_duration=1.5))
         result = '''<score-timewise version="3.0">
   <part-list>
@@ -63,9 +66,11 @@ class TestTreeTimewise(TestCase):
         </pitch>
         <duration>2</duration>
         <type>half</type>
+        <accidental>sharp</accidental>
       </note>
     </part>
   </measure>
 </score-timewise>
 '''
         self.assertEqual(self.score.to_string(), result)
+        self.score.write(path=path)

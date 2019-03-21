@@ -176,16 +176,17 @@ class TreeNote(Note):
 
     def update_dot(self):
         _dot = 0
+        division = self.up.get_divisions()
         if self.quarter_duration.numerator % 3 == 0:
             _dot = 1
         elif self.quarter_duration == Fraction(1, 2) and (
-                self.up.divisions == 3 or self.up.divisions == 6 or self.up.divisions == 12):
+                division == 3 or division == 6 or division == 12):
             _dot = 1
         elif self.quarter_duration == Fraction(1, 4) and (
-                self.up.divisions == 3 or self.up.divisions == 6 or self.up.divisions == 12):
+                division == 3 or division == 6 or division == 12):
             _dot = 1
         elif (self.quarter_duration == Fraction(3, 9) or self.quarter_duration == Fraction(6,
-                                                                                           9)) and self.up.divisions == 9:
+                                                                                           9)) and division == 9:
             _dot = 1
         elif self.quarter_duration == Fraction(7, 8):
             _dot = 2
