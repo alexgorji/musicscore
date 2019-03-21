@@ -63,7 +63,6 @@ class Pitch(Event):
         super().__init__(tag='pitch')
         self._step = None
         self.step = step
-        self._alter = None
         self.alter = alter
         self._octave = None
         self.octave = octave
@@ -78,7 +77,11 @@ class Pitch(Event):
 
     @property
     def alter(self):
-        return self._alter
+        alter = self.get_children_by_type(Alter)
+        if alter:
+            return alter[0]
+        else:
+            return None
 
     @alter.setter
     def alter(self, value):

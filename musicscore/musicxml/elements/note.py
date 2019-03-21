@@ -1,11 +1,15 @@
 from musicscore.dtd.dtd import Element, GroupReference, Sequence, Choice
+from musicscore.musicxml.attributes.accidental import Cautionary, Editorial, Smulf
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
+from musicscore.musicxml.attributes.level_display import LevelDisplay
+from musicscore.musicxml.attributes.print_style import PrintStyle
 from musicscore.musicxml.elements.fullnote import FullNote
 from musicscore.musicxml.elements.xml_element import XMLElement
 import copy
 
-from musicscore.musicxml.types.complex_type import EmptyPlacement
-from musicscore.musicxml.types.simple_type import PositiveDivisions, NoteTypeValue
+from musicscore.musicxml.types.complex_type import EmptyPlacement, ComplexType
+from musicscore.musicxml.types.simple_type import PositiveDivisions, NoteTypeValue, TypeAccidentalValue
 
 
 class Grace(XMLElement, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):
@@ -87,11 +91,21 @@ class Dot(EmptyPlacement):
         super().__init__(tag='dot', *args, **kwargs)
 
 
-class Accidental(XMLElement):
-    """"""
+class TypeAccidental(ComplexType, TypeAccidentalValue, Cautionary, Editorial, LevelDisplay, PrintStyle, Smulf):
+    """
+    The accidental type represents actual notated accidentals. Editorial and cautionary indications are indicated by 
+    attributes. Values for these attributes are "no" if not present. Specific graphic display such as parentheses, 
+    brackets, and size are controlled by the level-display attribute group
+    """
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='accidental', *args, **kwargs)
+    def __init__(self, tag, value, *args, **kwargs):
+        super().__init__(tag=tag, value=value, *args, **kwargs)
+
+
+class Accidental(TypeAccidental):
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='accidental', value=value, *args, **kwargs)
 
 
 class TimeModification(XMLElement):

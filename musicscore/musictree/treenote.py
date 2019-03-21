@@ -1,7 +1,30 @@
 from quicktions import Fraction
 
-from musicscore.musicxml.elements.fullnote import Rest, Event
-from musicscore.musicxml.elements.note import Note, Dot, Duration, Type, Grace
+from musicscore.musicxml.elements.fullnote import Rest, Event, Pitch, Alter
+from musicscore.musicxml.elements.note import Note, Dot, Duration, Type, Grace, Accidental
+
+
+class TreeAccidental(Accidental):
+    """"""
+
+    def __init__(self, value='natural', show=False, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+        self._note = None
+        self._show = None
+        self.show = show
+
+
+    @property
+    def show(self):
+        return self._show
+
+    @show.setter
+    def show(self, value):
+        if not isinstance(value, bool):
+            raise TypeError('show.value must be of type bool not{}'.format(type(value)))
+        self._show = value
+        if self._note:
+            self._note.update_accidental()
 
 
 class TreeNote(Note):
@@ -11,10 +34,13 @@ class TreeNote(Note):
 
     def __init__(self, event=Rest(), quarter_duration=1, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._accidental = TreeAccidental(show=False, value='natural')
+        self._accidental._note = self
         self._quarter_duration = None
         self.quarter_duration = quarter_duration
         self._event = None
         self.event = event
+
 
     @property
     def quarter_duration(self):
@@ -42,6 +68,11 @@ class TreeNote(Note):
                 self.add_child(Grace())
 
     @property
+    def accidental(self):
+        return self._accidental
+
+
+    @property
     def event(self):
         return self._event
 
@@ -54,6 +85,35 @@ class TreeNote(Note):
         except ValueError:
             pass
         self._event = self.add_child(value)
+        self.update_accidental()
+
+
+    def update_accidental(self):
+        _accidentals = {-1.5: 'three-quarters-flat',
+                        -1: 'flat',
+                        -0.5: 'quarter-flat',
+                        0: 'natural',
+                        0.5: 'quarter-sharp',
+                        1: 'sharp',
+                        1.5: 'three-quarters-sharp',
+                        2: 'double-sharp'
+                        }
+        accidental = self.get_children_by_type(type_=TreeAccidental)
+        if self._accidental.show:
+            if isinstance(self.event, Pitch):
+                alter = self.event.get_children_by_type(type_=Alter)
+                if not alter:
+                    self.event.add_child(Alter(0))
+
+                accidental_value = _accidentals[self.event.alter.value]
+                if accidental:
+                    accidental[0].value = accidental_value
+                else:
+                    self._accidental.value = accidental_value
+                    self.add_child(self._accidental)
+        else:
+            if accidental:
+                self.remove_child(accidental[0])
 
     def update_duration(self, divisions):
         try:

@@ -1,5 +1,6 @@
 from unittest import TestCase
 from musicscore.musictree.treenote import TreeNote
+from musicscore.musicxml.elements.fullnote import Pitch
 from musicscore.musicxml.elements.note import Duration
 
 
@@ -21,5 +22,22 @@ class TestTreeNote(TestCase):
         self.note.update_duration(4)
 
         self.assertEqual(self.note.duration.value, 8)
+
+    def test_accidental(self):
+        self.note.accidental.show = False
+        self.note.add_child(Duration(self.note.quarter_duration))
+        self.note.event = Pitch(step='A', alter=-1.5)
+        self.note.accidental.show = True
+        result = '''<note>
+  <pitch>
+    <step>A</step>
+    <alter>-1.5</alter>
+    <octave>4</octave>
+  </pitch>
+  <duration>1</duration>
+  <accidental>three-quarters-flat</accidental>
+</note>
+'''
+        self.assertEqual(self.note.to_string(), result)
 
 
