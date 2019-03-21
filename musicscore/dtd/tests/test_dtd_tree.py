@@ -6,52 +6,6 @@ from musicscore.musicxml.elements.fullnote import Rest
 class TestDTDTree(TestCase):
     def setUp(self):
         self.note = Note()
-        # self.dtd = (
-        #     Sequence(
-        #         Choice(
-        #             Sequence(
-        #                 Element(Grace),
-        #                 Choice(
-        #                     Sequence(
-        #                         Group(FullNote)
-        #                     ),
-        #                     Sequence(
-        #                         Group(FullNote),
-        #                         Element(Tie, 0, 2)
-        #                     ),
-        #                     Sequence(
-        #                         Element(Cue),
-        #                         Group(FullNote)
-        #                     )
-        #                 )
-        #             ),
-        #             Sequence(
-        #                 Element(Cue),
-        #                 Group(FullNote),
-        #                 Group(DurationGroup)
-        #             ),
-        #             Sequence(
-        #                 Group(FullNote),
-        #                 Group(DurationGroup),
-        #                 Element(Tie, 0, 2)
-        #             )
-        #         ),
-        #         Element(Instrument, 0),
-        #         Group(EditorialVoice),
-        #         Element(Type, 0),
-        #         Element(Dot, 0, None),
-        #         Element(Accidental, 0),
-        #         Element(TimeModification, 0, None),
-        #         Element(Stem, 0),
-        #         Element(Notehead, 0),
-        #         Element(NotheadText, 0),
-        #         Group(Staff, 0),
-        #         Element(Beam, 0, 8),
-        #         Element(Notations, 0, None),
-        #         Element(Lyric, 0, None),
-        #         Element(Play, 0)
-        #     )
-        # )
 
     def test_expand(self):
         result = [['Grace', 'Chord', 'Pitch', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification', 'Stem',
@@ -90,9 +44,9 @@ class TestDTDTree(TestCase):
         with self.assertRaises(StopIteration):
             for i in range(16):
                 if i == 0:
-                    possibility = self.note.dtd.get_current_combination()
+                    self.note.dtd.get_current_combination()
                 else:
-                    possibility = self.note.dtd.next()
+                    self.note.dtd.next()
 
     def test_check_type(self):
         self.note.reset_children()

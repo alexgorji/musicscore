@@ -47,5 +47,3 @@ class TestSort(TestCase):
         self.dtd_1.sort_children()
         result = ['Duration', 'Barline', 'Note', 'Direction', 'Backup', 'Note', 'Barline', 'Chord']
         self.assertEqual([type(child).__name__ for child in self.dtd_1.get_children()], result)
-
-        # print(self.dtd_1.to_string())

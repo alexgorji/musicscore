@@ -11,6 +11,7 @@ TestGroup = Sequence(
     Element(Chord)
 )
 
+
 class Foo(XMLElement):
     _DTD = Sequence(
         Choice(
@@ -36,11 +37,5 @@ class TestGroupReference(TestCase):
         self.foo.add_child(Chord())
         self.foo.add_child(Grace())
 
-        #
-        # print(self.foo.dtd.get_children()[0].get_children()[0].get_children())
-        #
-        # print([type(child).__name__ for child in self.foo.get_children()])
-
         self.foo.sort_children()
-        # print([type(child).__name__ for child in self.foo.get_children()])
         self.assertEqual([type(child).__name__ for child in self.foo.get_children()], ['Grace', 'Chord'])
