@@ -42,7 +42,7 @@ class DTDTree(Tree):
 class DTDNode(DTDTree):
     def __init__(self, children=[], min_occurrence=1, max_occurrence=1, *args, **kwargs):
         super().__init__(**kwargs)
-        self._occurrences_repaired = False
+        self._expanded = None
         self._min_occurrence = None
         self._max_occurrence = None
         self.min_occurrence = min_occurrence
@@ -52,8 +52,6 @@ class DTDNode(DTDTree):
             if not isinstance(child, DTDTree):
                 raise TypeError(
                     '{} can only have children of Type DTDTree not {}'.format(self.__class__.__name__, type(child)))
-            # if isinstance(child, type(self)):
-            #     raise TypeError('{} can not have children of its own Type'.format(self.__class__.__name__))
             self.add_child(child)
 
     @property
@@ -88,18 +86,23 @@ class DTDNode(DTDTree):
     def expand(self):
         return self
 
+    @property
+    def expanded(self):
+        if self._expanded is None:
+            self._expanded = self.expand()
+            self.repair_occurrences()
+        return self._expanded
+
+
     def next(self):
         try:
             self._possibility_index += 1
-            return self.expand()[self._possibility_index]
+            return self.expanded[self._possibility_index]
         except IndexError:
             raise StopIteration()
 
     def get_current_combination(self):
-        if not self._occurrences_repaired:
-            self.repair_occurrences()
-            self._occurrences_repaired = True
-        return self.expand()[self._possibility_index]
+        return self.expanded[self._possibility_index]
 
     def type_in_combination(self, ch):
         for index, t in enumerate([node.type_ for node in self.get_current_combination()]):
