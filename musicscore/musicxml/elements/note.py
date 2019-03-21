@@ -1,6 +1,5 @@
 from musicscore.dtd.dtd import Element, GroupReference, Sequence, Choice
 from musicscore.musicxml.attributes.accidental import Cautionary, Editorial, Smulf
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
 from musicscore.musicxml.attributes.level_display import LevelDisplay
 from musicscore.musicxml.attributes.print_style import PrintStyle
@@ -9,6 +8,7 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 import copy
 
 from musicscore.musicxml.types.complex_type import EmptyPlacement, ComplexType
+from musicscore.musicxml.types.complex_types.TypeBeam import TypeBeam
 from musicscore.musicxml.types.simple_type import PositiveDivisions, NoteTypeValue, TypeAccidentalValue
 
 
@@ -91,18 +91,12 @@ class Dot(EmptyPlacement):
         super().__init__(tag='dot', *args, **kwargs)
 
 
-class TypeAccidental(ComplexType, TypeAccidentalValue, Cautionary, Editorial, LevelDisplay, PrintStyle, Smulf):
+class Accidental(ComplexType, TypeAccidentalValue, Cautionary, Editorial, LevelDisplay, PrintStyle, Smulf):
     """
     The accidental type represents actual notated accidentals. Editorial and cautionary indications are indicated by 
     attributes. Values for these attributes are "no" if not present. Specific graphic display such as parentheses, 
     brackets, and size are controlled by the level-display attribute group
     """
-
-    def __init__(self, tag, value, *args, **kwargs):
-        super().__init__(tag=tag, value=value, *args, **kwargs)
-
-
-class Accidental(TypeAccidental):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='accidental', value=value, *args, **kwargs)
@@ -113,6 +107,7 @@ class TimeModification(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='time-modification', *args, **kwargs)
+        raise NotImplementedError()
 
 
 class Stem(XMLElement):
@@ -120,6 +115,7 @@ class Stem(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='stem', *args, **kwargs)
+        raise NotImplementedError()
 
 
 class Notehead(XMLElement):
@@ -127,6 +123,7 @@ class Notehead(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='notehead', *args, **kwargs)
+        raise NotImplementedError()
 
 
 class NoteheadText(XMLElement):
@@ -134,16 +131,15 @@ class NoteheadText(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='notehead-text', *args, **kwargs)
+        raise NotImplementedError()
 
 
 Staff = Sequence()
 
 
-class Beam(XMLElement):
-    """"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='beam', *args, **kwargs)
+class Beam(TypeBeam):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
 
 
 class Notations(XMLElement):
@@ -151,6 +147,7 @@ class Notations(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='notations', *args, **kwargs)
+        raise NotImplementedError()
 
 
 class Lyric(XMLElement):
@@ -226,6 +223,7 @@ class Play(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='play', *args, **kwargs)
+        raise NotImplementedError()
 
 
 class Note(XMLElement):

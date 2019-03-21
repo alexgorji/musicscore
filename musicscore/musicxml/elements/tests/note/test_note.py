@@ -42,9 +42,9 @@ class TestNoteDTD(TestCase):
 
     def test_sort_children(self):
         self.note.add_child(Pitch())
-        self.note.add_child(Beam())
+        self.note.add_child(Beam('begin'))
         self.note.add_child(Tie())
-        self.note.add_child(Beam())
+        self.note.add_child(Beam('continue'))
         self.note.add_child(Duration(1))
         self.note.add_child(Tie())
         self.note.close()
@@ -74,9 +74,9 @@ class TestNoteDTD(TestCase):
 
     def test_to_string(self):
         self.note.add_child(Pitch())
-        self.note.add_child(Beam())
+        self.note.add_child(Beam('begin'))
         self.note.add_child(Tie())
-        self.note.add_child(Beam())
+        self.note.add_child(Beam('continue'))
         self.note.add_child(Duration(1))
         self.note.add_child(Tie())
         self.note.add_child(Chord())
@@ -90,8 +90,8 @@ class TestNoteDTD(TestCase):
   <duration>1</duration>
   <tie/>
   <tie/>
-  <beam/>
-  <beam/>
+  <beam number="1">begin</beam>
+  <beam number="1">continue</beam>
 </note>
 '''
         self.assertEqual(self.note.to_string(), result)

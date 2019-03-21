@@ -304,8 +304,37 @@ class CommaSeparatedText(Token):
         self._value = v
 
 
+class TypeTimeOnly(Token):
+    """
+    The time-only type is used to indicate that a particular playback-related element only applies particular times
+    through a repeated section. The value is a comma-separated list of positive integers arranged in ascending order,
+    indicating which times through the repeated section that the element applies.
+    """
+    pattern = r'[1-9][0-9]*(, ?[1-9][0-9]*)*'
+    p = re.compile(pattern)
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        m = self.p.match(v)
+        if m is None:
+            raise ValueError(
+                '{}.value {} must match the following pattern: {}'.format(self.__class__.__name__,
+                                                                          v, self.pattern))
+        self._value = v
+
+
 class RightLeftMiddle(SimpleType):
     permitted = ('right', 'left', 'middle')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class AboveBelow(SimpleType):
+    permitted = ('above', 'below')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -459,14 +488,6 @@ class MeasureText(Token):
     The measure-text type is used for the text attribute of measure elements. It has at least one character. The
     implicit attribute of the measure element should be set to "yes" rather than setting the text attribute to an empty
     string.
-    	<xs:simpleType name="measure-text">
-		<xs:annotation>
-			<xs:documentation></xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:minLength value="1"/>
-		</xs:restriction>
-	</xs:simpleType>
     """
 
     def __init__(self, value='1', *args, **kwargs):
@@ -478,3 +499,45 @@ class MeasureText(Token):
             raise ValueError(
                 '{}.value {} must have at least one character'.format(self.__class__.__name__, v))
         self._value = v
+
+
+# BEAM
+
+class BeamValue(SimpleType):
+    """
+    The beam-value type represents the type of beam associated with each of 8 beam levels (up to 1024th notes) available
+    for each note.
+    """
+    permitted = ["begin", "continue", "end", "forward hook", "backward hook"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class BeamLevel(PositiveInteger):
+    """
+    The MusicXML format supports six levels of beaming, up to 1024th notes. Unlike the number-level type, the beam-level
+    type identifies concurrent beams in a beam group. It does not distinguish overlapping beams such as grace notes
+    within regular notes, or beams used in different voices.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v < 1 or v > 8:
+            raise ValueError(
+                '{}.value {} must be between 1 and 8'.format(self.__class__.__name__, v))
+        self._value = v
+
+
+class Fan(Token):
+    """
+    The fan type represents the type of beam fanning present on a note, used to represent accelerandos and
+    ritardandos.
+    """
+    permitted = ["accel", "rit", "none"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
