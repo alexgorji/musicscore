@@ -7,14 +7,27 @@ from musicscore.basic_functions import lcm
 import musicscore.musicxml.elements.timewise as timewise
 from musicscore.musicxml.elements.fullnote import Pitch
 from musicscore.musicxml.elements.score_header import PartList, ScorePart, PartName
+import copy
 
 
 class TreeTime(Time):
 
     def __init__(self, *time_signature, **kwargs):
         super().__init__(**kwargs)
+        self._show = False
         self._quarter_duration = None
         self.pars_arguments(time_signature)
+
+    @property
+    def show(self):
+        return self._show
+
+    @show.setter
+    def show(self, value):
+        if not isinstance(value, bool):
+            raise TypeError('show.value must be of type bool not{}'.format(type(value)))
+
+        self._show = value
 
     def pars_arguments(self, time_signatures):
         if len(time_signatures) == 1 and time_signatures[0] == 'senza_misura':
@@ -48,9 +61,9 @@ class TreeMeasure(timewise.Measure):
     """"""
 
     def __init__(self, time=(4, 4), *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.time = time
+        super().__init__(number='1', *args, **kwargs)
         self._time = None
+        self.time = time
 
     @property
     def time(self):
@@ -58,7 +71,10 @@ class TreeMeasure(timewise.Measure):
 
     @time.setter
     def time(self, value):
-        self._time = value
+        if value:
+            self._time = TreeTime(*value)
+        else:
+            self._time = None
 
 
 class Part(timewise.Part):
@@ -145,12 +161,23 @@ class TreeScoreTimewise(timewise.Score):
         for measure in self.get_children_by_type(TreeMeasure):
             measure.add_child(Part(id=new_score_part.id))
 
-    def add_measure(self):
-        new_measure = TreeMeasure(number='0')
-        self.add_child(new_measure)
-        new_measure.number = str(len(self.get_children()) - 1)
+    def add_measure(self, measure=None):
+        new_measure = self.get_new_measure(measure)
+
         for score_part in self.get_score_parts():
             new_measure.add_child(Part(id=score_part.id))
+        return self.add_child(new_measure)
+
+    def get_new_measure(self, measure):
+        if measure is None:
+            new_measure = TreeMeasure()
+            measures = self.get_children_by_type(TreeMeasure)
+            if measures:
+                new_measure.time = copy.copy(measures[-1].time)
+            else:
+                new_measure.time.show = True
+        else:
+            new_measure = measure
         return new_measure
 
     def add_note(self, measure_number, part_number, note):
@@ -170,6 +197,11 @@ class TreeScoreTimewise(timewise.Score):
         self.add_note(measure_number, part_number, note)
 
     def finish(self):
-        for measure in self.get_children_by_type(TreeMeasure):
+        for index, measure in enumerate(self.get_children_by_type(TreeMeasure)):
+            measure.number = str(index + 1)
+            if measure.time.show is True:
+                part = measure.get_children_by_type(Part)[0]
+                part.attributes.add_child(measure.time)
+
             for part in measure.get_children_by_type(Part):
                 part.finish()

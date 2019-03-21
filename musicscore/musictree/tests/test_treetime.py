@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from musicscore.musictree.exceptions import MusicTreeError
-from musicscore.musictree.treetimewise import TreeTime
+from musicscore.musictree.treetimewise import TreeTime, TreeScoreTimewise
 
 
 class TestTreeTime(TestCase):
@@ -21,4 +21,11 @@ class TestTreeTime(TestCase):
 
         with self.assertRaises(MusicTreeError):
             TreeTime(4, 3)
+
+    def test_score_time(self):
+        score = TreeScoreTimewise()
+        score.add_measure()
+        score.add_part('one')
+        score.finish()
+        print(score.to_string())
 

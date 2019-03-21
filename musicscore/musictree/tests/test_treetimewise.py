@@ -36,7 +36,6 @@ class TestTreeTimewise(TestCase):
         self.score.add_note(1, 1, TreeNote())
         self.score.add_note(1, 1, TreeNote(event=Midi(61).get_pitch_rest(), quarter_duration=2))
         self.score.finish()
-        # self.score.add_note(1, 1, TreeNote(event=Midi(63).get_pitch_rest(), quarter_duration=1.5))
         result = '''<score-timewise version="3.0">
   <part-list>
     <score-part id="p1">
@@ -47,6 +46,10 @@ class TestTreeTimewise(TestCase):
     <part id="p1">
       <attributes>
         <divisions>1</divisions>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
       </attributes>
       <note>
         <rest/>
