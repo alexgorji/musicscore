@@ -14,7 +14,7 @@ class Number(AttributeAbstract):
 class Repeater(AttributeAbstract):
     def __init__(self, repeater=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('repeater', repeater, 'YesNo')
+        self.generate_attribute('repeater', repeater, 'TypeYesNo')
 
 
 class Fan(AttributeAbstract):

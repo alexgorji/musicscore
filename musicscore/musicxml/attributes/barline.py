@@ -14,7 +14,7 @@ class Location(AttributeAbstract):
 
     def __init__(self, location='right', *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('location', location, "RightLeftMiddle")
+        self.generate_attribute('location', location, "TypeRightLeftMiddle")
 
 
 class Segno(AttributeAbstract):

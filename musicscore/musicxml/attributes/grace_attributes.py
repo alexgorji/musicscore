@@ -12,7 +12,7 @@ class StealTimeFollowing(AttributeAbstract):
 
     def __init__(self, steal_time_following=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('steal-time-following', steal_time_following, 'Percent')
+        self.generate_attribute('steal-time-following', steal_time_following, 'TypePercent')
 
 
 class MakeTime(AttributeAbstract):
@@ -26,4 +26,4 @@ class Slash(AttributeAbstract):
 
     def __init__(self, slash=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('slash', slash, 'YesNo')
+        self.generate_attribute('slash', slash, 'TypeYesNo')

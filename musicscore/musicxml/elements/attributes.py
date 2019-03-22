@@ -3,11 +3,11 @@ from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.common.common import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.key import TypeKey
-from musicscore.musicxml.types.simple_type import PositiveDivisions, TypeClefSign, TypeStaffLine, PositiveInteger
+from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeClefSign, TypeStaffLine, PositiveInteger
 from musicscore.musicxml.attributes.printobject import PrintObject
 
 
-class Divisions(XMLElement, PositiveDivisions):
+class Divisions(XMLElement, TypePositiveDivisions):
     """
     Musical notation duration is commonly represented as fractions.
     The divisions element indicates how many divisions per quarter note are used to indicate a note's duration.

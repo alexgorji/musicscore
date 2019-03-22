@@ -4,25 +4,25 @@ from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 class DefaultX(AttributeAbstract):
     def __init__(self, default_x=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('default-x', default_x, 'Tenths')
+        self.generate_attribute('default-x', default_x, 'TypeTenths')
 
 
 class DefaultY(AttributeAbstract):
     def __init__(self, default_y=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('default-y', default_y, 'Tenths')
+        self.generate_attribute('default-y', default_y, 'TypeTenths')
 
 
 class RelativeX(AttributeAbstract):
     def __init__(self, relative_x=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('relative-x', relative_x, 'Tenths')
+        self.generate_attribute('relative-x', relative_x, 'TypeTenths')
 
 
 class RelativeY(AttributeAbstract):
     def __init__(self, relative_y=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('relative-y', relative_y, 'Tenths')
+        self.generate_attribute('relative-y', relative_y, 'TypeTenths')
 
 
 class Position(DefaultX, DefaultY, RelativeX, RelativeY):

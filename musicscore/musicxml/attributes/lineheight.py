@@ -10,4 +10,4 @@ class LineHeight(AttributeAbstract):
 
     def __init__(self, line_height=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('line-height', line_height, "NumberOrNormal")
+        self.generate_attribute('line-height', line_height, "TypeNumberOrNormal")

@@ -7,7 +7,7 @@ from musicscore.musicxml.types.complextypes.complextype import ComplexType
 class Type(AttributeAbstract):
     def __init__(self, type=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('type', type, 'StartStopContinue')
+        self.generate_attribute('type', type, 'TypeStartStopContinue')
 
 
 class ComplexTypeExtend(ComplexType, Type, Position, Color):

@@ -6,7 +6,7 @@ from musicscore.musicxml.types.complextypes.complextype import ComplexType
 class Reference(AttributeAbstract):
     def __init__(self, reference=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('reference', reference, 'YesNo')
+        self.generate_attribute('reference', reference, 'TypeYesNo')
 
 
 class ComplexTypeLevel(ComplexType, String, Reference, LevelDisplay):

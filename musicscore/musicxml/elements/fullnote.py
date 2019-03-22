@@ -106,7 +106,7 @@ class Unpitched(Event):
 class Measure(AttributeAbstract):
     def __init__(self, measure=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('measure', measure, 'YesNo')
+        self.generate_attribute('measure', measure, 'TypeYesNo')
 
 
 class Rest(Event, Measure):

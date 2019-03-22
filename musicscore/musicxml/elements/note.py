@@ -10,7 +10,7 @@ import copy
 from musicscore.musicxml.types.complextypes.complextype import EmptyPlacement, ComplexType
 from musicscore.musicxml.types.complextypes.beam import ComplexTypeBeam
 from musicscore.musicxml.types.complextypes.lyric import ComplexTypeLyric
-from musicscore.musicxml.types.simple_type import PositiveDivisions, NoteTypeValue, TypeAccidentalValue
+from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeNoteTypeValue, TypeAccidentalValue
 
 
 class Grace(XMLElement, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):
@@ -44,7 +44,7 @@ class Cue(XMLElement):
         super().__init__(tag='cue', *args, **kwargs)
 
 
-class Duration(XMLElement, PositiveDivisions):
+class Duration(XMLElement, TypePositiveDivisions):
     """
     Duration is a positive number specified in division units. This is the intended duration vs. notated duration
     (for instance, swing eighths vs. even eighths, or differences in dotted notes in Baroque-era music). Differences
@@ -75,7 +75,7 @@ class Instrument(XMLElement):
 EditorialVoice = Sequence()
 
 
-class Type(XMLElement, NoteTypeValue):
+class Type(XMLElement, TypeNoteTypeValue):
     """"""
 
     def __init__(self, value, *args, **kwargs):

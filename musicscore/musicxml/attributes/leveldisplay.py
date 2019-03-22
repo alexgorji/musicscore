@@ -5,14 +5,14 @@ class Parentheses(AttributeAbstract):
 
     def __init__(self, parentheses=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('parentheses', parentheses, "YesNo")
+        self.generate_attribute('parentheses', parentheses, "TypeYesNo")
 
 
 class Bracket(AttributeAbstract):
 
     def __init__(self, bracket=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('bracket', bracket, "YesNo")
+        self.generate_attribute('bracket', bracket, "TypeYesNo")
 
 
 class Size(AttributeAbstract):

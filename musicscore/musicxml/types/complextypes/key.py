@@ -105,7 +105,7 @@ class Number(AttributeAbstract):
 class CancelAttribute(AttributeAbstract):
     def __init__(self, cancel=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('cancel', cancel, 'YesNo')
+        self.generate_attribute('cancel', cancel, 'TypeYesNo')
 
 
 class ComplexTypeKeyOctave(ComplexType, TypeOctave, Number, CancelAttribute):

@@ -17,13 +17,13 @@ class Text(AttributeAbstract):
 class Implicit(AttributeAbstract):
     def __init__(self, implicit=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('implicit', implicit, "YesNo")
+        self.generate_attribute('implicit', implicit, "TypeYesNo")
 
 
 class NonControlling(AttributeAbstract):
     def __init__(self, non_controlling=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('non-controlling', non_controlling, "YesNo")
+        self.generate_attribute('non-controlling', non_controlling, "TypeYesNo")
 
 
 class Width(AttributeAbstract):
@@ -31,7 +31,7 @@ class Width(AttributeAbstract):
 
     def __init__(self, width=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('width', width, "Tenths")
+        self.generate_attribute('width', width, "TypeTenths")
 
 
 class MeasureAttributes(Number, Text, Implicit, NonControlling, Width, OptionalUniqueId):

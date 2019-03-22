@@ -10,4 +10,4 @@ class LetterSpacing(AttributeAbstract):
 
     def __init__(self, letter_spacing=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('letter-spacing', letter_spacing, "NumberOrNormal")
+        self.generate_attribute('letter-spacing', letter_spacing, "TypeNumberOrNormal")

@@ -6,7 +6,7 @@ class FontFamily(AttributeAbstract):
 
     def __init__(self, font_family=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('font-family', font_family, 'CommaSeparatedText')
+        self.generate_attribute('font-family', font_family, 'TypeCommaSeparatedText')
 
 
 class FontStyle(AttributeAbstract):

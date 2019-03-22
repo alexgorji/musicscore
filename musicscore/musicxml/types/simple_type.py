@@ -121,7 +121,7 @@ class IDREF(String):
 # ///////////////
 # Simple types derived from common.mod entities and elements
 
-class AboveBelow(SimpleType):
+class TypeAboveBelow(SimpleType):
     permitted = ('above', 'below')
 
     def __init__(self, value, *args, **kwargs):
@@ -163,7 +163,7 @@ class TypeColor(Token):
         self._value = v
 
 
-class CommaSeparatedText(Token):
+class TypeCommaSeparatedText(Token):
     pattern = r'^[^,]+(, ?[^,]+)*$'
     p = re.compile(pattern)
 
@@ -221,7 +221,7 @@ class TypeFontStyle(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class NonNegativeDecimal(SimpleType):
+class TypeNonNegativeDecimal(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
@@ -250,7 +250,7 @@ class TypeNumberOfLines(Integer):
         self._value = v
 
 
-class NumberOrNormal(SimpleType):
+class TypeNumberOrNormal(SimpleType):
     """
     The number-or-normal values can be either a decimal number or the string "normal". This is used by the line-height
     and letter-spacing attributes.
@@ -271,7 +271,7 @@ class NumberOrNormal(SimpleType):
         self._value = v
 
 
-class Percent(Decimal):
+class TypePercent(Decimal):
     """
     The percent type specifies a percentage from 0 to 100.
     """
@@ -287,7 +287,7 @@ class Percent(Decimal):
         self._value = v
 
 
-class PositiveDivisions(PositiveInteger):
+class TypePositiveDivisions(PositiveInteger):
     """
     The positive-divisions type restricts divisions values to positive numbers.
     """
@@ -296,7 +296,7 @@ class PositiveDivisions(PositiveInteger):
         super().__init__(value=value, *args, **kwargs)
 
 
-class PositiveDecimal(SimpleType):
+class TypePositiveDecimal(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
@@ -366,7 +366,7 @@ class SmulfLyricsGlyphName(SmulfGlyphName):
         raise NotImplementedError()
 
 
-class StartStopContinue(SimpleType):
+class TypeStartStopContinue(SimpleType):
     """
     The start-stop-continue type is used for an attribute of musical elements that can either start or stop, but also
     need to refer to an intermediate point in the symbol, as for complex slurs or for formatting of symbols across
@@ -393,7 +393,7 @@ class TypeSymbolSize(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class Tenths(Decimal):
+class TypeTenths(Decimal):
     """
     The tenths type is a number representing tenths of interline staff space (positive or negative).
     Both integer and decimal values are allowed, such as 5 for a half space and 2.5 for a quarter space.
@@ -459,7 +459,7 @@ class TypeValign(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class YesNo(SimpleType):
+class TypeYesNo(SimpleType):
     permitted = ('yes', 'no')
 
     def __init__(self, value, *args, **kwargs):
@@ -991,7 +991,7 @@ class TypeBarStyle(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class RightLeftMiddle(SimpleType):
+class TypeRightLeftMiddle(SimpleType):
     permitted = ('right', 'left', 'middle')
 
     def __init__(self, value, *args, **kwargs):
@@ -1624,7 +1624,7 @@ class TypeFan(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class NoteTypeValue(SimpleType):
+class TypeNoteTypeValue(SimpleType):
     """
     The note-type type is used for the MusicXML type element and represents the graphic note type, from 1024th (
     shortest) to maxima (longest)
