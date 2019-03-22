@@ -1,5 +1,5 @@
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeSyllabic
 from musicscore.musicxml.attributes.color import Color
 from musicscore.musicxml.attributes.justify import Justify
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
@@ -9,6 +9,9 @@ from musicscore.musicxml.attributes.printobject import PrintObject
 from musicscore.musicxml.attributes.timeonly import TimeOnly
 from musicscore.musicxml.common.common import Editorial
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, Empty
+from musicscore.musicxml.types.complextypes.elision import ComplexTypeElision
+from musicscore.musicxml.types.complextypes.extend import ComplexTypeExtend
+from musicscore.musicxml.types.complextypes.text_element_data import ComplexTypeTextElementData
 
 
 class Number(AttributeAbstract):
@@ -23,36 +26,32 @@ class Name(AttributeAbstract):
         self.generate_attribute('name', name, 'Token')
 
 
-class Sylabic(TypeSylabic):
+class Syllabic(TypeSyllabic):
     """"""
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='sylabic', *args, **kwargs)
-        raise NotImplementedError()
+        super().__init__(tag='syllabic', *args, **kwargs)
 
 
-class Text(TextElementData):
+class Text(ComplexTypeTextElementData):
     """"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='text', *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, value=None, *args, **kwargs):
+        super().__init__(tag='text', value=value, *args, **kwargs)
 
 
-class Elision(TypeElision):
+class Elision(ComplexTypeElision):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='elision', *args, **kwargs)
-        raise NotImplementedError()
 
 
-class Extend(TypeExtend):
+class Extend(ComplexTypeExtend):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='extend', *args, **kwargs)
-        raise NotImplementedError()
 
 
 class Laughing(Empty):
@@ -95,39 +94,16 @@ class ComplexTypeLyric(ComplexType, Number, Name, Justify, Position, Placement, 
     print-lyric attribute in cases where only some lyrics on a note are printed, as when lyrics for later verses are
     printed in a block of text rather than with each note. The time-only attribute precisely specifies which lyrics are
     to be sung which time through a repeated section.
-		<xs:sequence>
-			<xs:choice>
-				<xs:sequence>
-					<xs:element name="syllabic" type="syllabic" minOccurs="0"/>
-					<xs:element name="text" type="text-element-data"/>
-					<xs:sequence minOccurs="0" maxOccurs="unbounded">
-						<xs:sequence minOccurs="0">
-							<xs:element name="elision" type="elision"/>
-							<xs:element name="syllabic" type="syllabic" minOccurs="0"/>
-						</xs:sequence>
-						<xs:element name="text" type="text-element-data"/>
-					</xs:sequence>
-					<xs:element name="extend" type="extend" minOccurs="0"/>
-				</xs:sequence>
-				<xs:element name="extend" type="extend"/>
-				<xs:element name="laughing" type="empty">
-				<xs:element name="humming" type="empty">
-				</xs:element>
-			</xs:choice>
-			<xs:element name="end-line" type="empty" minOccurs="0">
-			<xs:element name="end-paragraph" type="empty" minOccurs="0">
-			<xs:group ref="editorial"/>
-		</xs:sequence>
     """
     _DTD = Sequence(
         Choice(
             Sequence(
-                Element(Sylabic, min_occurrence=0),
+                Element(Syllabic, min_occurrence=0),
                 Element(Text),
                 Sequence(
                     Sequence(
                         Element(Elision),
-                        Element(Sylabic, min_occurrence=0),
+                        Element(Syllabic, min_occurrence=0),
                         min_occurrence=0
                     ),
                     Element(Text),
