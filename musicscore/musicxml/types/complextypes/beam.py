@@ -46,6 +46,7 @@ class ComplexTypeBeam(ComplexType, TypeBeamValue, Number, Repeater, Fan, Color, 
 
 
 class Test(TestCase):
+
     def setUp(self):
         self.beam = ComplexTypeBeam('begin', number=2, repeater='yes', fan='accel', color='#800080', id='beam1')
 
@@ -53,3 +54,9 @@ class Test(TestCase):
         result = '''<beam number="2" repeater="yes" fan="accel" color="#800080" id="beam1">begin</beam>
 '''
         self.assertEqual(self.beam.to_string(), result)
+
+    def run(self):
+        self.setUp()
+        self.test_beam()
+        print('beam tested')
+        print()

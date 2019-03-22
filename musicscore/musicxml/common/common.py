@@ -9,8 +9,8 @@ class FootNote(ComplexTypeFormattedText):
     within a group due to its multiple uses within the MusicXML schema.
     """
 
-    def __init__(self, value=None, *args, **kwargs):
-        super().__init__(value=value, *args, **kwargs)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='footnote', value=value, *args, **kwargs)
 
 
 class Level(ComplexTypeLevel):

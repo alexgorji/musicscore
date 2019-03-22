@@ -9,6 +9,7 @@ import copy
 
 from musicscore.musicxml.types.complextypes.complextype import EmptyPlacement, ComplexType
 from musicscore.musicxml.types.complextypes.beam import ComplexTypeBeam
+from musicscore.musicxml.types.complextypes.lyric import ComplexTypeLyric
 from musicscore.musicxml.types.simple_type import PositiveDivisions, NoteTypeValue, TypeAccidentalValue
 
 
@@ -150,10 +151,9 @@ class Notations(XMLElement):
         raise NotImplementedError()
 
 
-class Lyric(XMLElement):
-    def __init__(self, text, *args, **kwargs):
-        super().__init__(tag='lyric', *args, **kwargs)
-        self.text = text
+class Lyric(ComplexTypeLyric):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class Play(XMLElement):

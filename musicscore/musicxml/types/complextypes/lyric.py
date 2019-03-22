@@ -1,5 +1,5 @@
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeSyllabic
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeSyllabic, String
 from musicscore.musicxml.attributes.color import Color
 from musicscore.musicxml.attributes.justify import Justify
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
@@ -7,15 +7,17 @@ from musicscore.musicxml.attributes.placement import Placement
 from musicscore.musicxml.attributes.position import Position
 from musicscore.musicxml.attributes.printobject import PrintObject
 from musicscore.musicxml.attributes.timeonly import TimeOnly
-from musicscore.musicxml.common.common import Editorial
+from musicscore.musicxml.common.common import Editorial, FootNote
+from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, Empty
 from musicscore.musicxml.types.complextypes.elision import ComplexTypeElision
 from musicscore.musicxml.types.complextypes.extend import ComplexTypeExtend
 from musicscore.musicxml.types.complextypes.text_element_data import ComplexTypeTextElementData
+from unittest import TestCase
 
 
 class Number(AttributeAbstract):
-    def __init__(self, number=1, *args, **kwargs):
+    def __init__(self, number='1', *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.generate_attribute('number', number, 'Token')
 
@@ -26,11 +28,11 @@ class Name(AttributeAbstract):
         self.generate_attribute('name', name, 'Token')
 
 
-class Syllabic(TypeSyllabic):
+class Syllabic(XMLElement, TypeSyllabic):
     """"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='syllabic', *args, **kwargs)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='syllabic', value=value, *args, **kwargs)
 
 
 class Text(ComplexTypeTextElementData):
@@ -95,21 +97,25 @@ class ComplexTypeLyric(ComplexType, Number, Name, Justify, Position, Placement, 
     printed in a block of text rather than with each note. The time-only attribute precisely specifies which lyrics are
     to be sung which time through a repeated section.
     """
+
+    # todo: sorting mixed Sequence with min_occurrence = 0 and max_occurrence = None and check_occurrence.
+    #  Syllabic doubled by sort
     _DTD = Sequence(
         Choice(
             Sequence(
                 Element(Syllabic, min_occurrence=0),
                 Element(Text),
-                Sequence(
-                    Sequence(
-                        Element(Elision),
-                        Element(Syllabic, min_occurrence=0),
-                        min_occurrence=0
-                    ),
-                    Element(Text),
-                    min_occurrence=0,
-                    max_occurrence=None
-                ),
+                # Sequence(
+                #     Sequence(
+                #         Element(Elision),
+                #         Element(Syllabic, min_occurrence=0),
+                #         min_occurrence=0
+                #     ),
+                #     Element(Text)
+                #     # ,
+                #     # min_occurrence=0,
+                #     # max_occurrence=None
+                # ),
                 Element(Extend, min_occurrence=0)
             ),
             Element(Extend),
@@ -121,5 +127,34 @@ class ComplexTypeLyric(ComplexType, Number, Name, Justify, Position, Placement, 
         GroupReference(Editorial)
     )
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='beam', value=value, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='lyric', *args, **kwargs)
+
+
+class Test(TestCase):
+    def setUp(self):
+        self.lyric = ComplexTypeLyric()
+        self.lyric.add_child(Extend())
+        self.lyric.add_child(Syllabic('begin'))
+        self.lyric.add_child(Text('bla'))
+        # self.lyric.add_child(Elision('00A0'))
+        # self.lyric.add_child(Elision('00A0'))
+        self.lyric.add_child(EndLine())
+        self.lyric.add_child(FootNote('foot'))
+
+    def test_lyric(self):
+        result = '''<lyric number="1">
+  <syllabic>begin</syllabic>
+  <text>bla</text>
+  <extend/>
+  <end-line/>
+  <footnote>foot</footnote>
+</lyric>
+'''
+        self.assertEqual(self.lyric.to_string(), result)
+
+    def run(self):
+        self.setUp()
+        self.test_lyric()
+        print('lyric tested')
+        print()
