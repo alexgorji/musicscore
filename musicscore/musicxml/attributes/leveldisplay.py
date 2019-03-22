@@ -19,7 +19,7 @@ class Size(AttributeAbstract):
 
     def __init__(self, size=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('size', size, "SymbolSize")
+        self.generate_attribute('size', size, "TypeSymbolSize")
 
 
 class LevelDisplay(Parentheses, Bracket, Size):

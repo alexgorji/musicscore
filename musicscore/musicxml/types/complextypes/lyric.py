@@ -1,14 +1,14 @@
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, BeamValue
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 from musicscore.musicxml.attributes.color import Color
 from musicscore.musicxml.attributes.justify import Justify
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.placement import Placement
 from musicscore.musicxml.attributes.position import Position
-from musicscore.musicxml.attributes.print_object import PrintObject
-from musicscore.musicxml.attributes.time_only import TimeOnly
-from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.types.complex_type import ComplexType
+from musicscore.musicxml.attributes.printobject import PrintObject
+from musicscore.musicxml.attributes.timeonly import TimeOnly
+from musicscore.musicxml.common.common import Editorial
+from musicscore.musicxml.types.complextypes.complextype import ComplexType, Empty
 
 
 class Number(AttributeAbstract):
@@ -23,7 +23,7 @@ class Name(AttributeAbstract):
         self.generate_attribute('name', name, 'Token')
 
 
-class Sylabic(XMLElement):
+class Sylabic(TypeSylabic):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -31,7 +31,7 @@ class Sylabic(XMLElement):
         raise NotImplementedError()
 
 
-class Text(XMLElement):
+class Text(TextElementData):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -39,7 +39,7 @@ class Text(XMLElement):
         raise NotImplementedError()
 
 
-class Elision(XMLElement):
+class Elision(TypeElision):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -47,7 +47,7 @@ class Elision(XMLElement):
         raise NotImplementedError()
 
 
-class Extend(XMLElement):
+class Extend(TypeExtend):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -55,32 +55,36 @@ class Extend(XMLElement):
         raise NotImplementedError()
 
 
-class Laughing(XMLElement):
+class Laughing(Empty):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='laughing', *args, **kwargs)
-        raise NotImplementedError()
 
 
-class Humming(XMLElement):
+class Humming(Empty):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='humming', *args, **kwargs)
-        raise NotImplementedError()
 
 
-class EndParagraph(XMLElement):
+class EndParagraph(Empty):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='end-paragraph', *args, **kwargs)
-        raise NotImplementedError()
 
 
-class TypeLyric(ComplexType, Number, Name, Justify, Position, Placement, Color, PrintObject, TimeOnly,
-                OptionalUniqueId):
+class EndLine(Empty):
+    """"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='end-line', *args, **kwargs)
+
+
+class ComplexTypeLyric(ComplexType, Number, Name, Justify, Position, Placement, Color, PrintObject, TimeOnly,
+                       OptionalUniqueId):
     """The lyric type represents text underlays for lyrics, based on Humdrum with support for other formats. Two text
     elements that are not separated by an elision element are part of the same syllable, but may have different text
     formatting. The MusicXML XSD is more strict than the DTD in enforcing this by disallowing a second syllabic element
@@ -136,11 +140,10 @@ class TypeLyric(ComplexType, Number, Name, Justify, Position, Placement, Color, 
             Element(Laughing),
             Element(Humming)
         ),
+        Element(EndLine, min_occurrence=0),
         Element(EndParagraph, min_occurrence=0),
         GroupReference(Editorial)
-
     )
 
-
-def __init__(self, value, *args, **kwargs):
-    super().__init__(tag='beam', value=value, *args, **kwargs)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag='beam', value=value, *args, **kwargs)

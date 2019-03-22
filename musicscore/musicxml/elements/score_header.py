@@ -1,10 +1,10 @@
 from musicscore.dtd.dtd import Sequence, Element, GroupReference, Choice
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, String
-from musicscore.musicxml.elements.editorial import Editorial
+from musicscore.musicxml.common.common import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.basic_functions import is_empty
-from musicscore.musicxml.attributes.part_name_text import PartNameText
-from musicscore.musicxml.types.complex_type import ComplexType
+from musicscore.musicxml.attributes.partname_text import PartNameText
+from musicscore.musicxml.types.complextypes.complextype import ComplexType
 
 
 class Work(XMLElement):

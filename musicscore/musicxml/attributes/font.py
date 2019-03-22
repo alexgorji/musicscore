@@ -14,7 +14,7 @@ class FontStyle(AttributeAbstract):
 
     def __init__(self, font_style=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('font-style', font_style, 'FontStyleType')
+        self.generate_attribute('font-style', font_style, 'TypeFontStyle')
 
 
 class FontSize(AttributeAbstract):
@@ -22,7 +22,7 @@ class FontSize(AttributeAbstract):
 
     def __init__(self, font_size=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('font-size', font_size, 'FontSizeType')
+        self.generate_attribute('font-size', font_size, 'TypeFontSize')
 
 
 class FontWeight(AttributeAbstract):
@@ -31,7 +31,7 @@ class FontWeight(AttributeAbstract):
     def __init__(self, font_weight=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.generate_attribute('font-weight', font_weight, 'FontWeightType')
+        self.generate_attribute('font-weight', font_weight, 'TypeFontWeight')
 
 
 class Font(FontFamily, FontStyle, FontSize, FontWeight):

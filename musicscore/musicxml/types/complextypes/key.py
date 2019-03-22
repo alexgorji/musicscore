@@ -1,73 +1,18 @@
 from musicscore.dtd.dtd import Sequence, Choice, GroupReference, Element
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
-from musicscore.musicxml.attributes.level_display import LevelDisplay
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
-from musicscore.musicxml.attributes.print_object import PrintObject
-from musicscore.musicxml.attributes.print_style import PrintStyle
+from musicscore.musicxml.attributes.printobject import PrintObject
+from musicscore.musicxml.attributes.printstyle import PrintStyle
 from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.types.simple_type import TypeStep, TypeAlter, TypeSemitones, TypeAccidentalValue, TypeMode, \
-    TypeFifths, TypeOctave
+from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from musicscore.musicxml.types.simple_type import TypeFifths, TypeMode, TypeStep, TypeSemitones, TypeAccidentalValue, \
+    TypeOctave
 
 
-class ComplexType(XMLElement):
-    def __init__(self, *args, **kwargs):
+class KeyNumberAttribute(AttributeAbstract):
+    def __init__(self, cancel=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-
-# TODO: add exception for attributes
-class Empty(ComplexType, XMLElement):
-    """
-    Empty is a type of XMLElement with no children, no text and no attributes
-    """
-
-    def __init__(self, tag, *args, **kwargs):
-        super().__init__(tag=tag, *args, **kwargs)
-
-    def add_child(self, child):
-        raise Exception('Empty cannot have children.')
-
-    @XMLElement.text.setter
-    def text(self, value):
-        if value is not None:
-            raise Exception('Empty cannot have text.')
-
-
-# class EmptyPlacement(Empty, PrintStyle, Placement):
-# todo: Placement
-class EmptyPlacement(Empty, PrintStyle):
-    """
-    The empty-placement type represents an empty element with print-style and placement attributes
-    """
-
-    def __init__(self, tag, *args, **kwargs):
-        super().__init__(tag=tag, *args, **kwargs)
-
-
-class Reference(AttributeAbstract):
-    def __init__(self, reference=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.generate_attribute('reference', reference, 'YesNo')
-
-
-class TypeLevel(ComplexType, Reference, LevelDisplay):
-    _ATTRIBUTES = ['reference', 'parentheses', 'bracket', 'size']
-
-    """The level type is used to specify editorial information for different MusicXML elements. If the reference
-    attribute for the level element is yes, this indicates editorial information that is for display only and should
-    not affect playback. For instance, a modern edition of older music may set reference="yes" on the attributes
-    containing the music's original clef, key, and time signature. It is no by default
-    	<xs:complexType name="level">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="reference" type="yes-no"/>
-				<xs:attributeGroup ref="level-display"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-    """
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(value=value, *args, **kwargs)
+        self.generate_attribute('number', cancel, 'StaffNumber')
 
 
 class Location(AttributeAbstract):
@@ -75,10 +20,10 @@ class Location(AttributeAbstract):
 
     def __init__(self, location=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('location', location, 'CancelLocation')
+        self.generate_attribute('location', location, 'TypeCancelLocation')
 
 
-class TypeCancel(ComplexType, TypeFifths, Location):
+class ComplexTypeCancel(ComplexType, TypeFifths, Location):
     """
     A cancel element indicates that the old key signature should be cancelled before the new one appears. This will
     always happen when changing to C major or A minor and need not be specified then. The cancel value matches the
@@ -91,7 +36,7 @@ class TypeCancel(ComplexType, TypeFifths, Location):
         super().__init__(value=value, *args, **kwargs)
 
 
-class Cancel(TypeCancel):
+class Cancel(ComplexTypeCancel):
     """"""
 
     def __init__(self, value, *args, **kwargs):
@@ -110,17 +55,6 @@ class Mode(XMLElement, TypeMode):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
-
-
-"""
-The traditional-key group represents a traditional key signature using the cycle of fifths.
-"""
-TraditionalKey = Sequence(
-    Element(Cancel, min_occurrence=0),
-    Element(Fifths),
-    Element(Mode, min_occurrence=0)
-
-)
 
 
 class KeyStep(XMLElement, TypeStep):
@@ -145,7 +79,7 @@ class KeyAlter(XMLElement, TypeSemitones):
         super().__init__(value=value, *args, **kwargs)
 
 
-class KeyAccidental(ComplexType, TypeAccidentalValue):
+class ComplexKeyAccidental(ComplexType, TypeAccidentalValue):
     """
     Non-traditional key signatures can be represented using the Humdrum/Scot concept of a list of altered tones.
     The key-accidental element indicates the accidental to be displayed in the key signature, represented in the same
@@ -162,23 +96,8 @@ class KeyAccidental(ComplexType, TypeAccidentalValue):
         raise NotImplementedError()
 
 
-"""
-The non-traditional-key group represents a single alteration within a non-traditional key signature. A sequence of 
-these groups makes up a non-traditional key signature
-"""
-NonTraditionalKey = Sequence(
-    Element(KeyStep),
-    Element(KeyAlter),
-    Element(KeyAccidental, min_occurrence=0)
-)
-
-
-class NumberAttribute(AttributeAbstract):
-    """
-    REQUIRED!
-    """
-
-    def __init__(self, number=None, *args, **kwargs):
+class Number(AttributeAbstract):
+    def __init__(self, number, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.generate_attribute('number', number, 'PositiveInteger')
 
@@ -189,7 +108,7 @@ class CancelAttribute(AttributeAbstract):
         self.generate_attribute('cancel', cancel, 'YesNo')
 
 
-class TypeKeyOctave(ComplexType, TypeOctave, NumberAttribute, CancelAttribute):
+class ComplexTypeKeyOctave(ComplexType, TypeOctave, Number, CancelAttribute):
     """
     The key-octave element specifies in which octave an element of a key signature appears. The content specifies the
     octave value using the same values as the display-octave element. The number attribute is a positive integer that
@@ -200,16 +119,30 @@ class TypeKeyOctave(ComplexType, TypeOctave, NumberAttribute, CancelAttribute):
     """
 
 
-class KeyOctave(TypeKeyOctave):
+class KeyOctave(ComplexTypeKeyOctave):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
 
-class KeyNumberAttribute(AttributeAbstract):
-    def __init__(self, cancel=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.generate_attribute('number', cancel, 'StaffNumber')
+"""
+The traditional-key group represents a traditional key signature using the cycle of fifths.
+"""
+TraditionalKey = Sequence(
+    Element(Cancel, min_occurrence=0),
+    Element(Fifths),
+    Element(Mode, min_occurrence=0)
+
+)
+"""
+The non-traditional-key group represents a single alteration within a non-traditional key signature. A sequence of 
+these groups makes up a non-traditional key signature
+"""
+NonTraditionalKey = Sequence(
+    Element(KeyStep),
+    Element(KeyAlter),
+    Element(ComplexKeyAccidental, min_occurrence=0)
+)
 
 
 class TypeKey(ComplexType, KeyNumberAttribute, PrintStyle, PrintObject,

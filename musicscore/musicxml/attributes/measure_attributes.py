@@ -11,7 +11,7 @@ class Number(AttributeAbstract):
 class Text(AttributeAbstract):
     def __init__(self, text=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('text', text, "MeasureText")
+        self.generate_attribute('text', text, "TypeMeasureText")
 
 
 class Implicit(AttributeAbstract):
@@ -61,7 +61,5 @@ class MeasureAttributes(Number, Text, Implicit, NonControlling, Width, OptionalU
     to barline or system end.
     """
 
-    def __init__(self, number, text=None, implicit=None, non_controlling=None, width=None, id=None,
-                 *args, **kwargs):
-        super().__init__(number=number, text=text, implicit=implicit, non_controlling=non_controlling, width=width,
-                         id=id, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

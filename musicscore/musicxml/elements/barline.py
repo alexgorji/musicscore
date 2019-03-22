@@ -1,13 +1,13 @@
 from musicscore.dtd.dtd import Sequence, GroupReference, Element
 from musicscore.musicxml.attributes.barline import BarlineAttributes
 from musicscore.musicxml.attributes.color import Color
-from musicscore.musicxml.elements.editorial import Editorial
-from musicscore.musicxml.types.complex_type import ComplexType
-from musicscore.musicxml.types.simple_type import BarStyleType
+from musicscore.musicxml.common.common import Editorial
+from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from musicscore.musicxml.types.simple_type import TypeBarStyle
 from musicscore.musicxml.elements.xml_element import XMLElement
 
 
-class BarStyleColor(ComplexType, BarStyleType, Color):
+class BarStyleColor(ComplexType, TypeBarStyle, Color):
     """
     The bar-style-color type contains barline style and color information.
     """

@@ -1,30 +1,26 @@
-from musicscore.dtd.dtd import Sequence, GroupReference, Element
-from musicscore.musicxml.types.complex_type import ComplexType
-from musicscore.musicxml.types.simple_type import String
+from musicscore.dtd.dtd import Sequence, Element
+from musicscore.musicxml.types.complextypes.formattedtext import ComplexTypeFormattedText
+from musicscore.musicxml.types.complextypes.level import ComplexTypeLevel
 
 
-class FormattedText(ComplexType, String, TextFormatting):
+class FootNote(ComplexTypeFormattedText):
     """
-    The formatted-text type represents a text element with text-formatting attributes.
-    """
-
-    """
-    	<xs:complexType name="formatted-text">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attributeGroup ref="text-formatting"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
+    The footnote element specifies editorial information that appears in footnotes in the printed score. It is defined
+    within a group due to its multiple uses within the MusicXML schema.
     """
 
-"""
-The footnote element specifies editorial information that appears in footnotes in the printed score. It is defined 
-within a group due to its multiple uses within the MusicXML schema.
-"""
+    def __init__(self, value=None, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
 
-class FootNote(FormattedText):
-    pass
+
+class Level(ComplexTypeLevel):
+    """
+    The level element specifies editorial information for different MusicXML elements. It is defined within a group due
+    to its multiple uses within the MusicXML schema.
+    """
+
+    def __init__(self, value=None, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
 
 
 """

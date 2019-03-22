@@ -1,6 +1,6 @@
 from musicscore.musicxml.attributes.justify import Justify
-from musicscore.musicxml.attributes.print_object import PrintObject
-from musicscore.musicxml.attributes.print_style import PrintStyle
+from musicscore.musicxml.attributes.printobject import PrintObject
+from musicscore.musicxml.attributes.printstyle import PrintStyle
 
 
 class PartNameText(PrintStyle, PrintObject, Justify):

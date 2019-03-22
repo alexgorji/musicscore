@@ -32,7 +32,7 @@ class Coda(AttributeAbstract):
 class Divisions(AttributeAbstract):
     def __init__(self, divisions=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('divisions', divisions, "Divisions")
+        self.generate_attribute('divisions', divisions, "TypeDivisions")
 
 
 class BarlineAttributes(Location, Segno, Coda, Divisions, OptionalUniqueId):

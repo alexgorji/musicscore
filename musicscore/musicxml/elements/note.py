@@ -1,14 +1,14 @@
 from musicscore.dtd.dtd import Element, GroupReference, Sequence, Choice
 from musicscore.musicxml.attributes.accidental import Cautionary, Editorial, Smulf
 from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
-from musicscore.musicxml.attributes.level_display import LevelDisplay
-from musicscore.musicxml.attributes.print_style import PrintStyle
+from musicscore.musicxml.attributes.leveldisplay import LevelDisplay
+from musicscore.musicxml.attributes.printstyle import PrintStyle
 from musicscore.musicxml.elements.fullnote import FullNote
 from musicscore.musicxml.elements.xml_element import XMLElement
 import copy
 
-from musicscore.musicxml.types.complex_type import EmptyPlacement, ComplexType
-from musicscore.musicxml.types.complex_types.TypeBeam import TypeBeam
+from musicscore.musicxml.types.complextypes.complextype import EmptyPlacement, ComplexType
+from musicscore.musicxml.types.complextypes.beam import ComplexTypeBeam
 from musicscore.musicxml.types.simple_type import PositiveDivisions, NoteTypeValue, TypeAccidentalValue
 
 
@@ -137,7 +137,7 @@ class NoteheadText(XMLElement):
 Staff = Sequence()
 
 
-class Beam(TypeBeam):
+class Beam(ComplexTypeBeam):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
@@ -151,68 +151,6 @@ class Notations(XMLElement):
 
 
 class Lyric(XMLElement):
-    """
-    The lyric type represents text underlays for lyrics, based on Humdrum with support for other formats. Two text
-    elements that are not separated by an elision element are part of the same syllable, but may have different text
-    formatting. The MusicXML XSD is more strict than the DTD in enforcing this by disallowing a second syllabic element
-    unless preceded by an elision element. The lyric number indicates multiple lines, though a name can be used as well
-    (as in Finale's verse / chorus / section specification).
-
-    Justification is center by default; placement is below by default. The print-object attribute can override a note's
-    print-lyric attribute in cases where only some lyrics on a note are printed, as when lyrics for later verses are printed
-    in a block of text rather than with each note. The time-only attribute precisely specifies which lyrics are to be sung
-    which time through a repeated section.
-    	<xs:complexType name="lyric">
-		<xs:sequence>
-			<xs:choice>
-				<xs:sequence>
-					<xs:element name="syllabic" type="syllabic" minOccurs="0"/>
-					<xs:element name="text" type="text-element-data"/>
-					<xs:sequence minOccurs="0" maxOccurs="unbounded">
-						<xs:sequence minOccurs="0">
-							<xs:element name="elision" type="elision"/>
-							<xs:element name="syllabic" type="syllabic" minOccurs="0"/>
-						</xs:sequence>
-						<xs:element name="text" type="text-element-data"/>
-					</xs:sequence>
-					<xs:element name="extend" type="extend" minOccurs="0"/>
-				</xs:sequence>
-				<xs:element name="extend" type="extend"/>
-				<xs:element name="laughing" type="empty">
-					<xs:annotation>
-						<xs:documentation>The laughing element is taken from Humdrum.</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element name="humming" type="empty">
-					<xs:annotation>
-						<xs:documentation>The humming element is taken from Humdrum.</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-			</xs:choice>
-			<xs:element name="end-line" type="empty" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>The end-line element comes from RP-017 for Standard MIDI File Lyric meta-events. It facilitates lyric display for Karaoke and similar applications.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="end-paragraph" type="empty" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>The end-paragraph element comes from RP-017 for Standard MIDI File Lyric meta-events. It facilitates lyric display for Karaoke and similar applications.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:group ref="editorial"/>
-		</xs:sequence>
-		<xs:attribute name="number" type="xs:NMTOKEN"/>
-		<xs:attribute name="name" type="xs:token"/>
-		<xs:attributeGroup ref="justify"/>
-		<xs:attributeGroup ref="position"/>
-		<xs:attributeGroup ref="placement"/>
-		<xs:attributeGroup ref="color"/>
-		<xs:attributeGroup ref="print-object"/>
-		<xs:attribute name="time-only" type="time-only"/>
-		<xs:attributeGroup ref="optional-unique-id"/>
-	</xs:complexType>
-    """
-
     def __init__(self, text, *args, **kwargs):
         super().__init__(tag='lyric', *args, **kwargs)
         self.text = text

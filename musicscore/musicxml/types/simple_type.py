@@ -183,7 +183,7 @@ class TypeOctave(SimpleType):
 # ///////////////
 
 
-class Divisions(Integer):
+class TypeDivisions(Integer):
     """
     The divisions type is used to express values in terms of the musical divisions defined by the divisions element.
     It is preferred that these be integer values both for MIDI interoperability and to avoid roundoff errors.
@@ -219,7 +219,7 @@ class PositiveDivisions(PositiveInteger):
         super().__init__(value=value, *args, **kwargs)
 
 
-class ClefSign(SimpleType):
+class TypeClefSign(SimpleType):
     """
     The clef-sign element represents the different clef symbols.
     The jianpu sign indicates that the music that follows should be in jianpu numbered notation,
@@ -232,7 +232,7 @@ class ClefSign(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class StaffLine(PositiveInteger):
+class TypeStaffLine(PositiveInteger):
     """
     The staff-line type indicates the line on a given staff.
     Staff lines are numbered from bottom to top, with 1 being the bottom line on a staff.
@@ -267,20 +267,20 @@ class YesNo(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class FontWeightType(SimpleType):
+class TypeFontWeight(SimpleType):
     permitted = ('normal', 'bold')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
 
-class FontSizeType(Decimal):
+class TypeFontSize(Decimal):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
 
-class FontStyleType(SimpleType):
+class TypeFontStyle(SimpleType):
     permitted = ('normal', 'italic')
 
     def __init__(self, value, *args, **kwargs):
@@ -340,7 +340,7 @@ class AboveBelow(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class BarStyleType(SimpleType):
+class TypeBarStyle(SimpleType):
     permitted = ('regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy', 'heavy-light', 'heavy-heavy',
                  'tick', 'short' 'none')
 
@@ -348,7 +348,7 @@ class BarStyleType(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class ColorType(Token):
+class TypeColor(Token):
     pattern = r'^#[\dA-F]{6}([\dA-F][\dA-F])?$'
     p = re.compile(pattern)
 
@@ -440,7 +440,7 @@ class TypeAccidentalValue(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class CancelLocation(SimpleType):
+class TypeCancelLocation(SimpleType):
     """
     The cancel-location type is used to indicate where a key signature cancellation appears relative to a new key
     signature: to the left, to the right, or before the barline and to the left. It is left by default. For mid-measure
@@ -473,7 +473,7 @@ class TypeMode(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class SymbolSize(SimpleType):
+class TypeSymbolSize(SimpleType):
     """
     The symbol-size type is used to distinguish between full, cue sized, grace cue sized, and oversized symbols.
     """
@@ -483,7 +483,7 @@ class SymbolSize(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class MeasureText(Token):
+class TypeMeasureText(Token):
     """
     The measure-text type is used for the text attribute of measure elements. It has at least one character. The
     implicit attribute of the measure element should be set to "yes" rather than setting the text attribute to an empty
@@ -503,7 +503,7 @@ class MeasureText(Token):
 
 # BEAM
 
-class BeamValue(SimpleType):
+class TypeBeamValue(SimpleType):
     """
     The beam-value type represents the type of beam associated with each of 8 beam levels (up to 1024th notes) available
     for each note.
@@ -514,7 +514,7 @@ class BeamValue(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class BeamLevel(PositiveInteger):
+class TypeBeamLevel(PositiveInteger):
     """
     The MusicXML format supports six levels of beaming, up to 1024th notes. Unlike the number-level type, the beam-level
     type identifies concurrent beams in a beam group. It does not distinguish overlapping beams such as grace notes
@@ -532,7 +532,7 @@ class BeamLevel(PositiveInteger):
         self._value = v
 
 
-class Fan(Token):
+class TypeFan(SimpleType):
     """
     The fan type represents the type of beam fanning present on a note, used to represent accelerandos and
     ritardandos.
@@ -541,3 +541,97 @@ class Fan(Token):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
+
+
+class TypeValign(SimpleType):
+    """
+    The valign type is used to indicate vertical alignment to the top, middle, bottom, or baseline of the text.
+    Defaults are implementation-dependent.
+    """
+
+    permitted = ["top", "middle", "bottom", "baseline"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeNumberOfLines(Integer):
+    """
+    The number-of-lines type is used to specify the number of lines in text decoration attributes.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v < 0 or v > 3:
+            raise ValueError(
+                '{}.value {} must be between 0 and 3'.format(self.__class__.__name__, v))
+        self._value = v
+
+
+class TypeRotationDegrees(Decimal):
+    """
+    The rotation-degrees type specifies rotation, pan, and elevation values in degrees. Values range from -180 to 180.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v < -180 or v > 180:
+            raise ValueError(
+                '{}.value {} must be between -180 and 180'.format(self.__class__.__name__, v))
+        self._value = v
+
+
+class NumberOrNormal(SimpleType):
+    """
+    The number-or-normal values can be either a decimal number or the string "normal". This is used by the line-height
+    and letter-spacing attributes.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v is not 'normal':
+            try:
+                Decimal(v)
+            except TypeError:
+                raise ValueError(
+                    '{}.value {} can be either a decimal number or the string "normal"'.format(self.__class__.__name__,
+                                                                                               v))
+        self._value = v
+
+
+class TypeTextDirection(SimpleType):
+    """documentation>The text-direction type is used to adjust and override the Unicode bidirectional text algorithm,
+    similar to the W3C Internationalization Tag Set recommendation. Values are ltr (left-to-right embed), rtl (right-to-
+    left embed), lro (left-to-right bidi-override), and rlo (right-to-left bidi-override). The default value is ltr.
+    This type is typically used by applications that store text in left-to-right visual order rather than logical order.
+    Such applications can use the lro value to better communicate with other applications that more fully support
+    bidirectional text.
+    """
+
+    permitted = ["ltr", "rtl", "lro", "rlo"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeEnclosureShape(SimpleType):
+    """The enclosure-shape type describes the shape and presence / absence of an enclosure around text or symbols. A
+    bracket enclosure is similar to a rectangle with the bottom line missing, as is common in jazz notation.
+    """
+    permitted = ["rectangle", "square", "oval", "circle", "bracket", "triangle", "diamond", "pentagon", "hexagon",
+                 "heptagon", "octagon", "nonagon", "decagon", "none"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+class TypeLevel():
+    pass

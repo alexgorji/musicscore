@@ -1,13 +1,14 @@
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, BeamValue
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeBeamValue
 from musicscore.musicxml.attributes.color import Color
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
-from musicscore.musicxml.types.complex_type import ComplexType
+from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from unittest import TestCase
 
 
 class Number(AttributeAbstract):
     def __init__(self, number=1, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('number', number, 'BeamLevel')
+        self.generate_attribute('number', number, 'TypeBeamLevel')
 
 
 class Repeater(AttributeAbstract):
@@ -19,10 +20,10 @@ class Repeater(AttributeAbstract):
 class Fan(AttributeAbstract):
     def __init__(self, fan=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('fan', fan, 'Fan')
+        self.generate_attribute('fan', fan, 'TypeFan')
 
 
-class TypeBeam(ComplexType, BeamValue, Number, Repeater, Fan, Color, OptionalUniqueId):
+class ComplexTypeBeam(ComplexType, TypeBeamValue, Number, Repeater, Fan, Color, OptionalUniqueId):
     """
     documentation>Beam values include begin, continue, end, forward hook, and backward hook. Up to eight concurrent
     beams are available to cover up to 1024th notes. Each beam in a note is represented with a separate beam element,
@@ -42,3 +43,13 @@ class TypeBeam(ComplexType, BeamValue, Number, Repeater, Fan, Color, OptionalUni
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='beam', value=value, *args, **kwargs)
+
+
+class Test(TestCase):
+    def setUp(self):
+        self.beam = ComplexTypeBeam('begin', number=2, repeater='yes', fan='accel', color='#800080', id='beam1')
+
+    def test_beam(self):
+        result = '''<beam number="2" repeater="yes" fan="accel" color="#800080" id="beam1">begin</beam>
+'''
+        self.assertEqual(self.beam.to_string(), result)

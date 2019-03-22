@@ -1,9 +1,9 @@
-from musicscore.musicxml.types.simple_type import BarStyleType
+from musicscore.musicxml.types.simple_type import TypeBarStyle
 from musicscore.musicxml.elements.xml_element import XMLElement
 from unittest import TestCase
 
 
-class Bared(XMLElement, BarStyleType):
+class Bared(XMLElement, TypeBarStyle):
 
     def __init__(self, value=None, *args, **kwargs):
         super().__init__(tag='test_bar', value=value, *args, **kwargs)
@@ -11,9 +11,9 @@ class Bared(XMLElement, BarStyleType):
 
 class TestBarstyleType(TestCase):
     def test_barstyle(self):
-        bst = BarStyleType('regular')
+        bst = TypeBarStyle('regular')
         with self.assertRaises(ValueError):
-            bst = BarStyleType('bla')
+            bst = TypeBarStyle('bla')
 
 class TestBaredXML(TestCase):
     def test_barstyled_xml(self):

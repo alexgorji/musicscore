@@ -12,4 +12,4 @@ class Color(AttributeAbstract):
 
     def __init__(self, color=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('color', color, 'ColorType')
+        self.generate_attribute('color', color, 'TypeColor')

@@ -19,7 +19,7 @@ class MakeTime(AttributeAbstract):
 
     def __init__(self, make_time=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('make-time', make_time, 'Divisions')
+        self.generate_attribute('make-time', make_time, 'TypeDivisions')
 
 
 class Slash(AttributeAbstract):

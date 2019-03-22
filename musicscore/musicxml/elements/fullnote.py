@@ -1,7 +1,7 @@
 from musicscore.dtd.dtd import Sequence, Element, Choice, GroupReference
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.types.complex_type import Empty
+from musicscore.musicxml.types.complextypes.complextype import Empty
 from musicscore.musicxml.types.simple_type import TypeStep, TypeAlter, TypeOctave
 
 

@@ -1,10 +1,10 @@
 from musicscore.dtd.dtd import Sequence, GroupReference, Element, Choice
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
-from musicscore.musicxml.elements.editorial import Editorial
+from musicscore.musicxml.common.common import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.types.complex_type import TypeKey
-from musicscore.musicxml.types.simple_type import PositiveDivisions, ClefSign, StaffLine, PositiveInteger
-from musicscore.musicxml.attributes.print_object import PrintObject
+from musicscore.musicxml.types.complextypes.key import TypeKey
+from musicscore.musicxml.types.simple_type import PositiveDivisions, TypeClefSign, TypeStaffLine, PositiveInteger
+from musicscore.musicxml.attributes.printobject import PrintObject
 
 
 class Divisions(XMLElement, PositiveDivisions):
@@ -143,12 +143,12 @@ class Instruments(XMLElement):
         raise NotImplementedError()
 
 
-class Sign(XMLElement, ClefSign):
+class Sign(XMLElement, TypeClefSign):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='sign', value=value, *args, **kwargs)
 
 
-class Line(XMLElement, StaffLine):
+class Line(XMLElement, TypeStaffLine):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='line', value=value, *args, **kwargs)
 
