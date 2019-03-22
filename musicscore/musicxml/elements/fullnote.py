@@ -2,7 +2,7 @@ from musicscore.dtd.dtd import Sequence, Element, Choice, GroupReference
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import Empty
-from musicscore.musicxml.types.simple_type import TypeStep, TypeAlter, TypeOctave
+from musicscore.musicxml.types.simple_type import TypeStep, TypeSemitones, TypeOctave
 
 
 class Step(XMLElement, TypeStep):
@@ -10,7 +10,7 @@ class Step(XMLElement, TypeStep):
         super().__init__(tag='step', value=value, *args, **kwargs)
 
 
-class Alter(XMLElement, TypeAlter):
+class Alter(XMLElement, TypeSemitones):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='alter', value=value, *args, **kwargs)
 

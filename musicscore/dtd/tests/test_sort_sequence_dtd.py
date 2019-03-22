@@ -3,7 +3,7 @@ from unittest import TestCase
 from musicscore.dtd.dtd import Element, Sequence, GroupReference, Choice
 from musicscore.musicxml.elements.attributes import TimeSignature, Beats, BeatType
 from musicscore.musicxml.elements.barline import Barline
-from musicscore.musicxml.elements.music_data import Backup
+from musicscore.musicxml.elements.musicdata import Backup
 from musicscore.musicxml.elements.note import Duration
 from musicscore.musicxml.elements.xml_element import XMLElement
 

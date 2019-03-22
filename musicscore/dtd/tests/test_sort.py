@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from musicscore.dtd.dtd import Sequence, Element, GroupReference
 from musicscore.musicxml.elements.fullnote import Rest, Chord
-from musicscore.musicxml.elements.music_data import MusicData, Barline, Backup, Direction, Attributes
+from musicscore.musicxml.elements.musicdata import MusicData, Barline, Backup, Direction, Attributes
 from musicscore.musicxml.elements.note import Duration, Note
 from musicscore.musicxml.elements.xml_element import XMLElement
 

@@ -170,9 +170,6 @@ class XMLElement(XMLTree):
             for child in self.get_children():
                 if isinstance(child, XMLElement):
                     xml.append(child._to_xml())
-                elif isinstance(child, XMLElementGroup):
-                    for sibling in child.get_children():
-                        xml.append(sibling._to_xml())
                 else:
                     raise TypeError('child {} must be of type XMLElement2 or XMLElementGroup'.format(child))
 
@@ -190,10 +187,3 @@ class XMLElement(XMLTree):
         self.close()
         xml = self._to_xml()
         return et.tounicode(xml, pretty_print=True)
-
-
-class XMLElementGroup(XMLTree):
-    """"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
