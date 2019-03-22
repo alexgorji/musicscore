@@ -1,7 +1,8 @@
 from unittest import TestCase
 
 from musicscore.musictree.exceptions import MusicTreeError
-from musicscore.musictree.treetimewise import TreeTime, TreeScoreTimewise
+from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musictree.treetime import TreeTime
 
 
 class TestTreeTime(TestCase):
@@ -37,6 +38,10 @@ class TestTreeTime(TestCase):
     <part id="p1">
       <attributes>
         <divisions>1</divisions>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
       </attributes>
     </part>
   </measure>

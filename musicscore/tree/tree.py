@@ -54,7 +54,10 @@ class Tree(object):
         return child
 
     def remove_child(self, child):
-        self._children.remove(child)
+        try:
+            self._children.remove(child)
+        except ValueError:
+            pass
 
     def clear_children(self):
         self._children.clear()

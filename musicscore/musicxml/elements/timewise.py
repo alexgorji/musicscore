@@ -52,4 +52,3 @@ class Score(XMLElement, DocumentAttributes):
         output_file.write(doctype)
         output_file.write(self.to_string())
         output_file.close()
-        print('writing finished')

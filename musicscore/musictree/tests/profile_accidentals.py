@@ -1,6 +1,6 @@
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treenote import TreeNote
-from musicscore.musictree.treetimewise import TreeScoreTimewise
+from musicscore.musictree.treescore_timewise import TreeScoreTimewise
 import os
 import cProfile
 

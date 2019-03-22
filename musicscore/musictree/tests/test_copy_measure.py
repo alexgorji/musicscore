@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from musicscore.musictree.treetimewise import TreeMeasure
+from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musicxml.elements.attributes import Beats
 
 
