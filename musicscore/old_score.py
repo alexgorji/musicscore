@@ -1,6 +1,7 @@
 from musicscore.musicxml.elements.partwise import XMLScorePartwise, XMLPartPartwise, XMLMeasurePartwise
 from musicscore.musicxml.elements.timewise import Score, MeasureTimewise
-from musicscore.musicxml.elements.score_header import XMLScorePart, PartName, XMLPartList
+from musicscore.musicxml.elements.scoreheader import XMLScorePart, XMLPartList
+from musicscore.musicxml.types.complextypes.scorepart import PartName
 from musicscore.musicxml.exceptions import ChildAlreadyExists
 
 

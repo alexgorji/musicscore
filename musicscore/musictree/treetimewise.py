@@ -6,7 +6,9 @@ from quicktions import Fraction
 from musicscore.basic_functions import lcm
 import musicscore.musicxml.elements.timewise as timewise
 from musicscore.musicxml.elements.fullnote import Pitch
-from musicscore.musicxml.elements.score_header import PartList, ScorePart, PartName
+from musicscore.musicxml.elements.scoreheader import PartList
+from musicscore.musicxml.types.complextypes.partlist import ScorePart
+from musicscore.musicxml.types.complextypes.scorepart import PartName
 import copy
 
 
