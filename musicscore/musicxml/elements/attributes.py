@@ -41,6 +41,10 @@ class Beats(XMLElement, PositiveInteger):
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='beats', value=value, *args, **kwargs)
 
+    def __copy__(self):
+        new_beats = Beats(self.value)
+        return new_beats
+
 
 class BeatType(XMLElement, PositiveInteger):
     """
@@ -49,6 +53,10 @@ class BeatType(XMLElement, PositiveInteger):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag='beat-type', value=value, *args, **kwargs)
+
+    def __copy__(self):
+        new_beat_type = BeatType(self.value)
+        return new_beat_type
 
 
 TimeSignature = Sequence(

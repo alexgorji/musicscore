@@ -27,5 +27,20 @@ class TestTreeTime(TestCase):
         score.add_measure()
         score.add_part('one')
         score.finish()
-        print(score.to_string())
+        result = '''<score-timewise version="3.0">
+  <part-list>
+    <score-part id="p1">
+      <part-name print-object="no">one</part-name>
+    </score-part>
+  </part-list>
+  <measure number="1">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+    </part>
+  </measure>
+</score-timewise>
+'''
+        self.assertEqual(score.to_string(), result)
 

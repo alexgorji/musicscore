@@ -152,9 +152,9 @@ class XMLElement(XMLTree):
         self.get_attributes().clear()
 
     def __repr__(self):
-        if self.value:
+        try:
             return '{} {} at {}'.format(self.__class__.__name__, self.value, hex(id(self)))
-        else:
+        except AttributeError:
             return '{} at {}'.format(self.__class__.__name__, hex(id(self)))
 
     def _to_xml(self):

@@ -58,6 +58,19 @@ class TreeTime(Time):
     def quarter_duration(self):
         return self._quarter_duration
 
+    def __copy__(self):
+        new_time = TreeTime()
+        for key, new_key in zip(self.__dict__.keys(), new_time.__dict__.keys()):
+            item = self.__dict__[key]
+            if key == '_attributes':
+                new_time.__dict__[new_key] = item
+            elif key == '_children':
+                new_children = []
+                for child in item:
+                    new_children.append(child.__copy__())
+                new_time.__dict__[new_key] = new_children
+        return new_time
+
 
 class TreeMeasure(timewise.Measure):
     """"""
@@ -77,6 +90,16 @@ class TreeMeasure(timewise.Measure):
             self._time = TreeTime(*value)
         else:
             self._time = None
+
+    def __copy__(self):
+        new_measure = TreeMeasure()
+        for key, new_key in zip(self.__dict__.keys(), new_measure.__dict__.keys()):
+            item = self.__dict__[key]
+            if key == '_attributes':
+                new_measure.__dict__[new_key] = item
+            elif key == '_time':
+                new_measure.__dict__[new_key] = item.__copy__()
+        return new_measure
 
 
 class Part(timewise.Part):
@@ -202,6 +225,7 @@ class TreeScoreTimewise(timewise.Score):
         for index, measure in enumerate(self.get_children_by_type(TreeMeasure)):
             measure.number = str(index + 1)
             if measure.time.show is True:
+                # print(measure.time)
                 part = measure.get_children_by_type(Part)[0]
                 part.attributes.add_child(measure.time)
 
