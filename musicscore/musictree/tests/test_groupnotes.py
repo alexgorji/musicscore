@@ -17,6 +17,8 @@ class TestGrouping(TestCase):
         for i in range(2):
             self.make_measure(i + 1)
 
+        # self.score.get_measure(1).group_beams(4)
+
         self.score.finish()
         print(self.score.to_string())
         self.score.write(path=path)
