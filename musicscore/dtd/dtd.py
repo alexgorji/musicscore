@@ -95,9 +95,29 @@ class DTDNode(DTDTree):
 
     @property
     def choices(self):
-        output = [self.__copy__() for i in range(len(self.expanded))]
-        for choice in self.expanded:
-            print(choice)
+        output = []
+        for ex in self.expanded:
+            new_tree = self.__deepcopy__()
+            for leaf in ex:
+                new_tree.goto(leaf.index).trim = True
+
+            for leaf in new_tree.traverse_leaves():
+                try:
+                    if leaf.trim:
+                        branch = leaf.get_branch()
+                        for index, node in enumerate(branch):
+                            if isinstance(node, Choice):
+                                if node.is_root:
+                                    branch[index + 1]._up = None
+                                    new_tree = branch[index + 1]
+                                else:
+                                    node.replace_node(branch[index + 1])
+                except AttributeError:
+                    pass
+
+            output.append(new_tree)
+        # for choice in output:
+        #     print(choice)
         return output
 
 
@@ -409,13 +429,20 @@ class Element(DTDLeaf):
         children = children[:self.max_occurrence]
         xmltree._sorted_children.extend(children)
 
+    def __deepcopy__(self):
+        return Element(type_=self.type_, min_occurrence=self.min_occurrence, max_occurrence=self.max_occurrence)
+
 
 class GroupReference(DTDNode):
     """"""
 
     def __init__(self, child, min_occurrence=1, max_occurrence=1):
-        self.child = copy.deepcopy(child)
+        # self.child = copy.deepcopy(child)
+        self.child = child.__deepcopy__()
         super().__init__(children=[self.child], min_occurrence=min_occurrence, max_occurrence=max_occurrence)
+
+    def __deepcopy__(self):
+        return GroupReference(self.child.__deepcopy__(), min_occurrence=self.min_occurrence, max_occurrence=self.max_occurrence)
 
     def expand(self):
         output = self.child.expand()

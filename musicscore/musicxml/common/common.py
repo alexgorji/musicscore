@@ -1,6 +1,7 @@
 from musicscore.dtd.dtd import Sequence, Element
 from musicscore.musicxml.types.complextypes.formattedtext import ComplexTypeFormattedText
 from musicscore.musicxml.types.complextypes.level import ComplexTypeLevel
+from musicscore.musicxml.types.simple_type import String, PositiveInteger
 
 
 class FootNote(ComplexTypeFormattedText):
@@ -29,4 +30,50 @@ The editorial group specifies editorial information for a musical element.
 Editorial = Sequence(
     Element(FootNote, min_occurrence=0),
     Element(Level, min_occurrence=0)
+)
+
+
+class Voice(String):
+    def __init__(self, value=None, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+'''
+The editorial-voice group supports the common combination of editorial and voice information for a musical element
+'''
+EditorialVoice = Sequence(
+    Element(FootNote, min_occurrence=0),
+    Element(Level, min_occurrence=0),
+    Element(Voice, min_occurrence=0)
+
+)
+
+'''
+	<xs:group name="staff">
+		<xs:annotation>
+			<xs:documentation>The staff element is defined within a group due to its use by both notes and direction elements.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="staff" type="xs:positiveInteger">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:group>
+'''
+
+
+class StaffElement(PositiveInteger):
+    '''
+    Staff assignment is only needed for music notated on multiple staves. Used by both notes and directions. Staff values
+    are numbers, with 1 referring to the top-most staff in a part.
+    '''
+
+    def __init__(self, value=None, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+Staff = Sequence(
+    Element(StaffElement)
 )
