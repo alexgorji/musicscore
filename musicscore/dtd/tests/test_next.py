@@ -9,5 +9,6 @@ class Test(TestCase):
     def setUp(self):
         self.dtd = Note().dtd
 
-    def test_next(self):
-        pass
+    # def test_next(self):
+    #     for i in range(14):
+    #         print([leaf for leaf in self.dtd.next().traverse_leaves()])

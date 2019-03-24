@@ -43,6 +43,7 @@ class DTDNode(DTDTree):
     def __init__(self, children=[], min_occurrence=1, max_occurrence=1, *args, **kwargs):
         super().__init__(**kwargs)
         self._expanded = None
+        self._choices = None
         self._min_occurrence = None
         self._max_occurrence = None
         self.min_occurrence = min_occurrence
@@ -95,44 +96,43 @@ class DTDNode(DTDTree):
 
     @property
     def choices(self):
-        output = []
-        for ex in self.expanded:
-            new_tree = self.__deepcopy__()
-            for leaf in ex:
-                new_tree.goto(leaf.index).trim = True
+        if self._choices is None:
+            self._choices = []
+            for ex in self.expanded:
+                new_tree = self.__deepcopy__()
+                for leaf in ex:
+                    new_tree.goto(leaf.index).trim = True
 
-            for leaf in new_tree.traverse_leaves():
-                try:
-                    if leaf.trim:
-                        branch = leaf.get_branch()
-                        for index, node in enumerate(branch):
-                            if isinstance(node, Choice):
-                                if node.is_root:
-                                    branch[index + 1]._up = None
-                                    new_tree = branch[index + 1]
-                                else:
-                                    node.replace_node(branch[index + 1])
-                except AttributeError:
-                    pass
+                for leaf in new_tree.traverse_leaves():
+                    try:
+                        if leaf.trim:
+                            branch = leaf.get_branch()
+                            for index, node in enumerate(branch):
+                                if isinstance(node, Choice):
+                                    if node.is_root:
+                                        branch[index + 1]._up = None
+                                        new_tree = branch[index + 1]
+                                    else:
+                                        node.replace_node(branch[index + 1])
+                    except AttributeError:
+                        pass
 
-            output.append(new_tree)
-        # for choice in output:
-        #     print(choice)
-        return output
-
-    def next(self):
-        try:
-            self._possibility_index += 1
-            return self.expanded[self._possibility_index]
-        except IndexError:
-            raise StopIteration()
+                self._choices.append(new_tree)
+        return self._choices
 
     # def next(self):
     #     try:
     #         self._possibility_index += 1
-    #         return self.choices[self._possibility_index]
+    #         return self.expanded[self._possibility_index]
     #     except IndexError:
     #         raise StopIteration()
+
+    def next(self):
+        try:
+            self._possibility_index += 1
+            return self.choices[self._possibility_index]
+        except IndexError:
+            raise StopIteration()
 
     def get_current_combination(self):
         return self.expanded[self._possibility_index]
@@ -149,16 +149,16 @@ class DTDNode(DTDTree):
                 return True
         return False
 
-    def reduce_group_references(self):
-        for node in self.traverse():
-            if isinstance(node, GroupReference) and len(node.get_children()) == 1 and isinstance(node.get_children()[0],
-                                                                                                 Sequence) and len(
-                node.get_children()[0].get_children()) == 1 and isinstance(node.get_children()[0].get_children()[0],
-                                                                           Element):
-                el = node.get_children()[0].get_children()[0]
-                new_parent = el.up.up.up
-                el._up = new_parent
-                new_parent._children = [el if child == node else child for child in new_parent.get_children()]
+    # def reduce_group_references(self):
+    #     for node in self.traverse():
+    #         if isinstance(node, GroupReference) and len(node.get_children()) == 1 and isinstance(node.get_children()[0],
+    #                                                                                              Sequence) and len(
+    #             node.get_children()[0].get_children()) == 1 and isinstance(node.get_children()[0].get_children()[0],
+    #                                                                        Element):
+    #             el = node.get_children()[0].get_children()[0]
+    #             new_parent = el.up.up.up
+    #             el._up = new_parent
+    #             new_parent._children = [el if child == node else child for child in new_parent.get_children()]
 
     def dtd_filter_children(self, xmltree):
         filtered_children = [child for child in xmltree.get_children() if self.check_dtd_type(child)]
