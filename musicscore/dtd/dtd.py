@@ -93,6 +93,32 @@ class DTDNode(DTDTree):
             self.repair_occurrences()
         return self._expanded
 
+    @property
+    def choices(self):
+        output = []
+        for ex in self.expanded:
+            new_tree = self.__deepcopy__()
+            for leaf in ex:
+                new_tree.goto(leaf.index).trim = True
+
+            for leaf in new_tree.traverse_leaves():
+                try:
+                    if leaf.trim:
+                        branch = leaf.get_branch()
+                        for index, node in enumerate(branch):
+                            if isinstance(node, Choice):
+                                if node.is_root:
+                                    branch[index + 1]._up = None
+                                    new_tree = branch[index + 1]
+                                else:
+                                    node.replace_node(branch[index + 1])
+                except AttributeError:
+                    pass
+
+            output.append(new_tree)
+        # for choice in output:
+        #     print(choice)
+        return output
 
     def next(self):
         try:
