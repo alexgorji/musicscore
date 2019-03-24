@@ -90,8 +90,15 @@ class DTDNode(DTDTree):
     def expanded(self):
         if self._expanded is None:
             self._expanded = self.expand()
-            self.repair_occurrences()
+            # self.repair_occurrences()
         return self._expanded
+
+    @property
+    def choices(self):
+        output = [self.__copy__() for i in range(len(self.expanded))]
+        for choice in self.expanded:
+            print(choice)
+        return output
 
 
     def next(self):

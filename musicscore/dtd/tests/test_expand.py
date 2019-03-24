@@ -156,12 +156,9 @@ note_dtd = Sequence(
 class Test(TestCase):
     def test_expand(self):
         # print(el.expand())
-        # print(seq1.expand())
-        for choice in seq1.expand():
-            print(choice)
-            for ch in choice:
-                print(ch.get_root())
-                print(ch.get_branch())
+        seq1.choices
+        # el.choices
+        # ch1.choices
         # print(seq2.get_choices())
         # print(ch1.get_choices())
         # for choice in ch2.get_choices():
