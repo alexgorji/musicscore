@@ -54,7 +54,7 @@ class XMLTree(Tree):
         return child
 
     def sort_children(self):
-        self.dtd.reduce_group_references()
+        # self.dtd.reduce_group_references()
         current_combination = self.dtd.get_current_combination()
         common_ancestor = current_combination[0].get_common_ancestor(*current_combination[1:])
         self._sorted_children = []

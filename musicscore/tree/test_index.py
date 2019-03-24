@@ -22,9 +22,9 @@ class Test(TestCase):
         self.parent.add_child(self.me)
 
     def test_index(self):
-        for node in self.parent.traverse():
-            print(node.name)
-            print(node.index)
-            print(self.parent.goto(node.index).name)
+        # for node in self.parent.traverse():
+        #     print(node.name)
+        #     print(node.index)
+        #     print(self.parent.goto(node.index).name)
         self.assertEqual(self.parent.goto(self.grandchild.index).name, 'grand_child')
 

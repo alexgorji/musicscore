@@ -33,8 +33,9 @@ class TestNoteDTD(TestCase):
         self.note.add_child(Rest())
         self.note.add_child(Grace())
         self.note.close()
-        result = ['Grace', 'Chord', 'Pitch', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification', 'Stem',
-                  'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play']
+        result = ['Grace', 'Chord', 'Pitch', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot', 'Accidental',
+                  'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam', 'Notations', 'Lyric',
+                  'Play']
         self.assertEqual([node.type_.__name__ for node in self.note._DTD.get_current_combination()], result)
 
         self.note.reset_children()

@@ -33,16 +33,17 @@ class Test(TestCase):
             self.parent.replace_node(self.me)
 
     def test_replaced_children(self):
-        for node in self.parent.traverse():
-            print('{} children: {}'.format(node.name, [child.name for child in node.get_children()]))
-        print()
-        self.me.replace_node(self.child1)
-        for node in self.parent.traverse():
-            print('{} children: {}'.format(node.name, [child.name for child in node.get_children()]))
-
-        # self.
-        print()
-        self.nephew.replace_node(self.me)
-        for node in self.parent.traverse():
-            print('{} children: {}'.format(node.name, [child.name for child in node.get_children()]))
-            print('root', node.get_root().name)
+        pass
+        # for node in self.parent.traverse():
+        #     print('{} children: {}'.format(node.name, [child.name for child in node.get_children()]))
+        # print()
+        # self.me.replace_node(self.child1)
+        # for node in self.parent.traverse():
+        #     print('{} children: {}'.format(node.name, [child.name for child in node.get_children()]))
+        #
+        # # self.
+        # print()
+        # self.nephew.replace_node(self.me)
+        # for node in self.parent.traverse():
+        #     print('{} children: {}'.format(node.name, [child.name for child in node.get_children()]))
+        #     print('root', node.get_root().name)

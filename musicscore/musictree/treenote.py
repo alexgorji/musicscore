@@ -13,7 +13,6 @@ class TreeAccidental(Accidental):
         self._show = None
         self.show = show
 
-
     @property
     def show(self):
         return self._show
@@ -40,7 +39,6 @@ class TreeNote(Note):
         self.quarter_duration = quarter_duration
         self._event = None
         self.event = event
-
 
     @property
     def quarter_duration(self):
@@ -71,7 +69,6 @@ class TreeNote(Note):
     def accidental(self):
         return self._accidental
 
-
     @property
     def event(self):
         return self._event
@@ -86,7 +83,6 @@ class TreeNote(Note):
             pass
         self._event = self.add_child(value)
         self.update_accidental()
-
 
     def update_accidental(self):
         _accidentals = {-1.5: 'three-quarters-flat',

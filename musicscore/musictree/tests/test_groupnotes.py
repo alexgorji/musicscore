@@ -20,7 +20,7 @@ class TestGrouping(TestCase):
         # self.score.get_measure(1).group_beams(4)
 
         self.score.finish()
-        print(self.score.to_string())
+        # print(self.score.to_string())
         self.score.write(path=path)
 
     def make_measure(self, number):

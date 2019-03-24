@@ -90,7 +90,7 @@ class DTDNode(DTDTree):
     def expanded(self):
         if self._expanded is None:
             self._expanded = self.expand()
-            # self.repair_occurrences()
+        self.repair_occurrences()
         return self._expanded
 
     @property
@@ -120,13 +120,19 @@ class DTDNode(DTDTree):
         #     print(choice)
         return output
 
-
     def next(self):
         try:
             self._possibility_index += 1
             return self.expanded[self._possibility_index]
         except IndexError:
             raise StopIteration()
+
+    # def next(self):
+    #     try:
+    #         self._possibility_index += 1
+    #         return self.choices[self._possibility_index]
+    #     except IndexError:
+    #         raise StopIteration()
 
     def get_current_combination(self):
         return self.expanded[self._possibility_index]
@@ -149,7 +155,6 @@ class DTDNode(DTDTree):
                                                                                                  Sequence) and len(
                 node.get_children()[0].get_children()) == 1 and isinstance(node.get_children()[0].get_children()[0],
                                                                            Element):
-
                 el = node.get_children()[0].get_children()[0]
                 new_parent = el.up.up.up
                 el._up = new_parent
@@ -183,6 +188,19 @@ class DTDNode(DTDTree):
             return False
 
         return True
+
+    def check_child_type(self, parent, child):
+
+        while not self.type_in_combination(child)[0]:
+            try:
+                self.next()
+                for sibling in parent.get_children():
+                    try:
+                        self.check_child_type(parent, sibling)
+                    except ChildTypeDTDConflict:
+                        raise ChildTypeDTDConflict(child)
+            except StopIteration:
+                raise ChildTypeDTDConflict(child)
 
     def check_child_type(self, parent, child):
 
@@ -442,7 +460,8 @@ class GroupReference(DTDNode):
         super().__init__(children=[self.child], min_occurrence=min_occurrence, max_occurrence=max_occurrence)
 
     def __deepcopy__(self):
-        return GroupReference(self.child.__deepcopy__(), min_occurrence=self.min_occurrence, max_occurrence=self.max_occurrence)
+        return GroupReference(self.child.__deepcopy__(), min_occurrence=self.min_occurrence,
+                              max_occurrence=self.max_occurrence)
 
     def expand(self):
         output = self.child.expand()

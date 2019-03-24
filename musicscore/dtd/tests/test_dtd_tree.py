@@ -8,36 +8,51 @@ class TestDTDTree(TestCase):
         self.note = Note()
 
     def test_expand(self):
-        result = [['Grace', 'Chord', 'Pitch', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification', 'Stem',
-                   'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Grace', 'Chord', 'Unpitched', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification', 'Stem',
-                   'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Grace', 'Chord', 'Rest', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification', 'Stem',
-                   'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Grace', 'Chord', 'Pitch', 'Tie', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification',
-                   'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Grace', 'Chord', 'Unpitched', 'Tie', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification',
-                   'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Grace', 'Chord', 'Rest', 'Tie', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification',
-                   'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Grace', 'Cue', 'Chord', 'Pitch', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification',
-                   'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Grace', 'Cue', 'Chord', 'Unpitched', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification',
-                   'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Grace', 'Cue', 'Chord', 'Rest', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification',
-                   'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Cue', 'Chord', 'Pitch', 'Duration', 'Instrument', 'Type', 'Dot', 'Accidental',
-                   'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Cue', 'Chord', 'Unpitched', 'Duration', 'Instrument', 'Type', 'Dot', 'Accidental',
-                   'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Cue', 'Chord', 'Rest', 'Duration', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification',
-                   'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Chord', 'Pitch', 'Duration', 'Tie', 'Instrument', 'Type', 'Dot', 'Accidental',
-                   'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Chord', 'Unpitched', 'Duration', 'Tie', 'Instrument', 'Type', 'Dot', 'Accidental',
-                   'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play'],
-                  ['Chord', 'Rest', 'Duration', 'Tie', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification',
-                   'Stem', 'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play']]
+        result = [['Grace', 'Chord', 'Pitch', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot', 'Accidental',
+                   'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam', 'Notations', 'Lyric',
+                   'Play'],
+                  ['Grace', 'Chord', 'Unpitched', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Grace', 'Chord', 'Rest', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot', 'Accidental',
+                   'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam', 'Notations', 'Lyric',
+                   'Play'],
+                  ['Grace', 'Chord', 'Pitch', 'Tie', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Grace', 'Chord', 'Unpitched', 'Tie', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Grace', 'Chord', 'Rest', 'Tie', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Grace', 'Cue', 'Chord', 'Pitch', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Grace', 'Cue', 'Chord', 'Unpitched', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Grace', 'Cue', 'Chord', 'Rest', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Cue', 'Chord', 'Pitch', 'Duration', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Cue', 'Chord', 'Unpitched', 'Duration', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Cue', 'Chord', 'Rest', 'Duration', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Chord', 'Pitch', 'Duration', 'Tie', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Chord', 'Unpitched', 'Duration', 'Tie', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play'],
+                  ['Chord', 'Rest', 'Duration', 'Tie', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot',
+                   'Accidental', 'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam',
+                   'Notations', 'Lyric', 'Play']]
 
         self.assertEqual([[node._type.__name__ for node in possibility] for possibility in self.note.dtd.expand()],
                          result)
@@ -48,12 +63,17 @@ class TestDTDTree(TestCase):
                 else:
                     self.note.dtd.next()
 
-    def test_check_type(self):
-        self.note.reset_children()
-        self.note.add_child(Rest())
-        result = ['Grace', 'Chord', 'Rest', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification', 'Stem',
-                  'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play']
 
-        self.assertEqual([node._type.__name__ for node in self.note.dtd.get_current_combination()], result)
+def test_check_type(self):
+    self.note.reset_children()
+    self.note.add_child(Rest())
+    # result = ['Grace', 'Chord', 'Rest', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification', 'Stem',
+    #           'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play']
 
-        self.note.add_child(Duration(1))
+    result = ['Grace', 'Chord', 'Rest', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot', 'Accidental',
+              'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam', 'Notations', 'Lyric',
+              'Play']
+
+    self.assertEqual([node._type.__name__ for node in self.note.dtd.get_current_combination()], result)
+
+    self.note.add_child(Duration(1))
