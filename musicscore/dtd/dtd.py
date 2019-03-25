@@ -108,7 +108,7 @@ class DTDNode(DTDTree):
                         if leaf.trim:
                             branch = leaf.get_branch()
                             for index, node in enumerate(branch):
-                                if isinstance(node, Choice):
+                                if isinstance(node, Choice) and (node.min_occurrence, node.max_occurrence) == (1, 1):
                                     if node.is_root:
                                         branch[index + 1]._up = None
                                         new_tree = branch[index + 1]
