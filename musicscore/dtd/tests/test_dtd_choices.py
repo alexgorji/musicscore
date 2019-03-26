@@ -120,6 +120,7 @@ seq6 = Sequence(
         )
     )
 )
+
 lyric_dtd = Sequence(
     Choice(
         Sequence(

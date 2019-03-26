@@ -20,5 +20,5 @@ class ComplexTypeElision(ComplexType, String, Font, Color, Smulf):
     glyph is application-specific.
     """
 
-    def __init__(self, value=None, *args, **kwargs):
+    def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)

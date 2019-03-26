@@ -129,6 +129,26 @@ class DTDNode(DTDTree):
             self.generate_dtd_choices()
         return self._dtd_choices
 
+    def get_current_choice(self):
+        return self.get_dtd_choices()[self._possibility_index]
+
+    def check_occurrence(self, xml_child):
+        pass
+
+    def check_dtd(self, xml_child):
+        choice = self.get_current_choice()
+
+        same_type_leaves = [leaf for leaf in choice.traverse_leaves() if isinstance(xml_child, leaf.type_)]
+        if not same_type_leaves:
+            try:
+                self.next_choice()
+            except StopIteration:
+                return False
+            self.check_dtd(xml_child)
+        else:
+            self.check_occurrence(xml_child)
+            return True
+
     def expand(self):
         return self
 
@@ -139,10 +159,11 @@ class DTDNode(DTDTree):
         self.repair_occurrences()
         return self._expanded
 
-    def next(self):
+    def next_choice(self):
         try:
             self._possibility_index += 1
-            return self.get_dtd_choices()[self._possibility_index]
+            output = self.get_dtd_choices()[self._possibility_index]
+            return output
         except IndexError:
             raise StopIteration()
 
@@ -500,7 +521,6 @@ class GroupReference(DTDNode):
 
     def __init__(self, child, min_occurrence=1, max_occurrence=1):
         super().__init__(children=[child.__deepcopy__()], min_occurrence=min_occurrence, max_occurrence=max_occurrence)
-
 
     @property
     def child(self):
