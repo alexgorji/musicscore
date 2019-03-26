@@ -219,21 +219,21 @@ class Tree(object):
 
         return copied
 
-    # def __copy__(self):
-    #     copied = self.__class__()
-    #     for item in self.__dict__.items():
-    #         key = item[0]
-    #         value = item[1]
-    #
-    #         if key != '_children':
-    #             try:
-    #                 new_value = value.__copy__()
-    #             except (AttributeError, TypeError):
-    #                 new_value = value
-    #
-    #             copied.__dict__[key] = new_value
-    #
-    #     return copied
+    def no_child_copy(self, *arguments, **kwargs):
+        copied = self.__class__(*arguments, **kwargs)
+        for item in self.__dict__.items():
+            key = item[0]
+            value = item[1]
+
+            if key not in ('_children', '_up'):
+                try:
+                    new_value = value.__copy__()
+                except (AttributeError, TypeError):
+                    new_value = value
+
+                copied.__dict__[key] = new_value
+
+        return copied
 
 
 class TreeNode(Tree):

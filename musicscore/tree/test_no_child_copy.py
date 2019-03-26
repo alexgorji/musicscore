@@ -20,12 +20,12 @@ class Test(TestCase):
         self.nephew = self.sibling.add_child(TreeNode())
         self.nephew.name = 'nephew'
         self.parent.add_child(self.me)
-    #
-    # def test_copy(self):
-    #     copied_child1 = self.child1.__copy__()
-    #     self.assertEqual(copied_child1.get_children(), [])
-    #     self.assertEqual(copied_child1.up.name, self.child1.up.name)
-    #     self.assertFalse(id(copied_child1) == id(self.child1))
-    #     self.assertFalse(id(copied_child1.up) == id(self.child1.up))
+
+    def test_copy(self):
+        copied_child1 = self.child1.no_child_copy()
+        self.assertEqual(copied_child1.get_children(), [])
+        self.assertEqual(copied_child1.name, self.child1.name)
+        self.assertFalse(id(copied_child1) == id(self.child1))
+        # self.assertFalse(id(copied_child1.up) == id(self.child1.up))
 
 

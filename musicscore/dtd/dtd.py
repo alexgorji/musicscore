@@ -44,6 +44,7 @@ class DTDNode(DTDTree):
         super().__init__(**kwargs)
         self._expanded = None
         self._choices = None
+        self._dtd_choices = None
         self._min_occurrence = None
         self._max_occurrence = None
         self.min_occurrence = min_occurrence
@@ -84,6 +85,50 @@ class DTDNode(DTDTree):
             return '{} type {} at {}'.format(self.__class__.__name__, self.type_.__name__, hex(id(self)))
         return '{} at {}'.format(self.__class__.__name__, hex(id(self)))
 
+    def copy_child(self, child, ch=None):
+        if isinstance(child, Element):
+            copied = child.no_child_copy(child.type_)
+        else:
+            copied = child.no_child_copy()
+
+        copied.original = child
+        copied.choice = ch
+        return copied
+
+    def eliminate_group_reference(self):
+        for node in self.traverse():
+            if isinstance(node, GroupReference):
+                node.replace_node(node.get_children()[0])
+
+    def carbon_copy(self):
+        if isinstance(self, Element):
+            copied = Element(self.type_)
+        else:
+            copied = self.__class__()
+
+        copied.original = self.original
+        copied.choice = self.choice
+        for child in self.get_children():
+            copied.add_child(child.carbon_copy())
+
+        return copied
+
+    def generate_dtd_choices(self):
+        self.eliminate_group_reference()
+
+        self._dtd_choices = [self.copy_child(self)]
+        choice_index = 0
+
+        while choice_index < len(self._dtd_choices):
+            current_choice = self._dtd_choices[choice_index]
+            current_choice.magic_expand(self._dtd_choices)
+            choice_index += 1
+
+    def get_dtd_choices(self):
+        if not self._dtd_choices:
+            self.generate_dtd_choices()
+        return self._dtd_choices
+
     def expand(self):
         return self
 
@@ -94,43 +139,10 @@ class DTDNode(DTDTree):
         self.repair_occurrences()
         return self._expanded
 
-    @property
-    def choices(self):
-        if self._choices is None:
-            self._choices = []
-            for ex in self.expanded:
-                new_tree = self.__deepcopy__()
-                for leaf in ex:
-                    new_tree.goto(leaf.index).trim = True
-
-                for leaf in new_tree.traverse_leaves():
-                    try:
-                        if leaf.trim:
-                            branch = leaf.get_branch()
-                            for index, node in enumerate(branch):
-                                if isinstance(node, Choice) and (node.min_occurrence, node.max_occurrence) == (1, 1):
-                                    if node.is_root:
-                                        branch[index + 1]._up = None
-                                        new_tree = branch[index + 1]
-                                    else:
-                                        node.replace_node(branch[index + 1])
-                    except AttributeError:
-                        pass
-
-                self._choices.append(new_tree)
-        return self._choices
-
-    # def next(self):
-    #     try:
-    #         self._possibility_index += 1
-    #         return self.expanded[self._possibility_index]
-    #     except IndexError:
-    #         raise StopIteration()
-
     def next(self):
         try:
             self._possibility_index += 1
-            return self.choices[self._possibility_index]
+            return self.get_dtd_choices()[self._possibility_index]
         except IndexError:
             raise StopIteration()
 
@@ -148,17 +160,6 @@ class DTDNode(DTDTree):
             if isinstance(child, dtd_child.type_):
                 return True
         return False
-
-    # def reduce_group_references(self):
-    #     for node in self.traverse():
-    #         if isinstance(node, GroupReference) and len(node.get_children()) == 1 and isinstance(node.get_children()[0],
-    #                                                                                              Sequence) and len(
-    #             node.get_children()[0].get_children()) == 1 and isinstance(node.get_children()[0].get_children()[0],
-    #                                                                        Element):
-    #             el = node.get_children()[0].get_children()[0]
-    #             new_parent = el.up.up.up
-    #             el._up = new_parent
-    #             new_parent._children = [el if child == node else child for child in new_parent.get_children()]
 
     def dtd_filter_children(self, xmltree):
         filtered_children = [child for child in xmltree.get_children() if self.check_dtd_type(child)]
@@ -343,6 +344,30 @@ class Choice(DTDNode):
         # self.repair_occurrences()
         return output
 
+    def magic_expand(self, dtd_choices):
+        if not self.original:
+            raise Exception('is not copied')
+
+        if self.choice is None:
+            for index, child in enumerate(self.original.get_children()):
+                if index == 0:
+                    copied = self.copy_child(child, index)
+                    self.add_child(copied)
+                    self.choice = 0
+                    copied.magic_expand(dtd_choices)
+                else:
+                    new_choice = self.get_root().carbon_copy()
+                    new_choice.goto(self.index).choice = index
+                    new_choice.goto(self.index)._children = []
+                    dtd_choices.append(new_choice)
+        else:
+            if not self.get_children():
+                copied = self.copy_child(self.original.get_children()[self.choice])
+                self.add_child(copied)
+                copied.magic_expand(dtd_choices)
+            else:
+                self.get_children()[0].magic_expand(dtd_choices)
+
     def sort_children(self, xmltree):
         # print('sorting {} with children {}'.format(self, self.get_children()))
         # print()
@@ -426,6 +451,22 @@ class Sequence(DTDNode):
             for dtd_child in self.get_children():
                 dtd_child.sort_children(xmltree)
 
+    def magic_expand(self, dtd_choices):
+        if not self.original:
+            raise Exception('is not copied')
+        for child in self.original.get_children():
+            child_exists = False
+            for ch in self.get_children():
+                if ch.original == child:
+                    child_exists = True
+                    ch.magic_expand(dtd_choices)
+                    break
+
+            if not child_exists:
+                copied = self.copy_child(child)
+                self.add_child(copied)
+                copied.magic_expand(dtd_choices)
+
 
 class Element(DTDLeaf):
     """"""
@@ -447,6 +488,9 @@ class Element(DTDLeaf):
         children = children[:self.max_occurrence]
         xmltree._sorted_children.extend(children)
 
+    def magic_expand(self, dtd_choices):
+        pass
+
     def __deepcopy__(self):
         return Element(type_=self.type_, min_occurrence=self.min_occurrence, max_occurrence=self.max_occurrence)
 
@@ -455,9 +499,12 @@ class GroupReference(DTDNode):
     """"""
 
     def __init__(self, child, min_occurrence=1, max_occurrence=1):
-        # self.child = copy.deepcopy(child)
-        self.child = child.__deepcopy__()
-        super().__init__(children=[self.child], min_occurrence=min_occurrence, max_occurrence=max_occurrence)
+        super().__init__(children=[child.__deepcopy__()], min_occurrence=min_occurrence, max_occurrence=max_occurrence)
+
+
+    @property
+    def child(self):
+        return self.get_children()[0]
 
     def __deepcopy__(self):
         return GroupReference(self.child.__deepcopy__(), min_occurrence=self.min_occurrence,
@@ -466,6 +513,10 @@ class GroupReference(DTDNode):
     def expand(self):
         output = self.child.expand()
         return output
+
+    # def magic_expand(self, dtd_choices):
+    #     print('expand group', self, 'with child', self.child)
+    #     self.child.magic_expand(dtd_choices)
 
     def sort_children(self, xmltree):
         # print('sorting {} with children {}'.format(self, self.get_children()))
