@@ -47,25 +47,21 @@ class XMLTree(Tree):
     def add_child(self, child):
         if not self.dtd:
             raise DTDError('_DTD is None. No Child can be added. ')
-        self.dtd.check_child_type(self, child)
-        self.dtd.check_child_max_occurrence(self, child)
-        self._children.append(child)
+        self.dtd.add_xml_child(child)
+        # self._children.append(child)
         child._up = self
         return child
 
-    def sort_children(self):
-        # self.dtd.reduce_group_references()
-        current_combination = self.dtd.get_current_combination()
-        common_ancestor = current_combination[0].get_common_ancestor(*current_combination[1:])
-        self._sorted_children = []
-        common_ancestor.sort_children(self)
-        self._children = self._sorted_children
-
     def close(self):
         if self.dtd:
-            self.dtd.close(self)
-        for child in self.get_children():
-            child.close()
+            self.dtd.close()
+        # for child in self.get_children():
+        #     child.close()
+
+    def get_children(self):
+        if self.dtd:
+            return self.dtd.get_current_xml_children()
+        return []
 
     def get_children_by_type(self, type_):
         return [child for child in self.get_children() if isinstance(child, type_)]
@@ -158,8 +154,6 @@ class XMLElement(XMLTree):
             return '{} at {}'.format(self.__class__.__name__, hex(id(self)))
 
     def _to_xml(self):
-
-        # self.sort_children()
         xml = et.Element(_tag=self.tag)
 
         def set_attributes():

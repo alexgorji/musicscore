@@ -1,12 +1,16 @@
-from musicscore.dtd.dtd import Element, Sequence, Choice, GroupReference
+from musicscore.dtd.dtd import Element, Sequence, Choice, GroupReference, ChildTypeDTDConflict, \
+    ChildOccurrenceDTDConflict
 from musicscore.musicxml.common.common import Editorial
-from musicscore.musicxml.elements.fullnote import FullNote, Chord, Pitch, Unpitched, Rest
+from musicscore.musicxml.elements.attributes import TimeSignature, Interchangeable, SenzaMisura
+from musicscore.musicxml.elements.fullnote import FullNote, Chord, Pitch, Unpitched, Rest, Alter
+from musicscore.musicxml.elements.musicdata import Backup, Forward, Direction, Attributes, Sound, Barline, Link, \
+    Bookmark
 from musicscore.musicxml.types.complextypes.lyric import Elision, EndLine, EndParagraph, Syllabic, Humming, Laughing, \
     Extend, Text
 from unittest import TestCase
 
 from musicscore.musicxml.elements.note import Grace, Play, Lyric, Notations, Beam, Staff, NoteheadText, Notehead, Stem, \
-    TimeModification, Accidental, Dot, Type, EditorialVoice, Instrument, Tie, DurationGroup, Cue
+    TimeModification, Accidental, Dot, Type, EditorialVoice, Instrument, Tie, DurationGroup, Cue, Duration, Note
 
 el = Element(Elision)
 
@@ -50,75 +54,6 @@ ch3 = Choice(
         Element(EndLine)
     ),
     Element(EndLine)
-)
-
-ch4 = Choice(
-    Sequence(
-        Choice(
-            Element(Grace)
-        )
-    )
-)
-
-ch5 = Sequence(
-    Choice(
-        Sequence(
-            Choice(
-                Element(Grace)
-            )
-        )
-    )
-)
-
-seq3 = Sequence(
-    Choice(
-        Sequence(
-            Choice(
-                Element(Pitch),
-                Element(Unpitched),
-            )
-
-        )
-    )
-)
-
-# seq4 = GroupReference(FullNote)
-
-# seq4 = Sequence(
-#     Element(Chord, min_occurrence=0),
-#     Choice(
-#         Element(Pitch),
-#         Element(Unpitched),
-#         Element(Rest)
-#     )
-# )
-
-seq4 = Sequence(
-    GroupReference(FullNote)
-)
-
-seq5 = Choice(
-    Sequence(
-        GroupReference(FullNote),
-        Element(Tie, 0, 2)
-    )
-)
-
-seq6 = Sequence(
-    Element(Grace),
-    Choice(
-        Sequence(
-            GroupReference(FullNote)
-        ),
-        Sequence(
-            GroupReference(FullNote),
-            Element(Tie, 0, 2)
-        ),
-        Sequence(
-            Element(Cue),
-            GroupReference(FullNote)
-        )
-    )
 )
 
 lyric_dtd = Sequence(
@@ -193,9 +128,114 @@ note_dtd = Sequence(
     Element(Play, 0)
 )
 
+MusicData = Sequence(
+    Choice(
+        Element(Note),
+        Element(Backup),
+        Element(Forward),
+        Element(Direction),
+        Element(Attributes),
+        Element(Sound),
+        Element(Barline),
+        Element(Link),
+        Element(Bookmark),
+        min_occurrence=0,
+        max_occurrence=None
+    )
+)
+
 
 class Test(TestCase):
-    def test_dtd_check_el(self):
-        print(seq1.check_dtd(Elision('bla')))
-        print(seq1.check_dtd(Lyric()))
 
+    def test_dtd_check_type(self):
+        dtd = seq2.__deepcopy__()
+        dtd.add_xml_child(Elision('bla'))
+        dtd.add_xml_child(Syllabic('single'))
+        with self.assertRaises(ChildTypeDTDConflict):
+            dtd.add_xml_child(Lyric())
+
+        dtd = ch2.__deepcopy__()
+        dtd.add_xml_child(EndLine())
+        dtd.add_xml_child(Syllabic('single'))
+        with self.assertRaises(ChildTypeDTDConflict):
+            dtd.add_xml_child(Elision('bla'))
+
+    def test_dtd_check_max_occurrence(self):
+        dtd = seq2.__deepcopy__()
+        dtd.add_xml_child(Elision('bla'))
+        # print(dtd.get_current_xml_children())
+        with self.assertRaises(ChildOccurrenceDTDConflict):
+            dtd.add_xml_child(Elision('bla'))
+
+        dtd = ch2.__deepcopy__()
+        dtd.add_xml_child(EndLine())
+        dtd.add_xml_child(Syllabic('single'))
+        with self.assertRaises(ChildOccurrenceDTDConflict):
+            dtd.add_xml_child(Syllabic('single'))
+
+
+class TestNoteDtd(TestCase):
+    def setUp(self):
+        self.dtd = note_dtd.__deepcopy__()
+        self.dtd.add_xml_child(Instrument())
+        self.dtd.add_xml_child(Rest())
+        self.dtd.add_xml_child(Duration())
+        self.dtd.add_xml_child(Type('quarter'))
+
+    def test_dtd_note_1(self):
+        with self.assertRaises(ChildTypeDTDConflict):
+            self.dtd.add_xml_child(Unpitched())
+
+    def test_dtd_note_2(self):
+        with self.assertRaises(ChildOccurrenceDTDConflict):
+            self.dtd.add_xml_child(Instrument())
+
+    def test_dtd_note_3(self):
+        self.dtd.add_xml_child(Tie())
+        self.dtd.add_xml_child(Tie())
+
+        result = ['Rest', 'Duration', 'Tie', 'Tie', 'Instrument', 'Type']
+        self.assertEqual([type(xml_child).__name__ for xml_child in self.dtd.get_current_xml_children()], result)
+
+        with self.assertRaises(ChildOccurrenceDTDConflict):
+            self.dtd.add_xml_child(Tie())
+
+    def test_dtd_pitch(self):
+        p = Pitch()
+        result = ['Step', 'Octave']
+        self.assertEqual([type(child).__name__ for child in p.get_children()], result)
+        p.add_child(Alter(2))
+        result = ['Step', 'Alter', 'Octave']
+        self.assertEqual([type(child).__name__ for child in p.get_children()], result)
+        # p.close()
+        # print(p.to_string())
+
+class TestMusicData(TestCase):
+    def setUp(self):
+        self.dtd = MusicData.__deepcopy__()
+
+    def test_music_data_dtd(self):
+        self.dtd.add_xml_child(Forward())
+        self.dtd.add_xml_child(Bookmark())
+        self.dtd.add_xml_child(Forward())
+        self.dtd.add_xml_child(Direction())
+        result = ['Forward', 'Bookmark', 'Forward', 'Direction']
+        self.assertEqual([type(xml_child).__name__ for xml_child in self.dtd.get_current_xml_children()], result)
+
+
+time_dtd = Choice(
+    Sequence(
+        GroupReference(TimeSignature, max_occurrence=None),
+        Element(Interchangeable, min_occurrence=0)
+    ),
+    Element(SenzaMisura)
+)
+
+
+class TestTimeDtd(TestCase):
+    def setUp(self):
+        self.dtd = time_dtd
+
+    def test_time(self):
+        print(self.dtd.get_dtd_choices()[0].dump())
+        print([node.max_occurrence for node in self.dtd.get_dtd_choices()[0].dump()])

@@ -203,9 +203,10 @@ class Test(TestCase):
     # def test_element(self):
     #     self.print_choices(el)
     #
-    # def test_sequence(self):
+    def test_sequence(self):
     # self.print_choices(seq1)
-    # self.print_choices(seq2)
+        print(seq2.get_dtd_choices())
+        self.print_choices(seq2)
     # self.print_choices(seq3)
     # self.print_choices(seq4)
     # self.print_choices(seq6)
