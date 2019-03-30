@@ -1,4 +1,3 @@
-from musicscore.basic_functions import roundrobin, flatten
 from musicscore.tree.tree import Tree
 import warnings
 
@@ -358,7 +357,7 @@ class Element(DTDLeaf):
                     return False
             return True
 
-        if self.up.min_occurrence !=1:
+        if self.up.min_occurrence != 1:
             raise NotImplementedError('check_min_occurrence')
         else:
             return False
@@ -366,8 +365,6 @@ class Element(DTDLeaf):
     def add_xml_child(self, xml_child):
         if not isinstance(xml_child, self.type_):
             raise DTDError('{} is of wrong type and cannot be added to {}'.format(xml_child, self))
-
-        # list_of_same_types = [child for child in self.up.get_children() if isinstance(xml_child, child.type_)]
 
         if isinstance(self.up, Choice) and (self.up.min_occurrence, self.up.max_occurrence) == (0, None):
             self.up.xml_children.append(xml_child)
@@ -379,7 +376,6 @@ class Element(DTDLeaf):
 
         elif self.up.max_occurrence != 1:
             if isinstance(self.up, Sequence):
-            # see dtd.add_xml_child()
                 return False
             else:
                 raise NotImplementedError()

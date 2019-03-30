@@ -1,5 +1,4 @@
 from lxml import etree as et
-import warnings
 import copy
 
 from musicscore.basic_functions import replace_dash
@@ -14,24 +13,6 @@ class XMLTree(Tree):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.dtd = copy.copy(self._DTD)
-
-        self._sorted = False
-        self._sorted_children = []
-
-    def find_child_by_tag(self, tag):
-        return next((child for child in self._children if child.tag == tag), None)
-
-    def remove_old_child_by_tag(self, tag):
-        old_child = self.find_child_by_tag(tag)
-        if old_child is not None:
-            self.remove_child(old_child)
-
-    def replace_old_child_by_tag(self, tag, new_child):
-        self.remove_old_child_by_tag(tag)
-        if new_child is not None:
-            if new_child.tag != tag:
-                raise ValueError('new_child must have the tag {}'.format(tag))
-            self.add_child(new_child)
 
     def _set_child(self, type_, tag, value):
         if value is not None and not isinstance(value, type_):

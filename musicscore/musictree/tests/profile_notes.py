@@ -11,11 +11,14 @@ path = os.path.abspath(__file__).split('.')[0]
 
 def p():
     score = TreeScoreTimewise()
-    score.add_measure()
     score.add_part('one')
-    midis = [60, 61, 62, 60, 63, 64, 65, 61]
-    for midi in midis:
-        score.add_note(1, 1, TreeNote(event=Midi(midi).get_pitch_rest(), quarter_duration=0.5))
+
+    midis = [60]*500
+
+    for index, midi in enumerate(midis):
+        if index % 8 == 0:
+            score.add_measure()
+        score.add_note((index//8 + 1), 1, TreeNote(event=Midi(midi).get_pitch_rest(), quarter_duration=0.5))
 
     score.finish()
     score.write(path=path)

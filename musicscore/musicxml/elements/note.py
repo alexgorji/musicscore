@@ -232,5 +232,11 @@ class Note(XMLElement):
         Element(Play, 0)
     )
 
+    # DTD_CHOICES = _DTD.generate_dtd_choices()
+
     def __init__(self, *args, **kwargs):
         super().__init__(tag='note', *args, **kwargs)
+        # self._dtd_choices = self.DTD_CHOICES
+
+
+

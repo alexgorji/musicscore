@@ -7,6 +7,8 @@ class Tree(object):
     A simple Tree class
     """
 
+    COUNT_COPYING = 0
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._children = []
@@ -197,12 +199,8 @@ class Tree(object):
                 return leaf
         return False
 
-    def repair_parenthood(self):
-        for child in self.get_children():
-            child._up = self
-
-    def __deepcopy__(self):
-        copied = self.__class__()
+    def __deepcopy__(self, *args, **kwargs):
+        copied = self.__class__(*args, **kwargs)
         for item in self.__dict__.items():
             key = item[0]
             value = item[1]
@@ -221,6 +219,9 @@ class Tree(object):
         return copied
 
     def no_child_copy(self, *arguments, **kwargs):
+        # Tree.COUNT_COPYING += 1
+        # print(Tree.COUNT_COPYING)
+        # print(self)
         copied = self.__class__(*arguments, **kwargs)
         for item in self.__dict__.items():
             key = item[0]
