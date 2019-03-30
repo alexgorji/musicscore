@@ -154,6 +154,7 @@ class DTDNode(DTDTree):
     def add_xml_child(self, xml_child):
         choice = self.current_choice
         selected_leaves = [leaf for leaf in choice.traverse_leaves() if isinstance(xml_child, leaf.type_)]
+
         if not selected_leaves:
             try:
                 self.goto_next_choice()
@@ -162,15 +163,32 @@ class DTDNode(DTDTree):
                 raise ChildTypeDTDConflict(xml_child)
 
         else:
+            child_added = False
             for selected_leaf in selected_leaves:
-                if selected_leaf.check_max_occurrence():
-                    selected_leaf.add_xml_child(xml_child)
-                else:
-                    try:
-                        self.goto_next_choice()
-                        self.add_xml_child(xml_child)
-                    except Exception:
-                        raise ChildOccurrenceDTDConflict(xml_child)
+                parent = selected_leaf.up
+                child_added = selected_leaf.add_xml_child(xml_child)
+                if child_added:
+                    break
+
+            if not child_added and isinstance(parent, Sequence) and (parent.min_occurrence, parent.max_occurrence) != (
+                    1, 1):
+                try:
+                    parent.pattern
+                except AttributeError:
+                    parent.pattern = [child.__deepcopy__() for child in parent.get_children()]
+                for child in parent.pattern:
+                    parent.add_child(child.__deepcopy__())
+
+                child_added = self.add_xml_child(xml_child)
+
+            if not child_added:
+                try:
+                    self.goto_next_choice()
+                    self.add_xml_child(xml_child)
+                except Exception:
+                    raise ChildOccurrenceDTDConflict(xml_child)
+
+            return child_added
 
     def get_current_xml_children(self):
         xml_children = []
@@ -209,7 +227,7 @@ class DTDNode(DTDTree):
             try:
                 self.goto_next_choice()
                 self.close()
-            except StopIteration:
+            except DTDError:
                 raise e
 
 
@@ -284,44 +302,9 @@ class Sequence(DTDNode):
     def __init__(self, *children, min_occurrence=1, max_occurrence=1):
         super().__init__(children=children, min_occurrence=min_occurrence, max_occurrence=max_occurrence)
 
-    def expand(self):
-
-        if not self.get_children():
-            output = [[]]
-        else:
-            x = self.get_children()[0]
-            xs = self.get_children()[1:]
-            ex = x.expand()
-            exs = Sequence(*xs, min_occurrence=self.min_occurrence, max_occurrence=self.max_occurrence).expand()
-            output = [a + b for a in ex for b in exs]
-        self.repair_parenthood()
-        # self.repair_occurrences()
-        return output
-
-    def sort_children(self, xmltree):
-        # print('sorting {} with children {}'.format(self, self.get_children()))
-        # print()
-
-        # if all dtd_children are Elements. Sequence can have max_occurrence larger than 1
-        if not self.non_element_dtd_children():
-            list_of_children = [xmltree.get_children_by_type(child.type_) for child in self.get_children()]
-            if self.max_occurrence is None or self.max_occurrence > 1:
-                sorted_children = list(roundrobin(*list_of_children))
-                xmltree._sorted_children.extend(sorted_children)
-            else:
-                xmltree._sorted_children.extend(flatten(list_of_children))
-
-        # for mixed children of Sequence.  max_occurrence larger than 1 is not allowed!
-        else:
-            if self.max_occurrence is None or self.max_occurrence > 1:
-                raise DTDError('sorting of Sequence is still not possible if max_occurrence is larger than 1 and non '
-                               'Element children exist')
-            for dtd_child in self.get_children():
-                dtd_child.sort_children(xmltree)
-
     def magic_expand(self, dtd_choices):
         if not self.original:
-            raise Exception('is not copied')
+            raise Exception('is not a copy')
         for child in self.original.get_children():
             child_exists = False
             for ch in self.get_children():
@@ -362,33 +345,40 @@ class Element(DTDLeaf):
     def __deepcopy__(self):
         return Element(type_=self.type_, min_occurrence=self.min_occurrence, max_occurrence=self.max_occurrence)
 
-    def check_max_occurrence(self):
-        if self.up.max_occurrence != 1:
-            if isinstance(self.up, Choice):
-                return True
-            else:
-                raise NotImplementedError()
-        if self.max_occurrence is None or len(self.xml_children) < self.max_occurrence:
-            return True
-        else:
-            return False
-
     def check_min_occurrence(self):
+        if isinstance(self.up, Choice) and self.up.min_occurrence == 0:
+            return True
         if self.up.min_occurrence != 1:
-            if isinstance(self.up, Choice):
-                return True
-            else:
-                raise NotImplementedError()
-        if len(self.xml_children) >= self.min_occurrence:
+            raise NotImplementedError()
+
+        if len(self.xml_children) < self.min_occurrence:
+            return False
+        else:
             return True
 
     def add_xml_child(self, xml_child):
         if not isinstance(xml_child, self.type_):
             raise DTDError('{} is of wrong type and cannot be added to {}'.format(xml_child, self))
+
+        # list_of_same_types = [child for child in self.up.get_children() if isinstance(xml_child, child.type_)]
+
         if isinstance(self.up, Choice) and (self.up.min_occurrence, self.up.max_occurrence) == (0, None):
             self.up.xml_children.append(xml_child)
-        else:
+            return True
+
+        elif self.max_occurrence is None or len(self.xml_children) < self.max_occurrence:
             self.xml_children.append(xml_child)
+            return True
+
+        elif self.up.max_occurrence != 1:
+            if isinstance(self.up, Sequence):
+            # see dtd.add_xml_child()
+                return False
+            else:
+                raise NotImplementedError()
+
+        else:
+            return False
 
 
 class GroupReference(DTDNode):

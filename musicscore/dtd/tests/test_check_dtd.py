@@ -1,7 +1,7 @@
 from musicscore.dtd.dtd import Element, Sequence, Choice, GroupReference, ChildTypeDTDConflict, \
-    ChildOccurrenceDTDConflict
+    ChildOccurrenceDTDConflict, ChildIsNotOptional
 from musicscore.musicxml.common.common import Editorial
-from musicscore.musicxml.elements.attributes import TimeSignature, Interchangeable, SenzaMisura
+from musicscore.musicxml.elements.attributes import TimeSignature, Interchangeable, SenzaMisura, Beats, BeatType
 from musicscore.musicxml.elements.fullnote import FullNote, Chord, Pitch, Unpitched, Rest, Alter
 from musicscore.musicxml.elements.musicdata import Backup, Forward, Direction, Attributes, Sound, Barline, Link, \
     Bookmark
@@ -210,6 +210,7 @@ class TestNoteDtd(TestCase):
         # p.close()
         # print(p.to_string())
 
+
 class TestMusicData(TestCase):
     def setUp(self):
         self.dtd = MusicData.__deepcopy__()
@@ -237,5 +238,12 @@ class TestTimeDtd(TestCase):
         self.dtd = time_dtd
 
     def test_time(self):
-        print(self.dtd.get_dtd_choices()[0].dump())
-        print([node.max_occurrence for node in self.dtd.get_dtd_choices()[0].dump()])
+        self.dtd.add_xml_child(BeatType(4))
+        self.dtd.add_xml_child(Beats(4))
+        self.dtd.add_xml_child(BeatType(2))
+        self.dtd.add_xml_child(BeatType(16))
+        self.dtd.add_xml_child(Beats(5))
+        result = [('Beats', 4), ('BeatType', 4), ('Beats', 5), ('BeatType', 2), ('BeatType', 16)]
+        self.assertEqual([(type(child).__name__, child.value) for child in self.dtd.get_current_xml_children()], result)
+        with self.assertRaises(ChildIsNotOptional):
+            self.dtd.close()
