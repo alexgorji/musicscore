@@ -15,10 +15,13 @@ class TestPitch(TestCase):
         result = '<pitch>\n  <step>D</step>\n  <alter>1.5</alter>\n  <octave>7</octave>\n</pitch>\n'
         self.assertEqual(pitch.to_string(), result)
 
-    def test_change_alter(self):
+    def test_change_alter_1(self):
         self.pitch.alter = Alter(-1)
         result = '<pitch>\n  <step>C</step>\n  <alter>-1</alter>\n  <octave>4</octave>\n</pitch>\n'
         self.assertEqual(self.pitch.to_string(), result)
+
+    def test_change_alter_2(self):
+        self.pitch.alter = Alter(-1)
         self.pitch.alter = Alter(1)
         result = '<pitch>\n  <step>C</step>\n  <alter>1</alter>\n  <octave>4</octave>\n</pitch>\n'
         self.assertEqual(self.pitch.to_string(), result)

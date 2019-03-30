@@ -3,6 +3,7 @@ from musicscore.musicxml.attributes.accidental import Cautionary, Editorial, Smu
 from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
 from musicscore.musicxml.attributes.leveldisplay import LevelDisplay
 from musicscore.musicxml.attributes.printstyle import PrintStyle
+from musicscore.musicxml.common.common import FootNote, Level, EditorialVoice, Staff
 from musicscore.musicxml.elements.fullnote import FullNote
 from musicscore.musicxml.elements.xml_element import XMLElement
 import copy
@@ -72,9 +73,6 @@ class Instrument(XMLElement):
         super().__init__(tag='instrument', *args, **kwargs)
 
 
-EditorialVoice = Sequence()
-
-
 class Type(XMLElement, TypeNoteTypeValue):
     """"""
 
@@ -133,9 +131,6 @@ class NoteheadText(XMLElement):
     def __init__(self, *args, **kwargs):
         super().__init__(tag='notehead-text', *args, **kwargs)
         raise NotImplementedError()
-
-
-Staff = Sequence()
 
 
 class Beam(ComplexTypeBeam):
@@ -237,6 +232,11 @@ class Note(XMLElement):
         Element(Play, 0)
     )
 
+    # DTD_CHOICES = _DTD.generate_dtd_choices()
+
     def __init__(self, *args, **kwargs):
         super().__init__(tag='note', *args, **kwargs)
-        self.dtd = copy.copy(self._DTD)
+        # self._dtd_choices = self.DTD_CHOICES
+
+
+

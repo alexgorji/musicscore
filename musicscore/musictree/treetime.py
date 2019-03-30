@@ -69,9 +69,7 @@ class TreeTime(Time):
             item = self.__dict__[key]
             if key == '_attributes':
                 new_time.__dict__[new_key] = item
-            elif key == '_children':
-                new_children = []
-                for child in item:
-                    new_children.append(child.__copy__())
-                new_time.__dict__[new_key] = new_children
+        for xml_child in self.get_children():
+            new_time.add_child(xml_child.__copy__())
+
         return new_time

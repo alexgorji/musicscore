@@ -45,16 +45,15 @@ class TestTime(TestCase):
             self.time.print_object = 'bla'
 
     def test_senza_misura(self):
-        self.time.reset_children()
         with self.assertRaises(NotImplementedError):
             self.time.add_child(SenzaMisura())
 
     def test_multiple_time_signatures(self):
-        self.time.reset_children()
-        self.time.add_child(Beats(3))
-        self.time.add_child(BeatType(4))
-        self.time.add_child(Beats(1))
-        self.time.add_child(BeatType(8))
+        time = Time()
+        time.add_child(Beats(3))
+        time.add_child(BeatType(4))
+        time.add_child(Beats(1))
+        time.add_child(BeatType(8))
         result = '''<time>
   <beats>3</beats>
   <beat-type>4</beat-type>
@@ -62,4 +61,4 @@ class TestTime(TestCase):
   <beat-type>8</beat-type>
 </time>
 '''
-        self.assertEqual(self.time.to_string(), result)
+        self.assertEqual(time.to_string(), result)

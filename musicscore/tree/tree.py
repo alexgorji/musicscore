@@ -7,6 +7,8 @@ class Tree(object):
     A simple Tree class
     """
 
+    COUNT_COPYING = 0
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._children = []
@@ -60,6 +62,7 @@ class Tree(object):
             pass
 
     def clear_children(self):
+
         self._children.clear()
 
     def get_branch(self):
@@ -172,17 +175,19 @@ class Tree(object):
         if index == [0]:
             return self
 
-        if len(id_) == 1:
+        if len(index) == 1:
             return self.get_children()[index[0] - 1]
 
         return self.goto(index[:1]).goto(index[1:])
 
-    def substitute_node(self, new_node):
+    def replace_node(self, new_node):
         if self.is_root:
-            raise Exception('substituting root')
+            raise Exception('root cannot be replaced')
         else:
             index = self.up.get_children().index(self)
+            new_node._up = self._up
             self.up.get_children()[index] = new_node
+            self._up = None
 
     def traverse_leaves(self):
         for leaf in flatten(self.get_leaves()):
@@ -194,49 +199,45 @@ class Tree(object):
                 return leaf
         return False
 
-    def repair_parenthood(self):
+    def __deepcopy__(self, *args, **kwargs):
+        copied = self.__class__(*args, **kwargs)
+        for item in self.__dict__.items():
+            key = item[0]
+            value = item[1]
+
+            if key not in ('_children', '_up'):
+                try:
+                    new_value = value.__deepcopy__()
+                except (AttributeError, TypeError):
+                    new_value = value
+
+                copied.__dict__[key] = new_value
+
         for child in self.get_children():
-            child._up = self
-        # for node in self.traverse():
-        #     for child in node.get_children():
-        #         child._up = node
+            copied.add_child(child.__deepcopy__())
 
-    # def get_number_of_layers(self):
-    #     if self.is_leaf:
-    #         return 0
-    #     return max(flatten(self.get_leaves(key=lambda child: child.get_distance(self))))
+        return copied
 
-    # def get_layer(self, layer=0, key=None):
-    #
-    #     if layer <= self.get_root().get_number_of_layers():
-    #
-    #         branch_distances = []
-    #         for child in self.get_children():
-    #             branch_distances.append(child.get_number_of_layers())
-    #         print('layer', layer)
-    #         print('branch_distances', branch_distances)
-    #         if layer == 0:
-    #             if key:
-    #                 return key(self)
-    #             else:
-    #                 return self
-    #
-    #         if layer >= 1:
-    #             if layer > max(branch_distances):
-    #                 self.get_layer(layer=layer - 1, key=key)
-    #
-    #             output = []
-    #             for i in range(len(self.get_children())):
-    #                 child = self.get_children()[i]
-    #                 if branch_distances[i] == 1:
-    #                     if key:
-    #                         output.append(key(child))
-    #                     else:
-    #                         output.append(child)
-    #                 else:
-    #                     output.append(child.get_layer(layer - 1, key))
-    #
-    #             return output
-    #     else:
-    #         err = 'max layer number=' + str(self.get_number_of_layers())
-    #         raise ValueError(err)
+    def no_child_copy(self, *arguments, **kwargs):
+        # Tree.COUNT_COPYING += 1
+        # print(Tree.COUNT_COPYING)
+        # print(self)
+        copied = self.__class__(*arguments, **kwargs)
+        for item in self.__dict__.items():
+            key = item[0]
+            value = item[1]
+
+            if key not in ('_children', '_up'):
+                try:
+                    new_value = value.__copy__()
+                except (AttributeError, TypeError):
+                    new_value = value
+
+                copied.__dict__[key] = new_value
+
+        return copied
+
+
+class TreeNode(Tree):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

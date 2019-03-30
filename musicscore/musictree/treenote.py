@@ -13,7 +13,6 @@ class TreeAccidental(Accidental):
         self._show = None
         self.show = show
 
-
     @property
     def show(self):
         return self._show
@@ -41,7 +40,6 @@ class TreeNote(Note):
         self._event = None
         self.event = event
 
-
     @property
     def quarter_duration(self):
         return self._quarter_duration
@@ -59,7 +57,7 @@ class TreeNote(Note):
         if value == 0:
             if not self.get_children_by_type(Grace):
                 children = self.get_children()[:]
-                self.reset_children()
+                self.reset_dtd()
                 for child in children:
                     if not isinstance(child, Duration):
                         self.add_child(child)
@@ -71,7 +69,6 @@ class TreeNote(Note):
     def accidental(self):
         return self._accidental
 
-
     @property
     def event(self):
         return self._event
@@ -82,11 +79,11 @@ class TreeNote(Note):
             raise TypeError('event.value must be of type  not{}'.format(type(value)))
         try:
             self.remove_child(self._event)
-        except ValueError:
+        except ValueError as err:
+            print(err)
             pass
         self._event = self.add_child(value)
         self.update_accidental()
-
 
     def update_accidental(self):
         _accidentals = {-1.5: 'three-quarters-flat',

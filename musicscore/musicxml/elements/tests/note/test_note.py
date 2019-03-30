@@ -11,6 +11,7 @@ class TestNoteDTD(TestCase):
         self.note = Note()
 
     def test_add_chord(self):
+
         ch = self.note.add_child(Chord())
         self.note.add_child(Pitch())
         self.note.add_child(Grace())
@@ -29,15 +30,16 @@ class TestNoteDTD(TestCase):
         with self.assertRaises(ChildOccurrenceDTDConflict):
             self.note.add_child(Pitch())
 
-    def test_close(self):
+    def test_close_1(self):
         self.note.add_child(Rest())
         self.note.add_child(Grace())
         self.note.close()
-        result = ['Grace', 'Chord', 'Pitch', 'Instrument', 'Type', 'Dot', 'Accidental', 'TimeModification', 'Stem',
-                  'Notehead', 'NoteheadText', 'Beam', 'Notations', 'Lyric', 'Play']
-        self.assertEqual([node.type_.__name__ for node in self.note._DTD.get_current_combination()], result)
+        result = ['Grace', 'Chord', 'Rest', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot', 'Accidental',
+                  'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam', 'Notations', 'Lyric',
+                  'Play']
+        self.assertEqual([node.type_.__name__ for node in self.note.dtd.current_choice.traverse_leaves()], result)
 
-        self.note.reset_children()
+    def test_close_2(self):
         self.note.add_child(Rest())
         with self.assertRaises(ChildIsNotOptional):
             self.note.close()
@@ -50,7 +52,7 @@ class TestNoteDTD(TestCase):
         self.note.add_child(Duration(1))
         self.note.add_child(Tie())
         self.note.close()
-        # self.note.sort_children()
+
         result = ['Pitch', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
 

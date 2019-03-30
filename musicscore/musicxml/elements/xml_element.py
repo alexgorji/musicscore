@@ -1,5 +1,4 @@
 from lxml import etree as et
-import warnings
 import copy
 
 from musicscore.basic_functions import replace_dash
@@ -15,57 +14,53 @@ class XMLTree(Tree):
         super().__init__(*args, **kwargs)
         self.dtd = copy.copy(self._DTD)
 
-        self._sorted = False
-        self._sorted_children = []
-
-    def find_child_by_tag(self, tag):
-        return next((child for child in self._children if child.tag == tag), None)
-
-    def remove_old_child_by_tag(self, tag):
-        old_child = self.find_child_by_tag(tag)
-        if old_child is not None:
-            self.remove_child(old_child)
-
-    def replace_old_child_by_tag(self, tag, new_child):
-        self.remove_old_child_by_tag(tag)
-        if new_child is not None:
-            if new_child.tag != tag:
-                raise ValueError('new_child must have the tag {}'.format(tag))
-            self.add_child(new_child)
-
     def _set_child(self, type_, tag, value):
-
         if value is not None and not isinstance(value, type_):
             value = type_(value)
 
-        self.replace_old_child_by_tag(tag=tag, new_child=value)
+        current_xml_children = self.dtd.get_current_xml_children()
+        if value:
+            for xml_child in current_xml_children:
+                if isinstance(xml_child, type_):
+                    self.dtd.remove_xml_child(xml_child)
+
+            self.dtd.add_xml_child(value)
 
         name = '_' + replace_dash(tag)
 
         self.__setattr__(name, value)
 
+    def reset_dtd(self):
+        self.dtd = copy.copy(self._DTD)
+        self.dtd._dtd_choices = None
+        self.dtd._choice_index = 0
+        self.dtd._current_choice = None
+        self.dtd._xml_children = None
+
     def add_child(self, child):
         if not self.dtd:
             raise DTDError('_DTD is None. No Child can be added. ')
-        self.dtd.check_child_type(self, child)
-        self.dtd.check_child_max_occurrence(self, child)
-        self._children.append(child)
+        self.dtd.add_xml_child(child)
         child._up = self
         return child
 
-    def sort_children(self):
-        self.dtd.reduce_group_references()
-        current_combination = self.dtd.get_current_combination()
-        common_ancestor = current_combination[0].get_common_ancestor(*current_combination[1:])
-        self._sorted_children = []
-        common_ancestor.sort_children(self)
-        self._children = self._sorted_children
+    def remove_child(self, child):
+        current_xml_children = self.dtd.get_current_xml_children()
+        if child:
+            current_xml_children.remove(child)
+        self.reset_dtd()
+
+        for xml_child in current_xml_children:
+            self.dtd.add_xml_child(xml_child)
 
     def close(self):
         if self.dtd:
-            self.dtd.close(self)
-        for child in self.get_children():
-            child.close()
+            self.dtd.close()
+
+    def get_children(self):
+        if self.dtd:
+            return self.dtd.get_current_xml_children()
+        return []
 
     def get_children_by_type(self, type_):
         return [child for child in self.get_children() if isinstance(child, type_)]
@@ -158,8 +153,6 @@ class XMLElement(XMLTree):
             return '{} at {}'.format(self.__class__.__name__, hex(id(self)))
 
     def _to_xml(self):
-
-        # self.sort_children()
         xml = et.Element(_tag=self.tag)
 
         def set_attributes():
@@ -178,10 +171,6 @@ class XMLElement(XMLTree):
             xml.text = str(self.text)
         set_attributes()
         return xml
-
-    def reset_children(self):
-        self.clear_children()
-        self.dtd._possibility_index = 0
 
     def to_string(self):
         self.close()
