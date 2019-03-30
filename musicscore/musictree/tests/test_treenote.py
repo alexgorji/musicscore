@@ -13,7 +13,6 @@ class TestTreeNote(TestCase):
         result = ['Rest', 'Duration']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
         self.note.quarter_duration = 0
-        self.note.sort_children()
         result = ['Grace', 'Rest']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
 

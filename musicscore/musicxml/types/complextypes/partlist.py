@@ -16,21 +16,11 @@ class ScorePart(ComplexTypeScorePart):
         super().__init__(tag='score-part', id=id, *args, **kwargs)
 
 
-ScorePartGroup = Sequence(
-    Element(ScorePart)
-)
-
-
 class PartGroup(ComplexTypePartGroup):
     """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='part-group', *args, **kwargs)
-
-
-PartGroupGroup = Sequence(
-    Element(PartGroup)
-)
 
 
 class ComplexTypePartList(ComplexType):
@@ -42,11 +32,11 @@ class ComplexTypePartList(ComplexType):
     which they appear in the part-list.
     """
     _DTD = Sequence(
-        GroupReference(PartGroupGroup, min_occurrence=0, max_occurrence=None),
-        GroupReference(ScorePartGroup),
+        Element(PartGroup, min_occurrence=0, max_occurrence=None),
+        Element(ScorePart),
         Choice(
-            GroupReference(PartGroupGroup),
-            GroupReference(ScorePartGroup),
+            Element(PartGroup),
+            Element(ScorePart),
             min_occurrence=0, max_occurrence=None
         )
     )

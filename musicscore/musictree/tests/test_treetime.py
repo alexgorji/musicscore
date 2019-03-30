@@ -49,3 +49,15 @@ class TestTreeTime(TestCase):
 '''
         self.assertEqual(score.to_string(), result)
 
+    def test_copy_time(self):
+        time = TreeTime(3, 4, 1, 8)
+        copy = time.__copy__()
+        result = '''<time>
+  <beats>3</beats>
+  <beat-type>4</beat-type>
+  <beats>1</beats>
+  <beat-type>8</beat-type>
+</time>
+'''
+        self.assertEqual(copy.to_string(), result)
+

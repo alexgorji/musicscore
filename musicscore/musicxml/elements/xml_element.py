@@ -34,29 +34,47 @@ class XMLTree(Tree):
             self.add_child(new_child)
 
     def _set_child(self, type_, tag, value):
-
         if value is not None and not isinstance(value, type_):
             value = type_(value)
 
-        self.replace_old_child_by_tag(tag=tag, new_child=value)
+        current_xml_children = self.dtd.get_current_xml_children()
+        if value:
+            for xml_child in current_xml_children:
+                if isinstance(xml_child, type_):
+                    self.dtd.remove_xml_child(xml_child)
+
+            self.dtd.add_xml_child(value)
 
         name = '_' + replace_dash(tag)
 
         self.__setattr__(name, value)
 
+    def reset_dtd(self):
+        self.dtd = copy.copy(self._DTD)
+        self.dtd._dtd_choices = None
+        self.dtd._choice_index = 0
+        self.dtd._current_choice = None
+        self.dtd._xml_children = None
+
     def add_child(self, child):
         if not self.dtd:
             raise DTDError('_DTD is None. No Child can be added. ')
         self.dtd.add_xml_child(child)
-        # self._children.append(child)
         child._up = self
         return child
+
+    def remove_child(self, child):
+        current_xml_children = self.dtd.get_current_xml_children()
+        if child:
+            current_xml_children.remove(child)
+        self.reset_dtd()
+
+        for xml_child in current_xml_children:
+            self.dtd.add_xml_child(xml_child)
 
     def close(self):
         if self.dtd:
             self.dtd.close()
-        # for child in self.get_children():
-        #     child.close()
 
     def get_children(self):
         if self.dtd:
@@ -172,10 +190,6 @@ class XMLElement(XMLTree):
             xml.text = str(self.text)
         set_attributes()
         return xml
-
-    def reset_children(self):
-        self.clear_children()
-        self.dtd._possibility_index = 0
 
     def to_string(self):
         self.close()

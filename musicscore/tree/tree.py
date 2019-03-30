@@ -60,6 +60,7 @@ class Tree(object):
             pass
 
     def clear_children(self):
+
         self._children.clear()
 
     def get_branch(self):

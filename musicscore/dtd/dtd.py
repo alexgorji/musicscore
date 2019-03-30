@@ -99,6 +99,13 @@ class DTDNode(DTDTree):
             return '{} type {} at {}'.format(self.__class__.__name__, self.type_.__name__, hex(id(self)))
         return '{} at {}'.format(self.__class__.__name__, hex(id(self)))
 
+    def replace_xml_child(self, xml_child):
+        print('replacing {} in {}'.format(xml_child, self))
+
+        print('current_xml_children', self.get_current_xml_children())
+        for xml_ch in [node.xml_children for node in self.current_choice.traverse()]:
+            print(xml_ch)
+
     def copy_child(self, child, ch=None):
         if isinstance(child, Element):
             copied = child.no_child_copy(child.type_)
@@ -130,6 +137,7 @@ class DTDNode(DTDTree):
 
         copied.original = self.original
         copied.choice = self.choice
+        (copied.min_occurrence, copied.max_occurrence) = (self.min_occurrence, self.max_occurrence)
         for child in self.get_children():
             copied.add_child(child.carbon_copy())
 
@@ -190,6 +198,11 @@ class DTDNode(DTDTree):
 
             return child_added
 
+    def remove_xml_child(self, xml_child):
+        for node in self.current_choice.traverse():
+            if xml_child in node.xml_children:
+                node.xml_children.remove(xml_child)
+
     def get_current_xml_children(self):
         xml_children = []
         pregnant_nodes = []
@@ -227,7 +240,7 @@ class DTDNode(DTDTree):
             try:
                 self.goto_next_choice()
                 self.close()
-            except DTDError:
+            except (DTDError, StopIteration):
                 raise e
 
 
@@ -325,20 +338,6 @@ class Element(DTDLeaf):
     def __init__(self, type_, min_occurrence=1, max_occurrence=1, **kwargs):
         super().__init__(type_, min_occurrence=min_occurrence, max_occurrence=max_occurrence, **kwargs)
 
-    def expand(self):
-        output = [[self]]
-        self.repair_parenthood()
-        # self.repair_occurrences()
-        return output
-
-    def sort_children(self, xmltree):
-        # print('sorting', self)
-        # print()
-        children = xmltree.get_children_by_type(self.type_)
-        children = [child for child in children if child not in xmltree._sorted_children]
-        children = children[:self.max_occurrence]
-        xmltree._sorted_children.extend(children)
-
     def magic_expand(self, dtd_choices):
         pass
 
@@ -346,15 +345,23 @@ class Element(DTDLeaf):
         return Element(type_=self.type_, min_occurrence=self.min_occurrence, max_occurrence=self.max_occurrence)
 
     def check_min_occurrence(self):
+        if len(self.xml_children) >= self.min_occurrence:
+            return True
+
         if isinstance(self.up, Choice) and self.up.min_occurrence == 0:
             return True
-        if self.up.min_occurrence != 1:
-            raise NotImplementedError()
 
-        if len(self.xml_children) < self.min_occurrence:
-            return False
-        else:
+        if isinstance(self.up, Sequence) and self.up.min_occurrence == 0:
+            siblings = [child for child in self.up.get_children() if child != self]
+            for sibling in siblings:
+                if sibling._xml_children:
+                    return False
             return True
+
+        if self.up.min_occurrence !=1:
+            raise NotImplementedError('check_min_occurrence')
+        else:
+            return False
 
     def add_xml_child(self, xml_child):
         if not isinstance(xml_child, self.type_):

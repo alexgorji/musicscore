@@ -234,4 +234,3 @@ class Note(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='note', *args, **kwargs)
-        # self.dtd = self._DTD

@@ -36,6 +36,4 @@ class TestGroupReference(TestCase):
     def test_expand(self):
         self.foo.add_child(Chord())
         self.foo.add_child(Grace())
-
-        self.foo.sort_children()
         self.assertEqual([type(child).__name__ for child in self.foo.get_children()], ['Grace', 'Chord'])

@@ -22,7 +22,7 @@ class TreeMeasure(timewise.Measure):
                 self._time = value
             else:
                 if isinstance(self._time, TreeTime):
-                    self._time._children = []
+                    self._time.reset_dtd()
                     self._time.pars_arguments(value)
                 else:
                     self._time = TreeTime(*value)
@@ -35,14 +35,14 @@ class TreeMeasure(timewise.Measure):
 
     def hide_time_signature(self):
         part = self.get_children_by_type(Part)[0]
-        part.attributes.remove_child(self.time)
+        if self.time in part.attributes.get_children():
+            part.attributes.remove_child(self.time)
 
     def __copy__(self):
-        new_measure = TreeMeasure()
+        time = self.time.__copy__()
+        new_measure = TreeMeasure(time)
         for key, new_key in zip(self.__dict__.keys(), new_measure.__dict__.keys()):
             item = self.__dict__[key]
             if key == '_attributes':
                 new_measure.__dict__[new_key] = item
-            elif key == '_time':
-                new_measure.__dict__[new_key] = item.__copy__()
         return new_measure

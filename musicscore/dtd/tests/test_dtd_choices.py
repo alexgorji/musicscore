@@ -200,25 +200,7 @@ class Test(TestCase):
         for choice in choices:
             print(choice.dump())
 
-    # def test_element(self):
-    #     self.print_choices(el)
-    #
-    def test_sequence(self):
-    # self.print_choices(seq1)
-        print(seq2.get_dtd_choices())
-        self.print_choices(seq2)
-    # self.print_choices(seq3)
-    # self.print_choices(seq4)
-    # self.print_choices(seq6)
-
-    #
-    # def test_choice(self):
-    #     self.print_choices(ch1)
-    #     self.print_choices(ch2)
-    #     self.print_choices(ch3)
-
     def test_lyric(self):
-
         result = [
             [[['Syllabic', 'Text', [['Elision', 'Syllabic'], 'Text'], 'Extend']], 'EndLine', 'EndParagraph',
              ['FootNote', 'Level']],
