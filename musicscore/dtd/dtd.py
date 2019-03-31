@@ -40,7 +40,7 @@ class DTDTree(Tree):
 class DTDNode(DTDTree):
     def __init__(self, children=None, min_occurrence=1, max_occurrence=1, *args, **kwargs):
         super().__init__(**kwargs)
-        self._dtd_choices = None
+        self.choices = None
         self._min_occurrence = None
         self._max_occurrence = None
         self._choice_index = 0
@@ -57,11 +57,6 @@ class DTDNode(DTDTree):
                     '{} can only have children of Type DTDTree not {}'.format(self.__class__.__name__, type(child)))
             self.add_child(child)
 
-    @property
-    def current_choice(self):
-        if self._current_choice is None:
-            self._current_choice = self.get_dtd_choices()[self._choice_index]
-        return self._current_choice
 
     @property
     def min_occurrence(self):
@@ -97,13 +92,6 @@ class DTDNode(DTDTree):
         if isinstance(self, Element):
             return '{} type {} at {}'.format(self.__class__.__name__, self.type_.__name__, hex(id(self)))
         return '{} at {}'.format(self.__class__.__name__, hex(id(self)))
-
-    def replace_xml_child(self, xml_child):
-        print('replacing {} in {}'.format(xml_child, self))
-
-        print('current_xml_children', self.get_current_xml_children())
-        for xml_ch in [node.xml_children for node in self.current_choice.traverse()]:
-            print(xml_ch)
 
     def copy_child(self, child, ch=None):
         if isinstance(child, Element):
@@ -145,60 +133,21 @@ class DTDNode(DTDTree):
     def generate_dtd_choices(self):
         self.eliminate_group_reference()
 
-        self._dtd_choices = [self.copy_child(self)]
+        self.choices = [self.copy_child(self)]
         choice_index = 0
 
-        while choice_index < len(self._dtd_choices):
-            current_choice = self._dtd_choices[choice_index]
-            current_choice.magic_expand(self._dtd_choices)
+        while choice_index < len(self.choices):
+            current_choice = self.choices[choice_index]
+            current_choice.magic_expand(self.choices)
             choice_index += 1
 
-    def get_dtd_choices(self):
-        if not self._dtd_choices:
+    def get_choices(self):
+        if not self.choices:
             self.generate_dtd_choices()
-        return self._dtd_choices
-
-    def add_xml_child(self, xml_child):
-        choice = self.current_choice
-        selected_leaves = [leaf for leaf in choice.traverse_leaves() if isinstance(xml_child, leaf.type_)]
-
-        if not selected_leaves:
-            try:
-                self.goto_next_choice()
-                self.add_xml_child(xml_child)
-            except Exception:
-                raise ChildTypeDTDConflict(xml_child)
-
-        else:
-            child_added = False
-            for selected_leaf in selected_leaves:
-                parent = selected_leaf.up
-                child_added = selected_leaf.add_xml_child(xml_child)
-                if child_added:
-                    break
-
-            if not child_added and isinstance(parent, Sequence) and (parent.min_occurrence, parent.max_occurrence) != (
-                    1, 1):
-                try:
-                    parent.pattern
-                except AttributeError:
-                    parent.pattern = [child.__deepcopy__() for child in parent.get_children()]
-                for child in parent.pattern:
-                    parent.add_child(child.__deepcopy__())
-
-                child_added = self.add_xml_child(xml_child)
-
-            if not child_added:
-                try:
-                    self.goto_next_choice()
-                    self.add_xml_child(xml_child)
-                except Exception:
-                    raise ChildOccurrenceDTDConflict(xml_child)
-
-            return child_added
+        return self.choices
 
     def remove_xml_child(self, xml_child):
-        for node in self.current_choice.traverse():
+        for node in self.traverse():
             if xml_child in node.xml_children:
                 node.xml_children.remove(xml_child)
 
@@ -206,7 +155,7 @@ class DTDNode(DTDTree):
         xml_children = []
         pregnant_nodes = []
 
-        for leaf in self.current_choice.traverse_leaves():
+        for leaf in self.traverse_leaves():
             if isinstance(leaf.up, Choice) and (leaf.up.min_occurrence, leaf.up.max_occurrence) == (0, None):
                 if leaf.up not in pregnant_nodes:
                     pregnant_nodes.append(leaf.up)
@@ -216,31 +165,6 @@ class DTDNode(DTDTree):
             xml_children.extend(node.xml_children)
         return xml_children
 
-    def goto_next_choice(self):
-        try:
-            old_xml_children = self.get_current_xml_children()
-            self._choice_index += 1
-            self._current_choice = self.get_dtd_choices()[self._choice_index]
-            for old_xml_child in old_xml_children:
-                self.add_xml_child(old_xml_child)
-            return self._current_choice
-        except IndexError:
-            raise StopIteration()
-
-    def check_non_optional(self):
-        for leaf in self.current_choice.traverse_leaves():
-            if not leaf.check_min_occurrence():
-                raise ChildIsNotOptional(leaf)
-
-    def close(self):
-        try:
-            self.check_non_optional()
-        except ChildIsNotOptional as e:
-            try:
-                self.goto_next_choice()
-                self.close()
-            except (DTDError, StopIteration):
-                raise e
 
 
 class DTDLeaf(DTDNode):

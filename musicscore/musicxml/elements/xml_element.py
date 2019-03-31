@@ -2,7 +2,7 @@ from lxml import etree as et
 import copy
 
 from musicscore.basic_functions import replace_dash
-from musicscore.dtd.dtd import DTDError
+from musicscore.dtd.dtd import DTDError, ChildIsNotOptional, ChildTypeDTDConflict, ChildOccurrenceDTDConflict, Sequence
 from musicscore.musicxml.exceptions import AfterInitializationError
 from musicscore.tree.tree import Tree
 
@@ -10,56 +10,129 @@ from musicscore.tree.tree import Tree
 class XMLTree(Tree):
     _DTD = None
 
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.dtd = copy.copy(self._DTD)
+        self.dtd = self._DTD
+        self._current_choice = None
+        self._choice_index = 0
+        self._old_choice_index = None
+
 
     def _set_child(self, type_, tag, value):
         if value is not None and not isinstance(value, type_):
             value = type_(value)
 
-        current_xml_children = self.dtd.get_current_xml_children()
+        current_xml_children = self.current_dtd_choice.get_current_xml_children()
         if value:
             for xml_child in current_xml_children:
                 if isinstance(xml_child, type_):
-                    self.dtd.remove_xml_child(xml_child)
+                    self.current_dtd_choice.remove_xml_child(xml_child)
 
-            self.dtd.add_xml_child(value)
+            self.add_xml_child(value)
 
         name = '_' + replace_dash(tag)
 
         self.__setattr__(name, value)
 
+    @property
+    def current_dtd_choice(self):
+        if self._old_choice_index != self._choice_index:
+            self._current_choice = self.dtd.get_choices()[self._choice_index].carbon_copy()
+            self._old_choice_index = self._choice_index
+        return self._current_choice
+
+    def goto_next_dtd_choice(self):
+        try:
+            old_xml_children = self.current_dtd_choice.get_current_xml_children()
+            self._choice_index += 1
+
+            for old_xml_child in old_xml_children:
+                self.add_xml_child(old_xml_child)
+            # return self._current_choice
+        except IndexError:
+            raise StopIteration()
+
+    def check_non_optional(self):
+        for leaf in self.current_dtd_choice.traverse_leaves():
+            if not leaf.check_min_occurrence():
+                raise ChildIsNotOptional(leaf)
+
     def reset_dtd(self):
-        self.dtd = copy.copy(self._DTD)
-        self.dtd._dtd_choices = None
-        self.dtd._choice_index = 0
-        self.dtd._current_choice = None
-        self.dtd._xml_children = None
+        self._current_choice = None
+        self._choice_index = 0
+        self._old_choice_index = None
+
+
+    def add_xml_child(self, xml_child):
+        choice = self.current_dtd_choice
+        selected_leaves = [leaf for leaf in choice.traverse_leaves() if isinstance(xml_child, leaf.type_)]
+
+        if not selected_leaves:
+            try:
+                self.goto_next_dtd_choice()
+                self.add_xml_child(xml_child)
+            except Exception:
+                raise ChildTypeDTDConflict(xml_child)
+
+        else:
+            child_added = False
+            for selected_leaf in selected_leaves:
+                parent = selected_leaf.up
+                child_added = selected_leaf.add_xml_child(xml_child)
+                if child_added:
+                    break
+
+            if not child_added and isinstance(parent, Sequence) and (parent.min_occurrence, parent.max_occurrence) != (
+                    1, 1):
+                try:
+                    parent.pattern
+                except AttributeError:
+                    parent.pattern = [child.__deepcopy__() for child in parent.get_children()]
+                for child in parent.pattern:
+                    parent.add_child(child.__deepcopy__())
+
+                child_added = self.add_xml_child(xml_child)
+
+            if not child_added:
+                try:
+                    self.goto_next_dtd_choice()
+                    self.add_xml_child(xml_child)
+                except Exception:
+                    raise ChildOccurrenceDTDConflict(xml_child)
+
+            return child_added
 
     def add_child(self, child):
         if not self.dtd:
             raise DTDError('_DTD is None. No Child can be added. ')
-        self.dtd.add_xml_child(child)
+        self.add_xml_child(child)
         child._up = self
         return child
 
     def remove_child(self, child):
-        current_xml_children = self.dtd.get_current_xml_children()
+        current_xml_children = self.current_dtd_choice.get_current_xml_children()
         if child:
             current_xml_children.remove(child)
         self.reset_dtd()
 
         for xml_child in current_xml_children:
-            self.dtd.add_xml_child(xml_child)
+            self.add_xml_child(xml_child)
 
     def close(self):
         if self.dtd:
-            self.dtd.close()
+            try:
+                self.check_non_optional()
+            except ChildIsNotOptional as e:
+                try:
+                    self.goto_next_dtd_choice()
+                    self.close()
+                except (DTDError, StopIteration):
+                    raise e
 
     def get_children(self):
         if self.dtd:
-            return self.dtd.get_current_xml_children()
+            return self.current_dtd_choice.get_current_xml_children()
         return []
 
     def get_children_by_type(self, type_):

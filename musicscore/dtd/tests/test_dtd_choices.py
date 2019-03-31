@@ -196,7 +196,7 @@ note_dtd = Sequence(
 
 class Test(TestCase):
     def print_choices(self, dtd):
-        choices = dtd.get_dtd_choices()
+        choices = dtd.get_choices()
         for choice in choices:
             print(choice.dump())
 
@@ -209,11 +209,11 @@ class Test(TestCase):
             [['Humming'], 'EndLine', 'EndParagraph', ['FootNote', 'Level']]
         ]
 
-        choices = [choice.get_leaves(key=lambda leaf: leaf.type_.__name__) for choice in lyric_dtd.get_dtd_choices()]
+        choices = [choice.get_leaves(key=lambda leaf: leaf.type_.__name__) for choice in lyric_dtd.get_choices()]
         self.assertEqual(choices, result)
 
     def test_note(self):
-        choices = [choice.get_leaves(key=lambda leaf: leaf.type_.__name__) for choice in note_dtd.get_dtd_choices()]
+        choices = [choice.get_leaves(key=lambda leaf: leaf.type_.__name__) for choice in note_dtd.get_choices()]
         # choices = [choice.get_leaves(key=lambda leaf: leaf) for choice in note_dtd.get_dtd_choices()]
 
         result = [

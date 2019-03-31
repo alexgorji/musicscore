@@ -37,7 +37,7 @@ class TestNoteDTD(TestCase):
         result = ['Grace', 'Chord', 'Rest', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot', 'Accidental',
                   'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam', 'Notations', 'Lyric',
                   'Play']
-        self.assertEqual([node.type_.__name__ for node in self.note.dtd.current_choice.traverse_leaves()], result)
+        self.assertEqual([node.type_.__name__ for node in self.note.current_dtd_choice.traverse_leaves()], result)
 
     def test_close_2(self):
         self.note.add_child(Rest())

@@ -3,9 +3,6 @@ from musicscore.musictree.treenote import TreeNote
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
 import os
 import cProfile
-
-from musicscore.tree.tree import Tree
-
 path = os.path.abspath(__file__).split('.')[0]
 
 
