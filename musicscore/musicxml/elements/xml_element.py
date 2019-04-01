@@ -16,6 +16,7 @@ class XMLTree(Tree):
         self._current_choice = None
         self._choice_index = 0
         self._old_choice_index = None
+        self._not_sorted_children = []
 
 
     @property
@@ -26,13 +27,11 @@ class XMLTree(Tree):
         if value is not None and not isinstance(value, type_):
             value = type_(value)
 
-        # current_xml_children = self.current_dtd_choice.get_xml_children()
         current_xml_children = self.current_children
         if value:
             for xml_child in current_xml_children:
                 if isinstance(xml_child, type_):
                     self.current_dtd_choice.remove_xml_child(xml_child)
-                    self.update_current_children()
 
             self.add_xml_child(value)
 
@@ -42,7 +41,6 @@ class XMLTree(Tree):
 
     @property
     def current_dtd_choice(self):
-        # print('current_dtd_choice of {} {} with choice_index {}'.format(type(self).__name__, id(self), self._choice_index))
         if self._old_choice_index != self._choice_index:
             self._current_choice = self.dtd.get_choices()[self._choice_index].carbon_copy()
             self._old_choice_index = self._choice_index
@@ -50,19 +48,11 @@ class XMLTree(Tree):
 
     def goto_next_dtd_choice(self):
         try:
-            # print('goto_next')
-            # print('getting old_xml_children')
-            # old_xml_children = self.current_dtd_choice.get_xml_children()
-            # print('old_xml_children {}'.format(old_xml_children))
-            self.update_current_children()
-            new_old_xml_children = self.current_children
-
-            # print('getting new old_xml_children')
-            # print('new old_xml_children {}'.format(new_old_xml_children))
+            old_xml_children = self._not_sorted_children
+            self._not_sorted_children = []
             self._choice_index += 1
-            # print('new choice_index = {}'.format(self._choice_index))
 
-            for old_xml_child in new_old_xml_children:
+            for old_xml_child in old_xml_children:
                 self.add_xml_child(old_xml_child)
         except IndexError:
             raise StopIteration()
@@ -73,12 +63,12 @@ class XMLTree(Tree):
                 raise ChildIsNotOptional(leaf)
 
     def reset_dtd(self):
+        self._not_sorted_children = []
         self._current_choice = None
         self._choice_index = 0
         self._old_choice_index = None
 
     def add_xml_child(self, xml_child):
-        # print('adding {} '.format(xml_child))
         choice = self.current_dtd_choice
         selected_leaves = [leaf for leaf in choice.traverse_leaves() if isinstance(xml_child, leaf.type_)]
 
@@ -86,7 +76,7 @@ class XMLTree(Tree):
             try:
                 self.goto_next_dtd_choice()
                 self.add_xml_child(xml_child)
-            except Exception as err:
+            except Exception:
                 raise ChildTypeDTDConflict(xml_child)
 
         else:
@@ -117,27 +107,26 @@ class XMLTree(Tree):
 
             if child_added:
                 self.update_current_children()
+                self._not_sorted_children.append(xml_child)
 
             return child_added
 
     def update_current_children(self):
-        # print('updating')
         self._current_children = self.current_dtd_choice.get_xml_children()
-        # print('updated current_children of {} {}'.format(type(self).__name__, self.current_children))
 
     def add_child(self, child):
         if not self.dtd:
             raise DTDError('_DTD is None. No Child can be added. ')
         self.add_xml_child(child)
-        # self.update_current_children()
         child._up = self
         return child
 
     def remove_child(self, child):
-        # current_xml_children = self.current_dtd_choice.get_xml_children()
+
         current_xml_children = self.current_children
         if child:
             current_xml_children.remove(child)
+
         self.reset_dtd()
 
         for xml_child in current_xml_children:
@@ -156,12 +145,9 @@ class XMLTree(Tree):
 
     def get_children(self):
         return self.current_children
-        # if self.dtd:
-        #     return self.current_dtd_choice.get_xml_children()
-        # return []
 
     def get_children_by_type(self, type_):
-        return [child for child in self.get_children() if isinstance(child, type_)]
+        return [child for child in self.current_children if isinstance(child, type_)]
 
 
 class XMLElement(XMLTree):
