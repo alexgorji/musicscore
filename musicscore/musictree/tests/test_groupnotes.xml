@@ -23,7 +23,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
-        <beam>begin</beam>
+        <beam number="1">begin</beam>
       </note>
       <note>
         <pitch>
@@ -33,7 +33,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
-        <beam>end</beam>
+        <beam number="1">end</beam>
       </note>
       <note>
         <pitch>
@@ -43,7 +43,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
-        <beam>begin</beam>
+        <beam number="1">begin</beam>
       </note>
       <note>
         <pitch>
@@ -53,7 +53,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
-        <beam>end</beam>
+        <beam number="1">end</beam>
       </note>
       <note>
         <pitch>
@@ -63,7 +63,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
-        <beam>begin</beam>
+        <beam number="1">begin</beam>
       </note>
       <note>
         <pitch>
@@ -73,7 +73,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
-        <beam>end</beam>
+        <beam number="1">end</beam>
       </note>
     </part>
   </measure>

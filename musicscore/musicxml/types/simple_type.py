@@ -156,7 +156,7 @@ class TypeColor(Token):
 
     @SimpleType.value.setter
     def value(self, v):
-        v(Token)
+        Token(v)
         m = self.p.match(v)
         if m is None:
             raise ValueError(

@@ -5,23 +5,6 @@ from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from unittest import TestCase
 
 
-class Number(AttributeAbstract):
-    def __init__(self, number=1, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._number = None
-
-    @property
-    def number(self):
-        return self._number
-
-    @number.setter
-    def number(self, value):
-        if not isinstance(value, TypeBeamLevel):
-            raise TypeError('number.value must be of type TypeBeamLevel not{}'.format(type(value)))
-        self._number = value
-        # self.generate_attribute('number', number, 'TypeBeamLevel')
-
-
 class Repeater(AttributeAbstract):
     def __init__(self, repeater=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,7 +17,7 @@ class Fan(AttributeAbstract):
         self.generate_attribute('fan', fan, 'TypeFan')
 
 
-class ComplexTypeBeam(ComplexType, TypeBeamValue, Number, Repeater, Fan, Color, OptionalUniqueId):
+class ComplexTypeBeam(ComplexType, TypeBeamValue, Repeater, Fan, Color, OptionalUniqueId):
     """
     documentation>Beam values include begin, continue, end, forward hook, and backward hook. Up to eight concurrent
     beams are available to cover up to 1024th notes. Each beam in a note is represented with a separate beam element,
@@ -52,8 +35,22 @@ class ComplexTypeBeam(ComplexType, TypeBeamValue, Number, Repeater, Fan, Color, 
     with a "yes" value for each beam using it.
     """
 
-    def __init__(self, value, *args, **kwargs):
+    def __init__(self, value, number=1, *args, **kwargs):
         super().__init__(tag='beam', value=value, *args, **kwargs)
+        self.number = number
+
+    @property
+    def number(self):
+        return self.get_attribute('number')
+
+    @number.setter
+    def number(self, value):
+        if value is None:
+            self.remove_attribute('number')
+        else:
+            TypeBeamLevel(value)
+            self._ATTRIBUTES.insert(0, 'number')
+            self.set_attribute('number', value)
 
 
 class Test(TestCase):
