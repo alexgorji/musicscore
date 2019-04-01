@@ -103,28 +103,28 @@ class Tree(object):
         else:
             return False
 
-    # def get_leaves(self, key=None):
-    #     output = []
-    #     for index, child in enumerate(self.get_children()):
-    #         if not child.is_leaf:
-    #             output.append(child.get_leaves(key=key))
-    #         else:
-    #             if key is not None:
-    #                 output.append(key(child))
-    #             else:
-    #                 output.append(child)
-    #
-    #     return output
-
-    def get_leaves(self):
+    def get_leaves(self, key=None):
         output = []
         for child in self.get_children():
             if not child.is_leaf:
-                output.append(child.get_leaves())
+                output.append(child.get_leaves(key=key))
             else:
-                output.append(child)
+                if key is not None:
+                    output.append(key(child))
+                else:
+                    output.append(child)
 
         return output
+
+    # def get_leaves(self):
+    #     output = []
+    #     for child in self.get_children():
+    #         if not child.is_leaf:
+    #             output.append(child.get_leaves())
+    #         else:
+    #             output.append(child)
+    #
+    #     return output
 
     def traverse(self):
         yield self
