@@ -1,7 +1,7 @@
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treenote import TreeNote
-from musicscore.musictree.treepart import Part
+from musicscore.musictree.treepart import TreePart
 import musicscore.musicxml.elements.timewise as timewise
 from musicscore.musicxml.elements.scoreheader import PartList
 from musicscore.musicxml.types.complextypes.partlist import ScorePart
@@ -32,13 +32,13 @@ class TreeScoreTimewise(timewise.Score):
         part_name.print_object = print_object
         self._part_list.add_child(new_score_part)
         for measure in self.get_children_by_type(TreeMeasure):
-            measure.add_child(Part(id=new_score_part.id))
+            measure.add_child(TreePart(id=new_score_part.id))
 
     def add_measure(self, measure=None):
         new_measure = self.set_new_measure(measure)
 
         for score_part in self.get_score_parts():
-            new_measure.add_child(Part(id=score_part.id))
+            new_measure.add_child(TreePart(id=score_part.id))
         return self.add_child(new_measure)
 
     def set_new_measure(self, measure):
@@ -60,8 +60,9 @@ class TreeScoreTimewise(timewise.Score):
         if not isinstance(note, TreeNote):
             raise TypeError('add_note note must be of type Note not {}'.format(type(note)))
         measure = self.get_children_by_type(TreeMeasure)[measure_number - 1]
-        part = measure.get_children_by_type(Part)[part_number - 1]
+        part = measure.get_children_by_type(TreePart)[part_number - 1]
         part.add_child(note)
+        part.update_note_offsets()
         part.quantize()
         divisions = part.get_divisions()
         note.update_duration(divisions=divisions)
@@ -91,5 +92,5 @@ class TreeScoreTimewise(timewise.Score):
     def finish(self):
         self.update_measures()
         for measure in self.get_children_by_type(TreeMeasure):
-            for part in measure.get_children_by_type(Part):
+            for part in measure.get_children_by_type(TreePart):
                 part.finish()

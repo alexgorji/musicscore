@@ -59,6 +59,9 @@ class TreeTime(Time):
         else:
             self.add_child(BeatType(beat_type))
 
+    def get_time_signature(self):
+        return zip(self.get_children_by_type(Beats), self.get_children_by_type(BeatType))
+
     @property
     def quarter_duration(self):
         return self._quarter_duration

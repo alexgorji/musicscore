@@ -11,7 +11,7 @@
       <attributes>
         <divisions>2</divisions>
         <time>
-          <beats>4</beats>
+          <beats>3</beats>
           <beat-type>4</beat-type>
         </time>
       </attributes>
@@ -23,6 +23,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
+        <beam>begin</beam>
       </note>
       <note>
         <pitch>
@@ -32,6 +33,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
+        <beam>end</beam>
       </note>
       <note>
         <pitch>
@@ -41,6 +43,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
+        <beam>begin</beam>
       </note>
       <note>
         <pitch>
@@ -50,6 +53,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
+        <beam>end</beam>
       </note>
       <note>
         <pitch>
@@ -59,6 +63,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
+        <beam>begin</beam>
       </note>
       <note>
         <pitch>
@@ -68,24 +73,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>0</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <type>eighth</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>0</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <type>eighth</type>
+        <beam>end</beam>
       </note>
     </part>
   </measure>
@@ -94,24 +82,6 @@
       <attributes>
         <divisions>2</divisions>
       </attributes>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>0</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <type>eighth</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>0</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <type>eighth</type>
-      </note>
       <note>
         <pitch>
           <step>C</step>

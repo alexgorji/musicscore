@@ -1,4 +1,4 @@
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeBeamValue
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeBeamValue, TypeBeamLevel
 from musicscore.musicxml.attributes.color import Color
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
@@ -8,7 +8,18 @@ from unittest import TestCase
 class Number(AttributeAbstract):
     def __init__(self, number=1, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('number', number, 'TypeBeamLevel')
+        self._number = None
+
+    @property
+    def number(self):
+        return self._number
+
+    @number.setter
+    def number(self, value):
+        if not isinstance(value, TypeBeamLevel):
+            raise TypeError('number.value must be of type TypeBeamLevel not{}'.format(type(value)))
+        self._number = value
+        # self.generate_attribute('number', number, 'TypeBeamLevel')
 
 
 class Repeater(AttributeAbstract):

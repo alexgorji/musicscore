@@ -6,9 +6,10 @@ from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Pitch
+from musicscore.musicxml.elements.note import Beam
 
 
-class Part(timewise.Part):
+class TreePart(timewise.Part):
     """"""
 
     def __init__(self, *args, **kwargs):
@@ -27,6 +28,107 @@ class Part(timewise.Part):
             return duration_denominators[0]
         else:
             return lcm(duration_denominators)
+
+    @property
+    def notes(self):
+        return self.get_children_by_type(TreeNote)
+
+    def update_note_offsets(self):
+        notes = self.notes
+        for index, note in enumerate(notes):
+            if not note.offset:
+                if index == 0:
+                    note._offset = 0
+                else:
+                    previous_note = notes[index - 1]
+                    note._offset = previous_note.offset + previous_note.quarter_duration
+
+    def _group_beats(self, grouping_list):
+        # todo test grouping list
+        if False:
+            raise Exception()
+        else:
+            notes = self.notes
+            grouped_notes = []
+            group_positions = [0]
+            for group in grouping_list:
+                # todo list of beat_types
+
+                beat_type = self.up.time.beat_type
+                if isinstance(beat_type, list):
+                    raise NotImplementedError()
+
+                group_positions.append(group_positions[-1] + group * (4. / beat_type.value))
+            current_note_index = 0
+            group_positions.pop(0)
+            for group_position in group_positions:
+                current_grouped_notes = []
+                while current_note_index < len(notes) and notes[current_note_index].offset < group_position:
+                    current_grouped_notes.append(notes[current_note_index])
+                    current_note_index = current_note_index + 1
+
+                grouped_notes.append(current_grouped_notes)
+            return grouped_notes
+
+    def group_beams(self, grouping_list=None):
+
+        def _generate_grouping_list():
+            grouping_list = []
+            for (beats, beat_type) in self.up.time.get_time_signature():
+                if beats.value % 3 == 0 and beat_type.value != 4:
+                    for x in range(beats.value // 3):
+                        grouping_list.append(3)
+                else:
+                    for x in range(beats.value):
+                        grouping_list.append(1)
+            return grouping_list
+
+        def _set_beams(grouped_notes):
+            for group in grouped_notes:
+                begin_beam = True
+                continue_end_beam = False
+
+                for i in range(len(group)):
+                    note = group[i]
+                    if note.type.value in ('eighth', '16th', '32nd'):
+                        beam = note.add_child(Beam(None))
+                        if i != len(group) - 1:
+                            if begin_beam:
+                                beam.value = 'begin'
+                                begin_beam = False
+                                continue_end_beam = True
+
+                            elif continue_end_beam:
+                                if i == len(group) - 1:
+                                    beam.value = 'end'
+                                    begin_beam = True
+                                    continue_end_beam = False
+                                else:
+                                    beam.value = 'continue'
+                        elif len(group) > 1 and group[i - 1] != []:
+                            beam.value = 'end'
+
+                    elif i != 0:
+                        try:
+                            beam = group[i - 1].beam
+
+                            if beam.value == 'begin':
+                                group[i - 1].remove_child(beam)
+                                begin_beam = True
+                                continue_end_beam = False
+                            elif beam.value == 'continue':
+                                group[i - 1].beam.value = 'end'
+                                begin_beam = True
+                                continue_end_beam = False
+                        except AttributeError:
+                            pass
+
+        if grouping_list is None:
+            grouping_list = _generate_grouping_list()
+            grouped_notes = self._group_beats(grouping_list)
+            _set_beams(grouped_notes)
+        else:
+            raise NotImplementedError('group_beams with values other than None')
 
     def update_divisions(self):
         attributes = self.get_children_by_type(Attributes)[0]

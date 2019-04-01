@@ -1,6 +1,8 @@
-from musicscore.musictree.treepart import Part
+from musicscore.musictree.treenote import TreeNote
+from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treetime import TreeTime
 from musicscore.musicxml.elements import timewise as timewise
+from musicscore.musicxml.elements.attributes import Beats, BeatType
 
 
 class TreeMeasure(timewise.Measure):
@@ -30,13 +32,16 @@ class TreeMeasure(timewise.Measure):
             self._time = None
 
     def show_time_signature(self):
-        part = self.get_children_by_type(Part)[0]
+        part = self.get_children_by_type(TreePart)[0]
         part.attributes.add_child(self.time)
 
     def hide_time_signature(self):
-        part = self.get_children_by_type(Part)[0]
+        part = self.get_children_by_type(TreePart)[0]
         if self.time in part.attributes.get_children():
             part.attributes.remove_child(self.time)
+
+    def get_part(self, number):
+        return self.get_children_by_type(TreePart)[number - 1]
 
     def __copy__(self):
         time = self.time.__copy__()

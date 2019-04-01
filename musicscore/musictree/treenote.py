@@ -39,6 +39,7 @@ class TreeNote(Note):
         self.quarter_duration = quarter_duration
         self._event = None
         self.event = event
+        self._offset = None
 
     @property
     def quarter_duration(self):
@@ -64,6 +65,10 @@ class TreeNote(Note):
                     else:
                         del child
                 self.add_child(Grace())
+
+    @property
+    def offset(self):
+        return self._offset
 
     @property
     def accidental(self):

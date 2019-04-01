@@ -140,6 +140,7 @@ class TypeBeamLevel(PositiveInteger):
 
     @SimpleType.value.setter
     def value(self, v):
+        PositiveInteger(v)
         if v < 1 or v > 8:
             raise ValueError(
                 '{}.value {} must be between 1 and 8'.format(self.__class__.__name__, v))
@@ -155,6 +156,7 @@ class TypeColor(Token):
 
     @SimpleType.value.setter
     def value(self, v):
+        v(Token)
         m = self.p.match(v)
         if m is None:
             raise ValueError(
