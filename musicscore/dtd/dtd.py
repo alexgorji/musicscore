@@ -57,7 +57,6 @@ class DTDNode(DTDTree):
                     '{} can only have children of Type DTDTree not {}'.format(self.__class__.__name__, type(child)))
             self.add_child(child)
 
-
     @property
     def min_occurrence(self):
         return self._min_occurrence
@@ -116,6 +115,7 @@ class DTDNode(DTDTree):
                 (new_node.min_occurrence, new_node.max_occurrence) = (node.min_occurrence, node.max_occurrence)
                 node.replace_node(new_node)
 
+
     def carbon_copy(self):
         if isinstance(self, Element):
             copied = Element(self.type_)
@@ -151,7 +151,7 @@ class DTDNode(DTDTree):
             if xml_child in node.xml_children:
                 node.xml_children.remove(xml_child)
 
-    def get_current_xml_children(self):
+    def get_xml_children(self):
         xml_children = []
         pregnant_nodes = []
 
@@ -164,7 +164,6 @@ class DTDNode(DTDTree):
         for node in pregnant_nodes:
             xml_children.extend(node.xml_children)
         return xml_children
-
 
 
 class DTDLeaf(DTDNode):

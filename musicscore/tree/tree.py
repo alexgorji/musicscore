@@ -116,6 +116,16 @@ class Tree(object):
 
         return output
 
+    # def get_leaves(self):
+    #     output = []
+    #     for child in self.get_children():
+    #         if not child.is_leaf:
+    #             output.append(child.get_leaves())
+    #         else:
+    #             output.append(child)
+    #
+    #     return output
+
     def traverse(self):
         yield self
         for child in self.get_children():
@@ -189,7 +199,13 @@ class Tree(object):
             self.up.get_children()[index] = new_node
             self._up = None
 
+    def get_flatten_leaves(self):
+        return [node for node in self.traverse() if node.is_leaf]
+
     def traverse_leaves(self):
+        # for node in self.traverse():
+        #     if node.is_leaf:
+        #         yield node
         for leaf in flatten(self.get_leaves()):
             yield leaf
 
