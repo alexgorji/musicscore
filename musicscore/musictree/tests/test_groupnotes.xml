@@ -81,6 +81,10 @@
     <part id="p1">
       <attributes>
         <divisions>2</divisions>
+        <time>
+          <beats>6</beats>
+          <beat-type>8</beat-type>
+        </time>
       </attributes>
       <note>
         <pitch>
@@ -90,6 +94,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
+        <beam number="1">begin</beam>
       </note>
       <note>
         <pitch>
@@ -99,6 +104,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
+        <beam number="1">continue</beam>
       </note>
       <note>
         <pitch>
@@ -108,6 +114,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
+        <beam number="1">end</beam>
       </note>
       <note>
         <pitch>
@@ -117,6 +124,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
+        <beam number="1">begin</beam>
       </note>
       <note>
         <pitch>
@@ -126,6 +134,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
+        <beam number="1">continue</beam>
       </note>
       <note>
         <pitch>
@@ -135,6 +144,7 @@
         </pitch>
         <duration>1</duration>
         <type>eighth</type>
+        <beam number="1">end</beam>
       </note>
     </part>
   </measure>

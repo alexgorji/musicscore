@@ -17,18 +17,17 @@ class TestGrouping(TestCase):
         self.score.add_part('one')
 
     def test_grouping(self):
-        for i in range(2):
-            # self.make_measure(i + 1, (3, 8, 2, 4))
-            self.make_measure(i + 1, (3, 4))
+        self.make_measure(1, (3, 4))
+        self.make_measure(2, (6, 8))
 
-        measure = self.score.get_measure(1)
+        for measure in self.score.get_children_by_type(TreeMeasure):
+            measure.get_part(1).group_beams()
 
-        measure.get_part(1).group_beams()
         self.score.finish()
 
         self.score.write(path=path)
 
     def make_measure(self, number, time_signature=(4, 4)):
         self.score.add_measure(TreeMeasure(time=time_signature))
-        for i in range(time_signature[0] * 2):
+        for i in range(time_signature[0] * 8//time_signature[1]):
             self.score.add_note(number, 1, TreeNote(event=Midi(60).get_pitch_rest(), quarter_duration=0.5))
