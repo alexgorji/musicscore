@@ -1,9 +1,8 @@
 from unittest import TestCase
 
 from musicscore.dtd.dtd import Sequence, GroupReference, Choice, Element
-from musicscore.musicxml.elements.fullnote import FullNote, Rest, Chord
-from musicscore.musicxml.elements.note import Duration, Grace, Tie, Cue, DurationGroup, Instrument, EditorialVoice, \
-    Type, Dot, Accidental, TimeModification, Stem, Notehead, NoteheadText, Staff, Beam, Notations, Lyric, Play
+from musicscore.musicxml.elements.fullnote import Chord
+from musicscore.musicxml.elements.note import Duration, Grace
 from musicscore.musicxml.elements.xml_element import XMLElement
 
 TestGroup = Sequence(
