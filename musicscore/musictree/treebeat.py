@@ -25,7 +25,7 @@ def _find_quantized_locations(duration, subdivision):
     return output
 
 
-class Beat(object):
+class TreeBeat(object):
     def __init__(self, duration=1, max_division=None, forbidden_divisions=None):
         self._duration = None
         self._max_division = None

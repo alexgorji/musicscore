@@ -2,6 +2,7 @@ from quicktions import Fraction
 
 from musicscore.basic_functions import lcm
 from musicscore.musictree.exceptions import MusicTreeError
+from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
@@ -17,6 +18,7 @@ class TreePart(timewise.Part):
         attributes = self.add_child(Attributes())
         attributes.add_child(Divisions(1))
         self._accidental_steps = []
+        self._beats = []
 
     def get_divisions(self):
         duration_denominators = [note.quarter_duration.denominator for note in
@@ -74,7 +76,7 @@ class TreePart(timewise.Part):
 
         def _generate_grouping_list():
             grouping_list = []
-            for (beats, beat_type) in self.up.time.get_time_signature():
+            for (beats, beat_type) in self.up.time.get_time_signatures():
                 if beats.value % 3 == 0 and beat_type.value != 4:
                     for x in range(beats.value // 3):
                         grouping_list.append(3)
@@ -148,6 +150,33 @@ class TreePart(timewise.Part):
                     note.accidental.show = True
         else:
             raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
+
+    def set_beats(self, list_of_beats=None):
+        if not self.up:
+            raise Exception('part must be a child of a measure to be able to set beats')
+        if list_of_beats is None:
+            list_of_beats = []
+            for time_signature in self.up.time.get_time_signatures():
+                (beats, beat_type) = time_signature
+                for b in range(beats.value):
+                    list_of_beats.append(TreeBeat(duration=4. / beat_type.value))
+        else:
+            duration = 0
+            for beat in list_of_beats:
+                duration += beat.duration
+            if self.up.quarter_duration != duration:
+                raise ValueError('sum of beat durations must be equal to measure duration')
+        if list_of_beats:
+            list_of_beats[0].offset = 0
+
+        for index, beat in enumerate(list_of_beats[1:]):
+            previous_beat = list_of_beats[index]
+            beat.offset = previous_beat.offset + previous_beat.duration
+
+        self._beats = list_of_beats
+
+    def get_beats(self):
+        return self._beats
 
     def quantize(self):
         for note in self.get_children_by_type(TreeNote):

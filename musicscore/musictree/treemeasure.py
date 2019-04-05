@@ -10,6 +10,7 @@ class TreeMeasure(timewise.Measure):
         super().__init__(number='1', *args, **kwargs)
         self._time = None
         self.time = time
+        self._beats = None
 
     @property
     def time(self):
@@ -28,6 +29,14 @@ class TreeMeasure(timewise.Measure):
                     self._time = TreeTime(*value)
         else:
             self._time = None
+
+    @property
+    def quarter_duration(self):
+        output = 0
+        for time_signature in self.time.get_time_signatures():
+            (beats, beat_type) = time_signature
+            output += beats.value / beat_type.value * 4
+        return output
 
     def show_time_signature(self):
         part = self.get_children_by_type(TreePart)[0]
