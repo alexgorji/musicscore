@@ -153,6 +153,10 @@ class TreePart(timewise.Part):
         for note in self.get_children_by_type(TreeNote):
             note.quarter_duration = Fraction(note.quarter_duration).limit_denominator(12)
 
+    def quantize_2(self):
+        for note in self.get_children_by_type(TreeNote):
+            note.quarter_duration = Fraction(note.quarter_duration).limit_denominator(12)
+
     def finish(self):
         self.quantize()
 

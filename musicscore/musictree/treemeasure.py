@@ -1,8 +1,6 @@
-from musicscore.musictree.treenote import TreeNote
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treetime import TreeTime
 from musicscore.musicxml.elements import timewise as timewise
-from musicscore.musicxml.elements.attributes import Beats, BeatType
 
 
 class TreeMeasure(timewise.Measure):
