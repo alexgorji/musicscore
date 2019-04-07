@@ -1,13 +1,14 @@
 from quicktions import Fraction
 
 from musicscore.basic_functions import lcm
+from musicscore.dtd.dtd import Element
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Pitch
-from musicscore.musicxml.elements.note import Beam
+from musicscore.musicxml.elements.note import Beam, Tie
 
 
 class TreePart(timewise.Part):
@@ -181,6 +182,22 @@ class TreePart(timewise.Part):
     def quantize(self):
         for note in self.get_children_by_type(TreeNote):
             note.quarter_duration = Fraction(note.quarter_duration).limit_denominator(12)
+
+    def split_note(self, note, ratios):
+        if not isinstance(note, TreeNote):
+            raise TypeError()
+
+        new_notes = note.split(ratios)
+        for new_note in new_notes[:-1]:
+            new_note.add_child(Tie())
+
+        insert_index = note.node._xml_children.index(note) + 1
+
+        for new_note in new_notes[1:].__reversed__():
+            self.add_child(new_note)
+            note.node._xml_children.remove(new_note)
+            note.node._xml_children.insert(insert_index, new_note)
+            self.update_current_children()
 
     def quantize_2(self):
         for note in self.get_children_by_type(TreeNote):

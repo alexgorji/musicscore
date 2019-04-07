@@ -291,10 +291,12 @@ class Element(DTDLeaf):
 
         if isinstance(self.up, Choice) and (self.up.min_occurrence, self.up.max_occurrence) == (0, None):
             self.up.xml_children.append(xml_child)
+            xml_child.node = self.up
             return True
 
         elif self.max_occurrence is None or len(self.xml_children) < self.max_occurrence:
             self.xml_children.append(xml_child)
+            xml_child.node = self
             return True
 
         elif self.up.max_occurrence != 1:

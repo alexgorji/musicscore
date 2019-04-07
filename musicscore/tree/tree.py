@@ -61,6 +61,20 @@ class Tree(object):
         except ValueError:
             pass
 
+    def remove(self):
+        if self.is_root:
+            raise Exception()
+
+        parent = self.up
+        insert_index = self.up._children.index(self)
+        self.up._children.remove(self)
+
+        for child in self.get_children().__reversed__():
+            parent.add_child(child)
+            new_child = parent._children.pop(-1)
+            parent._children.insert(insert_index, new_child)
+
+
     def clear_children(self):
 
         self._children.clear()

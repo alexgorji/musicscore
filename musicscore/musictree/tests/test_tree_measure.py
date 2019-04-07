@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treemeasure import TreeMeasure
+from musicscore.musictree.treepart import TreePart
 
 
 class Test(TestCase):
@@ -19,9 +20,12 @@ class Test(TestCase):
             copied.number = 3
 
     def test_duration(self):
-        m = TreeMeasure(time=(3, 8))
-        self.assertEqual(m.quarter_duration, 1.5)
+        m = TreeMeasure(time=(3, 4))
+        self.assertEqual(m.quarter_duration, 3)
 
-        m.set_beats([TreeBeat(duration=1), TreeBeat(duration=0.5), TreeBeat(duration=2)])
-        result = [0, 1, 1.5]
-        self.assertEqual([beat.offset for beat in m.get_beats()], result)
+        p = TreePart(id='one')
+        m.add_child(p)
+
+        p.set_beats([TreeBeat(duration=2), TreeBeat(duration=0.5), TreeBeat(duration=0.5)])
+        result = [0, 2, 2.5]
+        self.assertEqual([beat.offset for beat in p.get_beats()], result)

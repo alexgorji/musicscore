@@ -1,7 +1,8 @@
 from quicktions import Fraction
 
+from musicscore.dtd.dtd import Element
 from musicscore.musicxml.elements.fullnote import Rest, Event, Pitch, Alter
-from musicscore.musicxml.elements.note import Note, Dot, Duration, Type, Grace, Accidental
+from musicscore.musicxml.elements.note import Note, Dot, Duration, Type, Grace, Accidental, Tie
 
 
 class TreeAccidental(Accidental):
@@ -202,3 +203,15 @@ class TreeNote(Note):
 
         for i in range(_dot):
             self.add_child(Dot())
+
+    def split_copy(self, quarter_duration):
+        new_note = TreeNote(quarter_duration=quarter_duration, event=self.event)
+        return new_note
+
+    def split(self, ratios):
+        new_ratios = [Fraction(ratio, sum(ratios)) for ratio in ratios]
+        self.quarter_duration *= new_ratios[0]
+        splitted_notes = [self.split_copy(quarter_duration=ratio * self.quarter_duration) for ratio in new_ratios[1:]]
+        splitted_notes.insert(0, self)
+        return splitted_notes
+
