@@ -39,7 +39,6 @@ class Test(TestCase):
 
         p.add_child(TreeNote(quarter_duration=1))
         p.add_child(TreeNote(quarter_duration=1.2))
-        # p.add_child(TreeNote(quarter_duration=0.8))
 
         note1 = p.get_children_by_type(TreeNote)[0]
         l1 = Lyric()
