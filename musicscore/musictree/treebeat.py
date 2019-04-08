@@ -1,4 +1,5 @@
 from fractions import Fraction
+from musicscore.musictree.treenote import TreeNote
 
 
 def _find_nearest_quantized_value(quantized_values, values):
@@ -32,6 +33,7 @@ class TreeBeat(object):
         self._forbidden_divisions = None
         self._best_div = None
         self._permitted_durations = (4, 2, 1, 0.5)
+        self._notes = []
 
         self.duration = duration
         self.max_division = max_division
@@ -87,6 +89,18 @@ class TreeBeat(object):
     @property
     def best_div(self):
         return self._best_div
+
+    @property
+    def notes(self):
+        return self._notes
+
+    def add_note(self, note):
+        if not isinstance(note, TreeNote):
+            raise TypeError('{} must be of type TreeNote'.format(note))
+        # if sum([note.quarter_duration for note in self.notes]) + note.quarter_duration > self.duration:
+        #     raise Exception('note with quarter_duration {} cannot be added, otherwise beat duration would be exceeded')
+
+        self.notes.append(note)
 
     def get_quantized_locations(self, subdivision):
         return _find_quantized_locations(self.duration, subdivision)

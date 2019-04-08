@@ -5,11 +5,39 @@ from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musictree.treepart import TreePart
-from musicscore.musicxml.elements.note import Lyric
+from musicscore.musicxml.elements.note import Lyric, Tie
 from musicscore.musicxml.types.complextypes.lyric import Text
 
 
 class Test(TestCase):
+
+    def setUp(self):
+        m = TreeMeasure(time=(4, 4))
+        self.part = TreePart(id='one')
+        m.add_child(self.part)
+        self.part.set_beats()
+        self.part.add_child(TreeNote(quarter_duration=1, event=Midi(60).get_pitch_rest()))
+        self.part.add_child(TreeNote(quarter_duration=1.75, event=Midi(60).get_pitch_rest()))
+        self.part.add_child(TreeNote(quarter_duration=1.25, event=Midi(60).get_pitch_rest()))
+
+    def test_previous_note(self):
+        p = self.part
+        self.assertEqual(p.notes[0].previous, None)
+        self.assertEqual(id(p.notes[1].previous), id(p.notes[0]))
+        self.assertEqual(id(p.notes[2].previous), id(p.notes[1]))
+
+    def test_offset(self):
+        p = self.part
+        result = [0, 1, 2.75]
+        self.assertEqual([note.offset for note in p.notes], result)
+
+    def test_split_beats(self):
+        p = self.part
+        p.quantize_2()
+        result = [0, 1, 2.0, 2.75]
+        self.assertEqual([note.offset for note in p.notes], result)
+        result = [[], ['Tie'], [], []]
+        self.assertEqual([[type(t).__name__ for t in note.get_children_by_type(Tie)] for note in p.notes], result)
 
     def test_beats(self):
         m = TreeMeasure(time=(3, 8, 2, 4))
@@ -83,4 +111,9 @@ class Test(TestCase):
 '''
         self.assertEqual(p.to_string(), result)
 
-
+    def test_split_notes_2(self):
+        p = self.part
+        n = p.notes[1]
+        split = n.split([1, 1])
+        result = [0.875, 0.875]
+        self.assertEqual([s.quarter_duration for s in split], result)

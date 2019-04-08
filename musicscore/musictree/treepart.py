@@ -199,9 +199,39 @@ class TreePart(timewise.Part):
             note.node._xml_children.insert(insert_index, new_note)
             self.update_current_children()
 
+        return new_notes
+
+
+    def add_notes_to_beats(self):
+        notes = self.get_children_by_type(TreeNote)
+        beats = iter(self.get_beats())
+        current_beat = beats.__next__()
+        next_beat = beats.__next__()
+        for note in notes:
+            while note.offset < current_beat.offset or note.offset >= next_beat.offset:
+                try:
+                    current_beat = next_beat
+                    next_beat = beats.__next__()
+                except StopIteration:
+                    pass
+            current_beat.add_note(note)
+            note.part = self
+
+    def splite_notes_beatwise(self):
+        for beat in self.get_beats():
+            if beat.notes:
+                first_note = beat.notes[0]
+                if beat.offset < first_note.offset:
+                    previous_note = first_note.previous
+                    remain_duration = (previous_note.end_position - beat.offset)
+                    ratios = [previous_note.quarter_duration - remain_duration, remain_duration]
+                    self.notes.insert(0, self.split_note(previous_note, ratios)[1])
+
     def quantize_2(self):
-        for note in self.get_children_by_type(TreeNote):
-            note.quarter_duration = Fraction(note.quarter_duration).limit_denominator(12)
+        self.add_notes_to_beats()
+        self.splite_notes_beatwise()
+
+
 
     def finish(self):
         self.quantize()

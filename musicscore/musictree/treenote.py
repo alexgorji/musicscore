@@ -1,6 +1,5 @@
 from quicktions import Fraction
 
-from musicscore.dtd.dtd import Element
 from musicscore.musicxml.elements.fullnote import Rest, Event, Pitch, Alter
 from musicscore.musicxml.elements.note import Note, Dot, Duration, Type, Grace, Accidental, Tie
 
@@ -40,7 +39,6 @@ class TreeNote(Note):
         self.quarter_duration = quarter_duration
         self._event = None
         self.event = event
-        self._offset = None
 
     @property
     def quarter_duration(self):
@@ -68,8 +66,23 @@ class TreeNote(Note):
                 self.add_child(Grace())
 
     @property
+    def previous(self):
+        index = self.up.notes.index(self)
+        if index == 0:
+            return None
+        return self.up.notes[index - 1]
+
+    @property
     def offset(self):
-        return self._offset
+        if self.previous:
+            output = self.previous.offset + self.previous.quarter_duration
+            return output
+        else:
+            return 0
+
+    @property
+    def end_position(self):
+        return self.offset + self.quarter_duration
 
     @property
     def accidental(self):
@@ -209,9 +222,10 @@ class TreeNote(Note):
         return new_note
 
     def split(self, ratios):
-        new_ratios = [Fraction(ratio, sum(ratios)) for ratio in ratios]
+        new_ratios = [Fraction(ratio / sum(ratios)) for ratio in ratios]
+        old_duration = self.quarter_duration
         self.quarter_duration *= new_ratios[0]
-        splitted_notes = [self.split_copy(quarter_duration=ratio * self.quarter_duration) for ratio in new_ratios[1:]]
-        splitted_notes.insert(0, self)
-        return splitted_notes
+        output = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
+        output.insert(0, self)
+        return output
 
