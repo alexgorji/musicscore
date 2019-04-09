@@ -1,4 +1,4 @@
-from fractions import Fraction
+from quicktions import Fraction
 from musicscore.musictree.treenote import TreeNote
 
 
@@ -34,6 +34,7 @@ class TreeBeat(object):
         self._best_div = None
         self._permitted_durations = (4, 2, 1, 0.5)
         self._notes = []
+        self._part = None
 
         self.duration = duration
         self.max_division = max_division
@@ -51,7 +52,7 @@ class TreeBeat(object):
         else:
             raise Exception('duration can be set by initialization')
 
-        self._duration = value
+        self._duration = Fraction(value)
 
     @property
     def max_division(self):
@@ -93,6 +94,31 @@ class TreeBeat(object):
     @property
     def notes(self):
         return self._notes
+
+    @property
+    def part(self):
+        return self._part
+
+    @property
+    def previous(self):
+        if not self.part:
+            raise Exception('beat has no part')
+        index = self.part.beats.index(self)
+        if index == 0:
+            return None
+        return self.part.beats[index - 1]
+
+    @property
+    def offset(self):
+        if self.previous:
+            output = self.previous.offset + self.previous.duration
+            return output
+        else:
+            return 0
+
+    @property
+    def end_position(self):
+        return self.offset + self.duration
 
     def add_note(self, note):
         if not isinstance(note, TreeNote):
@@ -153,3 +179,10 @@ class TreeBeat(object):
         self._best_div = best_div
 
         return quantized_durations
+
+    def quantize(self):
+        quarter_durations = [note.quarter_duration for note in self.notes]
+        print(quarter_durations)
+        quantized_durations = self.get_quantized_durations(quarter_durations)
+        for note, quantized_duration in zip(self.notes, quantized_durations) :
+            note.quarter_duration = quantized_duration

@@ -28,4 +28,4 @@ class Test(TestCase):
 
         p.set_beats([TreeBeat(duration=2), TreeBeat(duration=0.5), TreeBeat(duration=0.5)])
         result = [0, 2, 2.5]
-        self.assertEqual([beat.offset for beat in p.get_beats()], result)
+        self.assertEqual([beat.offset for beat in p.beats], result)

@@ -52,7 +52,7 @@ class TreeNote(Note):
         if value < 0:
             raise ValueError('quarter_duration {} must be zero or positive'.format(value))
 
-        self._quarter_duration = value
+        self._quarter_duration = Fraction(value).limit_denominator(1000)
 
         if value == 0:
             if not self.get_children_by_type(Grace):
@@ -228,4 +228,3 @@ class TreeNote(Note):
         output = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
         output.insert(0, self)
         return output
-
