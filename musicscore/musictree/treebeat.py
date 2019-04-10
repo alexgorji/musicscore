@@ -109,6 +109,15 @@ class TreeBeat(object):
         return self.part.beats[index - 1]
 
     @property
+    def next(self):
+        if not self.part:
+            raise Exception('beat has no part')
+        index = self.part.beats.index(self)
+        if index == len(self.part.beats) - 1:
+            return None
+        return self.part.beats[index + 1]
+
+    @property
     def offset(self):
         if self.previous:
             output = self.previous.offset + self.previous.duration
@@ -132,6 +141,8 @@ class TreeBeat(object):
         return _find_quantized_locations(self.duration, subdivision)
 
     def get_quantized_durations(self, durations):
+        durations = [Fraction(duration).limit_denominator(1000) for duration in durations]
+
         if sum(durations) != self.duration:
             raise ValueError('sum of durations must be  equal to beat duration')
 
@@ -139,7 +150,7 @@ class TreeBeat(object):
             positions = [0]
             for index, duration in enumerate(durations):
                 positions.append(positions[index] + duration)
-            positions.append(self.duration)
+            # positions.append(self.duration)
             return positions
 
         def _get_permitted_divs():
@@ -182,7 +193,6 @@ class TreeBeat(object):
 
     def quantize(self):
         quarter_durations = [note.quarter_duration for note in self.notes]
-        print(quarter_durations)
         quantized_durations = self.get_quantized_durations(quarter_durations)
         for note, quantized_duration in zip(self.notes, quantized_durations) :
             note.quarter_duration = quantized_duration

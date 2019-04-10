@@ -36,15 +36,15 @@ class TreePart(timewise.Part):
     def notes(self):
         return self.get_children_by_type(TreeNote)
 
-    def update_note_offsets(self):
-        notes = self.notes
-        for index, note in enumerate(notes):
-            if not note.offset:
-                if index == 0:
-                    note._offset = 0
-                else:
-                    previous_note = notes[index - 1]
-                    note._offset = previous_note.offset + previous_note.quarter_duration
+    # def update_note_offsets(self):
+    #     notes = self.notes
+    #     for index, note in enumerate(notes):
+    #         if not note.offset:
+    #             if index == 0:
+    #                 note._offset = 0
+    #             else:
+    #                 previous_note = notes[index - 1]
+    #                 note._offset = previous_note.offset + previous_note.quarter_duration
 
     def _group_beats(self, grouping_list):
         # todo test grouping list
@@ -166,15 +166,10 @@ class TreePart(timewise.Part):
         else:
             duration = 0
             for beat in list_of_beats:
+                beat._part = self
                 duration += beat.duration
             if self.up.quarter_duration != duration:
                 raise ValueError('sum of beat durations must be equal to measure duration')
-        # if list_of_beats:
-        #     list_of_beats[0].offset = 0
-
-        # for index, beat in enumerate(list_of_beats[1:]):
-        #     previous_beat = list_of_beats[index]
-        #     beat.offset = previous_beat.offset + previous_beat.duration
 
         self._beats = list_of_beats
 
@@ -217,9 +212,9 @@ class TreePart(timewise.Part):
                 except StopIteration:
                     pass
             current_beat.add_note(note)
-            note._part = self
 
     def split_notes_beatwise(self):
+
         for beat in self.beats:
             if beat.notes:
                 first_note = beat.notes[0]
@@ -228,20 +223,16 @@ class TreePart(timewise.Part):
                     previous_note = first_note.previous
                     tail_duration = (previous_note.end_position - beat.offset)
                     ratios = [previous_note.quarter_duration - tail_duration, tail_duration]
+
                     beat.notes.insert(0, self.split_note(previous_note, ratios)[1])
-        # todo: note should be added from the begining to beat in part and part_notes should be the combination of beat.notes
 
         for beat in self.beats:
             if beat.notes:
                 last_note = beat.notes[-1]
                 if last_note.end_position > beat.end_position:
-                    print('last_note.end_position', last_note.end_position)
-                    print(last_note.quarter_duration)
-                    print(last_note.offset)
-                    print(beat.end_position)
                     head_duration = (beat.end_position - last_note.offset)
                     ratios = [head_duration, last_note.quarter_duration - head_duration]
-                    # self.notes.insert(0, self.split_note(last_note, ratios)[0])
+                    beat.next.notes.insert(0, self.split_note(last_note, ratios)[1])
 
     def quantize_2(self):
         self.add_notes_to_beats()

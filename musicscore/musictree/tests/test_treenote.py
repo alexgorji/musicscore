@@ -9,7 +9,7 @@ class TestTreeNote(TestCase):
         self.note = TreeNote()
 
     def test_quarter_duration(self):
-        self.note.add_child(Duration(self.note.quarter_duration))
+        self.note.add_child(Duration(int(self.note.quarter_duration)))
         result = ['Rest', 'Duration']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
         self.note.quarter_duration = 0
@@ -24,7 +24,7 @@ class TestTreeNote(TestCase):
 
     def test_accidental(self):
         self.note.accidental.show = False
-        self.note.add_child(Duration(self.note.quarter_duration))
+        self.note.add_child(Duration(int(self.note.quarter_duration)))
         self.note.event = Pitch(step='A', alter=-1.5)
         self.note.accidental.show = True
         result = '''<note>

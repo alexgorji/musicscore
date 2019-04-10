@@ -37,21 +37,13 @@ class Test(TestCase):
         p = self.part
         p.add_notes_to_beats()
         p.split_notes_beatwise()
-        result = [0, 1, 2.0, 2.75]
+
+        result = [0, Fraction(1, 1), Fraction(2, 1), Fraction(11, 4), Fraction(3, 1)]
         self.assertEqual([note.offset for note in p.notes], result)
-        result = [[], ['Tie'], [], []]
+        result = [[], ['Tie'], [], ['Tie'], []]
         self.assertEqual([[type(t).__name__ for t in note.get_children_by_type(Tie)] for note in p.notes], result)
 
     def test_split_beats_2(self):
-        p = self.part
-        p.add_notes_to_beats()
-        p.split_notes_beatwise()
-        result = [0, 1, 2.0, 2.75]
-        self.assertEqual([note.offset for note in p.notes], result)
-        result = [[], ['Tie'], [], []]
-        self.assertEqual([[type(t).__name__ for t in note.get_children_by_type(Tie)] for note in p.notes], result)
-
-    def test_split_beats_3(self):
         m = TreeMeasure(time=(3, 4))
         p = TreePart(id='one')
         m.add_child(p)
@@ -61,8 +53,7 @@ class Test(TestCase):
         p.add_notes_to_beats()
         p.split_notes_beatwise()
         result = [Fraction(1, 1), Fraction(2, 5), Fraction(3, 5), Fraction(1, 1)]
-        print([note.quarter_duration for note in p.notes])
-        # self.assertEqual([note.quarter_duration for note in p.notes], result)
+        self.assertEqual([note.quarter_duration for note in p.notes], result)
 
     def test_quantize(self):
         m = TreeMeasure(time=(4, 4))
@@ -75,8 +66,11 @@ class Test(TestCase):
         p.add_child(TreeNote(quarter_duration=0.2, event=Midi(60).get_pitch_rest()))
         p.add_child(TreeNote(quarter_duration=1.3, event=Midi(60).get_pitch_rest()))
         p.quantize_2()
-        print([note.quarter_duration for note in p.notes])
-        pass
+        result = [Fraction(1, 1), Fraction(1, 1), Fraction(1, 6), Fraction(1, 3), Fraction(1, 6), Fraction(1, 3), Fraction(1, 1)]
+        self.assertEqual([note.quarter_duration for note in p.notes], result)
+        result = [[], ['Tie'], [], [], [], ['Tie'], []]
+        self.assertEqual([[type(t).__name__ for t in note.get_children_by_type(Tie)] for note in p.notes], result)
+
 
     def test_beats(self):
         m = TreeMeasure(time=(3, 8, 2, 4))
@@ -84,19 +78,19 @@ class Test(TestCase):
         m.add_child(p)
         p.set_beats()
         result = [0.5, 0.5, 0.5, 1.0, 1.0]
-        self.assertEqual([beat.duration for beat in p.beats()], result)
+        self.assertEqual([beat.duration for beat in p.beats], result)
         result = [0, 0.5, 1.0, 1.5, 2.5]
-        self.assertEqual([beat.offset for beat in p.beats()], result)
+        self.assertEqual([beat.offset for beat in p.beats], result)
         result = [4, 4, 4, 8, 8]
-        self.assertEqual([beat.max_division for beat in p.beats()], result)
-        p.beats()[3].max_division = 5
+        self.assertEqual([beat.max_division for beat in p.beats], result)
+        p.beats[3].max_division = 5
         result = [4, 4, 4, 5, 8]
-        self.assertEqual([beat.max_division for beat in p.beats()], result)
+        self.assertEqual([beat.max_division for beat in p.beats], result)
         with self.assertRaises(ValueError):
             p.set_beats([TreeBeat(duration=0.5), TreeBeat(duration=0.5), TreeBeat(duration=0.5)])
         p.set_beats([TreeBeat(duration=1), TreeBeat(duration=0.5), TreeBeat(duration=2)])
         result = [0, 1, 1.5]
-        self.assertEqual([beat.offset for beat in p.beats()], result)
+        self.assertEqual([beat.offset for beat in p.beats], result)
 
     def test_split_notes(self):
         m = TreeMeasure(time=(3, 4))
