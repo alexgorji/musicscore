@@ -36,6 +36,15 @@ class TreePart(timewise.Part):
     def notes(self):
         return self.get_children_by_type(TreeNote)
 
+    def add_note(self, note):
+        if not isinstance(note, TreeNote):
+            raise TypeError()
+
+        self.add_child(note)
+        previous_note = note.previous
+        if previous_note and previous_note.is_tied:
+            note.add_tie('stop')
+
     # def update_note_offsets(self):
     #     notes = self.notes
     #     for index, note in enumerate(notes):

@@ -9,73 +9,31 @@
   <measure number="1">
     <part id="p1">
       <attributes>
-        <divisions>6</divisions>
+        <divisions>1</divisions>
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
       </attributes>
       <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>6</duration>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>6</duration>
-        <tie/>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
+        <rest/>
         <duration>1</duration>
-        <type>16th</type>
-        <beam number="1">begin</beam>
+        <type>quarter</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>1</duration>
+        <type>quarter</type>
       </note>
       <note>
         <pitch>
           <step>C</step>
+          <alter>1</alter>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <type>eighth</type>
-        <beam number="1">continue</beam>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <type>16th</type>
-        <beam number="1">continue</beam>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <tie/>
-        <type>eighth</type>
-        <beam number="1">end</beam>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>6</duration>
-        <type>quarter</type>
+        <type>half</type>
+        <accidental>sharp</accidental>
       </note>
     </part>
   </measure>

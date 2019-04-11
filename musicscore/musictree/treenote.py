@@ -1,7 +1,8 @@
 from quicktions import Fraction
 
 from musicscore.musicxml.elements.fullnote import Rest, Event, Pitch, Alter
-from musicscore.musicxml.elements.note import Note, Dot, Duration, Type, Grace, Accidental, Tie
+from musicscore.musicxml.elements.note import Note, Dot, Duration, Type, Grace, Accidental, Tie, Notations
+from musicscore.musicxml.types.complextypes.notations import Tied
 
 
 class TreeAccidental(Accidental):
@@ -31,7 +32,7 @@ class TreeNote(Note):
     quarter_duration = 0 means grace note
     """
 
-    def __init__(self, event=Rest(), quarter_duration=1, *args, **kwargs):
+    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._accidental = TreeAccidental(show=False, value='natural')
         self._accidental._note = self
@@ -40,6 +41,8 @@ class TreeNote(Note):
         self._event = None
         self.event = event
         self._offset = None
+        self._is_tied = False
+        self.is_tied = is_tied
 
     @property
     def quarter_duration(self):
@@ -109,6 +112,30 @@ class TreeNote(Note):
             pass
         self._event = self.add_child(value)
         self.update_accidental()
+
+    def add_tie(self, value):
+        if value == 'start':
+            self.add_child(Tie('start'))
+            notations = self.add_child(Notations())
+            notations.add_child(Tied('start'))
+        elif value == 'stop':
+            self.add_child(Tie('stop'))
+            notations = self.add_child(Notations())
+            notations.add_child(Tied('stop'))
+        else:
+            raise NotImplementedError('value {} cannot be a tie value'.format(value))
+
+    @property
+    def is_tied(self):
+        return self._is_tied
+
+    @is_tied.setter
+    def is_tied(self, value):
+        if not isinstance(value, bool):
+            raise TypeError('is_tied.value must be of type bool not{}'.format(type(value)))
+        self._is_tied = value
+        if value is True:
+            self.add_tie('start')
 
     def update_accidental(self):
         _accidentals = {-1.5: 'three-quarters-flat',

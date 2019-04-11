@@ -76,29 +76,29 @@ class TestNoteDTD(TestCase):
 '''
         self.assertEqual(self.note.to_string(), result)
 
-    def test_to_string(self):
-        self.note.add_child(Pitch())
-        self.note.add_child(Beam('begin'))
-        self.note.add_child(Tie())
-        self.note.add_child(Beam('continue'))
-        self.note.add_child(Duration(1))
-        self.note.add_child(Tie())
-        self.note.add_child(Chord())
-        self.note.close()
-        result = '''<note>
-  <chord/>
-  <pitch>
-    <step>C</step>
-    <octave>4</octave>
-  </pitch>
-  <duration>1</duration>
-  <tie/>
-  <tie/>
-  <beam number="1">begin</beam>
-  <beam number="1">continue</beam>
-</note>
-'''
-        self.assertEqual(self.note.to_string(), result)
+#     def test_to_string(self):
+#         self.note.add_child(Pitch())
+#         self.note.add_child(Beam('begin'))
+#         self.note.add_child(Tie())
+#         self.note.add_child(Beam('continue'))
+#         self.note.add_child(Duration(1))
+#         self.note.add_child(Tie())
+#         self.note.add_child(Chord())
+#         self.note.close()
+#         result = '''<note>
+#   <chord/>
+#   <pitch>
+#     <step>C</step>
+#     <octave>4</octave>
+#   </pitch>
+#   <duration>1</duration>
+#   <tie/>
+#   <tie/>
+#   <beam number="1">begin</beam>
+#   <beam number="1">continue</beam>
+# </note>
+# '''
+#         self.assertEqual(self.note.to_string(), result)
 
     def test_rest(self):
         rest = self.note.add_child(Rest())

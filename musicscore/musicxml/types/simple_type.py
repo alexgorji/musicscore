@@ -72,6 +72,19 @@ class PositiveInteger(SimpleType):
         self._value = v
 
 
+class NonNegativeInteger(SimpleType):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        Integer(v)
+        if v < 0:
+            raise ValueError('value {} must a be non negative.'.format(v))
+
+        self._value = v
+
+
 class String(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -368,6 +381,20 @@ class SmulfLyricsGlyphName(SmulfGlyphName):
         raise NotImplementedError()
 
 
+class TypeStartStop(SimpleType):
+    """
+    The start-stop type is used for an attribute of musical elements that can either start or stop, such as tuplets.
+    The values of start and stop refer to how an element appears in musical score order, not in MusicXML document order.
+    An element with a stop attribute may precede the corresponding element with a start attribute within a MusicXML
+    document. This is particularly common in multi-staff music. For example, the stopping point for a tuplet may appear
+    in staff 1 before the starting point for the tuplet appears in staff 2 later in the document
+    """
+    permitted = ["start", "stop"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 class TypeStartStopContinue(SimpleType):
     """
     The start-stop-continue type is used for an attribute of musical elements that can either start or stop, but also
@@ -413,7 +440,7 @@ class TypeTenths(Decimal):
 
 
 class TypeTextDirection(SimpleType):
-    """documentation>The text-direction type is used to adjust and override the Unicode bidirectional text algorithm,
+    """The text-direction type is used to adjust and override the Unicode bidirectional text algorithm,
     similar to the W3C Internationalization Tag Set recommendation. Values are ltr (left-to-right embed), rtl (right-to-
     left embed), lro (left-to-right bidi-override), and rlo (right-to-left bidi-override). The default value is ltr.
     This type is typically used by applications that store text in left-to-right visual order rather than logical order.
@@ -422,6 +449,23 @@ class TypeTextDirection(SimpleType):
     """
 
     permitted = ["ltr", "rtl", "lro", "rlo"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTiedType(SimpleType):
+    """
+	The tied-type type is used as an attribute of the tied element to specify where the visual representation of a tie
+	begins and ends. A tied element which joins two notes of the same pitch can be specified with tied-type start on the
+	first note and tied-type stop on the second note. To indicate a note should be undamped, use a single tied element
+	with tied-type let-ring. For other ties that are visually attached to a single note, such as a tie leading into or
+	out of a repeated section or coda, use two tied elements on the same note, one start and one stop.
+
+	In start-stop cases, ties can add more elements using a continue type. This is typically used to specify the
+	formatting of cross-system ties.
+    """
+    permitted = ["start", "stop", "continue", "let-ring"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -696,18 +740,6 @@ class TypeYesNo(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="start-stop">
-		<xs:annotation>
-			<xs:documentation>The start-stop type is used for an attribute of musical elements that can either start or stop, such as tuplets.
-
-The values of start and stop refer to how an element appears in musical score order, not in MusicXML document order. An element with a stop attribute may precede the corresponding element with a start attribute within a MusicXML document. This is particularly common in multi-staff music. For example, the stopping point for a tuplet may appear in staff 1 before the starting point for the tuplet appears in staff 2 later in the document.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="start"/>
-			<xs:enumeration value="stop"/>
-		</xs:restriction>
-	</xs:simpleType>
-
 	<xs:simpleType name="start-stop-single">
 		<xs:annotation>
 			<xs:documentation>The start-stop-single type is used for an attribute of musical elements that can be used for either multi-note or single-note musical elements, as for groupings.</xs:documentation>
@@ -724,20 +756,6 @@ The values of start and stop refer to how an element appears in musical score or
 			<xs:documentation>The string-number type indicates a string number. Strings are numbered from high to low, with 1 being the highest pitched full-length string.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:positiveInteger"/>
-	</xs:simpleType>
-
-	<xs:simpleType name="tied-type">
-		<xs:annotation>
-			<xs:documentation>The tied-type type is used as an attribute of the tied element to specify where the visual representation of a tie begins and ends. A tied element which joins two notes of the same pitch can be specified with tied-type start on the first note and tied-type stop on the second note. To indicate a note should be undamped, use a single tied element with tied-type let-ring. For other ties that are visually attached to a single note, such as a tie leading into or out of a repeated section or coda, use two tied elements on the same note, one start and one stop.
-
-In start-stop cases, ties can add more elements using a continue type. This is typically used to specify the formatting of cross-system ties.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="start"/>
-			<xs:enumeration value="stop"/>
-			<xs:enumeration value="continue"/>
-			<xs:enumeration value="let-ring"/>
-		</xs:restriction>
 	</xs:simpleType>
 
 	<xs:simpleType name="top-bottom">

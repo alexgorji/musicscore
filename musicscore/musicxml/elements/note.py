@@ -11,6 +11,8 @@ import copy
 from musicscore.musicxml.types.complextypes.complextype import EmptyPlacement, ComplexType
 from musicscore.musicxml.types.complextypes.beam import ComplexTypeBeam
 from musicscore.musicxml.types.complextypes.lyric import ComplexTypeLyric
+from musicscore.musicxml.types.complextypes.notations import ComplexTypeNotations
+from musicscore.musicxml.types.complextypes.tie import ComplexTypeTie
 from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeNoteTypeValue, TypeAccidentalValue
 
 
@@ -31,11 +33,15 @@ class Grace(XMLElement, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):
 # type="semitones"
 
 
-class Tie(XMLElement):
-    """"""
+class Tie(ComplexTypeTie):
+    """
+    The tie element indicates that a tie begins or ends with this note. If the tie element applies only particular times
+    through a repeat, the time-only attribute indicates which times to apply it. The tie element indicates sound; the
+    tied element indicates notation.</xs:documentation>
+    """
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='tie', *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class Cue(XMLElement):
@@ -138,12 +144,11 @@ class Beam(ComplexTypeBeam):
         super().__init__(value=value, *args, **kwargs)
 
 
-class Notations(XMLElement):
+class Notations(ComplexTypeNotations):
     """"""
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='notations', *args, **kwargs)
-        raise NotImplementedError()
+        super().__init__(*args, **kwargs)
 
 
 class Lyric(ComplexTypeLyric):

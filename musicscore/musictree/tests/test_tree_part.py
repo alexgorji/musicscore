@@ -92,53 +92,53 @@ class Test(TestCase):
         result = [0, 1, 1.5]
         self.assertEqual([beat.offset for beat in p.beats], result)
 
-    def test_split_notes(self):
-        m = TreeMeasure(time=(3, 4))
-        p = TreePart(id='one')
-        m.add_child(p)
-        p.set_beats()
-
-        p.add_child(TreeNote(quarter_duration=1))
-        p.add_child(TreeNote(quarter_duration=1.2))
-
-        note1 = p.get_children_by_type(TreeNote)[0]
-        l1 = Lyric()
-        l1.add_child(Text('bla'))
-        note1.add_child(l1)
-        note1.event = Midi(71).get_pitch_rest()
-        p.split_note(note1, (3, 1, 2))
-        result = '''<part id="one">
-  <attributes>
-    <divisions>1</divisions>
-  </attributes>
-  <note>
-    <pitch>
-      <step>B</step>
-      <octave>4</octave>
-    </pitch>
-    <tie/>
-    <lyric number="1">
-      <text>bla</text>
-    </lyric>
-  </note>
-  <note>
-    <pitch>
-      <step>B</step>
-      <octave>4</octave>
-    </pitch>
-    <tie/>
-  </note>
-  <note>
-    <pitch>
-      <step>B</step>
-      <octave>4</octave>
-    </pitch>
-  </note>
-  <note>
-    <rest/>
-  </note>
-</part>
-'''
-        self.assertEqual(p.to_string(), result)
+#     def test_split_notes(self):
+#         m = TreeMeasure(time=(3, 4))
+#         p = TreePart(id='one')
+#         m.add_child(p)
+#         p.set_beats()
+#
+#         p.add_child(TreeNote(quarter_duration=1))
+#         p.add_child(TreeNote(quarter_duration=1.2))
+#
+#         note1 = p.get_children_by_type(TreeNote)[0]
+#         l1 = Lyric()
+#         l1.add_child(Text('bla'))
+#         note1.add_child(l1)
+#         note1.event = Midi(71).get_pitch_rest()
+#         p.split_note(note1, (3, 1, 2))
+#         result = '''<part id="one">
+#   <attributes>
+#     <divisions>1</divisions>
+#   </attributes>
+#   <note>
+#     <pitch>
+#       <step>B</step>
+#       <octave>4</octave>
+#     </pitch>
+#     <tie/>
+#     <lyric number="1">
+#       <text>bla</text>
+#     </lyric>
+#   </note>
+#   <note>
+#     <pitch>
+#       <step>B</step>
+#       <octave>4</octave>
+#     </pitch>
+#     <tie/>
+#   </note>
+#   <note>
+#     <pitch>
+#       <step>B</step>
+#       <octave>4</octave>
+#     </pitch>
+#   </note>
+#   <note>
+#     <rest/>
+#   </note>
+# </part>
+# '''
+#         self.assertEqual(p.to_string(), result)
 
 
