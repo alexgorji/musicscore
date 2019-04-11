@@ -2,7 +2,6 @@ from unittest import TestCase
 
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechord import TreeChord
-from musicscore.musicxml.elements.note import Duration
 
 
 class TestTreeChord(TestCase):

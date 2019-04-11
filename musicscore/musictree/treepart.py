@@ -4,6 +4,7 @@ from musicscore.basic_functions import lcm
 from musicscore.dtd.dtd import Element
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
+from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
@@ -20,6 +21,11 @@ class TreePart(timewise.Part):
         attributes.add_child(Divisions(1))
         self._accidental_steps = []
         self._beats = []
+        self._chords = []
+
+    @property
+    def chords(self):
+        return self._chords
 
     def get_divisions(self):
         duration_denominators = [note.quarter_duration.denominator for note in
@@ -44,6 +50,14 @@ class TreePart(timewise.Part):
         previous_note = note.previous
         if previous_note and previous_note.is_tied:
             note.add_tie('stop')
+
+    def add_chord(self, chord):
+        if not isinstance(chord, TreeChord):
+            raise TypeError()
+
+        self.chords.append(chord)
+        for note in chord.tree_notes:
+            self.add_child(note)
 
     # def update_note_offsets(self):
     #     notes = self.notes

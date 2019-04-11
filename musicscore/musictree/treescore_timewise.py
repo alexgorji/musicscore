@@ -1,4 +1,5 @@
 from musicscore.musictree.midi import Midi
+from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musictree.treepart import TreePart
@@ -63,6 +64,13 @@ class TreeScoreTimewise(timewise.Score):
         part = measure.get_children_by_type(TreePart)[part_number - 1]
         part.add_note(note)
 
+    def add_chord(self, measure_number, part_number, chord):
+        if not isinstance(chord, TreeChord):
+            raise TypeError('add_note note must be of type TreeChord not {}'.format(type(chord)))
+
+        measure = self.get_children_by_type(TreeMeasure)[measure_number - 1]
+        part = measure.get_children_by_type(TreePart)[part_number - 1]
+        part.add_chord(chord)
 
     def add_midi(self, measure_number, part_number, midi=Midi(60), quarter_duration=1):
         note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=quarter_duration)

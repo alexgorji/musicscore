@@ -174,5 +174,7 @@ class TestTreeTimewise(TestCase):
 #         self.score.write(path=path)
 
     # def test_add_chord(self):
-    #     chord_1 =
-    #     self.score.add_chord(1, 1, TreeChord())
+    #     self.score.add_chord(1, 1, TreeChord(60, 61, quarter_duration=4))
+    #     self.score.finish()
+    #     # print(self.score.to_string())
+    #     # self.score.write(path=path)
