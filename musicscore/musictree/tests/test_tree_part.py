@@ -65,7 +65,7 @@ class Test(TestCase):
         p.add_child(TreeNote(quarter_duration=0.3, event=Midi(60).get_pitch_rest()))
         p.add_child(TreeNote(quarter_duration=0.2, event=Midi(60).get_pitch_rest()))
         p.add_child(TreeNote(quarter_duration=1.3, event=Midi(60).get_pitch_rest()))
-        p.quantize_2()
+        p.quantize()
         result = [Fraction(1, 1), Fraction(1, 1), Fraction(1, 6), Fraction(1, 3), Fraction(1, 6), Fraction(1, 3), Fraction(1, 1)]
         self.assertEqual([note.quarter_duration for note in p.notes], result)
         result = [[], ['Tie'], [], [], [], ['Tie'], []]
@@ -114,7 +114,6 @@ class Test(TestCase):
   <note>
     <pitch>
       <step>B</step>
-      <alter>0</alter>
       <octave>4</octave>
     </pitch>
     <tie/>
@@ -125,7 +124,6 @@ class Test(TestCase):
   <note>
     <pitch>
       <step>B</step>
-      <alter>0</alter>
       <octave>4</octave>
     </pitch>
     <tie/>
@@ -133,7 +131,6 @@ class Test(TestCase):
   <note>
     <pitch>
       <step>B</step>
-      <alter>0</alter>
       <octave>4</octave>
     </pitch>
   </note>

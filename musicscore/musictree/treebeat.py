@@ -1,3 +1,5 @@
+import warnings
+
 from quicktions import Fraction
 from musicscore.musictree.treenote import TreeNote
 
@@ -144,7 +146,7 @@ class TreeBeat(object):
         durations = [Fraction(duration).limit_denominator(1000) for duration in durations]
 
         if sum(durations) != self.duration:
-            raise ValueError('sum of durations must be  equal to beat duration')
+            warnings.warn('TreeBeat.get_quantized_durations: sum of durations is not equal to beat  duration')
 
         def _get_positions():
             positions = [0]
@@ -193,6 +195,7 @@ class TreeBeat(object):
 
     def quantize(self):
         quarter_durations = [note.quarter_duration for note in self.notes]
-        quantized_durations = self.get_quantized_durations(quarter_durations)
-        for note, quantized_duration in zip(self.notes, quantized_durations) :
-            note.quarter_duration = quantized_duration
+        if len(quarter_durations) > 1:
+            quantized_durations = self.get_quantized_durations(quarter_durations)
+            for note, quantized_duration in zip(self.notes, quantized_durations) :
+                note.quarter_duration = quantized_duration

@@ -1,7 +1,9 @@
 from unittest import TestCase
 
 from musicscore.musictree.midi import Midi
+from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treenote import TreeNote
+from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
 import os
 
@@ -22,6 +24,11 @@ class TestTreeTimewise(TestCase):
         for midi in midis:
             self.score.add_note(1, 1, TreeNote(event=Midi(midi).get_pitch_rest(), quarter_duration=0.5))
 
+        # measure = self.score.get_children_by_type(TreeMeasure)[0]
+        # part = measure.get_children_by_type(TreePart)[0]
+        # part.finish()
+
         self.score.finish()
+        #
         self.score.write(path=path)
 

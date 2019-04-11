@@ -39,6 +39,7 @@ class TreeNote(Note):
         self.quarter_duration = quarter_duration
         self._event = None
         self.event = event
+        self._offset = None
 
     @property
     def quarter_duration(self):
@@ -72,13 +73,18 @@ class TreeNote(Note):
             return None
         return self.up.notes[index - 1]
 
-    @property
-    def offset(self):
+    def update_offset(self):
         if self.previous:
             output = self.previous.offset + self.previous.quarter_duration
-            return output
+            self._offset = output
         else:
-            return 0
+            self._offset = 0
+
+    @property
+    def offset(self):
+        if self._offset is None:
+            self.update_offset()
+        return self._offset
 
     @property
     def end_position(self):

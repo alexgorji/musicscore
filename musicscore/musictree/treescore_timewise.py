@@ -63,11 +63,11 @@ class TreeScoreTimewise(timewise.Score):
         part = measure.get_children_by_type(TreePart)[part_number - 1]
         part.add_child(note)
         # part.update_note_offsets()
-        part.quantize()
-        divisions = part.get_divisions()
-        note.update_duration(divisions=divisions)
-        note.update_type()
-        note.update_dot()
+        # part.quantize()
+        # divisions = part.get_divisions()
+        # note.update_duration(divisions=divisions)
+        # note.update_type()
+        # note.update_dot()
 
     def add_midi(self, measure_number, part_number, midi=Midi(60), quarter_duration=1):
         note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=quarter_duration)

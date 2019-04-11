@@ -7,7 +7,6 @@ class TestMidi(TestCase):
         midi = Midi(60)
         result = '''<pitch>
   <step>C</step>
-  <alter>0</alter>
   <octave>4</octave>
 </pitch>
 '''

@@ -20,8 +20,8 @@ class TestGrouping(TestCase):
         self.make_measure(1, (3, 4))
         self.make_measure(2, (6, 8))
 
-        for measure in self.score.get_children_by_type(TreeMeasure):
-            measure.get_part(1).group_beams()
+        # for measure in self.score.get_children_by_type(TreeMeasure):
+        #     measure.get_part(1).group_beams()
 
         self.score.finish()
 

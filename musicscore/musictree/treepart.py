@@ -143,10 +143,11 @@ class TreePart(timewise.Part):
             self._accidental_steps = []
             pitched_notes = [note for note in self.get_children_by_type(TreeNote) if isinstance(note.event, Pitch)]
             for note in pitched_notes:
-                if note.pitch.alter.value != 0 and note.pitch.step.value not in self._accidental_steps:
+                if note.pitch.alter is not None and note.pitch.alter.value != 0 and note.pitch.step.value not in self._accidental_steps:
                     note.accidental.show = True
                     self._accidental_steps.append(note.pitch.step.value)
-                elif note.pitch.alter.value == 0 and note.pitch.step.value in self._accidental_steps:
+                elif (
+                        note.pitch.alter is None or note.pitch.alter.value == 0) and note.pitch.step.value in self._accidental_steps:
                     self._accidental_steps.remove(note.pitch.step.value)
                     note.accidental.show = True
         else:
@@ -177,10 +178,6 @@ class TreePart(timewise.Part):
     def beats(self):
         return self._beats
 
-    def quantize(self):
-        for note in self.get_children_by_type(TreeNote):
-            note.quarter_duration = Fraction(note.quarter_duration).limit_denominator(12)
-
     def split_note(self, note, ratios):
         if not isinstance(note, TreeNote):
             raise TypeError()
@@ -204,17 +201,20 @@ class TreePart(timewise.Part):
         beats = iter(self.beats)
         current_beat = beats.__next__()
         next_beat = beats.__next__()
+        while_loop = True
+
         for note in notes:
-            while note.offset < current_beat.offset or note.offset >= next_beat.offset:
+            while while_loop and (note.offset < current_beat.offset or note.offset >= next_beat.offset):
                 try:
                     current_beat = next_beat
+
                     next_beat = beats.__next__()
                 except StopIteration:
-                    pass
+                    while_loop = False
+
             current_beat.add_note(note)
 
     def split_notes_beatwise(self):
-
         for beat in self.beats:
             if beat.notes:
                 first_note = beat.notes[0]
@@ -223,28 +223,32 @@ class TreePart(timewise.Part):
                     previous_note = first_note.previous
                     tail_duration = (previous_note.end_position - beat.offset)
                     ratios = [previous_note.quarter_duration - tail_duration, tail_duration]
-
-                    beat.notes.insert(0, self.split_note(previous_note, ratios)[1])
+                    split = self.split_note(previous_note, ratios)
+                    # for note in split:
+                    beat.notes.insert(0, split[1])
 
         for beat in self.beats:
-            if beat.notes:
+            if beat.notes and len(beat.notes) != 1:
                 last_note = beat.notes[-1]
                 if last_note.end_position > beat.end_position:
                     head_duration = (beat.end_position - last_note.offset)
                     ratios = [head_duration, last_note.quarter_duration - head_duration]
-                    beat.next.notes.insert(0, self.split_note(last_note, ratios)[1])
+                    split = self.split_note(last_note, ratios)
+                    beat.next.notes.insert(0, split[1])
 
-    def quantize_2(self):
+    def quantize(self):
         self.add_notes_to_beats()
         self.split_notes_beatwise()
         for beat in self.beats:
             beat.quantize()
 
     def finish(self):
+        if not self.beats:
+            self.set_beats()
+
         self.quantize()
 
         self.update_divisions()
-
         self.update_accidentals(mode='normal')
 
         for note in self.get_children_by_type(TreeNote):
@@ -253,3 +257,5 @@ class TreePart(timewise.Part):
         for note in self.get_children_by_type(TreeNote):
             note.update_type()
             note.update_dot()
+
+        self.group_beams()
