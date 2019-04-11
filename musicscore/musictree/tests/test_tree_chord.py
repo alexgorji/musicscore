@@ -9,7 +9,7 @@ class TestTreeChord(TestCase):
         self.chord = TreeChord(60, 61, quarter_duration=2)
 
     def test_chord(self):
-        for tree_note in self.chord.tree_notes:
+        for tree_note in self.chord.notes:
             tree_note.update_duration(divisions=1)
             # print(tree_note.to_string())
 
@@ -18,7 +18,7 @@ class TestTreeChord(TestCase):
             TreeChord(0, 61, quarter_duration=2)
 
         chord = TreeChord(0, quarter_duration=2)
-        tree_note = chord.tree_notes[0]
+        tree_note = chord.notes[0]
         tree_note.update_duration(divisions=1)
 
         result = '''<note>
@@ -30,7 +30,7 @@ class TestTreeChord(TestCase):
 
     def test_chor_midi(self):
         chord = TreeChord(Midi(63, accidental_mode='sharp'), quarter_duration=2)
-        tree_note = chord.tree_notes[0]
+        tree_note = chord.notes[0]
         tree_note.update_duration(divisions=1)
 
         result = '''<note>

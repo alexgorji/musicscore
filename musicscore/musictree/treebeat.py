@@ -1,7 +1,8 @@
 import warnings
 
 from quicktions import Fraction
-from musicscore.musictree.treenote import TreeNote
+
+from musicscore.musictree.treechord import TreeChord
 
 
 def _find_nearest_quantized_value(quantized_values, values):
@@ -35,7 +36,7 @@ class TreeBeat(object):
         self._forbidden_divisions = None
         self._best_div = None
         self._permitted_durations = (4, 2, 1, 0.5)
-        self._notes = []
+        self._chords = []
         self._part = None
 
         self.duration = duration
@@ -94,8 +95,8 @@ class TreeBeat(object):
         return self._best_div
 
     @property
-    def notes(self):
-        return self._notes
+    def chords(self):
+        return self._chords
 
     @property
     def part(self):
@@ -131,19 +132,18 @@ class TreeBeat(object):
     def end_position(self):
         return self.offset + self.duration
 
-    def add_note(self, note):
-        if not isinstance(note, TreeNote):
-            raise TypeError('{} must be of type TreeNote'.format(note))
+    def add_chord(self, chord):
+        if not isinstance(chord, TreeChord):
+            raise TypeError('{} must be of type TreeChord'.format(chord))
         # if sum([note.quarter_duration for note in self.notes]) + note.quarter_duration > self.duration:
         #     raise Exception('note with quarter_duration {} cannot be added, otherwise beat duration would be exceeded')
 
-        self.notes.append(note)
+        self.chords.append(chord)
 
     def get_quantized_locations(self, subdivision):
         return _find_quantized_locations(self.duration, subdivision)
 
     def get_quantized_durations(self, durations):
-        durations = [Fraction(duration).limit_denominator(1000) for duration in durations]
 
         if sum(durations) != self.duration:
             warnings.warn('TreeBeat.get_quantized_durations: sum of durations is not equal to beat  duration')
@@ -180,7 +180,6 @@ class TreeBeat(object):
         quantized_positions = [f[0] for f in
                                _find_nearest_quantized_value(self.get_quantized_locations(subdivision=best_div),
                                                              positions)]
-
         quantized_durations = []
 
         for index, duration in enumerate(durations):
@@ -190,12 +189,11 @@ class TreeBeat(object):
             quantized_durations.append(quantized_duration)
 
         self._best_div = best_div
-
         return quantized_durations
 
     def quantize(self):
-        quarter_durations = [note.quarter_duration for note in self.notes]
+        quarter_durations = [chord.quarter_duration for chord in self.chords]
         if len(quarter_durations) > 1:
             quantized_durations = self.get_quantized_durations(quarter_durations)
-            for note, quantized_duration in zip(self.notes, quantized_durations) :
-                note.quarter_duration = quantized_duration
+            for chord, quantized_duration in zip(self.chords, quantized_durations):
+                chord.quarter_duration = quantized_duration

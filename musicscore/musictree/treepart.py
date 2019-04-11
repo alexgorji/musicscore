@@ -42,40 +42,25 @@ class TreePart(timewise.Part):
     def notes(self):
         return self.get_children_by_type(TreeNote)
 
-    def add_note(self, note):
-        if not isinstance(note, TreeNote):
-            raise TypeError()
-
-        self.add_child(note)
-        previous_note = note.previous
-        if previous_note and previous_note.is_tied:
-            note.add_tie('stop')
 
     def add_chord(self, chord):
         if not isinstance(chord, TreeChord):
             raise TypeError()
-
         self.chords.append(chord)
-        for note in chord.tree_notes:
-            self.add_child(note)
+        chord.parent_part = self
 
-    # def update_note_offsets(self):
-    #     notes = self.notes
-    #     for index, note in enumerate(notes):
-    #         if not note.offset:
-    #             if index == 0:
-    #                 note._offset = 0
-    #             else:
-    #                 previous_note = notes[index - 1]
-    #                 note._offset = previous_note.offset + previous_note.quarter_duration
+    def chord_to_notes(self):
+        for chord in self.chords:
+            for note in chord.notes:
+                self.add_child(note)
 
     def _group_beats(self, grouping_list):
         # todo test grouping list
         if False:
             raise Exception()
         else:
-            notes = self.notes
-            grouped_notes = []
+            chords = self.chords
+            grouped_chords = []
             group_positions = [0]
             for group in grouping_list:
                 # todo list of beat_types
@@ -85,16 +70,16 @@ class TreePart(timewise.Part):
                     raise NotImplementedError()
 
                 group_positions.append(group_positions[-1] + group * (4. / beat_type.value))
-            current_note_index = 0
+            current_chord_index = 0
             group_positions.pop(0)
             for group_position in group_positions:
-                current_grouped_notes = []
-                while current_note_index < len(notes) and notes[current_note_index].offset < group_position:
-                    current_grouped_notes.append(notes[current_note_index])
-                    current_note_index = current_note_index + 1
+                current_grouped_chords = []
+                while current_chord_index < len(chords) and chords[current_chord_index].offset < group_position:
+                    current_grouped_chords.append(chords[current_chord_index])
+                    current_chord_index = current_chord_index + 1
 
-                grouped_notes.append(current_grouped_notes)
-            return grouped_notes
+                grouped_chords.append(current_grouped_chords)
+            return grouped_chords
 
     def group_beams(self, grouping_list=None):
 
@@ -109,13 +94,14 @@ class TreePart(timewise.Part):
                         grouping_list.append(1)
             return grouping_list
 
-        def _set_beams(grouped_notes):
-            for group in grouped_notes:
+        def _set_beams(grouped_chords):
+
+            for group in grouped_chords:
                 begin_beam = True
                 continue_end_beam = False
 
                 for i in range(len(group)):
-                    note = group[i]
+                    note = group[i].notes[0]
                     if note.type.value in ('eighth', '16th', '32nd'):
                         beam = note.add_child(Beam(None))
                         if i != len(group) - 1:
@@ -136,14 +122,14 @@ class TreePart(timewise.Part):
 
                     elif i != 0:
                         try:
-                            beam = group[i - 1].beam
+                            beam = group[i - 1].notes[0].beam
 
                             if beam.value == 'begin':
-                                group[i - 1].remove_child(beam)
+                                group[i - 1].notes[0].remove_child(beam)
                                 begin_beam = True
                                 continue_end_beam = False
                             elif beam.value == 'continue':
-                                group[i - 1].beam.value = 'end'
+                                group[i - 1].notes[0].beam.value = 'end'
                                 begin_beam = True
                                 continue_end_beam = False
                         except AttributeError:
@@ -151,8 +137,8 @@ class TreePart(timewise.Part):
 
         if grouping_list is None:
             grouping_list = _generate_grouping_list()
-            grouped_notes = self._group_beats(grouping_list)
-            _set_beams(grouped_notes)
+            grouped_chords = self._group_beats(grouping_list)
+            _set_beams(grouped_chords)
         else:
             raise NotImplementedError('group_beams with values other than None')
 
@@ -201,54 +187,52 @@ class TreePart(timewise.Part):
     def beats(self):
         return self._beats
 
-    def split_note(self, note, ratios):
-        if not isinstance(note, TreeNote):
+    def split_chord(self, chord, ratios):
+        if not isinstance(chord, TreeChord):
             raise TypeError()
 
-        new_notes = note.split(ratios)
-        for new_note in new_notes[:-1]:
-            new_note.add_child(Tie())
+        new_chords = chord.split(ratios)
+        for new_chord in new_chords[:-1]:
+            new_chord.add_child(Tie())
 
-        insert_index = note.node._xml_children.index(note) + 1
+        insert_index = chord.node._xml_children.index(chord) + 1
 
-        for new_note in new_notes[1:].__reversed__():
-            self.add_child(new_note)
-            note.node._xml_children.remove(new_note)
-            note.node._xml_children.insert(insert_index, new_note)
+        for new_chord in new_chords[1:].__reversed__():
+            self.add_child(new_chord)
+            note.node._xml_children.remove(new_chord)
+            note.node._xml_children.insert(insert_index, new_chord)
             self.update_current_children()
 
-        return new_notes
+        return new_chords
 
-    def add_notes_to_beats(self):
-        notes = self.get_children_by_type(TreeNote)
+    def add_chords_to_beats(self):
         beats = iter(self.beats)
         current_beat = beats.__next__()
         next_beat = beats.__next__()
         while_loop = True
 
-        for note in notes:
-            while while_loop and (note.offset < current_beat.offset or note.offset >= next_beat.offset):
+        for chord in self.chords:
+            while while_loop and (chord.offset < current_beat.offset or chord.offset >= next_beat.offset):
                 try:
                     current_beat = next_beat
-
                     next_beat = beats.__next__()
                 except StopIteration:
                     while_loop = False
 
-            current_beat.add_note(note)
+            current_beat.add_chord(chord)
 
-    def split_notes_beatwise(self):
+    def split_chords_beatwise(self):
         for beat in self.beats:
-            if beat.notes:
-                first_note = beat.notes[0]
+            if beat.chords:
+                first_chords = beat.chords[0]
 
-                if beat.offset < first_note.offset:
-                    previous_note = first_note.previous
-                    tail_duration = (previous_note.end_position - beat.offset)
-                    ratios = [previous_note.quarter_duration - tail_duration, tail_duration]
-                    split = self.split_note(previous_note, ratios)
+                if beat.offset < first_chords.offset:
+                    previous_chord = first_chords.previous
+                    tail_duration = (previous_chord.end_position - beat.offset)
+                    ratios = [previous_chord.quarter_duration - tail_duration, tail_duration]
+                    split = self.split_chord(previous_chord, ratios)
                     # for note in split:
-                    beat.notes.insert(0, split[1])
+                    beat.chords.insert(0, split[1])
 
         for beat in self.beats:
             if beat.notes and len(beat.notes) != 1:
@@ -256,12 +240,14 @@ class TreePart(timewise.Part):
                 if last_note.end_position > beat.end_position:
                     head_duration = (beat.end_position - last_note.offset)
                     ratios = [head_duration, last_note.quarter_duration - head_duration]
-                    split = self.split_note(last_note, ratios)
+                    split = self.split_chord(last_note, ratios)
                     beat.next.notes.insert(0, split[1])
 
     def quantize(self):
-        self.add_notes_to_beats()
+        self.add_chords_to_beats()
+
         self.split_notes_beatwise()
+
         for beat in self.beats:
             beat.quantize()
 

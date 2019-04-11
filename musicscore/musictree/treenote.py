@@ -56,7 +56,10 @@ class TreeNote(Note):
         if value < 0:
             raise ValueError('quarter_duration {} must be zero or positive'.format(value))
 
-        self._quarter_duration = Fraction(value).limit_denominator(1000)
+        if not isinstance(self.quarter_duration, Fraction):
+            self._quarter_duration = Fraction(value).limit_denominator(1000)
+        else:
+            self._quarter_duration = value
 
         if value == 0:
             if not self.get_children_by_type(Grace):
