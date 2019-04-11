@@ -16,6 +16,7 @@ class TreeChord(object):
         self.quarter_duration = quarter_duration
         self._midis = None
         self.midis = midis
+        self.is_tied = False
 
     @property
     def quarter_duration(self):
@@ -79,6 +80,20 @@ class TreeChord(object):
     @property
     def end_position(self):
         return self.offset + self.quarter_duration
+
+    def split_copy(self, quarter_duration):
+        new_chord = TreeChord(quarter_duration=quarter_duration)
+        new_chord.midis = self.midis
+        new_chord.parent_part = self.parent_part
+        return new_chord
+
+    def split(self, ratios):
+        new_ratios = [Fraction(ratio / sum(ratios)) for ratio in ratios]
+        old_duration = self.quarter_duration
+        self.quarter_duration *= new_ratios[0]
+        output = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
+        output.insert(0, self)
+        return output
 
     @property
     def notes(self):

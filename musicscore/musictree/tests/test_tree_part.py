@@ -30,39 +30,50 @@ class Test(TestCase):
         self.assertEqual(type(note_2.chord).__name__, 'Chord')
         self.assertEqual(note_1.quarter_duration, note_2.quarter_duration, 4)
 
-    #
-    # def test_previous_note(self):
-    #     p = self.part
-    #     self.assertEqual(p.notes[0].previous, None)
-    #     self.assertEqual(id(p.notes[1].previous), id(p.notes[0]))
-    #     self.assertEqual(id(p.notes[2].previous), id(p.notes[1]))
-    #
-    # def test_offset(self):
-    #     p = self.part
-    #     result = [0, 1, 2.75]
-    #     self.assertEqual([note.offset for note in p.notes], result)
-    #
-    # def test_split_beats(self):
-    #     p = self.part
-    #     p.add_chords_to_beats()
-    #     p.split_notes_beatwise()
-    #
-    #     result = [0, Fraction(1, 1), Fraction(2, 1), Fraction(11, 4), Fraction(3, 1)]
-    #     self.assertEqual([note.offset for note in p.notes], result)
-    #     result = [[], ['Tie'], [], ['Tie'], []]
-    #     self.assertEqual([[type(t).__name__ for t in note.get_children_by_type(Tie)] for note in p.notes], result)
-    #
-    # def test_split_beats_2(self):
-    #     m = TreeMeasure(time=(3, 4))
-    #     p = TreePart(id='one')
-    #     m.add_child(p)
-    #     p.set_beats()
-    #     p.add_child(TreeNote(quarter_duration=1.4, event=Midi(60).get_pitch_rest()))
-    #     p.add_child(TreeNote(quarter_duration=1.6, event=Midi(60).get_pitch_rest()))
-    #     p.add_chords_to_beats()
-    #     p.split_notes_beatwise()
-    #     result = [Fraction(1, 1), Fraction(2, 5), Fraction(3, 5), Fraction(1, 1)]
-    #     self.assertEqual([note.quarter_duration for note in p.notes], result)
+    def test_previous_chord(self):
+        p = self.part
+        p.add_chord(TreeChord(60, 61, quarter_duration=1))
+        p.add_chord(TreeChord(62, quarter_duration=2))
+        p.add_chord(TreeChord(0, quarter_duration=1))
+
+        self.assertEqual(p.chords[0].previous, None)
+        self.assertEqual(id(p.chords[1].previous), id(p.chords[0]))
+        self.assertEqual(id(p.chords[2].previous), id(p.chords[1]))
+
+    def test_offset(self):
+        p = self.part
+        p.add_chord(TreeChord(60, 61, quarter_duration=1))
+        p.add_chord(TreeChord(62, quarter_duration=1.75))
+        p.add_chord(TreeChord(0, quarter_duration=1.25))
+        result = [0, 1, 2.75]
+        self.assertEqual([chord.offset for chord in p.chords], result)
+
+    def test_split_beats(self):
+        p = self.part
+        p.add_chord(TreeChord(60, 61, quarter_duration=1))
+        p.add_chord(TreeChord(62, quarter_duration=1.75))
+        p.add_chord(TreeChord(0, quarter_duration=1.25))
+        p.add_chords_to_beats()
+        p.split_chords_beatwise()
+        result = [0, Fraction(1, 1), Fraction(2, 1), Fraction(11, 4), Fraction(3, 1)]
+        self.assertEqual([chord.offset for chord in p.chords], result)
+        result = [False, True, False, True, False]
+        self.assertEqual([chord.is_tied for chord in p.chords], result)
+
+    def test_split_beats_2(self):
+        m = TreeMeasure(time=(3, 4))
+        p = TreePart(id='one')
+        m.add_child(p)
+        p.set_beats()
+
+        p.add_chord(TreeChord(60, quarter_duration=1.4))
+        p.add_chord(TreeChord(60, quarter_duration=1.6))
+        p.add_chords_to_beats()
+        p.split_chords_beatwise()
+        result = [Fraction(1, 1), Fraction(2, 5), Fraction(3, 5), Fraction(1, 1)]
+        self.assertEqual([chord.quarter_duration for chord in p.chords], result)
+
+
     #
     # def test_quantize(self):
     #     m = TreeMeasure(time=(4, 4))

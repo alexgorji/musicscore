@@ -252,15 +252,3 @@ class TreeNote(Note):
 
         for i in range(_dot):
             self.add_child(Dot())
-
-    def split_copy(self, quarter_duration):
-        new_note = TreeNote(quarter_duration=quarter_duration, event=self.event)
-        return new_note
-
-    def split(self, ratios):
-        new_ratios = [Fraction(ratio / sum(ratios)) for ratio in ratios]
-        old_duration = self.quarter_duration
-        self.quarter_duration *= new_ratios[0]
-        output = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
-        output.insert(0, self)
-        return output

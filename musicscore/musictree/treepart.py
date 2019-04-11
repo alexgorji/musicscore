@@ -47,6 +47,7 @@ class TreePart(timewise.Part):
         if not isinstance(chord, TreeChord):
             raise TypeError()
         self.chords.append(chord)
+
         chord.parent_part = self
 
     def chord_to_notes(self):
@@ -193,15 +194,7 @@ class TreePart(timewise.Part):
 
         new_chords = chord.split(ratios)
         for new_chord in new_chords[:-1]:
-            new_chord.add_child(Tie())
-
-        insert_index = chord.node._xml_children.index(chord) + 1
-
-        for new_chord in new_chords[1:].__reversed__():
-            self.add_child(new_chord)
-            note.node._xml_children.remove(new_chord)
-            note.node._xml_children.insert(insert_index, new_chord)
-            self.update_current_children()
+            new_chord.is_tied = True
 
         return new_chords
 
@@ -231,17 +224,20 @@ class TreePart(timewise.Part):
                     tail_duration = (previous_chord.end_position - beat.offset)
                     ratios = [previous_chord.quarter_duration - tail_duration, tail_duration]
                     split = self.split_chord(previous_chord, ratios)
-                    # for note in split:
                     beat.chords.insert(0, split[1])
 
         for beat in self.beats:
-            if beat.notes and len(beat.notes) != 1:
-                last_note = beat.notes[-1]
-                if last_note.end_position > beat.end_position:
-                    head_duration = (beat.end_position - last_note.offset)
-                    ratios = [head_duration, last_note.quarter_duration - head_duration]
-                    split = self.split_chord(last_note, ratios)
-                    beat.next.notes.insert(0, split[1])
+            if beat.chords and len(beat.chords) != 1:
+                last_chord = beat.chords[-1]
+                if last_chord.end_position > beat.end_position:
+                    head_duration = (beat.end_position - last_chord.offset)
+                    ratios = [head_duration, last_chord.quarter_duration - head_duration]
+                    split = self.split_chord(last_chord, ratios)
+                    beat.next.chords.insert(0, split[1])
+
+        self._chords = []
+        for beat in self.beats:
+            self._chords.extend(beat.chords)
 
     def quantize(self):
         self.add_chords_to_beats()
