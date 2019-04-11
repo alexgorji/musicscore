@@ -173,8 +173,8 @@ class TestTreeTimewise(TestCase):
 #         self.assertEqual(self.score.to_string(), result)
 #         self.score.write(path=path)
 
-    # def test_add_chord(self):
-    #     self.score.add_chord(1, 1, TreeChord(60, 61, quarter_duration=4))
-    #     self.score.finish()
-    #     # print(self.score.to_string())
-    #     # self.score.write(path=path)
+    def test_add_chord(self):
+        self.score.add_chord(1, 1, TreeChord(60, 61, quarter_duration=4))
+        self.score.finish()
+        # print(self.score.to_string())
+        # self.score.write(path=path)
