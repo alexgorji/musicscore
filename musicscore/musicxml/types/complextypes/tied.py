@@ -28,9 +28,23 @@ class ComplexTypeTied(ComplexType, LineType, DashedFormatting, Position, Placeme
     repeated sections or codas.
     """
 
-    def __init__(self, type, *args, **kwargs):
+    def __init__(self, type, number=1, *args, **kwargs):
         super().__init__(tag='tied', *args, **kwargs)
         self.type = type
+        self.number = number
+
+    @property
+    def number(self):
+        return self.get_attribute('number')
+
+    @number.setter
+    def number(self, value):
+        if value is None:
+            self.remove_attribute('number')
+        else:
+            TypeNumberLevel(value)
+            self._ATTRIBUTES.insert(0, 'number')
+            self.set_attribute('number', value)
 
     @property
     def type(self):
@@ -45,15 +59,4 @@ class ComplexTypeTied(ComplexType, LineType, DashedFormatting, Position, Placeme
             self._ATTRIBUTES.insert(0, 'type')
             self.set_attribute('type', value)
 
-    @property
-    def number(self):
-        return self.get_attribute('number')
 
-    @type.setter
-    def type(self, value):
-        if value is None:
-            self.remove_attribute('number')
-        else:
-            TypeNumberLevel(value)
-            self._ATTRIBUTES.insert(0, 'number')
-            self.set_attribute('number', value)
