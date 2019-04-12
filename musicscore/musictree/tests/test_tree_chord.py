@@ -1,7 +1,9 @@
 from unittest import TestCase
 
 from musicscore.musictree.midi import Midi
+from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treepart import TreePart
 
 
 class TestTreeChord(TestCase):
@@ -43,3 +45,23 @@ class TestTreeChord(TestCase):
 </note>
 '''
         self.assertEqual(tree_note.to_string(), result)
+
+    def test_split_chord(self):
+        b = TreeBeat()
+        p = TreePart('one')
+        chord = TreeChord(60, 62, quarter_duration=1)
+        p.add_chord(chord)
+        b.add_chord(chord)
+
+        print([chord.quarter_duration for chord in p.chords])
+
+        print([chord.quarter_duration for chord in b.chords])
+
+        chord.split([1, 0.5, 3])
+
+        print([chord.quarter_duration for chord in p.chords])
+
+        print([chord.quarter_duration for chord in b.chords])
+
+
+

@@ -1,6 +1,7 @@
 from musicscore.basic_functions import substitute
 from unittest import TestCase
 
+
 class Test(TestCase):
     def test_substitute(self):
         input_list = [1, 2, 3, 4, 5]

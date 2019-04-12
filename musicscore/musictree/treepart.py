@@ -213,7 +213,6 @@ class TreePart(timewise.Part):
                     while_loop = False
 
             current_beat.add_chord(chord)
-            chord.parent_beat = current_beat
 
     def _split_chords_beatwise(self):
         for beat in self.beats:

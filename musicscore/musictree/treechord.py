@@ -8,6 +8,7 @@ from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification
 from musicscore.musicxml.elements.xml_element import XMLTree
 from musicscore.musicxml.types.complextypes.notations import Tied
+from musicscore.basic_functions import substitute
 
 
 class TreeChord(XMLTree):
@@ -113,7 +114,9 @@ class TreeChord(XMLTree):
         return new_chord
 
     def split(self, ratios):
-        new_ratios = [Fraction(ratio / sum(ratios)) for ratio in ratios]
+        ratios = [int(ratio*100000) for ratio in ratios]
+
+        new_ratios = [Fraction(ratio, sum(ratios)) for ratio in ratios]
         old_duration = self.quarter_duration
         self.quarter_duration *= new_ratios[0]
         output = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
@@ -121,14 +124,12 @@ class TreeChord(XMLTree):
 
         if self.parent_part:
             p = self.parent_part
-
-            index = p.chords.index(self)
-            p._chords = p._chords[:index] + output + p._chords[index + 1:]
+            p._chords = substitute(p._chords, self, output)
 
         if self.parent_beat:
             b = self.parent_beat
-            index = b.chords.index(self)
-            b._chords = b._chords[:index] + output + b._chords[index + 1:]
+            print('b._chords', b._chords)
+            b._chords = substitute(b._chords, self, output)
 
         return output
 

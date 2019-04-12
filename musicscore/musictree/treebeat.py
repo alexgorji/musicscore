@@ -135,7 +135,7 @@ class TreeBeat(object):
     def add_chord(self, chord):
         if not isinstance(chord, TreeChord):
             raise TypeError('{} must be of type TreeChord'.format(chord))
-
+        chord.parent_beat = self
         self.chords.append(chord)
 
     def get_quantized_locations(self, subdivision):
