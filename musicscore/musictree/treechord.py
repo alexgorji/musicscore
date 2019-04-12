@@ -1,12 +1,37 @@
 from quicktions import Fraction
 
+from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treenote import TreeNote
-from musicscore.musicxml.elements.fullnote import Chord
+from musicscore.musicxml.common.common import EditorialVoice, Staff
+from musicscore.musicxml.elements.fullnote import Chord, FullNote
+from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification
+from musicscore.musicxml.elements.xml_element import XMLTree
+from musicscore.musicxml.types.complextypes.notations import Tied
 
 
-class TreeChord(object):
+class TreeChord(XMLTree):
     """"""
+
+    _DTD = Sequence(
+        Choice(
+            Sequence(
+                Element(Cue),
+                GroupReference(FullNote),
+            ),
+            Sequence(
+                GroupReference(FullNote),
+                Element(Tie, 0, 2)
+            )
+        ),
+        Element(Instrument, 0),
+        GroupReference(EditorialVoice, 0),
+        Element(TimeModification, 0, None),
+        Element(Stem, 0),
+        GroupReference(Staff, 0),
+        Element(Notations, 0, None),
+        Element(Lyric, 0, None),
+    )
 
     def __init__(self, *midis, quarter_duration=1, **kwargs):
         super().__init__(**kwargs)
@@ -16,7 +41,6 @@ class TreeChord(object):
         self.quarter_duration = quarter_duration
         self._midis = None
         self.midis = midis
-        self.is_tied = False
 
     @property
     def quarter_duration(self):
@@ -100,7 +124,21 @@ class TreeChord(object):
         output = []
         for index, midi in enumerate(self.midis):
             note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration)
+            for child in self.get_children():
+                note.add_child(child)
             if index > 0:
                 note.add_child(Chord())
             output.append(note)
         return output
+
+    def add_tie(self, value):
+        if value == 'start':
+            self.add_child(Tie('start'))
+            notations = self.add_child(Notations())
+            notations.add_child(Tied('start'))
+        elif value == 'stop':
+            self.add_child(Tie('stop'))
+            notations = self.add_child(Notations())
+            notations.add_child(Tied('stop'))
+        else:
+            raise NotImplementedError('value {} cannot be a tie value'.format(value))

@@ -33,16 +33,17 @@ class TreeScoreTimewise(timewise.Score):
         part_name.print_object = print_object
         self._part_list.add_child(new_score_part)
         for measure in self.get_children_by_type(TreeMeasure):
-            measure.add_child(TreePart(id=new_score_part.id))
+            p = measure.add_child(TreePart(id=new_score_part.id))
+            p.set_beats()
 
     def add_measure(self, measure=None):
-        new_measure = self.set_new_measure(measure)
+        new_measure = self._set_new_measure(measure)
 
         for score_part in self.get_score_parts():
             new_measure.add_child(TreePart(id=score_part.id))
         return self.add_child(new_measure)
 
-    def set_new_measure(self, measure):
+    def _set_new_measure(self, measure):
         if measure is None:
             new_measure = TreeMeasure()
             measures = self.get_children_by_type(TreeMeasure)
@@ -71,6 +72,7 @@ class TreeScoreTimewise(timewise.Score):
         measure = self.get_children_by_type(TreeMeasure)[measure_number - 1]
         part = measure.get_children_by_type(TreePart)[part_number - 1]
         part.add_chord(chord)
+        return chord
 
     def add_midi(self, measure_number, part_number, midi=Midi(60), quarter_duration=1):
         note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=quarter_duration)

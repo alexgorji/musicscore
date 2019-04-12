@@ -38,7 +38,7 @@ class Tied(XMLElement, TypeTiedType):
     """"""
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='tied-type', value=value, *args, **kwargs)
+        super().__init__(tag='tied', value=value, *args, **kwargs)
 
 
 class Slur(ComplexTypeSlur):

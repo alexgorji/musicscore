@@ -18,7 +18,6 @@ class XMLTree(Tree):
         self._old_choice_index = None
         self._not_sorted_children = []
 
-
     @property
     def current_children(self):
         return self._current_children

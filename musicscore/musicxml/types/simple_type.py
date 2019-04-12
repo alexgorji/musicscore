@@ -236,6 +236,16 @@ class TypeFontStyle(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeLineType(SimpleType):
+    """
+    The line-type type distinguishes between solid, dashed, dotted, and wavy lines.
+    """
+    permitted = ('solid', 'dashed' 'dotted', 'wavy')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 class TypeNonNegativeDecimal(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -246,6 +256,25 @@ class TypeNonNegativeDecimal(SimpleType):
             raise TypeError('value {} must a be a non negative float or int'.format(v))
         if v < 0:
             raise ValueError('value {} must be non negative'.format(v))
+        self._value = v
+
+
+class TypeNumberLevel(PositiveInteger):
+    """
+    Slurs, tuplets, and many other features can be concurrent and overlapping within a single musical part. The
+    number-level type distinguishes up to six concurrent objects of the same type. A reading program should be prepared
+    to handle cases where the number-levels stop in an arbitrary order. Different numbers are needed when the features
+    overlap in MusicXML document order. When a number-level value is optional, the value is 1 by default
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v < 1 or v > 6:
+            raise ValueError(
+                '{}.value {} must be between 1 and 6'.format(self.__class__.__name__, v))
         self._value = v
 
 
@@ -284,6 +313,13 @@ class TypeNumberOrNormal(SimpleType):
                     '{}.value {} can be either a decimal number or the string "normal"'.format(self.__class__.__name__,
                                                                                                v))
         self._value = v
+
+
+class OverUnder(SimpleType):
+    permitted = ('over', 'under')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
 
 
 class TypePercent(Decimal):
@@ -590,17 +626,6 @@ class TypeYesNo(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="line-type">
-		<xs:annotation>
-			<xs:documentation>The line-type type distinguishes between solid, dashed, dotted, and wavy lines.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="solid"/>
-			<xs:enumeration value="dashed"/>
-			<xs:enumeration value="dotted"/>
-			<xs:enumeration value="wavy"/>
-		</xs:restriction>
-	</xs:simpleType>
 
 	<xs:simpleType name="midi-16">
 		<xs:annotation>
@@ -652,26 +677,6 @@ class TypeYesNo(SimpleType):
 			<xs:enumeration value="stop-hand"/>
 			<xs:enumeration value="echo"/>
 			<xs:enumeration value="palm"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="number-level">
-		<xs:annotation>
-			<xs:documentation>Slurs, tuplets, and many other features can be concurrent and overlapping within a single musical part. The number-level type distinguishes up to six concurrent objects of the same type. A reading program should be prepared to handle cases where the number-levels stop in an arbitrary order. Different numbers are needed when the features overlap in MusicXML document order. When a number-level value is optional, the value is 1 by default.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:positiveInteger">
-			<xs:minInclusive value="1"/>
-			<xs:maxInclusive value="6"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="over-under">
-		<xs:annotation>
-			<xs:documentation>The over-under type is used to indicate whether the tips of curved lines such as slurs and ties are overhand (tips down) or underhand (tips up).</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="over"/>
-			<xs:enumeration value="under"/>
 		</xs:restriction>
 	</xs:simpleType>
 
