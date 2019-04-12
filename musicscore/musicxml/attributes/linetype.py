@@ -8,4 +8,4 @@ class LineType(AttributeAbstract):
 
     def __init__(self, line_type=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('line-type', line_type, "LineType")
+        self.generate_attribute('line-type', line_type, "TypeLineType")

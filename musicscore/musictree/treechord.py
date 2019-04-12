@@ -126,10 +126,9 @@ class TreeChord(XMLTree):
             p = self.parent_part
             p._chords = substitute(p._chords, self, output)
 
-        if self.parent_beat:
-            b = self.parent_beat
-            print('b._chords', b._chords)
-            b._chords = substitute(b._chords, self, output)
+        # if self.parent_beat:
+        #     b = self.parent_beat
+        #     b._chords = substitute(b._chords, self, output)
 
         return output
 

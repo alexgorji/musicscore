@@ -246,6 +246,16 @@ class TypeLineType(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeLineShape(SimpleType):
+    """
+    The line-shape type distinguishes between straight and curved lines.
+    """
+    permitted = ('straight', 'curved')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 class TypeNonNegativeDecimal(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -613,16 +623,6 @@ class TypeYesNo(SimpleType):
 			<xs:enumeration value="short"/>
 			<xs:enumeration value="medium"/>
 			<xs:enumeration value="long"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="line-shape">
-		<xs:annotation>
-			<xs:documentation>The line-shape type distinguishes between straight and curved lines.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="straight"/>
-			<xs:enumeration value="curved"/>
 		</xs:restriction>
 	</xs:simpleType>
 
@@ -1682,6 +1682,17 @@ class TypeSemitones(Decimal):
     The semitones type is a number representing semitones, used for chromatic alteration. A value of -1 corresponds to
     a flat and a value of 1 to a sharp. Decimal values like 0.5 (quarter tone sharp) are used for microtones.
     """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeShowTuplet(SimpleType):
+    """
+    The show-tuplet type indicates whether to show a part of a tuplet relating to the tuplet-actual element, both the
+    tuplet-actual and tuplet-normal elements, or neither.
+    """
+    permitted = ('actual', 'both', 'none')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)

@@ -61,8 +61,6 @@ class Test(TestCase):
         p._split_chords_beatwise()
         result = [0, Fraction(1, 1), Fraction(2, 1), Fraction(11, 4), Fraction(3, 1)]
         self.assertEqual([chord.offset for chord in p.chords], result)
-        result = [False, True, False, True, False]
-        self.assertEqual([chord.is_tied for chord in p.chords], result)
 
     def test_split_beats_2(self):
         m = TreeMeasure(time=(3, 4))
@@ -91,9 +89,6 @@ class Test(TestCase):
 
         result = [Fraction(1, 1), Fraction(1, 1), Fraction(1, 6), Fraction(1, 3), Fraction(1, 6), Fraction(1, 3), Fraction(1, 1)]
         self.assertEqual([chord.quarter_duration for chord in p.chords], result)
-
-        result = [False, True, False, False, False, True, False]
-        self.assertEqual([chord.is_tied for chord in p.chords], result)
 
 
     def test_beats(self):
