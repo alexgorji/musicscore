@@ -1,7 +1,4 @@
-from quicktions import Fraction
-
 from musicscore.basic_functions import lcm
-from musicscore.dtd.dtd import Element
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
@@ -9,7 +6,7 @@ from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Pitch
-from musicscore.musicxml.elements.note import Beam, Tie
+from musicscore.musicxml.elements.note import Beam
 
 
 class TreePart(timewise.Part):

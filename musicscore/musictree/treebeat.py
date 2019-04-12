@@ -195,6 +195,5 @@ class TreeBeat(object):
         quarter_durations = [chord.quarter_duration for chord in self.chords]
         if len(quarter_durations) > 1:
             quantized_durations = self.get_quantized_durations(quarter_durations)
-            print('quantized_durations', quantized_durations)
             for chord, quantized_duration in zip(self.chords, quantized_durations):
                 chord.quarter_duration = quantized_duration
