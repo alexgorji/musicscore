@@ -64,3 +64,14 @@ def roundrobin(*iterables):
         except StopIteration:
             num_active -= 1
             nexts = cycle(islice(nexts, num_active))
+
+
+def substitute(input_list, old_element, new_elements):
+    index = input_list.index(old_element)
+    try:
+        new_elements = list(new_elements)
+    except TypeError:
+        new_elements = [new_elements]
+
+    output_list = input_list[:index] + new_elements + input_list[index + 1:]
+    return output_list

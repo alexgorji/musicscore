@@ -123,11 +123,11 @@ class Test(TestCase):
         s.add_part('one')
         # m.add_child(p)
 
-        chord1 = s.add_chord(1, 1, TreeChord(71, quarter_duration=1.3))
+        chord1 = s.add_chord(1, 1, TreeChord(71,72, quarter_duration=1.3))
         l1 = Lyric()
         l1.add_child(Text('bla'))
         chord1.add_child(l1)
-        s.add_chord(1, 1, TreeChord(60, quarter_duration=0.6))
+        s.add_chord(1, 1, TreeChord(60, 63, 65, quarter_duration=0.6))
         s.add_chord(1, 1, TreeChord(60, quarter_duration=1.1))
 
         s.finish()

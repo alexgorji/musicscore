@@ -36,6 +36,7 @@ class TreeChord(XMLTree):
     def __init__(self, *midis, quarter_duration=1, **kwargs):
         super().__init__(**kwargs)
         self.parent_part = None
+        self.parent_beat = None
         self._offset = None
         self._quarter_duration = None
         self.quarter_duration = quarter_duration
@@ -117,6 +118,18 @@ class TreeChord(XMLTree):
         self.quarter_duration *= new_ratios[0]
         output = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
         output.insert(0, self)
+
+        if self.parent_part:
+            p = self.parent_part
+
+            index = p.chords.index(self)
+            p._chords = p._chords[:index] + output + p._chords[index + 1:]
+
+        if self.parent_beat:
+            b = self.parent_beat
+            index = b.chords.index(self)
+            b._chords = b._chords[:index] + output + b._chords[index + 1:]
+
         return output
 
     @property

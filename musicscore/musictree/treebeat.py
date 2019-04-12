@@ -135,24 +135,21 @@ class TreeBeat(object):
     def add_chord(self, chord):
         if not isinstance(chord, TreeChord):
             raise TypeError('{} must be of type TreeChord'.format(chord))
-        # if sum([note.quarter_duration for note in self.notes]) + note.quarter_duration > self.duration:
-        #     raise Exception('note with quarter_duration {} cannot be added, otherwise beat duration would be exceeded')
 
         self.chords.append(chord)
 
     def get_quantized_locations(self, subdivision):
         return _find_quantized_locations(self.duration, subdivision)
 
-    def get_quantized_durations(self, durations):
+    def get_quarter_durations(self, durations):
 
         if sum(durations) != self.duration:
-            warnings.warn('TreeBeat.get_quantized_durations: sum of durations is not equal to beat  duration')
+            warnings.warn('TreeBeat.get_quarter_durations: sum of durations is not equal to beat  duration')
 
         def _get_positions():
             positions = [0]
             for index, duration in enumerate(durations):
                 positions.append(positions[index] + duration)
-            # positions.append(self.duration)
             return positions
 
         def _get_permitted_divs():
@@ -180,20 +177,298 @@ class TreeBeat(object):
         quantized_positions = [f[0] for f in
                                _find_nearest_quantized_value(self.get_quantized_locations(subdivision=best_div),
                                                              positions)]
-        quantized_durations = []
+        quarter_durations = []
 
         for index, duration in enumerate(durations):
-            quantized_duration = Fraction(
+            quarter_duration = Fraction(
                 quantized_positions[index + 1] - quantized_positions[index]).limit_denominator(
                 int(best_div / self.duration))
-            quantized_durations.append(quantized_duration)
+            quarter_durations.append(quarter_duration)
 
         self._best_div = best_div
-        return quantized_durations
+        return quarter_durations
 
     def quantize(self):
         quarter_durations = [chord.quarter_duration for chord in self.chords]
         if len(quarter_durations) > 1:
-            quantized_durations = self.get_quantized_durations(quarter_durations)
-            for chord, quantized_duration in zip(self.chords, quantized_durations):
-                chord.quarter_duration = quantized_duration
+            quarter_durations = self.get_quarter_durations(quarter_durations)
+            for chord, quarter_duration in zip(self.chords, quarter_durations):
+                chord.quarter_duration = quarter_duration
+
+    def check_notatability(self):
+        for chord in self.chords:
+            if chord.quarter_duration == Fraction(1, 4):
+                if chord.position_in_beat == Fraction(3, 8):
+                    chord.split(1, 1)
+            elif chord.quarter_duration == Fraction(3, 8):
+                if chord.position_in_beat == Fraction(3, 8):
+                    chord.split(1, 2)
+            elif chord.quarter_duration == Fraction(5, 6) and self.best_div == 6:
+                if chord.position_in_beat == Fraction(0, 6):
+                    chord.split(4, 1)
+                elif chord.position_in_beat == Fraction(1, 6):
+                    chord.split(1, 4)
+
+            elif chord.quarter_duration == Fraction(5, 7):
+                if chord.position_in_beat == Fraction(0, 7):
+                    chord.split(4, 1)
+                elif chord.position_in_beat == Fraction(1, 7):
+                    chord.split(3, 2)
+                elif chord.position_in_beat == Fraction(2, 7):
+                    chord.split(2, 3)
+
+            elif chord.quarter_duration == Fraction(5, 8):
+                if chord.position_in_beat == Fraction(0, 8):
+                    chord.split(4, 1)
+                elif chord.position_in_beat == Fraction(1, 8):
+                    chord.split(3, 2)
+                elif chord.position_in_beat == Fraction(2, 8):
+                    chord.split(2, 3)
+                elif chord.position_in_beat == Fraction(3, 8):
+                    chord.split(1, 4)
+
+            # elif chord.quarter_duration == Fraction(7,8):
+            #     if chord.position_in_beat == Fraction(0,8):
+            #         chord.split(Fraction(4,8), Fraction(3,8))
+            #     elif chord.position_in_beat == Fraction(1,8):
+            #         chord.split(Fraction(3,8), Fraction(4,8))
+
+            elif chord.quarter_duration == Fraction(5, 9):
+                if chord.position_in_beat == Fraction(0, 9):
+                    chord.split(4, 1)
+                elif chord.position_in_beat == Fraction(1, 9):
+                    chord.split(1, 4)
+                elif chord.position_in_beat == Fraction(2, 9):
+                    chord.split(1, 4)
+                elif chord.position_in_beat == Fraction(3, 9):
+                    chord.split(1, 4)
+                elif chord.position_in_beat == Fraction(4, 9):
+                    chord.split(4, 1)
+
+            elif chord.quarter_duration == Fraction(7, 9):
+                if chord.position_in_beat == Fraction(0, 9):
+                    chord.split(Fraction(6, 9), Fraction(1, 9))
+                elif chord.position_in_beat == Fraction(1, 9):
+                    chord.split(Fraction(2, 9), Fraction(5, 9))
+                elif chord.position_in_beat == Fraction(2, 9):
+                    chord.split(Fraction(1, 9), Fraction(6, 9))
+
+            elif chord.quarter_duration == Fraction(5, 10) and self.divisions == 10:
+                if chord.position_in_beat == Fraction(0, 10):
+                    chord.split(Fraction(3, 10), Fraction(2, 10))
+                elif chord.position_in_beat == Fraction(1, 10):
+                    chord.split(Fraction(3, 10), Fraction(2, 10))
+                elif chord.position_in_beat == Fraction(2, 10):
+                    chord.split(Fraction(2, 10), Fraction(3, 10))
+                elif chord.position_in_beat == Fraction(3, 10):
+                    chord.split(Fraction(3, 10), Fraction(2, 10))
+                elif chord.position_in_beat == Fraction(4, 10):
+                    chord.split(Fraction(2, 10), Fraction(3, 10))
+                elif chord.position_in_beat == Fraction(5, 10):
+                    chord.split(Fraction(3, 10), Fraction(2, 10))
+
+            elif chord.quarter_duration == Fraction(6, 10) and self.divisions == 10:
+                if chord.position_in_beat == Fraction(0, 10):
+                    chord.split(Fraction(3, 10), Fraction(3, 10))
+                elif chord.position_in_beat == Fraction(3, 10):
+                    chord.split(Fraction(3, 10), Fraction(3, 10))
+                elif chord.position_in_beat == Fraction(4, 10):
+                    chord.split(Fraction(3, 10), Fraction(3, 10))
+
+
+            elif chord.quarter_duration == Fraction(7, 10):
+                if chord.position_in_beat == Fraction(0, 10):
+                    chord.split(Fraction(3, 10), Fraction(4, 10))
+                    # self.check_notatability()
+                elif chord.position_in_beat == Fraction(1, 10):
+                    chord.split(Fraction(3, 10), Fraction(4, 10))
+                elif chord.position_in_beat == Fraction(2, 10):
+                    chord.split(Fraction(1, 10), Fraction(6, 10))
+                elif chord.position_in_beat == Fraction(3, 10):
+                    chord.split(Fraction(4, 10), Fraction(3, 10))
+
+            elif chord.quarter_duration == Fraction(9, 10):
+                if chord.position_in_beat == Fraction(0, 10):
+                    chord.split(Fraction(3, 10), Fraction(6, 10))
+                    # self.check_notatability()
+                elif chord.position_in_beat == Fraction(1, 10):
+                    chord.split(Fraction(3, 10), Fraction(6, 10))
+                    # self.check_notatability()
+
+            elif chord.quarter_duration == Fraction(5, 11):
+                if chord.position_in_beat == Fraction(0, 11):
+                    chord.split(Fraction(4, 11), Fraction(1, 11))
+                elif chord.position_in_beat == Fraction(1, 11):
+                    chord.split(Fraction(3, 11), Fraction(2, 11))
+                elif chord.position_in_beat == Fraction(2, 11):
+                    chord.split(Fraction(2, 11), Fraction(3, 11))
+                elif chord.position_in_beat == Fraction(3, 11):
+                    chord.split(Fraction(1, 11), Fraction(4, 11))
+                elif chord.position_in_beat == Fraction(4, 11):
+                    chord.split(Fraction(4, 11), Fraction(1, 11))
+                elif chord.position_in_beat == Fraction(5, 11):
+                    chord.split(Fraction(3, 11), Fraction(2, 11))
+                elif chord.position_in_beat == Fraction(6, 11):
+                    chord.split(Fraction(3, 11), Fraction(2, 11))
+
+            elif chord.quarter_duration == Fraction(7, 11):
+                if chord.position_in_beat == Fraction(0, 11):
+                    chord.split(Fraction(4, 11), Fraction(3, 11))
+                elif chord.position_in_beat == Fraction(1, 11):
+                    chord.split(Fraction(3, 11), Fraction(4, 11))
+                elif chord.position_in_beat == Fraction(2, 11):
+                    chord.split(Fraction(4, 11), Fraction(3, 11))
+                elif chord.position_in_beat == Fraction(3, 11):
+                    chord.split(Fraction(3, 11), Fraction(4, 11))
+                elif chord.position_in_beat == Fraction(4, 11):
+                    chord.split(Fraction(4, 11), Fraction(3, 11))
+
+            elif chord.quarter_duration == Fraction(10, 11):
+                if chord.position_in_beat == Fraction(0, 11):
+                    chord.split(Fraction(4, 11), Fraction(6, 11))
+                elif chord.position_in_beat == Fraction(1, 11):
+                    chord.split(Fraction(4, 11), Fraction(6, 11))
+
+            elif chord.quarter_duration == Fraction(9, 11):
+                if chord.position_in_beat == Fraction(0, 11):
+                    chord.split(Fraction(8, 11), Fraction(1, 11))
+                elif chord.position_in_beat == Fraction(1, 11):
+                    chord.split(Fraction(1, 11), Fraction(8, 11))
+                elif chord.position_in_beat == Fraction(2, 11):
+                    chord.split(Fraction(1, 11), Fraction(8, 11))
+
+            elif chord.quarter_duration == Fraction(5, 12):
+                if chord.position_in_beat == Fraction(0, 12):
+                    chord.split(Fraction(4, 12), Fraction(1, 12))
+                elif chord.position_in_beat == Fraction(1, 12):
+                    chord.split(Fraction(3, 12), Fraction(2, 12))
+                elif chord.position_in_beat == Fraction(2, 12):
+                    chord.split(Fraction(2, 12), Fraction(3, 12))
+                elif chord.position_in_beat == Fraction(3, 12):
+                    chord.split(Fraction(1, 12), Fraction(4, 12))
+                elif chord.position_in_beat == Fraction(4, 12):
+                    chord.split(Fraction(4, 12), Fraction(1, 12))
+                elif chord.position_in_beat == Fraction(5, 12):
+                    chord.split(Fraction(3, 12), Fraction(2, 12))
+                elif chord.position_in_beat == Fraction(6, 12):
+                    chord.split(Fraction(2, 12), Fraction(3, 12))
+                elif chord.position_in_beat == Fraction(7, 12):
+                    chord.split(Fraction(1, 12), Fraction(4, 12))
+
+            elif chord.quarter_duration == Fraction(6, 12):
+                if chord.position_in_beat == Fraction(5, 12):
+                    chord.split(Fraction(3, 12), Fraction(3, 12))
+
+            elif chord.quarter_duration == Fraction(7, 12):
+                if chord.position_in_beat == Fraction(0, 12):
+                    chord.split(Fraction(4, 12), Fraction(3, 12))
+                elif chord.position_in_beat == Fraction(1, 12):
+                    chord.split(Fraction(3, 12), Fraction(4, 12))
+                elif chord.position_in_beat == Fraction(2, 12):
+                    chord.split(Fraction(4, 12), Fraction(3, 12))
+                elif chord.position_in_beat == Fraction(3, 12):
+                    chord.split(Fraction(3, 12), Fraction(4, 12))
+                elif chord.position_in_beat == Fraction(4, 12):
+                    chord.split(Fraction(4, 12), Fraction(3, 12))
+                elif chord.position_in_beat == Fraction(5, 12):
+                    chord.split(Fraction(3, 12), Fraction(4, 12))
+
+            elif chord.quarter_duration == Fraction(9, 12) and self.divisions == 12:
+                if chord.position_in_beat == Fraction(0, 12):
+                    chord.split(Fraction(6, 12), Fraction(3, 12))
+                if chord.position_in_beat == Fraction(1, 12):
+                    chord.split(Fraction(3, 12), Fraction(6, 12))
+                if chord.position_in_beat == Fraction(2, 12):
+                    chord.split(Fraction(3, 12), Fraction(6, 12))
+                if chord.position_in_beat == Fraction(3, 12):
+                    chord.split(Fraction(6, 12), Fraction(3, 12))
+
+            elif chord.quarter_duration == Fraction(10, 12) and self.divisions == 12:
+                if chord.position_in_beat == Fraction(0, 12):
+                    chord.split(Fraction(6, 12), Fraction(4, 12))
+                if chord.position_in_beat == Fraction(1, 12):
+                    chord.split(Fraction(6, 12), Fraction(4, 12))
+                if chord.position_in_beat == Fraction(2, 12):
+                    chord.split(Fraction(6, 12), Fraction(4, 12))
+
+
+            elif chord.quarter_duration == Fraction(11, 12):
+                if chord.position_in_beat == Fraction(0, 12):
+                    chord.split(Fraction(8, 12), Fraction(3, 12))
+                    # self.check_notatability()
+
+
+                elif chord.position_in_beat == Fraction(1, 12):
+                    chord.split(Fraction(3, 12), Fraction(8, 12))
+
+        divisions = self.divisions
+
+        tuplet_divisions = [3, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+        if divisions not in tuplet_divisions:
+            for chord_node in self.node.children:
+                chord_node.chord.tuplet = None
+        else:
+            for i in range(len(self.node.children)):
+                if i == 0:
+                    self.node.children[0].chord.tuplet = Tuplet(divisions, position='start')
+                elif i == len(self.node.children) - 1:
+                    self.node.children[-1].chord.tuplet = Tuplet(divisions, position='stop')
+                else:
+                    self.node.children[i].chord.tuplet = Tuplet(divisions, position='continue')
+
+        chords_quarter_duration = map(lambda chord_node: chord_node.chord.quarter_duration, self.node.children)
+
+        # if divisions == 10:
+        #     first_chord = self.node.children[0].chord
+        #     last_chord = self.node.children[-1].chord
+        #     if first_chord.quarter_duration == Fraction(5, 10):
+        #         first_chord.tuplet = None
+        #         for chord_node in self.node.children[1:]:
+        #             chord_node.chord.tuplet = Tuplet(beat_divisions = 5)
+        #     if first_chord.quarter_duration == Fraction(5,10):
+        #         first_chord.tuplet = None
+        #         chord_nodes = self.node.children
+        #         for i in range(1, len(chord_nodes)):
+        #             chord_nodes[i].chord.tuplet = Tuplet(beat_divisions = 5)
+        #             if i == 1:
+        #                 chord_nodes[i].chord.tuplet.position = 'start'
+        #             elif i == len(chord_nodes)-1:
+        #                 chord_nodes[i].chord.tuplet.position = 'stop'
+        #             else:
+        #                 chord_nodes[i].chord.tuplet.position = 'continue'
+        #
+        #     if last_chord.quarter_duration == Fraction(5,10):
+        #         last_chord.tuplet = None
+        #         chord_nodes = self.node.children
+        #         for i in range(len(chord_nodes)-1):
+        #             chord_nodes[i].chord.tuplet = Tuplet(beat_divisions = 5)
+        #             if i == 0:
+        #                 chord_nodes[i].chord.tuplet.position = 'start'
+        #             elif i == len(chord_nodes)-2:
+        #                 chord_nodes[i].chord.tuplet.position = 'stop'
+        #             else:
+        #                 chord_nodes[i].chord.tuplet.position = 'continue'
+
+        six_divisions = (
+            [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)],
+            [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 3), Fraction(1, 6)],
+            [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 2)],
+            [Fraction(1, 6), Fraction(1, 3), Fraction(1, 3), Fraction(1, 6)],
+            [Fraction(1, 6), Fraction(1, 3), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)],
+            [Fraction(1, 6), Fraction(1, 3), Fraction(1, 2)],
+            # [Fraction(1,6), Fraction(1,2), Fraction(1,3)],
+            [Fraction(1, 6), Fraction(2, 3), Fraction(1, 6)],
+
+            [Fraction(1, 3), Fraction(1, 6), Fraction(1, 3), Fraction(1, 6)],
+            [Fraction(1, 3), Fraction(1, 6), Fraction(1, 2)],
+            # [Fraction(1,3), Fraction(1,2), Fraction(1,6)],
+            [Fraction(1, 2), Fraction(1, 3), Fraction(1, 6)],
+            [Fraction(1, 2), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)]
+        )
+
+        if divisions == 6:
+            if chords_quarter_duration not in six_divisions:
+                for chord_node in self.node.children:
+                    position = chord_node.chord.tuplet.position
+                    chord_node.chord.tuplet = Tuplet(3, position=position)
