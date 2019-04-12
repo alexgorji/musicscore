@@ -88,3 +88,6 @@ class ComplexTypeTimeModification(ComplexType):
             min_occurrence=0
         )
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='time-modification', *args, **kwargs)

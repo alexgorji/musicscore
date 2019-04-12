@@ -32,6 +32,7 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.slur import ComplexTypeSlur
 from musicscore.musicxml.types.complextypes.tied import ComplexTypeTied
+from musicscore.musicxml.types.complextypes.tuplet import ComplexTypeTuplet
 from musicscore.musicxml.types.simple_type import TypeTiedType
 
 
@@ -50,12 +51,11 @@ class Slur(ComplexTypeSlur):
         raise NotImplementedError()
 
 
-class Tuplet(XMLElement):
+class Tuplet(ComplexTypeTuplet):
     """"""
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='tuplet', value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class Glissando(XMLElement):

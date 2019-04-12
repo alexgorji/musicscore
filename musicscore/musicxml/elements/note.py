@@ -13,6 +13,7 @@ from musicscore.musicxml.types.complextypes.beam import ComplexTypeBeam
 from musicscore.musicxml.types.complextypes.lyric import ComplexTypeLyric
 from musicscore.musicxml.types.complextypes.notations import ComplexTypeNotations
 from musicscore.musicxml.types.complextypes.tie import ComplexTypeTie
+from musicscore.musicxml.types.complextypes.timemodification import ComplexTypeTimeModification
 from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeNoteTypeValue, TypeAccidentalValue
 
 
@@ -107,12 +108,11 @@ class Accidental(ComplexType, TypeAccidentalValue, Cautionary, Editorial, LevelD
         super().__init__(tag='accidental', value=value, *args, **kwargs)
 
 
-class TimeModification(XMLElement):
+class TimeModification(ComplexTypeTimeModification):
     """"""
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='time-modification', *args, **kwargs)
-        raise NotImplementedError()
+        super().__init__(*args, **kwargs)
 
 
 class Stem(XMLElement):

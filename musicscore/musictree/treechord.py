@@ -7,8 +7,9 @@ from musicscore.musicxml.common.common import EditorialVoice, Staff
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification
 from musicscore.musicxml.elements.xml_element import XMLTree
-from musicscore.musicxml.types.complextypes.notations import Tied
+from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet
 from musicscore.basic_functions import substitute
+from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
 
 class TreeChord(XMLTree):
@@ -126,10 +127,6 @@ class TreeChord(XMLTree):
             p = self.parent_part
             p._chords = substitute(p._chords, self, output)
 
-        # if self.parent_beat:
-        #     b = self.parent_beat
-        #     b._chords = substitute(b._chords, self, output)
-
         return output
 
     @property
@@ -155,3 +152,21 @@ class TreeChord(XMLTree):
             notations.add_child(Tied('stop'))
         else:
             raise NotImplementedError('value {} cannot be a tie value'.format(value))
+
+    def add_tuplet(self, position, number=1):
+        normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
+        types = {8: '32nd', 4: '16th', 2: 'eighth'}
+        actual_notes = self.parent_beat.best_div
+        normal_notes = normals[actual_notes]
+        normal_type = types[normal_notes / self.parent_beat.duration]
+        if position != 'continue':
+            try:
+                notations = self.notations
+            except AttributeError:
+                notations = self.add_child(Notations())
+            notations.add_child(Tuplet(type=position, number=number, bracket='yes', placement='above'))
+
+        tm = self.add_child(TimeModification())
+        tm.add_child(ActualNotes(actual_notes))
+        tm.add_child(NormalNotes(normal_notes))
+        tm.add_child(NormalType(normal_type))

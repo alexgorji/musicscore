@@ -225,6 +225,7 @@ class TreePart(timewise.Part):
                     ratios = [previous_chord.quarter_duration - tail_duration, tail_duration]
                     split = self._split_chord(previous_chord, ratios)
                     beat.chords.insert(0, split[1])
+                    split[1].parent_beat = beat
 
         for beat in self.beats:
             if beat.chords and len(beat.chords) != 1:
@@ -234,6 +235,7 @@ class TreePart(timewise.Part):
                     ratios = [head_duration, last_chord.quarter_duration - head_duration]
                     split = self._split_chord(last_chord, ratios)
                     beat.next.chords.insert(0, split[1])
+                    split[1].parent_beat = beat.next
 
         # self._chords = []
         # for beat in self.beats:
@@ -241,9 +243,7 @@ class TreePart(timewise.Part):
 
     def quantize(self):
         self._add_chords_to_beats()
-
         self._split_chords_beatwise()
-
         for beat in self.beats:
             beat.quantize()
 
@@ -252,6 +252,11 @@ class TreePart(timewise.Part):
             self.set_beats()
 
         self.quantize()
+
+
+        for beat in self.beats:
+            beat.check_notatability()
+
 
         self.chord_to_notes()
         self.update_divisions()

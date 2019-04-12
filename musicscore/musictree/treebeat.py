@@ -197,27 +197,18 @@ class TreeBeat(object):
             for chord, quarter_duration in zip(self.chords, quarter_durations):
                 chord.quarter_duration = quarter_duration
 
-    def add_tuplet(self, position):
-        normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
-        types = {8: '32nd', 4: '16th', 2: 'eighth'}
-        actual_notes = self.best_div
-        t = Tuplet()
-        # self.beat_duration = beat_duration
-
     def _update_tuplets(self):
         # to be used with check_notatability
         tuplet_divisions = [3, 5, 6, 7, 9, 10]
 
-        # if self.best_div  in tuplet_divisions:
-        #     for i in range(len(self.chords)):
-        #         if i == 0:
-        #             self.chords[0].add_tuplet('start') = Tuplet(divisions, position='start')
-        #         elif i == len(self.node.children) - 1:
-        #             self.node.children[-1].chord.tuplet = Tuplet(divisions, position='stop')
-        #         else:
-        #             self.node.children[i].chord.tuplet = Tuplet(divisions, position='continue')
-        #
-        # chords_quarter_duration = map(lambda chord_node: chord_node.chord.quarter_duration, self.node.children)
+        if self.best_div  in tuplet_divisions:
+            for i in range(len(self.chords)):
+                if i == 0:
+                    self.chords[0].add_tuplet('start')
+                elif i == len(self.chords) - 1:
+                    self.chords[-1].add_tuplet('stop')
+                else:
+                    self.chords[i].add_tuplet('continue')
 
     def check_notatability(self):
         for chord in self.chords:
@@ -424,6 +415,7 @@ class TreeBeat(object):
 
         self._update_tuplets()
 
+        # chords_quarter_duration = map(lambda chord_node: chord_node.chord.quarter_duration, self.node.children)
         # six_divisions = (
         #     [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)],
         #     [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 3), Fraction(1, 6)],
