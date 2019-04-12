@@ -195,6 +195,11 @@ class Note(XMLElement):
     _DTD = Sequence(
         Choice(
             Sequence(
+                GroupReference(FullNote),
+                GroupReference(DurationGroup),
+                Element(Tie, 0, 2)
+            ),
+            Sequence(
                 Element(Grace),
                 Choice(
                     Sequence(
@@ -215,11 +220,6 @@ class Note(XMLElement):
                 GroupReference(FullNote),
                 GroupReference(DurationGroup)
             ),
-            Sequence(
-                GroupReference(FullNote),
-                GroupReference(DurationGroup),
-                Element(Tie, 0, 2)
-            )
         ),
         Element(Instrument, 0),
         GroupReference(EditorialVoice, 0),

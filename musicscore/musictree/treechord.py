@@ -19,13 +19,13 @@ class TreeChord(XMLTree):
     _DTD = Sequence(
         Choice(
             Sequence(
+                GroupReference(FullNote),
+                Element(Tie, 0, 2)
+            ),
+            Sequence(
                 Element(Cue),
                 GroupReference(FullNote),
             ),
-            Sequence(
-                GroupReference(FullNote),
-                Element(Tie, 0, 2)
-            )
         ),
         Element(Instrument, 0),
         GroupReference(EditorialVoice, 0),
@@ -124,7 +124,7 @@ class TreeChord(XMLTree):
         return new_chord
 
     def split(self, ratios):
-        ratios = [int(ratio*100000) for ratio in ratios]
+        ratios = [int(ratio * 100000) for ratio in ratios]
 
         new_ratios = [Fraction(ratio, sum(ratios)) for ratio in ratios]
         old_duration = self.quarter_duration

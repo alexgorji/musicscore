@@ -15,7 +15,6 @@ class Test(TestCase):
         self.assertEqual(b.get_quantized_durations(durations), result)
         self.assertEqual(b.best_div, 5)
 
-
     def test_add_chord_1(self):
         b = q.TreeBeat(max_division=5)
         b.add_chord(TreeChord((60, 61), quarter_duration=1))
@@ -41,5 +40,5 @@ class Test(TestCase):
         b.add_chord(TreeChord((60, 61), quarter_duration=0.2))
         b.add_chord(TreeChord((60, 61), quarter_duration=0.3))
         b.quantize()
-        self.assertEqual([chord.quarter_duration for chord in b.chords], [Fraction(1, 2), Fraction(1, 6), Fraction(1, 3)])
-
+        self.assertEqual([chord.quarter_duration for chord in b.chords],
+                         [Fraction(1, 2), Fraction(1, 6), Fraction(1, 3)])
