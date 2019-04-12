@@ -143,7 +143,7 @@ class TreeBeat(object):
     def get_quantized_locations(self, subdivision):
         return _find_quantized_locations(self.duration, subdivision)
 
-    def get_quarter_durations(self, durations):
+    def get_quantized_durations(self, durations):
 
         if sum(durations) != self.duration:
             warnings.warn('TreeBeat.get_quarter_durations: sum of durations is not equal to beat  duration')
@@ -179,21 +179,21 @@ class TreeBeat(object):
         quantized_positions = [f[0] for f in
                                _find_nearest_quantized_value(self.get_quantized_locations(subdivision=best_div),
                                                              positions)]
-        quarter_durations = []
+        quantized_durations = []
 
         for index, duration in enumerate(durations):
             quarter_duration = Fraction(
                 quantized_positions[index + 1] - quantized_positions[index]).limit_denominator(
                 int(best_div / self.duration))
-            quarter_durations.append(quarter_duration)
+            quantized_durations.append(quarter_duration)
 
         self._best_div = best_div
-        return quarter_durations
+        return quantized_durations
 
     def quantize(self):
         quarter_durations = [chord.quarter_duration for chord in self.chords]
         if len(quarter_durations) > 1:
-            quarter_durations = self.get_quarter_durations(quarter_durations)
+            quarter_durations = self.get_quantized_durations(quarter_durations)
             for chord, quarter_duration in zip(self.chords, quarter_durations):
                 chord.quarter_duration = quarter_duration
 
@@ -201,7 +201,7 @@ class TreeBeat(object):
         # to be used with check_notatability
         tuplet_divisions = [3, 5, 6, 7, 9, 10]
 
-        if self.best_div  in tuplet_divisions:
+        if self.best_div in tuplet_divisions:
             for i in range(len(self.chords)):
                 if i == 0:
                     self.chords[0].add_tuplet('start')
@@ -415,27 +415,26 @@ class TreeBeat(object):
 
         self._update_tuplets()
 
-        # chords_quarter_duration = map(lambda chord_node: chord_node.chord.quarter_duration, self.node.children)
-        # six_divisions = (
-        #     [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)],
-        #     [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 3), Fraction(1, 6)],
-        #     [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 2)],
-        #     [Fraction(1, 6), Fraction(1, 3), Fraction(1, 3), Fraction(1, 6)],
-        #     [Fraction(1, 6), Fraction(1, 3), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)],
-        #     [Fraction(1, 6), Fraction(1, 3), Fraction(1, 2)],
-        #     # [Fraction(1,6), Fraction(1,2), Fraction(1,3)],
-        #     [Fraction(1, 6), Fraction(2, 3), Fraction(1, 6)],
-        #
-        #     [Fraction(1, 3), Fraction(1, 6), Fraction(1, 3), Fraction(1, 6)],
-        #     [Fraction(1, 3), Fraction(1, 6), Fraction(1, 2)],
-        #     # [Fraction(1,3), Fraction(1,2), Fraction(1,6)],
-        #     [Fraction(1, 2), Fraction(1, 3), Fraction(1, 6)],
-        #     [Fraction(1, 2), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)]
-        # )
-        #
-        # if divisions == 6:
-        #     if chords_quarter_duration not in six_divisions:
-        #         for chord_node in self.node.children:
-        #             position = chord_node.chord.tuplet.position
-        #             chord_node.chord.tuplet = Tuplet(3, position=position)
+        six_divisions = (
+            [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)],
+            [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 3), Fraction(1, 6)],
+            [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 2)],
+            [Fraction(1, 6), Fraction(1, 3), Fraction(1, 3), Fraction(1, 6)],
+            [Fraction(1, 6), Fraction(1, 3), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)],
+            [Fraction(1, 6), Fraction(1, 3), Fraction(1, 2)],
+            # [Fraction(1,6), Fraction(1,2), Fraction(1,3)],
+            [Fraction(1, 6), Fraction(2, 3), Fraction(1, 6)],
 
+            [Fraction(1, 3), Fraction(1, 6), Fraction(1, 3), Fraction(1, 6)],
+            [Fraction(1, 3), Fraction(1, 6), Fraction(1, 2)],
+            # [Fraction(1,3), Fraction(1,2), Fraction(1,6)],
+            [Fraction(1, 2), Fraction(1, 3), Fraction(1, 6)],
+            [Fraction(1, 2), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)]
+        )
+
+        if self.best_div == 6:
+            chords_quarter_durations = [chord.quarter_duration for chord in self.chords]
+            if chords_quarter_durations not in six_divisions:
+                for chord in self.chords:
+                    position = chord.tuplet.position
+                    chord.tuplet = Tuplet(3, position=position)

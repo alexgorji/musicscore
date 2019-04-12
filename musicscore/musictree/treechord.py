@@ -5,7 +5,8 @@ from musicscore.musictree.midi import Midi
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.common.common import EditorialVoice, Staff
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
-from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification
+from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
+    Type, Dot, Notehead, NoteheadText, Beam
 from musicscore.musicxml.elements.xml_element import XMLTree
 from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet
 from musicscore.basic_functions import substitute
@@ -28,14 +29,20 @@ class TreeChord(XMLTree):
         ),
         Element(Instrument, 0),
         GroupReference(EditorialVoice, 0),
+        Element(Type, 0),
+        Element(Dot, 0, None),
         Element(TimeModification, 0, None),
         Element(Stem, 0),
+        Element(Notehead, 0),
+        Element(NoteheadText, 0),
         GroupReference(Staff, 0),
+        Element(Beam, 0, 8),
         Element(Notations, 0, None),
         Element(Lyric, 0, None),
+        Element(Play, 0)
     )
 
-    def __init__(self, *midis, quarter_duration=1, **kwargs):
+    def __init__(self, midis=0, quarter_duration=1, **kwargs):
         super().__init__(**kwargs)
         self.parent_part = None
         self.parent_beat = None
@@ -68,19 +75,21 @@ class TreeChord(XMLTree):
 
     @midis.setter
     def midis(self, values):
-        if values:
-            output = []
-            for midi in values:
-                if not isinstance(midi, Midi):
-                    output.append(Midi(midi))
-                else:
-                    output.append(midi)
+        try:
+            values = list(values)
+        except TypeError:
+            values = [values]
 
-            for midi in output:
-                if midi.value == 0 and len(values) > 1:
-                    raise ValueError('midi with value must be alone.')
-        else:
-            output = None
+        output = []
+        for midi in values:
+            if not isinstance(midi, Midi):
+                output.append(Midi(midi))
+            else:
+                output.append(midi)
+
+        for midi in output:
+            if midi.value == 0 and len(values) > 1:
+                raise ValueError('midi with value 0 must be alone.')
 
         self._midis = output
 
@@ -170,3 +179,82 @@ class TreeChord(XMLTree):
         tm.add_child(ActualNotes(actual_notes))
         tm.add_child(NormalNotes(normal_notes))
         tm.add_child(NormalType(normal_type))
+
+    def update_type(self):
+        """get type of a Note() depending on its quantized duration and return it [whole, half, quarter, eighth, 16th,
+        32nd, 64th]"""
+        _types = {(1, 12): '32nd',
+                  (1, 11): '32nd',
+                  (2, 11): '16th',
+                  (3, 11): '16th',
+                  (4, 11): 'eighth',
+                  (6, 11): 'eighth',
+                  (8, 11): 'quarter',
+                  (1, 10): '32nd',
+                  (3, 10): '16th',
+                  (1, 9): '32nd',
+                  (2, 9): '16th',
+                  (4, 9): 'eighth',
+                  (8, 9): 'quarter',
+                  (1, 8): '32nd',
+                  (3, 8): '16th',
+                  (7, 8): 'eighth',
+                  (1, 7): '16th',
+                  (2, 7): 'eighth',
+                  (3, 7): 'eighth',
+                  (4, 7): 'quarter',
+                  (6, 7): 'quarter',
+                  (1, 6): '16th',
+                  (1, 5): '16th',
+                  (2, 5): 'eighth',
+                  (3, 5): 'eighth',
+                  (4, 5): 'quarter',
+                  (1, 4): '16th',
+                  (2, 4): 'eighth',
+                  (3, 4): 'eighth',
+                  (7, 4): 'quarter',
+                  (1, 3): 'eighth',
+                  (2, 3): 'quarter',
+                  (3, 2): 'quarter',
+                  (1, 2): 'eighth',
+                  (1, 1): 'quarter',
+                  (2, 1): 'half',
+                  (3, 1): 'half',
+                  (4, 1): 'whole',
+                  (6, 1): 'whole',
+                  (8, 1): 'breve'}
+
+        value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
+
+        try:
+            chord_type = self.get_children_by_type(Type)[0]
+            chord_type.value = value
+        except IndexError:
+            self.add_child(Type(value))
+
+    def update_dot(self):
+        _dot = 0
+        division = self.parent_part.get_divisions()
+        if self.quarter_duration.numerator % 3 == 0:
+            _dot = 1
+        elif self.quarter_duration == Fraction(1, 2) and (
+                division == 3 or division == 6 or division == 12):
+            _dot = 1
+        elif self.quarter_duration == Fraction(1, 4) and (
+                division == 3 or division == 6 or division == 12):
+            _dot = 1
+        elif (self.quarter_duration == Fraction(3, 9) or self.quarter_duration == Fraction(6,
+                                                                                           9)) and division == 9:
+            _dot = 1
+        elif self.quarter_duration == Fraction(7, 8):
+            _dot = 2
+        elif self.quarter_duration == Fraction(7, 4):
+            _dot = 2
+        else:
+            _dot = 0
+
+        for dot in self.get_children_by_type(Dot):
+            self.remove_child(dot)
+
+        for i in range(_dot):
+            self.add_child(Dot())

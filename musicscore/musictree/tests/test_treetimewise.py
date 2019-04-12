@@ -36,9 +36,9 @@ class TestTreeTimewise(TestCase):
         self.assertEqual(self.score.to_string(), result)
 
     def test_add_note(self):
-        self.score.add_note(1, 1, TreeNote())
-        self.score.add_note(1, 1, TreeNote())
-        self.score.add_note(1, 1, TreeNote(event=Midi(61).get_pitch_rest(), quarter_duration=2))
+        self.score.add_chord(1, 1, TreeChord(0, 1))
+        self.score.add_chord(1, 1, TreeChord(0, quarter_duration=1))
+        self.score.add_chord(1, 1, TreeChord(61, quarter_duration=2))
         self.score.finish()
         result = '''<score-timewise version="3.0">
   <part-list>
@@ -174,7 +174,7 @@ class TestTreeTimewise(TestCase):
 #         self.score.write(path=path)
 
     def test_add_chord(self):
-        self.score.add_chord(1, 1, TreeChord(60, 61, quarter_duration=4))
+        self.score.add_chord(1, 1, TreeChord((60, 61), quarter_duration=4))
         self.score.finish()
         # print(self.score.to_string())
         # self.score.write(path=path)

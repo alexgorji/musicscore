@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from musicscore.musictree.midi import Midi
+from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
@@ -30,4 +31,4 @@ class TestGrouping(TestCase):
     def make_measure(self, number, time_signature=(4, 4)):
         self.score.add_measure(TreeMeasure(time=time_signature))
         for i in range(time_signature[0] * 8//time_signature[1]):
-            self.score.add_note(number, 1, TreeNote(event=Midi(60).get_pitch_rest(), quarter_duration=0.5))
+            self.score.add_chord(number, 1, TreeChord(60, quarter_duration=0.5))

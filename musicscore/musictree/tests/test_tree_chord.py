@@ -10,7 +10,7 @@ from musicscore.musictree.treepart import TreePart
 
 class TestTreeChord(TestCase):
     def setUp(self):
-        self.chord = TreeChord(60, 61, quarter_duration=2)
+        self.chord = TreeChord((60, 61), quarter_duration=2)
 
     def test_chord(self):
         for tree_note in self.chord.notes:
@@ -19,7 +19,7 @@ class TestTreeChord(TestCase):
 
     def test_rest(self):
         with self.assertRaises(ValueError):
-            TreeChord(0, 61, quarter_duration=2)
+            TreeChord((0, 61), quarter_duration=2)
 
         chord = TreeChord(0, quarter_duration=2)
         tree_note = chord.notes[0]
@@ -51,14 +51,14 @@ class TestTreeChord(TestCase):
     def test_split_chord(self):
         b = TreeBeat()
         p = TreePart('one')
-        chord = TreeChord(60, 62, quarter_duration=1)
+        chord = TreeChord((60, 62), quarter_duration=1)
         p.add_chord(chord)
         b.add_chord(chord)
 
         chord.split([1, 0.5, 3])
 
         result = [Fraction(2, 9), Fraction(1, 9), Fraction(2, 3)]
-        self.assertEqual([chord.quarter_duration for chord in p.chords], [chord.quarter_duration for chord in b.chords], result)
+        self.assertEqual([chord.quarter_duration for chord in p.chords], result)
 
 
 

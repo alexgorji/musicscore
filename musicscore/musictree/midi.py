@@ -143,7 +143,7 @@ class Midi(object):
         if not isinstance(v, float) and not isinstance(v, int):
             raise TypeError('midi.value must be of type float or int not{}'.format(type(v)))
         if v < 16 and v != 0:
-            raise ValueError('midi.value must be greater than 16')
+            raise ValueError('midi.value {} must be greater than 16'.format(v))
         self._value = v
 
     @property

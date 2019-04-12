@@ -6,7 +6,7 @@ from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Pitch
-from musicscore.musicxml.elements.note import Beam
+from musicscore.musicxml.elements.note import Beam, Type
 
 
 class TreePart(timewise.Part):
@@ -99,9 +99,9 @@ class TreePart(timewise.Part):
                 continue_end_beam = False
 
                 for i in range(len(group)):
-                    note = group[i].notes[0]
-                    if note.type.value in ('eighth', '16th', '32nd'):
-                        beam = note.add_child(Beam(None))
+                    chord = group[i]
+                    if chord.get_children_by_type(Type)[0].value in ('eighth', '16th', '32nd'):
+                        beam = chord.add_child(Beam(None))
                         if i != len(group) - 1:
                             if begin_beam:
                                 beam.value = 'begin'
@@ -120,14 +120,14 @@ class TreePart(timewise.Part):
 
                     elif i != 0:
                         try:
-                            beam = group[i - 1].notes[0].beam
+                            beam = group[i - 1].beam
 
                             if beam.value == 'begin':
-                                group[i - 1].notes[0].remove_child(beam)
+                                group[i - 1].remove_child(beam)
                                 begin_beam = True
                                 continue_end_beam = False
                             elif beam.value == 'continue':
-                                group[i - 1].notes[0].beam.value = 'end'
+                                group[i - 1].beam.value = 'end'
                                 begin_beam = True
                                 continue_end_beam = False
                         except AttributeError:
@@ -253,17 +253,18 @@ class TreePart(timewise.Part):
 
         self.quantize()
 
-
         for beat in self.beats:
             beat.check_notatability()
 
+        for chord in self.chords:
+            chord.update_type()
+            chord.update_dot()
+
+        self.group_beams()
 
         self.chord_to_notes()
+
         self.update_divisions()
         self.update_accidentals(mode='normal')
         for note in self.get_children_by_type(TreeNote):
             note.update_duration(self.get_divisions())
-            note.update_type()
-            note.update_dot()
-        #
-        # self.group_beams()

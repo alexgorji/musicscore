@@ -25,7 +25,7 @@ class Test(TestCase):
         self.part.set_beats()
 
     def test_add_chord1(self):
-        self.part.add_chord(TreeChord(60, 61, quarter_duration=4))
+        self.part.add_chord(TreeChord((60, 61), quarter_duration=4))
         self.part.chord_to_notes()
         note_1 = self.part.notes[0]
         with self.assertRaises(AttributeError):
@@ -36,7 +36,7 @@ class Test(TestCase):
 
     def test_previous_chord(self):
         p = self.part
-        p.add_chord(TreeChord(60, 61, quarter_duration=1))
+        p.add_chord(TreeChord((60, 61), quarter_duration=1))
         p.add_chord(TreeChord(62, quarter_duration=2))
         p.add_chord(TreeChord(0, quarter_duration=1))
 
@@ -46,7 +46,7 @@ class Test(TestCase):
 
     def test_offset(self):
         p = self.part
-        p.add_chord(TreeChord(60, 61, quarter_duration=1))
+        p.add_chord(TreeChord((60, 61), quarter_duration=1))
         p.add_chord(TreeChord(62, quarter_duration=1.75))
         p.add_chord(TreeChord(0, quarter_duration=1.25))
         result = [0, 1, 2.75]
@@ -54,7 +54,7 @@ class Test(TestCase):
 
     def test_split_beats(self):
         p = self.part
-        p.add_chord(TreeChord(60, 61, quarter_duration=1))
+        p.add_chord(TreeChord((60, 61), quarter_duration=1))
         p.add_chord(TreeChord(62, quarter_duration=1.75))
         p.add_chord(TreeChord(0, quarter_duration=1.25))
         p._add_chords_to_beats()
@@ -118,11 +118,11 @@ class Test(TestCase):
         s.add_part('one')
         # m.add_child(p)
 
-        chord1 = s.add_chord(1, 1, TreeChord(71,72, quarter_duration=1.3))
+        chord1 = s.add_chord(1, 1, TreeChord((71,72), quarter_duration=1.3))
         l1 = Lyric()
         l1.add_child(Text('bla'))
         chord1.add_child(l1)
-        s.add_chord(1, 1, TreeChord(60, 63, 65, quarter_duration=0.6))
+        s.add_chord(1, 1, TreeChord((60, 63, 65), quarter_duration=0.6))
         s.add_chord(1, 1, TreeChord(60, quarter_duration=1.1))
 
         s.finish()
