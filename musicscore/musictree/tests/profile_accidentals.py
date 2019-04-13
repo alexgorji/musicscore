@@ -1,9 +1,9 @@
-from musicscore.musictree.midi import Midi
-from musicscore.musictree.treechord import TreeChord
-from musicscore.musictree.treenote import TreeNote
-from musicscore.musictree.treescore_timewise import TreeScoreTimewise
-import os
 import cProfile
+import os
+
+from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+
 path = os.path.abspath(__file__).split('.')[0]
 
 
