@@ -11,6 +11,7 @@ class TreeMeasure(timewise.Measure):
         self._time = None
         self.time = time
         self._beats = None
+        self._offset = None
 
     @property
     def time(self):
@@ -49,6 +50,26 @@ class TreeMeasure(timewise.Measure):
 
     def get_part(self, number):
         return self.get_children_by_type(TreePart)[number - 1]
+
+    @property
+    def previous(self):
+        index = self.up.get_children_by_type(TreeMeasure).index(self)
+        if index == 0:
+            return None
+        return self.up.get_children_by_type(TreeMeasure)[index - 1]
+
+    def update_offset(self):
+        if self.previous:
+            output = self.previous.offset + self.previous.quarter_duration
+            self._offset = output
+        else:
+            self._offset = 0
+
+    @property
+    def offset(self):
+        if self._offset is None:
+            self.update_offset()
+        return self._offset
 
     def __copy__(self):
         time = self.time.__copy__()

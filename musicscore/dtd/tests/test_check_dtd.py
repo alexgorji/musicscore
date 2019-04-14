@@ -260,4 +260,4 @@ class TestTimeDtd(TestCase):
         result = [('Beats', 4), ('BeatType', 4), ('Beats', 5), ('BeatType', 2), ('BeatType', 16)]
         self.assertEqual([(type(child).__name__, child.value) for child in self.time.current_children], result)
         with self.assertRaises(ChildIsNotOptional):
-            self.time.close()
+            self.time.close_dtd()

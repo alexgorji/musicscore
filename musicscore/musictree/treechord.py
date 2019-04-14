@@ -42,7 +42,7 @@ class TreeChord(XMLTree):
         Element(Play, 0)
     )
 
-    def __init__(self, midis=0, quarter_duration=1, **kwargs):
+    def __init__(self, midis=71, quarter_duration=1, **kwargs):
         super().__init__(**kwargs)
         self.parent_part = None
         self.parent_beat = None
@@ -132,10 +132,6 @@ class TreeChord(XMLTree):
         output = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
         output.insert(0, self)
 
-        if self.parent_part:
-            p = self.parent_part
-            p._chords = substitute(p._chords, self, output)
-
         return output
 
     @property
@@ -151,16 +147,23 @@ class TreeChord(XMLTree):
         return output
 
     def add_tie(self, value):
-        if value == 'start':
-            self.add_child(Tie('start'))
-            notations = self.add_child(Notations())
-            notations.add_child(Tied('start'))
-        elif value == 'stop':
-            self.add_child(Tie('stop'))
-            notations = self.add_child(Notations())
-            notations.add_child(Tied('stop'))
-        else:
+        if value not in ('stop', 'start'):
             raise NotImplementedError('value {} cannot be a tie value'.format(value))
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        types = [tie.type for tie in self.get_children_by_type(Tie)]
+
+        if value == 'start' and 'start' not in types:
+            self.add_child(Tie('start'))
+            notations.add_child(Tied('start'))
+
+        elif value == 'stop' and 'stop' not in types:
+            self.add_child(Tie('stop'))
+            notations.add_child(Tied('stop'))
 
     def add_tuplet(self, position, number=1):
         normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
@@ -258,3 +261,9 @@ class TreeChord(XMLTree):
 
         for i in range(_dot):
             self.add_child(Dot())
+
+    def copy(self):
+        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+        new_chord.midis = self.midis
+        for child in self.get_children():
+            new_chord.add_child(child)

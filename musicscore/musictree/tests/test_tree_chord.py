@@ -5,6 +5,7 @@ from quicktions import Fraction
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
 
 
@@ -32,7 +33,7 @@ class TestTreeChord(TestCase):
 '''
         self.assertEqual(tree_note.to_string(), result)
 
-    def test_chor_midi(self):
+    def test_chord_midi(self):
         chord = TreeChord(Midi(63, accidental_mode='sharp'), quarter_duration=2)
         tree_note = chord.notes[0]
         tree_note.update_duration(divisions=1)
@@ -52,13 +53,11 @@ class TestTreeChord(TestCase):
         b = TreeBeat()
         p = TreePart('one')
         chord = TreeChord((60, 62), quarter_duration=1)
+        m = TreeMeasure()
+        m.add_child(p)
         p.add_chord(chord)
         b.add_chord(chord)
-
-        chord.split([1, 0.5, 3])
+        split = chord.split([1, 0.5, 3])
 
         result = [Fraction(2, 9), Fraction(1, 9), Fraction(2, 3)]
-        self.assertEqual([chord.quarter_duration for chord in p.chords], result)
-
-
-
+        self.assertEqual([chord.quarter_duration for chord in split], result)

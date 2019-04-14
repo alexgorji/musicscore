@@ -1,9 +1,9 @@
-from musicscore.musictree.midi import Midi
+from lxml import etree as et
+
+import musicscore.musicxml.elements.timewise as timewise
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treemeasure import TreeMeasure
-from musicscore.musictree.treenote import TreeNote
 from musicscore.musictree.treepart import TreePart
-import musicscore.musicxml.elements.timewise as timewise
 from musicscore.musicxml.elements.scoreheader import PartList
 from musicscore.musicxml.types.complextypes.partlist import ScorePart
 from musicscore.musicxml.types.complextypes.scorepart import PartName
@@ -35,6 +35,7 @@ class TreeScoreTimewise(timewise.Score):
         for measure in self.get_children_by_type(TreeMeasure):
             p = measure.add_child(TreePart(id=new_score_part.id))
             p.set_beats()
+        return p
 
     def add_measure(self, measure=None):
         new_measure = self._set_new_measure(measure)
@@ -67,12 +68,10 @@ class TreeScoreTimewise(timewise.Score):
         part.add_chord(chord)
         return chord
 
-
     def update_measures(self):
         measures = self.get_children_by_type(TreeMeasure)
         for index, measure in enumerate(measures):
             measure.number = str(index + 1)
-
             if measure.time.force_hide:
                 measure.hide_time_signature()
             elif measure.time.force_show:
@@ -89,3 +88,10 @@ class TreeScoreTimewise(timewise.Score):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 part.finish()
+
+    def to_string(self):
+        self.close_dtd()
+        self.finish()
+        xml = self._to_xml()
+        return et.tounicode(xml, pretty_print=True)
+

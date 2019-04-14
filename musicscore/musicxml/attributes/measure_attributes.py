@@ -5,7 +5,7 @@ from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 class Number(AttributeAbstract):
     def __init__(self, number, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('number', number, "Token")
+        self.generate_attribute('number', str(number), "Token")
 
 
 class Text(AttributeAbstract):

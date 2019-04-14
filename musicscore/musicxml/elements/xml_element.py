@@ -131,14 +131,14 @@ class XMLTree(Tree):
         for xml_child in current_xml_children:
             self.add_xml_child(xml_child)
 
-    def close(self):
+    def close_dtd(self):
         if self.dtd:
             try:
                 self.check_non_optional()
             except ChildIsNotOptional as e:
                 try:
                     self.goto_next_dtd_choice()
-                    self.close()
+                    self.close_dtd()
                 except (DTDError, StopIteration):
                     raise e
 
@@ -256,6 +256,6 @@ class XMLElement(XMLTree):
         return xml
 
     def to_string(self):
-        self.close()
+        self.close_dtd()
         xml = self._to_xml()
         return et.tounicode(xml, pretty_print=True)

@@ -33,7 +33,7 @@ class TestNoteDTD(TestCase):
     def test_close_1(self):
         self.note.add_child(Rest())
         self.note.add_child(Grace())
-        self.note.close()
+        self.note.close_dtd()
         result = ['Grace', 'Chord', 'Rest', 'Instrument', 'FootNote', 'Level', 'Voice', 'Type', 'Dot', 'Accidental',
                   'TimeModification', 'Stem', 'Notehead', 'NoteheadText', 'StaffElement', 'Beam', 'Notations', 'Lyric',
                   'Play']
@@ -42,7 +42,7 @@ class TestNoteDTD(TestCase):
     def test_close_2(self):
         self.note.add_child(Rest())
         with self.assertRaises(ChildIsNotOptional):
-            self.note.close()
+            self.note.close_dtd()
 
     def test_sort_children(self):
         self.note.add_child(Pitch())
@@ -51,7 +51,7 @@ class TestNoteDTD(TestCase):
         self.note.add_child(Beam('continue'))
         self.note.add_child(Duration(1))
         self.note.add_child(Tie())
-        self.note.close()
+        self.note.close_dtd()
 
         result = ['Pitch', 'Duration', 'Tie', 'Tie', 'Beam', 'Beam']
         self.assertEqual([type(child).__name__ for child in self.note.get_children()], result)
