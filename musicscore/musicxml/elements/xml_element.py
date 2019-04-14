@@ -247,7 +247,7 @@ class XMLElement(XMLTree):
                 if isinstance(child, XMLElement):
                     xml.append(child._to_xml())
                 else:
-                    raise TypeError('child {} must be of type XMLElement2 or XMLElementGroup'.format(child))
+                    raise TypeError('child {} must be of type XMLElement'.format(child))
 
         set_children()
         if self.text is not None:

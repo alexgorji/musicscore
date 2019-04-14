@@ -1,4 +1,5 @@
 from musicscore.dtd.dtd import Sequence, Element
+from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.formattedtext import ComplexTypeFormattedText
 from musicscore.musicxml.types.complextypes.level import ComplexTypeLevel
 from musicscore.musicxml.types.simple_type import String, PositiveInteger
@@ -33,9 +34,9 @@ Editorial = Sequence(
 )
 
 
-class Voice(String):
+class Voice(XMLElement, String):
     def __init__(self, value=None, *args, **kwargs):
-        super().__init__(value=value, *args, **kwargs)
+        super().__init__(tag='voice', value=value, *args, **kwargs)
 
 
 '''

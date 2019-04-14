@@ -35,7 +35,6 @@ class TreeScoreTimewise(timewise.Score):
         for measure in self.get_children_by_type(TreeMeasure):
             p = measure.add_child(TreePart(id=new_score_part.id))
             p.set_beats()
-        return p
 
     def add_measure(self, measure=None):
         new_measure = self._set_new_measure(measure)
@@ -89,9 +88,9 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.finish()
 
-    def to_string(self):
-        self.close_dtd()
-        self.finish()
-        xml = self._to_xml()
-        return et.tounicode(xml, pretty_print=True)
+    # def to_string(self):
+    #     self.close_dtd()
+    #     self.finish()
+    #     xml = self._to_xml()
+    #     return et.tounicode(xml, pretty_print=True)
 

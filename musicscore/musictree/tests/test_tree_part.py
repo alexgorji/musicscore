@@ -124,9 +124,9 @@ class Test(TestCase):
         chord1.add_child(l1)
         s.add_chord(1, 1, TreeChord((60, 63, 65), quarter_duration=0.6))
         s.add_chord(1, 1, TreeChord(60, quarter_duration=1.1))
-
         s.finish()
-        print(s.to_string())
+
+        # print(s.to_string())
         s.write(path=path)
 
 

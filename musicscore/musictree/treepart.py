@@ -5,7 +5,7 @@ from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
-from musicscore.musicxml.elements.fullnote import Pitch
+from musicscore.musicxml.elements.fullnote import Pitch, Alter, Step
 from musicscore.musicxml.elements.note import Beam, Type
 
 
@@ -269,7 +269,6 @@ class TreePart(timewise.Part):
             beat.quantize()
 
     def finish(self):
-        print('finishing part')
         if not self.beats:
             self.set_beats()
 

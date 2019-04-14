@@ -6,7 +6,6 @@ from musicscore.musicxml.common.common import Voice
 from musicscore.musicxml.types.simple_type import PositiveInteger
 
 
-
 class StreamVoice(object):
     """"""
 
@@ -41,11 +40,10 @@ class StreamVoice(object):
             except IndexError:
                 measure = score.add_measure()
 
-            try:
-                part = measure.get_children_by_type(TreePart)[part_number - 1]
-            except IndexError:
-                for i in range(part_number - len(measure.get_children_by_type(TreePart))):
-                    part = score.add_part()
+            for i in range(part_number - len(measure.get_children_by_type(TreePart))):
+                score.add_part()
+
+            part = measure.get_children_by_type(TreePart)[part_number - 1]
 
             remain = part.add_chord(chord)
             if remain:

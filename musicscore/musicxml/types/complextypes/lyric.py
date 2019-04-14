@@ -1,5 +1,5 @@
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeSyllabic, String
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeSyllabic
 from musicscore.musicxml.attributes.color import Color
 from musicscore.musicxml.attributes.justify import Justify
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
