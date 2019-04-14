@@ -13,5 +13,13 @@ class Test(TestCase):
 
     def test_voice(self):
         self.note.add_child(Voice('1'))
-        print(self.note.get_children())
-        # print(self.note.to_string())
+        result = '''<note>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>1</duration>
+  <voice>1</voice>
+</note>
+'''
+        self.assertEqual(self.note.to_string(), result)
