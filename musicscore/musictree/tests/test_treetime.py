@@ -43,6 +43,11 @@ class TestTreeTime(TestCase):
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <type>whole</type>
+      </note>
     </part>
   </measure>
 </score-timewise>

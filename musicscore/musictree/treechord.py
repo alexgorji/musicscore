@@ -135,7 +135,7 @@ class TreeChord(XMLTree):
         return output
 
     @property
-    def notes(self):
+    def _notes(self):
         output = []
         for index, midi in enumerate(self.midis):
             note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration)

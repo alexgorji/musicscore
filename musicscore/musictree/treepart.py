@@ -73,7 +73,7 @@ class TreePart(timewise.Part):
 
     def chord_to_notes(self):
         for chord in self.chords:
-            for note in chord.notes:
+            for note in chord._notes:
                 self.add_child(note)
 
     def _group_beats(self, grouping_list):
@@ -169,11 +169,27 @@ class TreePart(timewise.Part):
         divisions = attributes.get_children_by_type(Divisions)[0]
         divisions.value = self.get_divisions()
 
+    def get_previous_measure_last_notes(self):
+        previous_measure_last_notes = []
+        previous_measure = self.up.previous
+        if previous_measure:
+            part = [p for p in previous_measure.get_children_by_type(TreePart) if p.id == self.id][0]
+            previous_measure_last_chord = part.chords[-1]
+            previous_measure_last_notes = previous_measure_last_chord._notes
+        return previous_measure_last_notes
+
+
     def update_accidentals(self, mode):
+        def _get_previous_measure_last_signed_notes():
+            previous_measure_last_notes = self.get_previous_measure_last_notes()
+            return [n for n in previous_measure_last_notes if isinstance(n.event, Pitch) and n.pitch.alter and n.pitch.alter.value != 0]
+
         if mode == 'normal':
             _hide_accidental = []
             _set_natural = []
             pitched_notes = [note for note in self.get_children_by_type(TreeNote) if isinstance(note.event, Pitch)]
+            _first_chord_natural = [note.pitch.step.value for note in _get_previous_measure_last_signed_notes()]
+
             for note in pitched_notes:
                 if note.pitch.alter is not None and note.pitch.alter.value != 0 and note.pitch.step.value not in _hide_accidental:
                     if 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
@@ -181,13 +197,16 @@ class TreePart(timewise.Part):
                         _hide_accidental.append(note.pitch.step.value)
                     _set_natural.append(note.pitch.step.value)
                 elif (
-                        note.pitch.alter is None or note.pitch.alter.value == 0) and note.pitch.step.value in _set_natural:
-                    try:
-                        _hide_accidental.remove(note.pitch.step.value)
-                    except ValueError:
-                        pass
-                    _set_natural.remove(note.pitch.step.value)
-                    note.accidental.show = True
+                        note.pitch.alter is None or note.pitch.alter.value == 0):
+                    if note.pitch.step.value in _set_natural:
+                        try:
+                            _hide_accidental.remove(note.pitch.step.value)
+                        except ValueError:
+                            pass
+                        _set_natural.remove(note.pitch.step.value)
+                        note.accidental.show = True
+                    elif note.offset == 0 and note.pitch.step.value in _first_chord_natural:
+                        note.accidental.show = True
         else:
             raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
 
@@ -296,6 +315,8 @@ class TreePart(timewise.Part):
 
         for beat in self.beats:
             beat.check_notatability()
+
+        # self.update_chord_accidentals(mode='show')
 
         for chord in self.chords:
             chord.update_type()

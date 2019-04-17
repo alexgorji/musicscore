@@ -3,6 +3,8 @@ import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musicxml.elements.note import Lyric
+from musicscore.musicxml.types.complextypes.lyric import Text
 
 path = os.path.abspath(__file__).split('.')[0]
 
@@ -130,24 +132,24 @@ class Test(TestCase):
         self.score.add_part()
         self.score.add_measure()
         voice.add_to_score(self.score, 1)
-        p = self.score.get_measure(1).get_part(1)
-        p = self.score.get_measure(2).get_part(1)
-        p = self.score.get_measure(3).get_part(1)
         p = path + '_test_2'
         self.score.write(p)
 
 
-    def test_voice_1(self):
+    def test_3(self):
         sf = SimpleFormat(midis=[(60, 61, 67)], durations=7)
         voice = sf.to_voice(1)
         voice.add_to_score(self.score, 1)
-        print(self.score.to_string())
+        p = path + '_test_3'
+        self.score.write(p)
 
-    def test_voice_2(self):
+    def test_4(self):
         midis = list(range(60, 80))
-        # midis = [60, 61, 62, 63]
         sf = SimpleFormat(midis=midis)
+        for chord in sf.chords:
+            l = chord.add_child(Lyric())
+            l.add_child(Text(str([m.value for m in chord.midis])))
         voice = sf.to_voice(1)
         voice.add_to_score(self.score, 1)
-        print(self.score.to_string())
-        # print(self.score.get_measure(1).get_part(1).chords)
+        p = path + '_test_4'
+        self.score.write(p)
