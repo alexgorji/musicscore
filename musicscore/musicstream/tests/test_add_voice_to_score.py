@@ -85,11 +85,13 @@ class Test(TestCase):
       <note>
         <pitch>
           <step>E</step>
+          <alter>0</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>2</voice>
         <type>quarter</type>
+        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>

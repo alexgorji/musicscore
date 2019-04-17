@@ -171,7 +171,10 @@ class TreePart(timewise.Part):
 
     def get_previous_measure_last_notes(self):
         previous_measure_last_notes = []
-        previous_measure = self.up.previous
+        try:
+            previous_measure = self.up.previous
+        except AttributeError:
+            previous_measure = None
         if previous_measure:
             part = [p for p in previous_measure.get_children_by_type(TreePart) if p.id == self.id][0]
             previous_measure_last_chord = part.chords[-1]

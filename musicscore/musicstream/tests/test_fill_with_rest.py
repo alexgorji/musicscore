@@ -12,5 +12,5 @@ class Test(TestCase):
         simpleformat = SimpleFormat(durations=4)
         voice = simpleformat.to_voice(1)
         voice.add_to_score(self.score, 1, 1)
-        print(voice.chords)
+        # print(voice.chords)
         # print(self.score.to_string())
