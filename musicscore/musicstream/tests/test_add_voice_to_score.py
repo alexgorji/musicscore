@@ -1,10 +1,13 @@
 from unittest import TestCase
+import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
 
+path = os.path.abspath(__file__).split('.')[0]
 
 class Test(TestCase):
+
     def setUp(self) -> None:
         self.score = TreeScoreTimewise()
 
@@ -15,7 +18,111 @@ class Test(TestCase):
         self.score.add_part()
         self.score.add_measure()
         voice.add_to_score(self.score, 1)
-        print(self.score.to_string())
+        result = '''<score-timewise version="3.0">
+  <part-list>
+    <score-part id="p1">
+      <part-name print-object="no">none</part-name>
+    </score-part>
+  </part-list>
+  <measure number="1">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+    </part>
+  </measure>
+  <measure number="2">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </part>
+  </measure>
+</score-timewise>
+'''
+        self.assertEqual(self.score.to_string(), result)
 
     def test_2(self):
         simpleformat = SimpleFormat(midis=list(range(60, 68)), durations=[1.2]*8)
@@ -24,8 +131,10 @@ class Test(TestCase):
         self.score.add_measure()
         voice.add_to_score(self.score, 1)
         p = self.score.get_measure(1).get_part(1)
-        print([chord.quarter_duration for chord in p.chords])
-        # print(self.score.to_string())
+        p = self.score.get_measure(2).get_part(1)
+        p = self.score.get_measure(3).get_part(1)
+        p = path + '_test_2'
+        self.score.write(p)
 
 
     def test_voice_1(self):

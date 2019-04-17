@@ -18,6 +18,7 @@ class TreeScoreTimewise(timewise.Score):
         super().__init__(*args, **kwargs)
         self._part_list = self.add_child(PartList())
         self.version = '3.0'
+        self._finished = False
 
     def _generate_score_part(self):
         id_ = 'p' + str(self._auto_part_number)
@@ -87,9 +88,11 @@ class TreeScoreTimewise(timewise.Score):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 part.finish()
+        self._finished = True
 
     def to_string(self):
-        self.finish()
+        if not self._finished:
+            self.finish()
         self.close_dtd()
         xml = self._to_xml()
         return et.tounicode(xml, pretty_print=True)

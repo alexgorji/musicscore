@@ -34,6 +34,12 @@ class TestAddMeasure(TestCase):
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <note>
+        <rest/>
+        <duration>3</duration>
+        <type>half</type>
+        <dot/>
+      </note>
     </part>
   </measure>
   <measure number="2">
@@ -45,6 +51,11 @@ class TestAddMeasure(TestCase):
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <type>half</type>
+      </note>
     </part>
   </measure>
   <measure number="3">
@@ -52,6 +63,11 @@ class TestAddMeasure(TestCase):
       <attributes>
         <divisions>1</divisions>
       </attributes>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <type>half</type>
+      </note>
     </part>
   </measure>
   <measure number="4">
@@ -63,20 +79,31 @@ class TestAddMeasure(TestCase):
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <type>half</type>
+      </note>
     </part>
   </measure>
   <measure number="5">
     <part id="p1">
       <attributes>
-        <divisions>1</divisions>
+        <divisions>2</divisions>
         <time>
           <beats>3</beats>
           <beat-type>8</beat-type>
         </time>
       </attributes>
+      <note>
+        <rest/>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot/>
+      </note>
     </part>
   </measure>
 </score-timewise>
 '''
         self.assertEqual(self.score.to_string(), result)
-        self.score.write(path=path)
+        # self.score.write(path=path)

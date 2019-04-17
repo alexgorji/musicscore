@@ -17,17 +17,19 @@ class TestTreeTimewise(TestCase):
     def setUp(self):
         self.score = TreeScoreTimewise()
         self.score.add_measure()
-        part = self.score.add_part('one')
+        self.score.add_part('one')
 
     def test_accidentals(self):
         midis = [60, 61, 62, 60, 63, 64, 65, 61]
         for midi in midis:
             self.score.add_chord(1, 1, TreeChord(midi, quarter_duration=0.5))
 
+        p = self.score.get_measure(1).get_part(1)
+        self.score.finish()
         # measure = self.score.get_children_by_type(TreeMeasure)[0]
         # part = measure.get_children_by_type(TreePart)[0]
         # part.finish()
 
-        self.score.finish()
+        # self.score.finish()
         #
         self.score.write(path=path)

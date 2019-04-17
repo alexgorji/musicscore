@@ -9,7 +9,7 @@ from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Pitch
-from musicscore.musicxml.elements.note import Beam, Type
+from musicscore.musicxml.elements.note import Beam, Type, Tie
 
 
 class TreePart(timewise.Part):
@@ -171,15 +171,22 @@ class TreePart(timewise.Part):
 
     def update_accidentals(self, mode):
         if mode == 'normal':
-            self._accidental_steps = []
+            _hide_accidental = []
+            _set_natural = []
             pitched_notes = [note for note in self.get_children_by_type(TreeNote) if isinstance(note.event, Pitch)]
             for note in pitched_notes:
-                if note.pitch.alter is not None and note.pitch.alter.value != 0 and note.pitch.step.value not in self._accidental_steps:
-                    note.accidental.show = True
-                    self._accidental_steps.append(note.pitch.step.value)
+                if note.pitch.alter is not None and note.pitch.alter.value != 0 and note.pitch.step.value not in _hide_accidental:
+                    if 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
+                        note.accidental.show = True
+                        _hide_accidental.append(note.pitch.step.value)
+                    _set_natural.append(note.pitch.step.value)
                 elif (
-                        note.pitch.alter is None or note.pitch.alter.value == 0) and note.pitch.step.value in self._accidental_steps:
-                    self._accidental_steps.remove(note.pitch.step.value)
+                        note.pitch.alter is None or note.pitch.alter.value == 0) and note.pitch.step.value in _set_natural:
+                    try:
+                        _hide_accidental.remove(note.pitch.step.value)
+                    except ValueError:
+                        pass
+                    _set_natural.remove(note.pitch.step.value)
                     note.accidental.show = True
         else:
             raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
