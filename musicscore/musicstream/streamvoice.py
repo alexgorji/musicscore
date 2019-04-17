@@ -32,23 +32,43 @@ class StreamVoice(object):
         chord.add_child(Voice(str(self.voice)))
         self._chords.append(chord)
 
+    def add_to_part(self, part, chords = None):
+        if chords is None:
+            chords = self.chords
+
+        for i in range(len(chords)):
+            chord = chords[i]
+            remain = part.add_chord(chord)
+            if remain:
+                remaining_chords = [remain] + chords[i + 1:]
+                return remaining_chords
+
     def add_to_score(self, score, part_number, first_measure=1):
-        measure_index = first_measure - 1
-        for chord in self.chords:
+        measure_number = first_measure
+
+        def _get_measure():
             try:
-                measure = score.get_children_by_type(TreeMeasure)[measure_index]
+                measure = score.get_children_by_type(TreeMeasure)[measure_number - 1]
             except IndexError:
                 measure = score.add_measure()
 
-            for i in range(part_number - len(measure.get_children_by_type(TreePart))):
-                score.add_part()
+            return measure
 
+        measure = _get_measure()
+        for i in range(part_number - len(measure.get_children_by_type(TreePart))):
+            score.add_part()
+
+        def _add_to_part(chords=None):
             part = measure.get_children_by_type(TreePart)[part_number - 1]
+            remain = self.add_to_part(part, chords)
+            return remain
 
-            remain = part.add_chord(chord)
-            if remain:
-                measure_index += 1
-                self.add_to_score(score, part_number, first_measure=measure_index + 1)
+        remain = _add_to_part()
+
+        while remain:
+            measure_number += 1
+            measure = _get_measure()
+            remain = _add_to_part(remain)
 
 
 class SimpleFormat(object):
@@ -103,7 +123,13 @@ class SimpleFormat(object):
             except TypeError:
                 midis = [midis]
 
-        self._midis = [Midi(m) for m in midis]
+        self._midis = []
+        for m in midis:
+            try:
+                ms = [Midi(midi) for midi in m]
+                self._midis.append(ms)
+            except TypeError:
+                self._midis.append(Midi(m))
 
     def get_durations(self):
         return [chord.duration for chord in self.chords]

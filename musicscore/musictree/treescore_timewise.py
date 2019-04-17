@@ -88,9 +88,9 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.finish()
 
-    # def to_string(self):
-    #     self.close_dtd()
-    #     self.finish()
-    #     xml = self._to_xml()
-    #     return et.tounicode(xml, pretty_print=True)
+    def to_string(self):
+        self.finish()
+        self.close_dtd()
+        xml = self._to_xml()
+        return et.tounicode(xml, pretty_print=True)
 

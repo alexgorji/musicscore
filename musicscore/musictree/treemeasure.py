@@ -1,3 +1,5 @@
+from quicktions import Fraction
+
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treetime import TreeTime
 from musicscore.musicxml.elements import timewise as timewise
@@ -37,7 +39,7 @@ class TreeMeasure(timewise.Measure):
         for time_signature in self.time.get_time_signatures():
             (beats, beat_type) = time_signature
             output += beats.value / beat_type.value * 4
-        return output
+        return Fraction(output).limit_denominator(10000)
 
     def show_time_signature(self):
         part = self.get_children_by_type(TreePart)[0]

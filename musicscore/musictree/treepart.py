@@ -1,3 +1,6 @@
+from lxml import etree as et
+from quicktions import Fraction
+
 from musicscore.basic_functions import lcm, substitute
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
@@ -5,7 +8,7 @@ from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
-from musicscore.musicxml.elements.fullnote import Pitch, Alter, Step
+from musicscore.musicxml.elements.fullnote import Pitch
 from musicscore.musicxml.elements.note import Beam, Type
 
 
@@ -55,7 +58,11 @@ class TreePart(timewise.Part):
             raise TypeError()
 
         remain = chord.quarter_duration - self.remaining_duration
-        if remain > 0:
+
+        if self.remaining_duration == 0:
+            return chord
+
+        elif remain > 0:
             split = self._split_chord(chord, [chord.quarter_duration - remain, remain])
             split[0].parent_part = self
             self.chords.append(split[0])
@@ -208,12 +215,12 @@ class TreePart(timewise.Part):
             raise TypeError()
 
         new_chords = chord.split(ratios)
+        if chord.midis[0].value != 0:
+            for new_chord in new_chords[:-1]:
+                new_chord.add_tie('start')
 
-        for new_chord in new_chords[:-1]:
-            new_chord.add_tie('start')
-
-        for new_chord in new_chords[1:]:
-            new_chord.add_tie('stop')
+            for new_chord in new_chords[1:]:
+                new_chord.add_tie('stop')
 
         return new_chords
 
@@ -258,19 +265,25 @@ class TreePart(timewise.Part):
                     beat.next.chords.insert(0, split[1])
                     split[1].parent_beat = beat.next
 
-        # self._chords = []
-        # for beat in self.beats:
-        #     self._chords.extend(beat.chords)
-
     def quantize(self):
         self._add_chords_to_beats()
         self._split_chords_beatwise()
         for beat in self.beats:
             beat.quantize()
 
+    def fill_with_rest(self):
+        if self.remaining_duration > 0:
+            if self.chords and self.chords[-1].midis[0].value == 0:
+                self.chords[-1].quarter_duration += Fraction(self.remaining_duration)
+            else:
+                rest = TreeChord(midis=0, quarter_duration=self.remaining_duration)
+                self.add_chord(rest)
+
     def finish(self):
         if not self.beats:
             self.set_beats()
+
+        self.fill_with_rest()
 
         self.quantize()
 
@@ -289,3 +302,9 @@ class TreePart(timewise.Part):
         self.update_accidentals(mode='normal')
         for note in self.get_children_by_type(TreeNote):
             note.update_duration(self.get_divisions())
+
+    def to_string(self):
+        self.finish()
+        self.close_dtd()
+        xml = self._to_xml()
+        return et.tounicode(xml, pretty_print=True)
