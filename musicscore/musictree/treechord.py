@@ -8,8 +8,8 @@ from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
     Type, Dot, Notehead, NoteheadText, Beam
 from musicscore.musicxml.elements.xml_element import XMLTree
+from musicscore.musicxml.types.complextypes.lyric import Text
 from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet
-from musicscore.basic_functions import substitute
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
 
@@ -267,3 +267,7 @@ class TreeChord(XMLTree):
         new_chord.midis = self.midis
         for child in self.get_children():
             new_chord.add_child(child)
+
+    def add_lyric(self, text, number=1):
+        lyric = self.add_child(Lyric(number=str(number)))
+        lyric.add_child(Text(text))

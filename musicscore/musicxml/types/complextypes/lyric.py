@@ -15,17 +15,8 @@ from musicscore.musicxml.types.complextypes.extend import ComplexTypeExtend
 from musicscore.musicxml.types.complextypes.text_element_data import ComplexTypeTextElementData
 from unittest import TestCase
 
+from musicscore.musicxml.types.simple_type import Token
 
-class Number(AttributeAbstract):
-    def __init__(self, number='1', *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.generate_attribute('number', number, 'Token')
-
-
-class Name(AttributeAbstract):
-    def __init__(self, name=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.generate_attribute('name', name, 'Token')
 
 
 class Syllabic(XMLElement, TypeSyllabic):
@@ -84,7 +75,7 @@ class EndLine(Empty):
         super().__init__(tag='end-line', *args, **kwargs)
 
 
-class ComplexTypeLyric(ComplexType, Number, Name, Justify, Position, Placement, Color, PrintObject, TimeOnly,
+class ComplexTypeLyric(ComplexType, Justify, Position, Placement, Color, PrintObject, TimeOnly,
                        OptionalUniqueId):
     """The lyric type represents text underlays for lyrics, based on Humdrum with support for other formats. Two text
     elements that are not separated by an elision element are part of the same syllable, but may have different text
@@ -127,8 +118,35 @@ class ComplexTypeLyric(ComplexType, Number, Name, Justify, Position, Placement, 
         GroupReference(Editorial)
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, number='1', *args, **kwargs):
         super().__init__(tag='lyric', *args, **kwargs)
+        self.number = number
+
+    @property
+    def number(self):
+        return self.get_attribute('number')
+
+    @number.setter
+    def number(self, value):
+        if value is None:
+            self.remove_attribute('number')
+        else:
+            Token(value)
+            self._ATTRIBUTES.insert(0, 'number')
+            self.set_attribute('number', value)
+
+    @property
+    def name(self):
+        return self.get_attribute('name')
+
+    @name.setter
+    def name(self, value):
+        if value is None:
+            self.remove_attribute('name')
+        else:
+            Token(value)
+            self._ATTRIBUTES.insert(0, 'name')
+            self.set_attribute('name', value)
 
 
 class Test(TestCase):
