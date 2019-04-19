@@ -3,13 +3,13 @@ from quicktions import Fraction
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treenote import TreeNote
-from musicscore.musicxml.common.common import EditorialVoice, Staff
+from musicscore.musicxml.common.common import EditorialVoice, Staff, Voice
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
     Type, Dot, Notehead, NoteheadText, Beam
 from musicscore.musicxml.elements.xml_element import XMLTree
 from musicscore.musicxml.types.complextypes.lyric import Text
-from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet
+from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Dynamics, Technical, Articulations
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
 
@@ -42,7 +42,7 @@ class TreeChord(XMLTree):
         Element(Play, 0)
     )
 
-    def __init__(self, midis=71, quarter_duration=1, **kwargs):
+    def __init__(self, midis=71, quarter_duration=1, voice=1, **kwargs):
         super().__init__(**kwargs)
         self.parent_part = None
         self.parent_beat = None
@@ -51,6 +51,20 @@ class TreeChord(XMLTree):
         self.quarter_duration = quarter_duration
         self._midis = None
         self.midis = midis
+        self.voice = voice
+
+    @property
+    def voice(self):
+        return self.get_children_by_type(Voice)[0]
+
+    @voice.setter
+    def voice(self, value):
+        if not isinstance(value, int):
+            raise TypeError('voice.value must be of type int not{}'.format(type(value)))
+        try:
+            self.get_children_by_type(Voice)[0].value = str(value)
+        except IndexError:
+            self.add_child(Voice(str(value)))
 
     @property
     def quarter_duration(self):
@@ -140,7 +154,18 @@ class TreeChord(XMLTree):
         for index, midi in enumerate(self.midis):
             note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration)
             for child in self.get_children():
-                note.add_child(child)
+                if isinstance(child, Lyric) and index != 0:
+                    pass
+                elif isinstance(child, Notehead) and index != 0:
+                    pass
+                elif isinstance(child, Notations) and index != 0:
+                    grandchildren = child.get_children()
+                    for grandchild in grandchildren:
+                        if type(grandchild) not in (Ornaments, Technical, Articulations, Dynamics):
+                            note._add_notations(grandchild)
+
+                else:
+                    note.add_child(child)
             if index > 0:
                 note.add_child(Chord())
             output.append(note)
@@ -271,3 +296,4 @@ class TreeChord(XMLTree):
     def add_lyric(self, text, number=1):
         lyric = self.add_child(Lyric(number=str(number)))
         lyric.add_child(Text(text))
+        return lyric

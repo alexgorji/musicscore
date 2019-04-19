@@ -116,7 +116,6 @@ class TreeNote(Note):
         self._event = self.add_child(value)
         self.update_accidental()
 
-
     def update_accidental(self):
         _accidentals = {-1.5: 'three-quarters-flat',
                         -1: 'flat',
@@ -144,10 +143,17 @@ class TreeNote(Note):
             if accidental:
                 self.remove_child(accidental[0])
 
+    def _add_notations(self, notation):
+        try:
+            notations = self.get_children_by_type(Notations)
+        except AttributeError:
+            notations = self.add_child(Notations)
+
+        notations.add_child(notation)
+
     def update_duration(self, divisions):
         try:
             self.duration.value = int(self.quarter_duration * divisions)
         except AttributeError:
             self.add_child(Duration())
             self.duration.value = int(self.quarter_duration * divisions)
-

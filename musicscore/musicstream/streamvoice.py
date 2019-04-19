@@ -29,10 +29,10 @@ class StreamVoice(object):
         self._voice = value
 
     def add_chord(self, chord):
-        chord.add_child(Voice(str(self.voice)))
+        chord.voice = self.voice
         self._chords.append(chord)
 
-    def add_to_part(self, part, chords = None):
+    def add_to_part(self, part, chords=None):
         if chords is None:
             chords = self.chords
 

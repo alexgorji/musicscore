@@ -6,10 +6,72 @@ from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treenote import TreeNote
+from musicscore.musicxml.common.common import Voice
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Pitch
 from musicscore.musicxml.elements.note import Beam, Type, Tie
+
+
+class TreePartVoice(object):
+    def __init__(self, number = 1, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._number = None
+        self.number = number
+        self._chords = None
+
+    @property
+    def chords(self):
+        return self._chords
+
+    @property
+    def number(self):
+        return self._number
+
+    @number.setter
+    def number(self, value):
+        if not isinstance(value, int):
+            raise TypeError('number.value must be of type int not{}'.format(type(value)))
+        self._number = value
+
+    @staticmethod
+    def _split_chord(chord, ratios):
+        if not isinstance(chord, TreeChord):
+            raise TypeError()
+
+        new_chords = chord.split(ratios)
+        if chord.midis[0].value != 0:
+            for new_chord in new_chords[:-1]:
+                new_chord.add_tie('start')
+
+            for new_chord in new_chords[1:]:
+                new_chord.add_tie('stop')
+
+        return new_chords
+
+    def add_chord(self, chord):
+        remain = chord.quarter_duration - self.remaining_duration
+
+        if self.remaining_duration == 0:
+            return chord
+
+        elif remain > 0:
+            split = self._split_chord(chord, [chord.quarter_duration - remain, remain])
+            split[0].parent_part = self
+            self.chords.append(split[0])
+            split[0].part_voice = self
+            return split[1]
+        else:
+            self.chords.append(chord)
+            chord.parent_part = self
+            chord.part_voice = self
+
+    @property
+    def remaining_duration(self):
+        measure = self.part.up
+        if self.chords:
+            return measure.quarter_duration - self.chords[-1].end_position
+        return measure.quarter_duration
 
 
 class TreePart(timewise.Part):
@@ -21,11 +83,18 @@ class TreePart(timewise.Part):
         attributes.add_child(Divisions(1))
         self._accidental_steps = []
         self._beats = []
-        self._chords = []
+        self._voices = {}
 
     @property
     def chords(self):
+        output = []
+        for voice in self.voices.items():
+            output.extend(voice.chords)
         return self._chords
+
+    @property
+    def voices(self):
+        return self._voices
 
     def get_divisions(self):
         duration_denominators = [note.quarter_duration.denominator for note in
@@ -42,14 +111,23 @@ class TreePart(timewise.Part):
     def notes(self):
         return self.get_children_by_type(TreeNote)
 
-    @property
-    def remaining_duration(self):
-        measure = self.up
-        if self.chords:
-            return measure.quarter_duration - self.chords[-1].end_position
-        return measure.quarter_duration
+    # @property
+    # def remaining_duration(self):
+    #     measure = self.up
+    #     if self.chords:
+    #         return measure.quarter_duration - self.chords[-1].end_position
+    #     return measure.quarter_duration
 
-    def add_chord(self, chord):
+    def _add_as_voice(self, chord):
+        voice_number = chord.get_children_by_type(Voice)[0].value
+        try:
+            voice = self._voices[voice_number]
+        except KeyError:
+            self._voices[voice_number] = []
+            voice = self._voices[voice_number]
+        voice.append(chord)
+
+    def add_chord(self, chord, voice_number=1):
         measure = self.up
         if not measure:
             raise Exception('parent measure needed before adding chord to part')
@@ -57,19 +135,15 @@ class TreePart(timewise.Part):
         if not isinstance(chord, TreeChord):
             raise TypeError()
 
-        remain = chord.quarter_duration - self.remaining_duration
+        try:
+            voice = self.voices[voice_number]
+        except KeyError:
+            self.voices[voice_number] = TreePartVoice(voice_number)
+            voice = self.voices[voice_number]
 
-        if self.remaining_duration == 0:
-            return chord
+        voice.add_chord(chord)
 
-        elif remain > 0:
-            split = self._split_chord(chord, [chord.quarter_duration - remain, remain])
-            split[0].parent_part = self
-            self.chords.append(split[0])
-            return split[1]
-        else:
-            self.chords.append(chord)
-            chord.parent_part = self
+
 
     def chord_to_notes(self):
         for chord in self.chords:
@@ -181,11 +255,11 @@ class TreePart(timewise.Part):
             previous_measure_last_notes = previous_measure_last_chord._notes
         return previous_measure_last_notes
 
-
     def update_accidentals(self, mode):
         def _get_previous_measure_last_signed_notes():
             previous_measure_last_notes = self.get_previous_measure_last_notes()
-            return [n for n in previous_measure_last_notes if isinstance(n.event, Pitch) and n.pitch.alter and n.pitch.alter.value != 0]
+            return [n for n in previous_measure_last_notes if
+                    isinstance(n.event, Pitch) and n.pitch.alter and n.pitch.alter.value != 0]
 
         if mode == 'normal':
             _hide_accidental = []
@@ -238,20 +312,6 @@ class TreePart(timewise.Part):
     def beats(self):
         return self._beats
 
-    @staticmethod
-    def _split_chord(chord, ratios):
-        if not isinstance(chord, TreeChord):
-            raise TypeError()
-
-        new_chords = chord.split(ratios)
-        if chord.midis[0].value != 0:
-            for new_chord in new_chords[:-1]:
-                new_chord.add_tie('start')
-
-            for new_chord in new_chords[1:]:
-                new_chord.add_tie('stop')
-
-        return new_chords
 
     def _add_chords_to_beats(self):
         beats = iter(self.beats)
