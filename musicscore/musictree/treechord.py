@@ -52,7 +52,6 @@ class TreeChord(XMLTree):
         self._midis = None
         self.midis = midis
 
-
     @property
     def quarter_duration(self):
         return self._quarter_duration
@@ -126,9 +125,12 @@ class TreeChord(XMLTree):
         new_chord = TreeChord(quarter_duration=quarter_duration)
         new_chord.midis = self.midis
         new_chord.tree_part_voice = self.tree_part_voice
-        voice = self.get_children_by_type(Voice)[0]
-        if voice:
+        try:
+            voice = self.get_children_by_type(Voice)[0]
             new_chord.add_child(voice)
+        except IndexError:
+            pass
+
         return new_chord
 
     def split(self, ratios):

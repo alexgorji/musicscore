@@ -52,6 +52,7 @@
         </pitch>
         <duration>2</duration>
         <tie type="stop"/>
+        <voice>1</voice>
         <type>eighth</type>
         <time-modification>
           <actual-notes>7</actual-notes>
@@ -74,6 +75,7 @@
         </pitch>
         <duration>2</duration>
         <tie type="stop"/>
+        <voice>1</voice>
         <type>eighth</type>
         <time-modification>
           <actual-notes>7</actual-notes>
@@ -161,6 +163,7 @@
         </pitch>
         <duration>7</duration>
         <tie type="stop"/>
+        <voice>1</voice>
         <type>quarter</type>
         <notations>
           <tied number="1" type="stop"/>
