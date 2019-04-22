@@ -19,7 +19,7 @@ class TreePartVoice(object):
         self._number = None
         self.number = number
         self._chords = []
-        self._beats =  None
+        self._beats = None
 
     @property
     def chords(self):
@@ -325,8 +325,14 @@ class TreePart(timewise.Part):
             previous_measure = None
         if previous_measure:
             part = [p for p in previous_measure.get_children_by_type(TreePart) if p.id == self.id][0]
-            previous_measure_last_chord = part.chords[-1]
-            previous_measure_last_notes = previous_measure_last_chord._notes
+            voices = part.voices.values()
+            previous_measure_last_chords = []
+            for voice in voices:
+                previous_measure_last_chords.append(voice.chords[-1])
+
+            previous_measure_last_notes = []
+            for chord in previous_measure_last_chords:
+                previous_measure_last_notes.extend(chord._notes)
         return previous_measure_last_notes
 
     def update_accidentals(self, mode):
@@ -360,7 +366,6 @@ class TreePart(timewise.Part):
                         note.accidental.show = True
         else:
             raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
-
 
     def fill_with_rest(self):
         if self.voices == {}:
