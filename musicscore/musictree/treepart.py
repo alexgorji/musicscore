@@ -363,6 +363,8 @@ class TreePart(timewise.Part):
 
 
     def fill_with_rest(self):
+        if self.voices == {}:
+            self.set_voice(1)
         for voice in self.voices.values():
             voice.fill_with_rest()
 
