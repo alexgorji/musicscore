@@ -4,7 +4,9 @@ from quicktions import Fraction
 
 from musicscore.basic_functions import substitute
 from musicscore.musictree.treechord import TreeChord
+from musicscore.musicxml.elements.note import TimeModification
 from musicscore.musicxml.types.complextypes.notations import Tuplet
+from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes
 
 
 def _find_nearest_quantized_value(quantized_values, values):
@@ -436,5 +438,8 @@ class TreeBeat(object):
             chords_quarter_durations = [chord.quarter_duration for chord in self.chords]
             if chords_quarter_durations not in six_divisions:
                 for chord in self.chords:
-                    position = chord.tuplet.position
-                    chord.tuplet = Tuplet(3, position=position)
+                    tm = chord.get_children_by_type(TimeModification)[0]
+                    tm.get_children_by_type(ActualNotes)[0].value = 3
+                    tm.get_children_by_type(NormalNotes)[0].value = 2
+                    # position = chord.tuplet.position
+                    # chord.tuplet = Tuplet(3, position=position)

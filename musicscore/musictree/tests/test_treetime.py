@@ -46,6 +46,7 @@ class TestTreeTime(TestCase):
       <note>
         <rest/>
         <duration>4</duration>
+        <voice>1</voice>
         <type>whole</type>
       </note>
     </part>

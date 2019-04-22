@@ -175,7 +175,7 @@ class TreePartVoice(object):
         else:
             duration = 0
             for beat in list_of_beats:
-                beat._part = self
+                beat._tree_part_voice = self
                 duration += beat.duration
             if self.part.up.quarter_duration != duration:
                 raise ValueError('sum of beat durations must be equal to measure duration')
@@ -381,8 +381,6 @@ class TreePart(timewise.Part):
             for voice in self.voices.values():
                 for beat in voice.beats:
                     beat.check_notatability()
-
-            # self.update_chord_accidentals(mode='show')
 
             for chord in self.chords:
                 chord.update_type()

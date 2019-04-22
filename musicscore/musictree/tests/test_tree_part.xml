@@ -22,6 +22,7 @@
         </pitch>
         <duration>7</duration>
         <tie type="start"/>
+        <voice>1</voice>
         <type>quarter</type>
         <notations>
           <tied number="1" type="start"/>
@@ -38,13 +39,11 @@
         </pitch>
         <duration>7</duration>
         <tie type="start"/>
+        <voice>1</voice>
         <type>quarter</type>
         <notations>
           <tied number="1" type="start"/>
         </notations>
-        <lyric number="1">
-          <text>bla</text>
-        </lyric>
       </note>
       <note>
         <pitch>
@@ -84,8 +83,6 @@
         <beam number="1">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
@@ -95,6 +92,7 @@
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
+        <voice>1</voice>
         <type>quarter</type>
         <time-modification>
           <actual-notes>7</actual-notes>
@@ -110,6 +108,7 @@
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
+        <voice>1</voice>
         <type>quarter</type>
         <accidental>flat</accidental>
         <time-modification>
@@ -125,6 +124,7 @@
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
+        <voice>1</voice>
         <type>quarter</type>
         <time-modification>
           <actual-notes>7</actual-notes>
@@ -139,6 +139,7 @@
         </pitch>
         <duration>1</duration>
         <tie type="start"/>
+        <voice>1</voice>
         <type>16th</type>
         <time-modification>
           <actual-notes>7</actual-notes>

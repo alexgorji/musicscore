@@ -95,6 +95,10 @@ class TreeChord(XMLTree):
         self._midis = output
 
     @property
+    def position_in_beat(self):
+        return self.offset - self.parent_beat.offset
+
+    @property
     def previous(self):
         index = self.tree_part_voice.chords.index(self)
         if index == 0:

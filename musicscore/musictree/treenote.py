@@ -145,9 +145,9 @@ class TreeNote(Note):
 
     def _add_notations(self, notation):
         try:
-            notations = self.get_children_by_type(Notations)
-        except AttributeError:
-            notations = self.add_child(Notations)
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
 
         notations.add_child(notation)
 

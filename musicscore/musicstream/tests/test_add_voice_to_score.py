@@ -4,6 +4,7 @@ import os
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
 from musicscore.musicxml.elements.note import Lyric
+from musicscore.musicxml.score_templates.xml_test_score import TestScore
 from musicscore.musicxml.types.complextypes.lyric import Text
 
 path = os.path.abspath(__file__).split('.')[0]
@@ -134,16 +135,18 @@ class Test(TestCase):
         self.score.add_part()
         self.score.add_measure()
         voice.add_to_score(self.score, 1)
-        p = path + '_test_2'
-        self.score.write(p)
+        result_path = path + '_test_2'
+        self.score.write(result_path)
+        TestScore().assert_template(result_path=result_path)
 
 
     def test_3(self):
         sf = SimpleFormat(midis=[(60, 61, 67)], durations=7)
         voice = sf.to_voice(1)
         voice.add_to_score(self.score, 1)
-        p = path + '_test_3'
-        self.score.write(p)
+        result_path = path + '_test_3'
+        self.score.write(result_path)
+        TestScore().assert_template(result_path=result_path)
 
     def test_4(self):
         midis = list(range(60, 80))
