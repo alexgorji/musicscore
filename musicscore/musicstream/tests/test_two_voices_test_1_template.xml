@@ -54,7 +54,9 @@
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <backup>8</backup>>
+      <backup>
+        <duration>8</duration>
+      </backup>
       <note>
         <pitch>
           <step>D</step>

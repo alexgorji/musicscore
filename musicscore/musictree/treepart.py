@@ -5,7 +5,7 @@ from musicscore.basic_functions import lcm, substitute
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
-from musicscore.musictree.treenote import TreeNote
+from musicscore.musictree.treenote import TreeNote, TreeBackup
 from musicscore.musicxml.common.common import Voice
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
@@ -309,15 +309,12 @@ class TreePart(timewise.Part):
             voice.group_beams()
 
     def chord_to_notes(self):
-        for index, voice in enumerate(self.voices.values):
-            if index == 0:
-                self.add_child(Backup())
-            for chord in self.chords:
-
-
-        for chord in self.chords:
-            for note in chord._notes:
-                self.add_child(note)
+        for index, voice in enumerate(self.voices.values()):
+            if index != 0:
+                self.add_child(TreeBackup(quarter_duration=voice.part.up.quarter_duration))
+            for chord in voice.chords:
+                for note in chord._notes:
+                    self.add_child(note)
 
     def update_divisions(self):
         attributes = self.get_children_by_type(Attributes)[0]
@@ -372,7 +369,7 @@ class TreePart(timewise.Part):
                     elif note.offset == 0 and note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type
                                                                                                                for t in
                                                                                                                note.get_children_by_type(
-                                                                                                                       Tie)]:
+                                                                                                                   Tie)]:
                         note.accidental.show = True
         else:
             raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
@@ -409,6 +406,8 @@ class TreePart(timewise.Part):
             self.update_accidentals(mode='normal')
             for note in self.get_children_by_type(TreeNote):
                 note.update_duration(self.get_divisions())
+            for backup in self.get_children_by_type(TreeBackup):
+                backup.update_duration(self.get_divisions())
 
             self.close_dtd()
             self._finished = True

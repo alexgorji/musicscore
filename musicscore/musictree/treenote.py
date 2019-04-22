@@ -1,8 +1,30 @@
 from quicktions import Fraction
 
 from musicscore.musicxml.elements.fullnote import Rest, Event, Pitch, Alter
-from musicscore.musicxml.elements.note import Note, Dot, Duration, Type, Grace, Accidental, Tie, Notations
-from musicscore.musicxml.types.complextypes.notations import Tied
+from musicscore.musicxml.elements.musicdata import Backup
+from musicscore.musicxml.elements.note import Note, Duration, Grace, Accidental, Notations
+
+
+class TreeBackup(Backup):
+    def __init__(self, quarter_duration, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._quarter_duration = None
+        self.quarter_duration = quarter_duration
+
+    @property
+    def quarter_duration(self):
+        return self._quarter_duration
+
+    @quarter_duration.setter
+    def quarter_duration(self, value):
+        self._quarter_duration = value
+
+    def update_duration(self, divisions):
+        try:
+            self.get_children_by_type(Duration)[0].value = int(self.quarter_duration * divisions)
+        except IndexError:
+            self.add_child(Duration())
+            self.duration.value = int(self.quarter_duration * divisions)
 
 
 class TreeAccidental(Accidental):
