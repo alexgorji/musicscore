@@ -89,6 +89,7 @@ class Test(TestCase):
   <note>
     <rest/>
     <duration>1</duration>
+    <voice>2</voice>
     <type>quarter</type>
   </note>
 </part>
@@ -124,18 +125,17 @@ class Test(TestCase):
         self.score.add_part()
         self.score.add_measure()
         p = self.score.get_measure(1).get_part(1)
-        remaining_chords = voice.add_to_part(p)
+        voice.add_to_part(p)
         result = '''<part id="p1">
-          <attributes>
-            <divisions>1</divisions>
-          </attributes>
-          <note>
-            <rest/>
-            <duration>4</duration>
-            <voice>2</voice>
-            <type>whole</type>
-          </note>
-        </part>
-        '''
-        # self.assertEqual(p.to_string(), result)
-        print(self.score.to_string())
+  <attributes>
+    <divisions>1</divisions>
+  </attributes>
+  <note>
+    <rest/>
+    <duration>4</duration>
+    <voice>2</voice>
+    <type>whole</type>
+  </note>
+</part>
+'''
+        self.assertEqual(p.to_string(), result)

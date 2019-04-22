@@ -44,27 +44,14 @@ class TreeChord(XMLTree):
 
     def __init__(self, midis=71, quarter_duration=1, voice=1, **kwargs):
         super().__init__(**kwargs)
-        self.parent_part = None
+        self.tree_part_voice = None
         self.parent_beat = None
         self._offset = None
         self._quarter_duration = None
         self.quarter_duration = quarter_duration
         self._midis = None
         self.midis = midis
-        self.voice = voice
 
-    @property
-    def voice(self):
-        return self.get_children_by_type(Voice)[0]
-
-    @voice.setter
-    def voice(self, value):
-        if not isinstance(value, int):
-            raise TypeError('voice.value must be of type int not{}'.format(type(value)))
-        try:
-            self.get_children_by_type(Voice)[0].value = str(value)
-        except IndexError:
-            self.add_child(Voice(str(value)))
 
     @property
     def quarter_duration(self):
@@ -109,10 +96,10 @@ class TreeChord(XMLTree):
 
     @property
     def previous(self):
-        index = self.parent_part.chords.index(self)
+        index = self.tree_part_voice.chords.index(self)
         if index == 0:
             return None
-        return self.parent_part.chords[index - 1]
+        return self.tree_part_voice.chords[index - 1]
 
     def update_offset(self):
         if self.previous:
@@ -134,7 +121,7 @@ class TreeChord(XMLTree):
     def split_copy(self, quarter_duration):
         new_chord = TreeChord(quarter_duration=quarter_duration)
         new_chord.midis = self.midis
-        new_chord.parent_part = self.parent_part
+        new_chord.tree_part_voice = self.tree_part_voice
         return new_chord
 
     def split(self, ratios):
@@ -262,7 +249,8 @@ class TreeChord(XMLTree):
 
     def update_dot(self):
         _dot = 0
-        division = self.parent_part.get_divisions()
+
+        division = self.tree_part_voice.part.get_divisions()
         if self.quarter_duration.numerator % 3 == 0:
             _dot = 1
         elif self.quarter_duration == Fraction(1, 2) and (

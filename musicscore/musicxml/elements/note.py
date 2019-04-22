@@ -229,12 +229,12 @@ class Note(XMLElement):
         Element(TimeModification, 0, None),
         Element(Stem, 0),
         Element(Notehead, 0),
-        # Element(NoteheadText, 0),
-        # GroupReference(Staff, 0),
+        Element(NoteheadText, 0),
+        GroupReference(Staff, 0),
         Element(Beam, 0, 8),
         Element(Notations, 0, None),
         Element(Lyric, 0, None),
-        # Element(Play, 0)
+        Element(Play, 0)
     )
 
     def __init__(self, *args, **kwargs):

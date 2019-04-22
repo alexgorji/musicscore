@@ -39,7 +39,7 @@ class TreeBeat(object):
         self._best_div = None
         self._permitted_durations = (4, 2, 1, 0.5)
         self._chords = []
-        self._part = None
+        self._tree_part_voice = None
 
         self.duration = duration
         self.max_division = max_division
@@ -101,26 +101,26 @@ class TreeBeat(object):
         return self._chords
 
     @property
-    def part(self):
-        return self._part
+    def tree_part_voice(self):
+        return self._tree_part_voice
 
     @property
     def previous(self):
-        if not self.part:
-            raise Exception('beat has no part')
-        index = self.part.beats.index(self)
+        if not self.tree_part_voice:
+            raise Exception('beat has no voice')
+        index = self.tree_part_voice.beats.index(self)
         if index == 0:
             return None
-        return self.part.beats[index - 1]
+        return self.tree_part_voice.beats[index - 1]
 
     @property
     def next(self):
-        if not self.part:
-            raise Exception('beat has no part')
-        index = self.part.beats.index(self)
-        if index == len(self.part.beats) - 1:
+        if not self.tree_part_voice:
+            raise Exception('beat has no voice')
+        index = self.tree_part_voice.beats.index(self)
+        if index == len(self.tree_part_voice.beats) - 1:
             return None
-        return self.part.beats[index + 1]
+        return self.tree_part_voice.beats[index + 1]
 
     @property
     def offset(self):

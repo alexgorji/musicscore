@@ -38,7 +38,7 @@ class StreamVoice(object):
 
         for i in range(len(chords)):
             chord = chords[i]
-            remain = part.add_chord(chord)
+            remain = part.add_chord(chord, self.voice)
             if remain:
                 remaining_chords = [remain] + chords[i + 1:]
                 return remaining_chords

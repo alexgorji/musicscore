@@ -14,11 +14,12 @@ from musicscore.musicxml.elements.note import Beam, Type, Tie
 
 
 class TreePartVoice(object):
-    def __init__(self, number = 1, *args, **kwargs):
+    def __init__(self, number=1, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._number = None
         self.number = number
-        self._chords = None
+        self._chords = []
+        self._beats =  None
 
     @property
     def chords(self):
@@ -51,20 +52,19 @@ class TreePartVoice(object):
 
     def add_chord(self, chord):
         remain = chord.quarter_duration - self.remaining_duration
-
         if self.remaining_duration == 0:
             return chord
 
         elif remain > 0:
             split = self._split_chord(chord, [chord.quarter_duration - remain, remain])
-            split[0].parent_part = self
             self.chords.append(split[0])
-            split[0].part_voice = self
+            split[0].tree_part_voice = self
+            split[0].add_child(Voice(str(self.number)))
             return split[1]
         else:
             self.chords.append(chord)
-            chord.parent_part = self
-            chord.part_voice = self
+            chord.tree_part_voice = self
+            chord.add_child(Voice(str(self.number)))
 
     @property
     def remaining_duration(self):
@@ -72,83 +72,6 @@ class TreePartVoice(object):
         if self.chords:
             return measure.quarter_duration - self.chords[-1].end_position
         return measure.quarter_duration
-
-
-class TreePart(timewise.Part):
-    """"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        attributes = self.add_child(Attributes())
-        attributes.add_child(Divisions(1))
-        self._accidental_steps = []
-        self._beats = []
-        self._voices = {}
-
-    @property
-    def chords(self):
-        output = []
-        for voice in self.voices.items():
-            output.extend(voice.chords)
-        return self._chords
-
-    @property
-    def voices(self):
-        return self._voices
-
-    def get_divisions(self):
-        duration_denominators = [note.quarter_duration.denominator for note in
-                                 self.get_children_by_type(TreeNote)]
-
-        if len(duration_denominators) == 0:
-            return 1
-        elif len(duration_denominators) == 1:
-            return duration_denominators[0]
-        else:
-            return lcm(duration_denominators)
-
-    @property
-    def notes(self):
-        return self.get_children_by_type(TreeNote)
-
-    # @property
-    # def remaining_duration(self):
-    #     measure = self.up
-    #     if self.chords:
-    #         return measure.quarter_duration - self.chords[-1].end_position
-    #     return measure.quarter_duration
-
-    def _add_as_voice(self, chord):
-        voice_number = chord.get_children_by_type(Voice)[0].value
-        try:
-            voice = self._voices[voice_number]
-        except KeyError:
-            self._voices[voice_number] = []
-            voice = self._voices[voice_number]
-        voice.append(chord)
-
-    def add_chord(self, chord, voice_number=1):
-        measure = self.up
-        if not measure:
-            raise Exception('parent measure needed before adding chord to part')
-
-        if not isinstance(chord, TreeChord):
-            raise TypeError()
-
-        try:
-            voice = self.voices[voice_number]
-        except KeyError:
-            self.voices[voice_number] = TreePartVoice(voice_number)
-            voice = self.voices[voice_number]
-
-        voice.add_chord(chord)
-
-
-
-    def chord_to_notes(self):
-        for chord in self.chords:
-            for note in chord._notes:
-                self.add_child(note)
 
     def _group_beats(self, grouping_list):
         # todo test grouping list
@@ -161,7 +84,7 @@ class TreePart(timewise.Part):
             for group in grouping_list:
                 # todo list of beat_types
 
-                beat_type = self.up.time.beat_type
+                beat_type = self.part.up.time.beat_type
                 if isinstance(beat_type, list):
                     raise NotImplementedError()
 
@@ -181,7 +104,7 @@ class TreePart(timewise.Part):
 
         def _generate_grouping_list():
             grouping_list = []
-            for (beats, beat_type) in self.up.time.get_time_signatures():
+            for (beats, beat_type) in self.part.up.time.get_time_signatures():
                 if beats.value % 3 == 0 and beat_type.value != 4:
                     for x in range(beats.value // 3):
                         grouping_list.append(3)
@@ -238,72 +161,23 @@ class TreePart(timewise.Part):
         else:
             raise NotImplementedError('group_beams with values other than None')
 
-    def update_divisions(self):
-        attributes = self.get_children_by_type(Attributes)[0]
-        divisions = attributes.get_children_by_type(Divisions)[0]
-        divisions.value = self.get_divisions()
-
-    def get_previous_measure_last_notes(self):
-        previous_measure_last_notes = []
-        try:
-            previous_measure = self.up.previous
-        except AttributeError:
-            previous_measure = None
-        if previous_measure:
-            part = [p for p in previous_measure.get_children_by_type(TreePart) if p.id == self.id][0]
-            previous_measure_last_chord = part.chords[-1]
-            previous_measure_last_notes = previous_measure_last_chord._notes
-        return previous_measure_last_notes
-
-    def update_accidentals(self, mode):
-        def _get_previous_measure_last_signed_notes():
-            previous_measure_last_notes = self.get_previous_measure_last_notes()
-            return [n for n in previous_measure_last_notes if
-                    isinstance(n.event, Pitch) and n.pitch.alter and n.pitch.alter.value != 0]
-
-        if mode == 'normal':
-            _hide_accidental = []
-            _set_natural = []
-            pitched_notes = [note for note in self.get_children_by_type(TreeNote) if isinstance(note.event, Pitch)]
-            _first_chord_natural = [note.pitch.step.value for note in _get_previous_measure_last_signed_notes()]
-
-            for note in pitched_notes:
-                if note.pitch.alter is not None and note.pitch.alter.value != 0 and note.pitch.step.value not in _hide_accidental:
-                    if 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
-                        note.accidental.show = True
-                        _hide_accidental.append(note.pitch.step.value)
-                    _set_natural.append(note.pitch.step.value)
-                elif (
-                        note.pitch.alter is None or note.pitch.alter.value == 0):
-                    if note.pitch.step.value in _set_natural:
-                        try:
-                            _hide_accidental.remove(note.pitch.step.value)
-                        except ValueError:
-                            pass
-                        _set_natural.remove(note.pitch.step.value)
-                        note.accidental.show = True
-                    elif note.offset == 0 and note.pitch.step.value in _first_chord_natural:
-                        note.accidental.show = True
-        else:
-            raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
-
     def set_beats(self, list_of_beats=None):
-        if not self.up:
-            raise Exception('part must be a child of a measure to be able to set beats')
+        if not self.part.up:
+            raise Exception('voice must have a part as child of a measure to be able to set beats')
         if list_of_beats is None:
             list_of_beats = []
-            for time_signature in self.up.time.get_time_signatures():
+            for time_signature in self.part.up.time.get_time_signatures():
                 (beats, beat_type) = time_signature
                 for b in range(beats.value):
                     tree_beat = TreeBeat(duration=4. / beat_type.value)
                     list_of_beats.append(tree_beat)
-                    tree_beat._part = self
+                    tree_beat._tree_part_voice = self
         else:
             duration = 0
             for beat in list_of_beats:
                 beat._part = self
                 duration += beat.duration
-            if self.up.quarter_duration != duration:
+            if self.part.up.quarter_duration != duration:
                 raise ValueError('sum of beat durations must be equal to measure duration')
 
         self._beats = list_of_beats
@@ -312,8 +186,10 @@ class TreePart(timewise.Part):
     def beats(self):
         return self._beats
 
-
     def _add_chords_to_beats(self):
+        if not self._beats:
+            self.set_beats()
+
         beats = iter(self.beats)
         current_beat = beats.__next__()
         next_beat = beats.__next__()
@@ -368,34 +244,161 @@ class TreePart(timewise.Part):
                 rest = TreeChord(midis=0, quarter_duration=self.remaining_duration)
                 self.add_chord(rest)
 
-    def finish(self):
-        if not self.beats:
-            self.set_beats()
 
-        self.fill_with_rest()
+class TreePart(timewise.Part):
+    """"""
 
-        self.quantize()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        attributes = self.add_child(Attributes())
+        attributes.add_child(Divisions(1))
+        self._voices = {}
+        self._finished = False
 
-        for beat in self.beats:
-            beat.check_notatability()
+    @property
+    def chords(self):
+        output = []
+        for voice in self.voices.values():
+            output.extend(voice.chords)
+        return output
 
-        # self.update_chord_accidentals(mode='show')
+    @property
+    def voices(self):
+        return self._voices
 
+    def get_divisions(self):
+        duration_denominators = [note.quarter_duration.denominator for note in
+                                 self.get_children_by_type(TreeNote)]
+
+        if len(duration_denominators) == 0:
+            return 1
+        elif len(duration_denominators) == 1:
+            return duration_denominators[0]
+        else:
+            return lcm(duration_denominators)
+
+    @property
+    def notes(self):
+        return self.get_children_by_type(TreeNote)
+
+    def set_voice(self, voice_number):
+        self.voices[voice_number] = TreePartVoice(voice_number)
+        self.voices[voice_number].part = self
+        return self.voices[voice_number]
+
+    def get_voice(self, voice_number):
+        try:
+            return self.voices[voice_number]
+        except KeyError:
+            return self.set_voice(voice_number)
+
+    def add_chord(self, chord, voice_number=1):
+        measure = self.up
+        if not measure:
+            raise Exception('parent measure needed before adding chord to part')
+
+        if not isinstance(chord, TreeChord):
+            raise TypeError()
+
+        voice = self.get_voice(voice_number)
+        return voice.add_chord(chord)
+
+    def group_beams(self):
+        for voice in self.voices.values():
+            voice.group_beams()
+
+    def chord_to_notes(self):
         for chord in self.chords:
-            chord.update_type()
-            chord.update_dot()
+            for note in chord._notes:
+                self.add_child(note)
 
-        self.group_beams()
+    def update_divisions(self):
+        attributes = self.get_children_by_type(Attributes)[0]
+        divisions = attributes.get_children_by_type(Divisions)[0]
+        divisions.value = self.get_divisions()
 
-        self.chord_to_notes()
+    def get_previous_measure_last_notes(self):
+        previous_measure_last_notes = []
+        try:
+            previous_measure = self.up.previous
+        except AttributeError:
+            previous_measure = None
+        if previous_measure:
+            part = [p for p in previous_measure.get_children_by_type(TreePart) if p.id == self.id][0]
+            previous_measure_last_chord = part.chords[-1]
+            previous_measure_last_notes = previous_measure_last_chord._notes
+        return previous_measure_last_notes
 
-        self.update_divisions()
-        self.update_accidentals(mode='normal')
-        for note in self.get_children_by_type(TreeNote):
-            note.update_duration(self.get_divisions())
+    def update_accidentals(self, mode):
+        def _get_previous_measure_last_signed_notes():
+            previous_measure_last_notes = self.get_previous_measure_last_notes()
+            return [n for n in previous_measure_last_notes if
+                    isinstance(n.event, Pitch) and n.pitch.alter and n.pitch.alter.value != 0]
+
+        if mode == 'normal':
+            _hide_accidental = []
+            _set_natural = []
+            pitched_notes = [note for note in self.get_children_by_type(TreeNote) if isinstance(note.event, Pitch)]
+            _first_chord_natural = [note.pitch.step.value for note in _get_previous_measure_last_signed_notes()]
+
+            for note in pitched_notes:
+                if note.pitch.alter is not None and note.pitch.alter.value != 0 and note.pitch.step.value not in _hide_accidental:
+                    if 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
+                        note.accidental.show = True
+                        _hide_accidental.append(note.pitch.step.value)
+                    _set_natural.append(note.pitch.step.value)
+                elif (
+                        note.pitch.alter is None or note.pitch.alter.value == 0):
+                    if note.pitch.step.value in _set_natural:
+                        try:
+                            _hide_accidental.remove(note.pitch.step.value)
+                        except ValueError:
+                            pass
+                        _set_natural.remove(note.pitch.step.value)
+                        note.accidental.show = True
+                    elif note.offset == 0 and note.pitch.step.value in _first_chord_natural:
+                        note.accidental.show = True
+        else:
+            raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
+
+
+    def fill_with_rest(self):
+        for voice in self.voices.values():
+            voice.fill_with_rest()
+
+    def quantize(self):
+        for voice in self.voices.values():
+            voice.quantize()
+
+    def finish(self):
+        if not self._finished:
+            self.fill_with_rest()
+
+            self.quantize()
+
+            for voice in self.voices.values():
+                for beat in voice.beats:
+                    beat.check_notatability()
+
+            # self.update_chord_accidentals(mode='show')
+
+            for chord in self.chords:
+                chord.update_type()
+                chord.update_dot()
+
+            self.group_beams()
+
+            self.chord_to_notes()
+
+            self.update_divisions()
+            self.update_accidentals(mode='normal')
+            for note in self.get_children_by_type(TreeNote):
+                note.update_duration(self.get_divisions())
+
+            self.close_dtd()
+            self._finished = True
 
     def to_string(self):
         self.finish()
-        self.close_dtd()
         xml = self._to_xml()
         return et.tounicode(xml, pretty_print=True)
