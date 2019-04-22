@@ -362,7 +362,7 @@ class TreePart(timewise.Part):
                             pass
                         _set_natural.remove(note.pitch.step.value)
                         note.accidental.show = True
-                    elif note.offset == 0 and note.pitch.step.value in _first_chord_natural:
+                    elif note.offset == 0 and note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
                         note.accidental.show = True
         else:
             raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
