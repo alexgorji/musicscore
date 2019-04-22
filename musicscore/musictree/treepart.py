@@ -10,6 +10,7 @@ from musicscore.musicxml.common.common import Voice
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Pitch
+from musicscore.musicxml.elements.musicdata import Backup
 from musicscore.musicxml.elements.note import Beam, Type, Tie
 
 
@@ -308,6 +309,12 @@ class TreePart(timewise.Part):
             voice.group_beams()
 
     def chord_to_notes(self):
+        for index, voice in enumerate(self.voices.values):
+            if index == 0:
+                self.add_child(Backup())
+            for chord in self.chords:
+
+
         for chord in self.chords:
             for note in chord._notes:
                 self.add_child(note)
@@ -362,7 +369,10 @@ class TreePart(timewise.Part):
                             pass
                         _set_natural.remove(note.pitch.step.value)
                         note.accidental.show = True
-                    elif note.offset == 0 and note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
+                    elif note.offset == 0 and note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type
+                                                                                                               for t in
+                                                                                                               note.get_children_by_type(
+                                                                                                                       Tie)]:
                         note.accidental.show = True
         else:
             raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))

@@ -1,13 +1,14 @@
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.dtd.dtd import Sequence, Choice, Element
 from musicscore.musicxml.elements.note import Note
+from musicscore.musicxml.types.complextypes.backup import ComplexTypeBackup
 
 
-class Backup(XMLElement):
+class Backup(ComplexTypeBackup):
     """"""
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='backup', *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class Forward(XMLElement):
