@@ -3,6 +3,7 @@ import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musicxml.score_templates.xml_test_score import TestScore
 
 path = os.path.abspath(__file__).split('.')[0]
 
@@ -18,8 +19,9 @@ class Test(TestCase):
         l = voice.chords[0].add_lyric('bla')
 
         voice.add_to_score(self.score, 1, 1)
-        self.score.write(path=path + '_test_1')
-        # print(self.score.to_string())
+        result_path = path + '_test_1'
+        self.score.write(result_path)
+        TestScore().assert_template(result_path=result_path)
 
     def test_2(self):
         midis = [(60, 63, 65), 80]
@@ -29,8 +31,9 @@ class Test(TestCase):
         voice.chords[0].add_lyric('bb', number=2)
 
         voice.add_to_score(self.score, 1, 1)
-        self.score.write(path=path + '_test_2')
-        # print(self.score.to_string())
+        result_path = path + '_test_2'
+        self.score.write(result_path)
+        TestScore().assert_template(result_path=result_path)
 
     def test_3(self):
         midis = [(60, 63, 65), 80]
@@ -47,5 +50,6 @@ class Test(TestCase):
         voice2.chords[1].add_lyric('th', number=2)
         voice2.add_to_score(self.score, 1, 1)
 
-        self.score.write(path=path + '_test_3')
-        # print(self.score.to_string())
+        result_path = path + '_test_3'
+        self.score.write(result_path)
+        TestScore().assert_template(result_path=result_path)

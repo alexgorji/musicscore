@@ -3,6 +3,7 @@ import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musicxml.score_templates.xml_test_score import TestScore
 
 path = os.path.abspath(__file__).split('.')[0]
 
@@ -20,7 +21,6 @@ class Test(TestCase):
         voice2 = sf.to_voice(2)
         voice2.add_to_score(self.score, 1, 1)
 
-        p = self.score.get_measure(1).get_part(1)
-        print(p.voices)
-
-        # self.score.write(path=path + '_test_1')
+        result_path = path + '_test_1'
+        self.score.write(result_path)
+        TestScore().assert_template(result_path=result_path)

@@ -126,6 +126,9 @@ class TreeChord(XMLTree):
         new_chord = TreeChord(quarter_duration=quarter_duration)
         new_chord.midis = self.midis
         new_chord.tree_part_voice = self.tree_part_voice
+        voice = self.get_children_by_type(Voice)[0]
+        if voice:
+            new_chord.add_child(voice)
         return new_chord
 
     def split(self, ratios):
