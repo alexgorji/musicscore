@@ -21,7 +21,7 @@
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <voice>1</voice>
+        <voice>2</voice>
         <type>quarter</type>
         <lyric number="1">
           <text>bla</text>
@@ -38,7 +38,7 @@
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <voice>1</voice>
+        <voice>2</voice>
         <type>quarter</type>
         <accidental>flat</accidental>
       </note>
@@ -49,7 +49,7 @@
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <voice>1</voice>
+        <voice>2</voice>
         <type>quarter</type>
       </note>
       <note>
@@ -59,14 +59,14 @@
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
-        <voice>1</voice>
+        <voice>2</voice>
         <type>quarter</type>
         <accidental>flat</accidental>
       </note>
       <note>
         <rest/>
         <duration>2</duration>
-        <voice>1</voice>
+        <voice>2</voice>
         <type>half</type>
       </note>
       <backup>
@@ -79,7 +79,7 @@
           <octave>6</octave>
         </pitch>
         <duration>1</duration>
-        <voice>2</voice>
+        <voice>1</voice>
         <type>quarter</type>
         <accidental>sharp</accidental>
       </note>
@@ -89,7 +89,7 @@
           <octave>6</octave>
         </pitch>
         <duration>1</duration>
-        <voice>2</voice>
+        <voice>1</voice>
         <type>quarter</type>
         <lyric number="1">
           <text>sh</text>
@@ -106,13 +106,13 @@
           <octave>6</octave>
         </pitch>
         <duration>1</duration>
-        <voice>2</voice>
+        <voice>1</voice>
         <type>quarter</type>
       </note>
       <note>
         <rest/>
         <duration>2</duration>
-        <voice>2</voice>
+        <voice>1</voice>
         <type>half</type>
       </note>
     </part>

@@ -10,7 +10,6 @@ from musicscore.musicxml.common.common import Voice
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Pitch
-from musicscore.musicxml.elements.musicdata import Backup
 from musicscore.musicxml.elements.note import Beam, Type, Tie
 
 
@@ -122,7 +121,8 @@ class TreePartVoice(object):
 
                 for i in range(len(group)):
                     chord = group[i]
-                    if chord.get_children_by_type(Type)[0].value in ('eighth', '16th', '32nd'):
+                    if chord.get_children_by_type(Type)[0].value in (
+                    'eighth', '16th', '32nd') and chord.quarter_duration != 0:
                         beam = chord.add_child(Beam(None))
                         if i != len(group) - 1:
                             if begin_beam:
@@ -209,10 +209,9 @@ class TreePartVoice(object):
     def _split_chords_beatwise(self):
         for beat in self.beats:
             if beat.chords:
-                first_chords = beat.chords[0]
-
-                if beat.offset < first_chords.offset:
-                    previous_chord = first_chords.previous
+                first_chord = beat.chords[0]
+                if beat.offset < first_chord.offset:
+                    previous_chord = first_chord.previous
                     tail_duration = (previous_chord.end_position - beat.offset)
                     ratios = [previous_chord.quarter_duration - tail_duration, tail_duration]
                     split = self._split_chord(previous_chord, ratios)
@@ -221,7 +220,7 @@ class TreePartVoice(object):
                     split[1].parent_beat = beat
 
         for beat in self.beats:
-            if beat.chords and len(beat.chords) != 1:
+            if beat.chords and len([chord for chord in beat.chords if chord.quarter_duration != 0]) != 1:
                 last_chord = beat.chords[-1]
                 if last_chord.end_position > beat.end_position:
                     head_duration = (beat.end_position - last_chord.offset)
@@ -285,6 +284,7 @@ class TreePart(timewise.Part):
     def set_voice(self, voice_number):
         self.voices[voice_number] = TreePartVoice(voice_number)
         self.voices[voice_number].part = self
+        self.voices[voice_number].set_beats()
         return self.voices[voice_number]
 
     def get_voice(self, voice_number):
@@ -396,7 +396,8 @@ class TreePart(timewise.Part):
 
             for chord in self.chords:
                 chord.update_type()
-                chord.update_dot()
+                if chord.quarter_duration != 0:
+                    chord.update_dot()
 
             self.group_beams()
 
@@ -405,7 +406,8 @@ class TreePart(timewise.Part):
             self.update_divisions()
             self.update_accidentals(mode='normal')
             for note in self.get_children_by_type(TreeNote):
-                note.update_duration(self.get_divisions())
+                if note.quarter_duration!=0:
+                    note.update_duration(self.get_divisions())
             for backup in self.get_children_by_type(TreeBackup):
                 backup.update_duration(self.get_divisions())
 

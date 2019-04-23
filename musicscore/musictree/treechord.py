@@ -6,7 +6,7 @@ from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.common.common import EditorialVoice, Staff, Voice
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
-    Type, Dot, Notehead, NoteheadText, Beam
+    Type, Dot, Notehead, NoteheadText, Beam, Duration, Grace
 from musicscore.musicxml.elements.xml_element import XMLTree
 from musicscore.musicxml.types.complextypes.lyric import Text
 from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Dynamics, Technical, Articulations
@@ -20,11 +20,29 @@ class TreeChord(XMLTree):
         Choice(
             Sequence(
                 GroupReference(FullNote),
+                Element(Duration),
                 Element(Tie, 0, 2)
             ),
+            # Sequence(
+            #     Element(Grace),
+            #     Choice(
+            #         Sequence(
+            #             GroupReference(FullNote)
+            #         ),
+            #         Sequence(
+            #             GroupReference(FullNote),
+            #             Element(Tie, 0, 2)
+            #         ),
+            #         Sequence(
+            #             Element(Cue),
+            #             GroupReference(FullNote)
+            #         )
+            #     )
+            # ),
             Sequence(
                 Element(Cue),
                 GroupReference(FullNote),
+                Element(Duration)
             ),
         ),
         Element(Instrument, 0),
@@ -42,7 +60,7 @@ class TreeChord(XMLTree):
         Element(Play, 0)
     )
 
-    def __init__(self, midis=71, quarter_duration=1, voice=1, **kwargs):
+    def __init__(self, midis=71, quarter_duration=1, **kwargs):
         super().__init__(**kwargs)
         self.tree_part_voice = None
         self.parent_beat = None
@@ -68,6 +86,17 @@ class TreeChord(XMLTree):
             self._quarter_duration = Fraction(value).limit_denominator(1000)
         else:
             self._quarter_duration = value
+
+        # if value == 0:
+        #     if not self.get_children_by_type(Grace):
+        #         children = self.get_children()[:]
+        #         self.reset_dtd()
+        #         for child in children:
+        #             if not isinstance(child, Duration):
+        #                 self.add_child(child)
+        #             else:
+        #                 del child
+        #         self.add_child(Grace())
 
     @property
     def midis(self):
@@ -133,7 +162,9 @@ class TreeChord(XMLTree):
 
         return new_chord
 
-    def split(self, ratios):
+    def split(self, *ratios):
+        if len(ratios) == 1:
+            ratios = ratios[0]
         ratios = [int(ratio * 100000) for ratio in ratios]
 
         new_ratios = [Fraction(ratio, sum(ratios)) for ratio in ratios]
@@ -149,6 +180,7 @@ class TreeChord(XMLTree):
         output = []
         for index, midi in enumerate(self.midis):
             note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration)
+
             for child in self.get_children():
                 if isinstance(child, Lyric) and index != 0:
                     pass
@@ -248,7 +280,10 @@ class TreeChord(XMLTree):
                   (6, 1): 'whole',
                   (8, 1): 'breve'}
 
-        value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
+        if self.quarter_duration == 0:
+            value = 'eighth'
+        else:
+            value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
 
         try:
             chord_type = self.get_children_by_type(Type)[0]

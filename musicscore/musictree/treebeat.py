@@ -194,10 +194,11 @@ class TreeBeat(object):
 
     def quantize(self):
         quarter_durations = [chord.quarter_duration for chord in self.chords]
-        if len(quarter_durations) > 1:
+        if len([d for d in quarter_durations if d!=0]) > 1:
             quarter_durations = self.get_quantized_durations(quarter_durations)
             for chord, quarter_duration in zip(self.chords, quarter_durations):
                 chord.quarter_duration = quarter_duration
+                chord._offset = None
 
     def _update_tuplets(self):
         # to be used with check_notatability
@@ -244,6 +245,9 @@ class TreeBeat(object):
                     split = chord.split(2, 3)
                 elif chord.position_in_beat == Fraction(3, 8):
                     split = chord.split(1, 4)
+                else:
+                    raise Exception('something wrong with split')
+
 
             # elif chord.quarter_duration == Fraction(7,8):
             #     if chord.position_in_beat == Fraction(0,8):
