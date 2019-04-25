@@ -124,7 +124,12 @@ class TreeChord(XMLTree):
 
     @property
     def position_in_beat(self):
-        return self.offset - self.parent_beat.offset
+        index_in_beat = self.parent_beat.chords.index(self)
+        if index_in_beat == 0:
+            return 0
+        previous_in_beat = self.parent_beat.chords[index_in_beat - 1]
+
+        return previous_in_beat.position_in_beat + previous_in_beat.quarter_duration
 
     @property
     def previous(self):
@@ -154,6 +159,8 @@ class TreeChord(XMLTree):
         new_chord = TreeChord(quarter_duration=quarter_duration)
         new_chord.midis = self.midis
         new_chord.tree_part_voice = self.tree_part_voice
+        new_chord.parent_beat = self.parent_beat
+        new_chord._offset = None
         try:
             voice = self.get_children_by_type(Voice)[0]
             new_chord.add_child(voice)
@@ -327,5 +334,5 @@ class TreeChord(XMLTree):
 
     def add_lyric(self, text, number=1):
         lyric = self.add_child(Lyric(number=str(number)))
-        lyric.add_child(Text(text))
+        lyric.add_child(Text(str(text)))
         return lyric

@@ -2,10 +2,8 @@ import warnings
 
 from quicktions import Fraction
 
-from musicscore.basic_functions import substitute
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musicxml.elements.note import TimeModification
-from musicscore.musicxml.types.complextypes.notations import Tuplet
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes
 
 
@@ -194,13 +192,13 @@ class TreeBeat(object):
 
     def quantize(self):
         quarter_durations = [chord.quarter_duration for chord in self.chords]
-        if len([d for d in quarter_durations if d!=0]) > 1:
+        if len([d for d in quarter_durations if d != 0]) > 1:
             quarter_durations = self.get_quantized_durations(quarter_durations)
             for chord, quarter_duration in zip(self.chords, quarter_durations):
                 chord.quarter_duration = quarter_duration
                 chord._offset = None
 
-    def _update_tuplets(self):
+    def update_tuplets(self):
         # to be used with check_notatability
         tuplet_divisions = [3, 5, 6, 7, 9, 10]
 
@@ -213,7 +211,14 @@ class TreeBeat(object):
                 else:
                     self.chords[i].add_tuplet('continue')
 
-    def check_notatability(self):
+    def split_not_notatable(self):
+        # print('splitting beat {}'.format(self))
+        # print('beat offset is', self.offset)
+        # print('chord durations are:', [chord.quarter_duration for chord in self.chords])
+        # print('chord offsets are:', [chord.offset for chord in self.chords])
+        # print('chord position_in_beat are:', [chord.position_in_beat for chord in self.chords])
+
+        output = []
         for chord in self.chords:
             split = None
             if chord.quarter_duration == Fraction(1, 4):
@@ -417,10 +422,12 @@ class TreeBeat(object):
             #         split = chord.split(Fraction(3, 12), Fraction(8, 12))
 
             if split:
-                self._chords = substitute(self._chords, chord, split)
+                output.extend(split)
+            else:
+                output.append(chord)
+        self._chords = output
 
-        self._update_tuplets()
-
+    def substitue_sextole(self):
         six_divisions = (
             [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)],
             [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 3), Fraction(1, 6)],
@@ -445,5 +452,8 @@ class TreeBeat(object):
                     tm = chord.get_children_by_type(TimeModification)[0]
                     tm.get_children_by_type(ActualNotes)[0].value = 3
                     tm.get_children_by_type(NormalNotes)[0].value = 2
-                    # position = chord.tuplet.position
-                    # chord.tuplet = Tuplet(3, position=position)
+
+    # def check_notatability(self):
+    #     self.split_not_notable()
+    #     self.update_tuplets()
+    #     self.substitue_sextole()

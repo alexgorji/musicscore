@@ -32,6 +32,9 @@
         <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
+        <lyric number="1">
+          <text>1</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -47,6 +50,9 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>2</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -62,6 +68,9 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>3</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -80,6 +89,9 @@
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
+        <lyric number="1">
+          <text>4</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -90,6 +102,9 @@
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">begin</beam>
+        <lyric number="1">
+          <text>5</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -104,6 +119,9 @@
         <notations>
           <tied number="1" type="start"/>
         </notations>
+        <lyric number="1">
+          <text>6</text>
+        </lyric>
       </note>
       <note>
         <grace/>
@@ -139,6 +157,9 @@
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
+        <lyric number="1">
+          <text>7</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -161,6 +182,9 @@
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
+        <lyric number="1">
+          <text>8</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -206,6 +230,9 @@
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
+        <lyric number="1">
+          <text>9</text>
+        </lyric>
       </note>
     </part>
   </measure>
@@ -241,6 +268,9 @@
         <notations>
           <tied number="1" type="start"/>
         </notations>
+        <lyric number="1">
+          <text>10</text>
+        </lyric>
       </note>
       <note>
         <pitch>

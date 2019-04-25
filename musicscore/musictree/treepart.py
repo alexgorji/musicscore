@@ -1,3 +1,5 @@
+import warnings
+
 from lxml import etree as et
 from quicktions import Fraction
 
@@ -20,10 +22,18 @@ class TreePartVoice(object):
         self.number = number
         self._chords = []
         self._beats = None
+        self._filled_with_rest = False
+        self._beats_added = False
+        self._quantized = False
+        self._not_notatable_split = False
+        self._tuplets_updated = False
+        self._sextole_substituted = True
+        self._types_updated = False
 
     @property
     def chords(self):
         return self._chords
+
 
     @property
     def number(self):
@@ -122,7 +132,7 @@ class TreePartVoice(object):
                 for i in range(len(group)):
                     chord = group[i]
                     if chord.get_children_by_type(Type)[0].value in (
-                    'eighth', '16th', '32nd') and chord.quarter_duration != 0:
+                            'eighth', '16th', '32nd') and chord.quarter_duration != 0:
                         beam = chord.add_child(Beam(None))
                         if i != len(group) - 1:
                             if begin_beam:
@@ -188,8 +198,6 @@ class TreePartVoice(object):
         return self._beats
 
     def _add_chords_to_beats(self):
-        if not self._beats:
-            self.set_beats()
 
         beats = iter(self.beats)
         current_beat = beats.__next__()
@@ -230,19 +238,76 @@ class TreePartVoice(object):
                     beat.next.chords.insert(0, split[1])
                     split[1].parent_beat = beat.next
 
+    def add_beats(self, list_of_beats=None):
+        if not self._filled_with_rest:
+            self.fill_with_rest()
+        if not self._beats_added:
+            self.set_beats(list_of_beats)
+            self._add_chords_to_beats()
+            self._split_chords_beatwise()
+            self._beats_added = True
+        else:
+            warnings.warn('beats already added to {}. No action took place.'.format(self))
+
     def quantize(self):
-        self._add_chords_to_beats()
-        self._split_chords_beatwise()
-        for beat in self.beats:
-            beat.quantize()
+        if not self._quantized:
+            for beat in self.beats:
+                beat.quantize()
+            self._quantized = True
+        else:
+            warnings.warn('{} already quantized. No action took place.'.format(self))
+
+    def split_not_notatable(self):
+        if not self._not_notatable_split:
+            self._chords = []
+            for beat in self.beats:
+                beat.split_not_notatable()
+                self._chords.extend(beat.chords)
+            self._not_notatable_split = True
+        else:
+            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+
+    def update_tuplets(self):
+        if not self._tuplets_updated:
+            for beat in self.beats:
+                beat.update_tuplets()
+            self._tuplets_updated = True
+        else:
+            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+
+    def substitute_sextole(self):
+        if not self._sextole_substituted:
+            for beat in self.beats:
+                beat.substitute_sextole()
+            self._sextole_substituted = True
+        else:
+            warnings.warn('all sextoles in  {} already checked. No action took place.'.format(self))
+
+    def update_types(self):
+        if not self._types_updated:
+            for chord in self.chords:
+                chord.update_type()
+            self._types_updated = True
+        else:
+            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+
+    # def check_notatability(self):
+    #     if not self._notatability_checked:
+    #         for beat in self.beats:
+    #             beat.check_notatability()
+    #         self._notatability_checked = True
+    #     else:
+    #         warnings.warn('notability of {} already checked. No action took place.'.format(self))
 
     def fill_with_rest(self):
-        if self.remaining_duration > 0:
-            if self.chords and self.chords[-1].midis[0].value == 0:
-                self.chords[-1].quarter_duration += Fraction(self.remaining_duration)
-            else:
-                rest = TreeChord(midis=0, quarter_duration=self.remaining_duration)
-                self.add_chord(rest)
+        if not self._filled_with_rest:
+            if self.remaining_duration > 0:
+                if self.chords and self.chords[-1].midis[0].value == 0:
+                    self.chords[-1].quarter_duration += Fraction(self.remaining_duration)
+                else:
+                    rest = TreeChord(midis=0, quarter_duration=self.remaining_duration)
+                    self.add_chord(rest)
+            self._filled_with_rest = True
 
 
 class TreePart(timewise.Part):
@@ -380,34 +445,65 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.fill_with_rest()
 
+    def add_beats(self, list_of_beats=None):
+        for voice in self.voices.values():
+            voice.add_beats(list_of_beats)
+
     def quantize(self):
         for voice in self.voices.values():
             voice.quantize()
+
+    def split_not_notatable(self):
+        for voice in self.voices.values():
+            voice.split_not_notatable()
+
+    def update_tuplets(self):
+        for voice in self.voices.values():
+            voice.update_tuplets()
+
+    def substitue_sextole(self):
+        for voice in self.voices.values():
+            voice.substitue_sextole()
+
+    def update_types(self):
+        for voice in self.voices.values():
+            voice.update_types()
+
+    def update_dots(self):
+        for chord in self.chords:
+            if chord.quarter_duration != 0:
+                chord.update_dot()
 
     def finish(self):
         if not self._finished:
             self.fill_with_rest()
 
+            self.add_beats()
+
             self.quantize()
 
-            for voice in self.voices.values():
-                for beat in voice.beats:
-                    beat.check_notatability()
+            self.split_not_notatable()
 
-            for chord in self.chords:
-                chord.update_type()
-                if chord.quarter_duration != 0:
-                    chord.update_dot()
+            self.update_tuplets()
+
+            self.substitue_sextole()
+
+            self.update_types()
+
+            self.update_dots()
 
             self.group_beams()
 
             self.chord_to_notes()
 
             self.update_divisions()
+
             self.update_accidentals(mode='normal')
+
             for note in self.get_children_by_type(TreeNote):
-                if note.quarter_duration!=0:
+                if note.quarter_duration != 0:
                     note.update_duration(self.get_divisions())
+
             for backup in self.get_children_by_type(TreeBackup):
                 backup.update_duration(self.get_divisions())
 

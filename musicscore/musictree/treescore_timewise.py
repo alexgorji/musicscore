@@ -19,6 +19,9 @@ class TreeScoreTimewise(timewise.Score):
         self._part_list = self.add_child(PartList())
         self.version = '3.0'
         self._finished = False
+        self._pre_quantized = False
+        self._quantized = False
+        self._post_quantized = False
 
     def _generate_score_part(self):
         id_ = 'p' + str(self._auto_part_number)
@@ -83,6 +86,46 @@ class TreeScoreTimewise(timewise.Score):
             else:
                 measure.show_time_signature()
 
+    def add_beats(self, list_of_beats=None):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.add_beats(list_of_beats)
+
+    def quantize(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.quantize()
+
+    def split_not_notatable(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.split_not_notatable()
+
+    def update_tuplets(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.update_tuplets()
+
+    def substitue_sextole(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.substitue_sextole()
+
+    def update_types(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.update_types()
+
+    def update_dots(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.update_dots()
+
+    def group_beams(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.group_beams()
+
     def finish(self):
         if not self._finished:
             self.update_measures()
@@ -96,4 +139,3 @@ class TreeScoreTimewise(timewise.Score):
         self.finish()
         xml = self._to_xml()
         return et.tounicode(xml, pretty_print=True)
-
