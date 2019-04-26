@@ -42,8 +42,8 @@ class TreeMeasure(timewise.Measure):
         return Fraction(output).limit_denominator(10000)
 
     def show_time_signature(self):
-        part = self.get_children_by_type(TreePart)[0]
-        part.attributes.add_child(self.time)
+        for part in self.get_children_by_type(TreePart):
+            part.attributes.add_child(self.time)
 
     def hide_time_signature(self):
         part = self.get_children_by_type(TreePart)[0]
@@ -52,6 +52,12 @@ class TreeMeasure(timewise.Measure):
 
     def get_part(self, number):
         return self.get_children_by_type(TreePart)[number - 1]
+
+    def get_beats(self):
+        output = []
+        for part in self.get_children_by_type(TreePart):
+            output.extend(part.get_beats())
+        return output
 
     @property
     def previous(self):

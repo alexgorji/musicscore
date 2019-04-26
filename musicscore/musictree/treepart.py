@@ -182,6 +182,9 @@ class TreePartVoice(object):
     def beats(self):
         return self._beats
 
+    def get_beats(self):
+        return self.beats
+
     def _add_chords_to_beats(self):
 
         beats = iter(self.beats)
@@ -200,6 +203,7 @@ class TreePartVoice(object):
             current_beat.add_chord(chord)
 
     def _split_chords_beatwise(self):
+
         for beat in self.beats:
             if beat.chords:
                 first_chord = beat.chords[0]
@@ -354,7 +358,7 @@ class TreePart(timewise.Part):
     def set_voice(self, voice_number):
         self.voices[voice_number] = TreePartVoice(voice_number)
         self.voices[voice_number].part = self
-        self.voices[voice_number].set_beats()
+        # self.voices[voice_number].set_beats()
         return self.voices[voice_number]
 
     def get_voice(self, voice_number):
@@ -373,6 +377,12 @@ class TreePart(timewise.Part):
 
         voice = self.get_voice(voice_number)
         return voice.add_chord(chord)
+
+    def get_beats(self):
+        output = []
+        for voice in self.voices.values():
+            output.extend(voice.get_beats())
+        return output
 
     def group_beams(self):
         for voice in self.voices.values():

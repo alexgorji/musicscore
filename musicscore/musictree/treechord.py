@@ -6,7 +6,7 @@ from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.common.common import EditorialVoice, Staff, Voice
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
-    Type, Dot, Notehead, NoteheadText, Beam, Duration, Grace
+    Type, Dot, Notehead, NoteheadText, Beam, Duration
 from musicscore.musicxml.elements.xml_element import XMLTree
 from musicscore.musicxml.types.complextypes.lyric import Text
 from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Dynamics, Technical, Articulations
@@ -327,3 +327,18 @@ class TreeChord(XMLTree):
         lyric = self.add_child(Lyric(number=str(number)))
         lyric.add_child(Text(str(text)))
         return lyric
+
+    def __deepcopy__(self, memodict={}):
+        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+        new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
+        for child in self.get_children():
+            new_chord.add_child(child)
+        return new_chord
+
+    def deepcopy_for_SimplfeFormat(self):
+        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+        new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
+        for child in self.get_children():
+            if not isinstance(child, Voice):
+                new_chord.add_child(child)
+        return new_chord

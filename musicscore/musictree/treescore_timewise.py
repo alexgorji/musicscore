@@ -37,8 +37,7 @@ class TreeScoreTimewise(timewise.Score):
         part_name.print_object = print_object
         self._part_list.add_child(new_score_part)
         for measure in self.get_children_by_type(TreeMeasure):
-            p = measure.add_child(TreePart(id=new_score_part.id))
-            # p.set_beats()
+           p = measure.add_child(TreePart(id=new_score_part.id))
 
     def add_measure(self, measure=None):
         new_measure = self._set_new_measure(measure)
@@ -95,6 +94,12 @@ class TreeScoreTimewise(timewise.Score):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 part.add_beats(list_of_beats)
+
+    def get_beats(self):
+        output = []
+        for measure in self.get_children_by_type(TreeMeasure):
+            output.extend(measure.get_beats())
+        return output
 
     def quantize(self):
         for measure in self.get_children_by_type(TreeMeasure):

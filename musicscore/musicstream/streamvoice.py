@@ -43,7 +43,7 @@ class StreamVoice(object):
                 remaining_chords = [remain] + chords[i + 1:]
                 return remaining_chords
 
-    def add_to_score(self, score, part_number, first_measure=1):
+    def add_to_score(self, score, first_measure=1, part_number=1):
         measure_number = first_measure
 
         def _get_measure():
@@ -154,10 +154,18 @@ class SimpleFormat(object):
     def add_chord(self, chord):
         if self._chords is None:
             self._chords = []
+        if chord.get_children_by_type(Voice):
+            raise Exception('SimpleFormat Chords cannot have a voice child.')
         self._chords.append(chord)
 
     def to_voice(self, voice_number=1):
         output = StreamVoice(voice_number)
         for chord in self.chords:
             output.add_chord(chord)
+        return output
+
+    def __deepcopy__(self, memodict={}):
+        output = SimpleFormat()
+        for chord in self.chords:
+            output.add_chord(chord.deepcopy_for_SimplfeFormat())
         return output

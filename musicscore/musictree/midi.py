@@ -184,3 +184,8 @@ class Midi(object):
             return Rest()
         else:
             return Pitch(*self.get_pitch_name())
+
+    def __deepcopy__(self, memodict={}):
+        output = Midi(self.value, self.accidental_mode)
+        return output
+
