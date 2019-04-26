@@ -86,6 +86,11 @@ class TreeScoreTimewise(timewise.Score):
             else:
                 measure.show_time_signature()
 
+    def fill_with_rest(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.fill_with_rest()
+
     def add_beats(self, list_of_beats=None):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
@@ -106,10 +111,10 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.update_tuplets()
 
-    def substitue_sextole(self):
+    def substitute_sextoles(self):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
-                part.substitue_sextole()
+                part.substitute_sextoles()
 
     def update_types(self):
         for measure in self.get_children_by_type(TreeMeasure):
@@ -125,6 +130,26 @@ class TreeScoreTimewise(timewise.Score):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 part.group_beams()
+
+    def chord_to_notes(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.chord_to_notes()
+
+    def update_divisions(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.update_divisions()
+
+    def update_accidentals(self, mode='normal'):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.update_accidentals(mode=mode)
+
+    def update_durations(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.update_durations()
 
     def finish(self):
         if not self._finished:

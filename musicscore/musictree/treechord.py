@@ -23,22 +23,6 @@ class TreeChord(XMLTree):
                 Element(Duration),
                 Element(Tie, 0, 2)
             ),
-            # Sequence(
-            #     Element(Grace),
-            #     Choice(
-            #         Sequence(
-            #             GroupReference(FullNote)
-            #         ),
-            #         Sequence(
-            #             GroupReference(FullNote),
-            #             Element(Tie, 0, 2)
-            #         ),
-            #         Sequence(
-            #             Element(Cue),
-            #             GroupReference(FullNote)
-            #         )
-            #     )
-            # ),
             Sequence(
                 Element(Cue),
                 GroupReference(FullNote),
@@ -87,17 +71,6 @@ class TreeChord(XMLTree):
         else:
             self._quarter_duration = value
 
-        # if value == 0:
-        #     if not self.get_children_by_type(Grace):
-        #         children = self.get_children()[:]
-        #         self.reset_dtd()
-        #         for child in children:
-        #             if not isinstance(child, Duration):
-        #                 self.add_child(child)
-        #             else:
-        #                 del child
-        #         self.add_child(Grace())
-
     @property
     def midis(self):
         return self._midis
@@ -121,6 +94,10 @@ class TreeChord(XMLTree):
                 raise ValueError('midi with value 0 must be alone.')
 
         self._midis = output
+
+    @property
+    def tie_types(self):
+        return [tie.type for tie in self.get_children_by_type(Tie)]
 
     @property
     def position_in_beat(self):
@@ -170,17 +147,37 @@ class TreeChord(XMLTree):
         return new_chord
 
     def split(self, *ratios):
+        print('spliting chord with duration', self.quarter_duration)
+        print('chord tie types', self.tie_types)
         if len(ratios) == 1:
             ratios = ratios[0]
-        ratios = [int(ratio * 100000) for ratio in ratios]
 
-        new_ratios = [Fraction(ratio, sum(ratios)) for ratio in ratios]
+        new_ratios = [Fraction(Fraction(ratio), Fraction(sum(ratios))) for ratio in ratios]
+
         old_duration = self.quarter_duration
-        self.quarter_duration *= new_ratios[0]
-        output = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
-        output.insert(0, self)
 
-        return output
+        self.quarter_duration *= new_ratios[0]
+
+        new_chords = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
+
+        # print(self)
+        # print(self.get_children_by_type(Tie))
+        for t in self.tie_types:
+            new_chords[-1].add_tie(t)
+        #
+        # print(new_chords)
+
+        new_chords.insert(0, self)
+
+        if self.midis[0].value != 0:
+            for new_chord in new_chords[:-1]:
+                new_chord.add_tie('start')
+
+            for new_chord in new_chords[1:]:
+                new_chord.add_tie('stop')
+
+        print([chord.quarter_duration for chord in new_chords])
+        return new_chords
 
     @property
     def _notes(self):
@@ -215,13 +212,14 @@ class TreeChord(XMLTree):
         except IndexError:
             notations = self.add_child(Notations())
 
-        types = [tie.type for tie in self.get_children_by_type(Tie)]
+        # print('add_tie types')
+        # print(types)
 
-        if value == 'start' and 'start' not in types:
+        if value == 'start' and 'start' not in self.tie_types:
             self.add_child(Tie('start'))
             notations.add_child(Tied('start'))
 
-        elif value == 'stop' and 'stop' not in types:
+        elif value == 'stop' and 'stop' not in self.tie_types:
             self.add_child(Tie('stop'))
             notations.add_child(Tied('stop'))
 

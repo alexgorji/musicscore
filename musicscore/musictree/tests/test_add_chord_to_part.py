@@ -19,9 +19,12 @@ class Test(TestCase):
         chord_2 = TreeChord(quarter_duration=3.5)
         self.part.add_chord(chord_1)
         remain = self.part.add_chord(chord_2)
+        print(remain.tie_types)
         self.part.finish()
         result = [Fraction(1, 1), Fraction(1, 2), Fraction(1, 2), Fraction(2, 1)]
         self.assertEqual([chord.quarter_duration for chord in self.part.chords], result)
+        print([chord.quarter_duration for chord in self.part.chords])
+        print([chord.tie_types for chord in self.part.chords])
         result =['start', 'stop', 'start', 'stop']
         self.assertEqual([tie.type for chord in self.part.chords for tie in chord.get_children_by_type(Tie)], result)
         self.assertEqual(remain.quarter_duration, 1)

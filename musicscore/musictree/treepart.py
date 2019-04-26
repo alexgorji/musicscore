@@ -27,13 +27,13 @@ class TreePartVoice(object):
         self._quantized = False
         self._not_notatable_split = False
         self._tuplets_updated = False
-        self._sextole_substituted = True
+        self._sextoles_substituted = False
         self._types_updated = False
+        self._dots_updated = False
 
     @property
     def chords(self):
         return self._chords
-
 
     @property
     def number(self):
@@ -45,28 +45,13 @@ class TreePartVoice(object):
             raise TypeError('number.value must be of type int not{}'.format(type(value)))
         self._number = value
 
-    @staticmethod
-    def _split_chord(chord, ratios):
-        if not isinstance(chord, TreeChord):
-            raise TypeError()
-
-        new_chords = chord.split(ratios)
-        if chord.midis[0].value != 0:
-            for new_chord in new_chords[:-1]:
-                new_chord.add_tie('start')
-
-            for new_chord in new_chords[1:]:
-                new_chord.add_tie('stop')
-
-        return new_chords
-
     def add_chord(self, chord):
         remain = chord.quarter_duration - self.remaining_duration
         if self.remaining_duration == 0:
             return chord
 
         elif remain > 0:
-            split = self._split_chord(chord, [chord.quarter_duration - remain, remain])
+            split = chord.split([chord.quarter_duration - remain, remain])
             self.chords.append(split[0])
             split[0].tree_part_voice = self
             split[0].add_child(Voice(str(self.number)))
@@ -222,7 +207,7 @@ class TreePartVoice(object):
                     previous_chord = first_chord.previous
                     tail_duration = (previous_chord.end_position - beat.offset)
                     ratios = [previous_chord.quarter_duration - tail_duration, tail_duration]
-                    split = self._split_chord(previous_chord, ratios)
+                    split = previous_chord.split(ratios)
                     self._chords = substitute(self._chords, previous_chord, split)
                     beat.chords.insert(0, split[1])
                     split[1].parent_beat = beat
@@ -233,71 +218,10 @@ class TreePartVoice(object):
                 if last_chord.end_position > beat.end_position:
                     head_duration = (beat.end_position - last_chord.offset)
                     ratios = [head_duration, last_chord.quarter_duration - head_duration]
-                    split = self._split_chord(last_chord, ratios)
+                    split = last_chord.split(ratios)
                     self._chords = substitute(self._chords, last_chord, split)
                     beat.next.chords.insert(0, split[1])
                     split[1].parent_beat = beat.next
-
-    def add_beats(self, list_of_beats=None):
-        if not self._filled_with_rest:
-            self.fill_with_rest()
-        if not self._beats_added:
-            self.set_beats(list_of_beats)
-            self._add_chords_to_beats()
-            self._split_chords_beatwise()
-            self._beats_added = True
-        else:
-            warnings.warn('beats already added to {}. No action took place.'.format(self))
-
-    def quantize(self):
-        if not self._quantized:
-            for beat in self.beats:
-                beat.quantize()
-            self._quantized = True
-        else:
-            warnings.warn('{} already quantized. No action took place.'.format(self))
-
-    def split_not_notatable(self):
-        if not self._not_notatable_split:
-            self._chords = []
-            for beat in self.beats:
-                beat.split_not_notatable()
-                self._chords.extend(beat.chords)
-            self._not_notatable_split = True
-        else:
-            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
-
-    def update_tuplets(self):
-        if not self._tuplets_updated:
-            for beat in self.beats:
-                beat.update_tuplets()
-            self._tuplets_updated = True
-        else:
-            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
-
-    def substitute_sextole(self):
-        if not self._sextole_substituted:
-            for beat in self.beats:
-                beat.substitute_sextole()
-            self._sextole_substituted = True
-        else:
-            warnings.warn('all sextoles in  {} already checked. No action took place.'.format(self))
-
-    def update_types(self):
-        if not self._types_updated:
-            for chord in self.chords:
-                chord.update_type()
-            self._types_updated = True
-        else:
-            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
-
-    # def check_notatability(self):
-    #     if not self._notatability_checked:
-    #         for beat in self.beats:
-    #             beat.check_notatability()
-    #         self._notatability_checked = True
-    #     else:
-    #         warnings.warn('notability of {} already checked. No action took place.'.format(self))
 
     def fill_with_rest(self):
         if not self._filled_with_rest:
@@ -309,6 +233,85 @@ class TreePartVoice(object):
                     self.add_chord(rest)
             self._filled_with_rest = True
 
+    def add_beats(self, list_of_beats=None):
+        if not self._filled_with_rest:
+            raise Exception('fill_with_rest() first')
+        if not self._beats_added:
+            self.set_beats(list_of_beats)
+            self._add_chords_to_beats()
+            self._split_chords_beatwise()
+            self._beats_added = True
+        else:
+            warnings.warn('beats already added to {}. No action took place.'.format(self))
+
+    def quantize(self):
+        if not self._beats_added:
+            raise Exception('add_beats() first')
+        if not self._quantized:
+            for beat in self.beats:
+                beat.quantize()
+            self._quantized = True
+        else:
+            warnings.warn('{} already quantized. No action took place.'.format(self))
+
+    def split_not_notatable(self):
+        if not self._quantized:
+            raise Exception('quantize() first')
+
+        if not self._not_notatable_split:
+            self._chords = []
+            for beat in self.beats:
+                beat.split_not_notatable()
+                self._chords.extend(beat.chords)
+            self._not_notatable_split = True
+        else:
+            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+
+    def update_tuplets(self):
+        if not self._not_notatable_split:
+            raise Exception('split_not_notatable() first')
+
+        if not self._tuplets_updated:
+            for beat in self.beats:
+                beat.update_tuplets()
+            self._tuplets_updated = True
+        else:
+            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+
+    def substitute_sextoles(self):
+        if not self._tuplets_updated:
+            raise Exception('update_tuplets() first')
+
+        if not self._sextoles_substituted:
+            for beat in self.beats:
+                beat.substitute_sextoles()
+            self._sextoles_substituted = True
+        else:
+            warnings.warn('all sextoles in  {} already checked. No action took place.'.format(self))
+
+    def update_types(self):
+        if not self._sextoles_substituted:
+            raise Exception('substitute_sextoles() first')
+
+        if not self._types_updated:
+            for chord in self.chords:
+                chord.update_type()
+            self._types_updated = True
+        else:
+            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+
+    def update_dots(self):
+        if not self._types_updated:
+            raise Exception('update_types() first')
+
+        if not self._dots_updated:
+            for chord in self.chords:
+                if chord.quarter_duration != 0:
+                    chord.update_dot()
+            self._dots_updated = True
+        else:
+            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+
 
 class TreePart(timewise.Part):
     """"""
@@ -318,6 +321,8 @@ class TreePart(timewise.Part):
         attributes = self.add_child(Attributes())
         attributes.add_child(Divisions(1))
         self._voices = {}
+        self._chords_notated = False
+        self._divisions_updated = False
         self._finished = False
 
     @property
@@ -374,17 +379,32 @@ class TreePart(timewise.Part):
             voice.group_beams()
 
     def chord_to_notes(self):
-        for index, voice in enumerate(self.voices.values()):
-            if index != 0:
-                self.add_child(TreeBackup(quarter_duration=voice.part.up.quarter_duration))
-            for chord in voice.chords:
-                for note in chord._notes:
-                    self.add_child(note)
+        for voice in self.voices.values():
+            if not voice._dots_updated:
+                raise Exception('update_dots() first')
+
+        if not self._chords_notated:
+            for index, voice in enumerate(self.voices.values()):
+                if index != 0:
+                    self.add_child(TreeBackup(quarter_duration=voice.part.up.quarter_duration))
+                for chord in voice.chords:
+                    for note in chord._notes:
+                        self.add_child(note)
+            self._chords_notated = True
+        else:
+            warnings.warn('chord in {} are already notated. No action took place.'.format(self))
 
     def update_divisions(self):
-        attributes = self.get_children_by_type(Attributes)[0]
-        divisions = attributes.get_children_by_type(Divisions)[0]
-        divisions.value = self.get_divisions()
+        if not self._chords_notated:
+            raise Exception('chord_to_notes() first')
+
+        if not self._divisions_updated:
+            attributes = self.get_children_by_type(Attributes)[0]
+            divisions = attributes.get_children_by_type(Divisions)[0]
+            divisions.value = self.get_divisions()
+            self._divisions_updated = True
+        else:
+            warnings.warn('divisions in {} are already updated. No action took place.'.format(self))
 
     def get_previous_measure_last_notes(self):
         previous_measure_last_notes = []
@@ -405,6 +425,7 @@ class TreePart(timewise.Part):
         return previous_measure_last_notes
 
     def update_accidentals(self, mode):
+
         def _get_previous_measure_last_signed_notes():
             previous_measure_last_notes = self.get_previous_measure_last_notes()
             return [n for n in previous_measure_last_notes if
@@ -461,18 +482,24 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.update_tuplets()
 
-    def substitue_sextole(self):
+    def substitute_sextoles(self):
         for voice in self.voices.values():
-            voice.substitue_sextole()
+            voice.substitute_sextoles()
 
     def update_types(self):
         for voice in self.voices.values():
             voice.update_types()
 
     def update_dots(self):
-        for chord in self.chords:
-            if chord.quarter_duration != 0:
-                chord.update_dot()
+        for voice in self.voices.values():
+            voice.update_dots()
+
+    def update_durations(self):
+        for note in self.get_children_by_type(TreeNote):
+            if note.quarter_duration != 0:
+                note.update_duration(self.get_divisions())
+        for backup in self.get_children_by_type(TreeBackup):
+            backup.update_duration(self.get_divisions())
 
     def finish(self):
         if not self._finished:
@@ -486,7 +513,7 @@ class TreePart(timewise.Part):
 
             self.update_tuplets()
 
-            self.substitue_sextole()
+            self.substitute_sextoles()
 
             self.update_types()
 
@@ -500,14 +527,10 @@ class TreePart(timewise.Part):
 
             self.update_accidentals(mode='normal')
 
-            for note in self.get_children_by_type(TreeNote):
-                if note.quarter_duration != 0:
-                    note.update_duration(self.get_divisions())
-
-            for backup in self.get_children_by_type(TreeBackup):
-                backup.update_duration(self.get_divisions())
+            self.update_durations()
 
             self.close_dtd()
+
             self._finished = True
 
     def to_string(self):

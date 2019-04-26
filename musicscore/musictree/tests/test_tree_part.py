@@ -25,15 +25,15 @@ class Test(TestCase):
         m.add_child(self.part)
         # self.part.set_beats()
 
-    def test_add_chord1(self):
-        self.part.add_chord(TreeChord((60, 61), quarter_duration=4))
-        self.part.chord_to_notes()
-        note_1 = self.part.notes[0]
-        with self.assertRaises(AttributeError):
-            print(note_1.chord)
-        note_2 = self.part.notes[1]
-        self.assertEqual(type(note_2.chord).__name__, 'Chord')
-        self.assertEqual(note_1.quarter_duration, note_2.quarter_duration, 4)
+    # def test_add_chord1(self):
+    #     self.part.add_chord(TreeChord((60, 61), quarter_duration=4))
+    #     self.part.chord_to_notes()
+    #     note_1 = self.part.notes[0]
+    #     with self.assertRaises(AttributeError):
+    #         print(note_1.chord)
+    #     note_2 = self.part.notes[1]
+    #     self.assertEqual(type(note_2.chord).__name__, 'Chord')
+    #     self.assertEqual(note_1.quarter_duration, note_2.quarter_duration, 4)
 
     def test_previous_chord(self):
         p = self.part

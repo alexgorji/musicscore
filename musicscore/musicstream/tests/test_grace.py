@@ -3,6 +3,7 @@ import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musicxml.score_templates.xml_test_score import TestScore
 
 path = os.path.abspath(__file__).split('.')[0]
 
@@ -55,18 +56,23 @@ class Test(TestCase):
 
     def test_7(self):
         sf = SimpleFormat(durations=[1.3, 0, 2, 0, 0.7])
+        for index, chord in enumerate(sf.chords):
+            chord.add_lyric(index + 1)
         v = sf.to_voice(1)
         v.add_to_score(self.score, 1, 1)
-        self.score.add_beats()
-        self.score.quantize()
-        self.score.split_not_notatable()
-        self.score.update_tuplets()
+        # self.score.fill_with_rest()
+        # self.score.add_beats()
+        # self.score.quantize()
+        # self.score.split_not_notatable()
+        # self.score.update_tuplets()
+        # self.score.substitute_sextoles()
         # self.score.update_types()
         # self.score.update_dots()
+        # self.score.chord_to_notes()
+        # self.score.update_divisions()
+        # self.score.update_accidentals(mode='normal')
+        # self.score.update_durations()
         # self.score.finish()
-
-
-        # print([chord.quarter_duration for chord in self.score.get_measure(1).get_part(1).chords])
-        # print([chord.parent_beat for chord in self.score.get_measure(1).get_part(1).chords])
-        # result_path = path + '_test_7'
-        # self.score.write(path=result_path)
+        result_path = path + '_test_7'
+        self.score.write(path=result_path)
+        TestScore().assert_template(result_path=result_path)
