@@ -151,6 +151,11 @@ class SimpleFormat(object):
             for d, m in zip(self._durations, self._midis):
                 self._chords.append(TreeChord(m, d))
 
+    def add_chord(self, chord):
+        if self._chords is None:
+            self._chords = []
+        self._chords.append(chord)
+
     def to_voice(self, voice_number=1):
         output = StreamVoice(voice_number)
         for chord in self.chords:

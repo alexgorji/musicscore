@@ -147,8 +147,6 @@ class TreeChord(XMLTree):
         return new_chord
 
     def split(self, *ratios):
-        print('spliting chord with duration', self.quarter_duration)
-        print('chord tie types', self.tie_types)
         if len(ratios) == 1:
             ratios = ratios[0]
 
@@ -160,23 +158,18 @@ class TreeChord(XMLTree):
 
         new_chords = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
 
-        # print(self)
-        # print(self.get_children_by_type(Tie))
-        for t in self.tie_types:
-            new_chords[-1].add_tie(t)
-        #
-        # print(new_chords)
+        if 'start' in self.tie_types:
+            new_chords[-1].add_tie('start')
 
         new_chords.insert(0, self)
 
         if self.midis[0].value != 0:
-            for new_chord in new_chords[:-1]:
-                new_chord.add_tie('start')
-
             for new_chord in new_chords[1:]:
                 new_chord.add_tie('stop')
 
-        print([chord.quarter_duration for chord in new_chords])
+            for new_chord in new_chords[:-1]:
+                new_chord.add_tie('start')
+
         return new_chords
 
     @property
