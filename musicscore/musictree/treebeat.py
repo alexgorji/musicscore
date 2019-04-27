@@ -3,7 +3,7 @@ import warnings
 from quicktions import Fraction
 
 from musicscore.musictree.treechord import TreeChord
-from musicscore.musicxml.elements.note import TimeModification
+from musicscore.musicxml.elements.note import TimeModification, Grace
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes
 
 
@@ -201,15 +201,15 @@ class TreeBeat(object):
     def update_tuplets(self):
         # to be used with check_notatability
         tuplet_divisions = [3, 5, 6, 7, 9, 10]
-
+        non_grace_chords = [chord for chord in self.chords if chord.quarter_duration != 0]
         if self.best_div in tuplet_divisions:
-            for i in range(len(self.chords)):
+            for i in range(len(non_grace_chords)):
                 if i == 0:
-                    self.chords[0].add_tuplet('start')
+                    non_grace_chords[0].add_tuplet('start')
                 elif i == len(self.chords) - 1:
-                    self.chords[-1].add_tuplet('stop')
+                    non_grace_chords[-1].add_tuplet('stop')
                 else:
-                    self.chords[i].add_tuplet('continue')
+                    non_grace_chords[i].add_tuplet('continue')
 
     def split_not_notatable(self):
 

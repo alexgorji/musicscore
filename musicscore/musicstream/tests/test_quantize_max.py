@@ -1,6 +1,8 @@
 from unittest import TestCase
 import os
 
+from quicktions import Fraction
+
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
@@ -21,19 +23,43 @@ class Test(TestCase):
         v = sf.to_voice(1)
         v.add_to_score(self.score, 1, 1)
 
+        sf = sf.__deepcopy__()
+        v = sf.to_voice(1)
+        v.add_to_score(self.score, 1, 2)
+
         self.score.fill_with_rest()
         self.score.add_beats()
 
-        for beat in self.score.get_beats():
-            beat.max_division = 6
+        for measure in self.score.get_children_by_type(TreeMeasure):
+            part = measure.get_part(2)
+            for beat in part.get_beats():
+                beat.max_division = 7
 
         result_path = path + '_test_1'
         self.score.write(path=result_path)
         # TestScore()
 
-    def get_beats(self):
+    def test_2(self):
+        self.score.add_measure(TreeMeasure(time=(3, 4)))
+        sf = SimpleFormat(durations=[0.5, 0.6, 0.7, 0.8])
+        for index, chord in enumerate(sf.chords):
+            chord.add_lyric(index + 1)
+        v = sf.to_voice(1)
+        v.add_to_score(self.score, 1, 1)
+
+        sf = sf.__deepcopy__()
+        v = sf.to_voice(1)
+        v.add_to_score(self.score, 1, 2)
+
+        self.score.fill_with_rest()
+        self.score.add_beats()
+
         for measure in self.score.get_children_by_type(TreeMeasure):
-            for part in measure.get_children_by_type(TreePart):
-                for voice in part.voices.values():
-                    for beat in voice.beats:
-                        print(beat.max_division)
+            part = measure.get_part(2)
+            for beat in part.get_beats():
+                beat.max_division = 7
+
+        self.score.quantize()
+
+        result_path = path + '_test_2'
+        self.score.write(path=result_path)

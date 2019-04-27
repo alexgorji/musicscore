@@ -18,4 +18,5 @@ class Test(TestCase):
         v.add_to_score(self.score, 2, 2)
         result_path = path + '_test_1'
         self.score.write(path=result_path)
+
         TestScore().assert_template(result_path=result_path)

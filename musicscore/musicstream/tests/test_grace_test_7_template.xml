@@ -61,11 +61,6 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <time-modification>
-          <actual-notes>7</actual-notes>
-          <normal-notes>4</normal-notes>
-          <normal-type>16th</normal-type>
-        </time-modification>
         <lyric number="1">
           <text>2</text>
         </lyric>
@@ -113,9 +108,6 @@
           <tied number="1" type="start"/>
           <tied number="1" type="stop"/>
         </notations>
-        <notations>
-          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
-        </notations>
       </note>
       <note>
         <pitch>
@@ -162,11 +154,6 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <time-modification>
-          <actual-notes>7</actual-notes>
-          <normal-notes>4</normal-notes>
-          <normal-type>16th</normal-type>
-        </time-modification>
         <lyric number="1">
           <text>4</text>
         </lyric>
@@ -211,9 +198,6 @@
         <beam number="1">end</beam>
         <notations>
           <tied number="1" type="stop"/>
-        </notations>
-        <notations>
-          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
       </note>
     </part>
