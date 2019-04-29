@@ -157,6 +157,7 @@ class SimpleFormat(object):
         if chord.get_children_by_type(Voice):
             raise Exception('SimpleFormat Chords cannot have a voice child.')
         self._chords.append(chord)
+        return chord
 
     def to_voice(self, voice_number=1):
         output = StreamVoice(voice_number)

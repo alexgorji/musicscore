@@ -1,11 +1,11 @@
-from unittest import TestCase
 import os
+import random
+from unittest import TestCase
 
 from quicktions import Fraction
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treemeasure import TreeMeasure
-from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
 from musicscore.musicxml.score_templates.xml_test_score import TestScore
 
@@ -21,11 +21,11 @@ class Test(TestCase):
         for index, chord in enumerate(sf.chords):
             chord.add_lyric(index + 1)
         v = sf.to_voice(1)
-        v.add_to_score(self.score, 1, 1)
-
-        sf = sf.__deepcopy__()
-        v = sf.to_voice(1)
         v.add_to_score(self.score, 1, 2)
+
+        sf = SimpleFormat(durations=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
+        v = sf.to_voice(1)
+        v.add_to_score(self.score, 1, 1)
 
         self.score.fill_with_rest()
         self.score.add_beats()
@@ -36,8 +36,9 @@ class Test(TestCase):
                 beat.max_division = 7
 
         result_path = path + '_test_1'
-        self.score.write(path=result_path)
-        # TestScore()
+        with self.assertWarns(UserWarning):
+            self.score.write(path=result_path)
+        TestScore().assert_template(result_path=result_path)
 
     def test_2(self):
         self.score.add_measure(TreeMeasure(time=(3, 4)))
@@ -47,7 +48,9 @@ class Test(TestCase):
         v = sf.to_voice(1)
         v.add_to_score(self.score, 1, 1)
 
-        sf = sf.__deepcopy__()
+        sf = SimpleFormat(durations=[0.5, 0.6, 0.7, 0.8])
+        for index, chord in enumerate(sf.chords):
+            chord.add_lyric(index + 1)
         v = sf.to_voice(1)
         v.add_to_score(self.score, 1, 2)
 
@@ -62,4 +65,29 @@ class Test(TestCase):
         self.score.quantize()
 
         result_path = path + '_test_2'
+        with self.assertWarns(UserWarning):
+            self.score.write(path=result_path)
+        TestScore().assert_template(result_path=result_path)
+
+    def test_3(self):
+
+        random.seed(1)
+        durations = []
+        while sum(durations) <= 16:
+            duration = random.randrange(0, 2) + (random.random() / 2.)
+            durations.append(Fraction(duration).limit_denominator(100))
+
+        def add_to_score(part=1):
+            sf = SimpleFormat(durations=durations)
+            for index, chord in enumerate(sf.chords):
+                chord.add_lyric(index + 1)
+            v = sf.to_voice(1)
+            v.add_to_score(self.score, 1, part)
+
+        add_to_score(1)
+        add_to_score(2)
+        add_to_score(3)
+
+        result_path = path + '_test_3'
+
         self.score.write(path=result_path)

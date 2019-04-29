@@ -4,7 +4,7 @@ from quicktions import Fraction
 
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musicxml.elements.note import TimeModification, Grace
-from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes
+from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
 
 def _find_nearest_quantized_value(quantized_values, values):
@@ -39,7 +39,7 @@ class TreeBeat(object):
         self._best_div = None
         self._permitted_durations = (4, 2, 1, 0.5)
         self._chords = []
-        self._tree_part_voice = None
+        self.parent_voice = None
 
         self.duration = duration
         self.max_division = max_division
@@ -102,7 +102,7 @@ class TreeBeat(object):
 
     @property
     def tree_part_voice(self):
-        return self._tree_part_voice
+        return self.parent_voice
 
     @property
     def previous(self):
@@ -144,9 +144,12 @@ class TreeBeat(object):
         return _find_quantized_locations(self.duration, subdivision)
 
     def get_quantized_durations(self, durations):
-
+        diff = self.duration - sum(durations)
+        if diff != 0:
+            for index, dur in enumerate(durations):
+                durations[index] = dur + diff/len(durations)
         if sum(durations) != self.duration:
-            warnings.warn('TreeBeat.get_quarter_durations: sum of durations is not equal to beat  duration')
+            warnings.warn('TreeBeat.get_quarter_durations: sum of durations {} is not equal to beat duration {}'.format(sum(durations), self.duration))
 
         def _get_positions():
             positions = [0]
@@ -198,8 +201,12 @@ class TreeBeat(object):
                 chord.quarter_duration = quarter_duration
                 chord._offset = None
 
+    # def clean_zero_head_tails(self):
+    #     for chord in self.chords:
+    #         if chord.quarter_duration == 0 and chord._head or chord._tail:
+    #             chord.remove_from_score()
+
     def update_tuplets(self):
-        # to be used with check_notatability
         tuplet_divisions = [3, 5, 6, 7, 9, 10]
         non_grace_chords = [chord for chord in self.chords if chord.quarter_duration != 0]
         if self.best_div in tuplet_divisions:
@@ -447,3 +454,4 @@ class TreeBeat(object):
                     tm = chord.get_children_by_type(TimeModification)[0]
                     tm.get_children_by_type(ActualNotes)[0].value = 3
                     tm.get_children_by_type(NormalNotes)[0].value = 2
+                    tm.get_children_by_type(NormalType)[0].value = 'eighth'

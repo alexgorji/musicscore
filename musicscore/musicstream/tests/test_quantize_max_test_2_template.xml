@@ -177,29 +177,12 @@
           <octave>4</octave>
         </pitch>
         <duration>5</duration>
-        <tie type="start"/>
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">end</beam>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
         <lyric number="1">
           <text>2</text>
         </lyric>
-      </note>
-      <note>
-        <grace/>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type>eighth</type>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
       </note>
       <note>
         <pitch>
@@ -238,6 +221,9 @@
         <beam number="1">end</beam>
         <notations>
           <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>4</text>

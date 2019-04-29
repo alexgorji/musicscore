@@ -30,6 +30,7 @@ class TreePartVoice(object):
         self._sextoles_substituted = False
         self._types_updated = False
         self._dots_updated = False
+        self.parent_voice = None
 
     @property
     def chords(self):
@@ -53,12 +54,12 @@ class TreePartVoice(object):
         elif remain > 0:
             split = chord.split([chord.quarter_duration - remain, remain])
             self.chords.append(split[0])
-            split[0].tree_part_voice = self
+            split[0].parent_voice = self
             split[0].add_child(Voice(str(self.number)))
             return split[1]
         else:
             self.chords.append(chord)
-            chord.tree_part_voice = self
+            chord.parent_voice = self
             chord.add_child(Voice(str(self.number)))
 
     @property
@@ -167,11 +168,11 @@ class TreePartVoice(object):
                 for b in range(beats.value):
                     tree_beat = TreeBeat(duration=4. / beat_type.value)
                     list_of_beats.append(tree_beat)
-                    tree_beat._tree_part_voice = self
+                    tree_beat.parent_voice = self
         else:
             duration = 0
             for beat in list_of_beats:
-                beat._tree_part_voice = self
+                beat.parent_voice = self
                 duration += beat.duration
             if self.part.up.quarter_duration != duration:
                 raise ValueError('sum of beat durations must be equal to measure duration')
@@ -187,20 +188,25 @@ class TreePartVoice(object):
 
     def _add_chords_to_beats(self):
 
-        beats = iter(self.beats)
-        current_beat = beats.__next__()
-        next_beat = beats.__next__()
-        while_loop = True
+        if len(self.beats) == 1:
+            current_beat = self.beats[0]
+            for chord in self.chords:
+                current_beat.add_chord(chord)
+        else:
+            beats = iter(self.beats)
+            current_beat = beats.__next__()
+            next_beat = beats.__next__()
+            while_loop = True
 
-        for chord in self.chords:
-            while while_loop and (chord.offset < current_beat.offset or chord.offset >= next_beat.offset):
-                try:
-                    current_beat = next_beat
-                    next_beat = beats.__next__()
-                except StopIteration:
-                    while_loop = False
+            for chord in self.chords:
+                while while_loop and (chord.offset < current_beat.offset or chord.offset >= next_beat.offset):
+                    try:
+                        current_beat = next_beat
+                        next_beat = beats.__next__()
+                    except StopIteration:
+                        while_loop = False
 
-            current_beat.add_chord(chord)
+                current_beat.add_chord(chord)
 
     def _split_chords_beatwise(self):
 
@@ -211,10 +217,13 @@ class TreePartVoice(object):
                     previous_chord = first_chord.previous
                     tail_duration = (previous_chord.end_position - beat.offset)
                     ratios = [previous_chord.quarter_duration - tail_duration, tail_duration]
+
                     split = previous_chord.split(ratios)
                     self._chords = substitute(self._chords, previous_chord, split)
                     beat.chords.insert(0, split[1])
                     split[1].parent_beat = beat
+                    split[0]._head = True
+                    split[1]._tail = True
 
         for beat in self.beats:
             if beat.chords and len([chord for chord in beat.chords if chord.quarter_duration != 0]) != 1:
@@ -226,6 +235,8 @@ class TreePartVoice(object):
                     self._chords = substitute(self._chords, last_chord, split)
                     beat.next.chords.insert(0, split[1])
                     split[1].parent_beat = beat.next
+                    split[0]._head = True
+                    split[1]._tail = True
 
     def fill_with_rest(self):
         if not self._filled_with_rest:
@@ -258,6 +269,11 @@ class TreePartVoice(object):
         else:
             warnings.warn('{} already quantized. No action took place.'.format(self))
 
+    def clear_zero_heads_tails(self):
+        for chord in self.chords:
+            if chord.quarter_duration == 0 and (chord._head or chord._tail):
+                chord.remove_from_score()
+
     def split_not_notatable(self):
         if not self._quantized:
             raise Exception('quantize() first')
@@ -272,8 +288,8 @@ class TreePartVoice(object):
             warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
     def update_tuplets(self):
-        if not self._not_notatable_split:
-            raise Exception('split_not_notatable() first')
+        # if not self._not_notatable_split:
+        #     raise Exception('split_not_notatable() first')
 
         if not self._tuplets_updated:
             for beat in self.beats:
@@ -294,8 +310,8 @@ class TreePartVoice(object):
             warnings.warn('all sextoles in  {} already checked. No action took place.'.format(self))
 
     def update_types(self):
-        if not self._sextoles_substituted:
-            raise Exception('substitute_sextoles() first')
+        # if not self._sextoles_substituted:
+        #     raise Exception('substitute_sextoles() first')
 
         if not self._types_updated:
             for chord in self.chords:
@@ -340,9 +356,20 @@ class TreePart(timewise.Part):
     def voices(self):
         return self._voices
 
+    # def get_divisions(self):
+    #     duration_denominators = [note.quarter_duration.denominator for note in
+    #                              self.get_children_by_type(TreeNote)]
+    #
+    #     if len(duration_denominators) == 0:
+    #         return 1
+    #     elif len(duration_denominators) == 1:
+    #         return duration_denominators[0]
+    #     else:
+    #         return lcm(duration_denominators)
+
     def get_divisions(self):
-        duration_denominators = [note.quarter_duration.denominator for note in
-                                 self.get_children_by_type(TreeNote)]
+        duration_denominators = [chord.quarter_duration.denominator for chord in
+                                 self.chords]
 
         if len(duration_denominators) == 0:
             return 1
@@ -483,6 +510,7 @@ class TreePart(timewise.Part):
     def quantize(self):
         for voice in self.voices.values():
             voice.quantize()
+            voice.clear_zero_heads_tails()
 
     def split_not_notatable(self):
         for voice in self.voices.values():

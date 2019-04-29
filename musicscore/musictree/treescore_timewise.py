@@ -9,6 +9,24 @@ from musicscore.musicxml.types.complextypes.partlist import ScorePart
 from musicscore.musicxml.types.complextypes.scorepart import PartName
 
 
+class TreeInstrumentPart(object):
+    """"""
+
+    def __init__(self, parent_score, number, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._parent_score = parent_score
+        self._number = number
+        self._voices = None
+
+    @property
+    def parent_score(self):
+        return self._parent_score
+
+    @property
+    def number(self):
+        return self._number
+
+
 class TreeScoreTimewise(timewise.Score):
     """"""
 
@@ -37,7 +55,7 @@ class TreeScoreTimewise(timewise.Score):
         part_name.print_object = print_object
         self._part_list.add_child(new_score_part)
         for measure in self.get_children_by_type(TreeMeasure):
-           p = measure.add_child(TreePart(id=new_score_part.id))
+            p = measure.add_child(TreePart(id=new_score_part.id))
 
     def add_measure(self, measure=None):
         new_measure = self._set_new_measure(measure)

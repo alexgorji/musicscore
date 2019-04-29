@@ -46,13 +46,15 @@ class TreeChord(XMLTree):
 
     def __init__(self, midis=71, quarter_duration=1, **kwargs):
         super().__init__(**kwargs)
-        self.tree_part_voice = None
+        self.parent_voice = None
         self.parent_beat = None
         self._offset = None
         self._quarter_duration = None
         self.quarter_duration = quarter_duration
         self._midis = None
         self.midis = midis
+        self._tail = False
+        self._head = False
 
     @property
     def quarter_duration(self):
@@ -110,10 +112,17 @@ class TreeChord(XMLTree):
 
     @property
     def previous(self):
-        index = self.tree_part_voice.chords.index(self)
+        index = self.parent_voice.chords.index(self)
         if index == 0:
             return None
-        return self.tree_part_voice.chords[index - 1]
+        return self.parent_voice.chords[index - 1]
+
+    @property
+    def next(self):
+        index = self.parent_voice.chords.index(self)
+        if index == len(self.parent_voice.chords) - 1:
+            return None
+        return self.parent_voice.chords[index + 1]
 
     def update_offset(self):
         if self.previous:
@@ -135,7 +144,7 @@ class TreeChord(XMLTree):
     def split_copy(self, quarter_duration):
         new_chord = TreeChord(quarter_duration=quarter_duration)
         new_chord.midis = self.midis
-        new_chord.tree_part_voice = self.tree_part_voice
+        new_chord.parent_voice = self.parent_voice
         new_chord.parent_beat = self.parent_beat
         new_chord._offset = None
         try:
@@ -216,6 +225,17 @@ class TreeChord(XMLTree):
             self.add_child(Tie('stop'))
             notations.add_child(Tied('stop'))
 
+    def remove_tie(self, type):
+        if type in self.tie_types:
+            notations = self.get_children_by_type(Notations)[0]
+            tie = [t for t in self.get_children_by_type(Tie) if t.type == type][0]
+            self.remove_child(tie)
+
+            tied = [t for t in notations.get_children_by_type(Tied) if t.type == type][0]
+            notations.remove_child(tied)
+            if not notations.get_children():
+                self.remove_child(notations)
+
     def add_tuplet(self, position, number=1):
         normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
         types = {8: '32nd', 4: '16th', 2: 'eighth'}
@@ -292,17 +312,17 @@ class TreeChord(XMLTree):
     def update_dot(self):
         _dot = 0
 
-        division = self.tree_part_voice.part.get_divisions()
+        division = self.parent_voice.part.get_divisions()
         if self.quarter_duration.numerator % 3 == 0:
             _dot = 1
         elif self.quarter_duration == Fraction(1, 2) and (
-                division == 3 or division == 6 or division == 12):
+                division % 3 == 0):
             _dot = 1
         elif self.quarter_duration == Fraction(1, 4) and (
-                division == 3 or division == 6 or division == 12):
+                division % 3 == 0):
             _dot = 1
         elif (self.quarter_duration == Fraction(3, 9) or self.quarter_duration == Fraction(6,
-                                                                                           9)) and division == 9:
+                                                                                           9)) and division % 9 == 0:
             _dot = 1
         elif self.quarter_duration == Fraction(7, 8):
             _dot = 2
@@ -334,6 +354,21 @@ class TreeChord(XMLTree):
         for child in self.get_children():
             new_chord.add_child(child)
         return new_chord
+
+    def remove_from_score(self):
+        if 'stop' in self.tie_types:
+            previous_chord = self.previous
+            if not previous_chord:
+                previous_chord = self.parent_beat.previous.chords[-1]
+            previous_chord.remove_tie('start')
+        elif 'start' in self.tie_types:
+            next_chord = self.next
+            if not next_chord:
+                next_chord = self.parent_beat.next.chords[0]
+            next_chord.remove_tie('stop')
+
+        self.parent_beat.chords.remove(self)
+        self.parent_voice.chords.remove(self)
 
     def deepcopy_for_SimplfeFormat(self):
         new_chord = TreeChord(quarter_duration=self.quarter_duration)
