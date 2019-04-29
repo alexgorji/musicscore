@@ -312,17 +312,14 @@ class TreeChord(XMLTree):
     def update_dot(self):
         _dot = 0
 
-        division = self.parent_voice.parent_part.get_divisions()
         if self.quarter_duration.numerator % 3 == 0:
             _dot = 1
-        elif self.quarter_duration == Fraction(1, 2) and (
-                division % 3 == 0):
+        elif self.quarter_duration == Fraction(1, 2) and self.parent_beat.best_div == 6:
             _dot = 1
-        elif self.quarter_duration == Fraction(1, 4) and (
-                division % 3 == 0):
+        elif self.quarter_duration == Fraction(1, 4) and self.parent_beat.best_div == 6:
             _dot = 1
         elif (self.quarter_duration == Fraction(3, 9) or self.quarter_duration == Fraction(6,
-                                                                                           9)) and division % 9 == 0:
+                                                                                           9)) and self.parent_beat.best_div == 9:
             _dot = 1
         elif self.quarter_duration == Fraction(7, 8):
             _dot = 2
@@ -359,12 +356,22 @@ class TreeChord(XMLTree):
         if 'stop' in self.tie_types:
             previous_chord = self.previous
             if not previous_chord:
-                previous_chord = self.parent_beat.previous.chords[-1]
+                previous_beat = self.parent_beat.previous
+                if previous_beat:
+                    previous_chord = previous_beat.chords[-1]
+                else:
+                    previous_voice = self.parent_voice.previous
+                    previous_chord = previous_voice.chords[-1]
             previous_chord.remove_tie('start')
         elif 'start' in self.tie_types:
             next_chord = self.next
             if not next_chord:
-                next_chord = self.parent_beat.next.chords[0]
+                next_beat = self.parent_beat.next
+                if next_beat:
+                    next_chord = self.parent_beat.next.chords[0]
+                else:
+                    next_voice = self.parent_voice.next
+                    next_chord = next_voice.chords[0]
             next_chord.remove_tie('stop')
 
         self.parent_beat.chords.remove(self)

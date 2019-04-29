@@ -455,9 +455,10 @@ class TreeBeat(object):
         )
 
         if self.best_div == 6:
-            chords_quarter_durations = [chord.quarter_duration for chord in self.chords]
+            non_grace_chords = [chord for chord in self.chords if chord.quarter_duration != 0]
+            chords_quarter_durations = [chord.quarter_duration for chord in non_grace_chords]
             if chords_quarter_durations not in six_divisions:
-                for chord in self.chords:
+                for chord in non_grace_chords:
                     tm = chord.get_children_by_type(TimeModification)[0]
                     tm.get_children_by_type(ActualNotes)[0].value = 3
                     tm.get_children_by_type(NormalNotes)[0].value = 2

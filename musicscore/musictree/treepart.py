@@ -34,7 +34,6 @@ class TreePartVoice(object):
         self._dots_updated = False
         self.parent_part = None
 
-
     @property
     def chords(self):
         return self._chords
@@ -78,6 +77,32 @@ class TreePartVoice(object):
 
         self._forbidden_divisions = value
 
+    @property
+    def next(self):
+        parts = self.parent_part.parent_score_part.get_parts()
+        index = parts.index(self.parent_part)
+        if index < len(parts):
+            next_part = parts[index + 1]
+        else:
+            return None
+        try:
+            return next_part.get_voice(self.number)
+        except KeyError:
+            return None
+
+    @property
+    def previous(self):
+        parts = self.parent_part.parent_score_part.get_parts()
+        index = parts.index(self.parent_part)
+        if index > 0:
+            previous_part = parts[index - 1]
+        else:
+            return None
+        try:
+            return previous_part.get_voice(self.number)
+        except KeyError:
+            return None
+
     def add_chord(self, chord):
         remain = chord.quarter_duration - self.remaining_duration
         if self.remaining_duration == 0:
@@ -88,6 +113,8 @@ class TreePartVoice(object):
             self.chords.append(split[0])
             split[0].parent_voice = self
             split[0].add_child(Voice(str(self.number)))
+            split[0]._head = True
+            split[1]._tail = True
             return split[1]
         else:
             self.chords.append(chord)
@@ -380,7 +407,6 @@ class TreePart(timewise.Part):
         self._divisions_updated = False
         self._finished = False
         self.parent_score_part = None
-
 
     @property
     def chords(self):

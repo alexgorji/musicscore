@@ -11,6 +11,18 @@
     <score-part id="p3">
       <part-name print-object="no">none</part-name>
     </score-part>
+    <score-part id="p4">
+      <part-name print-object="no">none</part-name>
+    </score-part>
+    <score-part id="p5">
+      <part-name print-object="no">none</part-name>
+    </score-part>
+    <score-part id="p6">
+      <part-name print-object="no">none</part-name>
+    </score-part>
+    <score-part id="p7">
+      <part-name print-object="no">none</part-name>
+    </score-part>
   </part-list>
   <measure number="1">
     <part id="p1">
@@ -205,7 +217,7 @@
     </part>
     <part id="p2">
       <attributes>
-        <divisions>280</divisions>
+        <divisions>35</divisions>
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
@@ -216,7 +228,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>80</duration>
+        <duration>10</duration>
         <voice>1</voice>
         <type>eighth</type>
         <time-modification>
@@ -237,7 +249,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>40</duration>
+        <duration>5</duration>
         <voice>1</voice>
         <type>16th</type>
         <time-modification>
@@ -255,7 +267,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>160</duration>
+        <duration>20</duration>
         <tie type="start"/>
         <voice>1</voice>
         <type>quarter</type>
@@ -279,7 +291,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>224</duration>
+        <duration>28</duration>
         <tie type="stop"/>
         <voice>1</voice>
         <type>quarter</type>
@@ -300,7 +312,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>56</duration>
+        <duration>7</duration>
         <tie type="start"/>
         <voice>1</voice>
         <type>16th</type>
@@ -325,7 +337,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>280</duration>
+        <duration>35</duration>
         <tie type="start"/>
         <tie type="stop"/>
         <voice>1</voice>
@@ -340,13 +352,21 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>35</duration>
+        <duration>5</duration>
         <tie type="stop"/>
         <voice>1</voice>
-        <type>32nd</type>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>7</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <beam number="1">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
       <note>
@@ -366,9 +386,15 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>140</duration>
+        <duration>15</duration>
         <voice>1</voice>
         <type>eighth</type>
+        <dot/>
+        <time-modification>
+          <actual-notes>7</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <beam number="1">continue</beam>
         <lyric number="1">
           <text>6</text>
@@ -379,11 +405,16 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>105</duration>
+        <duration>15</duration>
         <tie type="start"/>
         <voice>1</voice>
-        <type>16th</type>
+        <type>eighth</type>
         <dot/>
+        <time-modification>
+          <actual-notes>7</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <beam number="1">end</beam>
         <notations>
           <tied number="1" type="start"/>
@@ -395,7 +426,7 @@
     </part>
     <part id="p3">
       <attributes>
-        <divisions>280</divisions>
+        <divisions>30</divisions>
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
@@ -406,11 +437,11 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>80</duration>
+        <duration>6</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <time-modification>
-          <actual-notes>7</actual-notes>
+          <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
@@ -427,11 +458,11 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>40</duration>
+        <duration>6</duration>
         <voice>1</voice>
         <type>16th</type>
         <time-modification>
-          <actual-notes>7</actual-notes>
+          <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
@@ -445,15 +476,17 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>160</duration>
+        <duration>18</duration>
         <tie type="start"/>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
+        <dot/>
         <time-modification>
-          <actual-notes>7</actual-notes>
+          <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
+        <beam number="1">end</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -469,7 +502,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>224</duration>
+        <duration>24</duration>
         <tie type="stop"/>
         <voice>1</voice>
         <type>quarter</type>
@@ -490,7 +523,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>56</duration>
+        <duration>6</duration>
         <tie type="start"/>
         <voice>1</voice>
         <type>16th</type>
@@ -515,7 +548,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>280</duration>
+        <duration>30</duration>
         <tie type="start"/>
         <tie type="stop"/>
         <voice>1</voice>
@@ -530,11 +563,543 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>35</duration>
+        <duration>5</duration>
         <tie type="stop"/>
         <voice>1</voice>
-        <type>32nd</type>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
         <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1">
+          <text>5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <dot/>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>6</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>7</text>
+        </lyric>
+      </note>
+    </part>
+    <part id="p4">
+      <attributes>
+        <divisions>5</divisions>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>1</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>2</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <dot/>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>3</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>4</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5</duration>
+        <tie type="start"/>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1">
+          <text>5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>6</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>7</text>
+        </lyric>
+      </note>
+    </part>
+    <part id="p5">
+      <attributes>
+        <divisions>4</divisions>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">begin</beam>
+        <lyric number="1">
+          <text>1</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>2</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>3</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <dot/>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>4</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">begin</beam>
+        <lyric number="1">
+          <text>5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>6</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>7</text>
+        </lyric>
+      </note>
+    </part>
+    <part id="p6">
+      <attributes>
+        <divisions>3</divisions>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>1</text>
+        </lyric>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1">
+          <text>2</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>3</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>4</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -556,10 +1121,17 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>140</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>eighth</type>
-        <beam number="1">continue</beam>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
         <lyric number="1">
           <text>6</text>
         </lyric>
@@ -569,11 +1141,130 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>105</duration>
+        <duration>1</duration>
         <tie type="start"/>
         <voice>1</voice>
-        <type>16th</type>
-        <dot/>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>7</text>
+        </lyric>
+      </note>
+    </part>
+    <part id="p7">
+      <attributes>
+        <divisions>2</divisions>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <lyric number="1">
+          <text>1</text>
+        </lyric>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1">
+          <text>2</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>3</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1">
+          <text>5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <lyric number="1">
+          <text>6</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
         <beam number="1">end</beam>
         <notations>
           <tied number="1" type="start"/>
@@ -1147,14 +1838,14 @@
     </part>
     <part id="p3">
       <attributes>
-        <divisions>42</divisions>
+        <divisions>12</divisions>
       </attributes>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>28</duration>
+        <duration>8</duration>
         <tie type="stop"/>
         <tie type="start"/>
         <voice>1</voice>
@@ -1177,7 +1868,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
+        <duration>2</duration>
         <tie type="stop"/>
         <voice>1</voice>
         <type>16th</type>
@@ -1196,7 +1887,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
+        <duration>2</duration>
         <tie type="start"/>
         <voice>1</voice>
         <type>16th</type>
@@ -1221,7 +1912,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
+        <duration>2</duration>
         <tie type="stop"/>
         <voice>1</voice>
         <type>16th</type>
@@ -1243,7 +1934,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
+        <duration>2</duration>
         <tie type="start"/>
         <voice>1</voice>
         <type>16th</type>
@@ -1265,7 +1956,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>28</duration>
+        <duration>8</duration>
         <tie type="start"/>
         <tie type="stop"/>
         <voice>1</voice>
@@ -1288,7 +1979,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>21</duration>
+        <duration>6</duration>
         <tie type="stop"/>
         <voice>1</voice>
         <type>eighth</type>
@@ -1311,7 +2002,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>14</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
         <time-modification>
@@ -1329,7 +2020,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
+        <duration>2</duration>
         <tie type="start"/>
         <voice>1</voice>
         <type>16th</type>
@@ -1354,12 +2045,119 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>12</duration>
+        <duration>3</duration>
         <tie type="stop"/>
         <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
         <type>eighth</type>
+        <lyric number="1">
+          <text>12</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>13</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>14</text>
+        </lyric>
+      </note>
+    </part>
+    <part id="p4">
+      <attributes>
+        <divisions>20</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>16</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
         <time-modification>
-          <actual-notes>7</actual-notes>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>8</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
@@ -1367,6 +2165,463 @@
         <notations>
           <tied number="1" type="stop"/>
         </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>16</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>9</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>12</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <dot/>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>10</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>11</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1">
+          <text>12</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>13</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>14</text>
+        </lyric>
+      </note>
+    </part>
+    <part id="p5">
+      <attributes>
+        <divisions>4</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <dot/>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>8</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <dot/>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>9</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>10</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>11</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1">
+          <text>12</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>13</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>14</text>
+        </lyric>
+      </note>
+    </part>
+    <part id="p6">
+      <attributes>
+        <divisions>6</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>8</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>9</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>10</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
         <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
@@ -1388,14 +2643,13 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>18</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <dot/>
         <time-modification>
-          <actual-notes>7</actual-notes>
-          <normal-notes>4</normal-notes>
-          <normal-type>16th</normal-type>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
         <lyric number="1">
@@ -1407,16 +2661,137 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>12</duration>
+        <duration>2</duration>
         <tie type="start"/>
         <voice>1</voice>
         <type>eighth</type>
         <time-modification>
-          <actual-notes>7</actual-notes>
-          <normal-notes>4</normal-notes>
-          <normal-type>16th</normal-type>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>14</text>
+        </lyric>
+      </note>
+    </part>
+    <part id="p7">
+      <attributes>
+        <divisions>2</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>9</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>10</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1">
+          <text>12</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>13</text>
+        </lyric>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -1564,14 +2939,14 @@
     </part>
     <part id="p2">
       <attributes>
-        <divisions>56</divisions>
+        <divisions>7</divisions>
       </attributes>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>56</duration>
+        <duration>7</duration>
         <tie type="stop"/>
         <tie type="start"/>
         <voice>1</voice>
@@ -1586,13 +2961,21 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
+        <duration>1</duration>
         <tie type="stop"/>
         <voice>1</voice>
-        <type>32nd</type>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>7</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <beam number="1">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
       <note>
@@ -1600,15 +2983,21 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>49</duration>
+        <duration>6</duration>
         <tie type="start"/>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>quarter</type>
         <dot/>
-        <dot/>
-        <beam number="1">end</beam>
+        <time-modification>
+          <actual-notes>7</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <notations>
           <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>15</text>
@@ -1619,7 +3008,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>24</duration>
+        <duration>3</duration>
         <tie type="stop"/>
         <voice>1</voice>
         <type>eighth</type>
@@ -1642,7 +3031,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>24</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>eighth</type>
         <dot/>
@@ -1661,7 +3050,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>1</duration>
         <tie type="start"/>
         <voice>1</voice>
         <type>16th</type>
@@ -1686,7 +3075,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>56</duration>
+        <duration>7</duration>
         <tie type="start"/>
         <tie type="stop"/>
         <voice>1</voice>
@@ -1699,14 +3088,14 @@
     </part>
     <part id="p3">
       <attributes>
-        <divisions>56</divisions>
+        <divisions>6</divisions>
       </attributes>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>56</duration>
+        <duration>6</duration>
         <tie type="stop"/>
         <tie type="start"/>
         <voice>1</voice>
@@ -1721,13 +3110,21 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
+        <duration>1</duration>
         <tie type="stop"/>
         <voice>1</voice>
-        <type>32nd</type>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
         <beam number="1">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
       <note>
@@ -1735,13 +3132,16 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>49</duration>
+        <duration>1</duration>
         <tie type="start"/>
         <voice>1</voice>
-        <type>eighth</type>
-        <dot/>
-        <dot/>
-        <beam number="1">end</beam>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">continue</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -1754,13 +3154,36 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>24</duration>
+        <duration>4</duration>
+        <tie type="start"/>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <notations>
+          <tied number="1" type="start"/>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
         <tie type="stop"/>
         <voice>1</voice>
         <type>eighth</type>
         <dot/>
         <time-modification>
-          <actual-notes>7</actual-notes>
+          <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
@@ -1777,12 +3200,11 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>24</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <dot/>
         <time-modification>
-          <actual-notes>7</actual-notes>
+          <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
@@ -1796,12 +3218,12 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>1</duration>
         <tie type="start"/>
         <voice>1</voice>
         <type>16th</type>
         <time-modification>
-          <actual-notes>7</actual-notes>
+          <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
@@ -1821,7 +3243,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>56</duration>
+        <duration>6</duration>
         <tie type="start"/>
         <tie type="stop"/>
         <voice>1</voice>
@@ -1829,6 +3251,393 @@
         <notations>
           <tied number="1" type="start"/>
           <tied number="1" type="stop"/>
+        </notations>
+      </note>
+    </part>
+    <part id="p4">
+      <attributes>
+        <divisions>5</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5</duration>
+        <tie type="stop"/>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+          <tied number="1" type="start"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>15</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>16</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>17</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5</duration>
+        <tie type="start"/>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+    </part>
+    <part id="p5">
+      <attributes>
+        <divisions>4</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>15</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>16</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>17</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start"/>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+    </part>
+    <part id="p6">
+      <attributes>
+        <divisions>2</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>15</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>16</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+      </note>
+    </part>
+    <part id="p7">
+      <attributes>
+        <divisions>2</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>15</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>16</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
         </notations>
       </note>
     </part>
@@ -1968,20 +3777,28 @@
     </part>
     <part id="p2">
       <attributes>
-        <divisions>8</divisions>
+        <divisions>35</divisions>
       </attributes>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>5</duration>
         <tie type="stop"/>
         <voice>1</voice>
-        <type>32nd</type>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>7</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <beam number="1">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
       <note>
@@ -1989,15 +3806,21 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
+        <duration>30</duration>
         <tie type="start"/>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>quarter</type>
         <dot/>
-        <dot/>
-        <beam number="1">end</beam>
+        <time-modification>
+          <actual-notes>7</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <notations>
           <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>18</text>
@@ -2008,13 +3831,21 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>7</duration>
         <tie type="stop"/>
         <voice>1</voice>
         <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <beam number="1">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
       <note>
@@ -2022,10 +3853,14 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>14</duration>
         <voice>1</voice>
-        <type>16th</type>
-        <dot/>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <beam number="1">continue</beam>
         <lyric number="1">
           <text>19</text>
@@ -2036,14 +3871,21 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>14</duration>
         <tie type="start"/>
         <voice>1</voice>
-        <type>16th</type>
-        <dot/>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <beam number="1">end</beam>
         <notations>
           <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>20</text>
@@ -2054,7 +3896,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>35</duration>
         <tie type="start"/>
         <tie type="stop"/>
         <voice>1</voice>
@@ -2069,13 +3911,21 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>5</duration>
         <tie type="stop"/>
         <voice>1</voice>
-        <type>32nd</type>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>7</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <beam number="1">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
       <note>
@@ -2083,15 +3933,21 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
+        <duration>30</duration>
         <tie type="start"/>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>quarter</type>
         <dot/>
-        <dot/>
-        <beam number="1">end</beam>
+        <time-modification>
+          <actual-notes>7</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <notations>
           <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>21</text>
@@ -2100,20 +3956,28 @@
     </part>
     <part id="p3">
       <attributes>
-        <divisions>8</divisions>
+        <divisions>30</divisions>
       </attributes>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>5</duration>
         <tie type="stop"/>
         <voice>1</voice>
-        <type>32nd</type>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
         <beam number="1">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
       <note>
@@ -2121,13 +3985,16 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
+        <duration>5</duration>
         <tie type="start"/>
         <voice>1</voice>
-        <type>eighth</type>
-        <dot/>
-        <dot/>
-        <beam number="1">end</beam>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">continue</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -2140,13 +4007,22 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>20</duration>
+        <tie type="start"/>
         <tie type="stop"/>
         <voice>1</voice>
-        <type>16th</type>
-        <beam number="1">begin</beam>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
         <notations>
+          <tied number="1" type="start"/>
           <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
       </note>
       <note>
@@ -2154,10 +4030,36 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>6</duration>
+        <tie type="stop"/>
         <voice>1</voice>
         <type>16th</type>
-        <dot/>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <beam number="1">continue</beam>
         <lyric number="1">
           <text>19</text>
@@ -2168,14 +4070,21 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>12</duration>
         <tie type="start"/>
         <voice>1</voice>
-        <type>16th</type>
-        <dot/>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <beam number="1">end</beam>
         <notations>
           <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>20</text>
@@ -2186,7 +4095,7 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>30</duration>
         <tie type="start"/>
         <tie type="stop"/>
         <voice>1</voice>
@@ -2201,10 +4110,227 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
+        <duration>5</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>21</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>20</duration>
+        <tie type="start"/>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <notations>
+          <tied number="1" type="start"/>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+    </part>
+    <part id="p4">
+      <attributes>
+        <divisions>5</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
         <duration>1</duration>
         <tie type="stop"/>
         <voice>1</voice>
-        <type>32nd</type>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>18</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>19</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>20</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>21</text>
+        </lyric>
+      </note>
+    </part>
+    <part id="p5">
+      <attributes>
+        <divisions>4</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>16th</type>
         <beam number="1">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
@@ -2215,13 +4341,302 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
+        <duration>3</duration>
         <tie type="start"/>
         <voice>1</voice>
         <type>eighth</type>
         <dot/>
-        <dot/>
         <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>18</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>19</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>20</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>21</text>
+        </lyric>
+      </note>
+    </part>
+    <part id="p6">
+      <attributes>
+        <divisions>3</divisions>
+      </attributes>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>18</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>19</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
+        <lyric number="1">
+          <text>20</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>21</text>
+        </lyric>
+      </note>
+    </part>
+    <part id="p7">
+      <attributes>
+        <divisions>2</divisions>
+      </attributes>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1">
+          <text>18</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <lyric number="1">
+          <text>19</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+        <lyric number="1">
+          <text>20</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -2299,6 +4714,138 @@
       </note>
     </part>
     <part id="p3">
+      <attributes>
+        <divisions>2</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <rest/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+      </note>
+      <note>
+        <rest/>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <dot/>
+      </note>
+    </part>
+    <part id="p4">
+      <attributes>
+        <divisions>2</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <rest/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+      </note>
+      <note>
+        <rest/>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <dot/>
+      </note>
+    </part>
+    <part id="p5">
+      <attributes>
+        <divisions>2</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <rest/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+      </note>
+      <note>
+        <rest/>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <dot/>
+      </note>
+    </part>
+    <part id="p6">
+      <attributes>
+        <divisions>2</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <rest/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+      </note>
+      <note>
+        <rest/>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <dot/>
+      </note>
+    </part>
+    <part id="p7">
       <attributes>
         <divisions>2</divisions>
       </attributes>
