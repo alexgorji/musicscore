@@ -61,22 +61,31 @@ class TreeBeat(object):
 
     @property
     def max_division(self):
+        if self._max_division is None:
+            self._max_division = self.parent_voice.max_division
+
+        if self._max_division is None:
+            if self.duration == 0.5:
+                self._max_division = 4
+            else:
+                self._max_division = 8
+
         return self._max_division
 
     @max_division.setter
     def max_division(self, value):
-        if value is None:
-            if self.duration == 0.5:
-                value = 4
-            else:
-                value = 8
-
-        if not isinstance(value, int):
-            raise TypeError('subdivision.value must be of type int not{}'.format(type(value)))
+        if value is not None and not isinstance(value, int):
+            raise TypeError('max_division.value must be None or of type int not {}'.format(type(value)))
         self._max_division = value
 
     @property
     def forbidden_divisions(self):
+        if self._forbidden_divisions is None:
+            self._forbidden_divisions = self.parent_voice.forbidden_divisions
+
+        if self._forbidden_divisions is None:
+            self._forbidden_divisions = []
+
         return self._forbidden_divisions
 
     @forbidden_divisions.setter
@@ -85,8 +94,6 @@ class TreeBeat(object):
             for x in value:
                 if not isinstance(x, int):
                     raise TypeError('forbidden_division must be of type int  not{}'.format(type(value)))
-        else:
-            value = []
         # max_division = int(max_division / 2)
         # forbidden_divisions = [div // 2 for div in forbidden_divisions if div // 2 != 0]
         # forbidden_divisions = list(set(forbidden_divisions))

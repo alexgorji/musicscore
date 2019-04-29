@@ -20,6 +20,8 @@ class TreePartVoice(object):
         super().__init__(*args, **kwargs)
         self._number = None
         self.number = number
+        self._max_division = None
+        self._forbidden_divisions = None
         self._chords = []
         self._beats = None
         self._filled_with_rest = False
@@ -30,7 +32,8 @@ class TreePartVoice(object):
         self._sextoles_substituted = False
         self._types_updated = False
         self._dots_updated = False
-        self.parent_voice = None
+        self.parent_part = None
+
 
     @property
     def chords(self):
@@ -45,6 +48,35 @@ class TreePartVoice(object):
         if not isinstance(value, int):
             raise TypeError('number.value must be of type int not{}'.format(type(value)))
         self._number = value
+
+    @property
+    def max_division(self):
+        if self._max_division is None:
+            self._max_division = self.parent_part.max_division
+        return self._max_division
+
+    @max_division.setter
+    def max_division(self, value):
+        if value is not None and not isinstance(value, int):
+            raise TypeError('max_division.value must be None or of type int not {}'.format(type(value)))
+
+        self._max_division = value
+
+    @property
+    def forbidden_divisions(self):
+        if self._forbidden_divisions is None:
+            self._forbidden_divisions = self.parent_part.forbidden_divisions
+
+        return self._forbidden_divisions
+
+    @forbidden_divisions.setter
+    def forbidden_divisions(self, value):
+        if value is not None:
+            for x in value:
+                if not isinstance(x, int):
+                    raise TypeError('forbidden_division must be of type int not{}'.format(type(value)))
+
+        self._forbidden_divisions = value
 
     def add_chord(self, chord):
         remain = chord.quarter_duration - self.remaining_duration
@@ -64,7 +96,7 @@ class TreePartVoice(object):
 
     @property
     def remaining_duration(self):
-        measure = self.part.up
+        measure = self.parent_part.up
         if self.chords:
             return measure.quarter_duration - self.chords[-1].end_position
         return measure.quarter_duration
@@ -80,7 +112,7 @@ class TreePartVoice(object):
             for group in grouping_list:
                 # todo list of beat_types
 
-                beat_type = self.part.up.time.beat_type
+                beat_type = self.parent_part.up.time.beat_type
                 if isinstance(beat_type, list):
                     raise NotImplementedError()
 
@@ -100,7 +132,7 @@ class TreePartVoice(object):
 
         def _generate_grouping_list():
             grouping_list = []
-            for (beats, beat_type) in self.part.up.time.get_time_signatures():
+            for (beats, beat_type) in self.parent_part.up.time.get_time_signatures():
                 if beats.value % 3 == 0 and beat_type.value != 4:
                     for x in range(beats.value // 3):
                         grouping_list.append(3)
@@ -159,11 +191,12 @@ class TreePartVoice(object):
             raise NotImplementedError('group_beams with values other than None')
 
     def set_beats(self, list_of_beats=None):
-        if not self.part.up:
+        if not self.parent_part.up:
             raise Exception('voice must have a part as child of a measure to be able to set beats')
+
         if list_of_beats is None:
             list_of_beats = []
-            for time_signature in self.part.up.time.get_time_signatures():
+            for time_signature in self.parent_part.up.time.get_time_signatures():
                 (beats, beat_type) = time_signature
                 for b in range(beats.value):
                     tree_beat = TreeBeat(duration=4. / beat_type.value)
@@ -174,7 +207,7 @@ class TreePartVoice(object):
             for beat in list_of_beats:
                 beat.parent_voice = self
                 duration += beat.duration
-            if self.part.up.quarter_duration != duration:
+            if self.parent_part.up.quarter_duration != duration:
                 raise ValueError('sum of beat durations must be equal to measure duration')
 
         self._beats = list_of_beats
@@ -288,8 +321,8 @@ class TreePartVoice(object):
             warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
     def update_tuplets(self):
-        # if not self._not_notatable_split:
-        #     raise Exception('split_not_notatable() first')
+        if not self._not_notatable_split:
+            raise Exception('split_not_notatable() first')
 
         if not self._tuplets_updated:
             for beat in self.beats:
@@ -310,8 +343,8 @@ class TreePartVoice(object):
             warnings.warn('all sextoles in  {} already checked. No action took place.'.format(self))
 
     def update_types(self):
-        # if not self._sextoles_substituted:
-        #     raise Exception('substitute_sextoles() first')
+        if not self._sextoles_substituted:
+            raise Exception('substitute_sextoles() first')
 
         if not self._types_updated:
             for chord in self.chords:
@@ -340,10 +373,14 @@ class TreePart(timewise.Part):
         super().__init__(*args, **kwargs)
         attributes = self.add_child(Attributes())
         attributes.add_child(Divisions(1))
+        self._max_division = None
+        self._forbidden_divisions = None
         self._voices = {}
         self._chords_notated = False
         self._divisions_updated = False
         self._finished = False
+        self.parent_score_part = None
+
 
     @property
     def chords(self):
@@ -356,16 +393,34 @@ class TreePart(timewise.Part):
     def voices(self):
         return self._voices
 
-    # def get_divisions(self):
-    #     duration_denominators = [note.quarter_duration.denominator for note in
-    #                              self.get_children_by_type(TreeNote)]
-    #
-    #     if len(duration_denominators) == 0:
-    #         return 1
-    #     elif len(duration_denominators) == 1:
-    #         return duration_denominators[0]
-    #     else:
-    #         return lcm(duration_denominators)
+    @property
+    def max_division(self):
+        if self._max_division is None:
+            self._max_division = self.parent_score_part.max_division
+        return self._max_division
+
+    @max_division.setter
+    def max_division(self, value):
+        if value is not None and not isinstance(value, int):
+            raise TypeError('max_division.value must be None or of type int not {}'.format(type(value)))
+
+        self._max_division = value
+
+    @property
+    def forbidden_divisions(self):
+        if self._forbidden_divisions is None:
+            self._forbidden_divisions = self.parent_score_part.forbidden_divisions
+
+        return self._forbidden_divisions
+
+    @forbidden_divisions.setter
+    def forbidden_divisions(self, value):
+        if value is not None:
+            for x in value:
+                if not isinstance(x, int):
+                    raise TypeError('forbidden_division must be of type int not{}'.format(type(value)))
+
+        self._forbidden_divisions = value
 
     def get_divisions(self):
         duration_denominators = [chord.quarter_duration.denominator for chord in
@@ -384,7 +439,7 @@ class TreePart(timewise.Part):
 
     def set_voice(self, voice_number):
         self.voices[voice_number] = TreePartVoice(voice_number)
-        self.voices[voice_number].part = self
+        self.voices[voice_number].parent_part = self
         # self.voices[voice_number].set_beats()
         return self.voices[voice_number]
 
@@ -423,7 +478,7 @@ class TreePart(timewise.Part):
         if not self._chords_notated:
             for index, voice in enumerate(self.voices.values()):
                 if index != 0:
-                    self.add_child(TreeBackup(quarter_duration=voice.part.up.quarter_duration))
+                    self.add_child(TreeBackup(quarter_duration=voice.parent_part.up.quarter_duration))
                 for chord in voice.chords:
                     for note in chord._notes:
                         self.add_child(note)

@@ -312,7 +312,7 @@ class TreeChord(XMLTree):
     def update_dot(self):
         _dot = 0
 
-        division = self.parent_voice.part.get_divisions()
+        division = self.parent_voice.parent_part.get_divisions()
         if self.quarter_duration.numerator % 3 == 0:
             _dot = 1
         elif self.quarter_duration == Fraction(1, 2) and (

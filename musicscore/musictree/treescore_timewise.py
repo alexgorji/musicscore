@@ -4,8 +4,8 @@ import musicscore.musicxml.elements.timewise as timewise
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
+from musicscore.musictree.treescorepart import TreeScorePart
 from musicscore.musicxml.elements.scoreheader import PartList
-from musicscore.musicxml.types.complextypes.partlist import ScorePart
 from musicscore.musicxml.types.complextypes.scorepart import PartName
 
 
@@ -40,28 +40,58 @@ class TreeScoreTimewise(timewise.Score):
         self._pre_quantized = False
         self._quantized = False
         self._post_quantized = False
+        self._max_division = None
+        self._forbidden_divisions = None
+
+    @property
+    def max_division(self):
+        return self._max_division
+
+    @max_division.setter
+    def max_division(self, value):
+        if value is not None and not isinstance(value, int):
+            raise TypeError('max_division.value must be None or of type int not {}'.format(type(value)))
+
+        self._max_division = value
+
+    @property
+    def forbidden_divisions(self):
+
+        return self._forbidden_divisions
+
+    @forbidden_divisions.setter
+    def forbidden_divisions(self, value):
+        if value is not None:
+            for x in value:
+                if not isinstance(x, int):
+                    raise TypeError('forbidden_division must be of type int not{}'.format(type(value)))
+
+        self._forbidden_divisions = value
 
     def _generate_score_part(self):
         id_ = 'p' + str(self._auto_part_number)
         self._auto_part_number += 1
-        return ScorePart(id=id_)
+        return TreeScorePart(id=id_)
 
     def get_score_parts(self):
         return self._part_list.get_children()
 
     def add_part(self, name='none', print_object='no'):
         new_score_part = self._generate_score_part()
+        new_score_part.parent_score = self
         part_name = new_score_part.add_child(PartName(name=name))
         part_name.print_object = print_object
         self._part_list.add_child(new_score_part)
         for measure in self.get_children_by_type(TreeMeasure):
-            p = measure.add_child(TreePart(id=new_score_part.id))
+            p = new_score_part.add_part()
+            measure.add_child(p)
 
     def add_measure(self, measure=None):
         new_measure = self._set_new_measure(measure)
 
         for score_part in self.get_score_parts():
-            new_measure.add_child(TreePart(id=score_part.id))
+            p = score_part.add_part()
+            new_measure.add_child(p)
         return self.add_child(new_measure)
 
     def _set_new_measure(self, measure):
