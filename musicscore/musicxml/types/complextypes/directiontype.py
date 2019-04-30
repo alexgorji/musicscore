@@ -1,6 +1,12 @@
 from musicscore.dtd.dtd import Choice, Element
-from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
+from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.complextypes.coda import ComplexTypeCoda
+from musicscore.musicxml.types.complextypes.complextype import ComplexType, EmptyPrintStyleAlignId
+from musicscore.musicxml.types.complextypes.formattedsymbolid import ComplexTypeFormattedSymbolId
 from musicscore.musicxml.types.complextypes.formattedtextid import ComplexTypeFormattedTextId
+from musicscore.musicxml.types.complextypes.segno import ComplexTypeSegno
+from musicscore.musicxml.types.complextypes.wedge import ComplexTypeWedge
 
 
 class Rehearsal(ComplexTypeFormattedTextId):
@@ -12,69 +18,225 @@ class Rehearsal(ComplexTypeFormattedTextId):
         super().__init__(tag='rehearsal', *args, **kwargs)
 
 
-class ComplexTypeDirectionType(ComplexType):
+class Segno(ComplexTypeSegno):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='segno', *args, **kwargs)
+
+
+class Coda(ComplexTypeCoda):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='coda', *args, **kwargs)
+
+
+class Words(ComplexTypeFormattedTextId):
+    """
+    The words element specifies a standard text direction. Left justification is assumed if not specified. Language is
+    Italian ("it") by default. Enclosure is none by default.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='words', *args, **kwargs)
+
+
+class Symbol(ComplexTypeFormattedSymbolId):
+    """
+    The symbol element specifies a musical symbol using a canonical SMuFL glyph name. It is used when an occasional
+    musical symbol is interspersed into text. It should not be used in place of semantic markup, such as metronome
+    marks that mix text and symbols. Left justification is assumed if not specified. Enclosure is none by default.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='words', *args, **kwargs)
+
+
+class Wedge(ComplexTypeWedge):
+    """"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='wedge', *args, **kwargs)
+
+
+class Dynamics(XMLElement):
+    """<xs:element name="dynamics" type="dynamics" maxOccurs="unbounded"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='dynamics', *args, **kwargs)
+        NotImplementedError()
+
+
+class Dashes(XMLElement):
+    """<xs:element name="dashes" type="dashes"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='dashes', *args, **kwargs)
+        NotImplementedError()
+
+
+class Bracket(XMLElement):
+    """<xs:element name="bracket" type="bracket"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='bracket', *args, **kwargs)
+        NotImplementedError()
+
+
+class Pedal(XMLElement):
+    """<xs:element name="pedal" type="pedal"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='pedal', *args, **kwargs)
+        NotImplementedError()
+
+
+class Metronome(XMLElement):
+    """"<xs:element name="metronome" type="metronome"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='metronome', *args, **kwargs)
+        NotImplementedError()
+
+
+class OctaveShift(XMLElement):
+    """"<xs:element name="octave-shift" type="octave-shift"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='octave-shift', *args, **kwargs)
+        NotImplementedError()
+
+
+class HarpPedals(XMLElement):
+    """"<xs:element name="harp-pedals" type="harp-pedals"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='harp-pedals', *args, **kwargs)
+        NotImplementedError()
+
+
+class Damp(EmptyPrintStyleAlignId):
+    """
+    The damp element specifies a harp damping mark.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='damp', *args, **kwargs)
+
+
+class DampAll(EmptyPrintStyleAlignId):
+    """
+    The damp-all element specifies a harp damping mark for all strings.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='damp-all', *args, **kwargs)
+
+
+class EyeGlasses(EmptyPrintStyleAlignId):
+    """
+    The eyeglasses element specifies the eyeglasses symbol, common in commercial music.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='eyeglasses', *args, **kwargs)
+
+
+class StringMute(XMLElement):
+    """"<xs:element name="string-mute" type="string-mute"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='string-mute', *args, **kwargs)
+        NotImplementedError()
+
+
+class Scordatura(XMLElement):
+    """"<xs:element name="string-mute" type="string-mute"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='scordatura', *args, **kwargs)
+        NotImplementedError()
+
+
+class Image(XMLElement):
+    """"<xs:element name="image" type="image"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='image', *args, **kwargs)
+        NotImplementedError()
+
+
+class PrincipalVoice(XMLElement):
+    """"<xs:element name="principal-voice" type="principal-voice"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='principal-voice', *args, **kwargs)
+        NotImplementedError()
+
+
+class Percussion(XMLElement):
+    """"<xs:element name="percussion" type="percussion" maxOccurs="unbounded"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='percussion', *args, **kwargs)
+        NotImplementedError()
+
+
+class StaffDivide(XMLElement):
+    """"<xs:element name="staff-divide" type="staff-divide"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='staff-divide', *args, **kwargs)
+        NotImplementedError()
+
+
+class AccordionRegistration(XMLElement):
+    """"<xs:element name="accordion-registration" type="accordion-registration"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='accordion-registration', *args, **kwargs)
+        NotImplementedError()
+
+
+class OtherDirection(XMLElement):
+    """"<xs:element name="other-direction" type="other-direction"/>"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='other-direction', *args, **kwargs)
+        NotImplementedError()
+
+
+class ComplexTypeDirectionType(ComplexType, OptionalUniqueId):
     """Textual direction types may have more than 1 component due to multiple fonts. The dynamics element may also be
     used in the notations element. Attribute groups related to print suggestions apply to the individual direction-type,
     not to the overall direction."""
 
     _DTD = Choice(
         Element(Rehearsal, max_occurrence=None),
-        Element(Segno, max_occurrence=None)
+        Element(Segno, max_occurrence=None),
+        Element(Coda, max_occurrence=None),
+        Choice(
+            Element(Words),
+            Element(Symbol),
+            max_occurrence=None
+        ),
+        Element(Wedge),
+        Element(Dynamics, max_occurrence=None),
+        Element(Dashes),
+        Element(Bracket),
+        Element(Pedal),
+        Element(Metronome),
+        Element(OctaveShift),
+        Element(HarpPedals),
+        Element(Pedal),
+        Element(DampAll),
+        Element(EyeGlasses),
+        Element(StringMute),
+        Element(Scordatura),
+        Element(Image),
+        Element(PrincipalVoice),
+        Element(Percussion, max_occurrence=None),
+        Element(AccordionRegistration),
+        Element(StaffDivide),
+        Element(OtherDirection)
     )
 
     def __init__(self, tag, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-
-
-'''
-	<xs:complexType name="direction-type">
-		<xs:choice>
-			<xs:element name="segno" type="segno" maxOccurs="unbounded"/>
-			<xs:element name="coda" type="coda" maxOccurs="unbounded"/>
-			<xs:choice maxOccurs="unbounded">
-				<xs:element name="words" type="formatted-text-id">
-					<xs:annotation>
-						<xs:documentation>The words element specifies a standard text direction. Left justification is assumed if not specified. Language is Italian ("it") by default. Enclosure is none by default.</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element name="symbol" type="formatted-symbol-id">
-					<xs:annotation>
-						<xs:documentation>The symbol element specifies a musical symbol using a canonical SMuFL glyph name. It is used when an occasional musical symbol is interspersed into text. It should not be used in place of semantic markup, such as metronome marks that mix text and symbols. Left justification is assumed if not specified. Enclosure is none by default.</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-			</xs:choice>
-			<xs:element name="wedge" type="wedge"/>
-			<xs:element name="dynamics" type="dynamics" maxOccurs="unbounded"/>
-			<xs:element name="dashes" type="dashes"/>
-			<xs:element name="bracket" type="bracket"/>
-			<xs:element name="pedal" type="pedal"/>
-			<xs:element name="metronome" type="metronome"/>
-			<xs:element name="octave-shift" type="octave-shift"/>
-			<xs:element name="harp-pedals" type="harp-pedals"/>
-			<xs:element name="damp" type="empty-print-style-align-id">
-				<xs:annotation>
-					<xs:documentation>The damp element specifies a harp damping mark.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="damp-all" type="empty-print-style-align-id">
-				<xs:annotation>
-					<xs:documentation>The damp-all element specifies a harp damping mark for all strings.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="eyeglasses" type="empty-print-style-align-id">
-				<xs:annotation>
-					<xs:documentation>The eyeglasses element specifies the eyeglasses symbol, common in commercial music.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="string-mute" type="string-mute"/>
-			<xs:element name="scordatura" type="scordatura"/>
-			<xs:element name="image" type="image"/>
-			<xs:element name="principal-voice" type="principal-voice"/>
-			<xs:element name="percussion" type="percussion" maxOccurs="unbounded"/>
-			<xs:element name="accordion-registration" type="accordion-registration"/>
-			<xs:element name="staff-divide" type="staff-divide"/>
-			<xs:element name="other-direction" type="other-direction"/>
-		</xs:choice>
-		<xs:attributeGroup ref="optional-unique-id"/>
-	</xs:complexType>
-'''

@@ -480,7 +480,7 @@ class TypeRotationDegrees(Decimal):
         self._value = v
 
 
-class SmulfGlyphName(Token):
+class TypeSmulfGlyphName(Token):
     """
     The smufl-glyph-name type is used for attributes that reference a specific Standard Music Font Layout (SMuFL)
     character. The value is a SMuFL canonical glyph name, not a code point. For instance, the value for a standard piano
@@ -493,7 +493,31 @@ class SmulfGlyphName(Token):
         raise NotImplementedError()
 
 
-class TypeSmulfSegnoGlyphName(SmulfGlyphName):
+class TypeSmuflCodaGlyphNameType(TypeSmulfGlyphName):
+    """
+    The smufl-coda-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) coda character.
+    The value is a SMuFL canonical glyph name that starts with coda.
+    """
+
+    # pattern = r"coda\c*"
+    # p = re.compile(pattern)
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+        NotImplementedError()
+
+    # @SimpleType.value.setter
+    # def value(self, v):
+    #     Token(v)
+    #     m = self.p.match(v)
+    #     if m is None:
+    #         raise ValueError(
+    #             '{}.value {} must match the following pattern: {}'.format(self.__class__.__name__,
+    #                                                                       v, self.pattern))
+    #     self._value = v
+
+
+class TypeTypeSmulfSegnoGlyphName(TypeSmulfGlyphName):
     """
     The smufl-segno-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) segno character.
     The value is a SMuFL canonical glyph name that starts with segno.
@@ -517,7 +541,7 @@ class TypeSmulfSegnoGlyphName(SmulfGlyphName):
     #     self._value = v
 
 
-class SmulfAccidentalGlyphName(SmulfGlyphName):
+class TypeSmulfAccidentalGlyphName(TypeSmulfGlyphName):
     """
     The smufl-accidental-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) accidental
     character. The value is a SMuFL canonical glyph name that starts with acc.
@@ -531,7 +555,7 @@ class SmulfAccidentalGlyphName(SmulfGlyphName):
         raise NotImplementedError()
 
 
-class SmulfLyricsGlyphName(SmulfGlyphName):
+class TypeSmulfLyricsGlyphName(TypeSmulfGlyphName):
     """
     The smufl-lyrics-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) lyrics elision
     character. The value is a SMuFL canonical glyph name that starts with lyrics.
@@ -1103,8 +1127,20 @@ class TypeStaffLine(PositiveInteger):
 
 '''
 
+
 # ///////////////
 # Simple types derived from direction.mod elements
+class TypeWedgeType(SimpleType):
+    """
+    The wedge type is crescendo for the start of a wedge that is closed at the left side, diminuendo for the start of
+    a wedge that is closed on the right side, and stop for the end of a wedge. The continue type is used for formatting
+    wedges over a system break, or for other situations where a single wedge is divided into multiple segments.
+    """
+    permitted = ('crescendo', 'diminuendo', 'stop', 'continue')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
 
 '''
 <!-- Simple types derived from direction.mod elements -->
@@ -1539,17 +1575,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="wedge-type">
-		<xs:annotation>
-			<xs:documentation>The wedge type is crescendo for the start of a wedge that is closed at the left side, diminuendo for the start of a wedge that is closed on the right side, and stop for the end of a wedge. The continue type is used for formatting wedges over a system break, or for other situations where a single wedge is divided into multiple segments.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="crescendo"/>
-			<xs:enumeration value="diminuendo"/>
-			<xs:enumeration value="stop"/>
-			<xs:enumeration value="continue"/>
-		</xs:restriction>
-	</xs:simpleType>
+
 
 	<xs:simpleType name="wood">
 		<xs:annotation>

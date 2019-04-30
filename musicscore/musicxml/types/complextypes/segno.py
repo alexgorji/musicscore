@@ -1,10 +1,10 @@
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.printstyle import PrintStyleAlign
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
-from musicscore.musicxml.types.simple_type import TypeSmulfSegnoGlyphName
+from musicscore.musicxml.types.simple_type import TypeTypeSmulfSegnoGlyphName
 
 
-class Smulf(TypeSmulfSegnoGlyphName):
+class Smulf(TypeTypeSmulfSegnoGlyphName):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 

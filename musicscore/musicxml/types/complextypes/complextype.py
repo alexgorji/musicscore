@@ -1,4 +1,5 @@
-from musicscore.musicxml.attributes.printstyle import PrintStyle
+from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
+from musicscore.musicxml.attributes.printstyle import PrintStyle, PrintStyleAlign
 from musicscore.musicxml.elements.xml_element import XMLElement
 
 
@@ -36,3 +37,10 @@ class EmptyPlacement(Empty, PrintStyle):
         super().__init__(tag=tag, *args, **kwargs)
 
 
+class EmptyPrintStyleAlignId(Empty, PrintStyleAlign, OptionalUniqueId):
+    """
+    The empty-print-style-align-id type represents an empty element with print-style-align and optional-unique-id 
+    attribute groups."""
+
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
