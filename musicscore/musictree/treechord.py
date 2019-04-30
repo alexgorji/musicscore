@@ -359,12 +359,14 @@ class TreeChord(XMLTree):
         except IndexError:
             notations = self.add_child(Notations())
 
-        try:
-            dynamics = notations.get_children_by_type(Dynamics)[0]
-        except IndexError:
-            dynamics = notations.add_child(Dynamics())
+        # try:
+        #     dynamics = notations.get_children_by_type(Dynamics)[0]
+        # except IndexError:
+        dynamics = notations.add_child(Dynamics())
 
         dynamics.add_child(dynamic_classes[index]())
+
+        return dynamics
 
     def __deepcopy__(self, memodict={}):
         new_chord = TreeChord(quarter_duration=self.quarter_duration)
@@ -375,6 +377,7 @@ class TreeChord(XMLTree):
 
     def remove_from_score(self):
         if 'stop' in self.tie_types:
+            self.remove_tie('stop')
             previous_chord = self.previous
             if not previous_chord:
                 previous_beat = self.parent_beat.previous
@@ -386,6 +389,7 @@ class TreeChord(XMLTree):
             previous_chord.remove_tie('start')
 
         elif 'start' in self.tie_types:
+            self.remove_tie('start')
             next_chord = self.next
             if not next_chord:
                 next_beat = self.parent_beat.next
@@ -398,6 +402,8 @@ class TreeChord(XMLTree):
 
             for l in self.get_children_by_type(Lyric):
                 next_chord.add_child(l)
+            for n in self.get_children_by_type(Notations):
+                next_chord.add_child(n)
 
         self.parent_beat.chords.remove(self)
         self.parent_voice.chords.remove(self)

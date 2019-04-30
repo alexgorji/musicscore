@@ -54,3 +54,27 @@ class Test(TestCase):
 
         with self.assertRaises(ValueError):
             chord.add_dynamics('mmf')
+
+    def test_3(self):
+        chord = TreeChord()
+        d = chord.add_dynamics('pp')
+        d.relative_x = 10
+        d.valign = 'middle'
+        d.halign = 'center'
+        note = chord._notes[0]
+        note.add_child(Duration(1))
+
+        result = '''<note>
+  <pitch>
+    <step>B</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>1</duration>
+  <notations>
+    <dynamics relative-x="10" halign="center" valign="middle" placement="below">
+      <pp/>
+    </dynamics>
+  </notations>
+</note>
+'''
+        self.assertEqual(note.to_string(), result)

@@ -74,7 +74,10 @@ class Position(DefaultX, DefaultY, RelativeX, RelativeY):
     tenths of a staff resized by the staff-size element.
     """
 
-    def __init__(self, default_x=None, default_y=None, relative_x=None, relative_y=None, *args, **kwargs):
-        super().__init__(default_x=default_x, default_y=default_y, relative_x=relative_x,
-                         relative_y=relative_y,
-                         *args, **kwargs)
+    # def __init__(self, default_x=None, default_y=None, relative_x=None, relative_y=None, *args, **kwargs):
+    #     super().__init__(default_x=default_x, default_y=default_y, relative_x=relative_x,
+    #                      relative_y=relative_y,
+    #                      *args, **kwargs)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

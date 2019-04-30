@@ -1,3 +1,4 @@
+import itertools
 import os
 import random
 from unittest import TestCase
@@ -7,9 +8,10 @@ from quicktions import Fraction
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
-from musicscore.musicxml.elements.note import Lyric, Tie
+from musicscore.musicxml.elements.note import Lyric, Tie, Notations
 from musicscore.musicxml.score_templates.xml_test_score import TestScore
 from musicscore.musicxml.types.complextypes.lyric import Text
+from musicscore.musicxml.types.complextypes.notations import Dynamics
 
 path = os.path.abspath(__file__).split('.')[0]
 
@@ -71,39 +73,44 @@ class Test(TestCase):
             self.score.write(path=result_path)
         TestScore().assert_template(result_path=result_path)
 
-    # def test_3(self):
-    #
-    #     random.seed(3)
-    #     durations = []
-    #     while sum(durations) <= 16:
-    #         duration = random.randrange(0, 2) + (random.random() / 2.)
-    #         durations.append(Fraction(duration).limit_denominator(100))
-    #
-    #     def add_to_score(part=1):
-    #         sf = SimpleFormat(durations=durations)
-    #         for index, chord in enumerate(sf.chords):
-    #             chord.add_lyric(index + 1)
-    #         v = sf.to_voice(1)
-    #         v.add_to_score(self.score, 1, part)
-    #
-    #     add_to_score(1)
-    #     add_to_score(2)
-    #     add_to_score(3)
-    #     add_to_score(4)
-    #     add_to_score(5)
-    #     add_to_score(6)
-    #     add_to_score(7)
-    #
-    #     self.score.get_score_parts()[0].max_division = 8
-    #     self.score.get_score_parts()[1].max_division = 7
-    #     self.score.get_score_parts()[2].max_division = 6
-    #     self.score.get_score_parts()[3].max_division = 5
-    #     self.score.get_score_parts()[4].max_division = 4
-    #     self.score.get_score_parts()[5].max_division = 3
-    #     self.score.get_score_parts()[6].max_division = 2
-    #     result_path = path + '_test_3'
-    #
-    #     self.score.write(path=result_path)
+    def test_3(self):
+
+        random.seed(3)
+        durations = []
+        while sum(durations) <= 16:
+            duration = random.randrange(0, 2) + (random.random() / 2.)
+            durations.append(Fraction(duration).limit_denominator(100))
+
+        def add_to_score(part=1):
+            sf = SimpleFormat(durations=durations)
+            dynamics = itertools.cycle(['pppp', 'ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff'])
+
+            for index, chord in enumerate(sf.chords):
+                chord.add_lyric(index + 1)
+                d = chord.add_dynamics(dynamics.__next__())
+                d.relative_y = -20
+                d.halign = 'center'
+            v = sf.to_voice(1)
+            v.add_to_score(self.score, 1, part)
+
+        add_to_score(1)
+        add_to_score(2)
+        add_to_score(3)
+        add_to_score(4)
+        add_to_score(5)
+        add_to_score(6)
+        add_to_score(7)
+
+        self.score.get_score_parts()[0].max_division = 8
+        self.score.get_score_parts()[1].max_division = 7
+        self.score.get_score_parts()[2].max_division = 6
+        self.score.get_score_parts()[3].max_division = 5
+        self.score.get_score_parts()[4].max_division = 4
+        self.score.get_score_parts()[5].max_division = 3
+        self.score.get_score_parts()[6].max_division = 2
+        result_path = path + '_test_3'
+
+        self.score.write(path=result_path)
 
     # def test_4(self):
     #

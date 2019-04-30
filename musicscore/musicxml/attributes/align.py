@@ -18,7 +18,7 @@ class Halign(AttributeAbstract):
 
     def __init__(self, halign=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('halign', halign, 'LeftCenterRight')
+        self.generate_attribute('halign', halign, 'TypeLeftCenterRight')
 
 
 class Valign(AttributeAbstract):

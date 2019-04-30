@@ -236,6 +236,16 @@ class TypeFontStyle(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeLeftCenterRight(SimpleType):
+    """
+    The left-center-right type is used to define horizontal alignment and text justification.
+    """
+    permitted = ('left', 'center', 'right')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 class TypeLineType(SimpleType):
     """
     The line-type type distinguishes between solid, dashed, dotted, and wavy lines.
@@ -591,17 +601,6 @@ class TypeYesNo(SimpleType):
 			<xs:enumeration value="half-curve"/>
 			<xs:enumeration value="curlew"/>
 			<xs:enumeration value=""/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="left-center-right">
-		<xs:annotation>
-			<xs:documentation>The left-center-right type is used to define horizontal alignment and text justification.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="left"/>
-			<xs:enumeration value="center"/>
-			<xs:enumeration value="right"/>
 		</xs:restriction>
 	</xs:simpleType>
 
