@@ -114,11 +114,11 @@ class ComplexTypeBarStyleColor(ComplexType, TypeBarStyle, Color):
 class BarStyle(ComplexTypeBarStyleColor):
     """"""
 
-    def __init__(self, value=None, *args, **kwargs):
-        super().__init__(tag='bar-style', value=value, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag='bar-style', *args, **kwargs)
 
 
-class Barline(ComplexType, BarlineAttributes):
+class ComplexTypeBarline(ComplexType, BarlineAttributes):
     """
     If a barline is other than a normal single barline, it should be represented by a barline type that describes it.
     This includes information about repeats and multiple endings, as well as line style. Barline data is on the same

@@ -22,7 +22,7 @@ class Test(TestCase):
   </pitch>
   <duration>1</duration>
   <notations>
-    <dynamics>
+    <dynamics placement="below">
       <ff/>
     </dynamics>
   </notations>
@@ -43,8 +43,10 @@ class Test(TestCase):
   </pitch>
   <duration>1</duration>
   <notations>
-    <dynamics>
+    <dynamics placement="below">
       <fp/>
+    </dynamics>
+    <dynamics placement="below">
       <pp/>
     </dynamics>
   </notations>

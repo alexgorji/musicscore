@@ -1,3 +1,4 @@
+from musicscore.musicxml.elements.barline import Barline
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.dtd.dtd import Sequence, Choice, Element
 from musicscore.musicxml.elements.note import Note
@@ -37,13 +38,6 @@ class Sound(XMLElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag='sound', *args, **kwargs)
-
-
-class Barline(XMLElement):
-    """"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='barline', *args, **kwargs)
 
 
 class Link(XMLElement):

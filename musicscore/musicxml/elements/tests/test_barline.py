@@ -1,5 +1,6 @@
-from musicscore.musicxml.elements.barline import Barline, BarStyle
 from unittest import TestCase
+# from musicscore.musicxml.elements.barline import Barline, BarStyle
+from musicscore.musicxml.elements.barline import Barline, BarStyle
 
 
 class TestBarline(TestCase):

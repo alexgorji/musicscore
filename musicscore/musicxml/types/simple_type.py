@@ -132,6 +132,80 @@ class IDREF(String):
 
 
 # ///////////////
+# Simple types derived from barline.mod elements
+
+class TypeBackwardForward(SimpleType):
+    """The backward-forward type is used to specify repeat directions. The start of the repeat has a forward direction
+    while the end of the repeat has a backward direction.
+    """
+    permitted = ["backward", "forward"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeBarStyle(SimpleType):
+    """The bar-style type represents barline style information. Choices are regular, dotted, dashed, heavy, light-light,
+    light-heavy, heavy-light, heavy-heavy, tick (a short stroke through the top line), short (a partial barline between
+    the 2nd and 4th lines), and none.
+    """
+    permitted = ["regular", "dotted", "dashed", "heavy", "light-light", "light-heavy", "heavy-light", "heavy-heavy",
+                 "tick", "short", "none"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeEndingNumber(Token):
+    """
+    The ending-number type is used to specify either a comma-separated list of positive integers without leading zeros,
+    or a string of zero or more spaces. It is used for the number attribute of the ending element. The zero or more
+    spaces version is used when software knows that an ending is present, but cannot determine the type of the ending
+    """
+    pattern = r'([ ]*)|([1-9][0-9]*(, ?[1-9][0-9]*)*)'
+    p = re.compile(pattern)
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeRightLeftMiddle(SimpleType):
+    """
+    The right-left-middle type is used to specify barline location.
+    """
+    permitted = ["right", "left", "middle"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeStopStartDiscontinue(SimpleType):
+    """
+    The start-stop-discontinue type is used to specify ending types. Typically, the start type is associated with the
+    left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline
+    of the last measure in an ending. Stop is used when the ending mark concludes with a downward jog, as is typical for
+    first endings. Discontinue is used when there is no downward jog, as is typical for second endings that do not
+    conclude a pieceThe right-left-middle type is used to specify barline location.
+    """
+    permitted = ["start", "stop", "discontinue"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeWinged(SimpleType):
+    """
+    The winged attribute indicates whether the repeat has winged extensions that appear above and below the barline.
+    The straight and curved values represent single wings, while the double-straight and double-curved values represent
+    double wings. The none value indicates no wings and is the default.
+    """
+    permitted = ["none", "straight", "curved", "double-straight", "double-curved"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+# ///////////////
 # Simple types derived from common.mod entities and elements
 
 class TypeAboveBelow(SimpleType):
@@ -241,6 +315,16 @@ class TypeLeftCenterRight(SimpleType):
     The left-center-right type is used to define horizontal alignment and text justification.
     """
     permitted = ('left', 'center', 'right')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeLineLength(SimpleType):
+    """
+    The line-length type distinguishes between different line lengths for doit, falloff, plop, and scoop articulations.
+    """
+    permitted = ('short', 'medium' 'long')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -409,6 +493,30 @@ class SmulfGlyphName(Token):
         raise NotImplementedError()
 
 
+class TypeSmulfSegnoGlyphName(SmulfGlyphName):
+    """
+    The smufl-segno-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) segno character.
+    The value is a SMuFL canonical glyph name that starts with segno.
+    """
+
+    # pattern = r'^segno\c*'
+    # p = re.compile(pattern)
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+        NotImplementedError()
+
+    # @SimpleType.value.setter
+    # def value(self, v):
+    #     Token(v)
+    #     m = self.p.match(v)
+    #     if m is None:
+    #         raise ValueError(
+    #             '{}.value {} must match the following pattern: {}'.format(self.__class__.__name__,
+    #                                                                       v, self.pattern))
+    #     self._value = v
+
+
 class SmulfAccidentalGlyphName(SmulfGlyphName):
     """
     The smufl-accidental-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) accidental
@@ -549,6 +657,18 @@ class TypeTimeOnly(Token):
         self._value = v
 
 
+class TypeUpDown(SimpleType):
+    """
+    The up-down type is used for the direction of arrows and other pointed symbols like vertical accents, indicating
+    which way the tip is pointing.
+    """
+
+    permitted = ["up", "down"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 class TypeValign(SimpleType):
     """
     The valign type is used to indicate vertical alignment to the top, middle, bottom, or baseline of the text.
@@ -611,17 +731,6 @@ class TypeYesNo(SimpleType):
 		<xs:restriction base="xs:token">
 			<xs:enumeration value="left"/>
 			<xs:enumeration value="right"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="line-length">
-		<xs:annotation>
-			<xs:documentation>The line-length type distinguishes between different line lengths for doit, falloff, plop, and scoop articulations.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="short"/>
-			<xs:enumeration value="medium"/>
-			<xs:enumeration value="long"/>
 		</xs:restriction>
 	</xs:simpleType>
 
@@ -815,16 +924,6 @@ class TypeYesNo(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="up-down">
-		<xs:annotation>
-			<xs:documentation>The up-down type is used for the direction of arrows and other pointed symbols like vertical accents, indicating which way the tip is pointing.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="up"/>
-			<xs:enumeration value="down"/>
-		</xs:restriction>
-	</xs:simpleType>
-
 	<xs:simpleType name="upright-inverted">
 		<xs:annotation>
 			<xs:documentation>The upright-inverted type describes the appearance of a fermata element. The value is upright if not specified.</xs:documentation>
@@ -1002,71 +1101,6 @@ class TypeStaffLine(PositiveInteger):
 		</xs:restriction>
 	</xs:simpleType>
 
-'''
-
-
-# ///////////////
-# Simple types derived from barline.mod elements
-class TypeBarStyle(SimpleType):
-    permitted = ('regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy', 'heavy-light', 'heavy-heavy',
-                 'tick', 'short' 'none')
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(value=value, *args, **kwargs)
-
-
-class TypeRightLeftMiddle(SimpleType):
-    permitted = ('right', 'left', 'middle')
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(value=value, *args, **kwargs)
-
-
-'''
-	<!-- Simple types derived from barline.mod elements -->
-
-  <xs:simpleType name="backward-forward">
-		<xs:annotation>
-			<xs:documentation>The backward-forward type is used to specify repeat directions. The start of the repeat has a forward direction while the end of the repeat has a backward direction.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="backward"/>
-			<xs:enumeration value="forward"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="ending-number">
-		<xs:annotation>
-			<xs:documentation>The ending-number type is used to specify either a comma-separated list of positive integers without leading zeros, or a string of zero or more spaces. It is used for the number attribute of the ending element. The zero or more spaces version is used when software knows that an ending is present, but cannot determine the type of the ending.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:pattern value="([ ]*)|([1-9][0-9]*(, ?[1-9][0-9]*)*)"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="start-stop-discontinue">
-		<xs:annotation>
-			<xs:documentation>The start-stop-discontinue type is used to specify ending types. Typically, the start type is associated with the left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline of the last measure in an ending. Stop is used when the ending mark concludes with a downward jog, as is typical for first endings. Discontinue is used when there is no downward jog, as is typical for second endings that do not conclude a piece.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="start"/>
-			<xs:enumeration value="stop"/>
-			<xs:enumeration value="discontinue"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="winged">
-		<xs:annotation>
-			<xs:documentation>The winged attribute indicates whether the repeat has winged extensions that appear above and below the barline. The straight and curved values represent single wings, while the double-straight and double-curved values represent double wings. The none value indicates no wings and is the default.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="none"/>
-			<xs:enumeration value="straight"/>
-			<xs:enumeration value="curved"/>
-			<xs:enumeration value="double-straight"/>
-			<xs:enumeration value="double-curved"/>
-		</xs:restriction>
-	</xs:simpleType>
 '''
 
 # ///////////////
@@ -1637,6 +1671,26 @@ class TypeBeamValue(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeBreathMarkValue(SimpleType):
+    """
+    The breath-mark-value type represents the symbol used for a breath mark.
+    """
+    permitted = ["", "comma", "tick", "upbow", "salzedo"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeCaesuraValue(SimpleType):
+    """
+    The caesura-value type represents the shape of the caesura sign.
+    """
+    permitted = ["normal", "thick", "short", "curved", "single", ""]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 class TypeFan(SimpleType):
     """
     The fan type represents the type of beam fanning present on a note, used to represent accelerandos and
@@ -1756,32 +1810,8 @@ class TypeSyllabic(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="breath-mark-value">
-		<xs:annotation>
-			<xs:documentation>The breath-mark-value type represents the symbol used for a breath mark.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value=""/>
-			<xs:enumeration value="comma"/>
-			<xs:enumeration value="tick"/>
-			<xs:enumeration value="upbow"/>
-			<xs:enumeration value="salzedo"/>
-		</xs:restriction>
-	</xs:simpleType>
 
-	<xs:simpleType name="caesura-value">
-		<xs:annotation>
-			<xs:documentation>The caesura-value type represents the shape of the caesura sign.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="normal"/>
-			<xs:enumeration value="thick"/>
-			<xs:enumeration value="short"/>
-			<xs:enumeration value="curved"/>
-			<xs:enumeration value="single"/>
-			<xs:enumeration value=""/>
-		</xs:restriction>
-	</xs:simpleType>
+
 	
 	<xs:simpleType name="circular-arrow">
 		<xs:annotation>
