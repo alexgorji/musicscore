@@ -71,39 +71,39 @@ class Test(TestCase):
             self.score.write(path=result_path)
         TestScore().assert_template(result_path=result_path)
 
-    def test_3(self):
-
-        random.seed(1)
-        durations = []
-        while sum(durations) <= 16:
-            duration = random.randrange(0, 2) + (random.random() / 2.)
-            durations.append(Fraction(duration).limit_denominator(100))
-
-        def add_to_score(part=1):
-            sf = SimpleFormat(durations=durations)
-            for index, chord in enumerate(sf.chords):
-                chord.add_lyric(index + 1)
-            v = sf.to_voice(1)
-            v.add_to_score(self.score, 1, part)
-
-        add_to_score(1)
-        add_to_score(2)
-        add_to_score(3)
-        add_to_score(4)
-        add_to_score(5)
-        add_to_score(6)
-        add_to_score(7)
-
-        self.score.get_score_parts()[0].max_division = 8
-        self.score.get_score_parts()[1].max_division = 7
-        self.score.get_score_parts()[2].max_division = 6
-        self.score.get_score_parts()[3].max_division = 5
-        self.score.get_score_parts()[4].max_division = 4
-        self.score.get_score_parts()[5].max_division = 3
-        self.score.get_score_parts()[6].max_division = 2
-        result_path = path + '_test_3'
-
-        self.score.write(path=result_path)
+    # def test_3(self):
+    #
+    #     random.seed(3)
+    #     durations = []
+    #     while sum(durations) <= 16:
+    #         duration = random.randrange(0, 2) + (random.random() / 2.)
+    #         durations.append(Fraction(duration).limit_denominator(100))
+    #
+    #     def add_to_score(part=1):
+    #         sf = SimpleFormat(durations=durations)
+    #         for index, chord in enumerate(sf.chords):
+    #             chord.add_lyric(index + 1)
+    #         v = sf.to_voice(1)
+    #         v.add_to_score(self.score, 1, part)
+    #
+    #     add_to_score(1)
+    #     add_to_score(2)
+    #     add_to_score(3)
+    #     add_to_score(4)
+    #     add_to_score(5)
+    #     add_to_score(6)
+    #     add_to_score(7)
+    #
+    #     self.score.get_score_parts()[0].max_division = 8
+    #     self.score.get_score_parts()[1].max_division = 7
+    #     self.score.get_score_parts()[2].max_division = 6
+    #     self.score.get_score_parts()[3].max_division = 5
+    #     self.score.get_score_parts()[4].max_division = 4
+    #     self.score.get_score_parts()[5].max_division = 3
+    #     self.score.get_score_parts()[6].max_division = 2
+    #     result_path = path + '_test_3'
+    #
+    #     self.score.write(path=result_path)
 
     # def test_4(self):
     #
