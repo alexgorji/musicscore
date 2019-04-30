@@ -13,6 +13,7 @@ class Tree(object):
         super().__init__(*args, **kwargs)
         self._children = []
         self._up = None
+        self._leaves = []
 
     @property
     def up(self):
@@ -74,7 +75,6 @@ class Tree(object):
             new_child = parent._children.pop(-1)
             parent._children.insert(insert_index, new_child)
 
-
     def clear_children(self):
 
         self._children.clear()
@@ -129,16 +129,6 @@ class Tree(object):
                     output.append(child)
 
         return output
-
-    # def get_leaves(self):
-    #     output = []
-    #     for child in self.get_children():
-    #         if not child.is_leaf:
-    #             output.append(child.get_leaves())
-    #         else:
-    #             output.append(child)
-    #
-    #     return output
 
     def traverse(self):
         yield self
@@ -212,9 +202,6 @@ class Tree(object):
             new_node._up = self._up
             self.up.get_children()[index] = new_node
             self._up = None
-
-    def get_flatten_leaves(self):
-        return [node for node in self.traverse() if node.is_leaf]
 
     def traverse_leaves(self):
         # for node in self.traverse():

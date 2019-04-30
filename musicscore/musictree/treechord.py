@@ -214,9 +214,6 @@ class TreeChord(XMLTree):
         except IndexError:
             notations = self.add_child(Notations())
 
-        # print('add_tie types')
-        # print(types)
-
         if value == 'start' and 'start' not in self.tie_types:
             self.add_child(Tie('start'))
             notations.add_child(Tied('start'))
