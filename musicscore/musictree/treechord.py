@@ -363,6 +363,7 @@ class TreeChord(XMLTree):
                     previous_voice = self.parent_voice.previous
                     previous_chord = previous_voice.chords[-1]
             previous_chord.remove_tie('start')
+
         elif 'start' in self.tie_types:
             next_chord = self.next
             if not next_chord:
@@ -373,6 +374,9 @@ class TreeChord(XMLTree):
                     next_voice = self.parent_voice.next
                     next_chord = next_voice.chords[0]
             next_chord.remove_tie('stop')
+
+            for l in self.get_children_by_type(Lyric):
+                next_chord.add_child(l)
 
         self.parent_beat.chords.remove(self)
         self.parent_voice.chords.remove(self)

@@ -78,6 +78,9 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <lyric number="1">
+          <text>4</text>
+        </lyric>
       </note>
       <note>
         <grace/>
@@ -149,6 +152,9 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
+        <lyric number="1">
+          <text>8</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -202,6 +208,9 @@
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">begin</beam>
+        <lyric number="1">
+          <text>11</text>
+        </lyric>
       </note>
       <note>
         <grace/>
@@ -243,6 +252,9 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <lyric number="1">
+          <text>14</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -293,10 +305,11 @@
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <tie type="start"/>
         <voice>1</voice>
         <type>quarter</type>
-        <notations/>
+        <lyric number="1">
+          <text>17</text>
+        </lyric>
       </note>
     </part>
   </measure>

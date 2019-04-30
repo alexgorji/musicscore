@@ -207,10 +207,24 @@ class TreeScoreTimewise(timewise.Score):
     def finish(self):
         if not self._finished:
             self.update_measures()
-            for measure in self.get_children_by_type(TreeMeasure):
-                for part in measure.get_children_by_type(TreePart):
-                    part.finish()
+            self.fill_with_rest()
+            self.add_beats()
+            self.quantize()
+            self.split_not_notatable()
+            self.update_tuplets()
+            self.substitute_sextoles()
+            self.update_types()
+            self.update_dots()
+            self.group_beams()
+            self.chord_to_notes()
+            self.update_divisions()
+            self.update_accidentals(mode='normal')
+            self.update_durations()
             self.close_dtd()
+            # for measure in self.get_children_by_type(TreeMeasure):
+            #     for part in measure.get_children_by_type(TreePart):
+            #         part.finish()
+            # self.close_dtd()
             self._finished = True
 
     def to_string(self):

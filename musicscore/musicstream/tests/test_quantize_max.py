@@ -7,7 +7,9 @@ from quicktions import Fraction
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musicxml.elements.note import Lyric, Tie
 from musicscore.musicxml.score_templates.xml_test_score import TestScore
+from musicscore.musicxml.types.complextypes.lyric import Text
 
 path = os.path.abspath(__file__).split('.')[0]
 
@@ -120,8 +122,38 @@ class Test(TestCase):
 
         add_to_score(1)
 
+        def print_last_chord_ties():
+            chord = self.score.get_measure(3).get_part(1).get_voice(1).get_beats()[-1].chords[-1]
+            try:
+                print(chord.get_children_by_type(Lyric)[0].get_children_by_type(Text)[0].value)
+            except:
+                pass
+            print(chord.tie_types)
+
         self.score.get_score_parts()[0].max_division = 2
+        # self.score.fill_with_rest()
+        # self.score.add_beats()
+        # print_last_chord_ties()
+        # self.score.quantize()
+        # print_last_chord_ties()
+        # self.score.split_not_notatable()
+        # print_last_chord_ties()
+        # self.score.update_tuplets()
+        # self.score.substitute_sextoles()
+        # self.score.update_types()
+        # self.score.update_dots()
+        # self.score.group_beams()
+        # print_last_chord_ties()
+        # self.score.chord_to_notes()
+        # print(self.score.get_measure(3).get_part(1).notes[-1].get_children())
+        # self.score.update_divisions()
+        #
+        # self.score.update_accidentals(mode='normal')
+        #
+        # self.score.update_durations()
+        # print(self.score.get_measure(3).get_part(1).notes[-1].get_children())
+        # self.score.close_dtd()
+        # print(self.score.get_measure(3).get_part(1).notes[-1].get_children())
 
         result_path = path + '_test_4'
-
         self.score.write(path=result_path)

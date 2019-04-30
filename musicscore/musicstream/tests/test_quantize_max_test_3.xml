@@ -1230,6 +1230,9 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <lyric number="1">
+          <text>4</text>
+        </lyric>
       </note>
       <note>
         <grace/>
@@ -2625,6 +2628,9 @@
         <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
+        <lyric number="1">
+          <text>11</text>
+        </lyric>
       </note>
       <note>
         <grace/>
@@ -2704,6 +2710,9 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
+        <lyric number="1">
+          <text>8</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -2757,6 +2766,9 @@
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">begin</beam>
+        <lyric number="1">
+          <text>11</text>
+        </lyric>
       </note>
       <note>
         <grace/>
@@ -2781,22 +2793,6 @@
         <beam number="1">end</beam>
         <lyric number="1">
           <text>13</text>
-        </lyric>
-      </note>
-      <note>
-        <grace/>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <tie type="start"/>
-        <voice>1</voice>
-        <type>eighth</type>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
-        <lyric number="1">
-          <text>14</text>
         </lyric>
       </note>
     </part>
@@ -3559,12 +3555,11 @@
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <tie type="start"/>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
+        <lyric number="1">
+          <text>17</text>
+        </lyric>
       </note>
     </part>
     <part id="p7">
@@ -3577,12 +3572,11 @@
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <tie type="stop"/>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
+        <lyric number="1">
+          <text>14</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -3633,12 +3627,11 @@
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <tie type="start"/>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
+        <lyric number="1">
+          <text>17</text>
+        </lyric>
       </note>
     </part>
   </measure>
@@ -4433,19 +4426,6 @@
         <divisions>3</divisions>
       </attributes>
       <note>
-        <grace/>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type>eighth</type>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
-      </note>
-      <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -4560,19 +4540,6 @@
       <attributes>
         <divisions>2</divisions>
       </attributes>
-      <note>
-        <grace/>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type>eighth</type>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
-      </note>
       <note>
         <pitch>
           <step>B</step>
