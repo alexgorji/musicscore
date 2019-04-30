@@ -30,6 +30,7 @@ from musicscore.musicxml.attributes.printobject import PrintObject
 from musicscore.musicxml.common.common import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics
 from musicscore.musicxml.types.complextypes.slur import ComplexTypeSlur
 from musicscore.musicxml.types.complextypes.tied import ComplexTypeTied
 from musicscore.musicxml.types.complextypes.tuplet import ComplexTypeTuplet
@@ -98,12 +99,11 @@ class Articulations(XMLElement):
         raise NotImplementedError()
 
 
-class Dynamics(XMLElement):
+class Dynamics(ComplexTypeDynamics):
     """"""
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='dynamics', value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class Fermata(XMLElement):

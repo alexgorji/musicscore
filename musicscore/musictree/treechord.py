@@ -8,6 +8,8 @@ from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
     Type, Dot, Notehead, NoteheadText, Beam, Duration
 from musicscore.musicxml.elements.xml_element import XMLTree
+from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, \
+    FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N
 from musicscore.musicxml.types.complextypes.lyric import Text
 from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Dynamics, Technical, Articulations
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
@@ -341,6 +343,28 @@ class TreeChord(XMLTree):
         lyric = self.add_child(Lyric(number=str(number)))
         lyric.add_child(Text(str(text)))
         return lyric
+
+    def add_dynamics(self, value):
+        dynamic_classes = [P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, FFFFFF, MP, MF, SF, SFP, SFPP, FP,
+                           RF, RFZ, SFZ, SFFZ, FZ, N, PF, SFZP]
+
+        tags = [d._TAG for d in dynamic_classes]
+        try:
+            index = tags.index(value)
+        except ValueError:
+            raise ValueError('wrong dynamics value')
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            dynamics = notations.get_children_by_type(Dynamics)[0]
+        except IndexError:
+            dynamics = notations.add_child(Dynamics())
+
+        dynamics.add_child(dynamic_classes[index]())
 
     def __deepcopy__(self, memodict={}):
         new_chord = TreeChord(quarter_duration=self.quarter_duration)
