@@ -446,7 +446,7 @@ class FractalMusic(FractalTree):
     @property
     def chord(self):
         if self._chord is None:  # or self._note.midis!=[self.midi] or self._note.duration!=self.duration:
-            self._chord = TreeChord(quarter_durations=self.duration, midis=self.midi_value)
+            self._chord = TreeChord(quarter_duration=self.duration, midis=[self.midi_value])
 
         return self._chord
 

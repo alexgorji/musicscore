@@ -2,7 +2,10 @@ from unittest import TestCase
 
 from quicktions import Fraction
 
+from musicscore import basic_functions
 from musicscore.fractaltree.fractaltree import FractalTree
+from musicscore.musicstream.streamvoice import SimpleFormat
+from musicscore.musictree.treescore_timewise import TreeScoreTimewise
 
 
 class Test(TestCase):
@@ -22,8 +25,6 @@ class Test(TestCase):
     def test_2(self):
         self.ft.add_layer()
         self.ft.add_layer(lambda n: True if n.fractal_order > 1 else False)
-        # print([node.fractal_order for node in self.ft.get_layer(1)])
-        # print([node.fertile for node in self.ft.get_layer(1)])
         self.ft.add_layer(lambda n: True if n.fractal_order > 1 else False)
         self.ft.add_layer(lambda n: True if n.fractal_order > 1 else False)
         self.ft.add_layer(lambda n: True if n.fractal_order > 1 else False)
@@ -36,5 +37,5 @@ class Test(TestCase):
         # print([name for name in self.ft.get_layer(2, key='name')])
         result = [[[['1.1']], [['1.2.1'], ['1.2.2.1', '1.2.2.2', '1.2.2.3'], ['1.2.3.1', '1.2.3.2', '1.2.3.3']], [['1.3.1.1', '1.3.1.2', '1.3.1.3'], ['1.3.2'], ['1.3.3.1', '1.3.3.2', '1.3.3.3']]], '2', [[['3.1.1'], ['3.1.2.1', '3.1.2.2', '3.1.2.3'], ['3.1.3.1', '3.1.3.2', '3.1.3.3']], [['3.2.1.1', '3.2.1.2', '3.2.1.3'], ['3.2.2'], ['3.2.3.1', '3.2.3.2', '3.2.3.3']], [['3.3']]]]
         self.assertEqual([name for name in self.ft.get_layer(4, key='name')], result)
-        # self.ft.add_layer()
-        # print(self.ft.layers)
+
+

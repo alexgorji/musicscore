@@ -174,9 +174,10 @@ class Midi(object):
             output = self.sharp[self.value % 12]
 
         output = list(output)
-        output[2] += (self.value // 12) - 1
+        output[2] += (int(self.value // 12)) - 1
         if output[1] == 0:
             output[1] = None
+
         return output
 
     def get_pitch_rest(self):
