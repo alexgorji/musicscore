@@ -14,3 +14,9 @@ class Test(TestCase):
         print(self.ft.name)
         print(self.ft.value)
         print(self.ft.children_fractal_values)
+
+        print(self.ft.dump())
+        self.ft.add_layer()
+        print(self.ft.dump())
+        self.ft.add_layer()
+        print(self.ft.dump())

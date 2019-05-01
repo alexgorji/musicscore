@@ -75,3 +75,41 @@ def substitute(input_list, old_element, new_elements):
 
     output_list = input_list[:index] + new_elements + input_list[index + 1:]
     return output_list
+
+
+def dToX(input_list, first_element=0):
+    if isinstance(input_list, list) is False:
+        raise TypeError('my_list.xToD(input_list)')
+    else:
+        output = [first_element]
+        for i in range(len(input_list)):
+            output.append(input_list[i] + output[i])
+        return output
+
+
+def xToD(input_list):
+    result = []
+    for i in range(1, len(input_list)):
+        result.append(input_list[i] - input_list[i - 1])
+    return result
+
+
+def step_sums(input):
+    # if input == {}:
+    #     return {}
+    if not input:
+        return []
+
+    # if isinstance(input, dict):
+    #     input_items = zip(*input.items())[1]
+    #     input_keys = zip(*input.items())[0]
+    #     output_items = [input_items[0]]
+    #     for i in range(1, len(input_items)):
+    #         output_items.append(output_items[-1] + input_items[i])
+    #
+    #     return dict(zip(input_keys, output_items))
+
+    result = [input[0]]
+    for i in range(1, len(input)):
+        result.append(result[-1] + input[i])
+    return result

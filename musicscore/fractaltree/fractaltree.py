@@ -1,13 +1,11 @@
+from musicscore import basic_functions
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.tree.tree import Tree
 from quicktions import Fraction
 from musicscore.permutation.permutation import permute, self_permute
-# import my_list as ml
-# from stimulating_pointers import generate_stimulating_pointers
 import copy
 
-
-# from midi_generators import RelativeMidi, RandomMidi, MidiGenerator
+from musicscore.fractaltree.midigenerators import RelativeMidi, MidiGenerator
 
 
 class FractalTree(Tree):
@@ -63,7 +61,7 @@ class FractalTree(Tree):
         if len(self.get_leaves()) == 1:
             return 0
         else:
-            return int(self.get_farthest_leaf(topology_only=True)[1]) + 1
+            return self.get_farthest_leaf().get_distance() + 1
 
     @property
     def name(self):
@@ -166,21 +164,21 @@ class FractalTree(Tree):
         def _calculate_permutation_order():
             if self.tree_permutation_order:
                 self_permuted_order = self_permute(self.tree_permutation_order)
-                multiplicated_order = [permute(self_permuted_order, current_order) for current_order in
-                                       self_permuted_order]
+                multiplied_order = [permute(self_permuted_order, current_order) for current_order in
+                                    self_permuted_order]
 
                 def reordered():
                     index_of_first_row = None
-                    for index_of_first_row in range(len(multiplicated_order)):
-                        if multiplicated_order[index_of_first_row][0] == self.tree_permutation_order:
+                    for index_of_first_row in range(len(multiplied_order)):
+                        if multiplied_order[index_of_first_row][0] == self.tree_permutation_order:
                             break
                     output = []
-                    for i in range(index_of_first_row, index_of_first_row + len(multiplicated_order)):
-                        output.append(multiplicated_order[i % len(multiplicated_order)])
+                    for i in range(index_of_first_row, index_of_first_row + len(multiplied_order)):
+                        output.append(multiplied_order[i % len(multiplied_order)])
                     return output
 
-                multiplicated_order = reordered()
-                return multiplicated_order[self.multi[0] - 1][self.multi[1] - 1]
+                multiplied_order = reordered()
+                return multiplied_order[self.multi[0] - 1][self.multi[1] - 1]
             else:
                 return range(1, len(self.proportions) + 1)
 
@@ -224,7 +222,9 @@ class FractalTree(Tree):
         return ch_multi
 
     def add_layer(self, *conditions):
-        leaves = self.get_leaves()
+        leaves = list(self.traverse_leaves())
+        if not leaves:
+            leaves = [self]
 
         if conditions:
             for leaf in leaves:
@@ -250,7 +250,7 @@ class FractalTree(Tree):
 
             branch_distances = []
             for child in self.get_children():
-                branch_distances.append(child.get_farthest_leaf(topology_only=False)[1] + 1)
+                branch_distances.append(child.get_farthest_leaf().get_distance() + 1)
 
             if layer == 0:
                 if key:
@@ -263,8 +263,8 @@ class FractalTree(Tree):
                     self.get_layer(layer=layer - 1, key=key)
 
                 output = []
-                for i in range(len(self.children)):
-                    child = self.children[i]
+                for i in range(len(self.get_children())):
+                    child = self.get_children()[i]
                     if branch_distances[i] == 1:
                         if key:
                             output.append(getattr(child, key))
@@ -284,15 +284,17 @@ class FractalTree(Tree):
             raise Exception('FractalTree().next property can only be used for leaves')
         else:
             try:
+
                 parent = self.up
                 while parent is not None:
-                    index = parent.get_leaves().index(self)
+                    parent_leaves = list(parent.traverse_leaves())
+                    index = parent_leaves.index(self)
                     try:
-                        return parent.get_leaves()[index + 1]
-                    except:
+                        return parent_leaves[index + 1]
+                    except IndexError:
                         parent = parent.up
-                raise Exception()
-            except Exception as err:
+                raise IndexError()
+            except IndexError:
                 return None
 
     @property
@@ -303,16 +305,17 @@ class FractalTree(Tree):
             try:
                 parent = self.up
                 while parent is not None:
-                    index = parent.get_leaves().index(self)
+                    parent_leaves = list(parent.traverse_leaves())
+                    index = parent_leaves.index(self)
                     try:
                         if index - 1 < 0:
                             raise Exception()
                         else:
-                            return parent.get_leaves()[index - 1]
-                    except:
+                            return parent_leaves[index - 1]
+                    except IndexError:
                         parent = parent.up
-                raise Exception()
-            except Exception as err:
+                raise IndexError()
+            except IndexError:
                 return None
 
     def split(self, proportions):
@@ -328,10 +331,10 @@ class FractalTree(Tree):
 
 class FractalMusic(FractalTree):
 
-    def __init__(self, midi_generator=None, duration=None, *args, **kargs):
-        super(FractalMusic, self).__init__(*args, **kargs)
-        self._midi = None
-        self._note = None
+    def __init__(self, midi_generator=None, duration=None, *args, **kwargs):
+        super(FractalMusic, self).__init__(*args, **kwargs)
+        self._midi_value = None
+        self._chord = None
         self._tempo = None
         self._midi_generator = None
         self._children_generated_midis = None
@@ -401,29 +404,29 @@ class FractalMusic(FractalTree):
 
     @property
     def _children_midis(self):
-        return [child.midi for child in self.children]
+        return [child.midi_value for child in self.get_children()]
 
     @property
-    def midi(self):
-        if self._midi is None:
+    def midi_value(self):
+        if self._midi_value is None:
             if self.is_root():
-                self._midi = 71
+                self._midi_value = 71
             else:
-                self._midi = self.up.children_generated_midis[self.up.children.index(self)]
-        return self._midi
+                self._midi_value = self.up.children_generated_midis[self.up.children.index(self)]
+        return self._midi_value
 
-    @midi.setter
-    def midi(self, value):
+    @midi_value.setter
+    def midi_value(self, value):
         if value is not None:
             if isinstance(value, int) or isinstance(value, float):
-                if value >= 24:
-                    self._midi = value
+                if value >= 18:
+                    self._midi_value = value
                 else:
-                    raise ValueError('midi cannot be smaller than 24')
+                    raise ValueError('midi cannot be smaller than 18')
             else:
                 raise TypeError('midi can only be int, float or None')
         else:
-            self._midi = value
+            self._midi_value = value
 
     @property
     def auto_midi_range(self):
@@ -443,7 +446,7 @@ class FractalMusic(FractalTree):
         ambitus = abs(self.midi_range[1] - self.midi_range[0]) * ambitus_factor
         chord_intervals = [float(value) * ambitus / sum(self.children_fractal_values) for value in
                            self.children_fractal_values]
-        chord_midis = [(value + self.midi) for value in [0] + ml.step_sums(chord_intervals)][:-1]
+        chord_midis = [(value + self.midi_value) for value in [0] + basic_functions.step_sums(chord_intervals)][:-1]
         factor = microtone / 2.0
         chord_midis = map(lambda midi: round(midi * factor) / factor, chord_midis)
         return Note(duration=self.duration, event=Chord(chord_midis))
@@ -455,10 +458,10 @@ class FractalMusic(FractalTree):
     @property
     def note(self):
         tempo_factor = Fraction(self.tempo, 60)
-        if self._note is None:  # or self._note.midis!=[self.midi] or self._note.duration!=self.duration:
-            self._note = Note(duration=self.duration * tempo_factor, event=Chord(self.midi))
+        if self._chord is None:  # or self._note.midis!=[self.midi] or self._note.duration!=self.duration:
+            self._chord = Note(duration=self.duration * tempo_factor, event=Chord(self.midi_value))
 
-        return self._note
+        return self._chord
 
     def copy(self):
         copied_midi_generator = self.midi_generator.copy()
@@ -467,9 +470,9 @@ class FractalMusic(FractalTree):
                                 midi_generator=copied_midi_generator)
         if self.fertile is False:
             try:
-                copied.midi = self.midi
+                copied.midi_value = self.midi_value
             except:
-                copied.midi = None
+                copied.midi_value = None
         return copied
 
     def get_chords(self, layer=1):
@@ -495,12 +498,12 @@ class FractalMusic(FractalTree):
             # print 'duration', duration
 
             self.add_child()
-            self.children[-1].duration = duration
-            self.children[-1]._note = note
+            self.get_children()[-1].duration = duration
+            self.get_children()[-1]._note = note
             # self.children[-1].name=self.name+'.'+str(index+1)
-            self.children[-1]._fractal_order = self.fractal_order
+            self.get_children()[-1]._fractal_order = self.fractal_order
 
-        return self.children
+        return self.get_children()
 
     def add_notes(self, notes):
         if self.is_leaf is False:
@@ -539,7 +542,7 @@ class FractalMusic(FractalTree):
                 if offset is None:
                     offset = self.position_in_tree - int(self.position_in_tree)
                 else:
-                    'split_rest.offset:', self.name, offset
+                    print('split_rest.offset:', self.name, offset)
 
                 duration = 1 - offset
                 if offset % 1. == 0: duration = 0.5

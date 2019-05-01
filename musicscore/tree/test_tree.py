@@ -86,3 +86,34 @@ class TestTree(TestCase):
         child_6 = child_5.add_child(Tree())
         self.assertEqual(child_6.get_common_ancestor(child_4), child_2)
         self.assertEqual(child_6.get_common_ancestor(child_6, child_3), self.tree)
+
+    def test_distance(self):
+        child_1 = self.tree.add_child(Tree())
+        child_2 = self.tree.add_child(Tree())
+        child_3 = self.tree.add_child(Tree())
+        child_4 = child_2.add_child(Tree())
+        child_5 = child_2.add_child(Tree())
+        child_6 = child_5.add_child(Tree())
+        self.assertEqual(child_6.get_distance(reference=child_2), 2)
+        self.assertEqual(child_6.get_distance(), 3)
+        self.assertEqual(child_6.get_distance(reference=child_3), None)
+
+    def test_get_farthest_leaf(self):
+        child_1 = self.tree.add_child(Tree())
+        child_2 = self.tree.add_child(Tree())
+        child_3 = self.tree.add_child(Tree())
+        child_4 = child_2.add_child(Tree())
+        child_5 = child_2.add_child(Tree())
+        child_6 = child_5.add_child(Tree())
+        self.assertEqual(self.tree.get_farthest_leaf().get_distance(), 3)
+
+    def test_dump(self):
+        child_1 = self.tree.add_child(Tree())
+        child_2 = self.tree.add_child(Tree())
+        child_3 = self.tree.add_child(Tree())
+        child_4 = child_2.add_child(Tree())
+        child_5 = child_2.add_child(Tree())
+        child_6 = child_5.add_child(Tree())
+        result = [self.tree, child_1, child_2, child_4, child_5, child_6, child_3]
+        self.assertEqual(self.tree.dump(), result)
+

@@ -157,6 +157,10 @@ class Tree(object):
                 return None
         return count
 
+    def get_farthest_leaf(self):
+        leaves = self.traverse_leaves()
+        return max(leaves, key=lambda leaf: leaf.get_distance())
+
     def get_layer(self, layer, key=None):
         if layer == 0:
             output = [self]
