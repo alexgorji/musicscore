@@ -121,12 +121,12 @@ class RelativeMidi(MidiGenerator):
                 raise AttributeError('set midi_range')
             if not self.microtone:
                 raise AttributeError('set microtone')
-            intervals = map(lambda proportion: proportion * self.direction_iterator.next(), self.proportions)
-            midis = basic_functions.dToX(intervals)
-            midis = map(lambda midi: scale(midi, min(midis), max(midis), self.midi_range[0], self.midi_range[1]), midis)
-            factor = self.microtone / 2.0
-            midis = map(lambda midi: round(midi * factor) / factor, midis)
 
+            intervals = [proportion * self.direction_iterator.__next__() for proportion in self.proportions]
+            midis = basic_functions.dToX(intervals)
+            midis =[scale(midi, min(midis), max(midis), self.midi_range[0], self.midi_range[1]) for midi in midis]
+            factor = self.microtone / 2.0
+            midis = [round(midi * factor) / factor for midi in  midis]
             self._iterator = iter(midis)
 
         return self._iterator
@@ -135,7 +135,6 @@ class RelativeMidi(MidiGenerator):
         return self.iterator.__next__()
 
     def copy(self):
-        # print 'copying midi_generator: ReltaiveMidi'
         return self.__class__(midi_range=None, proportions=self.proportions, directions=self.directions,
                               microtone=self.microtone)
 

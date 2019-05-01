@@ -106,6 +106,7 @@ class TestTree(TestCase):
         child_5 = child_2.add_child(Tree())
         child_6 = child_5.add_child(Tree())
         self.assertEqual(self.tree.get_farthest_leaf().get_distance(), 3)
+        self.assertEqual(child_1.get_farthest_leaf(), child_1)
 
     def test_dump(self):
         child_1 = self.tree.add_child(Tree())

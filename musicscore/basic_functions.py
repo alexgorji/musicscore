@@ -79,7 +79,7 @@ def substitute(input_list, old_element, new_elements):
 
 def dToX(input_list, first_element=0):
     if isinstance(input_list, list) is False:
-        raise TypeError('my_list.xToD(input_list)')
+        raise TypeError('xToD(input_list)')
     else:
         output = [first_element]
         for i in range(len(input_list)):
@@ -113,3 +113,16 @@ def step_sums(input):
     for i in range(1, len(input)):
         result.append(result[-1] + input[i])
     return result
+
+
+def one_dimensional(x):
+    if hasattr(x, '__iter__'):
+        result = []
+        for list_el in x:
+            if hasattr(list_el, "__iter__") and not hasattr(list_el[0], "__iter__"):
+                result.append(list_el)
+            else:
+                result.extend(one_dimensional(list_el))
+        return result
+    else:
+        return [x]
