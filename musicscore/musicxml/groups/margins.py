@@ -48,5 +48,4 @@ AllMargins = Sequence(
     GroupReference(LeftRightMargins),
     Element(TopMargin),
     Element(BottomMargin)
-
 )

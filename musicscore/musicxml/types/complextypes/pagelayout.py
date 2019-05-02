@@ -8,15 +8,15 @@ from musicscore.musicxml.types.simple_type import TypeTenths
 class PageHeight(XMLElement, TypeTenths):
     _TAG = 'page-height'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
+    def __init__(self, value=None, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class PageWidth(XMLElement, TypeTenths):
     _TAG = 'page-width'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
+    def __init__(self, value=None, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class PageMargins(ComplexTypePageMargins):

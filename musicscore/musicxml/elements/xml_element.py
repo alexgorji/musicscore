@@ -141,6 +141,8 @@ class XMLTree(Tree):
                     self.close_dtd()
                 except (DTDError, StopIteration):
                     raise e
+        for child in self.get_children():
+            child.close_dtd()
 
     def get_children(self):
         return self.current_children

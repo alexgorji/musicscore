@@ -103,6 +103,7 @@ class DTDNode(DTDTree):
         return copied
 
     def eliminate_group_reference(self):
+
         for node in self.traverse():
             if isinstance(node, GroupReference):
                 if len(node.get_children()) > 1:
@@ -114,7 +115,6 @@ class DTDNode(DTDTree):
                     warnings.warn('dtd.eliminate_group_reference: groups child occurrences are not 1.')
                 (new_node.min_occurrence, new_node.max_occurrence) = (node.min_occurrence, node.max_occurrence)
                 node.replace_node(new_node)
-
 
     def carbon_copy(self):
         if isinstance(self, Element):

@@ -89,16 +89,16 @@ class ComplexTypeCredit(ComplexType, Page, OptionalUniqueId):
                     Element(CreditWords),
                     Element(CreditSymbol)
                 ),
-                Sequence(
-                    Element(Link, min_occurrence=0, max_occurrence=None),
-                    Element(Bookmark, min_occurrence=0, max_occurrence=None),
-                    Choice(
-                        Element(CreditWords),
-                        Element(CreditSymbol)
-                    ),
-                    min_occurrence=0,
-                    max_occurrence=None,
-                )
+                # Sequence(
+                #     Element(Link, min_occurrence=0, max_occurrence=None),
+                #     Element(Bookmark, min_occurrence=0, max_occurrence=None),
+                #     Choice(
+                #         Element(CreditWords),
+                #         Element(CreditSymbol)
+                #     ),
+                #     min_occurrence=0,
+                #     max_occurrence=None,
+                # )
             )
 
         )

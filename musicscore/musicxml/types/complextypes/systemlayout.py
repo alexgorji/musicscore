@@ -24,15 +24,15 @@ class SystemMargins(ComplexTypeSystemMargins):
 class SystemDistance(XMLElement, TypeTenths):
     _TAG = 'system-distance'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
+    def __init__(self, value=None, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class TopSystemDistance(XMLElement, TypeTenths):
     _TAG = 'top-system-distance'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
+    def __init__(self, value=None, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class SystemDividers(ComplexTypeSystemDividers):

@@ -205,20 +205,18 @@ class ComplexTypeMetronome(ComplexType, PrintStyleAlign, Justify, Parentheses, O
                 Sequence(
                     GroupReference(GroupBeatUnit),
                     Element(BeatUnitTied, min_occurrence=0, max_occurrence=None),
-
-                )
-            ),
-            Sequence(
-                Element(MetronomeArrows, min_occurrence=0),
-                Element(MetronomeNote, max_occurrence=None),
-                Sequence(
-                    Element(MetronomeRelation),
-                    Element(MetronomeNote),
-                    min_occurrence=0
                 )
             )
+        ),
+        Sequence(
+            Element(MetronomeArrows, min_occurrence=0),
+            Element(MetronomeNote, max_occurrence=None),
+            Sequence(
+                Element(MetronomeRelation),
+                Element(MetronomeNote),
+                min_occurrence=0
+            )
         )
-
     )
 
     def __init__(self, tag, *args, **kwargs):
