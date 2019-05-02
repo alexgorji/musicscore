@@ -16,7 +16,7 @@ class PerMinute(ComplexType, String, Font):
     overrides the font specified for the overall metronome element. This allows separate specification of a music font
     for the beat-unit and a text font for the numeric value, in cases where a single metronome font is not used."""
 
-    _TAG = 'beat-unit'
+    _TAG = 'per-minute'
 
     def __init__(self, value=None, *args, **kwargs):
         super().__init__(tag=self._TAG, value=value, *args, **kwargs)

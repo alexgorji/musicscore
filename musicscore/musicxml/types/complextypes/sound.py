@@ -202,4 +202,4 @@ class ComplexTypeSound(ComplexType, Tempo, Dynamics, Dacapo, Segno, Dalsegno, Co
     )
 
     def __init__(self, tag, *args, **kwargs):
-        super().__init__(tag=tag * args, **kwargs)
+        super().__init__(tag=tag, * args, **kwargs)
