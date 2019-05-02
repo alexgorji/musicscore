@@ -5,6 +5,7 @@ from musicscore.musictree.treescore_timewise import TreeScoreTimewise
 from musicscore.musicxml.elements.scoreheader import Credit, Defaults
 from musicscore.musicxml.groups.layout import PageLayout, SystemLayout
 from musicscore.musicxml.groups.margins import LeftMargin, RightMargin, BottomMargin, TopMargin
+from musicscore.musicxml.score_templates.xml_test_score import TestScore
 from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWords
 from musicscore.musicxml.types.complextypes.defaults import Scaling
 from musicscore.musicxml.types.complextypes.pagelayout import PageHeight, PageWidth, PageMargins
@@ -59,5 +60,6 @@ class Test(TestCase):
         c.add_child(CreditWords('BLA', default_x=598, default_y=1550, font_size=18, justify='center', valign='top'))
 
         result_path = path + '_test_1'
-        print(self.score.to_string())
+
         self.score.write(path=result_path)
+        TestScore().assert_template(result_path=result_path)
