@@ -1,7 +1,8 @@
 from musicscore.dtd.dtd import Sequence, Element
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
-from musicscore.musicxml.types.simple_type import IDREF, TypeMidi16, String, TypePercent, TypeRotationDegrees
+from musicscore.musicxml.types.simple_type import IDREF, TypeMidi16, String, TypePercent, TypeRotationDegrees, \
+    TypeMidi16384, TypeMidi128
 
 
 class MidiChannel(XMLElement, TypeMidi16):
@@ -81,14 +82,14 @@ class ComplexTypeMidiInstrument(ComplexType):
     refers to the score-instrument affected by the change."""
 
     _DTD = Sequence(
-        Element(MidiChannel, minOccurs=0),
-        Element(MidiName, minOccurs=0),
-        Element(MidiBank, minOccurs=0),
-        Element(MidiProgram, minOccurs=0),
-        Element(MidiUnpitched, minOccurs=0),
-        Element(Volume, minOccurs=0),
-        Element(Pan, minOccurs=0),
-        Element(Elevation, minOccurs=0),
+        Element(MidiChannel, min_occurrence=0),
+        Element(MidiName, min_occurrence=0),
+        Element(MidiBank, min_occurrence=0),
+        Element(MidiProgram, min_occurrence=0),
+        Element(MidiUnpitched, min_occurrence=0),
+        Element(Volume, min_occurrence=0),
+        Element(Pan, min_occurrence=0),
+        Element(Elevation, min_occurrence=0)
     )
 
     def __init__(self, tag, id_, *args, **kwargs):

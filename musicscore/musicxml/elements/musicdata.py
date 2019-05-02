@@ -3,52 +3,52 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.dtd.dtd import Sequence, Choice, Element
 from musicscore.musicxml.elements.note import Note
 from musicscore.musicxml.types.complextypes.backup import ComplexTypeBackup
+from musicscore.musicxml.types.complextypes.direction import ComplexTypeDirection
+from musicscore.musicxml.types.complextypes.sound import ComplexTypeSound
 
 
 class Backup(ComplexTypeBackup):
     _TAG = 'backup'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._Tag, *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Forward(XMLElement):
     _TAG = 'forward'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._Tag, *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
         NotImplementedError()
 
 
-class Direction(XMLElement):
+class Direction(ComplexTypeDirection):
     _TAG = 'direction'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._Tag, *args, **kwargs)
-        NotImplementedError()
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Attributes(XMLElement):
     _TAG = 'attributes'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._Tag, *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
         NotImplementedError()
 
 
-class Sound(XMLElement):
+class Sound(ComplexTypeSound):
     _TAG = 'sound'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._Tag, *args, **kwargs)
-        NotImplementedError()
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Link(XMLElement):
     _TAG = 'link'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._Tag, *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
         NotImplementedError()
 
 
@@ -56,7 +56,7 @@ class Bookmark(XMLElement):
     _TAG = 'bookmark'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._Tag, *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
         NotImplementedError()
 
 

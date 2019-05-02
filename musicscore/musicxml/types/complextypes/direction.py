@@ -2,7 +2,7 @@ from musicscore.dtd.dtd import Sequence, Element, GroupReference
 from musicscore.musicxml.attributes.directive import Directive
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.placement import Placement
-from musicscore.musicxml.common.common import FootNote, Level, Voice, EditorialVoiceDirection, Staff
+from musicscore.musicxml.common.common import EditorialVoiceDirection, Staff
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.directiontype import ComplexTypeDirectionType
 from musicscore.musicxml.types.complextypes.offset import ComplexTypeOffset
@@ -30,7 +30,7 @@ class Sound(ComplexTypeSound):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class Direction(ComplexType, Placement, Directive, OptionalUniqueId):
+class ComplexTypeDirection(ComplexType, Placement, Directive, OptionalUniqueId):
     """A direction is a musical indication that is not necessarily attached to a specific note. Two or more may be
     combined to indicate starts and stops of wedges, dashes, etc. For applications where a specific direction is indeed
     attached to a specific note, the direction element can be associated with the note element that follows it in score
@@ -50,20 +50,3 @@ class Direction(ComplexType, Placement, Directive, OptionalUniqueId):
 
     def __init__(self, tag, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-
-
-''''
-	<xs:complexType name="direction">
-
-		<xs:sequence>
-			<xs:element name="direction-type" type="direction-type" maxOccurs="unbounded"/>
-			<xs:element name="offset" type="offset" minOccurs="0"/>
-			<xs:group ref="editorial-voice-direction"/>
-			<xs:group ref="staff" minOccurs="0"/>
-			<xs:element name="sound" type="sound" minOccurs="0"/>
-		</xs:sequence>
-		<xs:attributeGroup ref="placement"/>
-		<xs:attributeGroup ref="directive"/>
-		<xs:attributeGroup ref="optional-unique-id"/>
-	</xs:complexType>
-'''
