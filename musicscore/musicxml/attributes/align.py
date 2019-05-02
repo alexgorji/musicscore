@@ -30,3 +30,14 @@ class Valign(AttributeAbstract):
     def __init__(self, valign=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.generate_attribute('valign', valign, 'TypeValign')
+
+
+class ValignImage(AttributeAbstract):
+    """
+    The valign-image attribute is used to indicate vertical alignment for images and graphics, so it removes the
+    baseline value. Defaults are implementation-dependent.
+    """
+
+    def __init__(self, valign_image=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute('valign-image', valign_image, 'TypeValignImage')

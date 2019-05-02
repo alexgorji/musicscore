@@ -10,7 +10,7 @@
 	</xs:complexType>
 '''
 from musicscore.dtd.dtd import Sequence, GroupReference, Element
-from musicscore.musicxml.common.common import Editorial
+from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.elements.note import Duration
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 

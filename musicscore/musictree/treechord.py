@@ -3,7 +3,7 @@ from quicktions import Fraction
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treenote import TreeNote
-from musicscore.musicxml.common.common import EditorialVoice, Staff, Voice
+from musicscore.musicxml.groups.common import EditorialVoice, Staff, Voice
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
     Type, Dot, Notehead, NoteheadText, Beam, Duration

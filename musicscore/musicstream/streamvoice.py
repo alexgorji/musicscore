@@ -2,7 +2,7 @@ from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
-from musicscore.musicxml.common.common import Voice
+from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.types.simple_type import PositiveInteger
 
 

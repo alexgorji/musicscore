@@ -1,5 +1,5 @@
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeSyllabic
+from musicscore.musicxml.attributes.attribute_abstract import TypeSyllabic
 from musicscore.musicxml.attributes.color import Color
 from musicscore.musicxml.attributes.justify import Justify
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
@@ -7,7 +7,7 @@ from musicscore.musicxml.attributes.placement import Placement
 from musicscore.musicxml.attributes.position import Position
 from musicscore.musicxml.attributes.printobject import PrintObject
 from musicscore.musicxml.attributes.timeonly import TimeOnly
-from musicscore.musicxml.common.common import Editorial, FootNote
+from musicscore.musicxml.groups.common import Editorial, FootNote
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, Empty
 from musicscore.musicxml.types.complextypes.elision import ComplexTypeElision

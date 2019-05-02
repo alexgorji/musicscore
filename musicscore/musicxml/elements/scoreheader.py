@@ -1,5 +1,6 @@
 from musicscore.dtd.dtd import Sequence, Element
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.complextypes.credit import ComplexTypeCredit
 from musicscore.musicxml.types.complextypes.partlist import ComplexTypePartList
 from musicscore.musicxml.types.complextypes.scorepart import Identification
 
@@ -28,16 +29,18 @@ class Defaults(XMLElement):
         raise NotImplementedError('Defaults')
 
 
-class Credit(XMLElement):
+class Credit(ComplexTypeCredit):
+    _TAG = 'credit'
+
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='credit', *args, **kwargs)
-        raise NotImplementedError('Credit')
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class PartList(ComplexTypePartList):
+    _TAG = 'part-list'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='part-list', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 """

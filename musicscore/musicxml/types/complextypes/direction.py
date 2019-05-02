@@ -2,7 +2,7 @@ from musicscore.dtd.dtd import Sequence, Element, GroupReference
 from musicscore.musicxml.attributes.directive import Directive
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.placement import Placement
-from musicscore.musicxml.common.common import EditorialVoiceDirection, Staff
+from musicscore.musicxml.groups.common import EditorialVoiceDirection, Staff
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.directiontype import ComplexTypeDirectionType
 from musicscore.musicxml.types.complextypes.offset import ComplexTypeOffset

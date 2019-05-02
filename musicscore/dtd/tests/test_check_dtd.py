@@ -1,8 +1,8 @@
 from musicscore.dtd.dtd import Element, Sequence, Choice, GroupReference, ChildTypeDTDConflict, \
     ChildOccurrenceDTDConflict, ChildIsNotOptional
-from musicscore.musicxml.common.common import Editorial
+from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.elements.attributes import TimeSignature, Interchangeable, SenzaMisura, Beats, BeatType, Time
-from musicscore.musicxml.elements.fullnote import FullNote, Chord, Pitch, Unpitched, Rest, Alter
+from musicscore.musicxml.elements.fullnote import FullNote, Pitch, Unpitched, Rest, Alter
 from musicscore.musicxml.elements.musicdata import Backup, Forward, Direction, Attributes, Sound, Barline, Link, \
     Bookmark
 from musicscore.musicxml.elements.xml_element import XMLElement

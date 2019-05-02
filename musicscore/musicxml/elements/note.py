@@ -3,7 +3,7 @@ from musicscore.musicxml.attributes.accidental import Cautionary, Editorial, Smu
 from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
 from musicscore.musicxml.attributes.leveldisplay import LevelDisplay
 from musicscore.musicxml.attributes.printstyle import PrintStyle
-from musicscore.musicxml.common.common import EditorialVoice, Staff
+from musicscore.musicxml.groups.common import EditorialVoice, Staff
 from musicscore.musicxml.elements.fullnote import FullNote
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.beam import ComplexTypeBeam

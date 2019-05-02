@@ -1,5 +1,5 @@
 from musicscore.dtd.dtd import Sequence, Element, GroupReference
-from musicscore.musicxml.common.common import Editorial
+from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 

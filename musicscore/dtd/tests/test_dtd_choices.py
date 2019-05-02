@@ -1,6 +1,6 @@
 from musicscore.dtd.dtd import Element, Sequence, Choice, GroupReference
-from musicscore.musicxml.common.common import Editorial
-from musicscore.musicxml.elements.fullnote import FullNote, Chord, Pitch, Unpitched, Rest
+from musicscore.musicxml.groups.common import Editorial
+from musicscore.musicxml.elements.fullnote import FullNote, Pitch, Unpitched
 from musicscore.musicxml.types.complextypes.lyric import Elision, EndLine, EndParagraph, Syllabic, Humming, Laughing, \
     Extend, Text
 from unittest import TestCase

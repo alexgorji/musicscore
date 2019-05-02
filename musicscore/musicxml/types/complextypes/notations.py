@@ -27,14 +27,13 @@
 from musicscore.dtd.dtd import Sequence, GroupReference, Choice, Element
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.printobject import PrintObject
-from musicscore.musicxml.common.common import Editorial
+from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics
 from musicscore.musicxml.types.complextypes.slur import ComplexTypeSlur
 from musicscore.musicxml.types.complextypes.tied import ComplexTypeTied
 from musicscore.musicxml.types.complextypes.tuplet import ComplexTypeTuplet
-from musicscore.musicxml.types.simple_type import TypeTiedType
 
 
 class Tied(ComplexTypeTied):

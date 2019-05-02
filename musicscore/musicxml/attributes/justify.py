@@ -8,6 +8,6 @@ class Justify(AttributeAbstract):
     attribute indicates horizontal alignment as well as justification.
     """
 
-    def __init__(self, print_object=None, *args, **kwargs):
+    def __init__(self, justify=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('justify', print_object, "LeftCenterRight")
+        self.generate_attribute('justify', justify, "TypeLeftCenterRight")

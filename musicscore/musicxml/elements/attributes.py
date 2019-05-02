@@ -1,6 +1,6 @@
 from musicscore.dtd.dtd import Sequence, GroupReference, Element, Choice
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
-from musicscore.musicxml.common.common import Editorial
+from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.key import TypeKey
 from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeClefSign, TypeStaffLine, PositiveInteger

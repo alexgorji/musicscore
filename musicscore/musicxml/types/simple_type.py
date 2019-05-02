@@ -131,6 +131,16 @@ class IDREF(String):
         super().__init__(value=value, *args, **kwargs)
 
 
+# todo xs:anyURI
+class AnyURI(String):
+    """
+
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 # ///////////////
 # Simple types derived from barline.mod elements
 
@@ -777,6 +787,18 @@ class TypeValign(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeValignImage(SimpleType):
+    """
+    The valign-image type is used to indicate vertical alignment for images and graphics, so it does not include a
+    baseline value. Defaults are implementation-dependent.
+    """
+
+    _PERMITTED = ["top", "middle", "bottom"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 class TypeYesNo(SimpleType):
     _PERMITTED = ('yes', 'no')
 
@@ -982,17 +1004,6 @@ class TypeYesNoNumber(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="valign-image">
-		<xs:annotation>
-			<xs:documentation>The valign-image type is used to indicate vertical alignment for images and graphics, so it does not include a baseline value. Defaults are implementation-dependent.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="top"/>
-			<xs:enumeration value="middle"/>
-			<xs:enumeration value="bottom"/>
-		</xs:restriction>
-	</xs:simpleType>
-
 	<xs:simpleType name="yyyy-mm-dd">
 		<xs:annotation>
 			<xs:documentation>Calendar dates are represented yyyy-mm-dd format, following ISO 8601. This is a W3C XML Schema date type, but without the optional timezone data.</xs:documentation>
@@ -1037,6 +1048,14 @@ class TypeFifths(Integer):
     The fifths type represents the number of flats or sharps in a traditional key signature. Negative numbers are used
     for flats and positive numbers for sharps, reflecting the key's placement within the circle of fifths
     """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeMillimeters(Decimal):
+    """The millimeters type is a number representing millimeters. This is used in the scaling element to provide a
+    default scaling from tenths to physical units."""
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1148,6 +1167,17 @@ class TypeStaffLine(PositiveInteger):
 
 # ///////////////
 # Simple types derived from direction.mod elements
+
+class TypeMarginType(SimpleType):
+    """
+    The margin-type type specifies whether margins apply to even page, odd pages, or both.
+    """
+    _PERMITTED = ('odd', 'even', 'both')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 class TypeWedgeType(SimpleType):
     """
     The wedge type is crescendo for the start of a wedge that is closed at the left side, diminuendo for the start of
@@ -1649,23 +1679,6 @@ A quarter-rest type specifies the glyph to use when a note has a rest element an
 		<xs:restriction base="xs:token"/>
 	</xs:simpleType>
 
-	<xs:simpleType name="margin-type">
-		<xs:annotation>
-			<xs:documentation>The margin-type type specifies whether margins apply to even page, odd pages, or both.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="odd"/>
-			<xs:enumeration value="even"/>
-			<xs:enumeration value="both"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="millimeters">
-		<xs:annotation>
-			<xs:documentation>The millimeters type is a number representing millimeters. This is used in the scaling element to provide a default scaling from tenths to physical units.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:decimal"/>
-	</xs:simpleType>
 
 	<xs:simpleType name="note-size-type">
 		<xs:annotation>

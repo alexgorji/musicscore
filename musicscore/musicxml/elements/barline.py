@@ -2,7 +2,7 @@ from musicscore.dtd.dtd import Sequence, GroupReference, Element
 from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 from musicscore.musicxml.attributes.barline import BarlineAttributes
 from musicscore.musicxml.attributes.color import Color
-from musicscore.musicxml.common.common import Editorial
+from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.segno import ComplexTypeSegno
 from musicscore.musicxml.types.simple_type import TypeBarStyle, TypeBackwardForward

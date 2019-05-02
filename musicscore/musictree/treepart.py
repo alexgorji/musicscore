@@ -8,7 +8,7 @@ from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treenote import TreeNote, TreeBackup
-from musicscore.musicxml.common.common import Voice
+from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Pitch

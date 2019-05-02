@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from musicscore.musicxml.common.common import Voice
+from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.elements.fullnote import Pitch
 from musicscore.musicxml.elements.note import Note, Duration
 
