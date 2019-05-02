@@ -5,6 +5,7 @@ from musicscore.musicxml.types.complextypes.coda import ComplexTypeCoda
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, EmptyPrintStyleAlignId
 from musicscore.musicxml.types.complextypes.formattedsymbolid import ComplexTypeFormattedSymbolId
 from musicscore.musicxml.types.complextypes.formattedtextid import ComplexTypeFormattedTextId
+from musicscore.musicxml.types.complextypes.metronome import ComplexTypeMetronome
 from musicscore.musicxml.types.complextypes.segno import ComplexTypeSegno
 from musicscore.musicxml.types.complextypes.wedge import ComplexTypeWedge
 
@@ -13,19 +14,24 @@ class Rehearsal(ComplexTypeFormattedTextId):
     """The rehearsal type specifies a rehearsal mark. Language is Italian ("it") by default. Enclosure is square by
     default. Left justification is assumed if not specified.
     """
+    _TAG = 'rehearsal'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='rehearsal', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Segno(ComplexTypeSegno):
+    _TAG = 'segno'
+
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='segno', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Coda(ComplexTypeCoda):
+    _TAG = 'coda'
+
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='coda', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Words(ComplexTypeFormattedTextId):
@@ -33,9 +39,10 @@ class Words(ComplexTypeFormattedTextId):
     The words element specifies a standard text direction. Left justification is assumed if not specified. Language is
     Italian ("it") by default. Enclosure is none by default.
     """
+    _TAG = 'words'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='words', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Symbol(ComplexTypeFormattedSymbolId):
@@ -44,16 +51,17 @@ class Symbol(ComplexTypeFormattedSymbolId):
     musical symbol is interspersed into text. It should not be used in place of semantic markup, such as metronome
     marks that mix text and symbols. Left justification is assumed if not specified. Enclosure is none by default.
     """
+    _TAG = 'symbol'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='words', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Wedge(ComplexTypeWedge):
-    """"""
+    _TAG = 'wedge'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='wedge', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Dynamics(XMLElement):
@@ -88,12 +96,11 @@ class Pedal(XMLElement):
         NotImplementedError()
 
 
-class Metronome(XMLElement):
-    """"<xs:element name="metronome" type="metronome"/>"""
+class Metronome(ComplexTypeMetronome):
+    _TAG = 'metronome'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='metronome', *args, **kwargs)
-        NotImplementedError()
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class OctaveShift(XMLElement):

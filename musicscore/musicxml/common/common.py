@@ -49,6 +49,18 @@ EditorialVoice = Sequence(
 
 )
 
+"""
+The editorial-voice-direction group supports the common combination of editorial and voice information for a direction 
+element. It is separate from the editorial-voice element because extensions and restrictions might be different for 
+directions than for the note and forward elements.
+"""
+
+EditorialVoiceDirection = Sequence(
+    Element(FootNote, min_occurrence=0),
+    Element(Level, min_occurrence=0),
+    Element(Voice, min_occurrence=0)
+)
+
 '''
 	<xs:group name="staff">
 		<xs:annotation>
@@ -66,10 +78,10 @@ EditorialVoice = Sequence(
 
 
 class StaffElement(PositiveInteger):
-    '''
-    Staff assignment is only needed for music notated on multiple staves. Used by both notes and directions. Staff values
-    are numbers, with 1 referring to the top-most staff in a part.
-    '''
+    """
+    Staff assignment is only needed for music notated on multiple staves. Used by both notes and directions. Staff
+    valuesare numbers, with 1 referring to the top-most staff in a part.
+    """
 
     def __init__(self, value=None, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)

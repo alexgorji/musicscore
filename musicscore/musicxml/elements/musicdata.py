@@ -6,52 +6,58 @@ from musicscore.musicxml.types.complextypes.backup import ComplexTypeBackup
 
 
 class Backup(ComplexTypeBackup):
-    """"""
+    _TAG = 'backup'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(tag=self._Tag, *args, **kwargs)
 
 
 class Forward(XMLElement):
-    """"""
+    _TAG = 'forward'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='forward', *args, **kwargs)
+        super().__init__(tag=self._Tag, *args, **kwargs)
+        NotImplementedError()
 
 
 class Direction(XMLElement):
-    """"""
+    _TAG = 'direction'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='direction', *args, **kwargs)
+        super().__init__(tag=self._Tag, *args, **kwargs)
+        NotImplementedError()
 
 
 class Attributes(XMLElement):
-    """"""
+    _TAG = 'attributes'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='attributes', *args, **kwargs)
+        super().__init__(tag=self._Tag, *args, **kwargs)
+        NotImplementedError()
 
 
 class Sound(XMLElement):
-    """"""
+    _TAG = 'sound'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='sound', *args, **kwargs)
+        super().__init__(tag=self._Tag, *args, **kwargs)
+        NotImplementedError()
 
 
 class Link(XMLElement):
-    """"""
+    _TAG = 'link'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='link', *args, **kwargs)
+        super().__init__(tag=self._Tag, *args, **kwargs)
+        NotImplementedError()
 
 
 class Bookmark(XMLElement):
-    """"""
+    _TAG = 'bookmark'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='bookmark', *args, **kwargs)
+        super().__init__(tag=self._Tag, *args, **kwargs)
+        NotImplementedError()
 
 
 MusicData = Sequence(

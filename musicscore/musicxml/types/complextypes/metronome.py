@@ -187,7 +187,7 @@ class MetronomeRelation(XMLElement, String):
         super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
-class Metronome(ComplexType, PrintStyleAlign, Justify, Parentheses, OptionalUniqueId):
+class ComplexTypeMetronome(ComplexType, PrintStyleAlign, Justify, Parentheses, OptionalUniqueId):
     """
     The metronome type represents metronome marks and other metric relationships. The beat-unit group and per-minute
     element specify regular metronome marks. The metronome-note and metronome-relation elements allow for the

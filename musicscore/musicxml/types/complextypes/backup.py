@@ -27,5 +27,5 @@ class ComplexTypeBackup(ComplexType):
         GroupReference(Editorial)
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='backup', *args, **kwargs)
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)

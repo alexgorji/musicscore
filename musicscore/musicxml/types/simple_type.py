@@ -2,7 +2,7 @@ import re
 
 
 class SimpleType(object):
-    permitted = ()
+    _PERMITTED = ()
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -15,8 +15,8 @@ class SimpleType(object):
 
     @value.setter
     def value(self, v):
-        if v is not None and v not in self.permitted:
-            raise ValueError('{}.value {} must be None or in {} '.format(self.__class__.__name__, v, self.permitted))
+        if v is not None and v not in self._PERMITTED:
+            raise ValueError('{}.value {} must be None or in {} '.format(self.__class__.__name__, v, self._PERMITTED))
         self._value = v
         self._text = v
 
@@ -27,7 +27,7 @@ class SimpleType(object):
 # ///////////////
 
 class ExampleType(SimpleType):
-    permitted = ('one', 'two', 'three')
+    _PERMITTED = ('one', 'two', 'three')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -138,7 +138,7 @@ class TypeBackwardForward(SimpleType):
     """The backward-forward type is used to specify repeat directions. The start of the repeat has a forward direction
     while the end of the repeat has a backward direction.
     """
-    permitted = ["backward", "forward"]
+    _PERMITTED = ["backward", "forward"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -149,8 +149,8 @@ class TypeBarStyle(SimpleType):
     light-heavy, heavy-light, heavy-heavy, tick (a short stroke through the top line), short (a partial barline between
     the 2nd and 4th lines), and none.
     """
-    permitted = ["regular", "dotted", "dashed", "heavy", "light-light", "light-heavy", "heavy-light", "heavy-heavy",
-                 "tick", "short", "none"]
+    _PERMITTED = ["regular", "dotted", "dashed", "heavy", "light-light", "light-heavy", "heavy-light", "heavy-heavy",
+                  "tick", "short", "none"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -173,7 +173,7 @@ class TypeRightLeftMiddle(SimpleType):
     """
     The right-left-middle type is used to specify barline location.
     """
-    permitted = ["right", "left", "middle"]
+    _PERMITTED = ["right", "left", "middle"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -187,7 +187,7 @@ class TypeStopStartDiscontinue(SimpleType):
     first endings. Discontinue is used when there is no downward jog, as is typical for second endings that do not
     conclude a pieceThe right-left-middle type is used to specify barline location.
     """
-    permitted = ["start", "stop", "discontinue"]
+    _PERMITTED = ["start", "stop", "discontinue"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -199,7 +199,7 @@ class TypeWinged(SimpleType):
     The straight and curved values represent single wings, while the double-straight and double-curved values represent
     double wings. The none value indicates no wings and is the default.
     """
-    permitted = ["none", "straight", "curved", "double-straight", "double-curved"]
+    _PERMITTED = ["none", "straight", "curved", "double-straight", "double-curved"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -209,7 +209,7 @@ class TypeWinged(SimpleType):
 # Simple types derived from common.mod entities and elements
 
 class TypeAboveBelow(SimpleType):
-    permitted = ('above', 'below')
+    _PERMITTED = ('above', 'below')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -283,15 +283,15 @@ class TypeEnclosureShape(SimpleType):
     """The enclosure-shape type describes the shape and presence / absence of an enclosure around text or symbols. A
     bracket enclosure is similar to a rectangle with the bottom line missing, as is common in jazz notation.
     """
-    permitted = ["rectangle", "square", "oval", "circle", "bracket", "triangle", "diamond", "pentagon", "hexagon",
-                 "heptagon", "octagon", "nonagon", "decagon", "none"]
+    _PERMITTED = ["rectangle", "square", "oval", "circle", "bracket", "triangle", "diamond", "pentagon", "hexagon",
+                  "heptagon", "octagon", "nonagon", "decagon", "none"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
 
 class TypeFontWeight(SimpleType):
-    permitted = ('normal', 'bold')
+    _PERMITTED = ('normal', 'bold')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -304,7 +304,7 @@ class TypeFontSize(Decimal):
 
 
 class TypeFontStyle(SimpleType):
-    permitted = ('normal', 'italic')
+    _PERMITTED = ('normal', 'italic')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -314,7 +314,7 @@ class TypeLeftCenterRight(SimpleType):
     """
     The left-center-right type is used to define horizontal alignment and text justification.
     """
-    permitted = ('left', 'center', 'right')
+    _PERMITTED = ('left', 'center', 'right')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -324,7 +324,7 @@ class TypeLineLength(SimpleType):
     """
     The line-length type distinguishes between different line lengths for doit, falloff, plop, and scoop articulations.
     """
-    permitted = ('short', 'medium' 'long')
+    _PERMITTED = ('short', 'medium' 'long')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -334,7 +334,7 @@ class TypeLineType(SimpleType):
     """
     The line-type type distinguishes between solid, dashed, dotted, and wavy lines.
     """
-    permitted = ('solid', 'dashed' 'dotted', 'wavy')
+    _PERMITTED = ('solid', 'dashed' 'dotted', 'wavy')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -344,7 +344,72 @@ class TypeLineShape(SimpleType):
     """
     The line-shape type distinguishes between straight and curved lines.
     """
-    permitted = ('straight', 'curved')
+    _PERMITTED = ('straight', 'curved')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeMidi16(PositiveInteger):
+    """
+    The midi-16 type is used to express MIDI 1.0 values that range from 1 to 16.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        PositiveInteger(v)
+        if v <= 1 or v >= 16:
+            raise ValueError(
+                '{}.value {} must be between 1 and 16'.format(self.__class__.__name__, v))
+        self._value = v
+
+
+class TypeMidi128(PositiveInteger):
+    """
+    The midi-128 type is used to express MIDI 1.0 values that range from 1 to 128..
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        PositiveInteger(v)
+        if v <= 1 or v >= 128:
+            raise ValueError(
+                '{}.value {} must be between 1 and 128'.format(self.__class__.__name__, v))
+        self._value = v
+
+
+class TypeMidi16384(PositiveInteger):
+    """
+    The midi-16384 type is used to express MIDI 1.0 values that range from 1 to 16384..
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        PositiveInteger(v)
+        if v <= 1 or v >= 16384:
+            raise ValueError(
+                '{}.value {} must be between 1 and 16384'.format(self.__class__.__name__, v))
+        self._value = v
+
+
+class TypeMute(SimpleType):
+    """
+    The mute type represents muting for different instruments, including brass, winds, and strings. The on and off
+    values are used for undifferentiated mutes. The remaining values represent specific mutes.
+
+    """
+
+    _PERMITTED = ["on", "off", "straight", "cup", "harmon-no-stem", "harmon-stem", "bucket", "plunger", "hat",
+                  "solotone", "practice", "stop-mute", "stop-hand", "echo", "palm"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -420,7 +485,7 @@ class TypeNumberOrNormal(SimpleType):
 
 
 class OverUnder(SimpleType):
-    permitted = ('over', 'under')
+    _PERMITTED = ['over', 'under']
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -478,6 +543,13 @@ class TypeRotationDegrees(Decimal):
             raise ValueError(
                 '{}.value {} must be between -180 and 180'.format(self.__class__.__name__, v))
         self._value = v
+
+
+class TypeSemiPitched(SimpleType):
+    _PERMITTED = ["high", "medium-high", "medium", "medium-low", "low", "very-low"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
 
 
 class TypeSmulfGlyphName(Token):
@@ -577,7 +649,7 @@ class TypeStartStop(SimpleType):
     document. This is particularly common in multi-staff music. For example, the stopping point for a tuplet may appear
     in staff 1 before the starting point for the tuplet appears in staff 2 later in the document
     """
-    permitted = ["start", "stop"]
+    _PERMITTED = ["start", "stop"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -594,7 +666,7 @@ class TypeStartStopContinue(SimpleType):
     a MusicXML document. This is particularly common in multi-staff music. For example, the stopping point for a slur
     may appear in staff 1 before the starting point for the slur appears in staff 2 later in the document.
     """
-    permitted = ["start", "stop", "continue"]
+    _PERMITTED = ["start", "stop", "continue"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -604,7 +676,7 @@ class TypeSymbolSize(SimpleType):
     """
     The symbol-size type is used to distinguish between full, cue sized, grace cue sized, and oversized symbols.
     """
-    permitted = ["full", "cue", "grace-cue", "large"]
+    _PERMITTED = ["full", "cue", "grace-cue", "large"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -636,7 +708,7 @@ class TypeTextDirection(SimpleType):
     bidirectional text.
     """
 
-    permitted = ["ltr", "rtl", "lro", "rlo"]
+    _PERMITTED = ["ltr", "rtl", "lro", "rlo"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -653,7 +725,7 @@ class TypeTiedType(SimpleType):
 	In start-stop cases, ties can add more elements using a continue type. This is typically used to specify the
 	formatting of cross-system ties.
     """
-    permitted = ["start", "stop", "continue", "let-ring"]
+    _PERMITTED = ["start", "stop", "continue", "let-ring"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -687,7 +759,7 @@ class TypeUpDown(SimpleType):
     which way the tip is pointing.
     """
 
-    permitted = ["up", "down"]
+    _PERMITTED = ["up", "down"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -699,17 +771,34 @@ class TypeValign(SimpleType):
     Defaults are implementation-dependent.
     """
 
-    permitted = ["top", "middle", "bottom", "baseline"]
+    _PERMITTED = ["top", "middle", "bottom", "baseline"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
 
 class TypeYesNo(SimpleType):
-    permitted = ('yes', 'no')
+    _PERMITTED = ('yes', 'no')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
+
+
+class TypeYesNoNumber(SimpleType):
+    """
+    The yes-no-number type is used for attributes that can be either boolean or numeric values.
+    """
+    _PERMITTED = ('yes', 'no')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v is not None and v not in self._PERMITTED and not Decimal(v):
+            raise ValueError(
+                '{}.value {} must be yes no ord decimal')
+        self._value = v
 
 
 ''''
@@ -759,59 +848,6 @@ class TypeYesNo(SimpleType):
 	</xs:simpleType>
 
 
-	<xs:simpleType name="midi-16">
-		<xs:annotation>
-			<xs:documentation>The midi-16 type is used to express MIDI 1.0 values that range from 1 to 16.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:positiveInteger">
-			<xs:minInclusive value="1"/>
-			<xs:maxInclusive value="16"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="midi-128">
-		<xs:annotation>
-			<xs:documentation>The midi-16 type is used to express MIDI 1.0 values that range from 1 to 128.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:positiveInteger">
-			<xs:minInclusive value="1"/>
-			<xs:maxInclusive value="128"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="midi-16384">
-		<xs:annotation>
-			<xs:documentation>The midi-16 type is used to express MIDI 1.0 values that range from 1 to 16,384.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:positiveInteger">
-			<xs:minInclusive value="1"/>
-			<xs:maxInclusive value="16384"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="mute">
-		<xs:annotation>
-			<xs:documentation>The mute type represents muting for different instruments, including brass, winds, and strings. The on and off values are used for undifferentiated mutes. The remaining values represent specific mutes.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="on"/>
-			<xs:enumeration value="off"/>
-			<xs:enumeration value="straight"/>
-			<xs:enumeration value="cup"/>
-			<xs:enumeration value="harmon-no-stem"/>
-			<xs:enumeration value="harmon-stem"/>
-			<xs:enumeration value="bucket"/>
-			<xs:enumeration value="plunger"/>
-			<xs:enumeration value="hat"/>
-			<xs:enumeration value="solotone"/>
-			<xs:enumeration value="practice"/>
-			<xs:enumeration value="stop-mute"/>
-			<xs:enumeration value="stop-hand"/>
-			<xs:enumeration value="echo"/>
-			<xs:enumeration value="palm"/>
-		</xs:restriction>
-	</xs:simpleType>
-
 	<xs:simpleType name="positive-integer-or-empty">
 		<xs:annotation>
 			<xs:documentation>The positive-integer-or-empty values can be either a positive integer or an empty string.</xs:documentation>
@@ -825,19 +861,7 @@ class TypeYesNo(SimpleType):
 		</xs:union>
 	</xs:simpleType>
 
-	<xs:simpleType name="semi-pitched">
-		<xs:annotation>
-			<xs:documentation>The semi-pitched type represents categories of indefinite pitch for percussion instruments.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="high"/>
-			<xs:enumeration value="medium-high"/>
-			<xs:enumeration value="medium"/>
-			<xs:enumeration value="medium-low"/>
-			<xs:enumeration value="low"/>
-			<xs:enumeration value="very-low"/>
-		</xs:restriction>
-	</xs:simpleType>
+
 
 	<xs:simpleType name="smufl-coda-glyph-name">
 		<xs:annotation>
@@ -969,13 +993,6 @@ class TypeYesNo(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="yes-no-number">
-		<xs:annotation>
-			<xs:documentation>The yes-no-number type is used for attributes that can be either boolean or numeric values.</xs:documentation>
-		</xs:annotation>
-		<xs:union memberTypes="yes-no xs:decimal"/>
-	</xs:simpleType>
-
 	<xs:simpleType name="yyyy-mm-dd">
 		<xs:annotation>
 			<xs:documentation>Calendar dates are represented yyyy-mm-dd format, following ISO 8601. This is a W3C XML Schema date type, but without the optional timezone data.</xs:documentation>
@@ -996,7 +1013,7 @@ class TypeCancelLocation(SimpleType):
     signature: to the left, to the right, or before the barline and to the left. It is left by default. For mid-measure
     key elements, a cancel-location of before-barline should be treated like a cancel-location of left.
     """
-    permitted = ['left', 'right', 'before-barline']
+    _PERMITTED = ['left', 'right', 'before-barline']
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1009,7 +1026,7 @@ class TypeClefSign(SimpleType):
     just as the TAB sign indicates that the music that follows should be in tablature notation.
     Unlike TAB, a jianpu sign does not correspond to a visual clef notation.
     """
-    permitted = ('G', 'F', 'C', 'percussion', 'TAB', 'jianpu', 'none')
+    _PERMITTED = ('G', 'F', 'C', 'percussion', 'TAB', 'jianpu', 'none')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1030,7 +1047,8 @@ class TypeMode(SimpleType):
     The mode type is used to specify major/minor and other mode distinctions. Valid mode values include major, minor,
     dorian, phrygian, lydian, mixolydian, aeolian, ionian, locrian, and none
     """
-    permitted = ['major', 'minor', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'aeolian', 'ionian', 'locrian', 'none']
+    _PERMITTED = ['major', 'minor', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'aeolian', 'ionian', 'locrian',
+                  'none']
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1136,7 +1154,7 @@ class TypeWedgeType(SimpleType):
     a wedge that is closed on the right side, and stop for the end of a wedge. The continue type is used for formatting
     wedges over a system break, or for other situations where a single wedge is divided into multiple segments.
     """
-    permitted = ('crescendo', 'diminuendo', 'stop', 'continue')
+    _PERMITTED = ('crescendo', 'diminuendo', 'stop', 'continue')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1676,11 +1694,11 @@ class TypeAccidentalValue(SimpleType):
      in Turkish folk music. The sori and koron accidentals are microtonal sharp and flat accidentals used in Iranian
      and Persian music.
     """
-    permitted = ["sharp", "natural", "flat", "double-sharp", "sharp-sharp", "flat-flat", "natural-sharp",
-                 "natural-flat", "quarter-flat", "quarter-sharp", "three-quarters-flat", "three-quarters-sharp",
-                 "sharp-down", "sharp-up", "natural-down", "natural-up", "flat-down", "flat-up", "triple-sharp",
-                 "triple-flat", "slash-quarter-sharp", "slash-sharp", "slash-flat", "double-slash-flat", "sharp-1",
-                 "sharp-2", "sharp-3", "sharp-5", "flat-1", "flat-2", "flat-3", "flat-4", "sori", "karon"]
+    _PERMITTED = ["sharp", "natural", "flat", "double-sharp", "sharp-sharp", "flat-flat", "natural-sharp",
+                  "natural-flat", "quarter-flat", "quarter-sharp", "three-quarters-flat", "three-quarters-sharp",
+                  "sharp-down", "sharp-up", "natural-down", "natural-up", "flat-down", "flat-up", "triple-sharp",
+                  "triple-flat", "slash-quarter-sharp", "slash-sharp", "slash-flat", "double-slash-flat", "sharp-1",
+                  "sharp-2", "sharp-3", "sharp-5", "flat-1", "flat-2", "flat-3", "flat-4", "sori", "karon"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1691,7 +1709,7 @@ class TypeBeamValue(SimpleType):
     The beam-value type represents the type of beam associated with each of 8 beam levels (up to 1024th notes) available
     for each note.
     """
-    permitted = ["begin", "continue", "end", "forward hook", "backward hook"]
+    _PERMITTED = ["begin", "continue", "end", "forward hook", "backward hook"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1701,7 +1719,7 @@ class TypeBreathMarkValue(SimpleType):
     """
     The breath-mark-value type represents the symbol used for a breath mark.
     """
-    permitted = ["", "comma", "tick", "upbow", "salzedo"]
+    _PERMITTED = ["", "comma", "tick", "upbow", "salzedo"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1711,7 +1729,7 @@ class TypeCaesuraValue(SimpleType):
     """
     The caesura-value type represents the shape of the caesura sign.
     """
-    permitted = ["normal", "thick", "short", "curved", "single", ""]
+    _PERMITTED = ["normal", "thick", "short", "curved", "single", ""]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1722,7 +1740,7 @@ class TypeFan(SimpleType):
     The fan type represents the type of beam fanning present on a note, used to represent accelerandos and
     ritardandos.
     """
-    permitted = ["accel", "rit", "none"]
+    _PERMITTED = ["accel", "rit", "none"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1733,7 +1751,7 @@ class TypeNoteTypeValue(SimpleType):
     The note-type type is used for the MusicXML type element and represents the graphic note type, from 1024th (
     shortest) to maxima (longest)
     """
-    permitted = (
+    _PERMITTED = (
         '1024th', '512th', '256th', '128th', '64th', '32nd', '16th', 'eighth', 'quarter', 'half', 'whole', 'breve',
         'long',
         'maxima')
@@ -1771,14 +1789,14 @@ class TypeShowTuplet(SimpleType):
     The show-tuplet type indicates whether to show a part of a tuplet relating to the tuplet-actual element, both the
     tuplet-actual and tuplet-normal elements, or neither.
     """
-    permitted = ('actual', 'both', 'none')
+    _PERMITTED = ('actual', 'both', 'none')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
 
 
 class TypeStep(SimpleType):
-    permitted = ('A', 'B', 'C', 'D', 'E', 'F', 'G')
+    _PERMITTED = ('A', 'B', 'C', 'D', 'E', 'F', 'G')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1791,7 +1809,7 @@ class TypeSyllabic(SimpleType):
     respectively.
     """
 
-    permitted = ["single", "begin", "end", "middle"]
+    _PERMITTED = ["single", "begin", "end", "middle"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
