@@ -12,7 +12,11 @@ from musicscore.musicxml.common.common import Voice
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Pitch
+from musicscore.musicxml.elements.musicdata import Direction
 from musicscore.musicxml.elements.note import Beam, Type, Tie
+from musicscore.musicxml.types.complextypes.direction import DirectionType, Sound
+from musicscore.musicxml.types.complextypes.directiontype import Metronome
+from musicscore.musicxml.types.complextypes.metronome import BeatUnit, PerMinute
 
 
 class TreePartVoice(object):
@@ -619,6 +623,14 @@ class TreePart(timewise.Part):
                 note.update_duration(self.get_divisions())
         for backup in self.get_children_by_type(TreeBackup):
             backup.update_duration(self.get_divisions())
+
+    def add_metronome(self, beat_unit='quarter', per_minute=60):
+        d = self.add_child(Direction())
+        dt = d.add_child(DirectionType())
+        m = dt.add_child(Metronome())
+        m.add_child(BeatUnit(beat_unit))
+        m.add_child(PerMinute(str(per_minute)))
+        d.add_child(Sound(tempo=per_minute))
 
     def finish(self):
         if not self._finished:

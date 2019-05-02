@@ -422,7 +422,7 @@ class TypeNonNegativeDecimal(SimpleType):
     @SimpleType.value.setter
     def value(self, v):
         if not isinstance(v, float) and not isinstance(v, int):
-            raise TypeError('value {} must a be a non negative float or int'.format(v))
+            raise TypeError('value {} must a be a non negative float or int not {}'.format(v, type(v).__name__))
         if v < 0:
             raise ValueError('value {} must be non negative'.format(v))
         self._value = v
