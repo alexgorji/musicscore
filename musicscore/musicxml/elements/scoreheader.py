@@ -1,6 +1,7 @@
 from musicscore.dtd.dtd import Sequence, Element
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.credit import ComplexTypeCredit
+from musicscore.musicxml.types.complextypes.defaults import ComplexTypeDefaults
 from musicscore.musicxml.types.complextypes.partlist import ComplexTypePartList
 from musicscore.musicxml.types.complextypes.scorepart import Identification
 
@@ -23,10 +24,11 @@ class MovementTitle(XMLElement):
         raise NotImplementedError('MovementTitle')
 
 
-class Defaults(XMLElement):
+class Defaults(ComplexTypeDefaults):
+    _TAG = 'defaults'
+
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='defaults', *args, **kwargs)
-        raise NotImplementedError('Defaults')
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Credit(ComplexTypeCredit):

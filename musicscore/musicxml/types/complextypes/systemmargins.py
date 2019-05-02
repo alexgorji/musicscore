@@ -1,5 +1,5 @@
 from musicscore.dtd.dtd import GroupReference
-from musicscore.musicxml.groups.layout import LeftRightMargins
+from musicscore.musicxml.groups.margins import LeftRightMargins
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 
 

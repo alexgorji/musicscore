@@ -1,8 +1,3 @@
-from musicscore.dtd.dtd import Sequence, Element
-
-from musicscore.musicxml.types.complextypes.pagelayout import ComplexTypePageLayout
-from musicscore.musicxml.types.complextypes.systemlayout import ComplexTypeSystemLayout
-
 from musicscore.dtd.dtd import GroupReference, Element, Sequence
 
 from musicscore.musicxml.elements.xml_element import XMLElement
@@ -54,38 +49,4 @@ AllMargins = Sequence(
     Element(TopMargin),
     Element(BottomMargin)
 
-)
-
-
-class PageLayout(ComplexTypePageLayout):
-    _TAG = 'page-layout'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
-
-
-class SystemLayout(ComplexTypeSystemLayout):
-    """"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        NotImplementedError()
-
-
-class StaffLayout(object):
-    """"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        NotImplementedError()
-
-
-"""
-The layout group specifies the sequence of page, system, and staff layout elements that is
-                common to both the defaults and print elements.
-"""
-Layout = Sequence(
-    Element(PageLayout, min_occurrence=0),
-    Element(SystemLayout, min_occurrence=0),
-    Element(StaffLayout, min_occurrence=0, max_occurrence=None)
 )
