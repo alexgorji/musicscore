@@ -1,9 +1,9 @@
+from AGtree.tree import Tree
 from lxml import etree as et
 
 from musicscore.basic_functions import replace_dash
 from musicscore.dtd.dtd import DTDError, ChildIsNotOptional, ChildTypeDTDConflict, ChildOccurrenceDTDConflict, Sequence
 from musicscore.musicxml.exceptions import AfterInitializationError
-from musicscore.tree.tree import Tree
 
 
 class XMLTree(Tree):

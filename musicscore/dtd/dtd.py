@@ -1,5 +1,7 @@
-from musicscore.tree.tree import Tree
+
 import warnings
+
+from AGtree.tree import Tree
 
 
 class DTDError(Exception):

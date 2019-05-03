@@ -3,7 +3,7 @@ import warnings
 from quicktions import Fraction
 
 from musicscore.musictree.treechord import TreeChord
-from musicscore.musicxml.elements.note import TimeModification, Grace
+from musicscore.musicxml.elements.note import TimeModification
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
 
