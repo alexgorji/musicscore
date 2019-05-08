@@ -118,6 +118,10 @@ class TreeScoreTimewise(timewise.Score):
         part.add_chord(chord)
         return chord
 
+    def add_title(self, text):
+        pass
+
+
     def update_measures(self):
         measures = self.get_children_by_type(TreeMeasure)
         for index, measure in enumerate(measures):
