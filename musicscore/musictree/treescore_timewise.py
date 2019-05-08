@@ -5,8 +5,222 @@ from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescorepart import TreeScorePart
-from musicscore.musicxml.elements.scoreheader import PartList
+from musicscore.musicxml.elements.scoreheader import PartList, Credit, Defaults
+from musicscore.musicxml.groups.layout import PageLayout
+from musicscore.musicxml.groups.margins import LeftMargin, RightMargin, TopMargin, BottomMargin
+from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWords
+from musicscore.musicxml.types.complextypes.defaults import Scaling
+from musicscore.musicxml.types.complextypes.pagelayout import PageMargins, PageHeight, PageWidth
+from musicscore.musicxml.types.complextypes.scaling import Tenths, Millimeters
 from musicscore.musicxml.types.complextypes.scorepart import PartName
+
+
+class TreePageStyle(object):
+    sizes = {'A4': (210, 297), 'A3': (297, 420)}
+
+    def __init__(self, score, format='portrait', size='A4', scale=1, left_margin=20, right_margin=10, top_margin=15,
+                 bottom_margin=15):
+        self._score = None
+        self.score = score
+        self.tenth = 40
+
+        self._format = None
+        self._size = None
+
+        self._defaults = None
+        self._scaling = None
+
+        self._page_layout = None
+        self._page_height = None
+        self._page_width = None
+        self._page_margins = None
+
+        self._left_margin = None
+        self._right_margin = None
+        self._top_margin = None
+        self._bottom_margin = None
+
+        self._system_layout = None
+        self._system_margins = None
+        self._staff_distance = None
+
+        self.format = format
+        self.scale = scale
+        self.size = size
+        self.left_margin = left_margin
+        self.right_margin = right_margin
+        self.top_margin = top_margin
+        self.bottom_margin = bottom_margin
+
+    def millimeters_to_tenth(self, m):
+        return round(m / self.millimeters * self.tenth)
+
+    @property
+    def millimeters(self):
+        return self.scale * 7.2319
+
+    def _add_defaults(self):
+        self._defaults = self.score.add_child(Defaults())
+
+    def _add_scaling(self):
+        if not self._defaults:
+            self._add_defaults()
+        self._scaling = self._defaults.add_child(Scaling())
+        self._scaling.add_child(Millimeters(self.millimeters))
+        self._scaling.add_child(Tenths(self.tenth))
+
+    def _add_page_layout(self):
+        if not self._scaling:
+            self._add_scaling()
+
+        self._page_layout = self._defaults.add_child(PageLayout())
+
+    def _add_page_margins(self):
+        if not self._page_layout:
+            self._add_page_layout()
+
+        self._page_margins = self._page_layout.add_child(PageMargins(type_='both'))
+
+    @property
+    def score(self):
+        '''
+        system_layout = defaults.add_child(SystemLayout())
+        system_margins = system_layout.add_child(SystemMargins())
+        system_margins.add_child(LeftMargin(0))
+        system_margins.add_child(RightMargin(0))
+        system_layout.add_child(SystemDistance(121))
+        system_layout.add_child(TopSystemDistance(300))
+        '''
+        return self._score
+
+    @score.setter
+    def score(self, value):
+        if not isinstance(value, TreeScoreTimewise):
+            raise TypeError('score.value must be of type TreeScoreTimewise not{}'.format(type(value)))
+        self._score = value
+
+    @property
+    def page_height(self):
+        return self._page_height
+
+    @page_height.setter
+    def page_height(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.page_height:
+            self.page_height.value = value
+        else:
+            if not self._page_layout:
+                self._add_page_layout()
+            self._page_height = self._page_layout.add_child(PageHeight(value))
+
+    @property
+    def page_width(self):
+        return self._page_width
+
+    @page_width.setter
+    def page_width(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.page_width:
+            self.page_width.value = value
+        else:
+            if not self._page_layout:
+                self._add_page_layout()
+            self._page_width = self._page_layout.add_child(PageWidth(value))
+
+    @property
+    def format(self):
+        return self._format
+
+    @format.setter
+    def format(self, value):
+        self._format = value
+
+    @property
+    def left_margin(self):
+        return self._left_margin
+
+    @left_margin.setter
+    def left_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.left_margin:
+            self.left_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._left_margin = self._page_margins.add_child(LeftMargin(value))
+
+    @property
+    def right_margin(self):
+        return self._right_margin
+
+    @right_margin.setter
+    def right_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.right_margin:
+            self.right_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._right_margin = self._page_margins.add_child(RightMargin(value))
+
+    @property
+    def top_margin(self):
+        return self._top_margin
+
+    @top_margin.setter
+    def top_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.top_margin:
+            self.top_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._top_margin = self._page_margins.add_child(TopMargin(value))
+
+    @property
+    def bottom_margin(self):
+        return self._bottom_margin
+
+    @bottom_margin.setter
+    def bottom_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.bottom_margin:
+            self.bottom_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._bottom_margin = self._page_margins.add_child(BottomMargin(value))
+
+    @property
+    def staff_distance(self):
+        return self._staff_distance
+
+    @staff_distance.setter
+    def staff_distance(self, value):
+        self._staff_distance = value
+
+    @property
+    def size(self):
+        (w, h) = self.sizes[self._size]
+        if self.format == 'landscape':
+            h, w = w, h
+        # h = self.millimeters_to_tenth(h)
+        # w = self.millimeters_to_tenth(w)
+        return h, w
+
+    @size.setter
+    def size(self, value):
+        self._size = value
+        self.page_height = self.size[0]
+        self.page_width = self.size[1]
+
+    @property
+    def page_size(self):
+        return self.size
+
+    @page_size.setter
+    def page_size(self, value):
+        self.size = value
 
 
 class TreeInstrumentPart(object):
@@ -118,9 +332,24 @@ class TreeScoreTimewise(timewise.Score):
         part.add_chord(chord)
         return chord
 
-    def add_title(self, text):
-        pass
+    def add_title(self, text, page=None, font_size=None, default_x=None, default_y=None):
+        if not page:
+            page = 1
+        if not font_size:
+            font_size = 24
+        if not default_x:
+            default_x = 598
+        if not default_y:
+            default_y = 1600
 
+        c = self.add_child(Credit(page=page))
+        c.add_child(CreditType('title'))
+        c.add_child(CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify='center',
+                                valign='top'))
+
+    def add_page_style(self):
+        page_style = TreePageStyle(score=self)
+        return page_style
 
     def update_measures(self):
         measures = self.get_children_by_type(TreeMeasure)
