@@ -624,10 +624,10 @@ class TreePart(timewise.Part):
         for backup in self.get_children_by_type(TreeBackup):
             backup.update_duration(self.get_divisions())
 
-    def add_metronome(self, beat_unit='quarter', per_minute=60):
+    def add_metronome(self, beat_unit='quarter', per_minute=60, **kwargs):
         d = self.add_child(Direction())
         dt = d.add_child(DirectionType())
-        m = dt.add_child(Metronome())
+        m = dt.add_child(Metronome(**kwargs))
         m.add_child(BeatUnit(beat_unit))
         m.add_child(PerMinute(str(per_minute)))
         d.add_child(Sound(tempo=per_minute))

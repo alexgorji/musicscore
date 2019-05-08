@@ -17,7 +17,7 @@
       </attributes>
       <direction>
         <direction-type>
-          <metronome>
+          <metronome relative-y="15">
             <beat-unit>quarter</beat-unit>
             <per-minute>60</per-minute>
           </metronome>
