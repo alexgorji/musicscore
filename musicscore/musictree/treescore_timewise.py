@@ -332,7 +332,8 @@ class TreeScoreTimewise(timewise.Score):
         part.add_chord(chord)
         return chord
 
-    def add_title(self, text, page=None, font_size=None, default_x=None, default_y=None):
+    def add_title(self, text, page=None, font_size=None, default_x=None, default_y=None, justify=None, valign=None,
+                  **kwargs):
         if not page:
             page = 1
         if not font_size:
@@ -341,11 +342,35 @@ class TreeScoreTimewise(timewise.Score):
             default_x = 598
         if not default_y:
             default_y = 1600
+        if not justify:
+            justify = 'center'
+        if not valign:
+            valign = 'top'
 
         c = self.add_child(Credit(page=page))
         c.add_child(CreditType('title'))
-        c.add_child(CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify='center',
-                                valign='top'))
+        c.add_child(CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
+                                valign=valign, **kwargs))
+
+    def add_subtitle(self, text, page=None, font_size=None, default_x=None, default_y=None, justify=None, valign=None,
+                     **kwargs):
+        if not page:
+            page = 1
+        if not font_size:
+            font_size = 18
+        if not default_x:
+            default_x = 598
+        if not default_y:
+            default_y = 1550
+        if not justify:
+            justify = 'center'
+        if not valign:
+            valign = 'top'
+
+        c = self.add_child(Credit(page=page))
+        c.add_child(CreditType('subtitle'))
+        c.add_child(CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
+                                valign=valign, **kwargs))
 
     def add_page_style(self):
         page_style = TreePageStyle(score=self)
