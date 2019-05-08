@@ -417,6 +417,16 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.split_not_notatable()
 
+    def adjoin_ties(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.adjoin_ties()
+
+    def adjoin_rests(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.adjoin_rests()
+
     def update_tuplets(self):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
@@ -469,6 +479,8 @@ class TreeScoreTimewise(timewise.Score):
             self.add_beats()
             self.quantize()
             self.split_not_notatable()
+            self.join_ties()
+            self.join_rests()
             self.update_tuplets()
             self.substitute_sextoles()
             self.update_types()

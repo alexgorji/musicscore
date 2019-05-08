@@ -16,6 +16,12 @@ class TreeMeasure(timewise.Measure):
         self._offset = None
 
     @property
+    def __name__(self):
+        index = self.up.get_children_by_type(self.__class__).index(self)
+        # return 'm:' + str(index + 1)
+        return str(index + 1)
+
+    @property
     def time(self):
         return self._time
 

@@ -168,5 +168,5 @@ class SimpleFormat(object):
     def __deepcopy__(self, memodict={}):
         output = SimpleFormat()
         for chord in self.chords:
-            output.add_chord(chord.deepcopy_for_SimplfeFormat())
+            output.add_chord(chord.deepcopy_for_SimpleFormat())
         return output

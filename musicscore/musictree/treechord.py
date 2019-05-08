@@ -59,6 +59,11 @@ class TreeChord(XMLTree):
         self._head = False
 
     @property
+    def __name__(self):
+        # return self.parent_voice.__name__ + ' ' + 'ch:' + str(self.parent_voice.chords.index(self) + 1)
+        return self.parent_voice.__name__ + '.' + str(self.parent_voice.chords.index(self) + 1)
+
+    @property
     def quarter_duration(self):
         return self._quarter_duration
 
@@ -102,6 +107,24 @@ class TreeChord(XMLTree):
     @property
     def tie_types(self):
         return [tie.type for tie in self.get_children_by_type(Tie)]
+
+    @property
+    def is_tied_to_next(self):
+        if 'start' in self.tie_types:
+            return True
+        return False
+
+    @property
+    def is_tied_to_previous(self):
+        if 'stop' in self.tie_types:
+            return True
+        return False
+
+    @property
+    def is_rest(self):
+        if self.midis[0].value == 0:
+            return True
+        return False
 
     @property
     def position_in_beat(self):
@@ -408,7 +431,7 @@ class TreeChord(XMLTree):
         self.parent_beat.chords.remove(self)
         self.parent_voice.chords.remove(self)
 
-    def deepcopy_for_SimplfeFormat(self):
+    def deepcopy_for_SimpleFormat(self):
         new_chord = TreeChord(quarter_duration=self.quarter_duration)
         new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
         for child in self.get_children():
