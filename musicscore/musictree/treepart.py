@@ -360,107 +360,95 @@ class TreePartVoice(object):
             warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
     def adjoin_ties(self):
-        def _adjoin(current_chord, next_chord):
-            def _print_condition(condition_name, condition):
-                print('adjoin_ties:', current_chord.name, next_chord.name, condition_name, condition)
-
-            def _current_chord_is_all_tied():
-                condition = current_chord.is_tied
-                # _print_condition('_current_note_is_all_tied', condition)
-                return condition
-
-            def _chords_are_not_rest():
-                condition = not isinstance(current_chord.event, Rest) and not isinstance(next_chord.event, Rest)
-                # _print_condition('_chords_are_not_rest', condition)
-                return condition
-
-            def _chords_have_right_positions():
-                # print 'in _chords_have_right_positions', current_chord.name, next_chord.name
-                condition = current_chord.position_in_measure % (
-                    1) == 0 and next_chord.position_in_measure % 1 == 0
-                # _print_condition('_chords_have_right_positions', condition)
-                return condition
-
-            def _result_is_notatable():
-                condition = current_chord.quarter_duration + next_chord.quarter_duration in notatables
-                # _print_condition('_result_is_notatable', condition)
-                return condition
-
-            #
-            #
-            #
-            # if not self._ties_adjoined:
-            #     notatables = [1, 1.5, 2, 3, 4, 6, 8]
-            #     chords = self.chords
-            #
-            #     def adjoin_ties(self):
-            #
-            #         note_node_iterator = measure_node.iter_leaves()
-            #
-            #         def _adjoin(current_note_node, next_note_node):
-            #             # print ('_adjoin', current_note_node.note.position_in_measure, next_note_node.note.position_in_measure)
-            #             is_adjoined = False
-            #
-            #             if _current_note_is_all_tied() and _are_not_rests() and _have_right_positions() and _result_is_notatable() and next_note.divisions != 6:
-            #                 # print 'adjoining ties'
-            #                 current_note.duration += next_note.duration
-            #                 current_note.quantized_duration += next_note.quantized_duration
-            #                 for index, current_pitch in enumerate(current_note.pitches):
-            #                     current_pitch.is_tied = next_note.pitches[index].is_tied
-            #                 is_adjoined = True
-            #                 next_note_beat_node = next_note_node.up
-            #                 # print ('detaching next_note_node', next_note_beat_node.name)
-            #                 next_note_node.detach()
-            #
-            #                 if next_note_beat_node.children == []:
-            #                     # print ('detaching next_note_beat_node', next_note_beat_node.name)
-            #                     next_note_beat_node.detach()
-            #
-            #                 try:
-            #                     next_note_node = note_node_iterator.next()
-            #                     next_note_node = _adjoin(current_note_node, next_note_node)
-            #                 except StopIteration as err:
-            #                     pass
-            #
-            #             return next_note_node
-            #
-            #         current_note_node = note_node_iterator.next()
-            #
-            #         try:
-            #             next_note_node = note_node_iterator.next()
-            #         except StopIteration:
-            #             return
-            #
-            #         while True:
-            #             # print 'adjoin_ties in while: current_note', current_note_node.name
-            #             try:
-            #                 # print 'in while before joining', current_note_node.name, next_note_node.name
-            #                 next_note_node = _adjoin(current_note_node, next_note_node)
-            #                 # print 'in while before iter', current_note_node.name, next_note_node.name
-            #                 current_note_node = next_note_node
-            #                 next_note_node = note_node_iterator.next()
-            #                 # print 'in while after iter', current_note_node.name, next_note_node.name
-            #                 # #print 'is_adjoined', is_adjoined
-            #                 # if is_adjoined == False:
-            #                 #     current_note_node = next_note_node
-            #                 #     next_note_node = note_node_iterator.next()
-            #                 # else:
-            #                 #     current_note_node = note_node_iterator.next()
-            #                 #     next_note_node = note_node_iterator.next()
-            #
-            #             except StopIteration as err:
-            #                 break
-
-            self._ties_adjoined = True
-
         if not self._not_notatable_split:
             raise Exception('split_not_notatable() first')
+        if not self._ties_adjoined:
+            # notatables = [1, 1.5, 2, 3, 4, 6, 8]
+            notatables = [1, 2, 3, 4, 6, 8]
+
+            # chord_iterator = iter(reversed(self.chords))
+            chord_iterator = iter(self.chords)
+
+            def _adjoin(current_chord, next_chord):
+
+                def _chords_are_adjoinable():
+                    condition = current_chord.is_adjoinable and next_chord.is_adjoinable
+                    return condition
+
+                def _current_chord_is_all_tied():
+                    condition = current_chord.is_tied_to_next
+                    # _print_condition('_current_note_is_all_tied', condition)
+                    return condition
+
+                def _chords_are_not_rest():
+                    condition = not current_chord.is_rest and not next_chord.is_rest
+                    # _print_condition('_chords_are_not_rest', condition)
+                    return condition
+
+                def _chords_have_right_positions():
+                    # print 'in _chords_have_right_positions', current_chord.name, next_chord.name
+                    condition = current_chord.offset % (
+                        1) == 0 and next_chord.offset % 1 == 0
+                    # _print_condition('_chords_have_right_positions', condition)
+                    return condition
+
+                def _result_is_notatable():
+                    condition = current_chord.quarter_duration + next_chord.quarter_duration in notatables
+                    # _print_condition('_result_is_notatable', condition)
+                    return condition
+
+                if _chords_are_adjoinable() and _current_chord_is_all_tied() and _chords_are_not_rest() and _chords_have_right_positions() and _result_is_notatable() and next_chord.parent_beat.best_div != 6:
+
+                    current_chord.quarter_duration += next_chord.quarter_duration
+
+                    if 'stop' in next_chord.tie_types and 'start' not in next_chord.tie_types:
+                        current_chord.remove_tie('start')
+
+                    next_chord.marked = True
+
+                    try:
+                        next_chord = chord_iterator.__next__()
+                        next_chord = _adjoin(current_chord, next_chord)
+                    except StopIteration:
+                        pass
+
+                return next_chord
+
+            adjoin = True
+            current_chord = chord_iterator.__next__()
+            try:
+                next_chord = chord_iterator.__next__()
+            except StopIteration:
+                adjoin = False
+
+            while adjoin:
+                try:
+                    next_chord = _adjoin(current_chord, next_chord)
+                    current_chord = next_chord
+                    next_chord = chord_iterator.__next__()
+                except StopIteration:
+                    break
+
+            voice_new_chords = []
+            for chord in self.chords:
+
+                try:
+                    if chord.marked:
+                        chord.parent_beat.chords.remove(chord)
+                    else:
+                        voice_new_chords.append(chord)
+                except AttributeError as err:
+                    voice_new_chords.append(chord)
+
+            self._chords = voice_new_chords
+
+            self._ties_adjoined = True
         else:
             warnings.warn('ties of chords in {} already adjoined. No action took place.'.format(self))
 
     def adjoin_rests(self):
-        if not self._ties_joined:
-            raise Exception('adjoin_rests() first')
+        if not self._ties_adjoined:
+            raise Exception('adjoin_ties() first')
 
         if not self._rests_adjoined:
             print('TreePart.adjoin_rests() is a dummy')
@@ -469,7 +457,7 @@ class TreePartVoice(object):
             warnings.warn('rests in {} already adjoin_rests. No action took place.'.format(self))
 
     def update_tuplets(self):
-        if not self._rests_joined:
+        if not self._rests_adjoined:
             raise Exception('join_rests() first')
 
         if not self._tuplets_updated:

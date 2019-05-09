@@ -13,10 +13,17 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[1, 1])
+        sf = SimpleFormat(durations=[0.5, 1.5, 0.3, 1.7])
         v = sf.to_voice(1)
         v.add_to_score(self.score, 1, 1)
 
         result_path = path + '_test_1'
-        self.score.write(path=result_path)
-        # TestScore().assert_template(result_path=result_path)
+        self.score.fill_with_rest()
+        self.score.add_beats()
+        self.score.quantize()
+        self.score.split_not_notatable()
+        for chord in self.score.get_measure(1).get_part(1).get_voice(1).chords:
+            chord.add_lyric(round(float(chord.offset), 2))
+        with self.assertWarns(UserWarning):
+            self.score.write(path=result_path)
+        TestScore().assert_template(result_path=result_path)

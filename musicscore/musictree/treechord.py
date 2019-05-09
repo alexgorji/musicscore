@@ -57,6 +57,7 @@ class TreeChord(XMLTree):
         self.midis = midis
         self._tail = False
         self._head = False
+        self._is_adjoinable = True
 
     @property
     def __name__(self):
@@ -103,6 +104,16 @@ class TreeChord(XMLTree):
                 raise ValueError('midi with value 0 must be alone.')
 
         self._midis = output
+
+    @property
+    def is_adjoinable(self):
+        return self._is_adjoinable
+
+    @is_adjoinable.setter
+    def is_adjoinable(self, value):
+        if not isinstance(value, bool):
+            raise TypeError('is_joinable.value must be of type bool not{}'.format(type(value)))
+        self._is_adjoinable = value
 
     @property
     def tie_types(self):
@@ -399,7 +410,7 @@ class TreeChord(XMLTree):
         return new_chord
 
     def remove_from_score(self):
-        if 'stop' in self.tie_types:
+        if 'stop' in self.tie_types and 'start' not in self.tie_types:
             self.remove_tie('stop')
             previous_chord = self.previous
             if not previous_chord:
@@ -411,7 +422,7 @@ class TreeChord(XMLTree):
                     previous_chord = previous_voice.chords[-1]
             previous_chord.remove_tie('start')
 
-        elif 'start' in self.tie_types:
+        elif 'start' in self.tie_types and 'stop' not in self.tie_types:
             self.remove_tie('start')
             next_chord = self.next
             if not next_chord:
