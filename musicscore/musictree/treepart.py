@@ -451,7 +451,74 @@ class TreePartVoice(object):
             raise Exception('adjoin_ties() first')
 
         if not self._rests_adjoined:
-            print('TreePart.adjoin_rests() is a dummy')
+            notatables = [1, 1.5, 2, 3, 4, 6, 8]
+
+            chord_iterator = iter(self.chords)
+
+            def _adjoin(current_chord, next_chord):
+
+                def _chords_are_adjoinable():
+                    condition = current_chord.is_adjoinable and next_chord.is_adjoinable
+                    return condition
+
+                def _chords_are_rest():
+                    condition = current_chord.is_rest and next_chord.is_rest
+                    # _print_condition('_chords_are_not_rest', condition)
+                    return condition
+
+                def _chords_have_right_positions():
+                    # print 'in _chords_have_right_positions', current_chord.name, next_chord.name
+                    condition = current_chord.offset % (
+                        1) == 0 and next_chord.offset % 1 == 0
+                    # _print_condition('_chords_have_right_positions', condition)
+                    return condition
+
+                def _result_is_notatable():
+                    condition = current_chord.quarter_duration + next_chord.quarter_duration in notatables
+                    # _print_condition('_result_is_notatable', condition)
+                    return condition
+
+                if _chords_are_adjoinable() and _chords_are_rest() and _chords_have_right_positions() and _result_is_notatable() and next_chord.parent_beat.best_div != 6:
+
+                    current_chord.quarter_duration += next_chord.quarter_duration
+
+                    next_chord.marked = True
+
+                    try:
+                        next_chord = chord_iterator.__next__()
+                        next_chord = _adjoin(current_chord, next_chord)
+                    except StopIteration:
+                        pass
+
+                return next_chord
+
+            adjoin = True
+            current_chord = chord_iterator.__next__()
+            try:
+                next_chord = chord_iterator.__next__()
+            except StopIteration:
+                adjoin = False
+
+            while adjoin:
+                try:
+                    next_chord = _adjoin(current_chord, next_chord)
+                    current_chord = next_chord
+                    next_chord = chord_iterator.__next__()
+                except StopIteration:
+                    break
+
+            voice_new_chords = []
+            for chord in self.chords:
+                try:
+                    if chord.marked:
+                        chord.parent_beat.chords.remove(chord)
+                    else:
+                        voice_new_chords.append(chord)
+                except AttributeError:
+                    voice_new_chords.append(chord)
+
+            self._chords = voice_new_chords
+
             self._rests_adjoined = True
         else:
             warnings.warn('rests in {} already adjoin_rests. No action took place.'.format(self))
