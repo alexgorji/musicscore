@@ -55,7 +55,7 @@ class Integer(SimpleType):
     @SimpleType.value.setter
     def value(self, v):
         if not isinstance(v, int):
-            raise TypeError('value {} must be an int'.format(v))
+            raise TypeError('value {} must be an int not {}'.format(v, type(v).__name__))
         self._value = v
 
 

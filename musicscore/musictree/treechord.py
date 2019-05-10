@@ -3,11 +3,14 @@ from quicktions import Fraction
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treenote import TreeNote
+from musicscore.musicxml.elements.musicdata import Direction
 from musicscore.musicxml.groups.common import EditorialVoice, Staff, Voice
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
     Type, Dot, Notehead, NoteheadText, Beam, Duration
 from musicscore.musicxml.elements.xml_element import XMLTree
+from musicscore.musicxml.types.complextypes.direction import DirectionType
+from musicscore.musicxml.types.complextypes.directiontype import Words
 from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, \
     FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N
 from musicscore.musicxml.types.complextypes.lyric import Text
@@ -31,6 +34,7 @@ class TreeChord(XMLTree):
                 Element(Duration)
             ),
         ),
+        Element(Direction, 0),
         Element(Instrument, 0),
         GroupReference(EditorialVoice, 0),
         Element(Type, 0),
@@ -233,7 +237,8 @@ class TreeChord(XMLTree):
                     for grandchild in grandchildren:
                         if type(grandchild) not in (Ornaments, Technical, Articulations, Dynamics):
                             note._add_notations(grandchild)
-
+                elif isinstance(child, Direction):
+                    pass
                 else:
                     note.add_child(child)
             if index > 0:
@@ -401,6 +406,11 @@ class TreeChord(XMLTree):
         dynamics.add_child(dynamic_classes[index]())
 
         return dynamics
+
+    def add_words(self, text, **kwargs):
+        d = self.add_child(Direction())
+        dt = d.add_child(DirectionType())
+        dt.add_child(Words(value=text, **kwargs))
 
     def __deepcopy__(self, memodict={}):
         new_chord = TreeChord(quarter_duration=self.quarter_duration)

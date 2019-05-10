@@ -221,7 +221,7 @@ class ComplexTypeDirectionType(ComplexType, OptionalUniqueId):
         Element(Coda, max_occurrence=None),
         Choice(
             Element(Words),
-            Element(Symbol),
+            # Element(Symbol),
             max_occurrence=None
         ),
         Element(Wedge),

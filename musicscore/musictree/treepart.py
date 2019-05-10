@@ -688,6 +688,8 @@ class TreePart(timewise.Part):
                 if index != 0:
                     self.add_child(TreeBackup(quarter_duration=voice.parent_part.up.quarter_duration))
                 for chord in voice.chords:
+                    for direction in chord.get_children_by_type(Direction):
+                        self.add_child(direction)
                     for note in chord._notes:
                         self.add_child(note)
             self._chords_notated = True
