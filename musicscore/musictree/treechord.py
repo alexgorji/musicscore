@@ -3,7 +3,7 @@ from quicktions import Fraction
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treenote import TreeNote
-from musicscore.musicxml.elements.musicdata import Direction
+from musicscore.musicxml.groups.musicdata import Direction, Attributes
 from musicscore.musicxml.groups.common import EditorialVoice, Staff, Voice
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
@@ -34,6 +34,7 @@ class TreeChord(XMLTree):
                 Element(Duration)
             ),
         ),
+        Element(Attributes, 0),
         Element(Direction, 0),
         Element(Instrument, 0),
         GroupReference(EditorialVoice, 0),
@@ -408,9 +409,13 @@ class TreeChord(XMLTree):
         return dynamics
 
     def add_words(self, text, **kwargs):
-        d = self.add_child(Direction())
+        try:
+            d = self.get_children_by_type(Direction)[0]
+        except IndexError:
+            d = self.add_child(Direction())
+
         dt = d.add_child(DirectionType())
-        dt.add_child(Words(value=text, **kwargs))
+        dt.add_child(Words(value=str(text), **kwargs))
 
     def __deepcopy__(self, memodict={}):
         new_chord = TreeChord(quarter_duration=self.quarter_duration)

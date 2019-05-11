@@ -1,8 +1,10 @@
-from musicscore.musicxml.elements.attributes import Attributes, Time, Beats, BeatType, Divisions, Clef, Sign, Line
 from musicscore.musicxml.elements.fullnote import Pitch
 from musicscore.musicxml.elements.note import Note, Duration
 from musicscore.musicxml.elements.partwise import ScorePartwise, Part, Measure
 from musicscore.musicxml.elements.scoreheader import PartList
+from musicscore.musicxml.groups.musicdata import Attributes
+from musicscore.musicxml.types.complextypes.attributes import Divisions, Time, Beats, BeatType, Clef
+from musicscore.musicxml.types.complextypes.clef import Sign, Line
 from musicscore.musicxml.types.complextypes.partlist import ScorePart
 from musicscore.musicxml.types.complextypes.scorepart import PartName
 

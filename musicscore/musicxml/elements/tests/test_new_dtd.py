@@ -1,7 +1,6 @@
 from unittest import TestCase
-import copy
-from musicscore.musicxml.elements.attributes import Time, Beats, BeatType
-from musicscore.musicxml.elements.fullnote import Chord
+
+from musicscore.musicxml.types.complextypes.attributes import Time, Beats, BeatType
 
 
 class Test(TestCase):

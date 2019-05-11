@@ -10,10 +10,10 @@ from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treenote import TreeNote, TreeBackup
 from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.elements import timewise as timewise
-from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Pitch
-from musicscore.musicxml.elements.musicdata import Direction
+from musicscore.musicxml.groups.musicdata import Direction, Attributes
 from musicscore.musicxml.elements.note import Beam, Type, Tie
+from musicscore.musicxml.types.complextypes.attributes import Divisions
 from musicscore.musicxml.types.complextypes.direction import DirectionType, Sound
 from musicscore.musicxml.types.complextypes.directiontype import Metronome
 from musicscore.musicxml.types.complextypes.metronome import BeatUnit, PerMinute

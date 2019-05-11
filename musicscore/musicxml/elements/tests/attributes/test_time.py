@@ -1,5 +1,6 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.attributes import Time, Beats, BeatType, SenzaMisura
+
+from musicscore.musicxml.types.complextypes.attributes import Time, Beats, BeatType, SenzaMisura
 
 
 class TestTime(TestCase):

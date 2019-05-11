@@ -1,11 +1,11 @@
 from musicscore.dtd.dtd import Element, Sequence, Choice, GroupReference, ChildTypeDTDConflict, \
     ChildOccurrenceDTDConflict, ChildIsNotOptional
 from musicscore.musicxml.groups.common import Editorial
-from musicscore.musicxml.elements.attributes import TimeSignature, Interchangeable, SenzaMisura, Beats, BeatType, Time
 from musicscore.musicxml.elements.fullnote import FullNote, Pitch, Unpitched, Rest, Alter
-from musicscore.musicxml.elements.musicdata import Backup, Forward, Direction, Attributes, Sound, Barline, Link, \
+from musicscore.musicxml.groups.musicdata import Backup, Forward, Direction, Attributes, Sound, Barline, Link, \
     Bookmark
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.complextypes.attributes import TimeSignature, Interchangeable, SenzaMisura, Beats, BeatType, Time
 from musicscore.musicxml.types.complextypes.lyric import Elision, EndLine, EndParagraph, Syllabic, Humming, Laughing, \
     Extend, Text
 from unittest import TestCase

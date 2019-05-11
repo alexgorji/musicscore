@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from musicscore.musictree.treemeasure import TreeMeasure
-from musicscore.musicxml.elements.attributes import Beats
+from musicscore.musicxml.types.complextypes.attributes import Beats
 
 
 class TestCopyMeasure(TestCase):

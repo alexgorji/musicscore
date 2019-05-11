@@ -1,5 +1,5 @@
 from musicscore.musictree.exceptions import MusicTreeError
-from musicscore.musicxml.elements.attributes import Time, SenzaMisura, Beats, BeatType
+from musicscore.musicxml.types.complextypes.attributes import Time, SenzaMisura, Beats, BeatType
 
 
 class TreeTime(Time):

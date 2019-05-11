@@ -2,7 +2,7 @@ import os
 from unittest import TestCase
 
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
-from musicscore.musicxml.elements.musicdata import Direction
+from musicscore.musicxml.groups.musicdata import Direction
 from musicscore.musicxml.score_templates.xml_test_score import TestScore
 from musicscore.musicxml.types.complextypes.direction import DirectionType, Sound
 from musicscore.musicxml.types.complextypes.directiontype import Metronome

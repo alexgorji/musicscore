@@ -3,7 +3,7 @@
 <score-timewise version="3.0">
   <part-list>
     <score-part id="p1">
-      <part-name print-object="no">one</part-name>
+      <part-name print-object="no">none</part-name>
     </score-part>
   </part-list>
   <measure number="1">
@@ -16,21 +16,28 @@
         </time>
       </attributes>
       <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
         <rest/>
         <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <accidental>sharp</accidental>
       </note>
     </part>
   </measure>

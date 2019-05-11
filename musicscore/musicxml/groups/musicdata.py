@@ -2,6 +2,7 @@ from musicscore.musicxml.elements.barline import Barline
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.dtd.dtd import Sequence, Choice, Element
 from musicscore.musicxml.elements.note import Note
+from musicscore.musicxml.types.complextypes.attributes import ComplexTypeAttributes
 from musicscore.musicxml.types.complextypes.backup import ComplexTypeBackup
 from musicscore.musicxml.types.complextypes.direction import ComplexTypeDirection
 from musicscore.musicxml.types.complextypes.sound import ComplexTypeSound
@@ -29,12 +30,11 @@ class Direction(ComplexTypeDirection):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class Attributes(XMLElement):
+class Attributes(ComplexTypeAttributes):
     _TAG = 'attributes'
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)
-        NotImplementedError()
 
 
 class Sound(ComplexTypeSound):

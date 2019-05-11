@@ -1,14 +1,9 @@
 from unittest import TestCase
 
-from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechord import TreeChord
-from musicscore.musictree.treemeasure import TreeMeasure
-from musicscore.musictree.treenote import TreeNote
-from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
 import os
 
-from musicscore.musicxml.elements.attributes import Attributes
 
 path = os.path.abspath(__file__).split('.')[0]
 

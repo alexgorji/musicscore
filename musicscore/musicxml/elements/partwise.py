@@ -2,8 +2,7 @@ from musicscore.dtd.dtd import Sequence, GroupReference, Element
 from musicscore.musicxml.attributes.document_attributes import DocumentAttributes
 from musicscore.musicxml.attributes.measure_attributes import MeasureAttributes
 from musicscore.musicxml.attributes.part_attributes import PartAttributes
-from musicscore.musicxml.elements.attributes import Attributes
-from musicscore.musicxml.elements.musicdata import MusicData
+from musicscore.musicxml.groups.musicdata import MusicData, Attributes
 from musicscore.musicxml.elements.scoreheader import ScoreHeader
 from musicscore.musicxml.elements.xml_element import XMLElement
 

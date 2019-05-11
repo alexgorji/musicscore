@@ -1,10 +1,12 @@
 from musicscore.dtd.dtd import Sequence, GroupReference, Element, Choice
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
-from musicscore.musicxml.groups.common import Editorial
-from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.types.complextypes.key import TypeKey
-from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeClefSign, TypeStaffLine, PositiveInteger
 from musicscore.musicxml.attributes.printobject import PrintObject
+from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.groups.common import Editorial
+from musicscore.musicxml.types.complextypes.clef import ComplexTypeClef
+from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from musicscore.musicxml.types.complextypes.key import TypeKey
+from musicscore.musicxml.types.simple_type import TypePositiveDivisions, PositiveInteger
 
 
 class Divisions(XMLElement, TypePositiveDivisions):
@@ -151,17 +153,7 @@ class Instruments(XMLElement):
         raise NotImplementedError()
 
 
-class Sign(XMLElement, TypeClefSign):
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='sign', value=value, *args, **kwargs)
-
-
-class Line(XMLElement, TypeStaffLine):
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='line', value=value, *args, **kwargs)
-
-
-class Clef(XMLElement):
+class Clef(ComplexTypeClef):
     """
     Clefs are represented by a combination of sign, line, and clef-octave-change elements.
     The optional number attribute refers to staff numbers within the part.
@@ -179,13 +171,10 @@ class Clef(XMLElement):
     Clefs appear at the start of each system unless the print-object attribute has been set to "no" or
     the additional attribute has been set to "yes"
     """
-    _DTD = Sequence(
-        Element(Sign),
-        Element(Line)
-    )
+    _TAG = 'clef'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='clef', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class StaffDetails(XMLElement):
@@ -229,7 +218,7 @@ class MeasureStyle(XMLElement):
         raise NotImplementedError()
 
 
-class Attributes(XMLElement):
+class ComplexTypeAttributes(ComplexType):
     """
     The attributes element contains musical information that typically changes on measure boundaries. This includes key
     and time signatures, clefs, transpositions, and staving. When attributes are changed mid-measure, it affects the
@@ -251,5 +240,5 @@ class Attributes(XMLElement):
 
     )
 
-    def __init__(self):
-        super().__init__(tag='attributes')
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)

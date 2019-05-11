@@ -1,8 +1,9 @@
 from unittest import TestCase
 import musicscore.musicxml.elements.timewise as timewise
-from musicscore.musicxml.elements.attributes import Attributes, Divisions
 from musicscore.musicxml.elements.fullnote import Rest
 from musicscore.musicxml.elements.note import Note, Duration
+from musicscore.musicxml.groups.musicdata import Attributes
+from musicscore.musicxml.types.complextypes.attributes import Divisions
 
 
 class TestAddNote(TestCase):

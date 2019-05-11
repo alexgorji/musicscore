@@ -1,10 +1,10 @@
 from unittest import TestCase
 
-from musicscore.musicxml.elements.attributes import Divisions, Attributes
 from musicscore.musicxml.elements.fullnote import Rest
-from musicscore.musicxml.elements.musicdata import Direction
+from musicscore.musicxml.groups.musicdata import Direction, Attributes
 from musicscore.musicxml.elements.note import Note, Duration
 from musicscore.musicxml.elements.timewise import Part
+from musicscore.musicxml.types.complextypes.attributes import Divisions
 from musicscore.musicxml.types.complextypes.direction import DirectionType
 from musicscore.musicxml.types.complextypes.directiontype import Words
 

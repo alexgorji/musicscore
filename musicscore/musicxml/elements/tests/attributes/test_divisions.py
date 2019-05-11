@@ -1,5 +1,6 @@
 from unittest import TestCase
-from musicscore.musicxml.elements.attributes import Divisions
+
+from musicscore.musicxml.types.complextypes.attributes import Divisions
 
 
 class TestDivisions(TestCase):
