@@ -47,8 +47,8 @@
       </note>
       <attributes>
         <clef>
-          <sign>C</sign>
-          <line>3</line>
+          <sign>percussion</sign>
+          <line>2</line>
         </clef>
       </attributes>
       <note>
@@ -63,7 +63,7 @@
       <attributes>
         <clef>
           <sign>C</sign>
-          <line>4</line>
+          <line>3</line>
         </clef>
       </attributes>
       <note>
@@ -84,8 +84,8 @@
       </attributes>
       <attributes>
         <clef>
-          <sign>percussion</sign>
-          <line>2</line>
+          <sign>C</sign>
+          <line>4</line>
         </clef>
       </attributes>
       <note>
@@ -106,6 +106,12 @@
         <voice>1</voice>
         <type>quarter</type>
       </note>
+      <attributes>
+        <clef>
+          <sign>C</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
       <note>
         <pitch>
           <step>B</step>

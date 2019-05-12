@@ -17,12 +17,14 @@ class Test(TestCase):
         sf = SimpleFormat(durations=[1, 1, 1, 1, 1, 1, 1, 1])
         sf.chords[0].add_clef(BASS_CLEF)
         sf.chords[1].add_clef(TREBLE_CLEF)
-        sf.chords[2].add_clef(ALTO_CLEF)
-        sf.chords[3].add_clef(TENOR_CLEF)
-        sf.chords[4].add_clef(PERCUSSION_CLEF)
+        sf.chords[2].add_clef(PERCUSSION_CLEF)
+        sf.chords[3].add_clef(ALTO_CLEF)
+        sf.chords[4].add_clef(TENOR_CLEF)
+        sf.chords[6].add_clef(TENOR_CLEF)
+
         v = sf.to_voice(1)
         v.add_to_score(self.score, 1, 1)
 
         result_path = path + '_test_1'
         self.score.write(path=result_path)
-        # TestScore().assert_template(result_path=result_path)
+        TestScore().assert_template(result_path=result_path)
