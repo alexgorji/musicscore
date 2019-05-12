@@ -690,6 +690,8 @@ class TreePart(timewise.Part):
                 for chord in voice.chords:
                     for direction in chord.get_children_by_type(Direction):
                         self.add_child(direction)
+                    for attributes in chord.get_children_by_type(Attributes):
+                        self.add_child(attributes)
                     for note in chord._notes:
                         self.add_child(note)
             self._chords_notated = True

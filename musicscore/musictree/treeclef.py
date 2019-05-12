@@ -1,10 +1,18 @@
-class TreeClef(object):
+from musicscore.musicxml.types.complextypes.attributes import Clef
+from musicscore.musicxml.types.complextypes.clef import Sign, Line, ClefOctaveChange
 
-    def __init__(self, sign='G', line=2, octave_change=None, force_show=False):
-        self._sign = sign
-        self._line = line
-        self._octave_change = octave_change
-        self.force_show = force_show
+
+class TreeClef(Clef):
+
+    def __init__(self, sign='G', line=2, octave_change=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._sign = None
+        self._line = None
+        self._octave_change = None
+
+        self.sign = sign
+        self.line = line
+        self.octave_change = octave_change
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -21,6 +29,11 @@ class TreeClef(object):
 
     @sign.setter
     def sign(self, value):
+        if not self._sign:
+            self._sign = self.add_child(Sign(value))
+        else:
+            self._sign.value = value
+
         self._sign = value
 
     @property
@@ -29,6 +42,11 @@ class TreeClef(object):
 
     @line.setter
     def line(self, value):
+        if not self._line:
+            self._line = self.add_child(Line(value))
+        else:
+            self._line.value = value
+
         self._line = value
 
     @property
@@ -37,16 +55,26 @@ class TreeClef(object):
 
     @octave_change.setter
     def octave_change(self, value):
-        self._octave_change = value
+        if value:
+            if not self._octave_change:
+                self._octave_change = self.add_child(ClefOctaveChange(value))
+            else:
+                self._octave_change.value = value
+
+            self._octave_change = value
+        else:
+            if self._octave_change:
+                self.remove_child(self._octave_change)
+                self._octave_change = None
 
 
-HIGH_TREBLE_CLEF = Clef(sign='G', line=2, octave_change=1)
-TREBLE_CLEF = Clef(sign='G', line=2)
-LOW_TREBLE_CLEF = Clef(sign='G', line=2, octave_change=-1)
-BASS_CLEF = Clef(sign='F', line=4)
-LOW_BASS_CLEF = Clef(sign='F', line=4, octave_change=-1)
+HIGH_TREBLE_CLEF = TreeClef(sign='G', line=2, octave_change=1)
+TREBLE_CLEF = TreeClef(sign='G', line=2)
+LOW_TREBLE_CLEF = TreeClef(sign='G', line=2, octave_change=-1)
+BASS_CLEF = TreeClef(sign='F', line=4)
+LOW_BASS_CLEF = TreeClef(sign='F', line=4, octave_change=-1)
 
-ALTO_CLEF = Clef(sign='C', line=3)
-TENOR_CLEF = Clef(sign='C', line=4)
+ALTO_CLEF = TreeClef(sign='C', line=3)
+TENOR_CLEF = TreeClef(sign='C', line=4)
 
-PERCUSSION_CLEF = Clef('percussion')
+PERCUSSION_CLEF = TreeClef('percussion')

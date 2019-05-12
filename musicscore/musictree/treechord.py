@@ -240,6 +240,8 @@ class TreeChord(XMLTree):
                             note._add_notations(grandchild)
                 elif isinstance(child, Direction):
                     pass
+                elif isinstance(child, Attributes):
+                    pass
                 else:
                     note.add_child(child)
             if index > 0:
@@ -384,6 +386,7 @@ class TreeChord(XMLTree):
         lyric.add_child(Text(str(text)))
         return lyric
 
+
     def add_dynamics(self, value):
         dynamic_classes = [P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, FFFFFF, MP, MF, SF, SFP, SFPP, FP,
                            RF, RFZ, SFZ, SFFZ, FZ, N, PF, SFZP]
@@ -399,9 +402,6 @@ class TreeChord(XMLTree):
         except IndexError:
             notations = self.add_child(Notations())
 
-        # try:
-        #     dynamics = notations.get_children_by_type(Dynamics)[0]
-        # except IndexError:
         dynamics = notations.add_child(Dynamics())
 
         dynamics.add_child(dynamic_classes[index]())
@@ -416,6 +416,14 @@ class TreeChord(XMLTree):
 
         dt = d.add_child(DirectionType())
         dt.add_child(Words(value=str(text), **kwargs))
+
+    def add_clef(self, clef):
+        try:
+            attributes = self.get_children_by_type(Attributes)[0]
+        except IndexError:
+            attributes = self.add_child(Attributes())
+
+        attributes.add_child(clef)
 
     def __deepcopy__(self, memodict={}):
         new_chord = TreeChord(quarter_duration=self.quarter_duration)
