@@ -1,5 +1,6 @@
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, HIGH_TREBLE_CLEF, LOW_BASS_CLEF
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.groups.common import Voice
@@ -170,3 +171,42 @@ class SimpleFormat(object):
         for chord in self.chords:
             output.add_chord(chord.deepcopy_for_SimpleFormat())
         return output
+
+    def auto_clef(self):
+        clefs = []
+        chords = self.chords
+
+        # ranges
+        high_treble = (87, 120)
+        treble = (67, 86)
+        treble_bass = (56, 66)
+        bass = (36, 55)
+        low_bass = (20, 35)
+
+        for chord in chords:
+            try:
+                last_clef = clefs[-1]
+            except IndexError:
+                last_clef = None
+
+            if high_treble[0] <= chord.midis[0].value <= high_treble[1]:
+                clef = HIGH_TREBLE_CLEF
+            elif treble[0] <= chord.midis[0].value <= treble[1]:
+                clef = TREBLE_CLEF
+            elif treble_bass[0] <= chord.midis[0].value <= treble_bass[1]:
+                if last_clef == LOW_BASS_CLEF:
+                    clef = BASS_CLEF
+                elif last_clef == HIGH_TREBLE_CLEF:
+                    clef = TREBLE_CLEF
+                else:
+                    pass
+            elif bass[0] <= chord.midis[0].value <= bass[1]:
+                clef = BASS_CLEF
+            elif low_bass[0] <= chord.midis[0].value <= low_bass[1]:
+                clef = LOW_BASS_CLEF
+            else:
+                raise ValueError('midi {} not in clef ranges'.format(chord.midis[0].value))
+
+            if clef != last_clef:
+                chord.add_clef(clef)
+                clefs.append(clef)

@@ -27,7 +27,7 @@ class ClefOctaveChange(XMLElement, Integer):
     """
     The clef-octave-change element is used for transposing clefs. A treble clef for tenors would have a value of -1.
     """
-    _TAG = 'sign'
+    _TAG = 'clef-octave-change'
 
     def __init__(self, value=None, *args, **kwargs):
         super().__init__(tag=self._TAG, value=value, *args, **kwargs)

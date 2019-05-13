@@ -68,11 +68,13 @@ class TreeClef(Clef):
                 self._octave_change = None
 
 
+SUPER_HIGH_TREBLE_CLEF = TreeClef(sign='G', line=2, octave_change=2)
 HIGH_TREBLE_CLEF = TreeClef(sign='G', line=2, octave_change=1)
 TREBLE_CLEF = TreeClef(sign='G', line=2)
 LOW_TREBLE_CLEF = TreeClef(sign='G', line=2, octave_change=-1)
 BASS_CLEF = TreeClef(sign='F', line=4)
 LOW_BASS_CLEF = TreeClef(sign='F', line=4, octave_change=-1)
+SUPER_LOW_BASS_CLEF = TreeClef(sign='F', line=4, octave_change=-2)
 
 ALTO_CLEF = TreeClef(sign='C', line=3)
 TENOR_CLEF = TreeClef(sign='C', line=4)
