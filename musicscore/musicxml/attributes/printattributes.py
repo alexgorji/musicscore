@@ -20,7 +20,7 @@ class StaffSpacing(AttributeAbstract):
 
     def __init__(self, staff_spacing=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('staff-spacing', staff_spacing, "Tenths")
+        self.generate_attribute('staff-spacing', staff_spacing, "TypeTenths")
 
 
 class NewSystem(AttributeAbstract):
@@ -28,7 +28,7 @@ class NewSystem(AttributeAbstract):
 
     def __init__(self, new_system=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('new-system', new_system, "YesNo")
+        self.generate_attribute('new-system', new_system, "TypeYesNo")
 
 
 class NewPage(AttributeAbstract):
@@ -36,7 +36,7 @@ class NewPage(AttributeAbstract):
 
     def __init__(self, new_page=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('new-page', new_page, "YesNo")
+        self.generate_attribute('new-page', new_page, "TypeYesNo")
 
 
 class BlankPage(AttributeAbstract):
@@ -53,6 +53,7 @@ class PageNumber(AttributeAbstract):
     def __init__(self, page_number=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.generate_attribute('page-number', page_number, "Token")
+
 
 
 class PrintAttributes(StaffSpacing, NewSystem, NewPage, BlankPage, PageNumber):

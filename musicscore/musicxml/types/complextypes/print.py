@@ -1,17 +1,26 @@
 from musicscore.dtd.dtd import Sequence, GroupReference, Element
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.printattributes import PrintAttributes
+from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.groups.layout import Layout
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.scorepart import PartNameDisplay, PartAbbreviationDisplay
 
 
-class MeasureLayout(object):
-    raise NotImplementedError()
+class MeasureLayout(XMLElement):
+    _TAG = 'measure-layout'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+        raise NotImplementedError()
 
 
-class MeasureNumbering(object):
-    raise NotImplementedError()
+class MeasureNumbering(XMLElement):
+    _TAG = 'measure-numbering'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+        raise NotImplementedError()
 
 
 class ComplexTypePrint(ComplexType, PrintAttributes, OptionalUniqueId):

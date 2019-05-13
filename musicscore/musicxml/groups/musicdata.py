@@ -6,6 +6,7 @@ from musicscore.musicxml.types.complextypes.attributes import ComplexTypeAttribu
 from musicscore.musicxml.types.complextypes.backup import ComplexTypeBackup
 from musicscore.musicxml.types.complextypes.direction import ComplexTypeDirection
 from musicscore.musicxml.types.complextypes.sound import ComplexTypeSound
+from musicscore.musicxml.types.complextypes.print import ComplexTypePrint
 
 
 class Backup(ComplexTypeBackup):
@@ -37,7 +38,7 @@ class Attributes(ComplexTypeAttributes):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class Print():
+class Print(ComplexTypePrint):
     _TAG = 'print'
 
     def __init__(self, *args, **kwargs):

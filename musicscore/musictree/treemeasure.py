@@ -3,6 +3,7 @@ from quicktions import Fraction
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treetime import TreeTime
 from musicscore.musicxml.elements import timewise as timewise
+from musicscore.musicxml.groups.musicdata import Print
 
 
 class TreeMeasure(timewise.Measure):
@@ -78,6 +79,10 @@ class TreeMeasure(timewise.Measure):
             self._offset = output
         else:
             self._offset = 0
+
+    def add_page_break(self):
+        part = self.get_children_by_type(TreePart)[0]
+        part.add_child(Print(new_page='yes'))
 
     @property
     def offset(self):
