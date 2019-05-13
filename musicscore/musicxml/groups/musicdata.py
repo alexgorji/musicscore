@@ -37,6 +37,13 @@ class Attributes(ComplexTypeAttributes):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
+class Print():
+    _TAG = 'print'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
 class Sound(ComplexTypeSound):
     _TAG = 'sound'
 
@@ -67,6 +74,7 @@ MusicData = Sequence(
         Element(Forward),
         Element(Direction),
         Element(Attributes),
+        Element(Print),
         Element(Sound),
         Element(Barline),
         Element(Link),
@@ -75,3 +83,19 @@ MusicData = Sequence(
         max_occurrence=None
     )
 )
+
+'''
+                <xs:element name="note" type="note"/>
+                <xs:element name="backup" type="backup"/>
+                <xs:element name="forward" type="forward"/>
+                <xs:element name="direction" type="direction"/>
+                <xs:element name="attributes" type="attributes"/>
+                <xs:element name="harmony" type="harmony"/>
+                <xs:element name="figured-bass" type="figured-bass"/>
+                <xs:element name="print" type="print"/>
+                <xs:element name="sound" type="sound"/>
+                <xs:element name="barline" type="barline"/>
+                <xs:element name="grouping" type="grouping"/>
+                <xs:element name="link" type="link"/>
+                <xs:element name="bookmark" type="bookmark"/>
+'''

@@ -183,7 +183,7 @@ class SimpleFormat(object):
         bass = (36, 55)
         low_bass = (20, 35)
 
-        for chord in chords:
+        for chord in [chord for chord in chords if not chord.is_rest]:
             try:
                 last_clef = clefs[-1]
             except IndexError:
@@ -199,7 +199,8 @@ class SimpleFormat(object):
                 elif last_clef == HIGH_TREBLE_CLEF:
                     clef = TREBLE_CLEF
                 else:
-                    pass
+                    clef = None
+
             elif bass[0] <= chord.midis[0].value <= bass[1]:
                 clef = BASS_CLEF
             elif low_bass[0] <= chord.midis[0].value <= low_bass[1]:
@@ -207,6 +208,7 @@ class SimpleFormat(object):
             else:
                 raise ValueError('midi {} not in clef ranges'.format(chord.midis[0].value))
 
-            if clef != last_clef:
+
+            if clef and clef != last_clef:
                 chord.add_clef(clef)
                 clefs.append(clef)
