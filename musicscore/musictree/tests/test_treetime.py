@@ -23,38 +23,6 @@ class TestTreeTime(TestCase):
         with self.assertRaises(MusicTreeError):
             TreeTime(4, 3)
 
-    def test_score_time(self):
-        score = TreeScoreTimewise()
-        score.add_measure()
-        score.add_part('one')
-        score.finish()
-        result = '''<score-timewise version="3.0">
-  <part-list>
-    <score-part id="p1">
-      <part-name print-object="no">one</part-name>
-    </score-part>
-  </part-list>
-  <measure number="1">
-    <part id="p1">
-      <attributes>
-        <divisions>1</divisions>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
-      <note>
-        <rest/>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </part>
-  </measure>
-</score-timewise>
-'''
-        self.assertEqual(score.to_string(), result)
-
     def test_copy_time(self):
         time = TreeTime(3, 4, 1, 8)
         copy = time.__copy__()
@@ -66,4 +34,3 @@ class TestTreeTime(TestCase):
 </time>
 '''
         self.assertEqual(copy.to_string(), result)
-

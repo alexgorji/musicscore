@@ -19,11 +19,11 @@
   </defaults>
   <credit page="1">
     <credit-type>title</credit-type>
-    <credit-words justify="center" default-x="598" default-y="1600" font-family="DejaVu Sans" font-size="24" valign="top">test title</credit-words>
+    <credit-words justify="center" default-x="581" default-y="1600" font-family="DejaVu Sans" font-size="24" valign="top">test title</credit-words>
   </credit>
   <credit page="1">
     <credit-type>subtitle</credit-type>
-    <credit-words justify="center" default-x="598" default-y="1550" font-family="DejaVu Sans" font-size="18" valign="top">test subtitle</credit-words>
+    <credit-words justify="center" default-x="581" default-y="1550" font-family="DejaVu Sans" font-size="18" valign="top">test subtitle</credit-words>
   </credit>
   <part-list>
     <score-part id="p1">

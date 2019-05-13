@@ -19,7 +19,7 @@
   </defaults>
   <credit page="1">
     <credit-type>subtitle</credit-type>
-    <credit-words justify="center" default-x="598" default-y="1550" font-size="18" valign="top">[True, False, False, True]</credit-words>
+    <credit-words justify="center" default-x="581" default-y="1550" font-size="18" valign="top">[True, False, False, True]</credit-words>
   </credit>
   <part-list>
     <score-part id="p1">

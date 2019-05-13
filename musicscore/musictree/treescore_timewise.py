@@ -18,14 +18,15 @@ from musicscore.musicxml.types.complextypes.scorepart import PartName
 class TreePageStyle(object):
     sizes = {'A4': (210, 297), 'A3': (297, 420)}
 
-    def __init__(self, score, format='portrait', size='A4', scale=1, left_margin=20, right_margin=10, top_margin=15,
+    def __init__(self, score, scale=1, size='A4', format='portrait', left_margin=20, right_margin=10, top_margin=15,
                  bottom_margin=15):
+
         self._score = None
         self.score = score
         self.tenth = 40
 
-        self._format = None
         self._size = None
+        self._format = 'portrait'
 
         self._defaults = None
         self._scaling = None
@@ -44,9 +45,10 @@ class TreePageStyle(object):
         self._system_margins = None
         self._staff_distance = None
 
-        self.format = format
         self.scale = scale
         self.size = size
+        self.format = format
+
         self.left_margin = left_margin
         self.right_margin = right_margin
         self.top_margin = top_margin
@@ -133,6 +135,13 @@ class TreePageStyle(object):
 
     @format.setter
     def format(self, value):
+        if value == 'landscape':
+            self.page_height, self.page_width = self.size[1], self.size[0]
+        elif value == 'portrait':
+            self.page_height, self.page_width = self.size[0], self.size[1]
+        else:
+            raise ValueError()
+
         self._format = value
 
     @property
@@ -202,8 +211,6 @@ class TreePageStyle(object):
     @property
     def size(self):
         (w, h) = self.sizes[self._size]
-        if self.format == 'landscape':
-            h, w = w, h
         # h = self.millimeters_to_tenth(h)
         # w = self.millimeters_to_tenth(w)
         return h, w
@@ -211,8 +218,9 @@ class TreePageStyle(object):
     @size.setter
     def size(self, value):
         self._size = value
-        self.page_height = self.size[0]
-        self.page_width = self.size[1]
+        self.format = self._format
+        # self.page_height = self.size[0]
+        # self.page_width = self.size[1]
 
     @property
     def page_size(self):
@@ -256,6 +264,7 @@ class TreeScoreTimewise(timewise.Score):
         self._post_quantized = False
         self._max_division = None
         self._forbidden_divisions = None
+        self._page_style = TreePageStyle(score=self, **kwargs)
 
     @property
     def max_division(self):
@@ -281,6 +290,10 @@ class TreeScoreTimewise(timewise.Score):
                     raise TypeError('forbidden_division must be of type int not{}'.format(type(value)))
 
         self._forbidden_divisions = value
+
+    @property
+    def page_style(self):
+        return self._page_style
 
     def _generate_score_part(self):
         id_ = 'p' + str(self._auto_part_number)
@@ -339,9 +352,11 @@ class TreeScoreTimewise(timewise.Score):
         if not font_size:
             font_size = 24
         if not default_x:
-            default_x = 598
+            default_x = int(self.page_style.page_width.value / 2)
+            # default_x = 598
         if not default_y:
-            default_y = 1600
+            default_y = self.page_style.page_height.value - 43
+            # default_y = 1600
         if not justify:
             justify = 'center'
         if not valign:
@@ -359,9 +374,9 @@ class TreeScoreTimewise(timewise.Score):
         if not font_size:
             font_size = 18
         if not default_x:
-            default_x = 598
+            default_x = int(self.page_style.page_width.value / 2)
         if not default_y:
-            default_y = 1550
+            default_y = self.page_style.page_height.value - 93
         if not justify:
             justify = 'center'
         if not valign:
@@ -371,10 +386,6 @@ class TreeScoreTimewise(timewise.Score):
         c.add_child(CreditType('subtitle'))
         c.add_child(CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
                                 valign=valign, **kwargs))
-
-    def add_page_style(self):
-        page_style = TreePageStyle(score=self)
-        return page_style
 
     def update_measures(self):
         measures = self.get_children_by_type(TreeMeasure)

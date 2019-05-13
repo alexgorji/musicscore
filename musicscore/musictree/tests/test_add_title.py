@@ -16,9 +16,17 @@ class Test(TestCase):
         v.add_to_score(self.score, 1, 1)
 
     def test_1(self):
-        self.score.add_page_style()
         self.score.add_title('test title', font_family='DejaVu Sans')
         self.score.add_subtitle('test subtitle', font_family='DejaVu Sans')
         result_path = path + '_test_1'
         self.score.write(path=result_path)
         TestScore().assert_template(result_path=result_path)
+
+    def test_2(self):
+        self.score.page_style.format = 'landscape'
+        self.score.add_title('test title', font_family='DejaVu Sans')
+        self.score.add_subtitle('test subtitle', font_family='DejaVu Sans')
+
+        result_path = path + '_test_2'
+        self.score.write(path=result_path)
+        # TestScore().assert_template(result_path=result_path)

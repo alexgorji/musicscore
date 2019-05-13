@@ -1,9 +1,13 @@
+import os
 import warnings
 from unittest import TestCase
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musicxml.score_templates.xml_test_score import TestScore
+
+path = os.path.abspath(__file__).split('.')[0]
 
 
 class Test(TestCase):
@@ -21,44 +25,12 @@ class Test(TestCase):
         self.score.add_beats()
         chord.remove_from_score()
 
-        result = '''<score-timewise version="3.0">
-  <part-list>
-    <score-part id="p1">
-      <part-name print-object="no">none</part-name>
-    </score-part>
-  </part-list>
-  <measure number="1">
-    <part id="p1">
-      <attributes>
-        <divisions>1</divisions>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <rest/>
-        <duration>3</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <dot/>
-      </note>
-    </part>
-  </measure>
-</score-timewise>
-'''
+        result_path = path + '_test_1'
 
         with self.assertWarns(UserWarning):
-            self.assertEqual(self.score.to_string(), result)
+            self.score.write(result_path)
+
+        TestScore().assert_template(result_path=result_path)
 
     def test_2(self):
         sf = SimpleFormat()
@@ -74,41 +46,10 @@ class Test(TestCase):
         self.score.add_beats()
         chord.remove_from_score()
 
-        result = '''<score-timewise version="3.0">
-  <part-list>
-    <score-part id="p1">
-      <part-name print-object="no">none</part-name>
-    </score-part>
-  </part-list>
-  <measure number="1">
-    <part id="p1">
-      <attributes>
-        <divisions>1</divisions>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <rest/>
-        <duration>3</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <dot/>
-      </note>
-    </part>
-  </measure>
-</score-timewise>
-'''
+        result_path = path + '_test_2'
+
         with self.assertWarns(UserWarning):
-            self.assertEqual(self.score.to_string(), result)
+            self.score.write(result_path)
+
+        TestScore().assert_template(result_path=result_path)
 

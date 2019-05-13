@@ -12,7 +12,7 @@ class TestAddMeasure(TestCase):
         self.score = TreeScoreTimewise()
         self.score.add_part('one')
 
-    def test_adding_measure(self):
+    def test_1(self):
         self.score.add_measure().time = (3, 4)
         self.score.add_measure().time = (2, 4)
         self.score.add_measure().time = (2, 4)
@@ -21,6 +21,6 @@ class TestAddMeasure(TestCase):
         self.score.add_measure().time = (3, 8)
 
         self.score.finish()
-        result_path = path + 'test_adding_measure'
+        result_path = path + '_test_1'
         self.score.write(path=result_path)
         TestScore().assert_template(result_path=result_path)

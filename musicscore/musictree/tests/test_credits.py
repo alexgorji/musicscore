@@ -22,26 +22,6 @@ class Test(TestCase):
         self.score.add_part()
 
     def test_1(self):
-        defaults = self.score.add_child(Defaults())
-        scaling = defaults.add_child(Scaling())
-        scaling.add_child(Millimeters(7.2319))
-        scaling.add_child(Tenths(40))
-
-        page_layout = defaults.add_child(PageLayout())
-        page_layout.add_child(PageHeight(1643))
-        page_layout.add_child(PageWidth(1161))
-        page_margins = page_layout.add_child(PageMargins(type_='both'))
-        page_margins.add_child(LeftMargin(105))
-        page_margins.add_child(RightMargin(70))
-        page_margins.add_child(TopMargin(70))
-        page_margins.add_child(BottomMargin(70))
-
-        system_layout = defaults.add_child(SystemLayout())
-        system_margins = system_layout.add_child(SystemMargins())
-        system_margins.add_child(LeftMargin(0))
-        system_margins.add_child(RightMargin(0))
-        system_layout.add_child(SystemDistance(121))
-        system_layout.add_child(TopSystemDistance(300))
 
         c = self.score.add_child(Credit(page=1))
         c.add_child(CreditType('title'))
