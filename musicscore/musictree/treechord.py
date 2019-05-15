@@ -277,6 +277,10 @@ class TreeChord(XMLTree):
             if not notations.get_children():
                 self.remove_child(notations)
 
+    def remove_voice(self):
+        for voice in self.get_children_by_type(Voice):
+            self.remove_child(voice)
+
     def add_tuplet(self, position, number=1):
         normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
         types = {8: '32nd', 4: '16th', 2: 'eighth'}
@@ -381,11 +385,10 @@ class TreeChord(XMLTree):
         for child in self.get_children():
             new_chord.add_child(child)
 
-    def add_lyric(self, text, number=1):
-        lyric = self.add_child(Lyric(number=str(number)))
+    def add_lyric(self, text, number=1, **kwargs):
+        lyric = self.add_child(Lyric(number=str(number), **kwargs))
         lyric.add_child(Text(str(text)))
         return lyric
-
 
     def add_dynamics(self, value):
         dynamic_classes = [P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, FFFFFF, MP, MF, SF, SFP, SFPP, FP,

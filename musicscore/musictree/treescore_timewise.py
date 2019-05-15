@@ -6,20 +6,22 @@ from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescorepart import TreeScorePart
 from musicscore.musicxml.elements.scoreheader import PartList, Credit, Defaults
-from musicscore.musicxml.groups.layout import PageLayout
+from musicscore.musicxml.groups.layout import PageLayout, StaffLayout, SystemLayout
 from musicscore.musicxml.groups.margins import LeftMargin, RightMargin, TopMargin, BottomMargin
 from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWords
 from musicscore.musicxml.types.complextypes.defaults import Scaling
 from musicscore.musicxml.types.complextypes.pagelayout import PageMargins, PageHeight, PageWidth
 from musicscore.musicxml.types.complextypes.scaling import Tenths, Millimeters
 from musicscore.musicxml.types.complextypes.scorepart import PartName
+from musicscore.musicxml.types.complextypes.stafflayout import StaffDistance
+from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance
 
 
 class TreePageStyle(object):
     sizes = {'A4': (210, 297), 'A3': (297, 420)}
 
     def __init__(self, score, scale=1, size='A4', format='portrait', left_margin=20, right_margin=10, top_margin=15,
-                 bottom_margin=15):
+                 bottom_margin=15, system_distance=None, staff_distance=None):
 
         self._score = None
         self.score = score
@@ -43,6 +45,8 @@ class TreePageStyle(object):
 
         self._system_layout = None
         self._system_margins = None
+        self._system_distance = None
+        self._staff_layout = None
         self._staff_distance = None
 
         self.scale = scale
@@ -53,6 +57,8 @@ class TreePageStyle(object):
         self.right_margin = right_margin
         self.top_margin = top_margin
         self.bottom_margin = bottom_margin
+        self.staff_distance = staff_distance
+        self.system_distance = system_distance
 
     def millimeters_to_tenth(self, m):
         return round(m / self.millimeters * self.tenth)
@@ -76,6 +82,18 @@ class TreePageStyle(object):
             self._add_scaling()
 
         self._page_layout = self._defaults.add_child(PageLayout())
+
+    def _add_staff_layout(self):
+        if not self._scaling:
+            self._add_scaling()
+
+        self._staff_layout = self._defaults.add_child(StaffLayout())
+
+    def _add_system_layout(self):
+        if not self._scaling:
+            self._add_scaling()
+
+        self._system_layout = self._defaults.add_child(SystemLayout())
 
     def _add_page_margins(self):
         if not self._page_layout:
@@ -206,7 +224,29 @@ class TreePageStyle(object):
 
     @staff_distance.setter
     def staff_distance(self, value):
-        self._staff_distance = value
+        if value:
+            value = self.millimeters_to_tenth(value)
+            if self.staff_distance:
+                self.staff_distance.value = value
+            else:
+                if not self._staff_layout:
+                    self._add_staff_layout()
+                self._staff_distance = self._staff_layout.add_child(StaffDistance(value))
+
+    @property
+    def system_distance(self):
+        return self._system_distance
+
+    @system_distance.setter
+    def system_distance(self, value):
+        if value:
+            value = self.millimeters_to_tenth(value)
+            if self.system_distance:
+                self.system_distance.value = value
+            else:
+                if not self._system_layout:
+                    self._add_system_layout()
+                self._system_distance = self._system_layout.add_child(SystemDistance(value))
 
     @property
     def size(self):
@@ -333,7 +373,161 @@ class TreeScoreTimewise(timewise.Score):
             new_measure = measure
         return new_measure
 
+    # def set_time_signatures(self, duration=None, times=None):
+    #     if self.get_children_by_type(TreeMeasure):
+    #         raise Exception('for setting time signatures score should be empty')
+    #
+    #     def make_measure(duration=None):
+    #         def get_time():
+    #             if duration % 1 == 0:
+    #                 time = (int(duration), 4)
+    #                 return time
+    #             elif (duration * 2) % 1 == 0:
+    #                 time = (int(duration * 2), 8)
+    #                 return time
+    #             else:
+    #                 raise ValueError('duration {} is not dividable'.format(duration))
+    #
+    #         if not duration:
+    #             time = (4, 4)
+    #         else:
+    #             time = get_time()
+    #
+    #         return TreeMeasure(time)
+    #
+    #     if not times:
+    #         times = {}
+    #
+    #     if duration:
+    #         duration = float(duration)
+    #         current_measure_number = 1
+    #         remaining_duration = duration
+    #
+    #         while True:
+    #             if current_measure_number in times.keys():
+    #                 measure = TreeMeasure(time=times[current_measure_number])
+    #             else:
+    #                 measure = TreeMeasure(time=(4, 4))
+    #             measure_duration = measure.quarter_duration
+    #             if measure_duration > remaining_duration:
+    #                 measure = make_measure(duration=remaining_duration)
+    #                 self.add_measure(measure)
+    #                 break
+    #             else:
+    #                 self.add_measure(measure)
+    #                 remaining_duration -= measure.quarter_duration
+    #                 if remaining_duration < 1:
+    #                     break
+    #                 current_measure_number += 1
+    #     else:
+    #         try:
+    #             number_of_measures = list(times.keys())[-1]
+    #             current_time = (4, 4)
+    #             for measure_number in range(1, number_of_measures + 1):
+    #                 try:
+    #                     current_time = times[measure_number]
+    #                 except KeyError:
+    #                     pass
+    #                 self.add_measure(TreeMeasure(time=current_time))
+    #         except IndexError:
+    #             pass
+
+    def set_time_signatures(self, durations=None, times=None):
+        global current_time
+        if self.get_children_by_type(TreeMeasure):
+            raise Exception('for setting time signatures score should be empty')
+
+        def make_measure(duration=None):
+            def get_time():
+                if duration % 1 == 0:
+                    time = (int(duration), 4)
+                    return time
+                elif (duration * 2) % 1 == 0:
+                    time = (int(duration * 2), 8)
+                    return time
+                else:
+                    raise ValueError('duration {} is not dividable'.format(duration))
+
+            if not duration:
+                time = (4, 4)
+            else:
+                time = get_time()
+
+            return TreeMeasure(time)
+
+        if not times:
+            times = {}
+
+        current_time = (4, 4)
+
+        def set_times(current_measure_number, duration):
+            global current_time
+            duration = float(duration)
+            remaining_duration = duration
+
+            while True:
+                if current_measure_number in times.keys():
+                    current_time = times[current_measure_number]
+
+                measure = TreeMeasure(time=current_time)
+
+                measure_duration = measure.quarter_duration
+                if measure_duration > remaining_duration:
+                    measure = make_measure(duration=remaining_duration)
+                    self.add_measure(measure)
+                    break
+                else:
+                    self.add_measure(measure)
+                    current_measure_number += 1
+                    remaining_duration -= measure.quarter_duration
+                    if remaining_duration < 1:
+                        break
+
+            return current_measure_number
+
+        if durations:
+            if not hasattr(durations, '__iter__'):
+                durations = [durations]
+            elif isinstance(durations, str):
+                raise TypeError()
+            else:
+                durations = durations
+
+            current_measure_number = 1
+            for duration in durations:
+                current_measure_number = set_times(current_measure_number, duration)
+
+            if list(times.keys()) != [] and current_measure_number < list(times.keys())[-1]:
+                current_time = (4, 4)
+                for key in times.keys():
+                    if key <= current_measure_number:
+                        current_time = times[key]
+
+                for measure_number in range(current_measure_number, list(times.keys())[-1] + 1):
+                    try:
+                        current_time = times[measure_number]
+                    except KeyError:
+                        pass
+                    self.add_measure(TreeMeasure(time=current_time))
+
+        else:
+            try:
+                number_of_measures = list(times.keys())[-1]
+                current_time = (4, 4)
+                for measure_number in range(1, number_of_measures + 1):
+                    try:
+                        current_time = times[measure_number]
+                    except KeyError:
+                        pass
+                    self.add_measure(TreeMeasure(time=current_time))
+            except IndexError:
+                pass
+
     def get_measure(self, number):
+        if number == 0:
+            raise ValueError('number can be positiv or negative integer but not 0')
+        if number < 0:
+            number += 1
         return self.get_children_by_type(TreeMeasure)[number - 1]
 
     def add_chord(self, measure_number, part_number, chord):
@@ -353,10 +547,8 @@ class TreeScoreTimewise(timewise.Score):
             font_size = 24
         if not default_x:
             default_x = int(self.page_style.page_width.value / 2)
-            # default_x = 598
         if not default_y:
             default_y = self.page_style.page_height.value - 43
-            # default_y = 1600
         if not justify:
             justify = 'center'
         if not valign:

@@ -1087,6 +1087,16 @@ class TypeStaffLine(PositiveInteger):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeStaffNumber(PositiveInteger):
+    """
+    The staff-number type indicates staff numbers within a multi-staff part. Staves are numbered from top to bottom,
+    with 1 being the top staff on a part.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 '''
 ```DTD
 	<!-- Simple types derived from attributes.mod entities and elements -->
@@ -1099,13 +1109,6 @@ class TypeStaffLine(PositiveInteger):
 			<xs:enumeration value="numbers"/>
 			<xs:enumeration value="letters"/>
 		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="staff-number">
-		<xs:annotation>
-			<xs:documentation>The staff-number type indicates staff numbers within a multi-staff part. Staves are numbered from top to bottom, with 1 being the top staff on a part.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:positiveInteger"/>
 	</xs:simpleType>
 
 	<xs:simpleType name="staff-type">

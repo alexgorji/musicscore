@@ -1,12 +1,14 @@
 from musicscore.dtd.dtd import Sequence, Element
 
 from musicscore.musicxml.types.complextypes.pagelayout import ComplexTypePageLayout
+from musicscore.musicxml.types.complextypes.stafflayout import ComplexTypeStaffLayout
 from musicscore.musicxml.types.complextypes.systemlayout import ComplexTypeSystemLayout
 
 from musicscore.dtd.dtd import GroupReference, Element, Sequence
 
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.simple_type import TypeTenths
+
 
 #
 # class LeftMargin(XMLElement, TypeTenths):
@@ -71,12 +73,11 @@ class SystemLayout(ComplexTypeSystemLayout):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class StaffLayout(object):
-    """"""
+class StaffLayout(ComplexTypeStaffLayout):
+    _TAG = 'staff-layout'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        NotImplementedError()
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 """

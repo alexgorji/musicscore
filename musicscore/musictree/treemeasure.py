@@ -3,7 +3,10 @@ from quicktions import Fraction
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treetime import TreeTime
 from musicscore.musicxml.elements import timewise as timewise
-from musicscore.musicxml.groups.musicdata import Print
+from musicscore.musicxml.elements.barline import Barline, BarStyle
+from musicscore.musicxml.groups.layout import SystemLayout
+from musicscore.musicxml.groups.musicdata import Print, Attributes
+from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance
 
 
 class TreeMeasure(timewise.Measure):
@@ -50,12 +53,12 @@ class TreeMeasure(timewise.Measure):
 
     def show_time_signature(self):
         for part in self.get_children_by_type(TreePart):
-            part.attributes.add_child(self.time)
+            part.get_children_by_type(Attributes)[0].add_child(self.time)
 
     def hide_time_signature(self):
         part = self.get_children_by_type(TreePart)[0]
-        if self.time in part.attributes.get_children():
-            part.attributes.remove_child(self.time)
+        if self.time in part.get_children_by_type(Attributes)[0].get_children():
+            part.get_children_by_type(Attributes)[0].remove_child(self.time)
 
     def get_part(self, number):
         return self.get_children_by_type(TreePart)[number - 1]
@@ -81,8 +84,47 @@ class TreeMeasure(timewise.Measure):
             self._offset = 0
 
     def add_page_break(self):
-        part = self.get_children_by_type(TreePart)[0]
-        part.add_child(Print(new_page='yes'))
+        for part in self.get_children_by_type(TreePart):
+            try:
+                p = part.get_children_by_type(Print)[0]
+            except IndexError:
+                p = part.add_child(Print())
+            p.new_page = 'yes'
+
+    def add_system_break(self):
+        for part in self.get_children_by_type(TreePart):
+            try:
+                p = part.get_children_by_type(Print)[0]
+            except IndexError:
+                p = part.add_child(Print())
+            p.new_system = 'yes'
+
+    def add_barline(self, style='regular'):
+        for part in self.get_children_by_type(TreePart):
+            bl = part.add_child(Barline())
+            bl.add_child(BarStyle(style))
+
+
+    def add_system_distance(self, value):
+        for part in self.get_children_by_type(TreePart):
+            try:
+                p = part.get_children_by_type(Print)[0]
+            except IndexError:
+                p = part.add_child(Print())
+
+            try:
+                s = p.get_children_by_type(SystemLayout)[0]
+            except IndexError:
+                s = p.add_child(SystemLayout())
+
+
+            try:
+                sd = s.get_children_by_type(SystemDistance)[0]
+            except IndexError:
+                sd = s.add_child(SystemDistance())
+
+            sd.value = value
+
 
     @property
     def offset(self):
