@@ -21,4 +21,15 @@ class Test(TestCase):
 
         result_path = path + '_test_1'
         self.score.write(path=result_path)
-        # TestScore().assert_template(result_path=result_path)
+        TestScore().assert_template(result_path=result_path)
+
+    def test_2(self):
+        # sf = SimpleFormat(midis = [52, 51, 70, 100, 110, 107, 90, 80, 70, 60, 50, 40, 30])
+        sf = SimpleFormat(midis=[62, 72, 50])
+        sf.auto_clef()
+        v = sf.to_voice(1)
+        v.add_to_score(self.score, 1, 1)
+
+        result_path = path + '_test_2'
+        self.score.write(path=result_path)
+        TestScore().assert_template(result_path=result_path)

@@ -4,6 +4,8 @@ from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, HIGH_TREBLE_CL
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.groups.common import Voice
+from musicscore.musicxml.groups.musicdata import Attributes
+from musicscore.musicxml.types.complextypes.attributes import Clef
 from musicscore.musicxml.types.simple_type import PositiveInteger
 
 
@@ -178,10 +180,10 @@ class SimpleFormat(object):
 
         # ranges
         high_treble = (87, 120)
-        treble = (67, 86)
-        treble_bass = (56, 66)
-        bass = (36, 55)
-        low_bass = (20, 35)
+        treble = (67, 86.5)
+        treble_bass = (56, 66.5)
+        bass = (36, 55.5)
+        low_bass = (20, 35.5)
 
         for chord in [chord for chord in chords if not chord.is_rest]:
             try:
@@ -196,7 +198,7 @@ class SimpleFormat(object):
             elif treble_bass[0] <= chord.midis[0].value <= treble_bass[1]:
                 if last_clef == LOW_BASS_CLEF:
                     clef = BASS_CLEF
-                elif last_clef == HIGH_TREBLE_CLEF:
+                elif not last_clef or last_clef == HIGH_TREBLE_CLEF:
                     clef = TREBLE_CLEF
                 else:
                     clef = None
@@ -207,7 +209,6 @@ class SimpleFormat(object):
                 clef = LOW_BASS_CLEF
             else:
                 raise ValueError('midi {} not in clef ranges'.format(chord.midis[0].value))
-
 
             if clef and clef != last_clef:
                 chord.add_clef(clef)
