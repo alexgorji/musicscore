@@ -20,11 +20,13 @@ class AGEquation(object):
 
 
 class AGLinear(AGEquation):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, a=1, b=0, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._a = None
         self._b = None
-        self._c = None
+
+        self.a = a
+        self.b = b
 
     @property
     def a(self):
@@ -32,8 +34,6 @@ class AGLinear(AGEquation):
 
     @a.setter
     def a(self, value):
-        if value == 0:
-            raise ValueError()
         self._a = value
 
     @property
@@ -42,17 +42,10 @@ class AGLinear(AGEquation):
 
     @b.setter
     def b(self, value):
-        if value == 0:
-            raise ValueError()
         self._b = value
 
-    @property
-    def c(self):
-        return self._c
-
-    @c.setter
-    def c(self, value):
-        self._c = value
+    def get_y(self, x):
+        return (self.a * x) + self.b
 
 
 class AGCos(AGEquation):
@@ -62,16 +55,6 @@ class AGCos(AGEquation):
         self._a = 1
         self._b = 0
         self._c = 0
-
-    # @property
-    # def frequency_formula(self):
-    #     return self._frequency_formula
-    #
-    # @frequency_formula.setter
-    # def frequency_formula(self, value):
-    #     if not isinstance(value, AGEquation):
-    #         raise TypeError()
-    #     self._frequency_formula = value
 
     @property
     def frequency(self):
@@ -110,6 +93,10 @@ class AGCos(AGEquation):
     def get_y(self, x):
         if not self.frequency:
             raise NoFrequencyError()
+        if callable(self.frequency):
+            frequency = self.frequency(x)
+        else:
+            frequency = self.frequency
 
-        y = self.a * math.cos(self.frequency * 2 * math.pi * (x - self.b)) + self.c
+        y = self.a * math.cos(frequency * 2 * math.pi * (x - self.b)) + self.c
         return y
