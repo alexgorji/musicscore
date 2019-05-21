@@ -25,7 +25,7 @@
   <measure number="1">
     <part id="p1">
       <attributes>
-        <divisions>2</divisions>
+        <divisions>4</divisions>
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
@@ -38,8 +38,21 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <beam number="1">begin</beam>
+        <lyric number="1">
+          <text>60.0</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
         <lyric number="1">
           <text>60.0</text>
         </lyric>
@@ -52,8 +65,22 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>quarter-sharp</accidental>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>60.5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>0.5</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
         <beam number="1">end</beam>
         <lyric number="1">
           <text>60.5</text>
@@ -67,11 +94,24 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>sharp</accidental>
         <beam number="1">begin</beam>
         <lyric number="1">
           <text>61.0</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>62.0</text>
         </lyric>
       </note>
       <note>
@@ -82,9 +122,9 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>quarter-sharp</accidental>
-        <beam number="1">end</beam>
+        <beam number="1">continue</beam>
         <lyric number="1">
           <text>62.5</text>
         </lyric>
@@ -92,14 +132,44 @@
       <note>
         <pitch>
           <step>E</step>
+          <alter>-0.5</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
+        <accidental>quarter-flat</accidental>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>63.5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <lyric number="1">
           <text>64.0</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>65.0</text>
         </lyric>
       </note>
       <note>
@@ -110,11 +180,24 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>sharp</accidental>
-        <beam number="1">end</beam>
+        <beam number="1">continue</beam>
         <lyric number="1">
           <text>66.0</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>67.0</text>
         </lyric>
       </note>
       <note>
@@ -125,11 +208,26 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>flat</accidental>
         <beam number="1">begin</beam>
         <lyric number="1">
           <text>68.0</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <alter>-0.5</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>quarter-flat</accidental>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>68.5</text>
         </lyric>
       </note>
       <note>
@@ -140,11 +238,26 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>quarter-sharp</accidental>
-        <beam number="1">end</beam>
+        <beam number="1">continue</beam>
         <lyric number="1">
           <text>69.5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>flat</accidental>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>70.0</text>
         </lyric>
       </note>
     </part>
@@ -152,16 +265,18 @@
   <measure number="2">
     <part id="p1">
       <attributes>
-        <divisions>2</divisions>
+        <divisions>4</divisions>
       </attributes>
       <note>
         <pitch>
           <step>B</step>
+          <alter>0</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
+        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <lyric number="1">
           <text>71.0</text>
@@ -175,9 +290,23 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>quarter-flat</accidental>
-        <beam number="1">end</beam>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>71.5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>-0.5</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
         <lyric number="1">
           <text>71.5</text>
         </lyric>
@@ -190,9 +319,35 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>natural</accidental>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>72.0</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
         <beam number="1">begin</beam>
+        <lyric number="1">
+          <text>72.0</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
         <lyric number="1">
           <text>72.0</text>
         </lyric>
@@ -205,7 +360,21 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>71.5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>-0.5</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
         <beam number="1">end</beam>
         <lyric number="1">
           <text>71.5</text>
@@ -218,10 +387,25 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <beam number="1">begin</beam>
         <lyric number="1">
           <text>71.0</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>flat</accidental>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>70.0</text>
         </lyric>
       </note>
       <note>
@@ -232,11 +416,26 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>quarter-sharp</accidental>
-        <beam number="1">end</beam>
+        <beam number="1">continue</beam>
         <lyric number="1">
           <text>69.5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <alter>-0.5</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>quarter-flat</accidental>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>68.5</text>
         </lyric>
       </note>
       <note>
@@ -247,11 +446,24 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>flat</accidental>
         <beam number="1">begin</beam>
         <lyric number="1">
           <text>68.0</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>67.0</text>
         </lyric>
       </note>
       <note>
@@ -262,11 +474,26 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>sharp</accidental>
-        <beam number="1">end</beam>
+        <beam number="1">continue</beam>
         <lyric number="1">
           <text>66.0</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>F</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>natural</accidental>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>65.0</text>
         </lyric>
       </note>
     </part>
@@ -274,7 +501,7 @@
   <measure number="3">
     <part id="p1">
       <attributes>
-        <divisions>2</divisions>
+        <divisions>4</divisions>
       </attributes>
       <note>
         <pitch>
@@ -283,10 +510,25 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <beam number="1">begin</beam>
         <lyric number="1">
           <text>64.0</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <alter>-0.5</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>quarter-flat</accidental>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>63.5</text>
         </lyric>
       </note>
       <note>
@@ -297,11 +539,26 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>quarter-sharp</accidental>
-        <beam number="1">end</beam>
+        <beam number="1">continue</beam>
         <lyric number="1">
           <text>62.5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>natural</accidental>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>62.0</text>
         </lyric>
       </note>
       <note>
@@ -312,7 +569,7 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>sharp</accidental>
         <beam number="1">begin</beam>
         <lyric number="1">
@@ -327,16 +584,45 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <accidental>quarter-sharp</accidental>
-        <beam number="1">end</beam>
+        <beam number="1">continue</beam>
         <lyric number="1">
           <text>60.5</text>
         </lyric>
       </note>
       <note>
+        <pitch>
+          <step>C</step>
+          <alter>0.5</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
+        <lyric number="1">
+          <text>60.5</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>natural</accidental>
+        <beam number="1">end</beam>
+        <lyric number="1">
+          <text>60.0</text>
+        </lyric>
+      </note>
+      <note>
         <rest/>
-        <duration>4</duration>
+        <duration>8</duration>
         <voice>1</voice>
         <type>half</type>
       </note>

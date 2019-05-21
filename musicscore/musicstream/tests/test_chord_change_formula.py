@@ -40,14 +40,12 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=20*[0.5])
+        sf = SimpleFormat(durations=40 * [0.25])
         sf.change_chord(CosChord())
         for chord in sf.chords:
             chord.add_lyric(chord.midis[0].value)
 
-        print([chord.midis[0].value for chord in sf.chords])
         v = sf.to_voice(1)
-
 
         v.add_to_score(self.score, 1, 1)
 

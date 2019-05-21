@@ -771,6 +771,24 @@ class TreePart(timewise.Part):
             except AttributeError:
                 return (note.pitch.step.value, 0)
 
+        def is_in_repetition(xml_chord):
+            chord_values = list(self.xml_chords.values())
+            index = chord_values.index(xml_chord)
+            if index != 0:
+                previous = chord_values[index - 1]
+                if len(xml_chord) == len(previous):
+                    for note_1, note_2 in zip(xml_chord, previous):
+                        if isinstance(note_1.event, Rest) or isinstance(note_2.event, Rest):
+                            return False
+                        pitch_1 = note_1.pitch.dump()
+                        pitch_2 = note_2.pitch.dump()
+                        if len(pitch_1) == len(pitch_2):
+                            for i in range(1, len(pitch_1)):
+                                if pitch_1[i].value != pitch_2[i].value:
+                                    return False
+                            return True
+            return False
+
         if mode == 'normal':
             _hide_accidental = []
             _set_natural = []
@@ -786,42 +804,24 @@ class TreePart(timewise.Part):
                         _hide_accidental.append(get_accidental_info(note))
                     _set_natural.append(note.pitch.step.value)
                 elif (
-                        note.pitch.alter is None or note.pitch.alter.value == 0):
+                        not note.pitch.alter or note.pitch.alter.value == 0):
                     if note.pitch.step.value in _set_natural:
-                        try:
-                            _hide_accidental.remove(get_accidental_info(note))
-                        except ValueError:
-                            pass
+                        for item in _hide_accidental:
+                            if item[0] == note.pitch.step.value:
+                                _hide_accidental.remove(item)
+
                         _set_natural.remove(note.pitch.step.value)
                         note.accidental.show = True
                     elif note.offset == 0:
                         if note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type for t in
                                                                                             note.get_children_by_type(
-                                                                                                    Tie)]:
+                                                                                                Tie)]:
                             note.accidental.show = True
 
         elif mode == 'modern':
             _first_chord_natural = [note.pitch.step.value for note in _get_previous_measure_last_signed_notes()]
 
             _set_natural = []
-
-            def is_in_repetition(xml_chord):
-                chord_values = list(self.xml_chords.values())
-                index = chord_values.index(xml_chord)
-                if index != 0:
-                    previous = chord_values[index - 1]
-                    if len(xml_chord) == len(previous):
-                        for note_1, note_2 in zip(xml_chord, previous):
-                            if isinstance(note_1.event, Rest) or isinstance(note_2.event, Rest):
-                                return False
-                            pitch_1 = note_1.pitch.dump()
-                            pitch_2 = note_2.pitch.dump()
-                            if len(pitch_1) == len(pitch_2):
-                                for i in range(1, len(pitch_1)):
-                                    if pitch_1[i].value != pitch_2[i].value:
-                                        return False
-                                return True
-                return False
 
             for index, xml_chord in enumerate(self.xml_chords.values()):
                 if index == 0:
