@@ -22,6 +22,7 @@ class Test(TestCase):
         self.score.add_measure()
         voice.add_to_score(self.score, 1)
         result_path = path + '_test_1'
+        # self.score.accidental_mode = 'modern'
         self.score.write(result_path)
         TestScore().assert_template(result_path=result_path)
 

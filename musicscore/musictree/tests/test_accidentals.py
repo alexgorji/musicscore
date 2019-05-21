@@ -1,6 +1,7 @@
 import os
 from unittest import TestCase
 
+from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
 from musicscore.musicxml.score_templates.xml_test_score import TestScore
@@ -57,4 +58,13 @@ class Test(TestCase):
         self.score.accidental_mode = 'modern'
         result_path = path + '_test_3'
         self.score.write(path=result_path)
+        TestScore().assert_template(result_path=result_path)
+
+    def test_4(self):
+        simpleformat = SimpleFormat(midis=list(range(60, 68)))
+        voice = simpleformat.to_voice(2)
+        voice.add_to_score(self.score, 1, 1)
+        result_path = path + '_test_4'
+        self.score.accidental_mode = 'modern'
+        self.score.write(result_path)
         TestScore().assert_template(result_path=result_path)

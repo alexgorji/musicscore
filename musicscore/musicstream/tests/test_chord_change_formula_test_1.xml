@@ -68,6 +68,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
+        <accidental>sharp</accidental>
         <beam number="1">begin</beam>
         <lyric number="1">
           <text>61.0</text>
@@ -140,6 +141,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
+        <accidental>quarter-sharp</accidental>
         <beam number="1">end</beam>
         <lyric number="1">
           <text>69.5</text>
@@ -204,7 +206,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>quarter-flat</accidental>
         <beam number="1">end</beam>
         <lyric number="1">
           <text>71.5</text>
@@ -247,6 +248,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
+        <accidental>flat</accidental>
         <beam number="1">begin</beam>
         <lyric number="1">
           <text>68.0</text>
@@ -326,6 +328,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
+        <accidental>quarter-sharp</accidental>
         <beam number="1">end</beam>
         <lyric number="1">
           <text>60.5</text>

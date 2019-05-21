@@ -775,7 +775,7 @@ class TreePart(timewise.Part):
             _hide_accidental = []
             _set_natural = []
             pitched_notes = [note for note in self.get_children_by_type(TreeNote) if isinstance(note.event, Pitch)]
-            _first_chord_natural = [get_accidental_info(note) for note in
+            _first_chord_natural = [note.pitch.step.value for note in
                                     _get_previous_measure_last_signed_notes()]
 
             for note in pitched_notes:
@@ -794,13 +794,14 @@ class TreePart(timewise.Part):
                             pass
                         _set_natural.remove(note.pitch.step.value)
                         note.accidental.show = True
-                    elif note.offset == 0 and note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type
-                                                                                                               for t in
-                                                                                                               note.get_children_by_type(
-                                                                                                                   Tie)]:
-                        note.accidental.show = True
+                    elif note.offset == 0:
+                        if note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type for t in
+                                                                                            note.get_children_by_type(
+                                                                                                    Tie)]:
+                            note.accidental.show = True
+
         elif mode == 'modern':
-            _first_chord_natural = [get_accidental_info(note) for note in _get_previous_measure_last_signed_notes()]
+            _first_chord_natural = [note.pitch.step.value for note in _get_previous_measure_last_signed_notes()]
 
             _set_natural = []
 
@@ -828,9 +829,9 @@ class TreePart(timewise.Part):
                         if isinstance(note.event, Rest):
                             break
                         if not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
-                            if get_accidental_info(note) in _first_chord_natural and 'stop' not in [t.type for t in
-                                                                                                    note.get_children_by_type(
-                                                                                                        Tie)]:
+                            if note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type for t in
+                                                                                                note.get_children_by_type(
+                                                                                                    Tie)]:
                                 note.accidental.show = True
                         else:
                             note.accidental.show = True
