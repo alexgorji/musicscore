@@ -305,6 +305,7 @@ class TreeScoreTimewise(timewise.Score):
         self._max_division = None
         self._forbidden_divisions = None
         self._page_style = TreePageStyle(score=self, **kwargs)
+        self._accidental_mode = 'normal'
 
     @property
     def max_division(self):
@@ -316,6 +317,14 @@ class TreeScoreTimewise(timewise.Score):
             raise TypeError('max_division.value must be None or of type int not {}'.format(type(value)))
 
         self._max_division = value
+
+    @property
+    def accidental_mode(self):
+        return self._accidental_mode
+
+    @accidental_mode.setter
+    def accidental_mode(self, value):
+        self._accidental_mode = value
 
     @property
     def forbidden_divisions(self):
@@ -691,7 +700,7 @@ class TreeScoreTimewise(timewise.Score):
             self.group_beams()
             self.chord_to_notes()
             self.update_divisions()
-            self.update_accidentals(mode='normal')
+            self.update_accidentals(mode=self.accidental_mode)
             self.update_durations()
             self.close_dtd()
             # for measure in self.get_children_by_type(TreeMeasure):

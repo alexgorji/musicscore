@@ -10,7 +10,7 @@ from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treenote import TreeNote, TreeBackup
 from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.elements import timewise as timewise
-from musicscore.musicxml.elements.fullnote import Pitch
+from musicscore.musicxml.elements.fullnote import Pitch, Rest
 from musicscore.musicxml.groups.musicdata import Direction, Attributes
 from musicscore.musicxml.elements.note import Beam, Type, Tie
 from musicscore.musicxml.types.complextypes.attributes import Divisions
@@ -139,6 +139,17 @@ class TreePartVoice(object):
         if self.chords:
             return measure.quarter_duration - self.chords[-1].end_position
         return measure.quarter_duration
+
+    @property
+    def xml_chords(self):
+        output = {}
+        for note in [note for note in self.parent_part.get_children_by_type(TreeNote) if
+                     note.get_children_by_type(Voice)[0].number == self.number]:
+            try:
+                output[note.offset].append(note)
+            except KeyError:
+                output[note.offset] = [note]
+        return output
 
     def _group_beats(self, grouping_list):
         # todo test grouping list
@@ -583,6 +594,7 @@ class TreePart(timewise.Part):
         self._divisions_updated = False
         self._finished = False
         self.parent_score_part = None
+        self._accidental_mode = 'normal'
 
     @property
     def __name__(self):
@@ -629,6 +641,24 @@ class TreePart(timewise.Part):
                     raise TypeError('forbidden_division must be of type int not{}'.format(type(value)))
 
         self._forbidden_divisions = value
+
+    @property
+    def accidental_mode(self):
+        return self._accidental_mode
+
+    @accidental_mode.setter
+    def accidental_mode(self, value):
+        self._accidental_mode = value
+
+    @property
+    def xml_chords(self):
+        output = {}
+        for note in self.get_children_by_type(TreeNote):
+            try:
+                output[note.offset].append(note)
+            except KeyError:
+                output[note.offset] = [note]
+        return output
 
     def get_divisions(self):
         duration_denominators = [chord.quarter_duration.denominator for chord in
@@ -735,23 +765,31 @@ class TreePart(timewise.Part):
             return [n for n in previous_measure_last_notes if
                     isinstance(n.event, Pitch) and n.pitch.alter and n.pitch.alter.value != 0]
 
+        def get_accidental_info(note):
+            try:
+                return (note.pitch.step.value, note.pitch.alter.value)
+            except AttributeError:
+                return (note.pitch.step.value, 0)
+
         if mode == 'normal':
             _hide_accidental = []
             _set_natural = []
             pitched_notes = [note for note in self.get_children_by_type(TreeNote) if isinstance(note.event, Pitch)]
-            _first_chord_natural = [note.pitch.step.value for note in _get_previous_measure_last_signed_notes()]
+            _first_chord_natural = [get_accidental_info(note) for note in
+                                    _get_previous_measure_last_signed_notes()]
 
             for note in pitched_notes:
-                if note.pitch.alter is not None and note.pitch.alter.value != 0 and note.pitch.step.value not in _hide_accidental:
+                if note.pitch.alter and note.pitch.alter.value != 0 and (
+                        note.pitch.step.value, note.pitch.alter.value) not in _hide_accidental:
                     if 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
                         note.accidental.show = True
-                        _hide_accidental.append(note.pitch.step.value)
+                        _hide_accidental.append(get_accidental_info(note))
                     _set_natural.append(note.pitch.step.value)
                 elif (
                         note.pitch.alter is None or note.pitch.alter.value == 0):
                     if note.pitch.step.value in _set_natural:
                         try:
-                            _hide_accidental.remove(note.pitch.step.value)
+                            _hide_accidental.remove(get_accidental_info(note))
                         except ValueError:
                             pass
                         _set_natural.remove(note.pitch.step.value)
@@ -761,6 +799,55 @@ class TreePart(timewise.Part):
                                                                                                                note.get_children_by_type(
                                                                                                                    Tie)]:
                         note.accidental.show = True
+        elif mode == 'modern':
+            _first_chord_natural = [get_accidental_info(note) for note in _get_previous_measure_last_signed_notes()]
+
+            _set_natural = []
+
+            def is_in_repetition(xml_chord):
+                chord_values = list(self.xml_chords.values())
+                index = chord_values.index(xml_chord)
+                if index != 0:
+                    previous = chord_values[index - 1]
+                    if len(xml_chord) == len(previous):
+                        for note_1, note_2 in zip(xml_chord, previous):
+                            if isinstance(note_1.event, Rest) or isinstance(note_2.event, Rest):
+                                return False
+                            pitch_1 = note_1.pitch.dump()
+                            pitch_2 = note_2.pitch.dump()
+                            if len(pitch_1) == len(pitch_2):
+                                for i in range(1, len(pitch_1)):
+                                    if pitch_1[i].value != pitch_2[i].value:
+                                        return False
+                                return True
+                return False
+
+            for index, xml_chord in enumerate(self.xml_chords.values()):
+                if index == 0:
+                    for note in xml_chord:
+                        if isinstance(note.event, Rest):
+                            break
+                        if not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
+                            if get_accidental_info(note) in _first_chord_natural and 'stop' not in [t.type for t in
+                                                                                                    note.get_children_by_type(
+                                                                                                        Tie)]:
+                                note.accidental.show = True
+                        else:
+                            note.accidental.show = True
+                            _set_natural.append(note.pitch.step.value)
+                else:
+                    for note in xml_chord:
+                        if isinstance(note.event, Rest):
+                            break
+                        if is_in_repetition(xml_chord):
+                            break
+                        if not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
+                            if note.pitch.step.value in _set_natural:
+                                note.accidental.show = True
+                                _set_natural.remove(note.pitch.step.value)
+                        else:
+                            note.accidental.show = True
+                            _set_natural.append(note.pitch.step.value)
         else:
             raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
 
@@ -850,7 +937,7 @@ class TreePart(timewise.Part):
 
             self.update_divisions()
 
-            self.update_accidentals(mode='normal')
+            self.update_accidentals(mode=self.accidental_mode)
 
             self.update_durations()
 

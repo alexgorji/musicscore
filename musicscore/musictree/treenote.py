@@ -1,6 +1,6 @@
 from quicktions import Fraction
 
-from musicscore.musicxml.elements.fullnote import Rest, Event, Pitch, Alter
+from musicscore.musicxml.elements.fullnote import Rest, Event, Pitch, Alter, Chord
 from musicscore.musicxml.groups.musicdata import Backup
 from musicscore.musicxml.elements.note import Note, Duration, Grace, Accidental, Notations
 
@@ -103,7 +103,10 @@ class TreeNote(Note):
 
     def update_offset(self):
         if self.previous:
-            output = self.previous.offset + self.previous.quarter_duration
+            if self.get_children_by_type(Chord):
+                output = self.previous.offset
+            else:
+                output = self.previous.offset + self.previous.quarter_duration
             self._offset = output
         else:
             self._offset = 0

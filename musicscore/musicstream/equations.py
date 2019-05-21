@@ -1,12 +1,22 @@
 import math
 
 
+class EquationError(Exception):
+    def __init__(self, msg=''):
+        super().__init__(msg)
+
+
+class NoFrequencyError(EquationError):
+    def __init__(self):
+        super().__init__(msg='set frequency first')
+
+
 class AGEquation(object):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def get_x(self, y):
-        return y
+    def get_y(self, x):
+        raise EquationError('get_y must be overridden by subclass')
 
 
 class AGLinear(AGEquation):
@@ -51,6 +61,7 @@ class AGCos(AGEquation):
         self._frequency = None
         self._a = 1
         self._b = 0
+        self._c = 0
 
     # @property
     # def frequency_formula(self):
@@ -68,8 +79,6 @@ class AGCos(AGEquation):
 
     @frequency.setter
     def frequency(self, value):
-        if value <= 0:
-            raise ValueError()
         self._frequency = value
 
     @property
@@ -90,7 +99,17 @@ class AGCos(AGEquation):
     def b(self, value):
         self._b = value
 
-    def get_y(self, x):
+    @property
+    def c(self):
+        return self._c
 
-        y = self.b + self.a * math.cos(self.frequency * 2*math.pi * (x - self.b))
+    @c.setter
+    def c(self, value):
+        self._c = value
+
+    def get_y(self, x):
+        if not self.frequency:
+            raise NoFrequencyError()
+
+        y = self.a * math.cos(self.frequency * 2 * math.pi * (x - self.b)) + self.c
         return y

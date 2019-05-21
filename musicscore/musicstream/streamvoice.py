@@ -1,12 +1,24 @@
+from musicscore.musicstream.equations import AGEquation
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, HIGH_TREBLE_CLEF, LOW_BASS_CLEF
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.groups.common import Voice
-from musicscore.musicxml.groups.musicdata import Attributes
-from musicscore.musicxml.types.complextypes.attributes import Clef
 from musicscore.musicxml.types.simple_type import PositiveInteger
+
+
+class StreamChordFormula(AGEquation):
+
+    @staticmethod
+    def condition(chord):
+        raise Exception('staticmethod condition must be overridden by subclasses')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def change_chord(self, chord):
+        raise Exception('function change_chord must be overwritten by subclasses')
 
 
 class StreamVoice(object):
@@ -213,3 +225,14 @@ class SimpleFormat(object):
             if clef and clef != last_clef:
                 chord.add_clef(clef)
                 clefs.append(clef)
+
+    def change_chord(self, *chord_formulas):
+        for formula in chord_formulas:
+            if not isinstance(formula, StreamChordFormula):
+                raise TypeError
+
+        for chord in self.chords:
+            for formula in chord_formulas:
+                if formula.condition(chord):
+                    formula.change_chord(chord)
+                    break
