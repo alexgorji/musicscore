@@ -12,11 +12,84 @@ from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.fullnote import Pitch, Rest
 from musicscore.musicxml.groups.musicdata import Direction, Attributes
-from musicscore.musicxml.elements.note import Beam, Type, Tie
+from musicscore.musicxml.elements.note import Beam, Type, Tie, Lyric
 from musicscore.musicxml.types.complextypes.attributes import Divisions
 from musicscore.musicxml.types.complextypes.direction import DirectionType, Sound
 from musicscore.musicxml.types.complextypes.directiontype import Metronome
+from musicscore.musicxml.types.complextypes.lyric import Text
 from musicscore.musicxml.types.complextypes.metronome import BeatUnit, PerMinute
+
+
+class XMLChord(object):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._notes = []
+        self._parent_voice = None
+
+    def add_note(self, note):
+        if self.notes:
+            if note.offset != self.offset:
+                raise ValueError('notes of XMLChord must have the same offset')
+            note_voice_number = note.get_children_by_type(Voice)[0].value
+
+            if note_voice_number != self.voice_number:
+                raise ValueError('notes of XMLChord must have the same voice number {} and {}'.format(note_voice_number,
+                                                                                                      self.voice_number))
+        self._notes.append(note)
+
+    @property
+    def notes(self):
+        return self._notes
+
+    @property
+    def parent_voice(self):
+        return self._parent_voice
+
+    @parent_voice.setter
+    def parent_voice(self, value):
+        if not isinstance(value, TreePartVoice):
+            raise TypeError()
+        self._parent_voice = value
+
+    @property
+    def offset(self):
+        if self.notes:
+            return self.notes[-1].offset
+        else:
+            return None
+
+    @property
+    def voice_number(self):
+        if self.notes:
+            return self.notes[-1].get_children_by_type(Voice)[0].value
+
+    @property
+    def previous(self):
+        index = self.parent_voice.xml_chords.index(self)
+        if index == 0:
+            return None
+        return self.parent_voice.xml_chords[index - 1]
+
+    @property
+    def is_tied_to_previous(self):
+        for note in self.notes:
+            if 'stop' in [t.type for t in note.get_children_by_type(Tie)]:
+                return True
+        return False
+
+    def has_same_pitches(self, xml_chord):
+        if len(self.notes) == len(xml_chord.notes):
+            for note_1, note_2 in zip(self.notes, xml_chord.notes):
+                if isinstance(note_1.event, Rest) or isinstance(note_2.event, Rest):
+                    return False
+                pitch_1 = note_1.pitch.dump()
+                pitch_2 = note_2.pitch.dump()
+                if len(pitch_1) == len(pitch_2):
+                    for i in range(1, len(pitch_1)):
+                        if pitch_1[i].value != pitch_2[i].value:
+                            return False
+                    return True
+        return False
 
 
 class TreePartVoice(object):
@@ -39,6 +112,7 @@ class TreePartVoice(object):
         self._types_updated = False
         self._dots_updated = False
         self.parent_part = None
+        self._xml_chords = None
 
     @property
     def __name__(self):
@@ -142,14 +216,23 @@ class TreePartVoice(object):
 
     @property
     def xml_chords(self):
-        output = {}
-        for note in [note for note in self.parent_part.get_children_by_type(TreeNote) if
-                     note.get_children_by_type(Voice)[0].number == self.number]:
-            try:
-                output[note.offset].append(note)
-            except KeyError:
-                output[note.offset] = [note]
-        return output
+        if not self._xml_chords:
+            xml_chords = []
+            for note in [note for note in self.parent_part.get_children_by_type(TreeNote)]:
+                offset_voices = [(xml_chord.offset, xml_chord.voice_number) for xml_chord in xml_chords]
+                note_offset_voice = (note.offset, note.get_children_by_type(Voice)[0].value)
+                if note_offset_voice in offset_voices:
+                    index = offset_voices.index(note_offset_voice)
+                    xml_chord = xml_chords[index]
+                    xml_chord.add_note(note)
+                else:
+                    xml_chord = XMLChord()
+                    xml_chord.parent_voice = self
+                    xml_chord.add_note(note)
+                    xml_chords.append(xml_chord)
+            self._xml_chords = xml_chords
+
+        return self._xml_chords
 
     def _group_beats(self, grouping_list):
         # todo test grouping list
@@ -652,13 +735,17 @@ class TreePart(timewise.Part):
 
     @property
     def xml_chords(self):
-        output = {}
-        for note in self.get_children_by_type(TreeNote):
-            try:
-                output[note.offset].append(note)
-            except KeyError:
-                output[note.offset] = [note]
+        output = []
+        for voice in self.voices.values():
+            output.extend(voice.xml_chords)
         return output
+        # output = {}
+        # for note in self.get_children_by_type(TreeNote):
+        #     try:
+        #         output[note.offset].append(note)
+        #     except KeyError:
+        #         output[note.offset] = [note]
+        # return output
 
     def get_divisions(self):
         duration_denominators = [chord.quarter_duration.denominator for chord in
@@ -772,26 +859,22 @@ class TreePart(timewise.Part):
                 return (note.pitch.step.value, 0)
 
         def is_in_repetition(xml_chord):
-            chord_values = list(self.xml_chords.values())
-            index = chord_values.index(xml_chord)
-            if index != 0:
-                previous = chord_values[index - 1]
-                if len(xml_chord) == len(previous):
-                    for note_1, note_2 in zip(xml_chord, previous):
-                        if isinstance(note_1.event, Rest) or isinstance(note_2.event, Rest):
-                            return False
-                        pitch_1 = note_1.pitch.dump()
-                        pitch_2 = note_2.pitch.dump()
-                        if len(pitch_1) == len(pitch_2):
-                            for i in range(1, len(pitch_1)):
-                                if pitch_1[i].value != pitch_2[i].value:
-                                    return False
-                            return True
-            return False
+            if xml_chord.is_tied_to_previous:
+                return False
+
+            previous = xml_chord.previous
+            while previous:
+                if previous.is_tied_to_previous:
+                    previous = previous.previous
+                else:
+                    break
+
+            if previous and xml_chord.has_same_pitches(xml_chord.previous):
+                return True
 
         if mode == 'normal':
             _hide_accidental = []
-            _set_natural = []
+            _set_natural = set()
             pitched_notes = [note for note in self.get_children_by_type(TreeNote) if isinstance(note.event, Pitch)]
             _first_chord_natural = [note.pitch.step.value for note in
                                     _get_previous_measure_last_signed_notes()]
@@ -802,7 +885,7 @@ class TreePart(timewise.Part):
                     if 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
                         note.accidental.show = True
                         _hide_accidental.append(get_accidental_info(note))
-                    _set_natural.append(note.pitch.step.value)
+                    _set_natural.add(note.pitch.step.value)
                 elif (
                         not note.pitch.alter or note.pitch.alter.value == 0):
                     if note.pitch.step.value in _set_natural:
@@ -820,35 +903,44 @@ class TreePart(timewise.Part):
 
         elif mode == 'modern':
             _first_chord_natural = [note.pitch.step.value for note in _get_previous_measure_last_signed_notes()]
-
-            _set_natural = []
-
-            for index, xml_chord in enumerate(self.xml_chords.values()):
+            _set_natural = set()
+            for index, xml_chord in enumerate(self.xml_chords):
+                # first xml_chord
                 if index == 0:
-                    for note in xml_chord:
+                    for note in xml_chord.notes:
                         if isinstance(note.event, Rest):
                             break
+                        # natural
                         if not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
                             if note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type for t in
                                                                                                 note.get_children_by_type(
                                                                                                     Tie)]:
                                 note.accidental.show = True
+                        # non natural
                         else:
-                            note.accidental.show = True
-                            _set_natural.append(note.pitch.step.value)
+                            _set_natural.add(note.pitch.step.value)
+                            if 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
+                                note.accidental.show = True
+
                 else:
-                    for note in xml_chord:
+                    # other xml_chords
+                    for note in xml_chord.notes:
                         if isinstance(note.event, Rest):
                             break
-                        if is_in_repetition(xml_chord):
-                            break
+                        # natural
                         if not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
                             if note.pitch.step.value in _set_natural:
                                 note.accidental.show = True
                                 _set_natural.remove(note.pitch.step.value)
+                        # non natural
                         else:
-                            note.accidental.show = True
-                            _set_natural.append(note.pitch.step.value)
+                            if is_in_repetition(xml_chord):
+                                break
+
+                            elif 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
+                                note.accidental.show = True
+
+                            _set_natural.add(note.pitch.step.value)
         else:
             raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
 

@@ -119,6 +119,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
+        <accidental>sharp</accidental>
         <beam number="1">end</beam>
       </note>
     </part>

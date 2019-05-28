@@ -1,8 +1,9 @@
 from quicktions import Fraction
 
 from musicscore.musicxml.elements.fullnote import Rest, Event, Pitch, Alter, Chord
+from musicscore.musicxml.elements.note import Note, Duration, Grace, Accidental, Notations, Lyric
 from musicscore.musicxml.groups.musicdata import Backup
-from musicscore.musicxml.elements.note import Note, Duration, Grace, Accidental, Notations
+from musicscore.musicxml.types.complextypes.lyric import Text
 
 
 class TreeBackup(Backup):
@@ -182,3 +183,8 @@ class TreeNote(Note):
         except AttributeError:
             self.add_child(Duration())
             self.duration.value = int(self.quarter_duration * divisions)
+
+    def add_lyric(self, text, number=1, **kwargs):
+        lyric = self.add_child(Lyric(number=str(number), **kwargs))
+        lyric.add_child(Text(str(text)))
+        return lyric

@@ -8,4 +8,4 @@ class Enclosure(AttributeAbstract):
 
     def __init__(self, enclosure=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute('enclosure', enclosure, "TypeEnclusureShape")
+        self.generate_attribute('enclosure', enclosure, "TypeEnclosureShape")

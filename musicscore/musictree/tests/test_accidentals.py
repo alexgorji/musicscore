@@ -1,6 +1,8 @@
 import os
 from unittest import TestCase
 
+from quicktions import Fraction
+
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
@@ -62,7 +64,7 @@ class Test(TestCase):
 
     def test_4(self):
         simpleformat = SimpleFormat(midis=list(range(60, 68)))
-        voice = simpleformat.to_voice(1)
+        voice = simpleformat.to_voice(2)
         voice.add_to_score(self.score, 1, 1)
         result_path = path + '_test_4'
         self.score.accidental_mode = 'modern'
@@ -77,3 +79,17 @@ class Test(TestCase):
         self.score.accidental_mode = 'normal'
         self.score.write(result_path)
         TestScore().assert_template(result_path=result_path)
+
+    def test_6(self):
+        midis = [51.5, 51.5, 50.5, 48.5, 49.5, 48.5, 50.0, 50.0, 49.5, 49.0]
+        durations = [Fraction(255, 56), Fraction(6525, 3136), Fraction(6075, 3136), Fraction(2475, 3136), Fraction(2145, 3136), Fraction(2805, 3136), Fraction(1815, 3136), Fraction(65, 56), Fraction(2015, 1568), Fraction(1625, 1568)]
+        simpleformat = SimpleFormat(midis=midis,  durations=durations)
+        simpleformat.auto_clef()
+        voice = simpleformat.to_voice(1)
+        voice.add_to_score(self.score, 1, 1)
+        result_path = path + '_test_6'
+        self.score.max_division = 7
+        self.score.accidental_mode = 'modern'
+        self.score.write(result_path)
+        TestScore().assert_template(result_path=result_path)
+

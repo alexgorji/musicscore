@@ -15,8 +15,8 @@ class AGEquation(object):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def get_y(self, x):
-        raise EquationError('get_y must be overridden by subclass')
+    def __call__(self, x):
+        raise EquationError('__call__ must be overridden by subclass')
 
 
 class AGLinear(AGEquation):
@@ -44,17 +44,23 @@ class AGLinear(AGEquation):
     def b(self, value):
         self._b = value
 
-    def get_y(self, x):
+    def __call__(self, x):
         return (self.a * x) + self.b
 
 
 class AGCos(AGEquation):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, frequency=0.1, a=1, b=0, c=0, *args,
+                 **kwargs):
         super().__init__(*args, **kwargs)
         self._frequency = None
-        self._a = 1
-        self._b = 0
-        self._c = 0
+        self._a = None
+        self._b = None
+        self._c = None
+
+        self.frequency = frequency
+        self.a = a
+        self.b = b
+        self.c = c
 
     @property
     def frequency(self):
@@ -64,15 +70,23 @@ class AGCos(AGEquation):
     def frequency(self, value):
         self._frequency = value
 
+    def get_frequency(self, x):
+        if not callable(self.frequency):
+            return self.frequency
+        return self.frequency(x)
+
     @property
     def a(self):
         return self._a
 
     @a.setter
     def a(self, value):
-        if value == 0:
-            raise ValueError()
         self._a = value
+
+    def get_a(self, x):
+        if not callable(self.a):
+            return self.a
+        return self.a(x)
 
     @property
     def b(self):
@@ -82,6 +96,11 @@ class AGCos(AGEquation):
     def b(self, value):
         self._b = value
 
+    def get_b(self, x):
+        if not callable(self.b):
+            return self.b
+        return self.b(x)
+
     @property
     def c(self):
         return self._c
@@ -90,13 +109,17 @@ class AGCos(AGEquation):
     def c(self, value):
         self._c = value
 
-    def get_y(self, x):
-        if not self.frequency:
-            raise NoFrequencyError()
-        if callable(self.frequency):
-            frequency = self.frequency(x)
-        else:
-            frequency = self.frequency
+    def get_c(self, x):
+        if not callable(self.c):
+            return self.c
+        return self.c(x)
 
-        y = self.a * math.cos(frequency * 2 * math.pi * (x - self.b)) + self.c
+    def __call__(self, x):
+        frequency = self.get_frequency(x)
+        a = self.get_a(x)
+        b = self.get_b(x)
+        c = self.get_c(x)
+
+        y = a * math.cos(frequency * 2 * math.pi * (x - b)) + c
+        # y = a * math.cos(frequency * (x - b)) + c
         return y
