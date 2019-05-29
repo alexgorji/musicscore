@@ -353,7 +353,6 @@ class TreePartVoice(object):
         return self.beats
 
     def _add_chords_to_beats(self):
-
         if len(self.beats) == 1:
             current_beat = self.beats[0]
             for chord in self.chords:
@@ -362,15 +361,16 @@ class TreePartVoice(object):
             beats = iter(self.beats)
             current_beat = beats.__next__()
             next_beat = beats.__next__()
-            while_loop = True
+            # while_loop = True
 
             for chord in self.chords:
-                while while_loop and (chord.offset < current_beat.offset or chord.offset >= next_beat.offset):
+                while True and (chord.offset < current_beat.offset or chord.offset >= next_beat.offset):
                     try:
                         current_beat = next_beat
                         next_beat = beats.__next__()
                     except StopIteration:
-                        while_loop = False
+                        # while_loop = False
+                        break
 
                 current_beat.add_chord(chord)
 

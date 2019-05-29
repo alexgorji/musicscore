@@ -208,11 +208,6 @@ class TreeBeat(object):
                 chord.quarter_duration = quarter_duration
                 chord._offset = None
 
-    # def clean_zero_head_tails(self):
-    #     for chord in self.chords:
-    #         if chord.quarter_duration == 0 and chord._head or chord._tail:
-    #             chord.remove_from_score()
-
     def update_tuplets(self):
         tuplet_divisions = [3, 5, 6, 7, 9, 10]
         non_grace_chords = [chord for chord in self.chords if chord.quarter_duration != 0]
@@ -230,6 +225,9 @@ class TreeBeat(object):
         output = []
         for chord in self.chords:
             split = None
+            if chord.quarter_duration == Fraction(5, 2):
+                if chord.position_in_beat == 0:
+                    split = chord.split(4, 1)
             if chord.quarter_duration == Fraction(1, 4):
                 if chord.position_in_beat == Fraction(3, 8):
                     split = chord.split(1, 1)
