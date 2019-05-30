@@ -18,6 +18,7 @@ class TreeMeasure(timewise.Measure):
         self.time = time
         self._beats = None
         self._offset = None
+        self._barline_style = None
 
     @property
     def __name__(self):
@@ -50,6 +51,28 @@ class TreeMeasure(timewise.Measure):
             (beats, beat_type) = time_signature
             output += beats.value / beat_type.value * 4
         return Fraction(output).limit_denominator(10000)
+
+
+    @property
+    def barline_style(self):
+        return self._barline_style
+
+    @barline_style.setter
+    def barline_style(self, value):
+        if value:
+            for part in self.get_children_by_type(TreePart):
+                try:
+                    bl = part.get_children_by_type(Barline)[0]
+                except IndexError:
+                    bl = part.add_child(Barline())
+
+                try:
+                    bs = bl.get_children_by_type(BarStyle)[0]
+                    bs.value = value
+                except IndexError:
+                    bs = bl.add_child(BarStyle(value))
+
+        self._barline_style = value
 
     def show_time_signature(self):
         for part in self.get_children_by_type(TreePart):
@@ -98,11 +121,6 @@ class TreeMeasure(timewise.Measure):
             except IndexError:
                 p = part.add_child(Print())
             p.new_system = 'yes'
-
-    def add_barline(self, style='regular'):
-        for part in self.get_children_by_type(TreePart):
-            bl = part.add_child(Barline())
-            bl.add_child(BarStyle(style))
 
 
     def add_system_distance(self, value):

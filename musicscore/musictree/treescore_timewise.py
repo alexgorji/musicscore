@@ -15,6 +15,7 @@ from musicscore.musicxml.types.complextypes.scaling import Tenths, Millimeters
 from musicscore.musicxml.types.complextypes.scorepart import PartName
 from musicscore.musicxml.types.complextypes.stafflayout import StaffDistance
 from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance
+from musicscore.musicxml.elements.barline import Barline, BarStyle
 
 
 class TreePageStyle(object):
@@ -359,8 +360,11 @@ class TreeScoreTimewise(timewise.Score):
         part_name.print_object = print_object
         self._part_list.add_child(new_score_part)
         for measure in self.get_children_by_type(TreeMeasure):
-            p = new_score_part.add_part()
-            measure.add_child(p)
+            part = new_score_part.add_part()
+            measure.add_child(part)
+            if measure.barline_style:
+                bl = part.add_child(Barline())
+                bl.add_child(BarStyle(measure.barline_style))
 
     def add_measure(self, measure=None):
         new_measure = self._set_new_measure(measure)
@@ -441,7 +445,7 @@ class TreeScoreTimewise(timewise.Score):
     #         except IndexError:
     #             pass
 
-    def set_time_signatures(self, durations=None, times=None):
+    def set_time_signatures(self, durations=None, times=None, barline_style=None):
         global current_time
         if self.get_children_by_type(TreeMeasure):
             raise Exception('for setting time signatures score should be empty')
@@ -491,7 +495,8 @@ class TreeScoreTimewise(timewise.Score):
                     remaining_duration -= measure.quarter_duration
                     if remaining_duration < 1:
                         break
-
+            if barline_style:
+                self.get_children_by_type(TreeMeasure)[-1].barline_style = barline_style
             return current_measure_number
 
         if durations:
@@ -531,6 +536,7 @@ class TreeScoreTimewise(timewise.Score):
                     self.add_measure(TreeMeasure(time=current_time))
             except IndexError:
                 pass
+
 
     def get_measure(self, number):
         if number == 0:
