@@ -1,6 +1,5 @@
-import math
-from unittest import TestCase
 import os
+from unittest import TestCase
 
 from musicscore.musicstream.equations import AGCos, AGLinear
 from musicscore.musicstream.streamvoice import SimpleFormat, StreamChordFormula

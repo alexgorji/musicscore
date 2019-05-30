@@ -1,12 +1,9 @@
-import math
-from unittest import TestCase
 import os
-import matplotlib.pyplot as plt
 import random
+from unittest import TestCase
 
 from musicscore.musicstream.equations import AGCos, AGLinear
-from musicscore.musicstream.streamvoice import SimpleFormat, StreamChordFormula
-from musicscore.musictree.midi import Midi
+from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescore_timewise import TreeScoreTimewise
 from musicscore.musicxml.score_templates.xml_test_score import TestScore
 
