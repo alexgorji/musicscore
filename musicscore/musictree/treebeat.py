@@ -1,3 +1,4 @@
+import math
 import warnings
 
 from quicktions import Fraction
@@ -62,7 +63,9 @@ class TreeBeat(object):
     @property
     def max_division(self):
         if self._max_division is None:
-            self._max_division = self.parent_voice.max_division
+            parent_max_division = self.parent_voice.max_division
+            if parent_max_division:
+                self._max_division = math.floor(parent_max_division * self.duration)
 
         if self._max_division is None:
             if self.duration == 0.5:
@@ -154,9 +157,10 @@ class TreeBeat(object):
         diff = self.duration - sum(durations)
         if diff != 0:
             for index, dur in enumerate(durations):
-                durations[index] = dur + diff/len(durations)
+                durations[index] = dur + diff / len(durations)
         if sum(durations) != self.duration:
-            warnings.warn('TreeBeat.get_quarter_durations: sum of durations {} is not equal to beat duration {}'.format(sum(durations), self.duration))
+            warnings.warn('TreeBeat.get_quarter_durations: sum of durations {} is not equal to beat duration {}'.format(
+                sum(durations), self.duration))
 
         def _get_positions():
             positions = [0]
@@ -228,6 +232,10 @@ class TreeBeat(object):
             if chord.quarter_duration == Fraction(5, 2):
                 if chord.position_in_beat == 0:
                     split = chord.split(4, 1)
+            if chord.quarter_duration == Fraction(7, 2):
+                if chord.position_in_beat == 0:
+                    split = chord.split(4, 3)
+
             if chord.quarter_duration == Fraction(1, 4):
                 if chord.position_in_beat == Fraction(3, 8):
                     split = chord.split(1, 1)

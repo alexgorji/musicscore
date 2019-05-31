@@ -493,7 +493,7 @@ class TreeScoreTimewise(timewise.Score):
                     self.add_measure(measure)
                     current_measure_number += 1
                     remaining_duration -= measure.quarter_duration
-                    if remaining_duration < 1:
+                    if remaining_duration == 0:
                         break
             if barline_style:
                 self.get_children_by_type(TreeMeasure)[-1].barline_style = barline_style

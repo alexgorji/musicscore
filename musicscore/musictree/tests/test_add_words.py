@@ -14,25 +14,26 @@ class Test(TestCase):
 
     def test_1(self):
         sf = SimpleFormat(durations=[1, 1])
-        v = sf.to_voice(1)
-        v.add_to_score(self.score, 1, 1)
 
         sf.chords[0].add_words('first word')
         sf.chords[1].add_words('second word', font_family='DejaVu Sans', font_size=14, font_weight='bold',
                                font_style='italic')
 
+        v = sf.to_voice(1)
+        v.add_to_score(self.score, 1, 1)
         result_path = path + '_test_1'
         self.score.write(path=result_path)
         TestScore().assert_template(result_path=result_path)
 
     def test_2(self):
         sf = SimpleFormat(durations=[1, 1])
-        v = sf.to_voice(1)
-        v.add_to_score(self.score, 1, 1)
 
         sf.chords[0].add_words('a')
         sf.chords[1].add_words('b')
         sf.chords[0].add_words('aa', relative_y=-15)
+
+        v = sf.to_voice(1)
+        v.add_to_score(self.score, 1, 1)
 
         result_path = path + '_test_2'
         self.score.write(path=result_path)

@@ -177,7 +177,8 @@ class SimpleFormat(object):
     def to_voice(self, voice_number=1):
         output = StreamVoice(voice_number)
         for chord in self.chords:
-            output.add_chord(chord)
+            output.add_chord(chord.__deepcopy__())
+            # output.add_chord(chord)
         return output
 
     def __deepcopy__(self, memodict={}):

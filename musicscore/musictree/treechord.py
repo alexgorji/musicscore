@@ -437,6 +437,10 @@ class TreeChord(XMLTree):
         new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
         for child in self.get_children():
             new_chord.add_child(child)
+
+        new_chord.is_adjoinable = self.is_adjoinable
+        # for attribute in self.__dir__():
+        #     print(attribute)
         return new_chord
 
     def remove_from_score(self):
