@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from musicscore.musicstream.streamvoice import SimpleFormat
-from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicscore.musicxml.elements.note import Tie
 
 

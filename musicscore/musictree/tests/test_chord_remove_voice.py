@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treechord import TreeChord
-from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.score_templates.xml_test_score import TestScore
 

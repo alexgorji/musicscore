@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
 
-from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicscore.musicxml.elements.scoreheader import Credit, Defaults
 from musicscore.musicxml.groups.layout import PageLayout, SystemLayout
 from musicscore.musicxml.groups.margins import LeftMargin, RightMargin, BottomMargin, TopMargin

@@ -6,7 +6,7 @@ from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
-from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicscore.musicxml.elements.note import Lyric
 from musicscore.musicxml.types.complextypes.lyric import Text
 

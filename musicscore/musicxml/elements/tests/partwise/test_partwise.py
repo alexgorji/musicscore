@@ -1,6 +1,6 @@
 from musicscore.musicxml.elements.fullnote import Pitch
 from musicscore.musicxml.elements.note import Note, Duration
-from musicscore.musicxml.elements.partwise import ScorePartwise, Part, Measure
+from musicscore.musicxml.elements.partwise import Score, Part, Measure
 from musicscore.musicxml.elements.scoreheader import PartList
 from musicscore.musicxml.groups.musicdata import Attributes
 from musicscore.musicxml.types.complextypes.attributes import Divisions, Time, Beats, BeatType, Clef
@@ -17,7 +17,7 @@ path = os.path.abspath(__file__).split('.')[0]
 
 class TestPartwise(TestScore):
     def setUp(self):
-        self.score = ScorePartwise()
+        self.score = Score()
         self.score.version = '3.0'
         part_list = self.score.add_child(PartList())
         score_part = part_list.add_child(ScorePart(id='P1'))

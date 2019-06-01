@@ -8,9 +8,6 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 
 """
 	<xs:element name="score-partwise" block="extension substitution" final="#all">
-		<xs:annotation>
-			<xs:documentation></xs:documentation>
-		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
 				<xs:group ref="score-header"/>
@@ -36,11 +33,10 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 
 class Measure(XMLElement, MeasureAttributes):
     _DTD = Sequence(
-        Element(Attributes),
         GroupReference(MusicData)
     )
 
-    def __init__(self, number, *args, **kwargs):
+    def __init__(self, number=None, *args, **kwargs):
         super().__init__(tag='measure', number=number, *args, **kwargs)
 
 
@@ -53,7 +49,7 @@ class Part(XMLElement, PartAttributes):
         super().__init__(tag='part', id=id, *args, **kwargs)
 
 
-class ScorePartwise(XMLElement, DocumentAttributes):
+class Score(XMLElement, DocumentAttributes):
     """The score-partwise element is the root element for a partwise MusicXML score. It includes a score-header group
     followed by a series of parts with measures inside. The document-attributes attribute group includes the version
     attribute.

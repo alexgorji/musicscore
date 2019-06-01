@@ -2,7 +2,7 @@ import cProfile
 import os
 
 from musicscore.musictree.treechord import TreeChord
-from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 
 path = os.path.abspath(__file__).split('.')[0]
 

@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treemeasure import TreeMeasure
-from musicscore.musictree.treescore_timewise import TreeScoreTimewise
+from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicscore.musicxml.score_templates.xml_test_score import TestScore
 
 path = os.path.abspath(__file__).split('.')[0]
