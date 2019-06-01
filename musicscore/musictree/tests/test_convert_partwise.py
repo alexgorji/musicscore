@@ -22,4 +22,4 @@ class Test(TestCase):
 
         result_path = path + '_test_1'
         partwise.write(path=result_path)
-        # TestScore().assert_template(result_path=result_path)
+        TestScore().assert_template(result_path=result_path)
