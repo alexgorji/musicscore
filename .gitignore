@@ -1,4 +1,7 @@
 venv
 *.pyc
 .idea
+build
+dist
+musicscore_alexgorji.egg-info
 

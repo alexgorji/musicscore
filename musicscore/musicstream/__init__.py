@@ -1,1 +1,1 @@
-from musicscore.musicstream import *
+from musicscore.musicstream.streamvoice import *
