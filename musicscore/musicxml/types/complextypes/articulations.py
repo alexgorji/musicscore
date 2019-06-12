@@ -4,6 +4,7 @@ from musicscore.musicxml.types.complextypes.breathmark import ComplexTypeBreathM
 from musicscore.musicxml.types.complextypes.caesura import ComplexTypeCaesura
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, EmptyPlacement
 from musicscore.musicxml.types.complextypes.emptyline import ComplexTypeEmptyLine
+from musicscore.musicxml.types.complextypes.strongaccent import ComplexTypeStrongAccent
 
 
 class Accent(EmptyPlacement):

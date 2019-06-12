@@ -1,4 +1,3 @@
-
 import warnings
 
 from AGtree.tree import Tree
