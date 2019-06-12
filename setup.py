@@ -6,7 +6,7 @@ setuptools.setup(
     author="Alex Gorji",
     author_email="aligorji@hotmail.com",
     description="generating musicxml",
-    url="git@github.com:alexgorji/music_score.git",
+    url="https://github.com/alexgorji/musicscore.git",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
