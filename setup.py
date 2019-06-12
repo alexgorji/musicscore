@@ -1,12 +1,15 @@
-from setuptools import setup
+import setuptools
 
-setup(
-    name='musicscore',
-    version='0.0.0',
-    packages=[],
-    url='',
-    license='',
-    author='aligorji',
-    author_email='',
-    description=''
+setuptools.setup(
+    name="musicscore-alexgorji",
+    version="0.0.1",
+    author="Alex Gorji",
+    author_email="aligorji@hotmail.com",
+    description="generating musicxml",
+    url="git@github.com:alexgorji/music_score.git",
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Operating System :: OS Independent",
+    ]
 )
