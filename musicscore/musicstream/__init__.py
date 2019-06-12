@@ -1,0 +1,1 @@
+from musicscore.musicstream import *

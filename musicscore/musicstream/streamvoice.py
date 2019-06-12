@@ -1,4 +1,3 @@
-from musicscore.musicstream.equations import AGEquation
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, HIGH_TREBLE_CLEF, LOW_BASS_CLEF
@@ -6,19 +5,6 @@ from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.types.simple_type import PositiveInteger
-
-
-class StreamChordFormula(AGEquation):
-
-    @staticmethod
-    def condition(chord):
-        raise Exception('staticmethod condition must be overridden by subclasses')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def change_chord(self, chord):
-        raise Exception('function change_chord must be overwritten by subclasses')
 
 
 class StreamVoice(object):
