@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musictree.treenote API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musictree.treenote</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from quicktions import Fraction
+
+from musicscore.musicxml.elements.fullnote import Rest, Event, Pitch, Alter, Chord
+from musicscore.musicxml.elements.note import Note, Duration, Grace, Accidental, Notations, Lyric
+from musicscore.musicxml.groups.musicdata import Backup
+from musicscore.musicxml.types.complextypes.lyric import Text
+
+
+class TreeBackup(Backup):
+    def __init__(self, quarter_duration, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._quarter_duration = None
+        self.quarter_duration = quarter_duration
+
+    @property
+    def quarter_duration(self):
+        return self._quarter_duration
+
+    @quarter_duration.setter
+    def quarter_duration(self, value):
+        self._quarter_duration = value
+
+    def update_duration(self, divisions):
+        try:
+            self.get_children_by_type(Duration)[0].value = int(self.quarter_duration * divisions)
+        except IndexError:
+            self.add_child(Duration())
+            self.duration.value = int(self.quarter_duration * divisions)
+
+
+class TreeAccidental(Accidental):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, value=&#39;natural&#39;, show=False, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+        self._note = None
+        self._show = None
+        self.show = show
+
+    @property
+    def show(self):
+        return self._show
+
+    @show.setter
+    def show(self, value):
+        if not isinstance(value, bool):
+            raise TypeError(&#39;show.value must be of type bool not{}&#39;.format(type(value)))
+        self._show = value
+        if self._note:
+            self._note.update_accidental()
+
+
+class TreeNote(Note):
+    &#34;&#34;&#34;
+    quarter_duration = 0 means grace note
+    &#34;&#34;&#34;
+
+    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._accidental = TreeAccidental(show=False, value=&#39;natural&#39;)
+        self._accidental._note = self
+        self._quarter_duration = None
+        self.quarter_duration = quarter_duration
+        self._event = None
+        self.event = event
+        self._offset = None
+        self._is_tied = False
+        self.is_tied = is_tied
+
+    @property
+    def quarter_duration(self):
+        return self._quarter_duration
+
+    @quarter_duration.setter
+    def quarter_duration(self, value):
+        if not isinstance(value, int) and not isinstance(value, float) and not isinstance(value, Fraction):
+            raise TypeError(&#39;quarter_duration must be of type int, float or Fraction not {}&#39;.format(type(value)))
+
+        if value &lt; 0:
+            raise ValueError(&#39;quarter_duration {} must be zero or positive&#39;.format(value))
+
+        if not isinstance(self.quarter_duration, Fraction):
+            self._quarter_duration = Fraction(value).limit_denominator(10000)
+        else:
+            self._quarter_duration = value
+
+        if value == 0:
+            if not self.get_children_by_type(Grace):
+                children = self.get_children()[:]
+                self.reset_dtd()
+                for child in children:
+                    if not isinstance(child, Duration):
+                        self.add_child(child)
+                    else:
+                        del child
+                self.add_child(Grace())
+
+    @property
+    def previous(self):
+        index = self.up.notes.index(self)
+        if index == 0:
+            return None
+        return self.up.notes[index - 1]
+
+    def update_offset(self):
+        if self.previous:
+            if self.get_children_by_type(Chord):
+                output = self.previous.offset
+            else:
+                output = self.previous.offset + self.previous.quarter_duration
+            self._offset = output
+        else:
+            self._offset = 0
+
+    @property
+    def offset(self):
+        if self._offset is None:
+            self.update_offset()
+        return self._offset
+
+    @property
+    def end_position(self):
+        return self.offset + self.quarter_duration
+
+    @property
+    def accidental(self):
+        return self._accidental
+
+    @property
+    def event(self):
+        return self._event
+
+    @event.setter
+    def event(self, value):
+        if not isinstance(value, Event):
+            raise TypeError(&#39;event.value must be of type  not{}&#39;.format(type(value)))
+        try:
+            self.remove_child(self._event)
+        except ValueError as err:
+            print(err)
+            pass
+        self._event = self.add_child(value)
+        self.update_accidental()
+
+    def update_accidental(self):
+        _accidentals = {-1.5: &#39;three-quarters-flat&#39;,
+                        -1: &#39;flat&#39;,
+                        -0.5: &#39;quarter-flat&#39;,
+                        0: &#39;natural&#39;,
+                        0.5: &#39;quarter-sharp&#39;,
+                        1: &#39;sharp&#39;,
+                        1.5: &#39;three-quarters-sharp&#39;,
+                        2: &#39;double-sharp&#39;
+                        }
+        accidental = self.get_children_by_type(type_=TreeAccidental)
+        if self._accidental.show:
+            if isinstance(self.event, Pitch):
+                alter = self.event.get_children_by_type(type_=Alter)
+                if not alter:
+                    self.event.add_child(Alter(0))
+
+                accidental_value = _accidentals[self.event.alter.value]
+                if accidental:
+                    accidental[0].value = accidental_value
+                else:
+                    self._accidental.value = accidental_value
+                    self.add_child(self._accidental)
+        else:
+            if accidental:
+                self.remove_child(accidental[0])
+
+    def _add_notations(self, notation):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(notation)
+
+    def update_duration(self, divisions):
+        try:
+            self.duration.value = int(self.quarter_duration * divisions)
+        except AttributeError:
+            self.add_child(Duration())
+            self.duration.value = int(self.quarter_duration * divisions)
+
+    def add_lyric(self, text, number=1, **kwargs):
+        lyric = self.add_child(Lyric(number=str(number), **kwargs))
+        lyric.add_child(Text(str(text)))
+        return lyric</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musictree.treenote.TreeAccidental"><code class="flex name class">
+<span>class <span class="ident">TreeAccidental</span></span>
+<span>(</span><span>value='natural', show=False, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TreeAccidental(Accidental):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, value=&#39;natural&#39;, show=False, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+        self._note = None
+        self._show = None
+        self.show = show
+
+    @property
+    def show(self):
+        return self._show
+
+    @show.setter
+    def show(self, value):
+        if not isinstance(value, bool):
+            raise TypeError(&#39;show.value must be of type bool not{}&#39;.format(type(value)))
+        self._show = value
+        if self._note:
+            self._note.update_accidental()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.note.Accidental" href="../musicxml/elements/note.html#musicscore.musicxml.elements.note.Accidental">Accidental</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeAccidentalValue" href="../musicxml/types/simple_type.html#musicscore.musicxml.types.simple_type.TypeAccidentalValue">TypeAccidentalValue</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../musicxml/types/simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+<li><a title="musicscore.musicxml.attributes.accidental.Cautionary" href="../musicxml/attributes/accidental.html#musicscore.musicxml.attributes.accidental.Cautionary">Cautionary</a></li>
+<li><a title="musicscore.musicxml.attributes.accidental.Editorial" href="../musicxml/attributes/accidental.html#musicscore.musicxml.attributes.accidental.Editorial">Editorial</a></li>
+<li><a title="musicscore.musicxml.attributes.leveldisplay.LevelDisplay" href="../musicxml/attributes/leveldisplay.html#musicscore.musicxml.attributes.leveldisplay.LevelDisplay">LevelDisplay</a></li>
+<li><a title="musicscore.musicxml.attributes.leveldisplay.Parentheses" href="../musicxml/attributes/leveldisplay.html#musicscore.musicxml.attributes.leveldisplay.Parentheses">Parentheses</a></li>
+<li><a title="musicscore.musicxml.attributes.leveldisplay.Bracket" href="../musicxml/attributes/leveldisplay.html#musicscore.musicxml.attributes.leveldisplay.Bracket">Bracket</a></li>
+<li><a title="musicscore.musicxml.attributes.leveldisplay.Size" href="../musicxml/attributes/leveldisplay.html#musicscore.musicxml.attributes.leveldisplay.Size">Size</a></li>
+<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../musicxml/attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../musicxml/attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../musicxml/attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../musicxml/attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../musicxml/attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../musicxml/attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../musicxml/attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../musicxml/attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../musicxml/attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../musicxml/attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../musicxml/attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../musicxml/attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.accidental.Smulf" href="../musicxml/attributes/accidental.html#musicscore.musicxml.attributes.accidental.Smulf">Smulf</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../musicxml/attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musictree.treenote.TreeAccidental.show"><code class="name">var <span class="ident">show</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def show(self):
+    return self._show</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treenote.TreeBackup"><code class="flex name class">
+<span>class <span class="ident">TreeBackup</span></span>
+<span>(</span><span>quarter_duration, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The backup and forward elements are required to coordinate multiple voices in one part, including music on multiple
+staves. The backup type is generally used to move between voices and staves. Thus the backup element does not
+include voice or staff elements. Duration values should always be positive, and should not cross measure boundaries
+or mid-measure changes in the divisions value.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TreeBackup(Backup):
+    def __init__(self, quarter_duration, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._quarter_duration = None
+        self.quarter_duration = quarter_duration
+
+    @property
+    def quarter_duration(self):
+        return self._quarter_duration
+
+    @quarter_duration.setter
+    def quarter_duration(self, value):
+        self._quarter_duration = value
+
+    def update_duration(self, divisions):
+        try:
+            self.get_children_by_type(Duration)[0].value = int(self.quarter_duration * divisions)
+        except IndexError:
+            self.add_child(Duration())
+            self.duration.value = int(self.quarter_duration * divisions)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.groups.musicdata.Backup" href="../musicxml/groups/musicdata.html#musicscore.musicxml.groups.musicdata.Backup">Backup</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.backup.ComplexTypeBackup" href="../musicxml/types/complextypes/backup.html#musicscore.musicxml.types.complextypes.backup.ComplexTypeBackup">ComplexTypeBackup</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musictree.treenote.TreeBackup.quarter_duration"><code class="name">var <span class="ident">quarter_duration</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def quarter_duration(self):
+    return self._quarter_duration</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treenote.TreeBackup.update_duration"><code class="name flex">
+<span>def <span class="ident">update_duration</span></span>(<span>self, divisions)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def update_duration(self, divisions):
+    try:
+        self.get_children_by_type(Duration)[0].value = int(self.quarter_duration * divisions)
+    except IndexError:
+        self.add_child(Duration())
+        self.duration.value = int(self.quarter_duration * divisions)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treenote.TreeNote"><code class="flex name class">
+<span>class <span class="ident">TreeNote</span></span>
+<span>(</span><span>event=Rest at 0x107e38b70, quarter_duration=1, is_tied=False, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>quarter_duration = 0 means grace note</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TreeNote(Note):
+    &#34;&#34;&#34;
+    quarter_duration = 0 means grace note
+    &#34;&#34;&#34;
+
+    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._accidental = TreeAccidental(show=False, value=&#39;natural&#39;)
+        self._accidental._note = self
+        self._quarter_duration = None
+        self.quarter_duration = quarter_duration
+        self._event = None
+        self.event = event
+        self._offset = None
+        self._is_tied = False
+        self.is_tied = is_tied
+
+    @property
+    def quarter_duration(self):
+        return self._quarter_duration
+
+    @quarter_duration.setter
+    def quarter_duration(self, value):
+        if not isinstance(value, int) and not isinstance(value, float) and not isinstance(value, Fraction):
+            raise TypeError(&#39;quarter_duration must be of type int, float or Fraction not {}&#39;.format(type(value)))
+
+        if value &lt; 0:
+            raise ValueError(&#39;quarter_duration {} must be zero or positive&#39;.format(value))
+
+        if not isinstance(self.quarter_duration, Fraction):
+            self._quarter_duration = Fraction(value).limit_denominator(10000)
+        else:
+            self._quarter_duration = value
+
+        if value == 0:
+            if not self.get_children_by_type(Grace):
+                children = self.get_children()[:]
+                self.reset_dtd()
+                for child in children:
+                    if not isinstance(child, Duration):
+                        self.add_child(child)
+                    else:
+                        del child
+                self.add_child(Grace())
+
+    @property
+    def previous(self):
+        index = self.up.notes.index(self)
+        if index == 0:
+            return None
+        return self.up.notes[index - 1]
+
+    def update_offset(self):
+        if self.previous:
+            if self.get_children_by_type(Chord):
+                output = self.previous.offset
+            else:
+                output = self.previous.offset + self.previous.quarter_duration
+            self._offset = output
+        else:
+            self._offset = 0
+
+    @property
+    def offset(self):
+        if self._offset is None:
+            self.update_offset()
+        return self._offset
+
+    @property
+    def end_position(self):
+        return self.offset + self.quarter_duration
+
+    @property
+    def accidental(self):
+        return self._accidental
+
+    @property
+    def event(self):
+        return self._event
+
+    @event.setter
+    def event(self, value):
+        if not isinstance(value, Event):
+            raise TypeError(&#39;event.value must be of type  not{}&#39;.format(type(value)))
+        try:
+            self.remove_child(self._event)
+        except ValueError as err:
+            print(err)
+            pass
+        self._event = self.add_child(value)
+        self.update_accidental()
+
+    def update_accidental(self):
+        _accidentals = {-1.5: &#39;three-quarters-flat&#39;,
+                        -1: &#39;flat&#39;,
+                        -0.5: &#39;quarter-flat&#39;,
+                        0: &#39;natural&#39;,
+                        0.5: &#39;quarter-sharp&#39;,
+                        1: &#39;sharp&#39;,
+                        1.5: &#39;three-quarters-sharp&#39;,
+                        2: &#39;double-sharp&#39;
+                        }
+        accidental = self.get_children_by_type(type_=TreeAccidental)
+        if self._accidental.show:
+            if isinstance(self.event, Pitch):
+                alter = self.event.get_children_by_type(type_=Alter)
+                if not alter:
+                    self.event.add_child(Alter(0))
+
+                accidental_value = _accidentals[self.event.alter.value]
+                if accidental:
+                    accidental[0].value = accidental_value
+                else:
+                    self._accidental.value = accidental_value
+                    self.add_child(self._accidental)
+        else:
+            if accidental:
+                self.remove_child(accidental[0])
+
+    def _add_notations(self, notation):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(notation)
+
+    def update_duration(self, divisions):
+        try:
+            self.duration.value = int(self.quarter_duration * divisions)
+        except AttributeError:
+            self.add_child(Duration())
+            self.duration.value = int(self.quarter_duration * divisions)
+
+    def add_lyric(self, text, number=1, **kwargs):
+        lyric = self.add_child(Lyric(number=str(number), **kwargs))
+        lyric.add_child(Text(str(text)))
+        return lyric</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.note.Note" href="../musicxml/elements/note.html#musicscore.musicxml.elements.note.Note">Note</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musictree.treenote.TreeNote.accidental"><code class="name">var <span class="ident">accidental</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def accidental(self):
+    return self._accidental</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treenote.TreeNote.end_position"><code class="name">var <span class="ident">end_position</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def end_position(self):
+    return self.offset + self.quarter_duration</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treenote.TreeNote.event"><code class="name">var <span class="ident">event</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def event(self):
+    return self._event</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treenote.TreeNote.offset"><code class="name">var <span class="ident">offset</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def offset(self):
+    if self._offset is None:
+        self.update_offset()
+    return self._offset</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treenote.TreeNote.previous"><code class="name">var <span class="ident">previous</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def previous(self):
+    index = self.up.notes.index(self)
+    if index == 0:
+        return None
+    return self.up.notes[index - 1]</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treenote.TreeNote.quarter_duration"><code class="name">var <span class="ident">quarter_duration</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def quarter_duration(self):
+    return self._quarter_duration</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treenote.TreeNote.add_lyric"><code class="name flex">
+<span>def <span class="ident">add_lyric</span></span>(<span>self, text, number=1, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_lyric(self, text, number=1, **kwargs):
+    lyric = self.add_child(Lyric(number=str(number), **kwargs))
+    lyric.add_child(Text(str(text)))
+    return lyric</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treenote.TreeNote.update_accidental"><code class="name flex">
+<span>def <span class="ident">update_accidental</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def update_accidental(self):
+    _accidentals = {-1.5: &#39;three-quarters-flat&#39;,
+                    -1: &#39;flat&#39;,
+                    -0.5: &#39;quarter-flat&#39;,
+                    0: &#39;natural&#39;,
+                    0.5: &#39;quarter-sharp&#39;,
+                    1: &#39;sharp&#39;,
+                    1.5: &#39;three-quarters-sharp&#39;,
+                    2: &#39;double-sharp&#39;
+                    }
+    accidental = self.get_children_by_type(type_=TreeAccidental)
+    if self._accidental.show:
+        if isinstance(self.event, Pitch):
+            alter = self.event.get_children_by_type(type_=Alter)
+            if not alter:
+                self.event.add_child(Alter(0))
+
+            accidental_value = _accidentals[self.event.alter.value]
+            if accidental:
+                accidental[0].value = accidental_value
+            else:
+                self._accidental.value = accidental_value
+                self.add_child(self._accidental)
+    else:
+        if accidental:
+            self.remove_child(accidental[0])</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treenote.TreeNote.update_duration"><code class="name flex">
+<span>def <span class="ident">update_duration</span></span>(<span>self, divisions)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def update_duration(self, divisions):
+    try:
+        self.duration.value = int(self.quarter_duration * divisions)
+    except AttributeError:
+        self.add_child(Duration())
+        self.duration.value = int(self.quarter_duration * divisions)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treenote.TreeNote.update_offset"><code class="name flex">
+<span>def <span class="ident">update_offset</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def update_offset(self):
+    if self.previous:
+        if self.get_children_by_type(Chord):
+            output = self.previous.offset
+        else:
+            output = self.previous.offset + self.previous.quarter_duration
+        self._offset = output
+    else:
+        self._offset = 0</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musictree" href="index.html">musicscore.musictree</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musictree.treenote.TreeAccidental" href="#musicscore.musictree.treenote.TreeAccidental">TreeAccidental</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treenote.TreeAccidental.show" href="#musicscore.musictree.treenote.TreeAccidental.show">show</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treenote.TreeBackup" href="#musicscore.musictree.treenote.TreeBackup">TreeBackup</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treenote.TreeBackup.quarter_duration" href="#musicscore.musictree.treenote.TreeBackup.quarter_duration">quarter_duration</a></code></li>
+<li><code><a title="musicscore.musictree.treenote.TreeBackup.update_duration" href="#musicscore.musictree.treenote.TreeBackup.update_duration">update_duration</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treenote.TreeNote" href="#musicscore.musictree.treenote.TreeNote">TreeNote</a></code></h4>
+<ul class="two-column">
+<li><code><a title="musicscore.musictree.treenote.TreeNote.accidental" href="#musicscore.musictree.treenote.TreeNote.accidental">accidental</a></code></li>
+<li><code><a title="musicscore.musictree.treenote.TreeNote.add_lyric" href="#musicscore.musictree.treenote.TreeNote.add_lyric">add_lyric</a></code></li>
+<li><code><a title="musicscore.musictree.treenote.TreeNote.end_position" href="#musicscore.musictree.treenote.TreeNote.end_position">end_position</a></code></li>
+<li><code><a title="musicscore.musictree.treenote.TreeNote.event" href="#musicscore.musictree.treenote.TreeNote.event">event</a></code></li>
+<li><code><a title="musicscore.musictree.treenote.TreeNote.offset" href="#musicscore.musictree.treenote.TreeNote.offset">offset</a></code></li>
+<li><code><a title="musicscore.musictree.treenote.TreeNote.previous" href="#musicscore.musictree.treenote.TreeNote.previous">previous</a></code></li>
+<li><code><a title="musicscore.musictree.treenote.TreeNote.quarter_duration" href="#musicscore.musictree.treenote.TreeNote.quarter_duration">quarter_duration</a></code></li>
+<li><code><a title="musicscore.musictree.treenote.TreeNote.update_accidental" href="#musicscore.musictree.treenote.TreeNote.update_accidental">update_accidental</a></code></li>
+<li><code><a title="musicscore.musictree.treenote.TreeNote.update_duration" href="#musicscore.musictree.treenote.TreeNote.update_duration">update_duration</a></code></li>
+<li><code><a title="musicscore.musictree.treenote.TreeNote.update_offset" href="#musicscore.musictree.treenote.TreeNote.update_offset">update_offset</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

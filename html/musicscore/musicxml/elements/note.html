@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musicxml.elements.note API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musicxml.elements.note</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from musicscore.dtd.dtd import Element, GroupReference, Sequence, Choice
+from musicscore.musicxml.attributes.accidental import Cautionary, Editorial, Smulf
+from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
+from musicscore.musicxml.attributes.leveldisplay import LevelDisplay
+from musicscore.musicxml.attributes.printstyle import PrintStyle
+from musicscore.musicxml.groups.common import EditorialVoice, Staff
+from musicscore.musicxml.elements.fullnote import FullNote
+from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.complextypes.beam import ComplexTypeBeam
+from musicscore.musicxml.types.complextypes.complextype import EmptyPlacement, ComplexType
+from musicscore.musicxml.types.complextypes.lyric import ComplexTypeLyric
+from musicscore.musicxml.types.complextypes.notations import ComplexTypeNotations
+from musicscore.musicxml.types.complextypes.tie import ComplexTypeTie
+from musicscore.musicxml.types.complextypes.timemodification import ComplexTypeTimeModification
+from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeNoteTypeValue, TypeAccidentalValue
+
+
+class Grace(XMLElement, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):
+    &#34;&#34;&#34;
+    documentation&gt;The grace type indicates the presence of a grace note. The slash attribute for a grace note is yes
+    for slashed eighth notes. The other grace note attributes come from MuseData sound suggestions. The
+    steal-time-previous attribute indicates the percentage of time to steal from the previous note for the grace note.
+    The steal-time-following attribute indicates the percentage of time to steal from the following note for the grace
+    note, as for appoggiaturas. The make-time attribute indicates to make time, not steal time; the units are in
+    real-time divisions for the grace note.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;grace&#39;, *args, **kwargs)
+
+
+# type=&#34;semitones&#34;
+
+
+class Tie(ComplexTypeTie):
+    &#34;&#34;&#34;
+    The tie element indicates that a tie begins or ends with this note. If the tie element applies only particular times
+    through a repeat, the time-only attribute indicates which times to apply it. The tie element indicates sound; the
+    tied element indicates notation.&lt;/xs:documentation&gt;
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+class Cue(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;cue&#39;, *args, **kwargs)
+
+
+class Duration(XMLElement, TypePositiveDivisions):
+    &#34;&#34;&#34;
+    Duration is a positive number specified in division units. This is the intended duration vs. notated duration
+    (for instance, swing eighths vs. even eighths, or differences in dotted notes in Baroque-era music). Differences
+    in duration specific to an interpretation or performance should use the note element&#39;s attack and release
+    attributes
+    &#34;&#34;&#34;
+
+    def __init__(self, value=1, *args, **kwargs):
+        super().__init__(tag=&#39;duration&#39;, value=value, *args, **kwargs)
+
+
+&#34;&#34;&#34;The duration element is defined within a group due to its uses within the note, figure-bass, backup, and
+forward elements.
+&#34;&#34;&#34;
+DurationGroup = Sequence(
+
+    Element(Duration)
+)
+
+
+class Instrument(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;instrument&#39;, *args, **kwargs)
+
+
+class Type(XMLElement, TypeNoteTypeValue):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;type&#39;, value=value, *args, **kwargs)
+
+
+class Dot(EmptyPlacement):
+    &#34;&#34;&#34;
+    One dot element is used for each dot of prolongation. The placement element is used to specify whether the dot
+    should appear above or below the staff line. It is ignored for notes that appear on a staff space.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;dot&#39;, *args, **kwargs)
+
+
+class Accidental(ComplexType, TypeAccidentalValue, Cautionary, Editorial, LevelDisplay, PrintStyle, Smulf):
+    &#34;&#34;&#34;
+    The accidental type represents actual notated accidentals. Editorial and cautionary indications are indicated by 
+    attributes. Values for these attributes are &#34;no&#34; if not present. Specific graphic display such as parentheses, 
+    brackets, and size are controlled by the level-display attribute group
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;accidental&#39;, value=value, *args, **kwargs)
+
+
+class TimeModification(ComplexTypeTimeModification):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+class Stem(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;stem&#39;, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class Notehead(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;notehead&#39;, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class NoteheadText(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;notehead-text&#39;, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class Beam(ComplexTypeBeam):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class Notations(ComplexTypeNotations):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+class Lyric(ComplexTypeLyric):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+class Play(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;play&#39;, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class Note(XMLElement):
+    &#34;&#34;&#34;
+    Notes are the most common type of MusicXML data. The MusicXML format keeps the MuseData distinction between
+    elements used for sound information and elements used for notation information (e.g., tie is used for sound,
+    tied for notation). Thus grace notes do not have a duration element. Cue notes have a duration element, as do
+    forward elements, but no tie elements. Having these two types of information available can make interchange
+    considerably easier, as some programs handle one type of information much more readily than the other.
+
+    The print-leger attribute is used to indicate whether leger lines are printed. Notes without leger lines are
+    used to indicate indeterminate high and low notes. By default, it is set to yes. If print-object is set to no,
+    print-leger is interpreted to also be set to no if not present. This attribute is ignored for rests.
+
+    The dynamics and end-dynamics attributes correspond to MIDI 1.0&#39;s Note On and Note Off velocities, respectively.
+    They are expressed in terms of percentages of the default forte value (90 for MIDI 1.0).
+
+    The attack and release attributes are used to alter the starting and stopping time of the note from when it
+    would otherwise occur based on the flow of durations - information that is specific to a performance. They are
+    expressed in terms of divisions, either positive or negative. A note that starts a tie should not have a
+    release attribute, and a note that stops a tie should not have an attack attribute. The attack and release
+    attributes are independent of each other. The attack attribute only changes the starting time of a note, and
+    the release attribute only changes the stopping time of a note.
+
+    If a note is played only particular times through a repeat, the time-only attribute shows which times to
+    play the note.
+
+    The pizzicato attribute is used when just this note is sounded pizzicato, vs. the pizzicato element which
+    changes overall playback between pizzicato and arco.
+    &#34;&#34;&#34;
+    _DTD = Sequence(
+        Choice(
+            Sequence(
+                GroupReference(FullNote),
+                GroupReference(DurationGroup),
+                Element(Tie, 0, 2)
+            ),
+            Sequence(
+                Element(Grace),
+                Choice(
+                    Sequence(
+                        GroupReference(FullNote)
+                    ),
+                    Sequence(
+                        GroupReference(FullNote),
+                        Element(Tie, 0, 2)
+                    ),
+                    Sequence(
+                        Element(Cue),
+                        GroupReference(FullNote)
+                    )
+                )
+            ),
+            Sequence(
+                Element(Cue),
+                GroupReference(FullNote),
+                GroupReference(DurationGroup)
+            ),
+        ),
+        Element(Instrument, 0),
+        GroupReference(EditorialVoice, 0),
+        Element(Type, 0),
+        Element(Dot, 0, None),
+        Element(Accidental, 0),
+        Element(TimeModification, 0, None),
+        Element(Stem, 0),
+        Element(Notehead, 0),
+        Element(NoteheadText, 0),
+        GroupReference(Staff, 0),
+        Element(Beam, 0, 8),
+        Element(Notations, 0, None),
+        Element(Lyric, 0, None),
+        Element(Play, 0)
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;note&#39;, *args, **kwargs)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musicxml.elements.note.Accidental"><code class="flex name class">
+<span>class <span class="ident">Accidental</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The accidental type represents actual notated accidentals. Editorial and cautionary indications are indicated by
+attributes. Values for these attributes are "no" if not present. Specific graphic display such as parentheses,
+brackets, and size are controlled by the level-display attribute group</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Accidental(ComplexType, TypeAccidentalValue, Cautionary, Editorial, LevelDisplay, PrintStyle, Smulf):
+    &#34;&#34;&#34;
+    The accidental type represents actual notated accidentals. Editorial and cautionary indications are indicated by 
+    attributes. Values for these attributes are &#34;no&#34; if not present. Specific graphic display such as parentheses, 
+    brackets, and size are controlled by the level-display attribute group
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;accidental&#39;, value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeAccidentalValue" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.TypeAccidentalValue">TypeAccidentalValue</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+<li><a title="musicscore.musicxml.attributes.accidental.Cautionary" href="../attributes/accidental.html#musicscore.musicxml.attributes.accidental.Cautionary">Cautionary</a></li>
+<li><a title="musicscore.musicxml.attributes.accidental.Editorial" href="../attributes/accidental.html#musicscore.musicxml.attributes.accidental.Editorial">Editorial</a></li>
+<li><a title="musicscore.musicxml.attributes.leveldisplay.LevelDisplay" href="../attributes/leveldisplay.html#musicscore.musicxml.attributes.leveldisplay.LevelDisplay">LevelDisplay</a></li>
+<li><a title="musicscore.musicxml.attributes.leveldisplay.Parentheses" href="../attributes/leveldisplay.html#musicscore.musicxml.attributes.leveldisplay.Parentheses">Parentheses</a></li>
+<li><a title="musicscore.musicxml.attributes.leveldisplay.Bracket" href="../attributes/leveldisplay.html#musicscore.musicxml.attributes.leveldisplay.Bracket">Bracket</a></li>
+<li><a title="musicscore.musicxml.attributes.leveldisplay.Size" href="../attributes/leveldisplay.html#musicscore.musicxml.attributes.leveldisplay.Size">Size</a></li>
+<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.accidental.Smulf" href="../attributes/accidental.html#musicscore.musicxml.attributes.accidental.Smulf">Smulf</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treenote.TreeAccidental" href="../../musictree/treenote.html#musicscore.musictree.treenote.TreeAccidental">TreeAccidental</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Beam"><code class="flex name class">
+<span>class <span class="ident">Beam</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>documentation&gt;Beam values include begin, continue, end, forward hook, and backward hook. Up to eight concurrent
+beams are available to cover up to 1024th notes. Each beam in a note is represented with a separate beam element,
+starting with the eighth note beam using a number attribute of 1.</p>
+<p>Note that the beam number does not distinguish sets of beams that overlap, as it does for slur and other elements.
+Beaming groups are distinguished by being in different voices and/or the presence or absence of grace and cue
+elements.</p>
+<p>Beams that have a begin value can also have a fan attribute to indicate accelerandos and ritardandos using fanned
+beams. The fan attribute may also be used with a continue value if the fanning direction changes on that note. The
+value is "none" if not specified.</p>
+<p>The repeater attribute has been deprecated in MusicXML 3.0. Formerly used for tremolos, it needs to be specified
+with a "yes" value for each beam using it.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Beam(ComplexTypeBeam):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.beam.ComplexTypeBeam" href="../types/complextypes/beam.html#musicscore.musicxml.types.complextypes.beam.ComplexTypeBeam">ComplexTypeBeam</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeBeamValue" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.TypeBeamValue">TypeBeamValue</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.beam.Repeater" href="../types/complextypes/beam.html#musicscore.musicxml.types.complextypes.beam.Repeater">Repeater</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.beam.Fan" href="../types/complextypes/beam.html#musicscore.musicxml.types.complextypes.beam.Fan">Fan</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Cue"><code class="flex name class">
+<span>class <span class="ident">Cue</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Cue(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;cue&#39;, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Dot"><code class="flex name class">
+<span>class <span class="ident">Dot</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>One dot element is used for each dot of prolongation. The placement element is used to specify whether the dot
+should appear above or below the staff line. It is ignored for notes that appear on a staff space.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Dot(EmptyPlacement):
+    &#34;&#34;&#34;
+    One dot element is used for each dot of prolongation. The placement element is used to specify whether the dot
+    should appear above or below the staff line. It is ignored for notes that appear on a staff space.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;dot&#39;, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.complextype.EmptyPlacement" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.EmptyPlacement">EmptyPlacement</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.Empty" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.Empty">Empty</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.placement.Placement" href="../attributes/placement.html#musicscore.musicxml.attributes.placement.Placement">Placement</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Duration"><code class="flex name class">
+<span>class <span class="ident">Duration</span></span>
+<span>(</span><span>value=1, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Duration is a positive number specified in division units. This is the intended duration vs. notated duration
+(for instance, swing eighths vs. even eighths, or differences in dotted notes in Baroque-era music). Differences
+in duration specific to an interpretation or performance should use the note element's attack and release
+attributes</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Duration(XMLElement, TypePositiveDivisions):
+    &#34;&#34;&#34;
+    Duration is a positive number specified in division units. This is the intended duration vs. notated duration
+    (for instance, swing eighths vs. even eighths, or differences in dotted notes in Baroque-era music). Differences
+    in duration specific to an interpretation or performance should use the note element&#39;s attack and release
+    attributes
+    &#34;&#34;&#34;
+
+    def __init__(self, value=1, *args, **kwargs):
+        super().__init__(tag=&#39;duration&#39;, value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.TypePositiveDivisions" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.TypePositiveDivisions">TypePositiveDivisions</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.PositiveInteger" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.PositiveInteger">PositiveInteger</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Grace"><code class="flex name class">
+<span>class <span class="ident">Grace</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>documentation&gt;The grace type indicates the presence of a grace note. The slash attribute for a grace note is yes
+for slashed eighth notes. The other grace note attributes come from MuseData sound suggestions. The
+steal-time-previous attribute indicates the percentage of time to steal from the previous note for the grace note.
+The steal-time-following attribute indicates the percentage of time to steal from the following note for the grace
+note, as for appoggiaturas. The make-time attribute indicates to make time, not steal time; the units are in
+real-time divisions for the grace note.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Grace(XMLElement, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):
+    &#34;&#34;&#34;
+    documentation&gt;The grace type indicates the presence of a grace note. The slash attribute for a grace note is yes
+    for slashed eighth notes. The other grace note attributes come from MuseData sound suggestions. The
+    steal-time-previous attribute indicates the percentage of time to steal from the previous note for the grace note.
+    The steal-time-following attribute indicates the percentage of time to steal from the following note for the grace
+    note, as for appoggiaturas. The make-time attribute indicates to make time, not steal time; the units are in
+    real-time divisions for the grace note.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;grace&#39;, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.grace_attributes.StealTimePrevious" href="../attributes/grace_attributes.html#musicscore.musicxml.attributes.grace_attributes.StealTimePrevious">StealTimePrevious</a></li>
+<li><a title="musicscore.musicxml.attributes.grace_attributes.StealTimeFollowing" href="../attributes/grace_attributes.html#musicscore.musicxml.attributes.grace_attributes.StealTimeFollowing">StealTimeFollowing</a></li>
+<li><a title="musicscore.musicxml.attributes.grace_attributes.MakeTime" href="../attributes/grace_attributes.html#musicscore.musicxml.attributes.grace_attributes.MakeTime">MakeTime</a></li>
+<li><a title="musicscore.musicxml.attributes.grace_attributes.Slash" href="../attributes/grace_attributes.html#musicscore.musicxml.attributes.grace_attributes.Slash">Slash</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Instrument"><code class="flex name class">
+<span>class <span class="ident">Instrument</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Instrument(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;instrument&#39;, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Lyric"><code class="flex name class">
+<span>class <span class="ident">Lyric</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The lyric type represents text underlays for lyrics, based on Humdrum with support for other formats. Two text
+elements that are not separated by an elision element are part of the same syllable, but may have different text
+formatting. The MusicXML XSD is more strict than the DTD in enforcing this by disallowing a second syllabic element
+unless preceded by an elision element. The lyric number indicates multiple lines, though a name can be used as well
+(as in Finale's verse / chorus / section specification).</p>
+<p>Justification is center by default; placement is below by default. The print-object attribute can override a note's
+print-lyric attribute in cases where only some lyrics on a note are printed, as when lyrics for later verses are
+printed in a block of text rather than with each note. The time-only attribute precisely specifies which lyrics are
+to be sung which time through a repeated section.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Lyric(ComplexTypeLyric):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.lyric.ComplexTypeLyric" href="../types/complextypes/lyric.html#musicscore.musicxml.types.complextypes.lyric.ComplexTypeLyric">ComplexTypeLyric</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.justify.Justify" href="../attributes/justify.html#musicscore.musicxml.attributes.justify.Justify">Justify</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.placement.Placement" href="../attributes/placement.html#musicscore.musicxml.attributes.placement.Placement">Placement</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.printobject.PrintObject" href="../attributes/printobject.html#musicscore.musicxml.attributes.printobject.PrintObject">PrintObject</a></li>
+<li><a title="musicscore.musicxml.attributes.timeonly.TimeOnly" href="../attributes/timeonly.html#musicscore.musicxml.attributes.timeonly.TimeOnly">TimeOnly</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Notations"><code class="flex name class">
+<span>class <span class="ident">Notations</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Notations(ComplexTypeNotations):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.notations.ComplexTypeNotations" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.ComplexTypeNotations">ComplexTypeNotations</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.printobject.PrintObject" href="../attributes/printobject.html#musicscore.musicxml.attributes.printobject.PrintObject">PrintObject</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Note"><code class="flex name class">
+<span>class <span class="ident">Note</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Notes are the most common type of MusicXML data. The MusicXML format keeps the MuseData distinction between
+elements used for sound information and elements used for notation information (e.g., tie is used for sound,
+tied for notation). Thus grace notes do not have a duration element. Cue notes have a duration element, as do
+forward elements, but no tie elements. Having these two types of information available can make interchange
+considerably easier, as some programs handle one type of information much more readily than the other.</p>
+<p>The print-leger attribute is used to indicate whether leger lines are printed. Notes without leger lines are
+used to indicate indeterminate high and low notes. By default, it is set to yes. If print-object is set to no,
+print-leger is interpreted to also be set to no if not present. This attribute is ignored for rests.</p>
+<p>The dynamics and end-dynamics attributes correspond to MIDI 1.0's Note On and Note Off velocities, respectively.
+They are expressed in terms of percentages of the default forte value (90 for MIDI 1.0).</p>
+<p>The attack and release attributes are used to alter the starting and stopping time of the note from when it
+would otherwise occur based on the flow of durations - information that is specific to a performance. They are
+expressed in terms of divisions, either positive or negative. A note that starts a tie should not have a
+release attribute, and a note that stops a tie should not have an attack attribute. The attack and release
+attributes are independent of each other. The attack attribute only changes the starting time of a note, and
+the release attribute only changes the stopping time of a note.</p>
+<p>If a note is played only particular times through a repeat, the time-only attribute shows which times to
+play the note.</p>
+<p>The pizzicato attribute is used when just this note is sounded pizzicato, vs. the pizzicato element which
+changes overall playback between pizzicato and arco.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Note(XMLElement):
+    &#34;&#34;&#34;
+    Notes are the most common type of MusicXML data. The MusicXML format keeps the MuseData distinction between
+    elements used for sound information and elements used for notation information (e.g., tie is used for sound,
+    tied for notation). Thus grace notes do not have a duration element. Cue notes have a duration element, as do
+    forward elements, but no tie elements. Having these two types of information available can make interchange
+    considerably easier, as some programs handle one type of information much more readily than the other.
+
+    The print-leger attribute is used to indicate whether leger lines are printed. Notes without leger lines are
+    used to indicate indeterminate high and low notes. By default, it is set to yes. If print-object is set to no,
+    print-leger is interpreted to also be set to no if not present. This attribute is ignored for rests.
+
+    The dynamics and end-dynamics attributes correspond to MIDI 1.0&#39;s Note On and Note Off velocities, respectively.
+    They are expressed in terms of percentages of the default forte value (90 for MIDI 1.0).
+
+    The attack and release attributes are used to alter the starting and stopping time of the note from when it
+    would otherwise occur based on the flow of durations - information that is specific to a performance. They are
+    expressed in terms of divisions, either positive or negative. A note that starts a tie should not have a
+    release attribute, and a note that stops a tie should not have an attack attribute. The attack and release
+    attributes are independent of each other. The attack attribute only changes the starting time of a note, and
+    the release attribute only changes the stopping time of a note.
+
+    If a note is played only particular times through a repeat, the time-only attribute shows which times to
+    play the note.
+
+    The pizzicato attribute is used when just this note is sounded pizzicato, vs. the pizzicato element which
+    changes overall playback between pizzicato and arco.
+    &#34;&#34;&#34;
+    _DTD = Sequence(
+        Choice(
+            Sequence(
+                GroupReference(FullNote),
+                GroupReference(DurationGroup),
+                Element(Tie, 0, 2)
+            ),
+            Sequence(
+                Element(Grace),
+                Choice(
+                    Sequence(
+                        GroupReference(FullNote)
+                    ),
+                    Sequence(
+                        GroupReference(FullNote),
+                        Element(Tie, 0, 2)
+                    ),
+                    Sequence(
+                        Element(Cue),
+                        GroupReference(FullNote)
+                    )
+                )
+            ),
+            Sequence(
+                Element(Cue),
+                GroupReference(FullNote),
+                GroupReference(DurationGroup)
+            ),
+        ),
+        Element(Instrument, 0),
+        GroupReference(EditorialVoice, 0),
+        Element(Type, 0),
+        Element(Dot, 0, None),
+        Element(Accidental, 0),
+        Element(TimeModification, 0, None),
+        Element(Stem, 0),
+        Element(Notehead, 0),
+        Element(NoteheadText, 0),
+        GroupReference(Staff, 0),
+        Element(Beam, 0, 8),
+        Element(Notations, 0, None),
+        Element(Lyric, 0, None),
+        Element(Play, 0)
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;note&#39;, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treenote.TreeNote" href="../../musictree/treenote.html#musicscore.musictree.treenote.TreeNote">TreeNote</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Notehead"><code class="flex name class">
+<span>class <span class="ident">Notehead</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Notehead(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;notehead&#39;, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.NoteheadText"><code class="flex name class">
+<span>class <span class="ident">NoteheadText</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class NoteheadText(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;notehead-text&#39;, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Play"><code class="flex name class">
+<span>class <span class="ident">Play</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Play(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;play&#39;, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Stem"><code class="flex name class">
+<span>class <span class="ident">Stem</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Stem(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;stem&#39;, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Tie"><code class="flex name class">
+<span>class <span class="ident">Tie</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The tie element indicates that a tie begins or ends with this note. If the tie element applies only particular times
+through a repeat, the time-only attribute indicates which times to apply it. The tie element indicates sound; the
+tied element indicates notation.</xs:documentation></p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Tie(ComplexTypeTie):
+    &#34;&#34;&#34;
+    The tie element indicates that a tie begins or ends with this note. If the tie element applies only particular times
+    through a repeat, the time-only attribute indicates which times to apply it. The tie element indicates sound; the
+    tied element indicates notation.&lt;/xs:documentation&gt;
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.tie.ComplexTypeTie" href="../types/complextypes/tie.html#musicscore.musicxml.types.complextypes.tie.ComplexTypeTie">ComplexTypeTie</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.timeonly.TimeOnly" href="../attributes/timeonly.html#musicscore.musicxml.attributes.timeonly.TimeOnly">TimeOnly</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.TimeModification"><code class="flex name class">
+<span>class <span class="ident">TimeModification</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TimeModification(ComplexTypeTimeModification):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.timemodification.ComplexTypeTimeModification" href="../types/complextypes/timemodification.html#musicscore.musicxml.types.complextypes.timemodification.ComplexTypeTimeModification">ComplexTypeTimeModification</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.elements.note.Type"><code class="flex name class">
+<span>class <span class="ident">Type</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Type(XMLElement, TypeNoteTypeValue):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;type&#39;, value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeNoteTypeValue" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.TypeNoteTypeValue">TypeNoteTypeValue</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musicxml.elements" href="index.html">musicscore.musicxml.elements</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Accidental" href="#musicscore.musicxml.elements.note.Accidental">Accidental</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Beam" href="#musicscore.musicxml.elements.note.Beam">Beam</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Cue" href="#musicscore.musicxml.elements.note.Cue">Cue</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Dot" href="#musicscore.musicxml.elements.note.Dot">Dot</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Duration" href="#musicscore.musicxml.elements.note.Duration">Duration</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Grace" href="#musicscore.musicxml.elements.note.Grace">Grace</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Instrument" href="#musicscore.musicxml.elements.note.Instrument">Instrument</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Lyric" href="#musicscore.musicxml.elements.note.Lyric">Lyric</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Notations" href="#musicscore.musicxml.elements.note.Notations">Notations</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Note" href="#musicscore.musicxml.elements.note.Note">Note</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Notehead" href="#musicscore.musicxml.elements.note.Notehead">Notehead</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.NoteheadText" href="#musicscore.musicxml.elements.note.NoteheadText">NoteheadText</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Play" href="#musicscore.musicxml.elements.note.Play">Play</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Stem" href="#musicscore.musicxml.elements.note.Stem">Stem</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Tie" href="#musicscore.musicxml.elements.note.Tie">Tie</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.TimeModification" href="#musicscore.musicxml.elements.note.TimeModification">TimeModification</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.note.Type" href="#musicscore.musicxml.elements.note.Type">Type</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

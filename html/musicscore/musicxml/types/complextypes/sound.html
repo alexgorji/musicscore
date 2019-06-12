@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musicxml.types.complextypes.sound API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musicxml.types.complextypes.sound</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from musicscore.dtd.dtd import Sequence, Element
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
+from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from musicscore.musicxml.types.complextypes.mididevice import ComplexTypeMidiDevice
+from musicscore.musicxml.types.complextypes.midiinstrument import ComplexTypeMidiInstrument
+from musicscore.musicxml.types.complextypes.offset import ComplexTypeOffset
+from musicscore.musicxml.types.complextypes.play import ComplexTypePlay
+
+
+class Tempo(AttributeAbstract):
+    def __init__(self, tempo=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;tempo&#39;, tempo, &#39;TypeNonNegativeDecimal&#39;)
+
+
+class Dynamics(AttributeAbstract):
+    def __init__(self, dynamics=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;dynamics&#39;, dynamics, &#39;TypeNonNegativeDecimal&#39;)
+
+
+class Dacapo(AttributeAbstract):
+    def __init__(self, dacapo=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;dacapo&#39;, dacapo, &#39;TypeYesNo&#39;)
+
+
+class Segno(AttributeAbstract):
+    def __init__(self, segno=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;segno&#39;, segno, &#39;Token&#39;)
+
+
+class Dalsegno(AttributeAbstract):
+    def __init__(self, dalsegno=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;dalsegno&#39;, dalsegno, &#39;Token&#39;)
+
+
+class Coda(AttributeAbstract):
+    def __init__(self, coda=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;coda&#39;, coda, &#39;Token&#39;)
+
+
+class Tocoda(AttributeAbstract):
+    def __init__(self, tocoda=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;tocoda&#39;, tocoda, &#39;Token&#39;)
+
+
+class Divisions(AttributeAbstract):
+    def __init__(self, divisions=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;divisions&#39;, divisions, &#39;TypeDivisions&#39;)
+
+
+class ForwardRepeat(AttributeAbstract):
+    def __init__(self, forward_repeat=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;forward-repeat&#39;, forward_repeat, &#39;TypeYesNo&#39;)
+
+
+class Fine(AttributeAbstract):
+    def __init__(self, fine=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;fine&#39;, fine, &#39;Token&#39;)
+
+
+class TimeOnly(AttributeAbstract):
+    def __init__(self, time_only=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;time-only&#39;, time_only, &#39;TypeTimeOnly&#39;)
+
+
+class Pizzicato(AttributeAbstract):
+    def __init__(self, pizzicato=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;pizzicato&#39;, pizzicato, &#39;TypeYesNo&#39;)
+
+
+class Pan(AttributeAbstract):
+    def __init__(self, pan=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;pan&#39;, pan, &#39;TypeRotationDegrees&#39;)
+
+
+class Elevation(AttributeAbstract):
+    def __init__(self, elevation=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;elevation&#39;, elevation, &#39;TypeRotationDegrees&#39;)
+
+
+class DamperPedal(AttributeAbstract):
+    def __init__(self, damper_pedal=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;damper-pedal&#39;, damper_pedal, &#39;TypeYesNoNumber&#39;)
+
+
+class SoftPedal(AttributeAbstract):
+    def __init__(self, soft_pedal=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;soft-pedal&#39;, soft_pedal, &#39;TypeYesNoNumber&#39;)
+
+
+class SostenutoPedal(AttributeAbstract):
+    def __init__(self, sostenuto_pedal=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;sostenuto-pedal-pedal&#39;, sostenuto_pedal, &#39;TypeYesNoNumber&#39;)
+
+
+class MidiDevice(ComplexTypeMidiDevice):
+    _TAG = &#39;midi-device&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class MidiInstrument(ComplexTypeMidiInstrument):
+    _TAG = &#39;midi-instrument&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class Play(ComplexTypePlay):
+    _TAG = &#39;play&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class Offset(ComplexTypeOffset):
+    _TAG = &#39;offset&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class ComplexTypeSound(ComplexType, Tempo, Dynamics, Dacapo, Segno, Dalsegno, Coda, Tocoda, Divisions, ForwardRepeat,
+                       Fine, TimeOnly, Pizzicato, Pan, Elevation, DamperPedal, SoftPedal, SostenutoPedal,
+                       OptionalUniqueId):
+    &#34;&#34;&#34;The sound element contains general playback parameters. They can stand alone within a part/measure, or be a
+    component element within a direction.
+
+    Tempo is expressed in quarter notes per minute. If 0, the sound-generating program should prompt the user at the
+    time of compiling a sound (MIDI) file.
+
+    Dynamics (or MIDI velocity) are expressed as a percentage of the default forte value (90 for MIDI 1.0).
+
+    Dacapo indicates to go back to the beginning of the movement. When used it always has the value &#34;yes&#34;.
+
+    Segno and dalsegno are used for backwards jumps to a segno sign; coda and tocoda are used for forward jumps to a
+    coda sign. If there are multiple jumps, the value of these parameters can be used to name and distinguish them. If
+    segno or coda is used, the divisions attribute can also be used to indicate the number of divisions per quarter
+    note. Otherwise sound and MIDI generating programs may have to recompute this.
+
+    By default, a dalsegno or dacapo attribute indicates that the jump should occur the first time through, while a
+    tocoda attribute indicates the jump should occur the second time through. The time that jumps occur can be changed
+    by using the time-only attribute.
+
+    Forward-repeat is used when a forward repeat sign is implied, and usually follows a bar line. When used it always
+    has the value of &#34;yes&#34;.
+
+    The fine attribute follows the final note or rest in a movement with a da capo or dal segno direction. If numeric,
+    the value represents the actual duration of the final note or rest, which can be ambiguous in written notation and
+    different among parts and voices. The value may also be &#34;yes&#34; to indicate no change to the final duration.
+
+    If the sound element applies only particular times through a repeat, the time-only attribute indicates which times
+    to apply the sound element.
+
+    Pizzicato in a sound element effects all following notes. Yes indicates pizzicato, no indicates arco.
+
+    The pan and elevation attributes are deprecated in Version 2.0. The pan and elevation elements in the midi-
+    instrument element should be used instead. The meaning of the pan and elevation attributes is the same as for the
+    pan and elevation elements. If both are present, the mid-instrument elements take priority.
+
+    The damper-pedal, soft-pedal, and sostenuto-pedal attributes effect playback of the three common piano pedals and
+    their MIDI controller equivalents. The yes value indicates the pedal is depressed; no indicates the pedal is
+    released. A numeric value from 0 to 100 may also be used for half pedaling. This value is the percentage that the
+    pedal is depressed. A value of 0 is equivalent to no, and a value of 100 is equivalent to yes.
+
+    MIDI devices, MIDI instruments, and playback techniques are changed using the midi-device, midi-instrument, and play
+    elements. When there are multiple instances of these elements, they should be grouped together by instrument using
+    the id attribute values.
+
+    The offset element is used to indicate that the sound takes place offset from the current score position. If the
+    sound element is a child of a direction element, the sound offset element overrides the direction offset element if
+    both elements are present. Note that the offset reflects the intended musical position for the change in sound. It
+    should not be used to compensate for latency issues in particular hardware configurations.&#34;&#34;&#34;
+
+    _DTD = Sequence(
+        Sequence(
+            Element(MidiDevice, min_occurrence=0),
+            Element(MidiInstrument, min_occurrence=0),
+            Element(Play, min_occurrence=0),
+            min_occurrence=0,
+            max_occurrence=None
+        ),
+        Element(Offset, min_occurrence=0)
+    )
+
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, * args, **kwargs)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musicxml.types.complextypes.sound.Coda"><code class="flex name class">
+<span>class <span class="ident">Coda</span></span>
+<span>(</span><span>coda=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Coda(AttributeAbstract):
+    def __init__(self, coda=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;coda&#39;, coda, &#39;Token&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound"><code class="flex name class">
+<span>class <span class="ident">ComplexTypeSound</span></span>
+<span>(</span><span>tag, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The sound element contains general playback parameters. They can stand alone within a part/measure, or be a
+component element within a direction.</p>
+<p>Tempo is expressed in quarter notes per minute. If 0, the sound-generating program should prompt the user at the
+time of compiling a sound (MIDI) file.</p>
+<p>Dynamics (or MIDI velocity) are expressed as a percentage of the default forte value (90 for MIDI 1.0).</p>
+<p>Dacapo indicates to go back to the beginning of the movement. When used it always has the value "yes".</p>
+<p>Segno and dalsegno are used for backwards jumps to a segno sign; coda and tocoda are used for forward jumps to a
+coda sign. If there are multiple jumps, the value of these parameters can be used to name and distinguish them. If
+segno or coda is used, the divisions attribute can also be used to indicate the number of divisions per quarter
+note. Otherwise sound and MIDI generating programs may have to recompute this.</p>
+<p>By default, a dalsegno or dacapo attribute indicates that the jump should occur the first time through, while a
+tocoda attribute indicates the jump should occur the second time through. The time that jumps occur can be changed
+by using the time-only attribute.</p>
+<p>Forward-repeat is used when a forward repeat sign is implied, and usually follows a bar line. When used it always
+has the value of "yes".</p>
+<p>The fine attribute follows the final note or rest in a movement with a da capo or dal segno direction. If numeric,
+the value represents the actual duration of the final note or rest, which can be ambiguous in written notation and
+different among parts and voices. The value may also be "yes" to indicate no change to the final duration.</p>
+<p>If the sound element applies only particular times through a repeat, the time-only attribute indicates which times
+to apply the sound element.</p>
+<p>Pizzicato in a sound element effects all following notes. Yes indicates pizzicato, no indicates arco.</p>
+<p>The pan and elevation attributes are deprecated in Version 2.0. The pan and elevation elements in the midi-
+instrument element should be used instead. The meaning of the pan and elevation attributes is the same as for the
+pan and elevation elements. If both are present, the mid-instrument elements take priority.</p>
+<p>The damper-pedal, soft-pedal, and sostenuto-pedal attributes effect playback of the three common piano pedals and
+their MIDI controller equivalents. The yes value indicates the pedal is depressed; no indicates the pedal is
+released. A numeric value from 0 to 100 may also be used for half pedaling. This value is the percentage that the
+pedal is depressed. A value of 0 is equivalent to no, and a value of 100 is equivalent to yes.</p>
+<p>MIDI devices, MIDI instruments, and playback techniques are changed using the midi-device, midi-instrument, and play
+elements. When there are multiple instances of these elements, they should be grouped together by instrument using
+the id attribute values.</p>
+<p>The offset element is used to indicate that the sound takes place offset from the current score position. If the
+sound element is a child of a direction element, the sound offset element overrides the direction offset element if
+both elements are present. Note that the offset reflects the intended musical position for the change in sound. It
+should not be used to compensate for latency issues in particular hardware configurations.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ComplexTypeSound(ComplexType, Tempo, Dynamics, Dacapo, Segno, Dalsegno, Coda, Tocoda, Divisions, ForwardRepeat,
+                       Fine, TimeOnly, Pizzicato, Pan, Elevation, DamperPedal, SoftPedal, SostenutoPedal,
+                       OptionalUniqueId):
+    &#34;&#34;&#34;The sound element contains general playback parameters. They can stand alone within a part/measure, or be a
+    component element within a direction.
+
+    Tempo is expressed in quarter notes per minute. If 0, the sound-generating program should prompt the user at the
+    time of compiling a sound (MIDI) file.
+
+    Dynamics (or MIDI velocity) are expressed as a percentage of the default forte value (90 for MIDI 1.0).
+
+    Dacapo indicates to go back to the beginning of the movement. When used it always has the value &#34;yes&#34;.
+
+    Segno and dalsegno are used for backwards jumps to a segno sign; coda and tocoda are used for forward jumps to a
+    coda sign. If there are multiple jumps, the value of these parameters can be used to name and distinguish them. If
+    segno or coda is used, the divisions attribute can also be used to indicate the number of divisions per quarter
+    note. Otherwise sound and MIDI generating programs may have to recompute this.
+
+    By default, a dalsegno or dacapo attribute indicates that the jump should occur the first time through, while a
+    tocoda attribute indicates the jump should occur the second time through. The time that jumps occur can be changed
+    by using the time-only attribute.
+
+    Forward-repeat is used when a forward repeat sign is implied, and usually follows a bar line. When used it always
+    has the value of &#34;yes&#34;.
+
+    The fine attribute follows the final note or rest in a movement with a da capo or dal segno direction. If numeric,
+    the value represents the actual duration of the final note or rest, which can be ambiguous in written notation and
+    different among parts and voices. The value may also be &#34;yes&#34; to indicate no change to the final duration.
+
+    If the sound element applies only particular times through a repeat, the time-only attribute indicates which times
+    to apply the sound element.
+
+    Pizzicato in a sound element effects all following notes. Yes indicates pizzicato, no indicates arco.
+
+    The pan and elevation attributes are deprecated in Version 2.0. The pan and elevation elements in the midi-
+    instrument element should be used instead. The meaning of the pan and elevation attributes is the same as for the
+    pan and elevation elements. If both are present, the mid-instrument elements take priority.
+
+    The damper-pedal, soft-pedal, and sostenuto-pedal attributes effect playback of the three common piano pedals and
+    their MIDI controller equivalents. The yes value indicates the pedal is depressed; no indicates the pedal is
+    released. A numeric value from 0 to 100 may also be used for half pedaling. This value is the percentage that the
+    pedal is depressed. A value of 0 is equivalent to no, and a value of 100 is equivalent to yes.
+
+    MIDI devices, MIDI instruments, and playback techniques are changed using the midi-device, midi-instrument, and play
+    elements. When there are multiple instances of these elements, they should be grouped together by instrument using
+    the id attribute values.
+
+    The offset element is used to indicate that the sound takes place offset from the current score position. If the
+    sound element is a child of a direction element, the sound offset element overrides the direction offset element if
+    both elements are present. Note that the offset reflects the intended musical position for the change in sound. It
+    should not be used to compensate for latency issues in particular hardware configurations.&#34;&#34;&#34;
+
+    _DTD = Sequence(
+        Sequence(
+            Element(MidiDevice, min_occurrence=0),
+            Element(MidiInstrument, min_occurrence=0),
+            Element(Play, min_occurrence=0),
+            min_occurrence=0,
+            max_occurrence=None
+        ),
+        Element(Offset, min_occurrence=0)
+    )
+
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, * args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Tempo" href="#musicscore.musicxml.types.complextypes.sound.Tempo">Tempo</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Dynamics" href="#musicscore.musicxml.types.complextypes.sound.Dynamics">Dynamics</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Dacapo" href="#musicscore.musicxml.types.complextypes.sound.Dacapo">Dacapo</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Segno" href="#musicscore.musicxml.types.complextypes.sound.Segno">Segno</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Dalsegno" href="#musicscore.musicxml.types.complextypes.sound.Dalsegno">Dalsegno</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Coda" href="#musicscore.musicxml.types.complextypes.sound.Coda">Coda</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Tocoda" href="#musicscore.musicxml.types.complextypes.sound.Tocoda">Tocoda</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Divisions" href="#musicscore.musicxml.types.complextypes.sound.Divisions">Divisions</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.ForwardRepeat" href="#musicscore.musicxml.types.complextypes.sound.ForwardRepeat">ForwardRepeat</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Fine" href="#musicscore.musicxml.types.complextypes.sound.Fine">Fine</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.TimeOnly" href="#musicscore.musicxml.types.complextypes.sound.TimeOnly">TimeOnly</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Pizzicato" href="#musicscore.musicxml.types.complextypes.sound.Pizzicato">Pizzicato</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Pan" href="#musicscore.musicxml.types.complextypes.sound.Pan">Pan</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Elevation" href="#musicscore.musicxml.types.complextypes.sound.Elevation">Elevation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.DamperPedal" href="#musicscore.musicxml.types.complextypes.sound.DamperPedal">DamperPedal</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.SoftPedal" href="#musicscore.musicxml.types.complextypes.sound.SoftPedal">SoftPedal</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.SostenutoPedal" href="#musicscore.musicxml.types.complextypes.sound.SostenutoPedal">SostenutoPedal</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.direction.Sound" href="direction.html#musicscore.musicxml.types.complextypes.direction.Sound">Sound</a></li>
+<li><a title="musicscore.musicxml.groups.musicdata.Sound" href="../../groups/musicdata.html#musicscore.musicxml.groups.musicdata.Sound">Sound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Dacapo"><code class="flex name class">
+<span>class <span class="ident">Dacapo</span></span>
+<span>(</span><span>dacapo=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Dacapo(AttributeAbstract):
+    def __init__(self, dacapo=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;dacapo&#39;, dacapo, &#39;TypeYesNo&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Dalsegno"><code class="flex name class">
+<span>class <span class="ident">Dalsegno</span></span>
+<span>(</span><span>dalsegno=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Dalsegno(AttributeAbstract):
+    def __init__(self, dalsegno=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;dalsegno&#39;, dalsegno, &#39;Token&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.DamperPedal"><code class="flex name class">
+<span>class <span class="ident">DamperPedal</span></span>
+<span>(</span><span>damper_pedal=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DamperPedal(AttributeAbstract):
+    def __init__(self, damper_pedal=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;damper-pedal&#39;, damper_pedal, &#39;TypeYesNoNumber&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Divisions"><code class="flex name class">
+<span>class <span class="ident">Divisions</span></span>
+<span>(</span><span>divisions=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Divisions(AttributeAbstract):
+    def __init__(self, divisions=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;divisions&#39;, divisions, &#39;TypeDivisions&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Dynamics"><code class="flex name class">
+<span>class <span class="ident">Dynamics</span></span>
+<span>(</span><span>dynamics=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Dynamics(AttributeAbstract):
+    def __init__(self, dynamics=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;dynamics&#39;, dynamics, &#39;TypeNonNegativeDecimal&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Elevation"><code class="flex name class">
+<span>class <span class="ident">Elevation</span></span>
+<span>(</span><span>elevation=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Elevation(AttributeAbstract):
+    def __init__(self, elevation=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;elevation&#39;, elevation, &#39;TypeRotationDegrees&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Fine"><code class="flex name class">
+<span>class <span class="ident">Fine</span></span>
+<span>(</span><span>fine=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Fine(AttributeAbstract):
+    def __init__(self, fine=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;fine&#39;, fine, &#39;Token&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.ForwardRepeat"><code class="flex name class">
+<span>class <span class="ident">ForwardRepeat</span></span>
+<span>(</span><span>forward_repeat=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ForwardRepeat(AttributeAbstract):
+    def __init__(self, forward_repeat=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;forward-repeat&#39;, forward_repeat, &#39;TypeYesNo&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.MidiDevice"><code class="flex name class">
+<span>class <span class="ident">MidiDevice</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-device type corresponds to the DeviceName meta event in Standard MIDI Files. The optional port attribute
+is a number from 1 to 16 that can be used with the unofficial MIDI port (or cable) meta event. Unlike the DeviceName
+meta event, there can be multiple midi-device elements per MusicXML part starting in MusicXML 3.0. The optional id
+attribute refers to the score-instrument assigned to this device. If missing, the device assignment affects all
+score-instrument elements in the score-part.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MidiDevice(ComplexTypeMidiDevice):
+    _TAG = &#39;midi-device&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.mididevice.ComplexTypeMidiDevice" href="mididevice.html#musicscore.musicxml.types.complextypes.mididevice.ComplexTypeMidiDevice">ComplexTypeMidiDevice</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.String" href="../simple_type.html#musicscore.musicxml.types.simple_type.String">String</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.mididevice.Port" href="mididevice.html#musicscore.musicxml.types.complextypes.mididevice.Port">Port</a></li>
+<li><a title="musicscore.musicxml.attributes.id.Id" href="../../attributes/id.html#musicscore.musicxml.attributes.id.Id">Id</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.MidiInstrument"><code class="flex name class">
+<span>class <span class="ident">MidiInstrument</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MidiInstrument(ComplexTypeMidiInstrument):
+    _TAG = &#39;midi-instrument&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Offset"><code class="flex name class">
+<span>class <span class="ident">Offset</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>An offset is represented in terms of divisions, and indicates where the direction will appear relative to the
+current musical location. This affects the visual appearance of the direction. If the sound attribute is "yes", then
+the offset affects playback too. If the sound attribute is "no", then any sound associated with the direction takes
+effect at the current location. The sound attribute is "no" by default for compatibility with earlier versions of
+the MusicXML format. If an element within a direction includes a default-x attribute, the offset value will be
+ignored when determining the appearance of that element</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Offset(ComplexTypeOffset):
+    _TAG = &#39;offset&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.offset.ComplexTypeOffset" href="offset.html#musicscore.musicxml.types.complextypes.offset.ComplexTypeOffset">ComplexTypeOffset</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeDivisions" href="../simple_type.html#musicscore.musicxml.types.simple_type.TypeDivisions">TypeDivisions</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.Integer" href="../simple_type.html#musicscore.musicxml.types.simple_type.Integer">Integer</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.offset.Sound" href="offset.html#musicscore.musicxml.types.complextypes.offset.Sound">Sound</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Pan"><code class="flex name class">
+<span>class <span class="ident">Pan</span></span>
+<span>(</span><span>pan=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Pan(AttributeAbstract):
+    def __init__(self, pan=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;pan&#39;, pan, &#39;TypeRotationDegrees&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Pizzicato"><code class="flex name class">
+<span>class <span class="ident">Pizzicato</span></span>
+<span>(</span><span>pizzicato=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Pizzicato(AttributeAbstract):
+    def __init__(self, pizzicato=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;pizzicato&#39;, pizzicato, &#39;TypeYesNo&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Play"><code class="flex name class">
+<span>class <span class="ident">Play</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The play type, new in Version 3.0, specifies playback techniques to be used in conjunction with the
+instrument-sound element. When used as part of a sound element, it applies to all notes going forward in score
+order. In multi-instrument parts, the affected instrument should be specified using the id attribute. When used as
+part of a note element, it applies to the current note only.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Play(ComplexTypePlay):
+    _TAG = &#39;play&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.play.ComplexTypePlay" href="play.html#musicscore.musicxml.types.complextypes.play.ComplexTypePlay">ComplexTypePlay</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.id.Id" href="../../attributes/id.html#musicscore.musicxml.attributes.id.Id">Id</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Segno"><code class="flex name class">
+<span>class <span class="ident">Segno</span></span>
+<span>(</span><span>segno=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Segno(AttributeAbstract):
+    def __init__(self, segno=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;segno&#39;, segno, &#39;Token&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.SoftPedal"><code class="flex name class">
+<span>class <span class="ident">SoftPedal</span></span>
+<span>(</span><span>soft_pedal=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class SoftPedal(AttributeAbstract):
+    def __init__(self, soft_pedal=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;soft-pedal&#39;, soft_pedal, &#39;TypeYesNoNumber&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.SostenutoPedal"><code class="flex name class">
+<span>class <span class="ident">SostenutoPedal</span></span>
+<span>(</span><span>sostenuto_pedal=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class SostenutoPedal(AttributeAbstract):
+    def __init__(self, sostenuto_pedal=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;sostenuto-pedal-pedal&#39;, sostenuto_pedal, &#39;TypeYesNoNumber&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Tempo"><code class="flex name class">
+<span>class <span class="ident">Tempo</span></span>
+<span>(</span><span>tempo=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Tempo(AttributeAbstract):
+    def __init__(self, tempo=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;tempo&#39;, tempo, &#39;TypeNonNegativeDecimal&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.TimeOnly"><code class="flex name class">
+<span>class <span class="ident">TimeOnly</span></span>
+<span>(</span><span>time_only=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TimeOnly(AttributeAbstract):
+    def __init__(self, time_only=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;time-only&#39;, time_only, &#39;TypeTimeOnly&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.sound.Tocoda"><code class="flex name class">
+<span>class <span class="ident">Tocoda</span></span>
+<span>(</span><span>tocoda=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Tocoda(AttributeAbstract):
+    def __init__(self, tocoda=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;tocoda&#39;, tocoda, &#39;Token&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musicxml.types.complextypes" href="index.html">musicscore.musicxml.types.complextypes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Coda" href="#musicscore.musicxml.types.complextypes.sound.Coda">Coda</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.ComplexTypeSound" href="#musicscore.musicxml.types.complextypes.sound.ComplexTypeSound">ComplexTypeSound</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Dacapo" href="#musicscore.musicxml.types.complextypes.sound.Dacapo">Dacapo</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Dalsegno" href="#musicscore.musicxml.types.complextypes.sound.Dalsegno">Dalsegno</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.DamperPedal" href="#musicscore.musicxml.types.complextypes.sound.DamperPedal">DamperPedal</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Divisions" href="#musicscore.musicxml.types.complextypes.sound.Divisions">Divisions</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Dynamics" href="#musicscore.musicxml.types.complextypes.sound.Dynamics">Dynamics</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Elevation" href="#musicscore.musicxml.types.complextypes.sound.Elevation">Elevation</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Fine" href="#musicscore.musicxml.types.complextypes.sound.Fine">Fine</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.ForwardRepeat" href="#musicscore.musicxml.types.complextypes.sound.ForwardRepeat">ForwardRepeat</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.MidiDevice" href="#musicscore.musicxml.types.complextypes.sound.MidiDevice">MidiDevice</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.MidiInstrument" href="#musicscore.musicxml.types.complextypes.sound.MidiInstrument">MidiInstrument</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Offset" href="#musicscore.musicxml.types.complextypes.sound.Offset">Offset</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Pan" href="#musicscore.musicxml.types.complextypes.sound.Pan">Pan</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Pizzicato" href="#musicscore.musicxml.types.complextypes.sound.Pizzicato">Pizzicato</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Play" href="#musicscore.musicxml.types.complextypes.sound.Play">Play</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Segno" href="#musicscore.musicxml.types.complextypes.sound.Segno">Segno</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.SoftPedal" href="#musicscore.musicxml.types.complextypes.sound.SoftPedal">SoftPedal</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.SostenutoPedal" href="#musicscore.musicxml.types.complextypes.sound.SostenutoPedal">SostenutoPedal</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Tempo" href="#musicscore.musicxml.types.complextypes.sound.Tempo">Tempo</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.TimeOnly" href="#musicscore.musicxml.types.complextypes.sound.TimeOnly">TimeOnly</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.sound.Tocoda" href="#musicscore.musicxml.types.complextypes.sound.Tocoda">Tocoda</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

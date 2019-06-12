@@ -1,0 +1,903 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musicxml.types.complextypes.attributes API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musicxml.types.complextypes.attributes</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from musicscore.dtd.dtd import Sequence, GroupReference, Element, Choice
+from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
+from musicscore.musicxml.attributes.printobject import PrintObject
+from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.groups.common import Editorial
+from musicscore.musicxml.types.complextypes.clef import ComplexTypeClef
+from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from musicscore.musicxml.types.complextypes.key import TypeKey
+from musicscore.musicxml.types.simple_type import TypePositiveDivisions, PositiveInteger
+
+
+class Divisions(XMLElement, TypePositiveDivisions):
+    &#34;&#34;&#34;
+    Musical notation duration is commonly represented as fractions.
+    The divisions element indicates how many divisions per quarter note are used to indicate a note&#39;s duration.
+    For example, if duration = 1 and divisions = 2, this is an eighth note duration.
+    Duration and divisions are used directly for generating sound output, so they must be chosen to take tuplets into
+    account. Using a divisions element lets us use just one number to represent a duration for each note in the score,
+    while retaining the full power of a fractional representation.
+    If maximum compatibility with Standard MIDI 1.0 files is important, do not have the divisions value exceed 16383.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;divisions&#39;, value=value, *args, **kwargs)
+
+
+class Key(TypeKey):
+    &#34;&#34;&#34;
+    The key element represents a key signature. Both traditional and non-traditional key signatures are supported.
+    The optional number attribute refers to staff numbers. If absent, the key signature applies to all staves in the
+    part.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;key&#39;, value=value, *args, **kwargs)
+
+
+class Beats(XMLElement, PositiveInteger):
+    &#34;&#34;&#34;
+    The beats element indicates the number of beats, as found in the numerator of a time signature.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;beats&#39;, value=value, *args, **kwargs)
+
+    def __copy__(self):
+        new_beats = Beats(self.value)
+        return new_beats
+
+
+class BeatType(XMLElement, PositiveInteger):
+    &#34;&#34;&#34;
+    The beat-type element indicates the beat unit, as found in the denominator of a time signature.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;beat-type&#39;, value=value, *args, **kwargs)
+
+    def __copy__(self):
+        new_beat_type = BeatType(self.value)
+        return new_beat_type
+
+
+TimeSignature = Sequence(
+    Element(Beats),
+    Element(BeatType)
+)
+
+
+class Interchangeable(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;interchangeable&#39;, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class SenzaMisura(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;senza-misura&#39;, *args, **kwargs)
+        raise NotImplementedError()
+
+
+# todo: &lt;xs:attribute name=&#34;number&#34; type=&#34;staff-number&#34;/&gt;
+#               &lt;xs:attribute name=&#34;symbol&#34; type=&#34;time-symbol&#34;/&gt;
+#               &lt;xs:attribute name=&#34;separator&#34; type=&#34;time-separator&#34;/&gt;
+#               &lt;xs:attributeGroup ref=&#34;print-style-align&#34;/&gt;
+
+# , OptionalUniqueId
+class Time(XMLElement, PrintObject, OptionalUniqueId):
+    &#34;&#34;&#34;
+    Time signatures are represented by the beats element for the numerator and the beat-type element for the
+    denominator. The symbol attribute is used indicate common and cut time symbols as well as a single number display.
+    Multiple pairs of beat and beat-type elements are used for composite time signatures with multiple denominators,
+    such as 2/4 + 3/8. A composite such as 3+2/8 requires only one beat/beat-type pair.
+    The print-object attribute allows a time signature to be specified but not printed, as is the case for excerpts
+    from the middle of a score. The value is &#34;yes&#34; if not present. The optional number attribute refers to staff numbers
+    within the part. If absent, the time signature applies to all staves in the part.
+    &#34;&#34;&#34;
+
+    _DTD = Choice(
+        Sequence(
+            GroupReference(TimeSignature, max_occurrence=None),
+            Element(Interchangeable, min_occurrence=0)
+        ),
+        Element(SenzaMisura)
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;time&#39;, *args, **kwargs)
+
+
+class Staves(XMLElement):
+    &#34;&#34;&#34;
+    The staves element is used if there is more than one staff represented in the given part (e.g., 2 staves for typical
+    piano parts). If absent, a value of 1 is assumed. Staves are ordered from top to bottom in a part in numerical
+    order, with staff 1 above staff 2
+
+        &lt;/xs:element&gt;
+    &lt;xs:element name=&#34;staves&#34; type=&#34;xs:nonNegativeInteger&#34; minOccurs=&#34;0&#34;&gt;
+    &lt;/xs:element&gt;
+
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;staves&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class PartSymbol(XMLElement):
+    &#34;&#34;&#34;
+    The part-symbol element indicates how a symbol for a multi-staff part is indicated in the score.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;part-symbols&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class Instruments(XMLElement):
+    &#34;&#34;&#34;
+    &lt;xs:element name=&#34;instruments&#34; type=&#34;xs:nonNegativeInteger&#34; minOccurs=&#34;0&#34;&gt;
+      &lt;xs:annotation&gt;
+        &lt;xs:documentation&gt;The instruments element is only used if more than one instrument is represented in the part (e.g., oboe I and II where they play together most of the time). If absent, a value of 1 is assumed.&lt;/xs:documentation&gt;
+      &lt;/xs:annotation&gt;
+    &lt;/xs:element&gt;
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;instruments&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class Clef(ComplexTypeClef):
+    &#34;&#34;&#34;
+    Clefs are represented by a combination of sign, line, and clef-octave-change elements.
+    The optional number attribute refers to staff numbers within the part.
+    A value of 1 is assumed if not present.
+    Sometimes clefs are added to the staff in non-standard line positions, either to indicate cue passages,
+    or when there are multiple clefs present simultaneously on one staff. In this situation,
+    the additional attribute is set to &#34;yes&#34; and the line value is ignored.
+    The size attribute is used for clefs where the additional attribute is &#34;yes&#34;.
+    It is typically used to indicate cue clefs.
+
+    Sometimes clefs at the start of a measure need to appear after the barline rather than before,
+    as for cues or for use after a repeated section.
+    The after-barline attribute is set to &#34;yes&#34; in this situation. The attribute is ignored for mid-measure clefs.
+
+    Clefs appear at the start of each system unless the print-object attribute has been set to &#34;no&#34; or
+    the additional attribute has been set to &#34;yes&#34;
+    &#34;&#34;&#34;
+    _TAG = &#39;clef&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class StaffDetails(XMLElement):
+    &#34;&#34;&#34;
+    &lt;xs:element name=&#34;staff-details&#34; type=&#34;staff-details&#34; minOccurs=&#34;0&#34; maxOccurs=&#34;unbounded&#34;&gt;
+      &lt;xs:annotation&gt;
+        &lt;xs:documentation&gt;The staff-details element is used to indicate different types of staves.&lt;/xs:documentation&gt;
+      &lt;/xs:annotation&gt;
+    &lt;/xs:element&gt;
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;staff-details&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class Transpose(XMLElement):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;transpose&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class Directive(XMLElement):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;directive&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class MeasureStyle(XMLElement):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;measure-style&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class ComplexTypeAttributes(ComplexType):
+    &#34;&#34;&#34;
+    The attributes element contains musical information that typically changes on measure boundaries. This includes key
+    and time signatures, clefs, transpositions, and staving. When attributes are changed mid-measure, it affects the
+    music in score order, not in MusicXML document order
+    &#34;&#34;&#34;
+    _DTD = Sequence(
+        GroupReference(Editorial),
+        Element(Divisions, min_occurrence=0),
+        Element(Key, min_occurrence=0, max_occurrence=None),
+        Element(Time, min_occurrence=0, max_occurrence=None),
+        Element(Staves, min_occurrence=0),
+        Element(PartSymbol, min_occurrence=0),
+        Element(Instruments, min_occurrence=0),
+        Element(Clef, min_occurrence=0),
+        Element(StaffDetails, min_occurrence=0, max_occurrence=None),
+        Element(Transpose, min_occurrence=0, max_occurrence=None),
+        Element(Directive, min_occurrence=0, max_occurrence=None),
+        Element(MeasureStyle, min_occurrence=0, max_occurrence=None)
+
+    )
+
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musicxml.types.complextypes.attributes.BeatType"><code class="flex name class">
+<span>class <span class="ident">BeatType</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The beat-type element indicates the beat unit, as found in the denominator of a time signature.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BeatType(XMLElement, PositiveInteger):
+    &#34;&#34;&#34;
+    The beat-type element indicates the beat unit, as found in the denominator of a time signature.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;beat-type&#39;, value=value, *args, **kwargs)
+
+    def __copy__(self):
+        new_beat_type = BeatType(self.value)
+        return new_beat_type</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.PositiveInteger" href="../simple_type.html#musicscore.musicxml.types.simple_type.PositiveInteger">PositiveInteger</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.Beats"><code class="flex name class">
+<span>class <span class="ident">Beats</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The beats element indicates the number of beats, as found in the numerator of a time signature.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Beats(XMLElement, PositiveInteger):
+    &#34;&#34;&#34;
+    The beats element indicates the number of beats, as found in the numerator of a time signature.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;beats&#39;, value=value, *args, **kwargs)
+
+    def __copy__(self):
+        new_beats = Beats(self.value)
+        return new_beats</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.PositiveInteger" href="../simple_type.html#musicscore.musicxml.types.simple_type.PositiveInteger">PositiveInteger</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.Clef"><code class="flex name class">
+<span>class <span class="ident">Clef</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Clefs are represented by a combination of sign, line, and clef-octave-change elements.
+The optional number attribute refers to staff numbers within the part.
+A value of 1 is assumed if not present.
+Sometimes clefs are added to the staff in non-standard line positions, either to indicate cue passages,
+or when there are multiple clefs present simultaneously on one staff. In this situation,
+the additional attribute is set to "yes" and the line value is ignored.
+The size attribute is used for clefs where the additional attribute is "yes".
+It is typically used to indicate cue clefs.</p>
+<p>Sometimes clefs at the start of a measure need to appear after the barline rather than before,
+as for cues or for use after a repeated section.
+The after-barline attribute is set to "yes" in this situation. The attribute is ignored for mid-measure clefs.</p>
+<p>Clefs appear at the start of each system unless the print-object attribute has been set to "no" or
+the additional attribute has been set to "yes"</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Clef(ComplexTypeClef):
+    &#34;&#34;&#34;
+    Clefs are represented by a combination of sign, line, and clef-octave-change elements.
+    The optional number attribute refers to staff numbers within the part.
+    A value of 1 is assumed if not present.
+    Sometimes clefs are added to the staff in non-standard line positions, either to indicate cue passages,
+    or when there are multiple clefs present simultaneously on one staff. In this situation,
+    the additional attribute is set to &#34;yes&#34; and the line value is ignored.
+    The size attribute is used for clefs where the additional attribute is &#34;yes&#34;.
+    It is typically used to indicate cue clefs.
+
+    Sometimes clefs at the start of a measure need to appear after the barline rather than before,
+    as for cues or for use after a repeated section.
+    The after-barline attribute is set to &#34;yes&#34; in this situation. The attribute is ignored for mid-measure clefs.
+
+    Clefs appear at the start of each system unless the print-object attribute has been set to &#34;no&#34; or
+    the additional attribute has been set to &#34;yes&#34;
+    &#34;&#34;&#34;
+    _TAG = &#39;clef&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.clef.ComplexTypeClef" href="clef.html#musicscore.musicxml.types.complextypes.clef.ComplexTypeClef">ComplexTypeClef</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.printobject.PrintObject" href="../../attributes/printobject.html#musicscore.musicxml.attributes.printobject.PrintObject">PrintObject</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.clef.AfterBarline" href="clef.html#musicscore.musicxml.types.complextypes.clef.AfterBarline">AfterBarline</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeclef.TreeClef" href="../../../musictree/treeclef.html#musicscore.musictree.treeclef.TreeClef">TreeClef</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.ComplexTypeAttributes"><code class="flex name class">
+<span>class <span class="ident">ComplexTypeAttributes</span></span>
+<span>(</span><span>tag, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The attributes element contains musical information that typically changes on measure boundaries. This includes key
+and time signatures, clefs, transpositions, and staving. When attributes are changed mid-measure, it affects the
+music in score order, not in MusicXML document order</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ComplexTypeAttributes(ComplexType):
+    &#34;&#34;&#34;
+    The attributes element contains musical information that typically changes on measure boundaries. This includes key
+    and time signatures, clefs, transpositions, and staving. When attributes are changed mid-measure, it affects the
+    music in score order, not in MusicXML document order
+    &#34;&#34;&#34;
+    _DTD = Sequence(
+        GroupReference(Editorial),
+        Element(Divisions, min_occurrence=0),
+        Element(Key, min_occurrence=0, max_occurrence=None),
+        Element(Time, min_occurrence=0, max_occurrence=None),
+        Element(Staves, min_occurrence=0),
+        Element(PartSymbol, min_occurrence=0),
+        Element(Instruments, min_occurrence=0),
+        Element(Clef, min_occurrence=0),
+        Element(StaffDetails, min_occurrence=0, max_occurrence=None),
+        Element(Transpose, min_occurrence=0, max_occurrence=None),
+        Element(Directive, min_occurrence=0, max_occurrence=None),
+        Element(MeasureStyle, min_occurrence=0, max_occurrence=None)
+
+    )
+
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.groups.musicdata.Attributes" href="../../groups/musicdata.html#musicscore.musicxml.groups.musicdata.Attributes">Attributes</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.Directive"><code class="flex name class">
+<span>class <span class="ident">Directive</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Directive(XMLElement):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;directive&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.Divisions"><code class="flex name class">
+<span>class <span class="ident">Divisions</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Musical notation duration is commonly represented as fractions.
+The divisions element indicates how many divisions per quarter note are used to indicate a note's duration.
+For example, if duration = 1 and divisions = 2, this is an eighth note duration.
+Duration and divisions are used directly for generating sound output, so they must be chosen to take tuplets into
+account. Using a divisions element lets us use just one number to represent a duration for each note in the score,
+while retaining the full power of a fractional representation.
+If maximum compatibility with Standard MIDI 1.0 files is important, do not have the divisions value exceed 16383.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Divisions(XMLElement, TypePositiveDivisions):
+    &#34;&#34;&#34;
+    Musical notation duration is commonly represented as fractions.
+    The divisions element indicates how many divisions per quarter note are used to indicate a note&#39;s duration.
+    For example, if duration = 1 and divisions = 2, this is an eighth note duration.
+    Duration and divisions are used directly for generating sound output, so they must be chosen to take tuplets into
+    account. Using a divisions element lets us use just one number to represent a duration for each note in the score,
+    while retaining the full power of a fractional representation.
+    If maximum compatibility with Standard MIDI 1.0 files is important, do not have the divisions value exceed 16383.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;divisions&#39;, value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.TypePositiveDivisions" href="../simple_type.html#musicscore.musicxml.types.simple_type.TypePositiveDivisions">TypePositiveDivisions</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.PositiveInteger" href="../simple_type.html#musicscore.musicxml.types.simple_type.PositiveInteger">PositiveInteger</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.Instruments"><code class="flex name class">
+<span>class <span class="ident">Instruments</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p><xs:element name="instruments" type="xs:nonNegativeInteger" minOccurs="0">
+<xs:annotation>
+<xs:documentation>The instruments element is only used if more than one instrument is represented in the part (e.g., oboe I and II where they play together most of the time). If absent, a value of 1 is assumed.</xs:documentation>
+</xs:annotation>
+</xs:element></p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Instruments(XMLElement):
+    &#34;&#34;&#34;
+    &lt;xs:element name=&#34;instruments&#34; type=&#34;xs:nonNegativeInteger&#34; minOccurs=&#34;0&#34;&gt;
+      &lt;xs:annotation&gt;
+        &lt;xs:documentation&gt;The instruments element is only used if more than one instrument is represented in the part (e.g., oboe I and II where they play together most of the time). If absent, a value of 1 is assumed.&lt;/xs:documentation&gt;
+      &lt;/xs:annotation&gt;
+    &lt;/xs:element&gt;
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;instruments&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.Interchangeable"><code class="flex name class">
+<span>class <span class="ident">Interchangeable</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Interchangeable(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;interchangeable&#39;, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.Key"><code class="flex name class">
+<span>class <span class="ident">Key</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The key element represents a key signature. Both traditional and non-traditional key signatures are supported.
+The optional number attribute refers to staff numbers. If absent, the key signature applies to all staves in the
+part.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Key(TypeKey):
+    &#34;&#34;&#34;
+    The key element represents a key signature. Both traditional and non-traditional key signatures are supported.
+    The optional number attribute refers to staff numbers. If absent, the key signature applies to all staves in the
+    part.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;key&#39;, value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.key.TypeKey" href="key.html#musicscore.musicxml.types.complextypes.key.TypeKey">TypeKey</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.complextypes.key.KeyNumberAttribute" href="key.html#musicscore.musicxml.types.complextypes.key.KeyNumberAttribute">KeyNumberAttribute</a></li>
+<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.printobject.PrintObject" href="../../attributes/printobject.html#musicscore.musicxml.attributes.printobject.PrintObject">PrintObject</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.MeasureStyle"><code class="flex name class">
+<span>class <span class="ident">MeasureStyle</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MeasureStyle(XMLElement):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;measure-style&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.PartSymbol"><code class="flex name class">
+<span>class <span class="ident">PartSymbol</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The part-symbol element indicates how a symbol for a multi-staff part is indicated in the score.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PartSymbol(XMLElement):
+    &#34;&#34;&#34;
+    The part-symbol element indicates how a symbol for a multi-staff part is indicated in the score.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;part-symbols&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.SenzaMisura"><code class="flex name class">
+<span>class <span class="ident">SenzaMisura</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class SenzaMisura(XMLElement):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;senza-misura&#39;, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.StaffDetails"><code class="flex name class">
+<span>class <span class="ident">StaffDetails</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p><xs:element name="staff-details" type="staff-details" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>The staff-details element is used to indicate different types of staves.</xs:documentation>
+</xs:annotation>
+</xs:element></p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class StaffDetails(XMLElement):
+    &#34;&#34;&#34;
+    &lt;xs:element name=&#34;staff-details&#34; type=&#34;staff-details&#34; minOccurs=&#34;0&#34; maxOccurs=&#34;unbounded&#34;&gt;
+      &lt;xs:annotation&gt;
+        &lt;xs:documentation&gt;The staff-details element is used to indicate different types of staves.&lt;/xs:documentation&gt;
+      &lt;/xs:annotation&gt;
+    &lt;/xs:element&gt;
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;staff-details&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.Staves"><code class="flex name class">
+<span>class <span class="ident">Staves</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The staves element is used if there is more than one staff represented in the given part (e.g., 2 staves for typical
+piano parts). If absent, a value of 1 is assumed. Staves are ordered from top to bottom in a part in numerical
+order, with staff 1 above staff 2</p>
+<pre><code>&lt;/xs:element&gt;
+</code></pre>
+<p><xs:element name="staves" type="xs:nonNegativeInteger" minOccurs="0">
+</xs:element></p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Staves(XMLElement):
+    &#34;&#34;&#34;
+    The staves element is used if there is more than one staff represented in the given part (e.g., 2 staves for typical
+    piano parts). If absent, a value of 1 is assumed. Staves are ordered from top to bottom in a part in numerical
+    order, with staff 1 above staff 2
+
+        &lt;/xs:element&gt;
+    &lt;xs:element name=&#34;staves&#34; type=&#34;xs:nonNegativeInteger&#34; minOccurs=&#34;0&#34;&gt;
+    &lt;/xs:element&gt;
+
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;staves&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.Time"><code class="flex name class">
+<span>class <span class="ident">Time</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Time signatures are represented by the beats element for the numerator and the beat-type element for the
+denominator. The symbol attribute is used indicate common and cut time symbols as well as a single number display.
+Multiple pairs of beat and beat-type elements are used for composite time signatures with multiple denominators,
+such as 2/4 + 3/8. A composite such as 3+2/8 requires only one beat/beat-type pair.
+The print-object attribute allows a time signature to be specified but not printed, as is the case for excerpts
+from the middle of a score. The value is "yes" if not present. The optional number attribute refers to staff numbers
+within the part. If absent, the time signature applies to all staves in the part.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Time(XMLElement, PrintObject, OptionalUniqueId):
+    &#34;&#34;&#34;
+    Time signatures are represented by the beats element for the numerator and the beat-type element for the
+    denominator. The symbol attribute is used indicate common and cut time symbols as well as a single number display.
+    Multiple pairs of beat and beat-type elements are used for composite time signatures with multiple denominators,
+    such as 2/4 + 3/8. A composite such as 3+2/8 requires only one beat/beat-type pair.
+    The print-object attribute allows a time signature to be specified but not printed, as is the case for excerpts
+    from the middle of a score. The value is &#34;yes&#34; if not present. The optional number attribute refers to staff numbers
+    within the part. If absent, the time signature applies to all staves in the part.
+    &#34;&#34;&#34;
+
+    _DTD = Choice(
+        Sequence(
+            GroupReference(TimeSignature, max_occurrence=None),
+            Element(Interchangeable, min_occurrence=0)
+        ),
+        Element(SenzaMisura)
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;time&#39;, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.printobject.PrintObject" href="../../attributes/printobject.html#musicscore.musicxml.attributes.printobject.PrintObject">PrintObject</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treetime.TreeTime" href="../../../musictree/treetime.html#musicscore.musictree.treetime.TreeTime">TreeTime</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.attributes.Transpose"><code class="flex name class">
+<span>class <span class="ident">Transpose</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Transpose(XMLElement):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=&#39;transpose&#39;, value=value, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musicxml.types.complextypes" href="index.html">musicscore.musicxml.types.complextypes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.BeatType" href="#musicscore.musicxml.types.complextypes.attributes.BeatType">BeatType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.Beats" href="#musicscore.musicxml.types.complextypes.attributes.Beats">Beats</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.Clef" href="#musicscore.musicxml.types.complextypes.attributes.Clef">Clef</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.ComplexTypeAttributes" href="#musicscore.musicxml.types.complextypes.attributes.ComplexTypeAttributes">ComplexTypeAttributes</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.Directive" href="#musicscore.musicxml.types.complextypes.attributes.Directive">Directive</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.Divisions" href="#musicscore.musicxml.types.complextypes.attributes.Divisions">Divisions</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.Instruments" href="#musicscore.musicxml.types.complextypes.attributes.Instruments">Instruments</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.Interchangeable" href="#musicscore.musicxml.types.complextypes.attributes.Interchangeable">Interchangeable</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.Key" href="#musicscore.musicxml.types.complextypes.attributes.Key">Key</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.MeasureStyle" href="#musicscore.musicxml.types.complextypes.attributes.MeasureStyle">MeasureStyle</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.PartSymbol" href="#musicscore.musicxml.types.complextypes.attributes.PartSymbol">PartSymbol</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.SenzaMisura" href="#musicscore.musicxml.types.complextypes.attributes.SenzaMisura">SenzaMisura</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.StaffDetails" href="#musicscore.musicxml.types.complextypes.attributes.StaffDetails">StaffDetails</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.Staves" href="#musicscore.musicxml.types.complextypes.attributes.Staves">Staves</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.Time" href="#musicscore.musicxml.types.complextypes.attributes.Time">Time</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.attributes.Transpose" href="#musicscore.musicxml.types.complextypes.attributes.Transpose">Transpose</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

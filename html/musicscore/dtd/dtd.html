@@ -1,0 +1,1318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.dtd.dtd API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.dtd.dtd</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">import warnings
+
+from AGtree.tree import Tree
+
+
+class DTDError(Exception):
+    def __init__(self, msg=&#39;DTD Error&#39;):
+        super().__init__(msg)
+
+
+class ChildTypeDTDConflict(DTDError):
+    def __init__(self, child):
+        msg = &#39;child of type {} cannot be added due to DTD Type conflicts&#39;.format(type(child))
+        super().__init__(msg)
+
+
+class ChildOccurrenceDTDConflict(DTDError):
+    def __init__(self, child):
+        msg = &#39;child of type {} cannot be added due to DTD Occurrence conflicts&#39;.format(type(child))
+        super().__init__(msg)
+
+
+class ChildIsNotOptional(DTDError):
+    def __init__(self, node):
+        msg = &#39;child of type {} is due to DTD Occurrence not optional&#39;.format(node.type_.__name__)
+        super().__init__(msg)
+
+
+class DTDConflict(DTDError):
+    def __init__(self, msg=None):
+        if msg is None:
+            msg = &#39;DTD conflicts exist&#39;
+        super().__init__(msg)
+
+
+class DTDTree(Tree):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+class DTDNode(DTDTree):
+    def __init__(self, children=None, min_occurrence=1, max_occurrence=1, *args, **kwargs):
+        super().__init__(**kwargs)
+        self.choices = None
+        self._min_occurrence = None
+        self._max_occurrence = None
+        self._choice_index = 0
+        self._current_choice = None
+        self._xml_children = None
+        self.min_occurrence = min_occurrence
+        self.max_occurrence = max_occurrence
+
+        if children is None:
+            children = []
+        for child in children:
+            if not isinstance(child, DTDTree):
+                raise TypeError(
+                    &#39;{} can only have children of Type DTDTree not {}&#39;.format(self.__class__.__name__, type(child)))
+            self.add_child(child)
+
+    @property
+    def min_occurrence(self):
+        return self._min_occurrence
+
+    @min_occurrence.setter
+    def min_occurrence(self, value):
+        if value is not None and not isinstance(value, int):
+            raise TypeError(&#39;min_occurrence.value must be of type None or positive int not {}&#39;.format(type(value)))
+        if value is not None and value &lt; 0:
+            raise ValueError(&#39;min_occurrence.value must be positive&#39;.format(type(value)))
+        self._min_occurrence = value
+
+    @property
+    def max_occurrence(self):
+        return self._max_occurrence
+
+    @max_occurrence.setter
+    def max_occurrence(self, value):
+        if value is not None and not isinstance(value, int):
+            raise TypeError(&#39;max_occurrence.value must be of type None or positive int not {}&#39;.format(type(value)))
+        if value is not None and value &lt; 0:
+            raise ValueError(&#39;max_occurrence.value must be positive&#39;.format(type(value)))
+        self._max_occurrence = value
+
+    @property
+    def xml_children(self):
+        if not self._xml_children:
+            self._xml_children = []
+        return self._xml_children
+
+    def __repr__(self):
+        if isinstance(self, Element):
+            return &#39;{} type {} at {}&#39;.format(self.__class__.__name__, self.type_.__name__, hex(id(self)))
+        return &#39;{} at {}&#39;.format(self.__class__.__name__, hex(id(self)))
+
+    def copy_child(self, child, ch=None):
+        if isinstance(child, Element):
+            copied = child.no_child_copy(child.type_)
+        else:
+            copied = child.no_child_copy()
+
+        copied.original = child
+        copied.choice = ch
+        return copied
+
+    def eliminate_group_reference(self):
+
+        for node in self.traverse():
+            if isinstance(node, GroupReference):
+                if len(node.get_children()) &gt; 1:
+                    warnings.warn(
+                        &#39;dtd.eliminate_group_reference: group has more than one child! Only the first child will be &#39;
+                        &#39;replaced.&#39;)
+                new_node = node.get_children()[0]
+                if (new_node.min_occurrence, new_node.max_occurrence) != (1, 1):
+                    warnings.warn(&#39;dtd.eliminate_group_reference: groups child occurrences are not 1.&#39;)
+                (new_node.min_occurrence, new_node.max_occurrence) = (node.min_occurrence, node.max_occurrence)
+                node.replace_node(new_node)
+
+    def carbon_copy(self):
+        if isinstance(self, Element):
+            copied = Element(self.type_)
+        else:
+            copied = self.__class__()
+
+        copied.original = self.original
+        copied.choice = self.choice
+        (copied.min_occurrence, copied.max_occurrence) = (self.min_occurrence, self.max_occurrence)
+        for child in self.get_children():
+            copied.add_child(child.carbon_copy())
+
+        return copied
+
+    def generate_dtd_choices(self):
+        self.eliminate_group_reference()
+
+        self.choices = [self.copy_child(self)]
+        choice_index = 0
+
+        while choice_index &lt; len(self.choices):
+            current_choice = self.choices[choice_index]
+            current_choice.magic_expand(self.choices)
+            choice_index += 1
+
+    def get_choices(self):
+        if not self.choices:
+            self.generate_dtd_choices()
+        return self.choices
+
+    def remove_xml_child(self, xml_child):
+        for node in self.traverse():
+            if xml_child in node.xml_children:
+                node.xml_children.remove(xml_child)
+
+    def get_xml_children(self):
+        xml_children = []
+        pregnant_nodes = []
+
+        for leaf in self.traverse_leaves():
+            if isinstance(leaf.up, Choice) and (leaf.up.min_occurrence, leaf.up.max_occurrence) == (0, None):
+                if leaf.up not in pregnant_nodes:
+                    pregnant_nodes.append(leaf.up)
+            else:
+                pregnant_nodes.append(leaf)
+        for node in pregnant_nodes:
+            xml_children.extend(node.xml_children)
+        return xml_children
+
+
+class DTDLeaf(DTDNode):
+    def __init__(self, type_, min_occurrence=1, max_occurrence=1, *args, **kwargs):
+        super().__init__(min_occurrence=min_occurrence, max_occurrence=max_occurrence, *args, **kwargs)
+        self._type = None
+        self.type_ = type_
+
+    @property
+    def type_(self):
+        return self._type
+
+    @type_.setter
+    def type_(self, value):
+        if not isinstance(value, type):
+            raise TypeError(&#39;type_.value must be of type type not{}&#39;.format(type(value)))
+        self._type = value
+
+    def add_child(self, child):
+        raise Exception(&#39;DTDLeaf can have no children&#39;)
+
+
+class Choice(DTDNode):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *children, min_occurrence=1, max_occurrence=1):
+        super().__init__(children=children, min_occurrence=min_occurrence, max_occurrence=max_occurrence)
+
+    def magic_expand(self, dtd_choices):
+        if not self.original:
+            raise Exception(&#39;is not copied&#39;)
+
+        if (self.min_occurrence, self.max_occurrence) == (1, 1):
+            if self.choice is None:
+                for index, child in enumerate(self.original.get_children()):
+                    if index == 0:
+                        copied = self.copy_child(child, index)
+                        self.add_child(copied)
+                        self.choice = 0
+                        copied.magic_expand(dtd_choices)
+                    else:
+                        new_choice = self.get_root().carbon_copy()
+                        new_choice.goto(self.index).choice = index
+                        new_choice.goto(self.index)._children = []
+                        dtd_choices.append(new_choice)
+            else:
+                if not self.get_children():
+                    copied = self.copy_child(self.original.get_children()[self.choice])
+                    self.add_child(copied)
+                    copied.magic_expand(dtd_choices)
+                else:
+                    self.get_children()[0].magic_expand(dtd_choices)
+        else:
+            for child in self.original.get_children():
+                child_exists = False
+                for ch in self.get_children():
+                    if ch.original == child:
+                        child_exists = True
+                        ch.magic_expand(dtd_choices)
+                        break
+
+                if not child_exists:
+                    copied = self.copy_child(child)
+                    self.add_child(copied)
+                    copied.magic_expand(dtd_choices)
+
+
+class Sequence(DTDNode):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *children, min_occurrence=1, max_occurrence=1):
+        super().__init__(children=children, min_occurrence=min_occurrence, max_occurrence=max_occurrence)
+
+    def magic_expand(self, dtd_choices):
+        if not self.original:
+            raise Exception(&#39;is not a copy&#39;)
+        for child in self.original.get_children():
+            child_exists = False
+            for ch in self.get_children():
+                if ch.original == child:
+                    child_exists = True
+                    ch.magic_expand(dtd_choices)
+                    break
+
+            if not child_exists:
+                copied = self.copy_child(child)
+                self.add_child(copied)
+                copied.magic_expand(dtd_choices)
+
+
+class Element(DTDLeaf):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, type_, min_occurrence=1, max_occurrence=1, **kwargs):
+        super().__init__(type_, min_occurrence=min_occurrence, max_occurrence=max_occurrence, **kwargs)
+
+    def magic_expand(self, dtd_choices):
+        pass
+
+    def __deepcopy__(self):
+        return Element(type_=self.type_, min_occurrence=self.min_occurrence, max_occurrence=self.max_occurrence)
+
+    def check_min_occurrence(self):
+        if len(self.xml_children) &gt;= self.min_occurrence:
+            return True
+
+        if isinstance(self.up, Choice) and self.up.min_occurrence == 0:
+            return True
+
+        if isinstance(self.up, Sequence) and self.up.min_occurrence == 0:
+            siblings = [child for child in self.up.get_children() if child != self]
+            for sibling in siblings:
+                if sibling._xml_children:
+                    return False
+            return True
+
+        if self.up.min_occurrence != 1:
+            raise NotImplementedError(&#39;check_min_occurrence&#39;)
+        else:
+            return False
+
+    def add_xml_child(self, xml_child):
+        if not isinstance(xml_child, self.type_):
+            raise DTDError(&#39;{} is of wrong type and cannot be added to {}&#39;.format(xml_child, self))
+
+        if isinstance(self.up, Choice) and (self.up.min_occurrence, self.up.max_occurrence) == (0, None):
+            self.up.xml_children.append(xml_child)
+            xml_child.node = self.up
+            return True
+
+        elif self.max_occurrence is None or len(self.xml_children) &lt; self.max_occurrence:
+            self.xml_children.append(xml_child)
+            xml_child.node = self
+            return True
+
+        elif self.up.max_occurrence != 1:
+            if isinstance(self.up, Sequence):
+                return False
+            else:
+                raise NotImplementedError()
+
+        else:
+            return False
+
+
+class GroupReference(DTDNode):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, child, min_occurrence=1, max_occurrence=1):
+        super().__init__(children=[child.__deepcopy__()], min_occurrence=min_occurrence, max_occurrence=max_occurrence)
+
+    @property
+    def child(self):
+        return self.get_children()[0]
+
+    def __deepcopy__(self):
+        return GroupReference(self.child.__deepcopy__(), min_occurrence=self.min_occurrence,
+                              max_occurrence=self.max_occurrence)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.dtd.dtd.ChildIsNotOptional"><code class="flex name class">
+<span>class <span class="ident">ChildIsNotOptional</span></span>
+<span>(</span><span>node)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ChildIsNotOptional(DTDError):
+    def __init__(self, node):
+        msg = &#39;child of type {} is due to DTD Occurrence not optional&#39;.format(node.type_.__name__)
+        super().__init__(msg)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDError" href="#musicscore.dtd.dtd.DTDError">DTDError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="musicscore.dtd.dtd.ChildOccurrenceDTDConflict"><code class="flex name class">
+<span>class <span class="ident">ChildOccurrenceDTDConflict</span></span>
+<span>(</span><span>child)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ChildOccurrenceDTDConflict(DTDError):
+    def __init__(self, child):
+        msg = &#39;child of type {} cannot be added due to DTD Occurrence conflicts&#39;.format(type(child))
+        super().__init__(msg)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDError" href="#musicscore.dtd.dtd.DTDError">DTDError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="musicscore.dtd.dtd.ChildTypeDTDConflict"><code class="flex name class">
+<span>class <span class="ident">ChildTypeDTDConflict</span></span>
+<span>(</span><span>child)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ChildTypeDTDConflict(DTDError):
+    def __init__(self, child):
+        msg = &#39;child of type {} cannot be added due to DTD Type conflicts&#39;.format(type(child))
+        super().__init__(msg)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDError" href="#musicscore.dtd.dtd.DTDError">DTDError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="musicscore.dtd.dtd.Choice"><code class="flex name class">
+<span>class <span class="ident">Choice</span></span>
+<span>(</span><span>*children, min_occurrence=1, max_occurrence=1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Choice(DTDNode):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *children, min_occurrence=1, max_occurrence=1):
+        super().__init__(children=children, min_occurrence=min_occurrence, max_occurrence=max_occurrence)
+
+    def magic_expand(self, dtd_choices):
+        if not self.original:
+            raise Exception(&#39;is not copied&#39;)
+
+        if (self.min_occurrence, self.max_occurrence) == (1, 1):
+            if self.choice is None:
+                for index, child in enumerate(self.original.get_children()):
+                    if index == 0:
+                        copied = self.copy_child(child, index)
+                        self.add_child(copied)
+                        self.choice = 0
+                        copied.magic_expand(dtd_choices)
+                    else:
+                        new_choice = self.get_root().carbon_copy()
+                        new_choice.goto(self.index).choice = index
+                        new_choice.goto(self.index)._children = []
+                        dtd_choices.append(new_choice)
+            else:
+                if not self.get_children():
+                    copied = self.copy_child(self.original.get_children()[self.choice])
+                    self.add_child(copied)
+                    copied.magic_expand(dtd_choices)
+                else:
+                    self.get_children()[0].magic_expand(dtd_choices)
+        else:
+            for child in self.original.get_children():
+                child_exists = False
+                for ch in self.get_children():
+                    if ch.original == child:
+                        child_exists = True
+                        ch.magic_expand(dtd_choices)
+                        break
+
+                if not child_exists:
+                    copied = self.copy_child(child)
+                    self.add_child(copied)
+                    copied.magic_expand(dtd_choices)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDNode" href="#musicscore.dtd.dtd.DTDNode">DTDNode</a></li>
+<li><a title="musicscore.dtd.dtd.DTDTree" href="#musicscore.dtd.dtd.DTDTree">DTDTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.dtd.dtd.Choice.magic_expand"><code class="name flex">
+<span>def <span class="ident">magic_expand</span></span>(<span>self, dtd_choices)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def magic_expand(self, dtd_choices):
+    if not self.original:
+        raise Exception(&#39;is not copied&#39;)
+
+    if (self.min_occurrence, self.max_occurrence) == (1, 1):
+        if self.choice is None:
+            for index, child in enumerate(self.original.get_children()):
+                if index == 0:
+                    copied = self.copy_child(child, index)
+                    self.add_child(copied)
+                    self.choice = 0
+                    copied.magic_expand(dtd_choices)
+                else:
+                    new_choice = self.get_root().carbon_copy()
+                    new_choice.goto(self.index).choice = index
+                    new_choice.goto(self.index)._children = []
+                    dtd_choices.append(new_choice)
+        else:
+            if not self.get_children():
+                copied = self.copy_child(self.original.get_children()[self.choice])
+                self.add_child(copied)
+                copied.magic_expand(dtd_choices)
+            else:
+                self.get_children()[0].magic_expand(dtd_choices)
+    else:
+        for child in self.original.get_children():
+            child_exists = False
+            for ch in self.get_children():
+                if ch.original == child:
+                    child_exists = True
+                    ch.magic_expand(dtd_choices)
+                    break
+
+            if not child_exists:
+                copied = self.copy_child(child)
+                self.add_child(copied)
+                copied.magic_expand(dtd_choices)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDConflict"><code class="flex name class">
+<span>class <span class="ident">DTDConflict</span></span>
+<span>(</span><span>msg=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DTDConflict(DTDError):
+    def __init__(self, msg=None):
+        if msg is None:
+            msg = &#39;DTD conflicts exist&#39;
+        super().__init__(msg)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDError" href="#musicscore.dtd.dtd.DTDError">DTDError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDError"><code class="flex name class">
+<span>class <span class="ident">DTDError</span></span>
+<span>(</span><span>msg='DTD Error')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DTDError(Exception):
+    def __init__(self, msg=&#39;DTD Error&#39;):
+        super().__init__(msg)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.ChildTypeDTDConflict" href="#musicscore.dtd.dtd.ChildTypeDTDConflict">ChildTypeDTDConflict</a></li>
+<li><a title="musicscore.dtd.dtd.ChildOccurrenceDTDConflict" href="#musicscore.dtd.dtd.ChildOccurrenceDTDConflict">ChildOccurrenceDTDConflict</a></li>
+<li><a title="musicscore.dtd.dtd.ChildIsNotOptional" href="#musicscore.dtd.dtd.ChildIsNotOptional">ChildIsNotOptional</a></li>
+<li><a title="musicscore.dtd.dtd.DTDConflict" href="#musicscore.dtd.dtd.DTDConflict">DTDConflict</a></li>
+</ul>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDLeaf"><code class="flex name class">
+<span>class <span class="ident">DTDLeaf</span></span>
+<span>(</span><span>type_, min_occurrence=1, max_occurrence=1, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A simple Tree class</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DTDLeaf(DTDNode):
+    def __init__(self, type_, min_occurrence=1, max_occurrence=1, *args, **kwargs):
+        super().__init__(min_occurrence=min_occurrence, max_occurrence=max_occurrence, *args, **kwargs)
+        self._type = None
+        self.type_ = type_
+
+    @property
+    def type_(self):
+        return self._type
+
+    @type_.setter
+    def type_(self, value):
+        if not isinstance(value, type):
+            raise TypeError(&#39;type_.value must be of type type not{}&#39;.format(type(value)))
+        self._type = value
+
+    def add_child(self, child):
+        raise Exception(&#39;DTDLeaf can have no children&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDNode" href="#musicscore.dtd.dtd.DTDNode">DTDNode</a></li>
+<li><a title="musicscore.dtd.dtd.DTDTree" href="#musicscore.dtd.dtd.DTDTree">DTDTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.Element" href="#musicscore.dtd.dtd.Element">Element</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.dtd.dtd.DTDLeaf.type_"><code class="name">var <span class="ident">type_</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def type_(self):
+    return self._type</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.dtd.dtd.DTDLeaf.add_child"><code class="name flex">
+<span>def <span class="ident">add_child</span></span>(<span>self, child)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_child(self, child):
+    raise Exception(&#39;DTDLeaf can have no children&#39;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDNode"><code class="flex name class">
+<span>class <span class="ident">DTDNode</span></span>
+<span>(</span><span>children=None, min_occurrence=1, max_occurrence=1, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A simple Tree class</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DTDNode(DTDTree):
+    def __init__(self, children=None, min_occurrence=1, max_occurrence=1, *args, **kwargs):
+        super().__init__(**kwargs)
+        self.choices = None
+        self._min_occurrence = None
+        self._max_occurrence = None
+        self._choice_index = 0
+        self._current_choice = None
+        self._xml_children = None
+        self.min_occurrence = min_occurrence
+        self.max_occurrence = max_occurrence
+
+        if children is None:
+            children = []
+        for child in children:
+            if not isinstance(child, DTDTree):
+                raise TypeError(
+                    &#39;{} can only have children of Type DTDTree not {}&#39;.format(self.__class__.__name__, type(child)))
+            self.add_child(child)
+
+    @property
+    def min_occurrence(self):
+        return self._min_occurrence
+
+    @min_occurrence.setter
+    def min_occurrence(self, value):
+        if value is not None and not isinstance(value, int):
+            raise TypeError(&#39;min_occurrence.value must be of type None or positive int not {}&#39;.format(type(value)))
+        if value is not None and value &lt; 0:
+            raise ValueError(&#39;min_occurrence.value must be positive&#39;.format(type(value)))
+        self._min_occurrence = value
+
+    @property
+    def max_occurrence(self):
+        return self._max_occurrence
+
+    @max_occurrence.setter
+    def max_occurrence(self, value):
+        if value is not None and not isinstance(value, int):
+            raise TypeError(&#39;max_occurrence.value must be of type None or positive int not {}&#39;.format(type(value)))
+        if value is not None and value &lt; 0:
+            raise ValueError(&#39;max_occurrence.value must be positive&#39;.format(type(value)))
+        self._max_occurrence = value
+
+    @property
+    def xml_children(self):
+        if not self._xml_children:
+            self._xml_children = []
+        return self._xml_children
+
+    def __repr__(self):
+        if isinstance(self, Element):
+            return &#39;{} type {} at {}&#39;.format(self.__class__.__name__, self.type_.__name__, hex(id(self)))
+        return &#39;{} at {}&#39;.format(self.__class__.__name__, hex(id(self)))
+
+    def copy_child(self, child, ch=None):
+        if isinstance(child, Element):
+            copied = child.no_child_copy(child.type_)
+        else:
+            copied = child.no_child_copy()
+
+        copied.original = child
+        copied.choice = ch
+        return copied
+
+    def eliminate_group_reference(self):
+
+        for node in self.traverse():
+            if isinstance(node, GroupReference):
+                if len(node.get_children()) &gt; 1:
+                    warnings.warn(
+                        &#39;dtd.eliminate_group_reference: group has more than one child! Only the first child will be &#39;
+                        &#39;replaced.&#39;)
+                new_node = node.get_children()[0]
+                if (new_node.min_occurrence, new_node.max_occurrence) != (1, 1):
+                    warnings.warn(&#39;dtd.eliminate_group_reference: groups child occurrences are not 1.&#39;)
+                (new_node.min_occurrence, new_node.max_occurrence) = (node.min_occurrence, node.max_occurrence)
+                node.replace_node(new_node)
+
+    def carbon_copy(self):
+        if isinstance(self, Element):
+            copied = Element(self.type_)
+        else:
+            copied = self.__class__()
+
+        copied.original = self.original
+        copied.choice = self.choice
+        (copied.min_occurrence, copied.max_occurrence) = (self.min_occurrence, self.max_occurrence)
+        for child in self.get_children():
+            copied.add_child(child.carbon_copy())
+
+        return copied
+
+    def generate_dtd_choices(self):
+        self.eliminate_group_reference()
+
+        self.choices = [self.copy_child(self)]
+        choice_index = 0
+
+        while choice_index &lt; len(self.choices):
+            current_choice = self.choices[choice_index]
+            current_choice.magic_expand(self.choices)
+            choice_index += 1
+
+    def get_choices(self):
+        if not self.choices:
+            self.generate_dtd_choices()
+        return self.choices
+
+    def remove_xml_child(self, xml_child):
+        for node in self.traverse():
+            if xml_child in node.xml_children:
+                node.xml_children.remove(xml_child)
+
+    def get_xml_children(self):
+        xml_children = []
+        pregnant_nodes = []
+
+        for leaf in self.traverse_leaves():
+            if isinstance(leaf.up, Choice) and (leaf.up.min_occurrence, leaf.up.max_occurrence) == (0, None):
+                if leaf.up not in pregnant_nodes:
+                    pregnant_nodes.append(leaf.up)
+            else:
+                pregnant_nodes.append(leaf)
+        for node in pregnant_nodes:
+            xml_children.extend(node.xml_children)
+        return xml_children</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDTree" href="#musicscore.dtd.dtd.DTDTree">DTDTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDLeaf" href="#musicscore.dtd.dtd.DTDLeaf">DTDLeaf</a></li>
+<li><a title="musicscore.dtd.dtd.Choice" href="#musicscore.dtd.dtd.Choice">Choice</a></li>
+<li><a title="musicscore.dtd.dtd.Sequence" href="#musicscore.dtd.dtd.Sequence">Sequence</a></li>
+<li><a title="musicscore.dtd.dtd.GroupReference" href="#musicscore.dtd.dtd.GroupReference">GroupReference</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.dtd.dtd.DTDNode.max_occurrence"><code class="name">var <span class="ident">max_occurrence</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def max_occurrence(self):
+    return self._max_occurrence</code></pre>
+</details>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDNode.min_occurrence"><code class="name">var <span class="ident">min_occurrence</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def min_occurrence(self):
+    return self._min_occurrence</code></pre>
+</details>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDNode.xml_children"><code class="name">var <span class="ident">xml_children</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def xml_children(self):
+    if not self._xml_children:
+        self._xml_children = []
+    return self._xml_children</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.dtd.dtd.DTDNode.carbon_copy"><code class="name flex">
+<span>def <span class="ident">carbon_copy</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def carbon_copy(self):
+    if isinstance(self, Element):
+        copied = Element(self.type_)
+    else:
+        copied = self.__class__()
+
+    copied.original = self.original
+    copied.choice = self.choice
+    (copied.min_occurrence, copied.max_occurrence) = (self.min_occurrence, self.max_occurrence)
+    for child in self.get_children():
+        copied.add_child(child.carbon_copy())
+
+    return copied</code></pre>
+</details>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDNode.copy_child"><code class="name flex">
+<span>def <span class="ident">copy_child</span></span>(<span>self, child, ch=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def copy_child(self, child, ch=None):
+    if isinstance(child, Element):
+        copied = child.no_child_copy(child.type_)
+    else:
+        copied = child.no_child_copy()
+
+    copied.original = child
+    copied.choice = ch
+    return copied</code></pre>
+</details>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDNode.eliminate_group_reference"><code class="name flex">
+<span>def <span class="ident">eliminate_group_reference</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def eliminate_group_reference(self):
+
+    for node in self.traverse():
+        if isinstance(node, GroupReference):
+            if len(node.get_children()) &gt; 1:
+                warnings.warn(
+                    &#39;dtd.eliminate_group_reference: group has more than one child! Only the first child will be &#39;
+                    &#39;replaced.&#39;)
+            new_node = node.get_children()[0]
+            if (new_node.min_occurrence, new_node.max_occurrence) != (1, 1):
+                warnings.warn(&#39;dtd.eliminate_group_reference: groups child occurrences are not 1.&#39;)
+            (new_node.min_occurrence, new_node.max_occurrence) = (node.min_occurrence, node.max_occurrence)
+            node.replace_node(new_node)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDNode.generate_dtd_choices"><code class="name flex">
+<span>def <span class="ident">generate_dtd_choices</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate_dtd_choices(self):
+    self.eliminate_group_reference()
+
+    self.choices = [self.copy_child(self)]
+    choice_index = 0
+
+    while choice_index &lt; len(self.choices):
+        current_choice = self.choices[choice_index]
+        current_choice.magic_expand(self.choices)
+        choice_index += 1</code></pre>
+</details>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDNode.get_choices"><code class="name flex">
+<span>def <span class="ident">get_choices</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_choices(self):
+    if not self.choices:
+        self.generate_dtd_choices()
+    return self.choices</code></pre>
+</details>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDNode.get_xml_children"><code class="name flex">
+<span>def <span class="ident">get_xml_children</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_xml_children(self):
+    xml_children = []
+    pregnant_nodes = []
+
+    for leaf in self.traverse_leaves():
+        if isinstance(leaf.up, Choice) and (leaf.up.min_occurrence, leaf.up.max_occurrence) == (0, None):
+            if leaf.up not in pregnant_nodes:
+                pregnant_nodes.append(leaf.up)
+        else:
+            pregnant_nodes.append(leaf)
+    for node in pregnant_nodes:
+        xml_children.extend(node.xml_children)
+    return xml_children</code></pre>
+</details>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDNode.remove_xml_child"><code class="name flex">
+<span>def <span class="ident">remove_xml_child</span></span>(<span>self, xml_child)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_xml_child(self, xml_child):
+    for node in self.traverse():
+        if xml_child in node.xml_children:
+            node.xml_children.remove(xml_child)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.dtd.dtd.DTDTree"><code class="flex name class">
+<span>class <span class="ident">DTDTree</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A simple Tree class</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DTDTree(Tree):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDNode" href="#musicscore.dtd.dtd.DTDNode">DTDNode</a></li>
+</ul>
+</dd>
+<dt id="musicscore.dtd.dtd.Element"><code class="flex name class">
+<span>class <span class="ident">Element</span></span>
+<span>(</span><span>type_, min_occurrence=1, max_occurrence=1, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Element(DTDLeaf):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, type_, min_occurrence=1, max_occurrence=1, **kwargs):
+        super().__init__(type_, min_occurrence=min_occurrence, max_occurrence=max_occurrence, **kwargs)
+
+    def magic_expand(self, dtd_choices):
+        pass
+
+    def __deepcopy__(self):
+        return Element(type_=self.type_, min_occurrence=self.min_occurrence, max_occurrence=self.max_occurrence)
+
+    def check_min_occurrence(self):
+        if len(self.xml_children) &gt;= self.min_occurrence:
+            return True
+
+        if isinstance(self.up, Choice) and self.up.min_occurrence == 0:
+            return True
+
+        if isinstance(self.up, Sequence) and self.up.min_occurrence == 0:
+            siblings = [child for child in self.up.get_children() if child != self]
+            for sibling in siblings:
+                if sibling._xml_children:
+                    return False
+            return True
+
+        if self.up.min_occurrence != 1:
+            raise NotImplementedError(&#39;check_min_occurrence&#39;)
+        else:
+            return False
+
+    def add_xml_child(self, xml_child):
+        if not isinstance(xml_child, self.type_):
+            raise DTDError(&#39;{} is of wrong type and cannot be added to {}&#39;.format(xml_child, self))
+
+        if isinstance(self.up, Choice) and (self.up.min_occurrence, self.up.max_occurrence) == (0, None):
+            self.up.xml_children.append(xml_child)
+            xml_child.node = self.up
+            return True
+
+        elif self.max_occurrence is None or len(self.xml_children) &lt; self.max_occurrence:
+            self.xml_children.append(xml_child)
+            xml_child.node = self
+            return True
+
+        elif self.up.max_occurrence != 1:
+            if isinstance(self.up, Sequence):
+                return False
+            else:
+                raise NotImplementedError()
+
+        else:
+            return False</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDLeaf" href="#musicscore.dtd.dtd.DTDLeaf">DTDLeaf</a></li>
+<li><a title="musicscore.dtd.dtd.DTDNode" href="#musicscore.dtd.dtd.DTDNode">DTDNode</a></li>
+<li><a title="musicscore.dtd.dtd.DTDTree" href="#musicscore.dtd.dtd.DTDTree">DTDTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.dtd.dtd.Element.add_xml_child"><code class="name flex">
+<span>def <span class="ident">add_xml_child</span></span>(<span>self, xml_child)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_xml_child(self, xml_child):
+    if not isinstance(xml_child, self.type_):
+        raise DTDError(&#39;{} is of wrong type and cannot be added to {}&#39;.format(xml_child, self))
+
+    if isinstance(self.up, Choice) and (self.up.min_occurrence, self.up.max_occurrence) == (0, None):
+        self.up.xml_children.append(xml_child)
+        xml_child.node = self.up
+        return True
+
+    elif self.max_occurrence is None or len(self.xml_children) &lt; self.max_occurrence:
+        self.xml_children.append(xml_child)
+        xml_child.node = self
+        return True
+
+    elif self.up.max_occurrence != 1:
+        if isinstance(self.up, Sequence):
+            return False
+        else:
+            raise NotImplementedError()
+
+    else:
+        return False</code></pre>
+</details>
+</dd>
+<dt id="musicscore.dtd.dtd.Element.check_min_occurrence"><code class="name flex">
+<span>def <span class="ident">check_min_occurrence</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def check_min_occurrence(self):
+    if len(self.xml_children) &gt;= self.min_occurrence:
+        return True
+
+    if isinstance(self.up, Choice) and self.up.min_occurrence == 0:
+        return True
+
+    if isinstance(self.up, Sequence) and self.up.min_occurrence == 0:
+        siblings = [child for child in self.up.get_children() if child != self]
+        for sibling in siblings:
+            if sibling._xml_children:
+                return False
+        return True
+
+    if self.up.min_occurrence != 1:
+        raise NotImplementedError(&#39;check_min_occurrence&#39;)
+    else:
+        return False</code></pre>
+</details>
+</dd>
+<dt id="musicscore.dtd.dtd.Element.magic_expand"><code class="name flex">
+<span>def <span class="ident">magic_expand</span></span>(<span>self, dtd_choices)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def magic_expand(self, dtd_choices):
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.dtd.dtd.GroupReference"><code class="flex name class">
+<span>class <span class="ident">GroupReference</span></span>
+<span>(</span><span>child, min_occurrence=1, max_occurrence=1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class GroupReference(DTDNode):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, child, min_occurrence=1, max_occurrence=1):
+        super().__init__(children=[child.__deepcopy__()], min_occurrence=min_occurrence, max_occurrence=max_occurrence)
+
+    @property
+    def child(self):
+        return self.get_children()[0]
+
+    def __deepcopy__(self):
+        return GroupReference(self.child.__deepcopy__(), min_occurrence=self.min_occurrence,
+                              max_occurrence=self.max_occurrence)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDNode" href="#musicscore.dtd.dtd.DTDNode">DTDNode</a></li>
+<li><a title="musicscore.dtd.dtd.DTDTree" href="#musicscore.dtd.dtd.DTDTree">DTDTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.dtd.dtd.GroupReference.child"><code class="name">var <span class="ident">child</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def child(self):
+    return self.get_children()[0]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.dtd.dtd.Sequence"><code class="flex name class">
+<span>class <span class="ident">Sequence</span></span>
+<span>(</span><span>*children, min_occurrence=1, max_occurrence=1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Sequence(DTDNode):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *children, min_occurrence=1, max_occurrence=1):
+        super().__init__(children=children, min_occurrence=min_occurrence, max_occurrence=max_occurrence)
+
+    def magic_expand(self, dtd_choices):
+        if not self.original:
+            raise Exception(&#39;is not a copy&#39;)
+        for child in self.original.get_children():
+            child_exists = False
+            for ch in self.get_children():
+                if ch.original == child:
+                    child_exists = True
+                    ch.magic_expand(dtd_choices)
+                    break
+
+            if not child_exists:
+                copied = self.copy_child(child)
+                self.add_child(copied)
+                copied.magic_expand(dtd_choices)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.dtd.dtd.DTDNode" href="#musicscore.dtd.dtd.DTDNode">DTDNode</a></li>
+<li><a title="musicscore.dtd.dtd.DTDTree" href="#musicscore.dtd.dtd.DTDTree">DTDTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.dtd.dtd.Sequence.magic_expand"><code class="name flex">
+<span>def <span class="ident">magic_expand</span></span>(<span>self, dtd_choices)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def magic_expand(self, dtd_choices):
+    if not self.original:
+        raise Exception(&#39;is not a copy&#39;)
+    for child in self.original.get_children():
+        child_exists = False
+        for ch in self.get_children():
+            if ch.original == child:
+                child_exists = True
+                ch.magic_expand(dtd_choices)
+                break
+
+        if not child_exists:
+            copied = self.copy_child(child)
+            self.add_child(copied)
+            copied.magic_expand(dtd_choices)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.dtd" href="index.html">musicscore.dtd</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.ChildIsNotOptional" href="#musicscore.dtd.dtd.ChildIsNotOptional">ChildIsNotOptional</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.ChildOccurrenceDTDConflict" href="#musicscore.dtd.dtd.ChildOccurrenceDTDConflict">ChildOccurrenceDTDConflict</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.ChildTypeDTDConflict" href="#musicscore.dtd.dtd.ChildTypeDTDConflict">ChildTypeDTDConflict</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.Choice" href="#musicscore.dtd.dtd.Choice">Choice</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.dtd.dtd.Choice.magic_expand" href="#musicscore.dtd.dtd.Choice.magic_expand">magic_expand</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.DTDConflict" href="#musicscore.dtd.dtd.DTDConflict">DTDConflict</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.DTDError" href="#musicscore.dtd.dtd.DTDError">DTDError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.DTDLeaf" href="#musicscore.dtd.dtd.DTDLeaf">DTDLeaf</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.dtd.dtd.DTDLeaf.add_child" href="#musicscore.dtd.dtd.DTDLeaf.add_child">add_child</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.DTDLeaf.type_" href="#musicscore.dtd.dtd.DTDLeaf.type_">type_</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.DTDNode" href="#musicscore.dtd.dtd.DTDNode">DTDNode</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.dtd.dtd.DTDNode.carbon_copy" href="#musicscore.dtd.dtd.DTDNode.carbon_copy">carbon_copy</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.DTDNode.copy_child" href="#musicscore.dtd.dtd.DTDNode.copy_child">copy_child</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.DTDNode.eliminate_group_reference" href="#musicscore.dtd.dtd.DTDNode.eliminate_group_reference">eliminate_group_reference</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.DTDNode.generate_dtd_choices" href="#musicscore.dtd.dtd.DTDNode.generate_dtd_choices">generate_dtd_choices</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.DTDNode.get_choices" href="#musicscore.dtd.dtd.DTDNode.get_choices">get_choices</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.DTDNode.get_xml_children" href="#musicscore.dtd.dtd.DTDNode.get_xml_children">get_xml_children</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.DTDNode.max_occurrence" href="#musicscore.dtd.dtd.DTDNode.max_occurrence">max_occurrence</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.DTDNode.min_occurrence" href="#musicscore.dtd.dtd.DTDNode.min_occurrence">min_occurrence</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.DTDNode.remove_xml_child" href="#musicscore.dtd.dtd.DTDNode.remove_xml_child">remove_xml_child</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.DTDNode.xml_children" href="#musicscore.dtd.dtd.DTDNode.xml_children">xml_children</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.DTDTree" href="#musicscore.dtd.dtd.DTDTree">DTDTree</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.Element" href="#musicscore.dtd.dtd.Element">Element</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.dtd.dtd.Element.add_xml_child" href="#musicscore.dtd.dtd.Element.add_xml_child">add_xml_child</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.Element.check_min_occurrence" href="#musicscore.dtd.dtd.Element.check_min_occurrence">check_min_occurrence</a></code></li>
+<li><code><a title="musicscore.dtd.dtd.Element.magic_expand" href="#musicscore.dtd.dtd.Element.magic_expand">magic_expand</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.GroupReference" href="#musicscore.dtd.dtd.GroupReference">GroupReference</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.dtd.dtd.GroupReference.child" href="#musicscore.dtd.dtd.GroupReference.child">child</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.dtd.dtd.Sequence" href="#musicscore.dtd.dtd.Sequence">Sequence</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.dtd.dtd.Sequence.magic_expand" href="#musicscore.dtd.dtd.Sequence.magic_expand">magic_expand</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

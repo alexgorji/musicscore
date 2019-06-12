@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musictree.treepagestyle API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musictree.treepagestyle</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from musicscore.musicxml.elements.scoreheader import Defaults
+from musicscore.musicxml.groups.layout import PageLayout, StaffLayout, SystemLayout
+from musicscore.musicxml.groups.margins import LeftMargin, RightMargin, TopMargin, BottomMargin
+from musicscore.musicxml.types.complextypes.defaults import Scaling
+from musicscore.musicxml.types.complextypes.encoding import Supports
+from musicscore.musicxml.types.complextypes.identification import Encoding
+from musicscore.musicxml.types.complextypes.pagelayout import PageMargins, PageHeight, PageWidth
+from musicscore.musicxml.types.complextypes.scaling import Millimeters, Tenths
+from musicscore.musicxml.types.complextypes.scorepart import Identification
+from musicscore.musicxml.types.complextypes.stafflayout import StaffDistance
+from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance, SystemMargins, TopSystemDistance
+
+
+class TreePageStyle(object):
+    sizes = {&#39;A4&#39;: (210, 297), &#39;A3&#39;: (297, 420)}
+
+    def __init__(self, score, scale=1, size=&#39;A4&#39;, format=&#39;portrait&#39;, left_margin=20, right_margin=10, top_margin=15,
+                 bottom_margin=15, system_distance=None, system_left_margin=None, system_right_margin=None,
+                 top_system_distance=None, staff_distance=None):
+
+        self._score = None
+        self.score = score
+        self.tenth = 40
+
+        self._size = None
+        self._format = &#39;portrait&#39;
+
+        self._defaults = None
+        self._scaling = None
+
+        self._page_layout = None
+        self._page_height = None
+        self._page_width = None
+        self._page_margins = None
+
+        self._left_margin = None
+        self._right_margin = None
+        self._top_margin = None
+        self._bottom_margin = None
+
+        self._system_layout = None
+        self._system_margins = None
+        self._system_distance = None
+        self._staff_layout = None
+        self._staff_distance = None
+        self._system_left_margin = None
+        self._system_right_margin = None
+        self._top_system_distance = None
+
+        self.scale = scale
+        self.size = size
+        self.format = format
+
+        self.left_margin = left_margin
+        self.right_margin = right_margin
+        self.top_margin = top_margin
+        self.bottom_margin = bottom_margin
+        self.staff_distance = staff_distance
+
+        self.system_distance = system_distance
+        self.system_left_margin = system_left_margin
+        self.system_right_margin = system_right_margin
+        self.top_system_distance = top_system_distance
+
+    def millimeters_to_tenth(self, m):
+        return round(m / self.millimeters * self.tenth)
+
+    @property
+    def millimeters(self):
+        return self.scale * 7.2319
+
+    def _add_defaults(self):
+        self._defaults = self.score.add_child(Defaults())
+
+    def _add_scaling(self):
+        if not self._defaults:
+            self._add_defaults()
+        self._scaling = self._defaults.add_child(Scaling())
+        self._scaling.add_child(Millimeters(self.millimeters))
+        self._scaling.add_child(Tenths(self.tenth))
+
+    def _add_page_layout(self):
+        if not self._scaling:
+            self._add_scaling()
+
+        self._page_layout = self._defaults.add_child(PageLayout())
+
+    def _add_staff_layout(self):
+        if not self._scaling:
+            self._add_scaling()
+
+        self._staff_layout = self._defaults.add_child(StaffLayout())
+
+    def _add_system_layout(self):
+        if not self._scaling:
+            self._add_scaling()
+
+        self._system_layout = self._defaults.add_child(SystemLayout())
+        self._system_distance = self._system_layout.add_child(SystemDistance(100))
+        self._system_margins = self._system_layout.add_child(SystemMargins())
+        self._system_left_margin = self._system_margins.add_child(LeftMargin(0))
+        self._system_right_margin = self._system_margins.add_child(RightMargin(0))
+        self._top_system_distance = self._system_layout.add_child(TopSystemDistance(150))
+
+    def _add_page_margins(self):
+        if not self._page_layout:
+            self._add_page_layout()
+
+        self._page_margins = self._page_layout.add_child(PageMargins(type_=&#39;both&#39;))
+
+    @property
+    def score(self):
+        &#39;&#39;&#39;
+        system_layout = defaults.add_child(SystemLayout())
+        system_margins = system_layout.add_child(SystemMargins())
+        system_margins.add_child(LeftMargin(0))
+        system_margins.add_child(RightMargin(0))
+        system_layout.add_child(SystemDistance(121))
+        system_layout.add_child(TopSystemDistance(300))
+        &#39;&#39;&#39;
+        return self._score
+
+    @score.setter
+    def score(self, value):
+        self._score = value
+
+    @property
+    def page_height(self):
+        return self._page_height
+
+    @page_height.setter
+    def page_height(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.page_height:
+            self.page_height.value = value
+        else:
+            if not self._page_layout:
+                self._add_page_layout()
+            self._page_height = self._page_layout.add_child(PageHeight(value))
+
+    @property
+    def page_width(self):
+        return self._page_width
+
+    @page_width.setter
+    def page_width(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.page_width:
+            self.page_width.value = value
+        else:
+            if not self._page_layout:
+                self._add_page_layout()
+            self._page_width = self._page_layout.add_child(PageWidth(value))
+
+    @property
+    def format(self):
+        return self._format
+
+    @format.setter
+    def format(self, value):
+        if value == &#39;landscape&#39;:
+            self.page_height, self.page_width = self.size[1], self.size[0]
+        elif value == &#39;portrait&#39;:
+            self.page_height, self.page_width = self.size[0], self.size[1]
+        else:
+            raise ValueError()
+
+        self._format = value
+
+    @property
+    def left_margin(self):
+        return self._left_margin
+
+    @left_margin.setter
+    def left_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.left_margin:
+            self.left_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._left_margin = self._page_margins.add_child(LeftMargin(value))
+
+    @property
+    def right_margin(self):
+        return self._right_margin
+
+    @right_margin.setter
+    def right_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.right_margin:
+            self.right_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._right_margin = self._page_margins.add_child(RightMargin(value))
+
+    @property
+    def top_margin(self):
+        return self._top_margin
+
+    @top_margin.setter
+    def top_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.top_margin:
+            self.top_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._top_margin = self._page_margins.add_child(TopMargin(value))
+
+    @property
+    def bottom_margin(self):
+        return self._bottom_margin
+
+    @bottom_margin.setter
+    def bottom_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.bottom_margin:
+            self.bottom_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._bottom_margin = self._page_margins.add_child(BottomMargin(value))
+
+    @property
+    def staff_distance(self):
+        return self._staff_distance
+
+    @staff_distance.setter
+    def staff_distance(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if self.staff_distance:
+                self.staff_distance.value = value
+            else:
+                if not self._staff_layout:
+                    self._add_staff_layout()
+                self._staff_distance = self._staff_layout.add_child(StaffDistance(value))
+
+    @property
+    def system_distance(self):
+        return self._system_distance
+
+    @system_distance.setter
+    def system_distance(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.system_distance.value = value
+
+    @property
+    def system_left_margin(self):
+        return self._system_left_margin
+
+    @system_left_margin.setter
+    def system_left_margin(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.system_left_margin.value = value
+
+    @property
+    def system_right_margin(self):
+        return self._system_right_margin
+
+    @system_right_margin.setter
+    def system_right_margin(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.system_right_margin.value = value
+
+    @property
+    def top_system_distance(self):
+        return self._top_system_distance
+
+    @top_system_distance.setter
+    def top_system_distance(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.top_system_distance.value = value
+
+    @property
+    def size(self):
+        (w, h) = self.sizes[self._size]
+        # h = self.millimeters_to_tenth(h)
+        # w = self.millimeters_to_tenth(w)
+        return h, w
+
+    @size.setter
+    def size(self, value):
+        self._size = value
+        self.format = self._format
+        # self.page_height = self.size[0]
+        # self.page_width = self.size[1]
+
+    @property
+    def page_size(self):
+        return self.size
+
+    @page_size.setter
+    def page_size(self, value):
+        self.size = value</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle"><code class="flex name class">
+<span>class <span class="ident">TreePageStyle</span></span>
+<span>(</span><span>score, scale=1, size='A4', format='portrait', left_margin=20, right_margin=10, top_margin=15, bottom_margin=15, system_distance=None, system_left_margin=None, system_right_margin=None, top_system_distance=None, staff_distance=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TreePageStyle(object):
+    sizes = {&#39;A4&#39;: (210, 297), &#39;A3&#39;: (297, 420)}
+
+    def __init__(self, score, scale=1, size=&#39;A4&#39;, format=&#39;portrait&#39;, left_margin=20, right_margin=10, top_margin=15,
+                 bottom_margin=15, system_distance=None, system_left_margin=None, system_right_margin=None,
+                 top_system_distance=None, staff_distance=None):
+
+        self._score = None
+        self.score = score
+        self.tenth = 40
+
+        self._size = None
+        self._format = &#39;portrait&#39;
+
+        self._defaults = None
+        self._scaling = None
+
+        self._page_layout = None
+        self._page_height = None
+        self._page_width = None
+        self._page_margins = None
+
+        self._left_margin = None
+        self._right_margin = None
+        self._top_margin = None
+        self._bottom_margin = None
+
+        self._system_layout = None
+        self._system_margins = None
+        self._system_distance = None
+        self._staff_layout = None
+        self._staff_distance = None
+        self._system_left_margin = None
+        self._system_right_margin = None
+        self._top_system_distance = None
+
+        self.scale = scale
+        self.size = size
+        self.format = format
+
+        self.left_margin = left_margin
+        self.right_margin = right_margin
+        self.top_margin = top_margin
+        self.bottom_margin = bottom_margin
+        self.staff_distance = staff_distance
+
+        self.system_distance = system_distance
+        self.system_left_margin = system_left_margin
+        self.system_right_margin = system_right_margin
+        self.top_system_distance = top_system_distance
+
+    def millimeters_to_tenth(self, m):
+        return round(m / self.millimeters * self.tenth)
+
+    @property
+    def millimeters(self):
+        return self.scale * 7.2319
+
+    def _add_defaults(self):
+        self._defaults = self.score.add_child(Defaults())
+
+    def _add_scaling(self):
+        if not self._defaults:
+            self._add_defaults()
+        self._scaling = self._defaults.add_child(Scaling())
+        self._scaling.add_child(Millimeters(self.millimeters))
+        self._scaling.add_child(Tenths(self.tenth))
+
+    def _add_page_layout(self):
+        if not self._scaling:
+            self._add_scaling()
+
+        self._page_layout = self._defaults.add_child(PageLayout())
+
+    def _add_staff_layout(self):
+        if not self._scaling:
+            self._add_scaling()
+
+        self._staff_layout = self._defaults.add_child(StaffLayout())
+
+    def _add_system_layout(self):
+        if not self._scaling:
+            self._add_scaling()
+
+        self._system_layout = self._defaults.add_child(SystemLayout())
+        self._system_distance = self._system_layout.add_child(SystemDistance(100))
+        self._system_margins = self._system_layout.add_child(SystemMargins())
+        self._system_left_margin = self._system_margins.add_child(LeftMargin(0))
+        self._system_right_margin = self._system_margins.add_child(RightMargin(0))
+        self._top_system_distance = self._system_layout.add_child(TopSystemDistance(150))
+
+    def _add_page_margins(self):
+        if not self._page_layout:
+            self._add_page_layout()
+
+        self._page_margins = self._page_layout.add_child(PageMargins(type_=&#39;both&#39;))
+
+    @property
+    def score(self):
+        &#39;&#39;&#39;
+        system_layout = defaults.add_child(SystemLayout())
+        system_margins = system_layout.add_child(SystemMargins())
+        system_margins.add_child(LeftMargin(0))
+        system_margins.add_child(RightMargin(0))
+        system_layout.add_child(SystemDistance(121))
+        system_layout.add_child(TopSystemDistance(300))
+        &#39;&#39;&#39;
+        return self._score
+
+    @score.setter
+    def score(self, value):
+        self._score = value
+
+    @property
+    def page_height(self):
+        return self._page_height
+
+    @page_height.setter
+    def page_height(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.page_height:
+            self.page_height.value = value
+        else:
+            if not self._page_layout:
+                self._add_page_layout()
+            self._page_height = self._page_layout.add_child(PageHeight(value))
+
+    @property
+    def page_width(self):
+        return self._page_width
+
+    @page_width.setter
+    def page_width(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.page_width:
+            self.page_width.value = value
+        else:
+            if not self._page_layout:
+                self._add_page_layout()
+            self._page_width = self._page_layout.add_child(PageWidth(value))
+
+    @property
+    def format(self):
+        return self._format
+
+    @format.setter
+    def format(self, value):
+        if value == &#39;landscape&#39;:
+            self.page_height, self.page_width = self.size[1], self.size[0]
+        elif value == &#39;portrait&#39;:
+            self.page_height, self.page_width = self.size[0], self.size[1]
+        else:
+            raise ValueError()
+
+        self._format = value
+
+    @property
+    def left_margin(self):
+        return self._left_margin
+
+    @left_margin.setter
+    def left_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.left_margin:
+            self.left_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._left_margin = self._page_margins.add_child(LeftMargin(value))
+
+    @property
+    def right_margin(self):
+        return self._right_margin
+
+    @right_margin.setter
+    def right_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.right_margin:
+            self.right_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._right_margin = self._page_margins.add_child(RightMargin(value))
+
+    @property
+    def top_margin(self):
+        return self._top_margin
+
+    @top_margin.setter
+    def top_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.top_margin:
+            self.top_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._top_margin = self._page_margins.add_child(TopMargin(value))
+
+    @property
+    def bottom_margin(self):
+        return self._bottom_margin
+
+    @bottom_margin.setter
+    def bottom_margin(self, value):
+        value = self.millimeters_to_tenth(value)
+        if self.bottom_margin:
+            self.bottom_margin.value = value
+        else:
+            if not self._page_margins:
+                self._add_page_margins()
+            self._bottom_margin = self._page_margins.add_child(BottomMargin(value))
+
+    @property
+    def staff_distance(self):
+        return self._staff_distance
+
+    @staff_distance.setter
+    def staff_distance(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if self.staff_distance:
+                self.staff_distance.value = value
+            else:
+                if not self._staff_layout:
+                    self._add_staff_layout()
+                self._staff_distance = self._staff_layout.add_child(StaffDistance(value))
+
+    @property
+    def system_distance(self):
+        return self._system_distance
+
+    @system_distance.setter
+    def system_distance(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.system_distance.value = value
+
+    @property
+    def system_left_margin(self):
+        return self._system_left_margin
+
+    @system_left_margin.setter
+    def system_left_margin(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.system_left_margin.value = value
+
+    @property
+    def system_right_margin(self):
+        return self._system_right_margin
+
+    @system_right_margin.setter
+    def system_right_margin(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.system_right_margin.value = value
+
+    @property
+    def top_system_distance(self):
+        return self._top_system_distance
+
+    @top_system_distance.setter
+    def top_system_distance(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.top_system_distance.value = value
+
+    @property
+    def size(self):
+        (w, h) = self.sizes[self._size]
+        # h = self.millimeters_to_tenth(h)
+        # w = self.millimeters_to_tenth(w)
+        return h, w
+
+    @size.setter
+    def size(self, value):
+        self._size = value
+        self.format = self._format
+        # self.page_height = self.size[0]
+        # self.page_width = self.size[1]
+
+    @property
+    def page_size(self):
+        return self.size
+
+    @page_size.setter
+    def page_size(self, value):
+        self.size = value</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.sizes"><code class="name">var <span class="ident">sizes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.bottom_margin"><code class="name">var <span class="ident">bottom_margin</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def bottom_margin(self):
+    return self._bottom_margin</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.format"><code class="name">var <span class="ident">format</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def format(self):
+    return self._format</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.left_margin"><code class="name">var <span class="ident">left_margin</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def left_margin(self):
+    return self._left_margin</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.millimeters"><code class="name">var <span class="ident">millimeters</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def millimeters(self):
+    return self.scale * 7.2319</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.page_height"><code class="name">var <span class="ident">page_height</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def page_height(self):
+    return self._page_height</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.page_size"><code class="name">var <span class="ident">page_size</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def page_size(self):
+    return self.size</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.page_width"><code class="name">var <span class="ident">page_width</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def page_width(self):
+    return self._page_width</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.right_margin"><code class="name">var <span class="ident">right_margin</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def right_margin(self):
+    return self._right_margin</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.score"><code class="name">var <span class="ident">score</span></code></dt>
+<dd>
+<section class="desc"><p>system_layout = defaults.add_child(SystemLayout())
+system_margins = system_layout.add_child(SystemMargins())
+system_margins.add_child(LeftMargin(0))
+system_margins.add_child(RightMargin(0))
+system_layout.add_child(SystemDistance(121))
+system_layout.add_child(TopSystemDistance(300))</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def score(self):
+    &#39;&#39;&#39;
+    system_layout = defaults.add_child(SystemLayout())
+    system_margins = system_layout.add_child(SystemMargins())
+    system_margins.add_child(LeftMargin(0))
+    system_margins.add_child(RightMargin(0))
+    system_layout.add_child(SystemDistance(121))
+    system_layout.add_child(TopSystemDistance(300))
+    &#39;&#39;&#39;
+    return self._score</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.size"><code class="name">var <span class="ident">size</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def size(self):
+    (w, h) = self.sizes[self._size]
+    # h = self.millimeters_to_tenth(h)
+    # w = self.millimeters_to_tenth(w)
+    return h, w</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.staff_distance"><code class="name">var <span class="ident">staff_distance</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def staff_distance(self):
+    return self._staff_distance</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.system_distance"><code class="name">var <span class="ident">system_distance</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def system_distance(self):
+    return self._system_distance</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.system_left_margin"><code class="name">var <span class="ident">system_left_margin</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def system_left_margin(self):
+    return self._system_left_margin</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.system_right_margin"><code class="name">var <span class="ident">system_right_margin</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def system_right_margin(self):
+    return self._system_right_margin</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.top_margin"><code class="name">var <span class="ident">top_margin</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def top_margin(self):
+    return self._top_margin</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.top_system_distance"><code class="name">var <span class="ident">top_system_distance</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def top_system_distance(self):
+    return self._top_system_distance</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.millimeters_to_tenth"><code class="name flex">
+<span>def <span class="ident">millimeters_to_tenth</span></span>(<span>self, m)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def millimeters_to_tenth(self, m):
+    return round(m / self.millimeters * self.tenth)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musictree" href="index.html">musicscore.musictree</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musictree.treepagestyle.TreePageStyle" href="#musicscore.musictree.treepagestyle.TreePageStyle">TreePageStyle</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.bottom_margin" href="#musicscore.musictree.treepagestyle.TreePageStyle.bottom_margin">bottom_margin</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.format" href="#musicscore.musictree.treepagestyle.TreePageStyle.format">format</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.left_margin" href="#musicscore.musictree.treepagestyle.TreePageStyle.left_margin">left_margin</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.millimeters" href="#musicscore.musictree.treepagestyle.TreePageStyle.millimeters">millimeters</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.millimeters_to_tenth" href="#musicscore.musictree.treepagestyle.TreePageStyle.millimeters_to_tenth">millimeters_to_tenth</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.page_height" href="#musicscore.musictree.treepagestyle.TreePageStyle.page_height">page_height</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.page_size" href="#musicscore.musictree.treepagestyle.TreePageStyle.page_size">page_size</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.page_width" href="#musicscore.musictree.treepagestyle.TreePageStyle.page_width">page_width</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.right_margin" href="#musicscore.musictree.treepagestyle.TreePageStyle.right_margin">right_margin</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.score" href="#musicscore.musictree.treepagestyle.TreePageStyle.score">score</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.size" href="#musicscore.musictree.treepagestyle.TreePageStyle.size">size</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.sizes" href="#musicscore.musictree.treepagestyle.TreePageStyle.sizes">sizes</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.staff_distance" href="#musicscore.musictree.treepagestyle.TreePageStyle.staff_distance">staff_distance</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.system_distance" href="#musicscore.musictree.treepagestyle.TreePageStyle.system_distance">system_distance</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.system_left_margin" href="#musicscore.musictree.treepagestyle.TreePageStyle.system_left_margin">system_left_margin</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.system_right_margin" href="#musicscore.musictree.treepagestyle.TreePageStyle.system_right_margin">system_right_margin</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.top_margin" href="#musicscore.musictree.treepagestyle.TreePageStyle.top_margin">top_margin</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.top_system_distance" href="#musicscore.musictree.treepagestyle.TreePageStyle.top_system_distance">top_system_distance</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

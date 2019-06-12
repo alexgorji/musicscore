@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musicxml.attributes.attribute_abstract API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musicxml.attributes.attribute_abstract</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from musicscore.basic_functions import replace_dash
+from musicscore.musicxml.types.simple_type import *
+
+
+class AttributeAbstract(object):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._ATTRIBUTES = []
+
+    def generate_attribute(self, attribute_name, attribute_value, type_string=None):
+        property_name = replace_dash(attribute_name)
+
+        exec(&#39;def getter(self): return self.get_attribute(&#34;{}&#34;)&#39;.format(attribute_name))
+        exec(&#39;&#39;&#39;def setter(self, value): 
+    if value is None:
+        self.remove_attribute(&#39;{}&#39;)
+    else:
+        if {} is not None:
+            {}(value)
+        self.set_attribute(&#39;{}&#39;, value)&#39;&#39;&#39;.format(attribute_name, type_string, type_string, attribute_name))
+        exec(&#39;AttributeAbstract.{} = property(getter, setter)&#39;.format(property_name))
+        self._ATTRIBUTES.insert(0, attribute_name)
+        if isinstance(attribute_value, str):
+            exec(&#39;self.{} = &#34;{}&#34;&#39;.format(property_name, attribute_value))
+        else:
+            exec(&#39;self.{} = {}&#39;.format(property_name, attribute_value))
+
+        return property_name</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract"><code class="flex name class">
+<span>class <span class="ident">AttributeAbstract</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class AttributeAbstract(object):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._ATTRIBUTES = []
+
+    def generate_attribute(self, attribute_name, attribute_value, type_string=None):
+        property_name = replace_dash(attribute_name)
+
+        exec(&#39;def getter(self): return self.get_attribute(&#34;{}&#34;)&#39;.format(attribute_name))
+        exec(&#39;&#39;&#39;def setter(self, value): 
+    if value is None:
+        self.remove_attribute(&#39;{}&#39;)
+    else:
+        if {} is not None:
+            {}(value)
+        self.set_attribute(&#39;{}&#39;, value)&#39;&#39;&#39;.format(attribute_name, type_string, type_string, attribute_name))
+        exec(&#39;AttributeAbstract.{} = property(getter, setter)&#39;.format(property_name))
+        self._ATTRIBUTES.insert(0, attribute_name)
+        if isinstance(attribute_value, str):
+            exec(&#39;self.{} = &#34;{}&#34;&#39;.format(property_name, attribute_value))
+        else:
+            exec(&#39;self.{} = {}&#39;.format(property_name, attribute_value))
+
+        return property_name</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.placement.Placement" href="placement.html#musicscore.musicxml.attributes.placement.Placement">Placement</a></li>
+<li><a title="musicscore.musicxml.attributes.printobject.PrintObject" href="printobject.html#musicscore.musicxml.attributes.printobject.PrintObject">PrintObject</a></li>
+<li><a title="musicscore.musicxml.attributes.align.Halign" href="align.html#musicscore.musicxml.attributes.align.Halign">Halign</a></li>
+<li><a title="musicscore.musicxml.attributes.align.Valign" href="align.html#musicscore.musicxml.attributes.align.Valign">Valign</a></li>
+<li><a title="musicscore.musicxml.attributes.align.ValignImage" href="align.html#musicscore.musicxml.attributes.align.ValignImage">ValignImage</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.elements.fullnote.Measure" href="../elements/fullnote.html#musicscore.musicxml.elements.fullnote.Measure">Measure</a></li>
+<li><a title="musicscore.musicxml.attributes.accidental.Cautionary" href="accidental.html#musicscore.musicxml.attributes.accidental.Cautionary">Cautionary</a></li>
+<li><a title="musicscore.musicxml.attributes.accidental.Editorial" href="accidental.html#musicscore.musicxml.attributes.accidental.Editorial">Editorial</a></li>
+<li><a title="musicscore.musicxml.attributes.accidental.Smulf" href="accidental.html#musicscore.musicxml.attributes.accidental.Smulf">Smulf</a></li>
+<li><a title="musicscore.musicxml.attributes.grace_attributes.StealTimePrevious" href="grace_attributes.html#musicscore.musicxml.attributes.grace_attributes.StealTimePrevious">StealTimePrevious</a></li>
+<li><a title="musicscore.musicxml.attributes.grace_attributes.StealTimeFollowing" href="grace_attributes.html#musicscore.musicxml.attributes.grace_attributes.StealTimeFollowing">StealTimeFollowing</a></li>
+<li><a title="musicscore.musicxml.attributes.grace_attributes.MakeTime" href="grace_attributes.html#musicscore.musicxml.attributes.grace_attributes.MakeTime">MakeTime</a></li>
+<li><a title="musicscore.musicxml.attributes.grace_attributes.Slash" href="grace_attributes.html#musicscore.musicxml.attributes.grace_attributes.Slash">Slash</a></li>
+<li><a title="musicscore.musicxml.attributes.leveldisplay.Parentheses" href="leveldisplay.html#musicscore.musicxml.attributes.leveldisplay.Parentheses">Parentheses</a></li>
+<li><a title="musicscore.musicxml.attributes.leveldisplay.Bracket" href="leveldisplay.html#musicscore.musicxml.attributes.leveldisplay.Bracket">Bracket</a></li>
+<li><a title="musicscore.musicxml.attributes.leveldisplay.Size" href="leveldisplay.html#musicscore.musicxml.attributes.leveldisplay.Size">Size</a></li>
+<li><a title="musicscore.musicxml.attributes.enclosure.Enclosure" href="enclosure.html#musicscore.musicxml.attributes.enclosure.Enclosure">Enclosure</a></li>
+<li><a title="musicscore.musicxml.attributes.justify.Justify" href="justify.html#musicscore.musicxml.attributes.justify.Justify">Justify</a></li>
+<li><a title="musicscore.musicxml.attributes.letterspacing.LetterSpacing" href="letterspacing.html#musicscore.musicxml.attributes.letterspacing.LetterSpacing">LetterSpacing</a></li>
+<li><a title="musicscore.musicxml.attributes.lineheight.LineHeight" href="lineheight.html#musicscore.musicxml.attributes.lineheight.LineHeight">LineHeight</a></li>
+<li><a title="musicscore.musicxml.attributes.textdecoration.Underline" href="textdecoration.html#musicscore.musicxml.attributes.textdecoration.Underline">Underline</a></li>
+<li><a title="musicscore.musicxml.attributes.textdecoration.Overline" href="textdecoration.html#musicscore.musicxml.attributes.textdecoration.Overline">Overline</a></li>
+<li><a title="musicscore.musicxml.attributes.textdecoration.LineThrough" href="textdecoration.html#musicscore.musicxml.attributes.textdecoration.LineThrough">LineThrough</a></li>
+<li><a title="musicscore.musicxml.attributes.text_direction.Dir" href="text_direction.html#musicscore.musicxml.attributes.text_direction.Dir">Dir</a></li>
+<li><a title="musicscore.musicxml.attributes.textrotation.Rotation" href="textrotation.html#musicscore.musicxml.attributes.textrotation.Rotation">Rotation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.level.Reference" href="../types/complextypes/level.html#musicscore.musicxml.types.complextypes.level.Reference">Reference</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.beam.Repeater" href="../types/complextypes/beam.html#musicscore.musicxml.types.complextypes.beam.Repeater">Repeater</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.beam.Fan" href="../types/complextypes/beam.html#musicscore.musicxml.types.complextypes.beam.Fan">Fan</a></li>
+<li><a title="musicscore.musicxml.attributes.timeonly.TimeOnly" href="timeonly.html#musicscore.musicxml.attributes.timeonly.TimeOnly">TimeOnly</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.elision.Smulf" href="../types/complextypes/elision.html#musicscore.musicxml.types.complextypes.elision.Smulf">Smulf</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.extend.Type" href="../types/complextypes/extend.html#musicscore.musicxml.types.complextypes.extend.Type">Type</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierX" href="bezier.html#musicscore.musicxml.attributes.bezier.BezierX">BezierX</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierY" href="bezier.html#musicscore.musicxml.attributes.bezier.BezierY">BezierY</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierX2" href="bezier.html#musicscore.musicxml.attributes.bezier.BezierX2">BezierX2</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierY2" href="bezier.html#musicscore.musicxml.attributes.bezier.BezierY2">BezierY2</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierOffset" href="bezier.html#musicscore.musicxml.attributes.bezier.BezierOffset">BezierOffset</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierOffset2" href="bezier.html#musicscore.musicxml.attributes.bezier.BezierOffset2">BezierOffset2</a></li>
+<li><a title="musicscore.musicxml.attributes.dahsedformatting.DashLength" href="dahsedformatting.html#musicscore.musicxml.attributes.dahsedformatting.DashLength">DashLength</a></li>
+<li><a title="musicscore.musicxml.attributes.dahsedformatting.SpaceLength" href="dahsedformatting.html#musicscore.musicxml.attributes.dahsedformatting.SpaceLength">SpaceLength</a></li>
+<li><a title="musicscore.musicxml.attributes.linetype.LineType" href="linetype.html#musicscore.musicxml.attributes.linetype.LineType">LineType</a></li>
+<li><a title="musicscore.musicxml.attributes.orientation.Orientation" href="orientation.html#musicscore.musicxml.attributes.orientation.Orientation">Orientation</a></li>
+<li><a title="musicscore.musicxml.attributes.lineshape.LineShape" href="lineshape.html#musicscore.musicxml.attributes.lineshape.LineShape">LineShape</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.tuplet.Bracket" href="../types/complextypes/tuplet.html#musicscore.musicxml.types.complextypes.tuplet.Bracket">Bracket</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.tuplet.ShowNumber" href="../types/complextypes/tuplet.html#musicscore.musicxml.types.complextypes.tuplet.ShowNumber">ShowNumber</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.tuplet.ShowType" href="../types/complextypes/tuplet.html#musicscore.musicxml.types.complextypes.tuplet.ShowType">ShowType</a></li>
+<li><a title="musicscore.musicxml.attributes.barline.Location" href="barline.html#musicscore.musicxml.attributes.barline.Location">Location</a></li>
+<li><a title="musicscore.musicxml.attributes.barline.Segno" href="barline.html#musicscore.musicxml.attributes.barline.Segno">Segno</a></li>
+<li><a title="musicscore.musicxml.attributes.barline.Coda" href="barline.html#musicscore.musicxml.attributes.barline.Coda">Coda</a></li>
+<li><a title="musicscore.musicxml.attributes.barline.Divisions" href="barline.html#musicscore.musicxml.attributes.barline.Divisions">Divisions</a></li>
+<li><a title="musicscore.musicxml.elements.barline.Times" href="../elements/barline.html#musicscore.musicxml.elements.barline.Times">Times</a></li>
+<li><a title="musicscore.musicxml.elements.barline.Winged" href="../elements/barline.html#musicscore.musicxml.elements.barline.Winged">Winged</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.clef.AfterBarline" href="../types/complextypes/clef.html#musicscore.musicxml.types.complextypes.clef.AfterBarline">AfterBarline</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.key.KeyNumberAttribute" href="../types/complextypes/key.html#musicscore.musicxml.types.complextypes.key.KeyNumberAttribute">KeyNumberAttribute</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.key.Location" href="../types/complextypes/key.html#musicscore.musicxml.types.complextypes.key.Location">Location</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.key.Number" href="../types/complextypes/key.html#musicscore.musicxml.types.complextypes.key.Number">Number</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.key.CancelAttribute" href="../types/complextypes/key.html#musicscore.musicxml.types.complextypes.key.CancelAttribute">CancelAttribute</a></li>
+<li><a title="musicscore.musicxml.attributes.directive.Directive" href="directive.html#musicscore.musicxml.attributes.directive.Directive">Directive</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.wedge.Spread" href="../types/complextypes/wedge.html#musicscore.musicxml.types.complextypes.wedge.Spread">Spread</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.wedge.Niente" href="../types/complextypes/wedge.html#musicscore.musicxml.types.complextypes.wedge.Niente">Niente</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.offset.Sound" href="../types/complextypes/offset.html#musicscore.musicxml.types.complextypes.offset.Sound">Sound</a></li>
+<li><a title="musicscore.musicxml.attributes.id.Id" href="id.html#musicscore.musicxml.attributes.id.Id">Id</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.mididevice.Port" href="../types/complextypes/mididevice.html#musicscore.musicxml.types.complextypes.mididevice.Port">Port</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Tempo" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Tempo">Tempo</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Dynamics" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Dynamics">Dynamics</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Dacapo" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Dacapo">Dacapo</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Segno" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Segno">Segno</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Dalsegno" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Dalsegno">Dalsegno</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Coda" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Coda">Coda</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Tocoda" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Tocoda">Tocoda</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Divisions" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Divisions">Divisions</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.ForwardRepeat" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.ForwardRepeat">ForwardRepeat</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Fine" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Fine">Fine</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.TimeOnly" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.TimeOnly">TimeOnly</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Pizzicato" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Pizzicato">Pizzicato</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Pan" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Pan">Pan</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.Elevation" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.Elevation">Elevation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.DamperPedal" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.DamperPedal">DamperPedal</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.SoftPedal" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.SoftPedal">SoftPedal</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.sound.SostenutoPedal" href="../types/complextypes/sound.html#musicscore.musicxml.types.complextypes.sound.SostenutoPedal">SostenutoPedal</a></li>
+<li><a title="musicscore.musicxml.attributes.printattributes.StaffSpacing" href="printattributes.html#musicscore.musicxml.attributes.printattributes.StaffSpacing">StaffSpacing</a></li>
+<li><a title="musicscore.musicxml.attributes.printattributes.NewSystem" href="printattributes.html#musicscore.musicxml.attributes.printattributes.NewSystem">NewSystem</a></li>
+<li><a title="musicscore.musicxml.attributes.printattributes.NewPage" href="printattributes.html#musicscore.musicxml.attributes.printattributes.NewPage">NewPage</a></li>
+<li><a title="musicscore.musicxml.attributes.printattributes.BlankPage" href="printattributes.html#musicscore.musicxml.attributes.printattributes.BlankPage">BlankPage</a></li>
+<li><a title="musicscore.musicxml.attributes.printattributes.PageNumber" href="printattributes.html#musicscore.musicxml.attributes.printattributes.PageNumber">PageNumber</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.Id" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.Id">Id</a></li>
+<li><a title="musicscore.musicxml.attributes.document_attributes.Version" href="document_attributes.html#musicscore.musicxml.attributes.document_attributes.Version">Version</a></li>
+<li><a title="musicscore.musicxml.attributes.measure_attributes.Number" href="measure_attributes.html#musicscore.musicxml.attributes.measure_attributes.Number">Number</a></li>
+<li><a title="musicscore.musicxml.attributes.measure_attributes.Text" href="measure_attributes.html#musicscore.musicxml.attributes.measure_attributes.Text">Text</a></li>
+<li><a title="musicscore.musicxml.attributes.measure_attributes.Implicit" href="measure_attributes.html#musicscore.musicxml.attributes.measure_attributes.Implicit">Implicit</a></li>
+<li><a title="musicscore.musicxml.attributes.measure_attributes.NonControlling" href="measure_attributes.html#musicscore.musicxml.attributes.measure_attributes.NonControlling">NonControlling</a></li>
+<li><a title="musicscore.musicxml.attributes.measure_attributes.Width" href="measure_attributes.html#musicscore.musicxml.attributes.measure_attributes.Width">Width</a></li>
+<li><a title="musicscore.musicxml.attributes.part_attributes.Id" href="part_attributes.html#musicscore.musicxml.attributes.part_attributes.Id">Id</a></li>
+<li><a title="musicscore.musicxml.attributes.elementposition.Element" href="elementposition.html#musicscore.musicxml.attributes.elementposition.Element">Element</a></li>
+<li><a title="musicscore.musicxml.attributes.image.Source" href="image.html#musicscore.musicxml.attributes.image.Source">Source</a></li>
+<li><a title="musicscore.musicxml.attributes.image.Height" href="image.html#musicscore.musicxml.attributes.image.Height">Height</a></li>
+<li><a title="musicscore.musicxml.attributes.image.Width" href="image.html#musicscore.musicxml.attributes.image.Width">Width</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.credit.Page" href="../types/complextypes/credit.html#musicscore.musicxml.types.complextypes.credit.Page">Page</a></li>
+<li><a title="musicscore.musicxml.attributes.linelength.LineLength" href="linelength.html#musicscore.musicxml.attributes.linelength.LineLength">LineLength</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.barline.Times" href="../types/complextypes/barline.html#musicscore.musicxml.types.complextypes.barline.Times">Times</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.barline.Winged" href="../types/complextypes/barline.html#musicscore.musicxml.types.complextypes.barline.Winged">Winged</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_example.AttributeExample" href="attribute_example.html#musicscore.musicxml.attributes.attribute_example.AttributeExample">AttributeExample</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.after_barline"><code class="name">var <span class="ident">after_barline</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.color"><code class="name">var <span class="ident">color</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.default_x"><code class="name">var <span class="ident">default_x</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.default_y"><code class="name">var <span class="ident">default_y</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.dir"><code class="name">var <span class="ident">dir</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.enclosure"><code class="name">var <span class="ident">enclosure</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.fan"><code class="name">var <span class="ident">fan</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_family"><code class="name">var <span class="ident">font_family</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_size"><code class="name">var <span class="ident">font_size</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_style"><code class="name">var <span class="ident">font_style</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_weight"><code class="name">var <span class="ident">font_weight</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.halign"><code class="name">var <span class="ident">halign</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.justify"><code class="name">var <span class="ident">justify</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.letter_spacing"><code class="name">var <span class="ident">letter_spacing</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.line_height"><code class="name">var <span class="ident">line_height</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.line_through"><code class="name">var <span class="ident">line_through</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.measure"><code class="name">var <span class="ident">measure</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.overline"><code class="name">var <span class="ident">overline</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.placement"><code class="name">var <span class="ident">placement</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.print_object"><code class="name">var <span class="ident">print_object</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.relative_x"><code class="name">var <span class="ident">relative_x</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.relative_y"><code class="name">var <span class="ident">relative_y</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.repeater"><code class="name">var <span class="ident">repeater</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.rotation"><code class="name">var <span class="ident">rotation</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.time_only"><code class="name">var <span class="ident">time_only</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.underline"><code class="name">var <span class="ident">underline</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.valign"><code class="name">var <span class="ident">valign</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.generate_attribute"><code class="name flex">
+<span>def <span class="ident">generate_attribute</span></span>(<span>self, attribute_name, attribute_value, type_string=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate_attribute(self, attribute_name, attribute_value, type_string=None):
+    property_name = replace_dash(attribute_name)
+
+    exec(&#39;def getter(self): return self.get_attribute(&#34;{}&#34;)&#39;.format(attribute_name))
+    exec(&#39;&#39;&#39;def setter(self, value): 
+if value is None:
+    self.remove_attribute(&#39;{}&#39;)
+else:
+    if {} is not None:
+        {}(value)
+    self.set_attribute(&#39;{}&#39;, value)&#39;&#39;&#39;.format(attribute_name, type_string, type_string, attribute_name))
+    exec(&#39;AttributeAbstract.{} = property(getter, setter)&#39;.format(property_name))
+    self._ATTRIBUTES.insert(0, attribute_name)
+    if isinstance(attribute_value, str):
+        exec(&#39;self.{} = &#34;{}&#34;&#39;.format(property_name, attribute_value))
+    else:
+        exec(&#39;self.{} = {}&#39;.format(property_name, attribute_value))
+
+    return property_name</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musicxml.attributes" href="index.html">musicscore.musicxml.attributes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></code></h4>
+<ul class="two-column">
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.after_barline" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.after_barline">after_barline</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.color" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.color">color</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.default_x" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.default_x">default_x</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.default_y" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.default_y">default_y</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.dir" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.dir">dir</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.enclosure" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.enclosure">enclosure</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.fan" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.fan">fan</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_family" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_family">font_family</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_size" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_size">font_size</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_style" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_style">font_style</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_weight" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.font_weight">font_weight</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.generate_attribute" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.generate_attribute">generate_attribute</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.halign" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.halign">halign</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.id" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.id">id</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.justify" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.justify">justify</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.letter_spacing" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.letter_spacing">letter_spacing</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.line_height" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.line_height">line_height</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.line_through" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.line_through">line_through</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.measure" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.measure">measure</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.overline" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.overline">overline</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.placement" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.placement">placement</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.print_object" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.print_object">print_object</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.relative_x" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.relative_x">relative_x</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.relative_y" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.relative_y">relative_y</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.repeater" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.repeater">repeater</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.rotation" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.rotation">rotation</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.time_only" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.time_only">time_only</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.type" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.type">type</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.underline" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.underline">underline</a></code></li>
+<li><code><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.valign" href="#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract.valign">valign</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

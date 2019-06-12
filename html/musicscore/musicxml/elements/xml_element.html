@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musicxml.elements.xml_element API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musicxml.elements.xml_element</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from AGtree.tree import Tree
+from lxml import etree as et
+
+from musicscore.basic_functions import replace_dash
+from musicscore.dtd.dtd import DTDError, ChildIsNotOptional, ChildTypeDTDConflict, ChildOccurrenceDTDConflict, Sequence
+from musicscore.musicxml.exceptions import AfterInitializationError
+
+
+class XMLTree(Tree):
+    _DTD = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.dtd = self._DTD
+        self._current_children = []
+        self._current_choice = None
+        self._choice_index = 0
+        self._old_choice_index = None
+        self._not_sorted_children = []
+
+    @property
+    def current_children(self):
+        return self._current_children
+
+    def _set_child(self, type_, tag, value):
+        if value is not None and not isinstance(value, type_):
+            value = type_(value)
+
+        current_xml_children = self.current_children
+        if value:
+            for xml_child in current_xml_children:
+                if isinstance(xml_child, type_):
+                    self.current_dtd_choice.remove_xml_child(xml_child)
+
+            self.add_xml_child(value)
+
+        name = &#39;_&#39; + replace_dash(tag)
+
+        self.__setattr__(name, value)
+
+    @property
+    def current_dtd_choice(self):
+        if self._old_choice_index != self._choice_index:
+            self._current_choice = self.dtd.get_choices()[self._choice_index].carbon_copy()
+            self._old_choice_index = self._choice_index
+        return self._current_choice
+
+    def goto_next_dtd_choice(self):
+        try:
+            old_xml_children = self._not_sorted_children
+            self._not_sorted_children = []
+            self._choice_index += 1
+
+            for old_xml_child in old_xml_children:
+                self.add_xml_child(old_xml_child)
+        except IndexError:
+            raise StopIteration()
+
+    def check_non_optional(self):
+        for leaf in self.current_dtd_choice.traverse_leaves():
+            if not leaf.check_min_occurrence():
+                raise ChildIsNotOptional(leaf)
+
+    def reset_dtd(self):
+        self._not_sorted_children = []
+        self._current_choice = None
+        self._choice_index = 0
+        self._old_choice_index = None
+
+    def add_xml_child(self, xml_child):
+        choice = self.current_dtd_choice
+        selected_leaves = [leaf for leaf in choice.traverse_leaves() if isinstance(xml_child, leaf.type_)]
+
+        if not selected_leaves:
+            try:
+                self.goto_next_dtd_choice()
+                self.add_xml_child(xml_child)
+            except Exception:
+                raise ChildTypeDTDConflict(xml_child)
+
+        else:
+            child_added = False
+            for selected_leaf in selected_leaves:
+                parent = selected_leaf.up
+                child_added = selected_leaf.add_xml_child(xml_child)
+                if child_added:
+                    break
+
+            if not child_added and isinstance(parent, Sequence) and (parent.min_occurrence, parent.max_occurrence) != (
+                    1, 1):
+                try:
+                    parent.pattern
+                except AttributeError:
+                    parent.pattern = [child.__deepcopy__() for child in parent.get_children()]
+                for child in parent.pattern:
+                    parent.add_child(child.__deepcopy__())
+
+                child_added = self.add_xml_child(xml_child)
+
+            if not child_added:
+                try:
+                    self.goto_next_dtd_choice()
+                    self.add_xml_child(xml_child)
+                except Exception:
+                    raise ChildOccurrenceDTDConflict(xml_child)
+
+            if child_added:
+                self.update_current_children()
+                self._not_sorted_children.append(xml_child)
+
+            return child_added
+
+    def update_current_children(self):
+        self._current_children = self.current_dtd_choice.get_xml_children()
+
+    def add_child(self, child):
+        if not self.dtd:
+            raise DTDError(&#39;_DTD is None. No Child can be added. &#39;)
+        self.add_xml_child(child)
+        child._up = self
+        return child
+
+    def remove_child(self, child):
+
+        current_xml_children = self.current_children
+        if child:
+            current_xml_children.remove(child)
+
+        self.reset_dtd()
+
+        for xml_child in current_xml_children:
+            self.add_xml_child(xml_child)
+
+    def close_dtd(self):
+        if self.dtd:
+            try:
+                self.check_non_optional()
+            except ChildIsNotOptional as e:
+                try:
+                    self.goto_next_dtd_choice()
+                    self.close_dtd()
+                except (DTDError, StopIteration):
+                    raise e
+        for child in self.get_children():
+            child.close_dtd()
+
+    def get_children(self):
+        return self.current_children
+
+    def get_children_by_type(self, type_):
+        return [child for child in self.current_children if isinstance(child, type_)]
+
+
+class XMLElement(XMLTree):
+    _ATTRIBUTES = None
+
+    def __init__(self, tag, *args, **kwargs):
+        self._attributes = {}
+        self._tag = None
+        self.tag = tag
+        super().__init__(*args, **kwargs)
+        self._text = None
+
+    @property
+    def tag(self):
+        return self._tag
+
+    @tag.setter
+    def tag(self, value):
+        if self._tag is not None:
+            raise AfterInitializationError(self.tag)
+        self._tag = value
+
+    @property
+    def text(self):
+        try:
+            return self.value
+        except AttributeError:
+            return self._text
+
+    @text.setter
+    def text(self, v):
+        try:
+            self.value = v
+        except AttributeError:
+            self._text = v
+
+    def __getattr__(self, item):
+        tag = replace_dash(item)
+        found_children = self.get_children_by_tag(tag)
+        if len(found_children) == 0:
+            raise AttributeError(&#39;object &#34;{}&#34; has no attribute &#34;{}&#34;&#39;.format(type(self).__name__, item))
+
+        if len(found_children) == 1:
+            return found_children[0]
+        else:
+            return found_children
+
+    def get_attributes(self):
+        return self._attributes
+
+    def get_attribute(self, attribute_name):
+        return self.get_attributes()[attribute_name]
+
+    def get_children_by_tag(self, tag):
+        return [child for child in self.get_children() if child.tag == tag]
+
+    def _sort_attributes(self):
+        def sort_function(x):
+            return self._ATTRIBUTES.index(x)
+
+        sorted_attributes = {}
+        for key in sorted(self._attributes, key=sort_function):
+            sorted_attributes[key] = self._attributes[key]
+        self._attributes = sorted_attributes
+
+    def set_attribute(self, attribute_name, attribute_value):
+        if self._ATTRIBUTES is not None:
+            if attribute_name not in self._ATTRIBUTES:
+                raise ValueError(&#39;{}.set_attribute: attribute_name: {} is not in {}._ATTRIBUTES&#39;.format(type(self),
+                                                                                                        attribute_name,
+                                                                                                        self.__class__.__name__))
+        self.get_attributes()[attribute_name] = attribute_value
+        if self._ATTRIBUTES is not None:
+            self._sort_attributes()
+
+    def remove_attribute(self, attribute):
+        if attribute in self.get_attributes().keys():
+            self.get_attributes().pop(attribute)
+
+    def clear_attributes(self):
+        self.get_attributes().clear()
+
+    def __repr__(self):
+        try:
+            return &#39;{} {} at {}&#39;.format(self.__class__.__name__, self.value, hex(id(self)))
+        except AttributeError:
+            return &#39;{} at {}&#39;.format(self.__class__.__name__, hex(id(self)))
+
+    def _to_xml(self):
+        xml = et.Element(_tag=self.tag)
+
+        def set_attributes():
+            for key in self.get_attributes().keys():
+                xml.set(key, str(self.get_attributes()[key]))
+
+        def set_children():
+            for child in self.get_children():
+                if isinstance(child, XMLElement):
+                    xml.append(child._to_xml())
+                else:
+                    raise TypeError(&#39;child {} must be of type XMLElement&#39;.format(child))
+
+        set_children()
+        if self.text is not None:
+            xml.text = str(self.text)
+        set_attributes()
+        return xml
+
+    def to_string(self):
+        self.close_dtd()
+        xml = self._to_xml()
+        return et.tounicode(xml, pretty_print=True)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musicxml.elements.xml_element.XMLElement"><code class="flex name class">
+<span>class <span class="ident">XMLElement</span></span>
+<span>(</span><span>tag, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A simple Tree class</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class XMLElement(XMLTree):
+    _ATTRIBUTES = None
+
+    def __init__(self, tag, *args, **kwargs):
+        self._attributes = {}
+        self._tag = None
+        self.tag = tag
+        super().__init__(*args, **kwargs)
+        self._text = None
+
+    @property
+    def tag(self):
+        return self._tag
+
+    @tag.setter
+    def tag(self, value):
+        if self._tag is not None:
+            raise AfterInitializationError(self.tag)
+        self._tag = value
+
+    @property
+    def text(self):
+        try:
+            return self.value
+        except AttributeError:
+            return self._text
+
+    @text.setter
+    def text(self, v):
+        try:
+            self.value = v
+        except AttributeError:
+            self._text = v
+
+    def __getattr__(self, item):
+        tag = replace_dash(item)
+        found_children = self.get_children_by_tag(tag)
+        if len(found_children) == 0:
+            raise AttributeError(&#39;object &#34;{}&#34; has no attribute &#34;{}&#34;&#39;.format(type(self).__name__, item))
+
+        if len(found_children) == 1:
+            return found_children[0]
+        else:
+            return found_children
+
+    def get_attributes(self):
+        return self._attributes
+
+    def get_attribute(self, attribute_name):
+        return self.get_attributes()[attribute_name]
+
+    def get_children_by_tag(self, tag):
+        return [child for child in self.get_children() if child.tag == tag]
+
+    def _sort_attributes(self):
+        def sort_function(x):
+            return self._ATTRIBUTES.index(x)
+
+        sorted_attributes = {}
+        for key in sorted(self._attributes, key=sort_function):
+            sorted_attributes[key] = self._attributes[key]
+        self._attributes = sorted_attributes
+
+    def set_attribute(self, attribute_name, attribute_value):
+        if self._ATTRIBUTES is not None:
+            if attribute_name not in self._ATTRIBUTES:
+                raise ValueError(&#39;{}.set_attribute: attribute_name: {} is not in {}._ATTRIBUTES&#39;.format(type(self),
+                                                                                                        attribute_name,
+                                                                                                        self.__class__.__name__))
+        self.get_attributes()[attribute_name] = attribute_value
+        if self._ATTRIBUTES is not None:
+            self._sort_attributes()
+
+    def remove_attribute(self, attribute):
+        if attribute in self.get_attributes().keys():
+            self.get_attributes().pop(attribute)
+
+    def clear_attributes(self):
+        self.get_attributes().clear()
+
+    def __repr__(self):
+        try:
+            return &#39;{} {} at {}&#39;.format(self.__class__.__name__, self.value, hex(id(self)))
+        except AttributeError:
+            return &#39;{} at {}&#39;.format(self.__class__.__name__, hex(id(self)))
+
+    def _to_xml(self):
+        xml = et.Element(_tag=self.tag)
+
+        def set_attributes():
+            for key in self.get_attributes().keys():
+                xml.set(key, str(self.get_attributes()[key]))
+
+        def set_children():
+            for child in self.get_children():
+                if isinstance(child, XMLElement):
+                    xml.append(child._to_xml())
+                else:
+                    raise TypeError(&#39;child {} must be of type XMLElement&#39;.format(child))
+
+        set_children()
+        if self.text is not None:
+            xml.text = str(self.text)
+        set_attributes()
+        return xml
+
+    def to_string(self):
+        self.close_dtd()
+        xml = self._to_xml()
+        return et.tounicode(xml, pretty_print=True)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.Empty" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.Empty">Empty</a></li>
+<li><a title="musicscore.musicxml.elements.fullnote.Step" href="fullnote.html#musicscore.musicxml.elements.fullnote.Step">Step</a></li>
+<li><a title="musicscore.musicxml.elements.fullnote.Alter" href="fullnote.html#musicscore.musicxml.elements.fullnote.Alter">Alter</a></li>
+<li><a title="musicscore.musicxml.elements.fullnote.Octave" href="fullnote.html#musicscore.musicxml.elements.fullnote.Octave">Octave</a></li>
+<li><a title="musicscore.musicxml.elements.fullnote.DisplayStep" href="fullnote.html#musicscore.musicxml.elements.fullnote.DisplayStep">DisplayStep</a></li>
+<li><a title="musicscore.musicxml.elements.fullnote.DisplayOctave" href="fullnote.html#musicscore.musicxml.elements.fullnote.DisplayOctave">DisplayOctave</a></li>
+<li><a title="musicscore.musicxml.elements.fullnote.Event" href="fullnote.html#musicscore.musicxml.elements.fullnote.Event">Event</a></li>
+<li><a title="musicscore.musicxml.groups.common.Voice" href="../groups/common.html#musicscore.musicxml.groups.common.Voice">Voice</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.lyric.Syllabic" href="../types/complextypes/lyric.html#musicscore.musicxml.types.complextypes.lyric.Syllabic">Syllabic</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.tuplet.TupletDot" href="../types/complextypes/tuplet.html#musicscore.musicxml.types.complextypes.tuplet.TupletDot">TupletDot</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.tuplet.TupletNumber" href="../types/complextypes/tuplet.html#musicscore.musicxml.types.complextypes.tuplet.TupletNumber">TupletNumber</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.tuplet.TupletType" href="../types/complextypes/tuplet.html#musicscore.musicxml.types.complextypes.tuplet.TupletType">TupletType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notations.Glissando" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Glissando">Glissando</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notations.Slide" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Slide">Slide</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notations.Ornaments" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Ornaments">Ornaments</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notations.Technical" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Technical">Technical</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notations.Articulations" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Articulations">Articulations</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notations.Fermata" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Fermata">Fermata</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notations.Arpeggiate" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Arpeggiate">Arpeggiate</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notations.NonArpeggiate" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.NonArpeggiate">NonArpeggiate</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notations.AccidentalMark" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.AccidentalMark">AccidentalMark</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notations.OtherNotation" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.OtherNotation">OtherNotation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.timemodification.ActualNotes" href="../types/complextypes/timemodification.html#musicscore.musicxml.types.complextypes.timemodification.ActualNotes">ActualNotes</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.timemodification.NormalNotes" href="../types/complextypes/timemodification.html#musicscore.musicxml.types.complextypes.timemodification.NormalNotes">NormalNotes</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.timemodification.NormalType" href="../types/complextypes/timemodification.html#musicscore.musicxml.types.complextypes.timemodification.NormalType">NormalType</a></li>
+<li><a title="musicscore.musicxml.elements.note.Grace" href="note.html#musicscore.musicxml.elements.note.Grace">Grace</a></li>
+<li><a title="musicscore.musicxml.elements.note.Cue" href="note.html#musicscore.musicxml.elements.note.Cue">Cue</a></li>
+<li><a title="musicscore.musicxml.elements.note.Duration" href="note.html#musicscore.musicxml.elements.note.Duration">Duration</a></li>
+<li><a title="musicscore.musicxml.elements.note.Instrument" href="note.html#musicscore.musicxml.elements.note.Instrument">Instrument</a></li>
+<li><a title="musicscore.musicxml.elements.note.Type" href="note.html#musicscore.musicxml.elements.note.Type">Type</a></li>
+<li><a title="musicscore.musicxml.elements.note.Stem" href="note.html#musicscore.musicxml.elements.note.Stem">Stem</a></li>
+<li><a title="musicscore.musicxml.elements.note.Notehead" href="note.html#musicscore.musicxml.elements.note.Notehead">Notehead</a></li>
+<li><a title="musicscore.musicxml.elements.note.NoteheadText" href="note.html#musicscore.musicxml.elements.note.NoteheadText">NoteheadText</a></li>
+<li><a title="musicscore.musicxml.elements.note.Play" href="note.html#musicscore.musicxml.elements.note.Play">Play</a></li>
+<li><a title="musicscore.musicxml.elements.note.Note" href="note.html#musicscore.musicxml.elements.note.Note">Note</a></li>
+<li><a title="musicscore.musicxml.elements.barline.WavyLine" href="barline.html#musicscore.musicxml.elements.barline.WavyLine">WavyLine</a></li>
+<li><a title="musicscore.musicxml.elements.barline.Coda" href="barline.html#musicscore.musicxml.elements.barline.Coda">Coda</a></li>
+<li><a title="musicscore.musicxml.elements.barline.Fermata" href="barline.html#musicscore.musicxml.elements.barline.Fermata">Fermata</a></li>
+<li><a title="musicscore.musicxml.elements.barline.Ending" href="barline.html#musicscore.musicxml.elements.barline.Ending">Ending</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.clef.Sign" href="../types/complextypes/clef.html#musicscore.musicxml.types.complextypes.clef.Sign">Sign</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.clef.Line" href="../types/complextypes/clef.html#musicscore.musicxml.types.complextypes.clef.Line">Line</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.clef.ClefOctaveChange" href="../types/complextypes/clef.html#musicscore.musicxml.types.complextypes.clef.ClefOctaveChange">ClefOctaveChange</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.key.Fifths" href="../types/complextypes/key.html#musicscore.musicxml.types.complextypes.key.Fifths">Fifths</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.key.Mode" href="../types/complextypes/key.html#musicscore.musicxml.types.complextypes.key.Mode">Mode</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.key.KeyStep" href="../types/complextypes/key.html#musicscore.musicxml.types.complextypes.key.KeyStep">KeyStep</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.key.KeyAlter" href="../types/complextypes/key.html#musicscore.musicxml.types.complextypes.key.KeyAlter">KeyAlter</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.Divisions" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.Divisions">Divisions</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.Beats" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.Beats">Beats</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.BeatType" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.BeatType">BeatType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.Interchangeable" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.Interchangeable">Interchangeable</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.SenzaMisura" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.SenzaMisura">SenzaMisura</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.Time" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.Time">Time</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.Staves" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.Staves">Staves</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.PartSymbol" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.PartSymbol">PartSymbol</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.Instruments" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.Instruments">Instruments</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.StaffDetails" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.StaffDetails">StaffDetails</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.Transpose" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.Transpose">Transpose</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.Directive" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.Directive">Directive</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.MeasureStyle" href="../types/complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.MeasureStyle">MeasureStyle</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.metronome.BeatUnit" href="../types/complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.BeatUnit">BeatUnit</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.metronome.MetronomeType" href="../types/complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.MetronomeType">MetronomeType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.metronome.MetronomeRelation" href="../types/complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.MetronomeRelation">MetronomeRelation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.Dynamics" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.Dynamics">Dynamics</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.Dashes" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.Dashes">Dashes</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.Bracket" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.Bracket">Bracket</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.Pedal" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.Pedal">Pedal</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.OctaveShift" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.OctaveShift">OctaveShift</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.HarpPedals" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.HarpPedals">HarpPedals</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.StringMute" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.StringMute">StringMute</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.Scordatura" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.Scordatura">Scordatura</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.Image" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.Image">Image</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.PrincipalVoice" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.PrincipalVoice">PrincipalVoice</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.Percussion" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.Percussion">Percussion</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.StaffDivide" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.StaffDivide">StaffDivide</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.AccordionRegistration" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.AccordionRegistration">AccordionRegistration</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.directiontype.OtherDirection" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.OtherDirection">OtherDirection</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiChannel" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiChannel">MidiChannel</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiName" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiName">MidiName</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiBank" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiBank">MidiBank</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiProgram" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiProgram">MidiProgram</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiUnpitched" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiUnpitched">MidiUnpitched</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.Volume" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.Volume">Volume</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.Pan" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.Pan">Pan</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.Elevation" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.Elevation">Elevation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.play.Ipa" href="../types/complextypes/play.html#musicscore.musicxml.types.complextypes.play.Ipa">Ipa</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.play.Mute" href="../types/complextypes/play.html#musicscore.musicxml.types.complextypes.play.Mute">Mute</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.play.SemiPitched" href="../types/complextypes/play.html#musicscore.musicxml.types.complextypes.play.SemiPitched">SemiPitched</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.play.OtherPlay" href="../types/complextypes/play.html#musicscore.musicxml.types.complextypes.play.OtherPlay">OtherPlay</a></li>
+<li><a title="musicscore.musicxml.groups.margins.LeftMargin" href="../groups/margins.html#musicscore.musicxml.groups.margins.LeftMargin">LeftMargin</a></li>
+<li><a title="musicscore.musicxml.groups.margins.RightMargin" href="../groups/margins.html#musicscore.musicxml.groups.margins.RightMargin">RightMargin</a></li>
+<li><a title="musicscore.musicxml.groups.margins.TopMargin" href="../groups/margins.html#musicscore.musicxml.groups.margins.TopMargin">TopMargin</a></li>
+<li><a title="musicscore.musicxml.groups.margins.BottomMargin" href="../groups/margins.html#musicscore.musicxml.groups.margins.BottomMargin">BottomMargin</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.pagelayout.PageHeight" href="../types/complextypes/pagelayout.html#musicscore.musicxml.types.complextypes.pagelayout.PageHeight">PageHeight</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.pagelayout.PageWidth" href="../types/complextypes/pagelayout.html#musicscore.musicxml.types.complextypes.pagelayout.PageWidth">PageWidth</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.stafflayout.StaffDistance" href="../types/complextypes/stafflayout.html#musicscore.musicxml.types.complextypes.stafflayout.StaffDistance">StaffDistance</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.systemlayout.SystemDistance" href="../types/complextypes/systemlayout.html#musicscore.musicxml.types.complextypes.systemlayout.SystemDistance">SystemDistance</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.systemlayout.TopSystemDistance" href="../types/complextypes/systemlayout.html#musicscore.musicxml.types.complextypes.systemlayout.TopSystemDistance">TopSystemDistance</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.encoding.EncodingDate" href="../types/complextypes/encoding.html#musicscore.musicxml.types.complextypes.encoding.EncodingDate">EncodingDate</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.identification.Source" href="../types/complextypes/identification.html#musicscore.musicxml.types.complextypes.identification.Source">Source</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.identification.Miscellaneus" href="../types/complextypes/identification.html#musicscore.musicxml.types.complextypes.identification.Miscellaneus">Miscellaneus</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.PartNameDisplay" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.PartNameDisplay">PartNameDisplay</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.PartAbbreviationDisplay" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.PartAbbreviationDisplay">PartAbbreviationDisplay</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.Group" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.Group">Group</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.ScoreInstrument" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.ScoreInstrument">ScoreInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.MidiDevice" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.MidiDevice">MidiDevice</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.MidiInstrument" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.MidiInstrument">MidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.print.MeasureLayout" href="../types/complextypes/print.html#musicscore.musicxml.types.complextypes.print.MeasureLayout">MeasureLayout</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.print.MeasureNumbering" href="../types/complextypes/print.html#musicscore.musicxml.types.complextypes.print.MeasureNumbering">MeasureNumbering</a></li>
+<li><a title="musicscore.musicxml.groups.musicdata.Forward" href="../groups/musicdata.html#musicscore.musicxml.groups.musicdata.Forward">Forward</a></li>
+<li><a title="musicscore.musicxml.groups.musicdata.Link" href="../groups/musicdata.html#musicscore.musicxml.groups.musicdata.Link">Link</a></li>
+<li><a title="musicscore.musicxml.groups.musicdata.Bookmark" href="../groups/musicdata.html#musicscore.musicxml.groups.musicdata.Bookmark">Bookmark</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.credit.CreditType" href="../types/complextypes/credit.html#musicscore.musicxml.types.complextypes.credit.CreditType">CreditType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scaling.Millimeters" href="../types/complextypes/scaling.html#musicscore.musicxml.types.complextypes.scaling.Millimeters">Millimeters</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scaling.Tenths" href="../types/complextypes/scaling.html#musicscore.musicxml.types.complextypes.scaling.Tenths">Tenths</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.partgroup.GroupName" href="../types/complextypes/partgroup.html#musicscore.musicxml.types.complextypes.partgroup.GroupName">GroupName</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.partgroup.GroupNameDisplay" href="../types/complextypes/partgroup.html#musicscore.musicxml.types.complextypes.partgroup.GroupNameDisplay">GroupNameDisplay</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.partgroup.GroupAbbreviation" href="../types/complextypes/partgroup.html#musicscore.musicxml.types.complextypes.partgroup.GroupAbbreviation">GroupAbbreviation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.partgroup.GroupAbbreviationDisplay" href="../types/complextypes/partgroup.html#musicscore.musicxml.types.complextypes.partgroup.GroupAbbreviationDisplay">GroupAbbreviationDisplay</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.partgroup.GroupSymbol" href="../types/complextypes/partgroup.html#musicscore.musicxml.types.complextypes.partgroup.GroupSymbol">GroupSymbol</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.partgroup.GroupTime" href="../types/complextypes/partgroup.html#musicscore.musicxml.types.complextypes.partgroup.GroupTime">GroupTime</a></li>
+<li><a title="musicscore.musicxml.elements.scoreheader.Work" href="scoreheader.html#musicscore.musicxml.elements.scoreheader.Work">Work</a></li>
+<li><a title="musicscore.musicxml.elements.scoreheader.MovementNumber" href="scoreheader.html#musicscore.musicxml.elements.scoreheader.MovementNumber">MovementNumber</a></li>
+<li><a title="musicscore.musicxml.elements.scoreheader.MovementTitle" href="scoreheader.html#musicscore.musicxml.elements.scoreheader.MovementTitle">MovementTitle</a></li>
+<li><a title="musicscore.musicxml.elements.timewise.Part" href="timewise.html#musicscore.musicxml.elements.timewise.Part">Part</a></li>
+<li><a title="musicscore.musicxml.elements.timewise.Measure" href="timewise.html#musicscore.musicxml.elements.timewise.Measure">Measure</a></li>
+<li><a title="musicscore.musicxml.elements.timewise.Score" href="timewise.html#musicscore.musicxml.elements.timewise.Score">Score</a></li>
+<li><a title="musicscore.musicxml.elements.partwise.Measure" href="partwise.html#musicscore.musicxml.elements.partwise.Measure">Measure</a></li>
+<li><a title="musicscore.musicxml.elements.partwise.Part" href="partwise.html#musicscore.musicxml.elements.partwise.Part">Part</a></li>
+<li><a title="musicscore.musicxml.elements.partwise.Score" href="partwise.html#musicscore.musicxml.elements.partwise.Score">Score</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.barline.WavyLine" href="../types/complextypes/barline.html#musicscore.musicxml.types.complextypes.barline.WavyLine">WavyLine</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.barline.Coda" href="../types/complextypes/barline.html#musicscore.musicxml.types.complextypes.barline.Coda">Coda</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.barline.Fermata" href="../types/complextypes/barline.html#musicscore.musicxml.types.complextypes.barline.Fermata">Fermata</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.barline.Ending" href="../types/complextypes/barline.html#musicscore.musicxml.types.complextypes.barline.Ending">Ending</a></li>
+<li><a title="musicscore.musicxml.elements.xml_example.XMLExampleChild1" href="xml_example.html#musicscore.musicxml.elements.xml_example.XMLExampleChild1">XMLExampleChild1</a></li>
+<li><a title="musicscore.musicxml.elements.xml_example.XMLExampleChild" href="xml_example.html#musicscore.musicxml.elements.xml_example.XMLExampleChild">XMLExampleChild</a></li>
+<li><a title="musicscore.musicxml.elements.xml_example.XMLExample" href="xml_example.html#musicscore.musicxml.elements.xml_example.XMLExample">XMLExample</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.elements.xml_element.XMLElement.tag"><code class="name">var <span class="ident">tag</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def tag(self):
+    return self._tag</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLElement.text"><code class="name">var <span class="ident">text</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def text(self):
+    try:
+        return self.value
+    except AttributeError:
+        return self._text</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musicxml.elements.xml_element.XMLElement.clear_attributes"><code class="name flex">
+<span>def <span class="ident">clear_attributes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def clear_attributes(self):
+    self.get_attributes().clear()</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLElement.get_attribute"><code class="name flex">
+<span>def <span class="ident">get_attribute</span></span>(<span>self, attribute_name)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_attribute(self, attribute_name):
+    return self.get_attributes()[attribute_name]</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLElement.get_attributes"><code class="name flex">
+<span>def <span class="ident">get_attributes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_attributes(self):
+    return self._attributes</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLElement.get_children_by_tag"><code class="name flex">
+<span>def <span class="ident">get_children_by_tag</span></span>(<span>self, tag)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_children_by_tag(self, tag):
+    return [child for child in self.get_children() if child.tag == tag]</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLElement.remove_attribute"><code class="name flex">
+<span>def <span class="ident">remove_attribute</span></span>(<span>self, attribute)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_attribute(self, attribute):
+    if attribute in self.get_attributes().keys():
+        self.get_attributes().pop(attribute)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLElement.set_attribute"><code class="name flex">
+<span>def <span class="ident">set_attribute</span></span>(<span>self, attribute_name, attribute_value)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_attribute(self, attribute_name, attribute_value):
+    if self._ATTRIBUTES is not None:
+        if attribute_name not in self._ATTRIBUTES:
+            raise ValueError(&#39;{}.set_attribute: attribute_name: {} is not in {}._ATTRIBUTES&#39;.format(type(self),
+                                                                                                    attribute_name,
+                                                                                                    self.__class__.__name__))
+    self.get_attributes()[attribute_name] = attribute_value
+    if self._ATTRIBUTES is not None:
+        self._sort_attributes()</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLElement.to_string"><code class="name flex">
+<span>def <span class="ident">to_string</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def to_string(self):
+    self.close_dtd()
+    xml = self._to_xml()
+    return et.tounicode(xml, pretty_print=True)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree"><code class="flex name class">
+<span>class <span class="ident">XMLTree</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A simple Tree class</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class XMLTree(Tree):
+    _DTD = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.dtd = self._DTD
+        self._current_children = []
+        self._current_choice = None
+        self._choice_index = 0
+        self._old_choice_index = None
+        self._not_sorted_children = []
+
+    @property
+    def current_children(self):
+        return self._current_children
+
+    def _set_child(self, type_, tag, value):
+        if value is not None and not isinstance(value, type_):
+            value = type_(value)
+
+        current_xml_children = self.current_children
+        if value:
+            for xml_child in current_xml_children:
+                if isinstance(xml_child, type_):
+                    self.current_dtd_choice.remove_xml_child(xml_child)
+
+            self.add_xml_child(value)
+
+        name = &#39;_&#39; + replace_dash(tag)
+
+        self.__setattr__(name, value)
+
+    @property
+    def current_dtd_choice(self):
+        if self._old_choice_index != self._choice_index:
+            self._current_choice = self.dtd.get_choices()[self._choice_index].carbon_copy()
+            self._old_choice_index = self._choice_index
+        return self._current_choice
+
+    def goto_next_dtd_choice(self):
+        try:
+            old_xml_children = self._not_sorted_children
+            self._not_sorted_children = []
+            self._choice_index += 1
+
+            for old_xml_child in old_xml_children:
+                self.add_xml_child(old_xml_child)
+        except IndexError:
+            raise StopIteration()
+
+    def check_non_optional(self):
+        for leaf in self.current_dtd_choice.traverse_leaves():
+            if not leaf.check_min_occurrence():
+                raise ChildIsNotOptional(leaf)
+
+    def reset_dtd(self):
+        self._not_sorted_children = []
+        self._current_choice = None
+        self._choice_index = 0
+        self._old_choice_index = None
+
+    def add_xml_child(self, xml_child):
+        choice = self.current_dtd_choice
+        selected_leaves = [leaf for leaf in choice.traverse_leaves() if isinstance(xml_child, leaf.type_)]
+
+        if not selected_leaves:
+            try:
+                self.goto_next_dtd_choice()
+                self.add_xml_child(xml_child)
+            except Exception:
+                raise ChildTypeDTDConflict(xml_child)
+
+        else:
+            child_added = False
+            for selected_leaf in selected_leaves:
+                parent = selected_leaf.up
+                child_added = selected_leaf.add_xml_child(xml_child)
+                if child_added:
+                    break
+
+            if not child_added and isinstance(parent, Sequence) and (parent.min_occurrence, parent.max_occurrence) != (
+                    1, 1):
+                try:
+                    parent.pattern
+                except AttributeError:
+                    parent.pattern = [child.__deepcopy__() for child in parent.get_children()]
+                for child in parent.pattern:
+                    parent.add_child(child.__deepcopy__())
+
+                child_added = self.add_xml_child(xml_child)
+
+            if not child_added:
+                try:
+                    self.goto_next_dtd_choice()
+                    self.add_xml_child(xml_child)
+                except Exception:
+                    raise ChildOccurrenceDTDConflict(xml_child)
+
+            if child_added:
+                self.update_current_children()
+                self._not_sorted_children.append(xml_child)
+
+            return child_added
+
+    def update_current_children(self):
+        self._current_children = self.current_dtd_choice.get_xml_children()
+
+    def add_child(self, child):
+        if not self.dtd:
+            raise DTDError(&#39;_DTD is None. No Child can be added. &#39;)
+        self.add_xml_child(child)
+        child._up = self
+        return child
+
+    def remove_child(self, child):
+
+        current_xml_children = self.current_children
+        if child:
+            current_xml_children.remove(child)
+
+        self.reset_dtd()
+
+        for xml_child in current_xml_children:
+            self.add_xml_child(xml_child)
+
+    def close_dtd(self):
+        if self.dtd:
+            try:
+                self.check_non_optional()
+            except ChildIsNotOptional as e:
+                try:
+                    self.goto_next_dtd_choice()
+                    self.close_dtd()
+                except (DTDError, StopIteration):
+                    raise e
+        for child in self.get_children():
+            child.close_dtd()
+
+    def get_children(self):
+        return self.current_children
+
+    def get_children_by_type(self, type_):
+        return [child for child in self.current_children if isinstance(child, type_)]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musictree.treechord.TreeChord" href="../../musictree/treechord.html#musicscore.musictree.treechord.TreeChord">TreeChord</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.current_children"><code class="name">var <span class="ident">current_children</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def current_children(self):
+    return self._current_children</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.current_dtd_choice"><code class="name">var <span class="ident">current_dtd_choice</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def current_dtd_choice(self):
+    if self._old_choice_index != self._choice_index:
+        self._current_choice = self.dtd.get_choices()[self._choice_index].carbon_copy()
+        self._old_choice_index = self._choice_index
+    return self._current_choice</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.add_child"><code class="name flex">
+<span>def <span class="ident">add_child</span></span>(<span>self, child)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_child(self, child):
+    if not self.dtd:
+        raise DTDError(&#39;_DTD is None. No Child can be added. &#39;)
+    self.add_xml_child(child)
+    child._up = self
+    return child</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.add_xml_child"><code class="name flex">
+<span>def <span class="ident">add_xml_child</span></span>(<span>self, xml_child)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_xml_child(self, xml_child):
+    choice = self.current_dtd_choice
+    selected_leaves = [leaf for leaf in choice.traverse_leaves() if isinstance(xml_child, leaf.type_)]
+
+    if not selected_leaves:
+        try:
+            self.goto_next_dtd_choice()
+            self.add_xml_child(xml_child)
+        except Exception:
+            raise ChildTypeDTDConflict(xml_child)
+
+    else:
+        child_added = False
+        for selected_leaf in selected_leaves:
+            parent = selected_leaf.up
+            child_added = selected_leaf.add_xml_child(xml_child)
+            if child_added:
+                break
+
+        if not child_added and isinstance(parent, Sequence) and (parent.min_occurrence, parent.max_occurrence) != (
+                1, 1):
+            try:
+                parent.pattern
+            except AttributeError:
+                parent.pattern = [child.__deepcopy__() for child in parent.get_children()]
+            for child in parent.pattern:
+                parent.add_child(child.__deepcopy__())
+
+            child_added = self.add_xml_child(xml_child)
+
+        if not child_added:
+            try:
+                self.goto_next_dtd_choice()
+                self.add_xml_child(xml_child)
+            except Exception:
+                raise ChildOccurrenceDTDConflict(xml_child)
+
+        if child_added:
+            self.update_current_children()
+            self._not_sorted_children.append(xml_child)
+
+        return child_added</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.check_non_optional"><code class="name flex">
+<span>def <span class="ident">check_non_optional</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def check_non_optional(self):
+    for leaf in self.current_dtd_choice.traverse_leaves():
+        if not leaf.check_min_occurrence():
+            raise ChildIsNotOptional(leaf)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.close_dtd"><code class="name flex">
+<span>def <span class="ident">close_dtd</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def close_dtd(self):
+    if self.dtd:
+        try:
+            self.check_non_optional()
+        except ChildIsNotOptional as e:
+            try:
+                self.goto_next_dtd_choice()
+                self.close_dtd()
+            except (DTDError, StopIteration):
+                raise e
+    for child in self.get_children():
+        child.close_dtd()</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.get_children"><code class="name flex">
+<span>def <span class="ident">get_children</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_children(self):
+    return self.current_children</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.get_children_by_type"><code class="name flex">
+<span>def <span class="ident">get_children_by_type</span></span>(<span>self, type_)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_children_by_type(self, type_):
+    return [child for child in self.current_children if isinstance(child, type_)]</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.goto_next_dtd_choice"><code class="name flex">
+<span>def <span class="ident">goto_next_dtd_choice</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def goto_next_dtd_choice(self):
+    try:
+        old_xml_children = self._not_sorted_children
+        self._not_sorted_children = []
+        self._choice_index += 1
+
+        for old_xml_child in old_xml_children:
+            self.add_xml_child(old_xml_child)
+    except IndexError:
+        raise StopIteration()</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.remove_child"><code class="name flex">
+<span>def <span class="ident">remove_child</span></span>(<span>self, child)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_child(self, child):
+
+    current_xml_children = self.current_children
+    if child:
+        current_xml_children.remove(child)
+
+    self.reset_dtd()
+
+    for xml_child in current_xml_children:
+        self.add_xml_child(xml_child)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.reset_dtd"><code class="name flex">
+<span>def <span class="ident">reset_dtd</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def reset_dtd(self):
+    self._not_sorted_children = []
+    self._current_choice = None
+    self._choice_index = 0
+    self._old_choice_index = None</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicxml.elements.xml_element.XMLTree.update_current_children"><code class="name flex">
+<span>def <span class="ident">update_current_children</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def update_current_children(self):
+    self._current_children = self.current_dtd_choice.get_xml_children()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musicxml.elements" href="index.html">musicscore.musicxml.elements</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></code></h4>
+<ul class="two-column">
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLElement.clear_attributes" href="#musicscore.musicxml.elements.xml_element.XMLElement.clear_attributes">clear_attributes</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLElement.get_attribute" href="#musicscore.musicxml.elements.xml_element.XMLElement.get_attribute">get_attribute</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLElement.get_attributes" href="#musicscore.musicxml.elements.xml_element.XMLElement.get_attributes">get_attributes</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLElement.get_children_by_tag" href="#musicscore.musicxml.elements.xml_element.XMLElement.get_children_by_tag">get_children_by_tag</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLElement.remove_attribute" href="#musicscore.musicxml.elements.xml_element.XMLElement.remove_attribute">remove_attribute</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLElement.set_attribute" href="#musicscore.musicxml.elements.xml_element.XMLElement.set_attribute">set_attribute</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLElement.tag" href="#musicscore.musicxml.elements.xml_element.XMLElement.tag">tag</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLElement.text" href="#musicscore.musicxml.elements.xml_element.XMLElement.text">text</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLElement.to_string" href="#musicscore.musicxml.elements.xml_element.XMLElement.to_string">to_string</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.add_child" href="#musicscore.musicxml.elements.xml_element.XMLTree.add_child">add_child</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.add_xml_child" href="#musicscore.musicxml.elements.xml_element.XMLTree.add_xml_child">add_xml_child</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.check_non_optional" href="#musicscore.musicxml.elements.xml_element.XMLTree.check_non_optional">check_non_optional</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.close_dtd" href="#musicscore.musicxml.elements.xml_element.XMLTree.close_dtd">close_dtd</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.current_children" href="#musicscore.musicxml.elements.xml_element.XMLTree.current_children">current_children</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.current_dtd_choice" href="#musicscore.musicxml.elements.xml_element.XMLTree.current_dtd_choice">current_dtd_choice</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.get_children" href="#musicscore.musicxml.elements.xml_element.XMLTree.get_children">get_children</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.get_children_by_type" href="#musicscore.musicxml.elements.xml_element.XMLTree.get_children_by_type">get_children_by_type</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.goto_next_dtd_choice" href="#musicscore.musicxml.elements.xml_element.XMLTree.goto_next_dtd_choice">goto_next_dtd_choice</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.remove_child" href="#musicscore.musicxml.elements.xml_element.XMLTree.remove_child">remove_child</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.reset_dtd" href="#musicscore.musicxml.elements.xml_element.XMLTree.reset_dtd">reset_dtd</a></code></li>
+<li><code><a title="musicscore.musicxml.elements.xml_element.XMLTree.update_current_children" href="#musicscore.musicxml.elements.xml_element.XMLTree.update_current_children">update_current_children</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

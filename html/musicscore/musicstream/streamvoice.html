@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musicstream.streamvoice API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musicstream.streamvoice</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from musicscore.musictree.midi import Midi
+from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, HIGH_TREBLE_CLEF, LOW_BASS_CLEF
+from musicscore.musictree.treemeasure import TreeMeasure
+from musicscore.musictree.treepart import TreePart
+from musicscore.musicxml.groups.common import Voice
+from musicscore.musicxml.types.simple_type import PositiveInteger
+
+
+class StreamVoice(object):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, voice=1, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._chords = []
+        self._voice = None
+        self.voice = voice
+
+    @property
+    def chords(self):
+        return self._chords
+
+    @property
+    def voice(self):
+        return self._voice
+
+    @voice.setter
+    def voice(self, value):
+        PositiveInteger(value)
+        self._voice = value
+
+    def add_chord(self, chord):
+        chord.voice = self.voice
+        self._chords.append(chord)
+
+    def add_to_part(self, part, chords=None):
+        if chords is None:
+            chords = self.chords
+
+        for i in range(len(chords)):
+            chord = chords[i]
+            remain = part.add_chord(chord, self.voice)
+            if remain:
+                remaining_chords = [remain] + chords[i + 1:]
+                return remaining_chords
+
+    def add_to_score(self, score, first_measure=1, part_number=1):
+        measure_number = first_measure
+
+        def _get_measure():
+            try:
+                measure = score.get_children_by_type(TreeMeasure)[measure_number - 1]
+            except IndexError:
+                measure = score.add_measure()
+
+            return measure
+
+        measure = _get_measure()
+        for i in range(part_number - len(measure.get_children_by_type(TreePart))):
+            score.add_part()
+
+        def _add_to_part(chords=None):
+            part = measure.get_children_by_type(TreePart)[part_number - 1]
+            remain = self.add_to_part(part, chords)
+            return remain
+
+        remain = _add_to_part()
+
+        while remain:
+            measure_number += 1
+            measure = _get_measure()
+            remain = _add_to_part(remain)
+
+
+class SimpleFormat(object):
+    def __init__(self, durations=None, midis=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._durations = None
+        self._midis = None
+        self._set_durations(durations)
+        self._set_midis(midis)
+        self._chords = None
+
+    @property
+    def durations(self):
+        return [chord.quarter_duration for chord in self.chords]
+        # return self._durations
+
+    @property
+    def midis(self):
+        return [chord.midis for chord in self.chords]
+
+    @property
+    def chords(self):
+        if self._chords is None:
+            self._generate_chords()
+        return self._chords
+
+    @staticmethod
+    def _check_duration(durations):
+        for duration in durations:
+            if duration &lt; 0:
+                raise ValueError(&#39;SimpleFormat(): wrong duration {}&#39;.format(duration))
+
+    def _set_durations(self, durations):
+        if durations is None:
+            durations = []
+        else:
+            try:
+                durations = list(durations)
+            except TypeError:
+                durations = [durations]
+
+        self._check_duration(durations)
+
+        self._durations = durations
+
+    def _set_midis(self, midis):
+        if midis is None:
+            midis = []
+        else:
+            try:
+                midis = list(midis)
+            except TypeError:
+                midis = [midis]
+
+        self._midis = []
+        for m in midis:
+            try:
+                ms = [Midi(midi) for midi in m]
+                self._midis.append(ms)
+            except TypeError:
+                self._midis.append(Midi(m))
+
+    def get_durations(self):
+        return [chord.duration for chord in self.chords]
+
+    def get_midis(self):
+        return [chord.midis for chord in self.chords]
+
+    def _generate_chords(self):
+        if self._durations == [] and self._midis == []:
+            pass
+        else:
+            self._chords = []
+            for i in range(len(self._durations) - len(self._midis)):
+                self._midis.append(71)
+
+            for i in range(len(self._midis) - len(self._durations)):
+                self._durations.append(1)
+
+            for d, m in zip(self._durations, self._midis):
+                self._chords.append(TreeChord(m, d))
+
+    def add_chord(self, chord):
+        if self._chords is None:
+            self._chords = []
+        if chord.get_children_by_type(Voice):
+            raise Exception(&#39;SimpleFormat Chords cannot have a voice child.&#39;)
+        self._chords.append(chord)
+        return chord
+
+    def to_voice(self, voice_number=1):
+        output = StreamVoice(voice_number)
+        for chord in self.chords:
+            output.add_chord(chord.__deepcopy__())
+            # output.add_chord(chord)
+        return output
+
+    def __deepcopy__(self, memodict={}):
+        output = SimpleFormat()
+        for chord in self.chords:
+            output.add_chord(chord.deepcopy_for_SimpleFormat())
+        return output
+
+    def auto_clef(self):
+        clefs = []
+        chords = self.chords
+
+        # ranges
+        high_treble = (87, 120)
+        treble = (67, 86.5)
+        treble_bass = (56, 66.5)
+        bass = (36, 55.5)
+        low_bass = (20, 35.5)
+
+        for chord in [chord for chord in chords if not chord.is_rest]:
+            try:
+                last_clef = clefs[-1]
+            except IndexError:
+                last_clef = None
+
+            if high_treble[0] &lt;= chord.midis[0].value &lt;= high_treble[1]:
+                clef = HIGH_TREBLE_CLEF
+            elif treble[0] &lt;= chord.midis[0].value &lt;= treble[1]:
+                clef = TREBLE_CLEF
+            elif treble_bass[0] &lt;= chord.midis[0].value &lt;= treble_bass[1]:
+                if last_clef == LOW_BASS_CLEF:
+                    clef = BASS_CLEF
+                elif not last_clef or last_clef == HIGH_TREBLE_CLEF:
+                    clef = TREBLE_CLEF
+                else:
+                    clef = None
+
+            elif bass[0] &lt;= chord.midis[0].value &lt;= bass[1]:
+                clef = BASS_CLEF
+            elif low_bass[0] &lt;= chord.midis[0].value &lt;= low_bass[1]:
+                clef = LOW_BASS_CLEF
+            else:
+                raise ValueError(&#39;midi {} not in clef ranges&#39;.format(chord.midis[0].value))
+
+            if clef and clef != last_clef:
+                chord.add_clef(clef)
+                clefs.append(clef)
+
+    def change_chord(self, *chord_formulas):
+        for formula in chord_formulas:
+            if not isinstance(formula, StreamChordFormula):
+                raise TypeError
+
+        for chord in self.chords:
+            for formula in chord_formulas:
+                if formula.condition(chord):
+                    formula.change_chord(chord)
+                    break</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat"><code class="flex name class">
+<span>class <span class="ident">SimpleFormat</span></span>
+<span>(</span><span>durations=None, midis=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class SimpleFormat(object):
+    def __init__(self, durations=None, midis=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._durations = None
+        self._midis = None
+        self._set_durations(durations)
+        self._set_midis(midis)
+        self._chords = None
+
+    @property
+    def durations(self):
+        return [chord.quarter_duration for chord in self.chords]
+        # return self._durations
+
+    @property
+    def midis(self):
+        return [chord.midis for chord in self.chords]
+
+    @property
+    def chords(self):
+        if self._chords is None:
+            self._generate_chords()
+        return self._chords
+
+    @staticmethod
+    def _check_duration(durations):
+        for duration in durations:
+            if duration &lt; 0:
+                raise ValueError(&#39;SimpleFormat(): wrong duration {}&#39;.format(duration))
+
+    def _set_durations(self, durations):
+        if durations is None:
+            durations = []
+        else:
+            try:
+                durations = list(durations)
+            except TypeError:
+                durations = [durations]
+
+        self._check_duration(durations)
+
+        self._durations = durations
+
+    def _set_midis(self, midis):
+        if midis is None:
+            midis = []
+        else:
+            try:
+                midis = list(midis)
+            except TypeError:
+                midis = [midis]
+
+        self._midis = []
+        for m in midis:
+            try:
+                ms = [Midi(midi) for midi in m]
+                self._midis.append(ms)
+            except TypeError:
+                self._midis.append(Midi(m))
+
+    def get_durations(self):
+        return [chord.duration for chord in self.chords]
+
+    def get_midis(self):
+        return [chord.midis for chord in self.chords]
+
+    def _generate_chords(self):
+        if self._durations == [] and self._midis == []:
+            pass
+        else:
+            self._chords = []
+            for i in range(len(self._durations) - len(self._midis)):
+                self._midis.append(71)
+
+            for i in range(len(self._midis) - len(self._durations)):
+                self._durations.append(1)
+
+            for d, m in zip(self._durations, self._midis):
+                self._chords.append(TreeChord(m, d))
+
+    def add_chord(self, chord):
+        if self._chords is None:
+            self._chords = []
+        if chord.get_children_by_type(Voice):
+            raise Exception(&#39;SimpleFormat Chords cannot have a voice child.&#39;)
+        self._chords.append(chord)
+        return chord
+
+    def to_voice(self, voice_number=1):
+        output = StreamVoice(voice_number)
+        for chord in self.chords:
+            output.add_chord(chord.__deepcopy__())
+            # output.add_chord(chord)
+        return output
+
+    def __deepcopy__(self, memodict={}):
+        output = SimpleFormat()
+        for chord in self.chords:
+            output.add_chord(chord.deepcopy_for_SimpleFormat())
+        return output
+
+    def auto_clef(self):
+        clefs = []
+        chords = self.chords
+
+        # ranges
+        high_treble = (87, 120)
+        treble = (67, 86.5)
+        treble_bass = (56, 66.5)
+        bass = (36, 55.5)
+        low_bass = (20, 35.5)
+
+        for chord in [chord for chord in chords if not chord.is_rest]:
+            try:
+                last_clef = clefs[-1]
+            except IndexError:
+                last_clef = None
+
+            if high_treble[0] &lt;= chord.midis[0].value &lt;= high_treble[1]:
+                clef = HIGH_TREBLE_CLEF
+            elif treble[0] &lt;= chord.midis[0].value &lt;= treble[1]:
+                clef = TREBLE_CLEF
+            elif treble_bass[0] &lt;= chord.midis[0].value &lt;= treble_bass[1]:
+                if last_clef == LOW_BASS_CLEF:
+                    clef = BASS_CLEF
+                elif not last_clef or last_clef == HIGH_TREBLE_CLEF:
+                    clef = TREBLE_CLEF
+                else:
+                    clef = None
+
+            elif bass[0] &lt;= chord.midis[0].value &lt;= bass[1]:
+                clef = BASS_CLEF
+            elif low_bass[0] &lt;= chord.midis[0].value &lt;= low_bass[1]:
+                clef = LOW_BASS_CLEF
+            else:
+                raise ValueError(&#39;midi {} not in clef ranges&#39;.format(chord.midis[0].value))
+
+            if clef and clef != last_clef:
+                chord.add_clef(clef)
+                clefs.append(clef)
+
+    def change_chord(self, *chord_formulas):
+        for formula in chord_formulas:
+            if not isinstance(formula, StreamChordFormula):
+                raise TypeError
+
+        for chord in self.chords:
+            for formula in chord_formulas:
+                if formula.condition(chord):
+                    formula.change_chord(chord)
+                    break</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.chords"><code class="name">var <span class="ident">chords</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def chords(self):
+    if self._chords is None:
+        self._generate_chords()
+    return self._chords</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.durations"><code class="name">var <span class="ident">durations</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def durations(self):
+    return [chord.quarter_duration for chord in self.chords]</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.midis"><code class="name">var <span class="ident">midis</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def midis(self):
+    return [chord.midis for chord in self.chords]</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.add_chord"><code class="name flex">
+<span>def <span class="ident">add_chord</span></span>(<span>self, chord)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_chord(self, chord):
+    if self._chords is None:
+        self._chords = []
+    if chord.get_children_by_type(Voice):
+        raise Exception(&#39;SimpleFormat Chords cannot have a voice child.&#39;)
+    self._chords.append(chord)
+    return chord</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.auto_clef"><code class="name flex">
+<span>def <span class="ident">auto_clef</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def auto_clef(self):
+    clefs = []
+    chords = self.chords
+
+    # ranges
+    high_treble = (87, 120)
+    treble = (67, 86.5)
+    treble_bass = (56, 66.5)
+    bass = (36, 55.5)
+    low_bass = (20, 35.5)
+
+    for chord in [chord for chord in chords if not chord.is_rest]:
+        try:
+            last_clef = clefs[-1]
+        except IndexError:
+            last_clef = None
+
+        if high_treble[0] &lt;= chord.midis[0].value &lt;= high_treble[1]:
+            clef = HIGH_TREBLE_CLEF
+        elif treble[0] &lt;= chord.midis[0].value &lt;= treble[1]:
+            clef = TREBLE_CLEF
+        elif treble_bass[0] &lt;= chord.midis[0].value &lt;= treble_bass[1]:
+            if last_clef == LOW_BASS_CLEF:
+                clef = BASS_CLEF
+            elif not last_clef or last_clef == HIGH_TREBLE_CLEF:
+                clef = TREBLE_CLEF
+            else:
+                clef = None
+
+        elif bass[0] &lt;= chord.midis[0].value &lt;= bass[1]:
+            clef = BASS_CLEF
+        elif low_bass[0] &lt;= chord.midis[0].value &lt;= low_bass[1]:
+            clef = LOW_BASS_CLEF
+        else:
+            raise ValueError(&#39;midi {} not in clef ranges&#39;.format(chord.midis[0].value))
+
+        if clef and clef != last_clef:
+            chord.add_clef(clef)
+            clefs.append(clef)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.change_chord"><code class="name flex">
+<span>def <span class="ident">change_chord</span></span>(<span>self, *chord_formulas)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def change_chord(self, *chord_formulas):
+    for formula in chord_formulas:
+        if not isinstance(formula, StreamChordFormula):
+            raise TypeError
+
+    for chord in self.chords:
+        for formula in chord_formulas:
+            if formula.condition(chord):
+                formula.change_chord(chord)
+                break</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.get_durations"><code class="name flex">
+<span>def <span class="ident">get_durations</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_durations(self):
+    return [chord.duration for chord in self.chords]</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.get_midis"><code class="name flex">
+<span>def <span class="ident">get_midis</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_midis(self):
+    return [chord.midis for chord in self.chords]</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.to_voice"><code class="name flex">
+<span>def <span class="ident">to_voice</span></span>(<span>self, voice_number=1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def to_voice(self, voice_number=1):
+    output = StreamVoice(voice_number)
+    for chord in self.chords:
+        output.add_chord(chord.__deepcopy__())
+        # output.add_chord(chord)
+    return output</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.StreamVoice"><code class="flex name class">
+<span>class <span class="ident">StreamVoice</span></span>
+<span>(</span><span>voice=1, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class StreamVoice(object):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, voice=1, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._chords = []
+        self._voice = None
+        self.voice = voice
+
+    @property
+    def chords(self):
+        return self._chords
+
+    @property
+    def voice(self):
+        return self._voice
+
+    @voice.setter
+    def voice(self, value):
+        PositiveInteger(value)
+        self._voice = value
+
+    def add_chord(self, chord):
+        chord.voice = self.voice
+        self._chords.append(chord)
+
+    def add_to_part(self, part, chords=None):
+        if chords is None:
+            chords = self.chords
+
+        for i in range(len(chords)):
+            chord = chords[i]
+            remain = part.add_chord(chord, self.voice)
+            if remain:
+                remaining_chords = [remain] + chords[i + 1:]
+                return remaining_chords
+
+    def add_to_score(self, score, first_measure=1, part_number=1):
+        measure_number = first_measure
+
+        def _get_measure():
+            try:
+                measure = score.get_children_by_type(TreeMeasure)[measure_number - 1]
+            except IndexError:
+                measure = score.add_measure()
+
+            return measure
+
+        measure = _get_measure()
+        for i in range(part_number - len(measure.get_children_by_type(TreePart))):
+            score.add_part()
+
+        def _add_to_part(chords=None):
+            part = measure.get_children_by_type(TreePart)[part_number - 1]
+            remain = self.add_to_part(part, chords)
+            return remain
+
+        remain = _add_to_part()
+
+        while remain:
+            measure_number += 1
+            measure = _get_measure()
+            remain = _add_to_part(remain)</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicstream.streamvoice.StreamVoice.chords"><code class="name">var <span class="ident">chords</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def chords(self):
+    return self._chords</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.StreamVoice.voice"><code class="name">var <span class="ident">voice</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def voice(self):
+    return self._voice</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musicstream.streamvoice.StreamVoice.add_chord"><code class="name flex">
+<span>def <span class="ident">add_chord</span></span>(<span>self, chord)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_chord(self, chord):
+    chord.voice = self.voice
+    self._chords.append(chord)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.StreamVoice.add_to_part"><code class="name flex">
+<span>def <span class="ident">add_to_part</span></span>(<span>self, part, chords=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_to_part(self, part, chords=None):
+    if chords is None:
+        chords = self.chords
+
+    for i in range(len(chords)):
+        chord = chords[i]
+        remain = part.add_chord(chord, self.voice)
+        if remain:
+            remaining_chords = [remain] + chords[i + 1:]
+            return remaining_chords</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.StreamVoice.add_to_score"><code class="name flex">
+<span>def <span class="ident">add_to_score</span></span>(<span>self, score, first_measure=1, part_number=1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_to_score(self, score, first_measure=1, part_number=1):
+    measure_number = first_measure
+
+    def _get_measure():
+        try:
+            measure = score.get_children_by_type(TreeMeasure)[measure_number - 1]
+        except IndexError:
+            measure = score.add_measure()
+
+        return measure
+
+    measure = _get_measure()
+    for i in range(part_number - len(measure.get_children_by_type(TreePart))):
+        score.add_part()
+
+    def _add_to_part(chords=None):
+        part = measure.get_children_by_type(TreePart)[part_number - 1]
+        remain = self.add_to_part(part, chords)
+        return remain
+
+    remain = _add_to_part()
+
+    while remain:
+        measure_number += 1
+        measure = _get_measure()
+        remain = _add_to_part(remain)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musicstream" href="index.html">musicscore.musicstream</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musicstream.streamvoice.SimpleFormat" href="#musicscore.musicstream.streamvoice.SimpleFormat">SimpleFormat</a></code></h4>
+<ul class="two-column">
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.add_chord" href="#musicscore.musicstream.streamvoice.SimpleFormat.add_chord">add_chord</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.auto_clef" href="#musicscore.musicstream.streamvoice.SimpleFormat.auto_clef">auto_clef</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.change_chord" href="#musicscore.musicstream.streamvoice.SimpleFormat.change_chord">change_chord</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.chords" href="#musicscore.musicstream.streamvoice.SimpleFormat.chords">chords</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.durations" href="#musicscore.musicstream.streamvoice.SimpleFormat.durations">durations</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.get_durations" href="#musicscore.musicstream.streamvoice.SimpleFormat.get_durations">get_durations</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.get_midis" href="#musicscore.musicstream.streamvoice.SimpleFormat.get_midis">get_midis</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.midis" href="#musicscore.musicstream.streamvoice.SimpleFormat.midis">midis</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.to_voice" href="#musicscore.musicstream.streamvoice.SimpleFormat.to_voice">to_voice</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musicstream.streamvoice.StreamVoice" href="#musicscore.musicstream.streamvoice.StreamVoice">StreamVoice</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicstream.streamvoice.StreamVoice.add_chord" href="#musicscore.musicstream.streamvoice.StreamVoice.add_chord">add_chord</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.StreamVoice.add_to_part" href="#musicscore.musicstream.streamvoice.StreamVoice.add_to_part">add_to_part</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.StreamVoice.add_to_score" href="#musicscore.musicstream.streamvoice.StreamVoice.add_to_score">add_to_score</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.StreamVoice.chords" href="#musicscore.musicstream.streamvoice.StreamVoice.chords">chords</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.StreamVoice.voice" href="#musicscore.musicstream.streamvoice.StreamVoice.voice">voice</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

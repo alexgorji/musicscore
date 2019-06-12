@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musicxml.types.complextypes.barline API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musicxml.types.complextypes.barline</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from musicscore.dtd.dtd import Sequence, GroupReference, Element
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+from musicscore.musicxml.attributes.barline import BarlineAttributes
+from musicscore.musicxml.attributes.color import Color
+from musicscore.musicxml.groups.common import Editorial
+from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from musicscore.musicxml.types.complextypes.segno import ComplexTypeSegno
+from musicscore.musicxml.types.simple_type import TypeBarStyle, TypeBackwardForward
+from musicscore.musicxml.elements.xml_element import XMLElement
+
+
+class WavyLine(XMLElement):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;wavy-line&#39;, *args, **kwargs)
+        raise NotImplementedError(&#39;WavyLine&#39;)
+
+
+class Segno(ComplexTypeSegno):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;segno&#39;, *args, **kwargs)
+
+
+class Coda(XMLElement):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;coda&#39;, *args, **kwargs)
+        raise NotImplementedError()
+
+
+class Fermata(XMLElement):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;fermata&#39;, *args, **kwargs)
+        raise NotImplementedError(&#39;Fermata&#39;)
+
+
+class Ending(XMLElement):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;ending&#39;, *args, **kwargs)
+        raise NotImplementedError(&#39;Ending&#39;)
+
+
+class Times(AttributeAbstract):
+
+    def __init__(self, times=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;times&#39;, times, &#39;NonNegativeInteger&#39;)
+
+
+class Winged(AttributeAbstract):
+
+    def __init__(self, winged=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;winged&#39;, winged, &#39;TypeWinged&#39;)
+
+
+class ComplexTypeRepeat(ComplexType, Times, Winged):
+    &#34;&#34;&#34;The repeat type represents repeat marks. The start of the repeat has a forward direction while the end of the
+    repeat has a backward direction. Backward repeats that are not part of an ending can use the times attribute to
+    indicate the number of times the repeated section is played.
+    &#34;&#34;&#34;
+
+    def __init__(self, tag, direction, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+        self.direction = direction
+
+    @property
+    def direction(self):
+        return self.get_attribute(&#39;direction&#39;)
+
+    @direction.setter
+    def direction(self, value):
+        if value is None:
+            self.remove_attribute(&#39;direction&#39;)
+        else:
+            TypeBackwardForward(value)
+            self._ATTRIBUTES.insert(0, &#39;direction&#39;)
+            self.set_attribute(&#39;direction&#39;, value)
+
+
+class Repeat(ComplexTypeRepeat):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;repeat&#39;, *args, **kwargs)
+
+
+&#39;&#39;&#39;
+        &lt;xs:complexType name=&#34;barline&#34;&gt;
+                &lt;xs:sequence&gt;
+                        &lt;xs:element name=&#34;bar-style&#34; type=&#34;bar-style-color&#34; minOccurs=&#34;0&#34;/&gt;
+                        &lt;xs:group ref=&#34;editorial&#34;/&gt;
+                        &lt;xs:element name=&#34;wavy-line&#34; type=&#34;wavy-line&#34; minOccurs=&#34;0&#34;/&gt;
+                        &lt;xs:element name=&#34;segno&#34; type=&#34;segno&#34; minOccurs=&#34;0&#34;/&gt;
+                        &lt;xs:element name=&#34;coda&#34; type=&#34;coda&#34; minOccurs=&#34;0&#34;/&gt;
+                        &lt;xs:element name=&#34;fermata&#34; type=&#34;fermata&#34; minOccurs=&#34;0&#34; maxOccurs=&#34;2&#34;/&gt;
+                        &lt;xs:element name=&#34;ending&#34; type=&#34;ending&#34; minOccurs=&#34;0&#34;/&gt;
+                        &lt;xs:element name=&#34;repeat&#34; type=&#34;repeat&#34; minOccurs=&#34;0&#34;/&gt;
+                &lt;/xs:sequence&gt;
+                &lt;xs:attribute name=&#34;location&#34; type=&#34;right-left-middle&#34; default=&#34;right&#34;/&gt;
+                &lt;xs:attribute name=&#34;segno&#34; type=&#34;xs:token&#34;/&gt;
+                &lt;xs:attribute name=&#34;coda&#34; type=&#34;xs:token&#34;/&gt;
+                &lt;xs:attribute name=&#34;divisions&#34; type=&#34;divisions&#34;/&gt;
+                &lt;xs:attributeGroup ref=&#34;optional-unique-id&#34;/&gt;
+        &lt;/xs:complexType&gt;
+&#39;&#39;&#39;
+
+
+class ComplexTypeBarStyleColor(ComplexType, TypeBarStyle, Color):
+    &#34;&#34;&#34;
+    The bar-style-color type contains barline style and color information.
+    &#34;&#34;&#34;
+
+    def __init__(self, tag, value, *args, **kwargs):
+        super().__init__(tag=tag, value=value, *args, **kwargs)
+
+
+class BarStyle(ComplexTypeBarStyleColor):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;bar-style&#39;, *args, **kwargs)
+
+
+class ComplexTypeBarline(ComplexType, BarlineAttributes):
+    &#34;&#34;&#34;
+    If a barline is other than a normal single barline, it should be represented by a barline type that describes it.
+    This includes information about repeats and multiple endings, as well as line style. Barline data is on the same
+    level as the other musical data in a score - a child of a measure in a partwise score, or a part in a timewise
+    score. This allows for barlines within measures, as in dotted barlines that subdivide measures in complex meters.
+    The two fermata elements allow for fermatas on both sides of the barline (the lower one inverted).
+
+    Barlines have a location attribute to make it easier to process barlines independently of the other musical data in
+    a score. It is often easier to set up measures separately from entering notes. The location attribute must match
+    where the barline element occurs within the rest of the musical data in the score. If location is left, it should be
+    the first element in the measure, aside from the print, bookmark, and link elements. If location is right, it should
+    be the last element, again with the possible exception of the print, bookmark, and link elements. If no location is
+    specified, the right barline is the default. The segno, coda, and divisions attributes work the same way as in the
+    sound element. They are used for playback when barline elements contain segno or coda child elements.
+    &#34;&#34;&#34;
+    _DTD = Sequence(
+        Element(BarStyle, min_occurrence=0),
+        GroupReference(Editorial),
+        Element(WavyLine, min_occurrence=0),
+        Element(Segno, min_occurrence=0),
+        Element(Coda, min_occurrence=0),
+        Element(Fermata, min_occurrence=0, max_occurrence=2),
+        Element(Ending, min_occurrence=0),
+        Element(Repeat, min_occurrence=0)
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;barline&#39;, *args, **kwargs)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musicxml.types.complextypes.barline.BarStyle"><code class="flex name class">
+<span>class <span class="ident">BarStyle</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BarStyle(ComplexTypeBarStyleColor):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;bar-style&#39;, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.barline.ComplexTypeBarStyleColor" href="#musicscore.musicxml.types.complextypes.barline.ComplexTypeBarStyleColor">ComplexTypeBarStyleColor</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeBarStyle" href="../simple_type.html#musicscore.musicxml.types.simple_type.TypeBarStyle">TypeBarStyle</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.barline.Coda"><code class="flex name class">
+<span>class <span class="ident">Coda</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A simple Tree class</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Coda(XMLElement):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;coda&#39;, *args, **kwargs)
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.barline.ComplexTypeBarStyleColor"><code class="flex name class">
+<span>class <span class="ident">ComplexTypeBarStyleColor</span></span>
+<span>(</span><span>tag, value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The bar-style-color type contains barline style and color information.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ComplexTypeBarStyleColor(ComplexType, TypeBarStyle, Color):
+    &#34;&#34;&#34;
+    The bar-style-color type contains barline style and color information.
+    &#34;&#34;&#34;
+
+    def __init__(self, tag, value, *args, **kwargs):
+        super().__init__(tag=tag, value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeBarStyle" href="../simple_type.html#musicscore.musicxml.types.simple_type.TypeBarStyle">TypeBarStyle</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.barline.BarStyle" href="#musicscore.musicxml.types.complextypes.barline.BarStyle">BarStyle</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.barline.ComplexTypeBarline"><code class="flex name class">
+<span>class <span class="ident">ComplexTypeBarline</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>If a barline is other than a normal single barline, it should be represented by a barline type that describes it.
+This includes information about repeats and multiple endings, as well as line style. Barline data is on the same
+level as the other musical data in a score - a child of a measure in a partwise score, or a part in a timewise
+score. This allows for barlines within measures, as in dotted barlines that subdivide measures in complex meters.
+The two fermata elements allow for fermatas on both sides of the barline (the lower one inverted).</p>
+<p>Barlines have a location attribute to make it easier to process barlines independently of the other musical data in
+a score. It is often easier to set up measures separately from entering notes. The location attribute must match
+where the barline element occurs within the rest of the musical data in the score. If location is left, it should be
+the first element in the measure, aside from the print, bookmark, and link elements. If location is right, it should
+be the last element, again with the possible exception of the print, bookmark, and link elements. If no location is
+specified, the right barline is the default. The segno, coda, and divisions attributes work the same way as in the
+sound element. They are used for playback when barline elements contain segno or coda child elements.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ComplexTypeBarline(ComplexType, BarlineAttributes):
+    &#34;&#34;&#34;
+    If a barline is other than a normal single barline, it should be represented by a barline type that describes it.
+    This includes information about repeats and multiple endings, as well as line style. Barline data is on the same
+    level as the other musical data in a score - a child of a measure in a partwise score, or a part in a timewise
+    score. This allows for barlines within measures, as in dotted barlines that subdivide measures in complex meters.
+    The two fermata elements allow for fermatas on both sides of the barline (the lower one inverted).
+
+    Barlines have a location attribute to make it easier to process barlines independently of the other musical data in
+    a score. It is often easier to set up measures separately from entering notes. The location attribute must match
+    where the barline element occurs within the rest of the musical data in the score. If location is left, it should be
+    the first element in the measure, aside from the print, bookmark, and link elements. If location is right, it should
+    be the last element, again with the possible exception of the print, bookmark, and link elements. If no location is
+    specified, the right barline is the default. The segno, coda, and divisions attributes work the same way as in the
+    sound element. They are used for playback when barline elements contain segno or coda child elements.
+    &#34;&#34;&#34;
+    _DTD = Sequence(
+        Element(BarStyle, min_occurrence=0),
+        GroupReference(Editorial),
+        Element(WavyLine, min_occurrence=0),
+        Element(Segno, min_occurrence=0),
+        Element(Coda, min_occurrence=0),
+        Element(Fermata, min_occurrence=0, max_occurrence=2),
+        Element(Ending, min_occurrence=0),
+        Element(Repeat, min_occurrence=0)
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;barline&#39;, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.barline.BarlineAttributes" href="../../attributes/barline.html#musicscore.musicxml.attributes.barline.BarlineAttributes">BarlineAttributes</a></li>
+<li><a title="musicscore.musicxml.attributes.barline.Location" href="../../attributes/barline.html#musicscore.musicxml.attributes.barline.Location">Location</a></li>
+<li><a title="musicscore.musicxml.attributes.barline.Segno" href="../../attributes/barline.html#musicscore.musicxml.attributes.barline.Segno">Segno</a></li>
+<li><a title="musicscore.musicxml.attributes.barline.Coda" href="../../attributes/barline.html#musicscore.musicxml.attributes.barline.Coda">Coda</a></li>
+<li><a title="musicscore.musicxml.attributes.barline.Divisions" href="../../attributes/barline.html#musicscore.musicxml.attributes.barline.Divisions">Divisions</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat"><code class="flex name class">
+<span>class <span class="ident">ComplexTypeRepeat</span></span>
+<span>(</span><span>tag, direction, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The repeat type represents repeat marks. The start of the repeat has a forward direction while the end of the
+repeat has a backward direction. Backward repeats that are not part of an ending can use the times attribute to
+indicate the number of times the repeated section is played.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ComplexTypeRepeat(ComplexType, Times, Winged):
+    &#34;&#34;&#34;The repeat type represents repeat marks. The start of the repeat has a forward direction while the end of the
+    repeat has a backward direction. Backward repeats that are not part of an ending can use the times attribute to
+    indicate the number of times the repeated section is played.
+    &#34;&#34;&#34;
+
+    def __init__(self, tag, direction, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+        self.direction = direction
+
+    @property
+    def direction(self):
+        return self.get_attribute(&#39;direction&#39;)
+
+    @direction.setter
+    def direction(self, value):
+        if value is None:
+            self.remove_attribute(&#39;direction&#39;)
+        else:
+            TypeBackwardForward(value)
+            self._ATTRIBUTES.insert(0, &#39;direction&#39;)
+            self.set_attribute(&#39;direction&#39;, value)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.complextypes.barline.Times" href="#musicscore.musicxml.types.complextypes.barline.Times">Times</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.barline.Winged" href="#musicscore.musicxml.types.complextypes.barline.Winged">Winged</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.barline.Repeat" href="#musicscore.musicxml.types.complextypes.barline.Repeat">Repeat</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat.direction"><code class="name">var <span class="ident">direction</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def direction(self):
+    return self.get_attribute(&#39;direction&#39;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.barline.Ending"><code class="flex name class">
+<span>class <span class="ident">Ending</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A simple Tree class</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Ending(XMLElement):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;ending&#39;, *args, **kwargs)
+        raise NotImplementedError(&#39;Ending&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.barline.Fermata"><code class="flex name class">
+<span>class <span class="ident">Fermata</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A simple Tree class</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Fermata(XMLElement):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;fermata&#39;, *args, **kwargs)
+        raise NotImplementedError(&#39;Fermata&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.barline.Repeat"><code class="flex name class">
+<span>class <span class="ident">Repeat</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The repeat type represents repeat marks. The start of the repeat has a forward direction while the end of the
+repeat has a backward direction. Backward repeats that are not part of an ending can use the times attribute to
+indicate the number of times the repeated section is played.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Repeat(ComplexTypeRepeat):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;repeat&#39;, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat" href="#musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat">ComplexTypeRepeat</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.complextypes.barline.Times" href="#musicscore.musicxml.types.complextypes.barline.Times">Times</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.barline.Winged" href="#musicscore.musicxml.types.complextypes.barline.Winged">Winged</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.barline.Segno"><code class="flex name class">
+<span>class <span class="ident">Segno</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The segno type is the visual indicator of a segno sign. The exact glyph can be specified with the smufl
+attribute. A sound element is also needed to guide playback applications reliably.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Segno(ComplexTypeSegno):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;segno&#39;, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.segno.ComplexTypeSegno" href="segno.html#musicscore.musicxml.types.complextypes.segno.ComplexTypeSegno">ComplexTypeSegno</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyleAlign" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyleAlign">PrintStyleAlign</a></li>
+<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.align.Halign" href="../../attributes/align.html#musicscore.musicxml.attributes.align.Halign">Halign</a></li>
+<li><a title="musicscore.musicxml.attributes.align.Valign" href="../../attributes/align.html#musicscore.musicxml.attributes.align.Valign">Valign</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.segno.Smulf" href="segno.html#musicscore.musicxml.types.complextypes.segno.Smulf">Smulf</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeTypeSmulfSegnoGlyphName" href="../simple_type.html#musicscore.musicxml.types.simple_type.TypeTypeSmulfSegnoGlyphName">TypeTypeSmulfSegnoGlyphName</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeSmulfGlyphName" href="../simple_type.html#musicscore.musicxml.types.simple_type.TypeSmulfGlyphName">TypeSmulfGlyphName</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.Token" href="../simple_type.html#musicscore.musicxml.types.simple_type.Token">Token</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.String" href="../simple_type.html#musicscore.musicxml.types.simple_type.String">String</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.barline.Times"><code class="flex name class">
+<span>class <span class="ident">Times</span></span>
+<span>(</span><span>times=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Times(AttributeAbstract):
+
+    def __init__(self, times=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;times&#39;, times, &#39;NonNegativeInteger&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat" href="#musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat">ComplexTypeRepeat</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.barline.WavyLine"><code class="flex name class">
+<span>class <span class="ident">WavyLine</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A simple Tree class</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class WavyLine(XMLElement):
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=&#39;wavy-line&#39;, *args, **kwargs)
+        raise NotImplementedError(&#39;WavyLine&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.barline.Winged"><code class="flex name class">
+<span>class <span class="ident">Winged</span></span>
+<span>(</span><span>winged=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Winged(AttributeAbstract):
+
+    def __init__(self, winged=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;winged&#39;, winged, &#39;TypeWinged&#39;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat" href="#musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat">ComplexTypeRepeat</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musicxml.types.complextypes" href="index.html">musicscore.musicxml.types.complextypes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.BarStyle" href="#musicscore.musicxml.types.complextypes.barline.BarStyle">BarStyle</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.Coda" href="#musicscore.musicxml.types.complextypes.barline.Coda">Coda</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.ComplexTypeBarStyleColor" href="#musicscore.musicxml.types.complextypes.barline.ComplexTypeBarStyleColor">ComplexTypeBarStyleColor</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.ComplexTypeBarline" href="#musicscore.musicxml.types.complextypes.barline.ComplexTypeBarline">ComplexTypeBarline</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat" href="#musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat">ComplexTypeRepeat</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat.direction" href="#musicscore.musicxml.types.complextypes.barline.ComplexTypeRepeat.direction">direction</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.Ending" href="#musicscore.musicxml.types.complextypes.barline.Ending">Ending</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.Fermata" href="#musicscore.musicxml.types.complextypes.barline.Fermata">Fermata</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.Repeat" href="#musicscore.musicxml.types.complextypes.barline.Repeat">Repeat</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.Segno" href="#musicscore.musicxml.types.complextypes.barline.Segno">Segno</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.Times" href="#musicscore.musicxml.types.complextypes.barline.Times">Times</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.WavyLine" href="#musicscore.musicxml.types.complextypes.barline.WavyLine">WavyLine</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.barline.Winged" href="#musicscore.musicxml.types.complextypes.barline.Winged">Winged</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
