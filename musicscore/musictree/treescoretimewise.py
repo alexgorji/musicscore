@@ -9,7 +9,9 @@ from musicscore.musictree.treescorepart import TreeScorePart
 from musicscore.musicxml.elements import partwise
 from musicscore.musicxml.elements.scoreheader import PartList, Credit
 from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWords
-from musicscore.musicxml.types.complextypes.scorepart import PartName
+from musicscore.musicxml.types.complextypes.encoding import Supports
+from musicscore.musicxml.types.complextypes.identification import Encoding
+from musicscore.musicxml.types.complextypes.scorepart import PartName, Identification
 from musicscore.musicxml.elements.barline import Barline, BarStyle
 
 
@@ -30,6 +32,8 @@ class TreeScoreTimewise(timewise.Score):
         self._forbidden_divisions = None
         self._page_style = TreePageStyle(score=self, **kwargs)
         self._accidental_mode = 'normal'
+
+        self._identifications_added = False
 
     @property
     def max_division(self):
@@ -108,6 +112,16 @@ class TreeScoreTimewise(timewise.Score):
         else:
             new_measure = measure
         return new_measure
+
+    def _add_identifications(self):
+        identification = self.add_child(Identification())
+        encoding = identification.add_child(Encoding())
+        encoding.add_child(Supports(attribute='new-page', element='print', type_='yes', value_='yes'))
+        encoding.add_child(Supports(attribute='new-system', element='print', type_='yes', value_='yes'))
+        # encoding.add_child(Supports(element='accidental', type_='yes'))
+        # encoding.add_child(Supports(element='beam', type_='yes'))
+        # encoding.add_child(Supports(element='stem', type_='yes'))
+        self._identifications_added = True
 
     # def set_time_signatures(self, duration=None, times=None):
     #     if self.get_children_by_type(TreeMeasure):

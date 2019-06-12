@@ -4,6 +4,7 @@ from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
 from musicscore.musicxml.attributes.partname_text import PartNameText
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from musicscore.musicxml.types.complextypes.identification import ComplexTypeIdentification
 from musicscore.musicxml.types.simple_type import String
 
 
@@ -24,10 +25,12 @@ class Id(AttributeAbstract):
         self.generate_attribute('id', id, "ID")
 
 
-class Identification(XMLElement):
+class Identification(ComplexTypeIdentification):
+    _TAG = 'identification'
+
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='identification', *args, **kwargs)
-        raise NotImplementedError('Identification')
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
 
 
 class PartName(ComplexTypePartName):

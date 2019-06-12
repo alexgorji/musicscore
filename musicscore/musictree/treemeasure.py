@@ -6,6 +6,8 @@ from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.barline import Barline, BarStyle
 from musicscore.musicxml.groups.layout import SystemLayout
 from musicscore.musicxml.groups.musicdata import Print, Attributes
+from musicscore.musicxml.types.complextypes.identification import Encoding
+from musicscore.musicxml.types.complextypes.scorepart import Identification
 from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance
 
 
@@ -51,7 +53,6 @@ class TreeMeasure(timewise.Measure):
             (beats, beat_type) = time_signature
             output += beats.value / beat_type.value * 4
         return Fraction(output).limit_denominator(10000)
-
 
     @property
     def barline_style(self):
@@ -106,7 +107,27 @@ class TreeMeasure(timewise.Measure):
         else:
             self._offset = 0
 
+    def _add_page_one(self):
+        score = self.up
+
+        first_part = score.get_measure(1).get_part(1)
+
+        first_part.get_children_by_type(TreePart)
+        try:
+            print_ = first_part.get_children_by_type(Print)[0]
+        except IndexError:
+            print_ = first_part.add_child(Print())
+        print_.page_number = '1'
+
     def add_page_break(self):
+
+        score = self.up
+
+        if not score._identifications_added:
+            score._add_identifications()
+
+        self._add_page_one()
+
         for part in self.get_children_by_type(TreePart):
             try:
                 p = part.get_children_by_type(Print)[0]
@@ -115,13 +136,16 @@ class TreeMeasure(timewise.Measure):
             p.new_page = 'yes'
 
     def add_system_break(self):
+        score = self.up
+        if not score._identifications_added:
+            score._add_identifications()
+
         for part in self.get_children_by_type(TreePart):
             try:
                 p = part.get_children_by_type(Print)[0]
             except IndexError:
                 p = part.add_child(Print())
             p.new_system = 'yes'
-
 
     def add_system_distance(self, value):
         for part in self.get_children_by_type(TreePart):
@@ -135,14 +159,12 @@ class TreeMeasure(timewise.Measure):
             except IndexError:
                 s = p.add_child(SystemLayout())
 
-
             try:
                 sd = s.get_children_by_type(SystemDistance)[0]
             except IndexError:
                 sd = s.add_child(SystemDistance())
 
             sd.value = value
-
 
     @property
     def offset(self):
@@ -158,5 +180,3 @@ class TreeMeasure(timewise.Measure):
             if key == '_attributes':
                 new_measure.__dict__[new_key] = item
         return new_measure
-
-

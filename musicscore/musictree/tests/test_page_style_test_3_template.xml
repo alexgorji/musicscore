@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE score-timewise PUBLIC "-//Recordare//DTD MusicXML 3.0 Timewise//EN" "http://www.musicxml.org/dtds/timewise.dtd">
 <score-timewise version="3.0">
+  <identification>
+    <encoding>
+      <supports attribute="new-page" element="print" type="yes" value="yes"/>
+      <supports attribute="new-system" element="print" type="yes" value="yes"/>
+    </encoding>
+  </identification>
   <defaults>
     <scaling>
       <millimeters>7.2319</millimeters>
@@ -95,6 +101,7 @@
       <attributes>
         <divisions>1</divisions>
       </attributes>
+      <print new-system="yes"/>
       <note>
         <pitch>
           <step>B</step>
@@ -107,6 +114,128 @@
     </part>
   </measure>
   <measure number="6">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </part>
+  </measure>
+  <measure number="7">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </part>
+  </measure>
+  <measure number="8">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </part>
+  </measure>
+  <measure number="9">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </part>
+  </measure>
+  <measure number="10">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes">
+        <system-layout>
+          <system-distance>200</system-distance>
+        </system-layout>
+      </print>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </part>
+  </measure>
+  <measure number="11">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </part>
+  </measure>
+  <measure number="12">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print>
+        <system-layout>
+          <system-distance>200</system-distance>
+        </system-layout>
+      </print>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </part>
+  </measure>
+  <measure number="13">
     <part id="p1">
       <attributes>
         <divisions>1</divisions>

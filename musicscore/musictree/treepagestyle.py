@@ -2,17 +2,21 @@ from musicscore.musicxml.elements.scoreheader import Defaults
 from musicscore.musicxml.groups.layout import PageLayout, StaffLayout, SystemLayout
 from musicscore.musicxml.groups.margins import LeftMargin, RightMargin, TopMargin, BottomMargin
 from musicscore.musicxml.types.complextypes.defaults import Scaling
+from musicscore.musicxml.types.complextypes.encoding import Supports
+from musicscore.musicxml.types.complextypes.identification import Encoding
 from musicscore.musicxml.types.complextypes.pagelayout import PageMargins, PageHeight, PageWidth
 from musicscore.musicxml.types.complextypes.scaling import Millimeters, Tenths
+from musicscore.musicxml.types.complextypes.scorepart import Identification
 from musicscore.musicxml.types.complextypes.stafflayout import StaffDistance
-from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance
+from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance, SystemMargins, TopSystemDistance
 
 
 class TreePageStyle(object):
     sizes = {'A4': (210, 297), 'A3': (297, 420)}
 
     def __init__(self, score, scale=1, size='A4', format='portrait', left_margin=20, right_margin=10, top_margin=15,
-                 bottom_margin=15, system_distance=None, staff_distance=None):
+                 bottom_margin=15, system_distance=None, system_left_margin=None, system_right_margin=None,
+                 top_system_distance=None, staff_distance=None):
 
         self._score = None
         self.score = score
@@ -39,6 +43,9 @@ class TreePageStyle(object):
         self._system_distance = None
         self._staff_layout = None
         self._staff_distance = None
+        self._system_left_margin = None
+        self._system_right_margin = None
+        self._top_system_distance = None
 
         self.scale = scale
         self.size = size
@@ -49,7 +56,11 @@ class TreePageStyle(object):
         self.top_margin = top_margin
         self.bottom_margin = bottom_margin
         self.staff_distance = staff_distance
+
         self.system_distance = system_distance
+        self.system_left_margin = system_left_margin
+        self.system_right_margin = system_right_margin
+        self.top_system_distance = top_system_distance
 
     def millimeters_to_tenth(self, m):
         return round(m / self.millimeters * self.tenth)
@@ -85,6 +96,11 @@ class TreePageStyle(object):
             self._add_scaling()
 
         self._system_layout = self._defaults.add_child(SystemLayout())
+        self._system_distance = self._system_layout.add_child(SystemDistance(100))
+        self._system_margins = self._system_layout.add_child(SystemMargins())
+        self._system_left_margin = self._system_margins.add_child(LeftMargin(0))
+        self._system_right_margin = self._system_margins.add_child(RightMargin(0))
+        self._top_system_distance = self._system_layout.add_child(TopSystemDistance(150))
 
     def _add_page_margins(self):
         if not self._page_layout:
@@ -214,7 +230,7 @@ class TreePageStyle(object):
     @staff_distance.setter
     def staff_distance(self, value):
         if value:
-            value = self.millimeters_to_tenth(value)
+            # value = self.millimeters_to_tenth(value)
             if self.staff_distance:
                 self.staff_distance.value = value
             else:
@@ -229,13 +245,46 @@ class TreePageStyle(object):
     @system_distance.setter
     def system_distance(self, value):
         if value:
-            value = self.millimeters_to_tenth(value)
-            if self.system_distance:
-                self.system_distance.value = value
-            else:
-                if not self._system_layout:
-                    self._add_system_layout()
-                self._system_distance = self._system_layout.add_child(SystemDistance(value))
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.system_distance.value = value
+
+    @property
+    def system_left_margin(self):
+        return self._system_left_margin
+
+    @system_left_margin.setter
+    def system_left_margin(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.system_left_margin.value = value
+
+    @property
+    def system_right_margin(self):
+        return self._system_right_margin
+
+    @system_right_margin.setter
+    def system_right_margin(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.system_right_margin.value = value
+
+    @property
+    def top_system_distance(self):
+        return self._top_system_distance
+
+    @top_system_distance.setter
+    def top_system_distance(self, value):
+        if value:
+            # value = self.millimeters_to_tenth(value)
+            if not self._system_layout:
+                self._add_system_layout()
+            self.top_system_distance.value = value
 
     @property
     def size(self):
