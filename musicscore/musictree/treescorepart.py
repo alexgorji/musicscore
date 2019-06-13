@@ -44,8 +44,12 @@ class TreeScorePart(ScorePart):
     def get_parts(self):
         return self._parts
 
-    def add_part(self):
-        part = TreePart(id=self.id)
+    def add_part(self, part=None):
+        if not part:
+            part = TreePart(id=self.id)
+        else:
+            if part.id != self.id:
+                raise ValueError('Part must have the same id as TreeScorePart')
         part.parent_score_part = self
         self._parts.append(part)
         return part

@@ -80,12 +80,22 @@ class TreeScoreTimewise(timewise.Score):
     def get_score_parts(self):
         return self._part_list.get_children()
 
+    def get_score_part(self, id):
+        for score_part in self.get_score_parts():
+            if score_part.id == id:
+                return score_part
+        return None
+
+    def add_score_part(self, score_part, name='none', print_object='no'):
+        score_part.parent_score = self
+        part_name = score_part.add_child(PartName(name=name))
+        part_name.print_object = print_object
+        self._part_list.add_child(score_part)
+
     def add_part(self, name='none', print_object='no'):
         new_score_part = self._generate_score_part()
-        new_score_part.parent_score = self
-        part_name = new_score_part.add_child(PartName(name=name))
-        part_name.print_object = print_object
-        self._part_list.add_child(new_score_part)
+        self.add_score_part(new_score_part, name, print_object)
+
         for measure in self.get_children_by_type(TreeMeasure):
             part = new_score_part.add_part()
             measure.add_child(part)
