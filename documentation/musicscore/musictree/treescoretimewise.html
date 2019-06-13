@@ -517,7 +517,31 @@ class TreeScoreTimewise(timewise.Score):
             output.add_child(partwise_part)
 
         output.close_dtd()
-        return output</code></pre>
+        return output
+
+    def extend(self, score):
+        if not score.get_score_parts():
+            raise ValueError(&#39;score {} cannot be empty&#39;.format(score))
+
+        if not self.get_score_parts():
+            for score_part in score.get_score_parts():
+                new_score_part = TreeScorePart(id=score_part.id)
+                self.add_score_part(new_score_part)
+                for part in new_score_part._parts:
+                    new_score_part.add_part(part)
+
+        else:
+            my_ids = [score_part.id for score_part in self.get_score_parts()]
+            other_ids = [score_part.id for score_part in score.get_score_parts()]
+            difference = set.symmetric_difference(set(my_ids), set(other_ids))
+            if difference:
+                raise ValueError(&#39;two scores must have score_parts with same ids. Difference is {}&#39;.format(difference))
+
+        for measure in score.get_children_by_type(TreeMeasure):
+            self.add_child(measure)
+            for part in measure.get_children_by_type(TreePart):
+                score_part = self.get_score_part(part.id)
+                score_part.add_part(part)</code></pre>
 </details>
 </section>
 <section>
@@ -1015,7 +1039,31 @@ class TreeScoreTimewise(timewise.Score):
             output.add_child(partwise_part)
 
         output.close_dtd()
-        return output</code></pre>
+        return output
+
+    def extend(self, score):
+        if not score.get_score_parts():
+            raise ValueError(&#39;score {} cannot be empty&#39;.format(score))
+
+        if not self.get_score_parts():
+            for score_part in score.get_score_parts():
+                new_score_part = TreeScorePart(id=score_part.id)
+                self.add_score_part(new_score_part)
+                for part in new_score_part._parts:
+                    new_score_part.add_part(part)
+
+        else:
+            my_ids = [score_part.id for score_part in self.get_score_parts()]
+            other_ids = [score_part.id for score_part in score.get_score_parts()]
+            difference = set.symmetric_difference(set(my_ids), set(other_ids))
+            if difference:
+                raise ValueError(&#39;two scores must have score_parts with same ids. Difference is {}&#39;.format(difference))
+
+        for measure in score.get_children_by_type(TreeMeasure):
+            self.add_child(measure)
+            for part in measure.get_children_by_type(TreePart):
+                score_part = self.get_score_part(part.id)
+                score_part.add_part(part)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1233,6 +1281,38 @@ def page_style(self):
     for measure in self.get_children_by_type(TreeMeasure):
         for part in measure.get_children_by_type(TreePart):
             part.chord_to_notes()</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treescoretimewise.TreeScoreTimewise.extend"><code class="name flex">
+<span>def <span class="ident">extend</span></span>(<span>self, score)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def extend(self, score):
+    if not score.get_score_parts():
+        raise ValueError(&#39;score {} cannot be empty&#39;.format(score))
+
+    if not self.get_score_parts():
+        for score_part in score.get_score_parts():
+            new_score_part = TreeScorePart(id=score_part.id)
+            self.add_score_part(new_score_part)
+            for part in new_score_part._parts:
+                new_score_part.add_part(part)
+
+    else:
+        my_ids = [score_part.id for score_part in self.get_score_parts()]
+        other_ids = [score_part.id for score_part in score.get_score_parts()]
+        difference = set.symmetric_difference(set(my_ids), set(other_ids))
+        if difference:
+            raise ValueError(&#39;two scores must have score_parts with same ids. Difference is {}&#39;.format(difference))
+
+    for measure in score.get_children_by_type(TreeMeasure):
+        self.add_child(measure)
+        for part in measure.get_children_by_type(TreePart):
+            score_part = self.get_score_part(part.id)
+            score_part.add_part(part)</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musictree.treescoretimewise.TreeScoreTimewise.fill_with_rest"><code class="name flex">
@@ -1665,6 +1745,7 @@ def page_style(self):
 <li><code><a title="musicscore.musictree.treescoretimewise.TreeScoreTimewise.adjoin_rests" href="#musicscore.musictree.treescoretimewise.TreeScoreTimewise.adjoin_rests">adjoin_rests</a></code></li>
 <li><code><a title="musicscore.musictree.treescoretimewise.TreeScoreTimewise.adjoin_ties" href="#musicscore.musictree.treescoretimewise.TreeScoreTimewise.adjoin_ties">adjoin_ties</a></code></li>
 <li><code><a title="musicscore.musictree.treescoretimewise.TreeScoreTimewise.chord_to_notes" href="#musicscore.musictree.treescoretimewise.TreeScoreTimewise.chord_to_notes">chord_to_notes</a></code></li>
+<li><code><a title="musicscore.musictree.treescoretimewise.TreeScoreTimewise.extend" href="#musicscore.musictree.treescoretimewise.TreeScoreTimewise.extend">extend</a></code></li>
 <li><code><a title="musicscore.musictree.treescoretimewise.TreeScoreTimewise.fill_with_rest" href="#musicscore.musictree.treescoretimewise.TreeScoreTimewise.fill_with_rest">fill_with_rest</a></code></li>
 <li><code><a title="musicscore.musictree.treescoretimewise.TreeScoreTimewise.finish" href="#musicscore.musictree.treescoretimewise.TreeScoreTimewise.finish">finish</a></code></li>
 <li><code><a title="musicscore.musictree.treescoretimewise.TreeScoreTimewise.forbidden_divisions" href="#musicscore.musictree.treescoretimewise.TreeScoreTimewise.forbidden_divisions">forbidden_divisions</a></code></li>
