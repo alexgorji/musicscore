@@ -495,3 +495,26 @@ class TreeScoreTimewise(timewise.Score):
         output.close_dtd()
         return output
 
+    def extend(self, score):
+        if not score.get_score_parts():
+            raise ValueError('score {} cannot be empty'.format(score))
+
+        if not self.get_score_parts():
+            for score_part in score.get_score_parts():
+                new_score_part = TreeScorePart(id=score_part.id)
+                self.add_score_part(new_score_part)
+                for part in new_score_part._parts:
+                    new_score_part.add_part(part)
+
+        else:
+            my_ids = [score_part.id for score_part in self.get_score_parts()]
+            other_ids = [score_part.id for score_part in score.get_score_parts()]
+            difference = set.symmetric_difference(set(my_ids), set(other_ids))
+            if difference:
+                raise ValueError('two scores must have score_parts with same ids. Difference is {}'.format(difference))
+
+        for measure in score.get_children_by_type(TreeMeasure):
+            self.add_child(measure)
+            for part in measure.get_children_by_type(TreePart):
+                score_part = self.get_score_part(part.id)
+                score_part.add_part(part)
