@@ -14,8 +14,8 @@ from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance, 
 class TreePageStyle(object):
     sizes = {'A4': (210, 297), 'A3': (297, 420)}
 
-    def __init__(self, score, scale=1, size='A4', format='portrait', left_margin=20, right_margin=10, top_margin=15,
-                 bottom_margin=15, system_distance=None, system_left_margin=None, system_right_margin=None,
+    def __init__(self, score, scale=1, size='A4', format='portrait', left_margin=111, right_margin=55, top_margin=83,
+                 bottom_margin=83, system_distance=None, system_left_margin=None, system_right_margin=None,
                  top_system_distance=None, staff_distance=None):
 
         self._score = None
@@ -173,7 +173,7 @@ class TreePageStyle(object):
 
     @left_margin.setter
     def left_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.left_margin:
             self.left_margin.value = value
         else:
@@ -187,7 +187,7 @@ class TreePageStyle(object):
 
     @right_margin.setter
     def right_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.right_margin:
             self.right_margin.value = value
         else:
@@ -201,7 +201,7 @@ class TreePageStyle(object):
 
     @top_margin.setter
     def top_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.top_margin:
             self.top_margin.value = value
         else:
@@ -215,7 +215,7 @@ class TreePageStyle(object):
 
     @bottom_margin.setter
     def bottom_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.bottom_margin:
             self.bottom_margin.value = value
         else:

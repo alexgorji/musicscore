@@ -528,3 +528,6 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 score_part = self.get_score_part(part.id)
                 score_part.add_part(part)
+
+        if not self._identifications_added:
+            self._add_identifications()

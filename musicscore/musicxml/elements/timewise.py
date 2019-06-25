@@ -44,7 +44,8 @@ class Score(XMLElement, DocumentAttributes):
         doctype = '<!DOCTYPE score-timewise PUBLIC "-//Recordare//DTD MusicXML {} Timewise//EN" "http://www.musicxml.org/dtds/timewise.dtd">\n'.format(
             self.version)
 
-        path += '.xml'
+        if path[-4:] != '.xml':
+            path += '.xml'
         output_file = open(path, 'w')
         output_file.write(xmlversion)
         output_file.write(doctype)
