@@ -110,6 +110,15 @@ class TreeChord(XMLTree):
 
         self._midis = output
 
+    def add_midi(self, val):
+        if val == 0:
+            raise ValueError('midi with value 0 can not be added.')
+
+        if not isinstance(val, Midi):
+            val = Midi(val)
+
+        self._midis.append(val)
+
     @property
     def is_adjoinable(self):
         return self._is_adjoinable
