@@ -18,7 +18,7 @@ class Test(TestCase):
     def test_1(self):
         self.score.add_measure(TreeMeasure(time=(1, 4)))
         sf = SimpleFormat(durations=[Fraction(4, 6), Fraction(1, 6), Fraction(1, 6)])
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
         result_path = path + '_test_1'
         self.score.write(path=result_path)

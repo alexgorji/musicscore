@@ -10,11 +10,12 @@ class Tree(object):
 
     COUNT_COPYING = 0
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, label=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._children = []
         self._up = None
         self._leaves = []
+        self.label = label
 
     @property
     def up(self):
@@ -275,6 +276,21 @@ class Tree(object):
                 copied.__dict__[key] = new_value
 
         return copied
+
+    @property
+    def __next__(self):
+        if not self.is_leaf:
+            raise Exception('__next__ is only possible for leaves')
+
+        leave_iterator = self.get_root().traverse_leaves()
+
+        def forward_leaves(leave_iterator):
+            leaf = leave_iterator.__next__()
+            if leaf != self:
+                forward_leaves(leave_iterator)
+
+        forward_leaves(leave_iterator)
+        return leave_iterator.__next__()
 
 
 class TreeNode(Tree):

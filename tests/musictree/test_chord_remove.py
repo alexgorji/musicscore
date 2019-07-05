@@ -17,7 +17,7 @@ class Test(TestCase):
         sf = SimpleFormat()
         sf.add_chord(TreeChord())
         sf.add_chord(TreeChord(quarter_duration=0))
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
         chord = self.score.get_measure(1).get_part(1).get_voice(1).chords[1]
         self.score.fill_with_rest()
@@ -38,7 +38,7 @@ class Test(TestCase):
         chord_1.add_tie('start')
         chord_2.add_tie('stop')
 
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
         chord = self.score.get_measure(1).get_part(1).get_voice(1).chords[1]
         self.score.fill_with_rest()

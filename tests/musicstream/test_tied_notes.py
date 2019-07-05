@@ -14,7 +14,7 @@ class Test(TestCase):
     def test_1(self):
         sf = SimpleFormat(midis=[(60)], durations=[2.2])
         sf.chords[0].add_tie('start')
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         # print(v.chords[0].tie_types)
         v.add_to_score(self.score, 1, 1)
         ch = self.score.get_measure(1).get_part(1).chords[0]

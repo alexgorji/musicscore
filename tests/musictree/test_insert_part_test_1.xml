@@ -25,10 +25,10 @@
   <measure number="1">
     <part id="p1">
       <attributes>
-        <divisions>2</divisions>
+        <divisions>1</divisions>
         <time>
-          <beats>5</beats>
-          <beat-type>8</beat-type>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
         </time>
       </attributes>
       <note>
@@ -36,27 +36,59 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
-        <tie type="start"/>
+        <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <dot/>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
       </note>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
-        <tie type="stop"/>
+        <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </part>
+  </measure>
+  <measure number="2">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <dot/>
       </note>
     </part>
   </measure>

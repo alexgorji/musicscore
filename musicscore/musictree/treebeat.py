@@ -229,9 +229,16 @@ class TreeBeat(object):
         output = []
         for chord in self.chords:
             split = None
+            if chord.quarter_duration == Fraction(9, 2):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 1)
+            if chord.quarter_duration == Fraction(5, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(3, 2)
+
             if chord.quarter_duration == Fraction(5, 2):
                 if chord.position_in_beat == 0:
-                    split = chord.split(4, 1)
+                    split = chord.split(3, 2)
             if chord.quarter_duration == Fraction(7, 2):
                 if chord.position_in_beat == 0:
                     split = chord.split(4, 3)

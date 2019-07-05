@@ -16,7 +16,7 @@ class Test(TestCase):
         sf = SimpleFormat(durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
         self.score.set_time_signatures(durations=sum(sf.durations))
 
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
         result_path = path + '_test_1'
@@ -27,7 +27,7 @@ class Test(TestCase):
         sf = SimpleFormat(durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
         self.score.set_time_signatures(times={1: (3, 4), 5: (2, 4)})
 
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
         result_path = path + '_test_2'
@@ -38,7 +38,7 @@ class Test(TestCase):
         sf = SimpleFormat(durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
         self.score.set_time_signatures(durations=[8, 3, 5, 4, 11, 3])
 
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
         result_path = path + '_test_3'
@@ -49,7 +49,7 @@ class Test(TestCase):
         sf = SimpleFormat(durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
         self.score.set_time_signatures(durations=[8, 3, 5, 4, 11, 3], times={1: (3, 4)})
 
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
         result_path = path + '_test_4'

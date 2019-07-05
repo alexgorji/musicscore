@@ -18,7 +18,7 @@ class Test(TestCase):
         sf = SimpleFormat(durations=[1, 0, 1])
         sf.chords[0].add_tie('start')
         sf.chords[1].add_tie('stop')
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
         self.score.fill_with_rest()
         self.score.add_beats()

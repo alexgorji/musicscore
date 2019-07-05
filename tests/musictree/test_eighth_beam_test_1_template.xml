@@ -27,7 +27,7 @@
       <attributes>
         <divisions>2</divisions>
         <time>
-          <beats>5</beats>
+          <beats>7</beats>
           <beat-type>8</beat-type>
         </time>
       </attributes>
@@ -37,26 +37,28 @@
           <octave>4</octave>
         </pitch>
         <duration>3</duration>
-        <tie type="start"/>
         <voice>1</voice>
         <type>quarter</type>
         <dot/>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
       </note>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
-        <tie type="stop"/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
+        <dot/>
       </note>
     </part>
   </measure>

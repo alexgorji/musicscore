@@ -1001,6 +1001,9 @@ class TreePart(timewise.Part):
         m.add_child(PerMinute(str(per_minute)))
         d.add_child(Sound(tempo=per_minute))
 
+    def add_voice(self, voice):
+        self.voices[voice.number] = voice
+
     def finish(self):
         if not self._finished:
             self.fill_with_rest()

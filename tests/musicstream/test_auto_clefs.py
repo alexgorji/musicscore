@@ -16,7 +16,7 @@ class Test(TestCase):
         # sf = SimpleFormat(midis = [52, 51, 70, 100, 110, 107, 90, 80, 70, 60, 50, 40, 30])
         sf = SimpleFormat(midis=[30, 40, 50, 60, 70, 80, 90, 100, 110, 100, 90, 80, 70, 60, 50, 40, 30])
         sf.auto_clef()
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
         result_path = path + '_test_1'
@@ -27,7 +27,7 @@ class Test(TestCase):
         # sf = SimpleFormat(midis = [52, 51, 70, 100, 110, 107, 90, 80, 70, 60, 50, 40, 30])
         sf = SimpleFormat(midis=[62, 72, 50])
         sf.auto_clef()
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
         result_path = path + '_test_2'

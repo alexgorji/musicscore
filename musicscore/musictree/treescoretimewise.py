@@ -7,6 +7,7 @@ from musicscore.musictree.treepagestyle import TreePageStyle
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescorepart import TreeScorePart
 from musicscore.musicxml.elements import partwise
+from musicscore.musicxml.elements.note import Stem
 from musicscore.musicxml.elements.scoreheader import PartList, Credit
 from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWords
 from musicscore.musicxml.types.complextypes.encoding import Supports
@@ -92,6 +93,10 @@ class TreeScoreTimewise(timewise.Score):
         part_name.print_object = print_object
         self._part_list.add_child(score_part)
 
+    @property
+    def number_of_parts(self):
+        return len(self._part_list.get_children_by_type(TreeScorePart))
+
     def add_part(self, name='none', print_object='no'):
         new_score_part = self._generate_score_part()
         self.add_score_part(new_score_part, name, print_object)
@@ -103,6 +108,11 @@ class TreeScoreTimewise(timewise.Score):
                 bl = part.add_child(Barline())
                 bl.add_child(BarStyle(measure.barline_style))
 
+    #
+    # def insert_part(self, number, name='none', print_object='no'):
+    #     def rearange_parts():
+    #         print()
+
     def add_measure(self, measure=None):
         new_measure = self._set_new_measure(measure)
 
@@ -110,6 +120,27 @@ class TreeScoreTimewise(timewise.Score):
             p = score_part.add_part()
             new_measure.add_child(p)
         return self.add_child(new_measure)
+
+    # def add_ruler(self, unit=1):
+    #     if not self._finished:
+    #         raise Exception('ruler can only be added to finished scores')
+    #
+    #     ruler_part = self.insert_part('ruler', part_number=1)
+    #     remaining_time = self.duration
+    #     while remaining_time > 0.01:
+    #         ruler_chord = ruler_part.add_chord(TreeChord(quarter_duration=unit, midis=[76]))
+    #         ruler_chord.head = 'none'
+    #         ruler_chord.stem = Stem(default_y=11, direction='down')
+    #         remaining_time -= ruler_chord.duration
+    #
+    #     # measure_1.staff_style = StaffStyle(number_of_lines=1)
+    #     # measure_1.time_signature.hide = True
+    #     # print measure_1.staff_style.number_of_lines
+    #     # part_node.children[0].content.staff_style = StaffStyle(number_of_lines = 1, staff_distance = 70)
+    #     # for measure_node in part_node.children:
+    #     #     measure_node.content.staff_style = StaffStyle(staff_distance=70)
+    #
+    #     # measure_1.notes[0].clef = Clef(sign='none')
 
     def _set_new_measure(self, measure):
         if measure is None:
@@ -473,6 +504,7 @@ class TreeScoreTimewise(timewise.Score):
         output = partwise.Score()
         output.version = self.version
         partwise_parts = []
+
         def get_ids():
             return [partwise_part.id for partwise_part in partwise_parts]
 

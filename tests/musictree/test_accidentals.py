@@ -64,7 +64,7 @@ class Test(TestCase):
 
     def test_4(self):
         simpleformat = SimpleFormat(midis=list(range(60, 68)))
-        voice = simpleformat.to_voice(2)
+        voice = simpleformat.to_stream_voice(2)
         voice.add_to_score(self.score, 1, 1)
         result_path = path + '_test_4'
         self.score.accidental_mode = 'modern'
@@ -73,7 +73,7 @@ class Test(TestCase):
 
     def test_5(self):
         simpleformat = SimpleFormat(midis=[71.5, 71.5, 72, 72, 71.5, 71.5], durations=6*[0.5])
-        voice = simpleformat.to_voice(1)
+        voice = simpleformat.to_stream_voice(1)
         voice.add_to_score(self.score, 1, 1)
         result_path = path + '_test_5'
         self.score.accidental_mode = 'normal'
@@ -85,7 +85,7 @@ class Test(TestCase):
         durations = [Fraction(255, 56), Fraction(6525, 3136), Fraction(6075, 3136), Fraction(2475, 3136), Fraction(2145, 3136), Fraction(2805, 3136), Fraction(1815, 3136), Fraction(65, 56), Fraction(2015, 1568), Fraction(1625, 1568)]
         simpleformat = SimpleFormat(midis=midis,  durations=durations)
         simpleformat.auto_clef()
-        voice = simpleformat.to_voice(1)
+        voice = simpleformat.to_stream_voice(1)
         voice.add_to_score(self.score, 1, 1)
         result_path = path + '_test_6'
         self.score.max_division = 7

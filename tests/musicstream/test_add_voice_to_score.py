@@ -17,7 +17,7 @@ class Test(TestCase):
 
     def test_1(self):
         simpleformat = SimpleFormat(midis=list(range(60, 68)))
-        voice = simpleformat.to_voice(2)
+        voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()
         voice.add_to_score(self.score, 1)
@@ -28,7 +28,7 @@ class Test(TestCase):
 
     def test_2(self):
         simpleformat = SimpleFormat(midis=list(range(60, 68)), durations=[1.2] * 8)
-        voice = simpleformat.to_voice(2)
+        voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()
         voice.add_to_score(self.score, 1)
@@ -38,7 +38,7 @@ class Test(TestCase):
 
     def test_3(self):
         sf = SimpleFormat(midis=[(60, 61, 67)], durations=7)
-        voice = sf.to_voice(1)
+        voice = sf.to_stream_voice(1)
         voice.add_to_score(self.score, 1)
         result_path = path + '_test_3'
         self.score.write(result_path)
@@ -50,7 +50,7 @@ class Test(TestCase):
         for chord in sf.chords:
             l = chord.add_child(Lyric())
             l.add_child(Text(str(chord.midis[0].value)))
-        voice = sf.to_voice(1)
+        voice = sf.to_stream_voice(1)
         voice.add_to_score(self.score, 1)
         result_path = path + '_test_4'
         self.score.write(result_path)

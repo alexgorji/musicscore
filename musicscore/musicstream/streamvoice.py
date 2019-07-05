@@ -10,27 +10,27 @@ from musicscore.musicxml.types.simple_type import PositiveInteger
 class StreamVoice(object):
     """"""
 
-    def __init__(self, voice=1, *args, **kwargs):
+    def __init__(self, voice_number=1, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._chords = []
         self._voice = None
-        self.voice = voice
+        self.voice_number = voice_number
 
     @property
     def chords(self):
         return self._chords
 
     @property
-    def voice(self):
+    def voice_number(self):
         return self._voice
 
-    @voice.setter
-    def voice(self, value):
+    @voice_number.setter
+    def voice_number(self, value):
         PositiveInteger(value)
         self._voice = value
 
     def add_chord(self, chord):
-        chord.voice = self.voice
+        chord.voice_number = self.voice_number
         self._chords.append(chord)
 
     def add_to_part(self, part, chords=None):
@@ -39,7 +39,7 @@ class StreamVoice(object):
 
         for i in range(len(chords)):
             chord = chords[i]
-            remain = part.add_chord(chord, self.voice)
+            remain = part.add_chord(chord, self.voice_number)
             if remain:
                 remaining_chords = [remain] + chords[i + 1:]
                 return remaining_chords
@@ -160,7 +160,7 @@ class SimpleFormat(object):
         self._chords.append(chord)
         return chord
 
-    def to_voice(self, voice_number=1):
+    def to_stream_voice(self, voice_number=1):
         output = StreamVoice(voice_number)
         for chord in self.chords:
             output.add_chord(chord.__deepcopy__())

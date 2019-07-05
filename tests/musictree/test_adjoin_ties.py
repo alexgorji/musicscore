@@ -22,7 +22,7 @@ class Test(TestCase):
         sf.chords[2].add_tie('stop')
         sf.chords[2].add_tie('start')
         sf.chords[3].add_tie('stop')
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
         self.score.add_subtitle(str([chord.is_adjoinable for chord in sf.chords]))
 

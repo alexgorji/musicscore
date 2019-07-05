@@ -12,7 +12,7 @@ class Test(TestCase):
     def setUp(self) -> None:
         self.score = TreeScoreTimewise()
         sf = SimpleFormat(durations=[1, 1])
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
     def test_1(self):

@@ -21,11 +21,11 @@ class Test(TestCase):
         sf = SimpleFormat(durations=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
         for index, chord in enumerate(sf.chords):
             chord.add_lyric(index + 1)
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 2)
 
         sf = SimpleFormat(durations=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
         self.score.fill_with_rest()
@@ -46,13 +46,13 @@ class Test(TestCase):
         sf = SimpleFormat(durations=[0.5, 0.6, 0.7, 0.8])
         for index, chord in enumerate(sf.chords):
             chord.add_lyric(index + 1)
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
         sf = SimpleFormat(durations=[0.5, 0.6, 0.7, 0.8])
         for index, chord in enumerate(sf.chords):
             chord.add_lyric(index + 1)
-        v = sf.to_voice(1)
+        v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 2)
 
         self.score.fill_with_rest()
@@ -87,7 +87,7 @@ class Test(TestCase):
                 d = chord.add_dynamics(dynamics.__next__())
                 d.relative_y = -20
                 d.halign = 'center'
-            v = sf.to_voice(1)
+            v = sf.to_stream_voice(1)
             v.add_to_score(self.score, 1, part)
 
         add_to_score(1)

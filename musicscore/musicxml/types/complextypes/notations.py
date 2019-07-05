@@ -99,10 +99,12 @@ class Articulations(XMLElement):
 
 
 class Dynamics(ComplexTypeDynamics):
+    _TAG = 'dynamics'
     """"""
 
+
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Fermata(XMLElement):

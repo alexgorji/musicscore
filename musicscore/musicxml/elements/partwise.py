@@ -67,10 +67,10 @@ class Score(XMLElement, DocumentAttributes):
         doctype = '<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML {} Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">\n'.format(
             self.version)
 
-        path += '.xml'
+        if path[-4:] != '.xml':
+            path += '.xml'
         output_file = open(path, 'w')
         output_file.write(xmlversion)
         output_file.write(doctype)
         output_file.write(self.to_string())
         output_file.close()
-        print('writing finished')

@@ -11,7 +11,7 @@ class Test(TestCase):
 
     def test_1(self):
         simpleformat = SimpleFormat(durations=4)
-        voice = simpleformat.to_voice(2)
+        voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()
         p = self.score.get_measure(1).get_part(1)
@@ -36,7 +36,7 @@ class Test(TestCase):
 
     def test_2(self):
         simpleformat = SimpleFormat(durations=7)
-        voice = simpleformat.to_voice(2)
+        voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()
         p = self.score.get_measure(1).get_part(1)
@@ -67,7 +67,7 @@ class Test(TestCase):
 
     def test_3(self):
         simpleformat = SimpleFormat(durations=3)
-        voice = simpleformat.to_voice(2)
+        voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()
         p = self.score.get_measure(1).get_part(1)
@@ -98,7 +98,7 @@ class Test(TestCase):
 
     def test_4(self):
         simpleformat = SimpleFormat(durations=7, midis=0)
-        voice = simpleformat.to_voice(2)
+        voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()
         p = self.score.get_measure(1).get_part(1)
@@ -121,7 +121,7 @@ class Test(TestCase):
 
     def test_5(self):
         simpleformat = SimpleFormat(durations=3, midis=0)
-        voice = simpleformat.to_voice(2)
+        voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()
         p = self.score.get_measure(1).get_part(1)
