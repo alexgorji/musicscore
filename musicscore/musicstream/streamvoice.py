@@ -72,6 +72,16 @@ class StreamVoice(object):
             remain = _add_to_part(remain)
 
 
+class StreamChordFormula(object):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def condition(self, chord):
+        pass
+    def change_chord(self, chord):
+        pass
+
+
 class SimpleFormat(object):
     def __init__(self, durations=None, midis=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -116,6 +126,19 @@ class SimpleFormat(object):
         self._durations = durations
 
     def _set_midis(self, midis):
+        def _is_value(x):
+            try:
+                float(x)
+                return True
+            except (ValueError, TypeError):
+                return False
+
+        def _is_midi(x):
+            if isinstance(x, Midi):
+                return True
+            else:
+                return False
+
         if midis is None:
             midis = []
         else:
@@ -126,11 +149,23 @@ class SimpleFormat(object):
 
         self._midis = []
         for m in midis:
-            try:
-                ms = [Midi(midi) for midi in m]
-                self._midis.append(ms)
-            except TypeError:
+            if _is_midi(m):
+                self._midis.append(m)
+            elif _is_value(m):
                 self._midis.append(Midi(m))
+            elif isinstance(m, list) or isinstance(m, tuple):
+                tmp = []
+
+                for midi in m:
+                    if _is_midi(midi):
+                        tmp.append(midi)
+                    elif _is_value(midi):
+                        tmp.append(Midi(midi))
+                    else:
+                        raise TypeError
+                self._midis.append(tmp)
+            else:
+                raise TypeError
 
     def get_durations(self):
         return [chord.duration for chord in self.chords]
@@ -223,3 +258,8 @@ class SimpleFormat(object):
                 if formula.condition(chord):
                     formula.change_chord(chord)
                     break
+
+    def extend(self, simple_format):
+        self.chords
+        for chord in simple_format.chords:
+            self.add_chord(chord)

@@ -396,7 +396,8 @@ class TreeChord(XMLTree):
 
     def transpose(self, interval):
         for midi in self.midis:
-            midi.value += interval
+            if midi.value != 0:
+                midi.value += interval
 
     def add_lyric(self, text, number=1, **kwargs):
         lyric = self.add_child(Lyric(number=str(number), **kwargs))

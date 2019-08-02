@@ -54,12 +54,12 @@ class Midi(object):
         9.5: ('B', -1.5, 0),
         10: ('B', -1, 0),
         10.5: ('B', -0.5, 0),
-        11: ('B', 0, 0),
+        11: ('C', -1, 1),
         11.5: ('C', -0.5, 1)
     }
 
     sharp = {
-        0: ('C', 0, 0),
+        0: ('B', 1, -1),
         0.5: ('C', 0.5, 0),
         1: ('C', 1, 0),
         1.5: ('C', 1.5, 0),
@@ -186,7 +186,88 @@ class Midi(object):
         else:
             return Pitch(*self.get_pitch_name())
 
+    def get_flat(self):
+        return Midi(value=self.value - 1, accidental_mode='flat')
+
+    def get_sharp(self):
+        return Midi(value=self.value + 1, accidental_mode='sharp')
+
+    def transpose(self, val):
+        return Midi(value=self.value + val, accidental_mode=self.accidental_mode)
+
     def __deepcopy__(self, memodict={}):
         output = Midi(self.value, self.accidental_mode)
         return output
 
+
+class MidiNote(Midi):
+    _VALUE = 60
+
+    def __init__(self, octave, accidental=None, *args, **kwargs):
+        super().__init__(value=60, *args, **kwargs)
+        self._accidental = None
+        self._octave = None
+
+        self.octave = octave
+        self.accidental = accidental
+
+    def _set_new_value(self):
+        if self._get_accidental_value() == -1:
+            self.accidental_mode = 'flat'
+        if self._get_accidental_value() == 1:
+            self.accidental_mode = 'sharp'
+        self.value = (self._VALUE + self._get_accidental_value()) - (4 - self.octave) * 12
+
+    def _get_accidental_value(self):
+        if self.accidental is None:
+            return 0
+        if self.accidental in ('flat', 'f', 'b'):
+            return -1
+        if self.accidental in ('sharp', 's', '#'):
+            return 1
+
+    @property
+    def octave(self):
+        return self._octave
+
+    @octave.setter
+    def octave(self, val):
+        self._octave = val
+        self._set_new_value()
+
+    @property
+    def accidental(self):
+        return self._accidental
+
+    @accidental.setter
+    def accidental(self, val):
+        self._accidental = val
+        self._set_new_value()
+
+
+class C(MidiNote):
+    _VALUE = 60
+
+
+class D(MidiNote):
+    _VALUE = 62
+
+
+class E(MidiNote):
+    _VALUE = 64
+
+
+class F(MidiNote):
+    _VALUE = 65
+
+
+class G(MidiNote):
+    _VALUE = 67
+
+
+class A(MidiNote):
+    _VALUE = 69
+
+
+class B(MidiNote):
+    _VALUE = 71
