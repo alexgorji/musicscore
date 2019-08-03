@@ -482,6 +482,8 @@ class TreeChord(XMLTree):
                 next_chord.add_child(l)
             for n in self.get_children_by_type(Notations):
                 next_chord.add_child(n)
+            for d in self.get_children_by_type(Direction):
+                next_chord.add_child(d)
 
         self.parent_beat.chords.remove(self)
         self.parent_voice.chords.remove(self)
