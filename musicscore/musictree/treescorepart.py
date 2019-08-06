@@ -1,14 +1,21 @@
 from musicscore.musictree.treeinstruments import TreeInstrument
 from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.types.complextypes.partlist import ScorePart
+import uuid
 
 
 class TreeScorePart(ScorePart):
     """"""
 
-    def __init__(self, instrument=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, instrument=None, id=None, *args, **kwargs):
+        if id is None:
+            if instrument is None:
+                id = uuid.uuid4()
+            else:
+                id = instrument.id
+        super().__init__(id=id, *args, **kwargs)
         self._instrument = None
+        self.instrument = instrument
         self._max_division = None
         self._forbidden_divisions = None
         self._parts = []

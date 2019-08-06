@@ -98,7 +98,7 @@ class TreeScoreTimewise(timewise.Score):
             part_name = score_part.add_child(PartName(name='none'))
             part_name.print_object = 'no'
 
-        self._part_list.add_child(score_part)
+        return self._part_list.add_child(score_part)
 
     @property
     def number_of_parts(self):

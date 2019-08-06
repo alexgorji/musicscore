@@ -1,14 +1,18 @@
 from musicscore.musicxml.types.complextypes.midiinstrument import ComplexTypeMidiInstrument
 from musicscore.musicxml.types.complextypes.scorepart import PartName, PartAbbreviation
+import uuid
 
 
 class TreeInstrument(ComplexTypeMidiInstrument):
-    def __init__(self, name, number=None, *args, **kwargs):
-        super().__init__(id='tmp_id', *args, **kwargs)
-        self._number = None
-        self.number = number
+    _TAG = 'midi-instrument'
+
+    def __init__(self, name, abbreviation=None, number=None, *args, **kwargs):
+        super().__init__(tag=self._TAG, id_='inst' + str(uuid.uuid4()), *args, **kwargs)
         self._part_name = PartName(name=name)
         self._part_abbreviation = PartAbbreviation()
+        self.abbreviation = abbreviation
+        self._number = None
+        self.number = number
 
     @property
     def number(self):
@@ -22,6 +26,10 @@ class TreeInstrument(ComplexTypeMidiInstrument):
         if val is not None and not isinstance(val, int):
             raise TypeError('number.value must be of type int not{}'.format(type(val)))
         self._number = val
+
+        if self._number is not None:
+            self.name += ' ' + str(self._number)
+            self.abbreviation += ' ' + str(self._number)
 
     @property
     def name(self):
@@ -41,34 +49,18 @@ class TreeInstrument(ComplexTypeMidiInstrument):
 
 
 class Violin(TreeInstrument):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.name = 'Violine'
-        self.abbreviation = 'vln'
-        self.id = 'vln'
-        if self.number is not None:
-            self.id += str(self.number)
-            self.name += ' ' + str(self.number)
-            self.abbreviation += ' ' + str(self.number)
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name='Violin', abbreviation='vln', number=number, *args, **kwargs)
+        self.id = 'vln' + str(uuid.uuid4())
+
 
 class Viola(TreeInstrument):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.name = 'Viola'
-        self.abbreviation = 'vla'
-        self.id = 'vla'
-        if self.number is not None:
-            self.id += str(self.number)
-            self.name += ' ' + str(self.number)
-            self.abbreviation += ' ' + str(self.number)
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name='Viola', abbreviation='vla', number=number, *args, **kwargs)
+        self.id = 'vla' + str(uuid.uuid4())
+
 
 class Cello(TreeInstrument):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.name = 'Cello'
-        self.abbreviation = 'vln'
-        self.id = 'vln'
-        if self.number is not None:
-            self.id += str(self.number)
-            self.name += ' ' + str(self.number)
-            self.abbreviation += ' ' + str(self.number)
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name='Cello', abbreviation='vc', number=number, *args, **kwargs)
+        self.id = 'vc' + str(uuid.uuid4())
