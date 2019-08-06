@@ -50,3 +50,25 @@ class Violin(TreeInstrument):
             self.id += str(self.number)
             self.name += ' ' + str(self.number)
             self.abbreviation += ' ' + str(self.number)
+
+class Viola(TreeInstrument):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.name = 'Viola'
+        self.abbreviation = 'vla'
+        self.id = 'vla'
+        if self.number is not None:
+            self.id += str(self.number)
+            self.name += ' ' + str(self.number)
+            self.abbreviation += ' ' + str(self.number)
+
+class Cello(TreeInstrument):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.name = 'Cello'
+        self.abbreviation = 'vln'
+        self.id = 'vln'
+        if self.number is not None:
+            self.id += str(self.number)
+            self.name += ' ' + str(self.number)
+            self.abbreviation += ' ' + str(self.number)
