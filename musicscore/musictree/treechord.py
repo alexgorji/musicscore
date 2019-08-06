@@ -151,6 +151,11 @@ class TreeChord(XMLTree):
             return True
         return False
 
+    def to_rest(self):
+        self.midis = [0]
+        self.remove_tie('stop')
+        self.remove_tie('start')
+
     @property
     def position_in_beat(self):
         index_in_beat = self.parent_beat.chords.index(self)

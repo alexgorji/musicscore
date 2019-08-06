@@ -421,8 +421,8 @@ class TreePartVoice(object):
             self._add_chords_to_beats()
             self._split_chords_beatwise()
             self._beats_added = True
-        else:
-            warnings.warn('beats already added to {}. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('beats already added to {}. No action took place.'.format(self))
 
     def quantize(self):
         if not self._beats_added:
@@ -431,8 +431,8 @@ class TreePartVoice(object):
             for beat in self.beats:
                 beat.quantize()
             self._quantized = True
-        else:
-            warnings.warn('{} already quantized. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('{} already quantized. No action took place.'.format(self))
 
     def clear_zero_heads_tails(self):
         for chord in self.chords:
@@ -449,8 +449,8 @@ class TreePartVoice(object):
                 beat.split_not_notatable()
                 self._chords.extend(beat.chords)
             self._not_notatable_split = True
-        else:
-            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
     def adjoin_ties(self):
         if not self._not_notatable_split:
@@ -536,8 +536,8 @@ class TreePartVoice(object):
             self._chords = voice_new_chords
 
             self._ties_adjoined = True
-        else:
-            warnings.warn('ties of chords in {} already adjoined. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('ties of chords in {} already adjoined. No action took place.'.format(self))
 
     def adjoin_rests(self):
         if not self._ties_adjoined:
@@ -613,19 +613,19 @@ class TreePartVoice(object):
             self._chords = voice_new_chords
 
             self._rests_adjoined = True
-        else:
-            warnings.warn('rests in {} already adjoin_rests. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('rests in {} already adjoin_rests. No action took place.'.format(self))
 
     def update_tuplets(self):
         if not self._rests_adjoined:
-            raise Exception('join_rests() first')
+            raise Exception('adjoin_rests() first')
 
         if not self._tuplets_updated:
             for beat in self.beats:
                 beat.update_tuplets()
             self._tuplets_updated = True
-        else:
-            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
     def substitute_sextoles(self):
         if not self._tuplets_updated:
@@ -635,8 +635,8 @@ class TreePartVoice(object):
             for beat in self.beats:
                 beat.substitute_sextoles()
             self._sextoles_substituted = True
-        else:
-            warnings.warn('all sextoles in  {} already checked. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('all sextoles in  {} already checked. No action took place.'.format(self))
 
     def update_types(self):
         if not self._sextoles_substituted:
@@ -646,8 +646,8 @@ class TreePartVoice(object):
             for chord in self.chords:
                 chord.update_type()
             self._types_updated = True
-        else:
-            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
     def update_dots(self):
         if not self._types_updated:
@@ -658,8 +658,8 @@ class TreePartVoice(object):
                 if chord.quarter_duration != 0:
                     chord.update_dot()
             self._dots_updated = True
-        else:
-            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
 
 class TreePart(timewise.Part):

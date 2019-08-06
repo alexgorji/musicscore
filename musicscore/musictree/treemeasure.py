@@ -6,8 +6,6 @@ from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.barline import Barline, BarStyle
 from musicscore.musicxml.groups.layout import SystemLayout
 from musicscore.musicxml.groups.musicdata import Print, Attributes
-from musicscore.musicxml.types.complextypes.identification import Encoding
-from musicscore.musicxml.types.complextypes.scorepart import Identification
 from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance
 
 
