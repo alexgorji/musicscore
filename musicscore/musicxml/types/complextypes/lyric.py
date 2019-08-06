@@ -18,7 +18,6 @@ from unittest import TestCase
 from musicscore.musicxml.types.simple_type import Token
 
 
-
 class Syllabic(XMLElement, TypeSyllabic):
     """"""
 

@@ -48,6 +48,9 @@ class Decimal(SimpleType):
         self._value = v
 
 
+TypeDecimal = Decimal
+
+
 class Integer(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -57,6 +60,9 @@ class Integer(SimpleType):
         if not isinstance(v, int):
             raise TypeError('value {} must be an int not {}'.format(v, type(v).__name__))
         self._value = v
+
+
+TypeInteger = Integer
 
 
 class PositiveInteger(SimpleType):
@@ -72,6 +78,9 @@ class PositiveInteger(SimpleType):
         self._value = v
 
 
+TypePositiveInteger = PositiveInteger
+
+
 class NonNegativeInteger(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -85,6 +94,9 @@ class NonNegativeInteger(SimpleType):
         self._value = v
 
 
+TypeNonNegativeInteger = NonNegativeInteger
+
+
 class String(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -94,6 +106,9 @@ class String(SimpleType):
         if not isinstance(v, str):
             raise TypeError('value {} must a be string'.format(v))
         self._value = v
+
+
+TypeString = String
 
 
 # todo xs:Token
@@ -109,6 +124,9 @@ class Token(String):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
+
+
+TypeToken = Token
 
 
 # todo xs:ID
@@ -823,6 +841,22 @@ class TypeYesNoNumber(SimpleType):
         self._value = v
 
 
+class TypePositiveIntegerOrEmpty(SimpleType):
+    """
+    The positive-integer-or-empty values can be either a positive integer or an empty string.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v is not None and not TypePositiveInteger(v) and v != '':
+            raise ValueError(
+                '{}.value {}  can be either a positive integer or an empty string')
+        self._value = v
+
+
 ''''
 	<!-- Simple types derived from common.mod entities and elements -->
 
@@ -868,21 +902,6 @@ class TypeYesNoNumber(SimpleType):
 			<xs:enumeration value="right"/>
 		</xs:restriction>
 	</xs:simpleType>
-
-
-	<xs:simpleType name="positive-integer-or-empty">
-		<xs:annotation>
-			<xs:documentation>The positive-integer-or-empty values can be either a positive integer or an empty string.</xs:documentation>
-		</xs:annotation>
-		<xs:union memberTypes="xs:positiveInteger">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value=""/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:union>
-	</xs:simpleType>
-
 
 
 	<xs:simpleType name="smufl-coda-glyph-name">

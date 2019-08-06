@@ -32,7 +32,6 @@ class Identification(ComplexTypeIdentification):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-
 class PartName(ComplexTypePartName):
 
     def __init__(self, name, *args, **kwargs):
