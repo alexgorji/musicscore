@@ -1,3 +1,4 @@
+from musicscore.musictree.treeinstruments import TreeInstrument
 from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.types.complextypes.partlist import ScorePart
 
@@ -5,12 +6,23 @@ from musicscore.musicxml.types.complextypes.partlist import ScorePart
 class TreeScorePart(ScorePart):
     """"""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, instrument=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._instrument = None
         self._max_division = None
         self._forbidden_divisions = None
         self._parts = []
         self.parent_score = None
+
+    @property
+    def instrument(self):
+        return self._instrument
+
+    @instrument.setter
+    def instrument(self, val):
+        if val is not None and not isinstance(val, TreeInstrument):
+            raise TypeError('instrument.value must be of type TreeInstrument not{}'.format(type(val)))
+        self._instrument = val
 
     @property
     def max_division(self):

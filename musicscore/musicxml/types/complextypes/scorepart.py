@@ -61,7 +61,7 @@ class PartNameDisplay(XMLElement):
 class PartAbbreviation(ComplexTypePartName, String):
     """"""
 
-    def __init__(self, value, *args, **kwargs):
+    def __init__(self, value=None, *args, **kwargs):
         super().__init__(tag='part-abbreviation', value=value, *args, **kwargs)
 
 

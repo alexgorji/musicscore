@@ -82,7 +82,7 @@ class ComplexTypeScoreInstrument(ComplexType, Id):
     _DTD = Sequence(
         Element(InstrumentName, min_occurrence=0),
         Element(InstrumentAbbreviation, min_occurrence=0),
-        Element(InstrumentAbbreviation, min_occurrence=0),
+        Element(InstrumentSound, min_occurrence=0),
         Choice(
             Element(Solo),
             Element(Ensemble),

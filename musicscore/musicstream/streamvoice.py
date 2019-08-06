@@ -78,6 +78,7 @@ class StreamChordFormula(object):
 
     def condition(self, chord):
         pass
+
     def change_chord(self, chord):
         pass
 

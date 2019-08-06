@@ -12,7 +12,7 @@ class TestTreeTimewise(TestCase):
     def setUp(self):
         self.score = TreeScoreTimewise()
         self.score.add_measure()
-        self.score.add_part('one')
+        self.score.add_part()
 
     def test_score(self):
         result_path = path+'_test_score'

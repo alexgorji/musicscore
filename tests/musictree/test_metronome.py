@@ -17,7 +17,7 @@ class Test(TestCase):
 
     def test_1(self):
         self.score.add_measure()
-        self.score.add_part('one')
+        self.score.add_part()
         part = self.score.get_measure(1).get_part(1)
         d = part.add_child(Direction())
         dt = d.add_child(DirectionType())

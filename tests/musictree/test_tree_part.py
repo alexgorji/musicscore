@@ -122,7 +122,7 @@ class Test(TestCase):
         s = TreeScoreTimewise()
         m = TreeMeasure(time=(3, 4))
         s.add_measure(m)
-        s.add_part('one')
+        s.add_part()
         # m.add_child(p)
 
         chord1 = s.add_chord(1, 1, TreeChord((71, 72), quarter_duration=1.3))

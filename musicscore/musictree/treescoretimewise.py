@@ -12,7 +12,7 @@ from musicscore.musicxml.elements.scoreheader import PartList, Credit
 from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWords
 from musicscore.musicxml.types.complextypes.encoding import Supports
 from musicscore.musicxml.types.complextypes.identification import Encoding
-from musicscore.musicxml.types.complextypes.scorepart import PartName, Identification
+from musicscore.musicxml.types.complextypes.scorepart import PartName, Identification, PartAbbreviation
 from musicscore.musicxml.elements.barline import Barline, BarStyle
 
 
@@ -87,19 +87,26 @@ class TreeScoreTimewise(timewise.Score):
                 return score_part
         return None
 
-    def add_score_part(self, score_part, name='none', print_object='no'):
+    def add_score_part(self, score_part):
         score_part.parent_score = self
-        part_name = score_part.add_child(PartName(name=name))
-        part_name.print_object = print_object
+        instrument = score_part.instrument
+        if instrument is not None:
+            part_name = score_part.add_child(PartName(name=instrument.name))
+            part_name.print_object = 'yes'
+            score_part.add_child(PartAbbreviation(value=instrument.abbreviation))
+        else:
+            part_name = score_part.add_child(PartName(name='none'))
+            part_name.print_object = 'no'
+
         self._part_list.add_child(score_part)
 
     @property
     def number_of_parts(self):
         return len(self._part_list.get_children_by_type(TreeScorePart))
 
-    def add_part(self, name='none', print_object='no'):
+    def add_part(self):
         new_score_part = self._generate_score_part()
-        self.add_score_part(new_score_part, name, print_object)
+        self.add_score_part(new_score_part)
 
         for measure in self.get_children_by_type(TreeMeasure):
             part = new_score_part.add_part()

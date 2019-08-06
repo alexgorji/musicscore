@@ -15,7 +15,7 @@ class Test(TestCase):
     def setUp(self):
         self.score = TreeScoreTimewise()
         self.score.add_measure()
-        self.score.add_part('one')
+        self.score.add_part()
 
     def test_1(self):
         midis = [61, 61, 62, 60, 63, 64, 65, 61]
@@ -72,7 +72,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_5(self):
-        simpleformat = SimpleFormat(midis=[71.5, 71.5, 72, 72, 71.5, 71.5], durations=6*[0.5])
+        simpleformat = SimpleFormat(midis=[71.5, 71.5, 72, 72, 71.5, 71.5], durations=6 * [0.5])
         voice = simpleformat.to_stream_voice(1)
         voice.add_to_score(self.score, 1, 1)
         result_path = path + '_test_5'
@@ -82,8 +82,10 @@ class Test(TestCase):
 
     def test_6(self):
         midis = [51.5, 51.5, 50.5, 48.5, 49.5, 48.5, 50.0, 50.0, 49.5, 49.0]
-        durations = [Fraction(255, 56), Fraction(6525, 3136), Fraction(6075, 3136), Fraction(2475, 3136), Fraction(2145, 3136), Fraction(2805, 3136), Fraction(1815, 3136), Fraction(65, 56), Fraction(2015, 1568), Fraction(1625, 1568)]
-        simpleformat = SimpleFormat(midis=midis,  durations=durations)
+        durations = [Fraction(255, 56), Fraction(6525, 3136), Fraction(6075, 3136), Fraction(2475, 3136),
+                     Fraction(2145, 3136), Fraction(2805, 3136), Fraction(1815, 3136), Fraction(65, 56),
+                     Fraction(2015, 1568), Fraction(1625, 1568)]
+        simpleformat = SimpleFormat(midis=midis, durations=durations)
         simpleformat.auto_clef()
         voice = simpleformat.to_stream_voice(1)
         voice.add_to_score(self.score, 1, 1)
@@ -92,4 +94,3 @@ class Test(TestCase):
         self.score.accidental_mode = 'modern'
         self.score.write(result_path)
         TestScore().assert_template(result_path=result_path)
-
