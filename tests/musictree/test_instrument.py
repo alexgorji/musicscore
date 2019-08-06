@@ -15,12 +15,11 @@ path = os.path.abspath(__file__)
 class Test(TestCase):
     def test_1(self):
         instrument = TreeInstrument(name='banjo', abbreviation='bjo', number=2)
-        instrument.id = 'banjo2'
         score = TreeScoreTimewise()
-        score.add_score_part(TreeScorePart(instrument))
+        score.add_score_part(TreeScorePart(id='p1', instrument=instrument))
         violin = Violin(1)
-        violin.id = 'vln1'
-        score.add_score_part(TreeScorePart(violin))
+        # violin.id = 'vln1'
+        score.add_score_part(TreeScorePart('p2', violin))
         sf = SimpleFormat(durations=5 * [1, 2, 3, 4])
         sf.to_stream_voice().add_to_score(score, 1, 1)
         sf = SimpleFormat(durations=4 * [4, 3, 2])

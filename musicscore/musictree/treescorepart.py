@@ -7,12 +7,7 @@ import uuid
 class TreeScorePart(ScorePart):
     """"""
 
-    def __init__(self, instrument=None, id=None, *args, **kwargs):
-        if id is None:
-            if instrument is None:
-                id = uuid.uuid4()
-            else:
-                id = instrument.id
+    def __init__(self, id, instrument=None, *args, **kwargs):
         super().__init__(id=id, *args, **kwargs)
         self._instrument = None
         self.instrument = instrument
@@ -30,6 +25,8 @@ class TreeScorePart(ScorePart):
         if val is not None and not isinstance(val, TreeInstrument):
             raise TypeError('instrument.value must be of type TreeInstrument not{}'.format(type(val)))
         self._instrument = val
+        if val is not None:
+            val.id = self.id
 
     @property
     def max_division(self):

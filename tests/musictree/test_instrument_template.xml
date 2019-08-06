@@ -18,17 +18,17 @@
     </page-layout>
   </defaults>
   <part-list>
-    <score-part id="banjo2">
+    <score-part id="p1">
       <part-name print-object="yes">banjo 2</part-name>
       <part-abbreviation>bjo 2</part-abbreviation>
     </score-part>
-    <score-part id="vln1">
+    <score-part id="p2">
       <part-name print-object="yes">Violin 1</part-name>
       <part-abbreviation>vln 1</part-abbreviation>
     </score-part>
   </part-list>
   <measure number="1">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
         <time>
@@ -68,7 +68,7 @@
         </notations>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
         <time>
@@ -88,7 +88,7 @@
     </part>
   </measure>
   <measure number="2">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -119,7 +119,7 @@
         </notations>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -149,7 +149,7 @@
     </part>
   </measure>
   <measure number="3">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -189,7 +189,7 @@
         </notations>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -223,7 +223,7 @@
     </part>
   </measure>
   <measure number="4">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -251,7 +251,7 @@
         <dot/>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -281,7 +281,7 @@
     </part>
   </measure>
   <measure number="5">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -295,7 +295,7 @@
         <type>whole</type>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -324,7 +324,7 @@
     </part>
   </measure>
   <measure number="6">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -360,7 +360,7 @@
         </notations>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -393,7 +393,7 @@
     </part>
   </measure>
   <measure number="7">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -424,7 +424,7 @@
         </notations>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -466,7 +466,7 @@
     </part>
   </measure>
   <measure number="8">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -506,7 +506,7 @@
         </notations>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -540,7 +540,7 @@
     </part>
   </measure>
   <measure number="9">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -568,7 +568,7 @@
         <dot/>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -597,7 +597,7 @@
     </part>
   </measure>
   <measure number="10">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -611,7 +611,7 @@
         <type>whole</type>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -624,7 +624,7 @@
     </part>
   </measure>
   <measure number="11">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -660,7 +660,7 @@
         </notations>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -673,7 +673,7 @@
     </part>
   </measure>
   <measure number="12">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -704,7 +704,7 @@
         </notations>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -717,7 +717,7 @@
     </part>
   </measure>
   <measure number="13">
-    <part id="banjo2">
+    <part id="p1">
       <attributes>
         <divisions>1</divisions>
       </attributes>
@@ -741,7 +741,7 @@
         <type>half</type>
       </note>
     </part>
-    <part id="vln1">
+    <part id="p2">
       <attributes>
         <divisions>1</divisions>
       </attributes>

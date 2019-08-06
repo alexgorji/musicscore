@@ -104,8 +104,9 @@ class TreeScoreTimewise(timewise.Score):
     def number_of_parts(self):
         return len(self._part_list.get_children_by_type(TreeScorePart))
 
-    def add_part(self):
+    def add_part(self, instrument=None):
         new_score_part = self._generate_score_part()
+        new_score_part.instrument = instrument
         self.add_score_part(new_score_part)
 
         for measure in self.get_children_by_type(TreeMeasure):
