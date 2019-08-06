@@ -193,6 +193,7 @@ class TreeChord(XMLTree):
 
     def split_copy(self, quarter_duration):
         new_chord = TreeChord(quarter_duration=quarter_duration)
+
         new_chord.midis = self.midis
         new_chord.parent_voice = self.parent_voice
         new_chord.parent_beat = self.parent_beat
@@ -200,6 +201,12 @@ class TreeChord(XMLTree):
         try:
             voice = self.get_children_by_type(Voice)[0]
             new_chord.add_child(voice)
+        except IndexError:
+            pass
+
+        try:
+            notehead = self.get_children_by_type(Notehead)[0]
+            new_chord.add_child(notehead)
         except IndexError:
             pass
 

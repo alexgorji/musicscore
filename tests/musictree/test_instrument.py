@@ -18,7 +18,6 @@ class Test(TestCase):
         score = TreeScoreTimewise()
         score.add_score_part(TreeScorePart(id='p1', instrument=instrument))
         violin = Violin(1)
-        # violin.id = 'vln1'
         score.add_score_part(TreeScorePart('p2', violin))
         sf = SimpleFormat(durations=5 * [1, 2, 3, 4])
         sf.to_stream_voice().add_to_score(score, 1, 1)

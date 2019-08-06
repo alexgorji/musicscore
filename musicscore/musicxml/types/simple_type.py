@@ -1850,6 +1850,32 @@ class TypeSyllabic(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeNoteheadValue(SimpleType):
+    """
+    The notehead-value type indicates shapes other than the open and closed ovals associated with note durations.
+    The values do, re, mi, fa, fa up, so, la, and ti correspond to Aikin's 7-shape system.  The fa up shape is typically
+    used with upstems; the fa shape is typically used with downstems or no stems.
+
+    The arrow shapes differ from triangle and inverted triangle by being centered on the stem. Slashed and back slashed
+    notes include both the normal notehead and a slash. The triangle shape has the tip of the triangle pointing up;
+    the inverted triangle shape has the tip of the triangle pointing down. The left triangle shape is a right triangle
+    with the hypotenuse facing up and to the left.
+
+    The other notehead covers noteheads other than those listed here. It is usually used in combination with the smufl
+    attribute to specify a particular SMuFL notehead. The smufl attribute may be used with any notehead value to help
+    specify the appearance of symbols that share the same MusicXML semantics. Noteheads in the SMuFL "Note name
+    noteheads" range (U+E150–U+E1AF) should not use the smufl attribute or the "other" value, but instead use the
+    notehead-text element.
+    """
+
+    _PERMITTED = ["slash", "triangle", "diamond", "square", "cross", "x", "circle-x", "inverted triangle", "arrow down",
+                  "arrow up", "circled", "slashed", "back slashed", "normal", "cluster", "circle dot", "left triangle",
+                  "rectangle", "none", "do", "re", "mi", "fa", "fa up", "so", "la", "ti", "other"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 '''
 	<!-- Simple types derived from note.mod elements -->
 
@@ -1968,49 +1994,6 @@ class TypeSyllabic(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="notehead-value">
-		<xs:annotation>
-			<xs:documentation>
-The notehead-value type indicates shapes other than the open and closed ovals associated with note durations. 
-
-The values do, re, mi, fa, fa up, so, la, and ti correspond to Aikin's 7-shape system.  The fa up shape is typically used with upstems; the fa shape is typically used with downstems or no stems.
-
-The arrow shapes differ from triangle and inverted triangle by being centered on the stem. Slashed and back slashed notes include both the normal notehead and a slash. The triangle shape has the tip of the triangle pointing up; the inverted triangle shape has the tip of the triangle pointing down. The left triangle shape is a right triangle with the hypotenuse facing up and to the left.
-
-The other notehead covers noteheads other than those listed here. It is usually used in combination with the smufl attribute to specify a particular SMuFL notehead. The smufl attribute may be used with any notehead value to help specify the appearance of symbols that share the same MusicXML semantics. Noteheads in the SMuFL "Note name noteheads" range (U+E150–U+E1AF) should not use the smufl attribute or the "other" value, but instead use the notehead-text element.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="slash"/>
-			<xs:enumeration value="triangle"/>
-			<xs:enumeration value="diamond"/>
-			<xs:enumeration value="square"/>
-			<xs:enumeration value="cross"/>
-			<xs:enumeration value="x"/>
-			<xs:enumeration value="circle-x"/>
-			<xs:enumeration value="inverted triangle"/>
-			<xs:enumeration value="arrow down"/>
-			<xs:enumeration value="arrow up"/>
-			<xs:enumeration value="circled"/>
-			<xs:enumeration value="slashed"/>
-			<xs:enumeration value="back slashed"/>
-			<xs:enumeration value="normal"/>
-			<xs:enumeration value="cluster"/>
-			<xs:enumeration value="circle dot"/>
-			<xs:enumeration value="left triangle"/>
-			<xs:enumeration value="rectangle"/>
-			<xs:enumeration value="none"/>
-			<xs:enumeration value="do"/>
-			<xs:enumeration value="re"/>
-			<xs:enumeration value="mi"/>
-			<xs:enumeration value="fa"/>
-			<xs:enumeration value="fa up"/>
-			<xs:enumeration value="so"/>
-			<xs:enumeration value="la"/>
-			<xs:enumeration value="ti"/>
-			<xs:enumeration value="other"/>
-		</xs:restriction>
-	</xs:simpleType>
-
 	<xs:simpleType name="show-tuplet">
 		<xs:annotation>
 			<xs:documentation>The show-tuplet type indicates whether to show a part of a tuplet relating to the tuplet-actual element, both the tuplet-actual and tuplet-normal elements, or neither.</xs:documentation>
@@ -2061,8 +2044,30 @@ The other notehead covers noteheads other than those listed here. It is usually 
 
 class TypeMeasureText(Token):
     """
-    The measure-text type is used for the text attribute of measure elements. It has at least one character. The
-    implicit attribute of the measure element should be set to "yes" rather than setting the text attribute to an empty
+    The
+    measure - text
+    type is used
+    for the text attribute of measure elements.It has at least one character.The
+    implicit
+    attribute
+    of
+    the
+    measure
+    element
+    should
+    be
+    set
+    to
+    "yes"
+    rather
+    than
+    setting
+    the
+    text
+    attribute
+    to
+    an
+    empty
     string.
     """
 

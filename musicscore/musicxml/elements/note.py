@@ -10,6 +10,7 @@ from musicscore.musicxml.types.complextypes.beam import ComplexTypeBeam
 from musicscore.musicxml.types.complextypes.complextype import EmptyPlacement, ComplexType
 from musicscore.musicxml.types.complextypes.lyric import ComplexTypeLyric
 from musicscore.musicxml.types.complextypes.notations import ComplexTypeNotations
+from musicscore.musicxml.types.complextypes.notehead import ComplexTypeNotehead
 from musicscore.musicxml.types.complextypes.tie import ComplexTypeTie
 from musicscore.musicxml.types.complextypes.timemodification import ComplexTypeTimeModification
 from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeNoteTypeValue, TypeAccidentalValue
@@ -121,12 +122,12 @@ class Stem(XMLElement):
         raise NotImplementedError()
 
 
-class Notehead(XMLElement):
+class Notehead(ComplexTypeNotehead):
+    _TAG = 'notehead'
     """"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='notehead', *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, value='normal', *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class NoteheadText(XMLElement):
