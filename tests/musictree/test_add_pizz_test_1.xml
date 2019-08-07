@@ -52,13 +52,6 @@
       </note>
       <note>
         <rest/>
-        <duration>20</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <beam number="1">end</beam>
-      </note>
-      <note>
-        <rest/>
         <duration>32</duration>
         <voice>1</voice>
         <type>quarter</type>
@@ -89,7 +82,7 @@
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
-        <beam number="1">end</beam>
+        <beam number="1">begin</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -108,7 +101,7 @@
         <voice>1</voice>
         <type>16th</type>
         <dot/>
-        <beam number="1">begin</beam>
+        <beam number="1">continue</beam>
       </note>
       <direction>
         <direction-type>
@@ -123,7 +116,7 @@
         <duration>20</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <beam number="1">continue</beam>
+        <beam number="1">end</beam>
       </note>
       <direction>
         <direction-type>
@@ -139,7 +132,7 @@
         <tie type="start"/>
         <voice>1</voice>
         <type>32nd</type>
-        <beam number="1">end</beam>
+        <beam number="1">begin</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -151,14 +144,14 @@
         <type>eighth</type>
         <dot/>
         <dot/>
-        <beam number="1">begin</beam>
+        <beam number="1">end</beam>
       </note>
       <note>
         <rest/>
         <duration>5</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <beam number="1">end</beam>
+        <beam number="1"/>
       </note>
     </part>
   </measure>

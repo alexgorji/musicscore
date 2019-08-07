@@ -213,19 +213,6 @@ class TreeBeat(object):
                 chord.quarter_duration = quarter_duration
                 chord._offset = None
 
-    def implement_flags(self):
-        flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
-        while flag_types:
-            flag_type = flag_types.pop()
-            new_chords = []
-            for chord in self.chords:
-                try:
-                    chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
-                    new_chords.extend(chord_flag.implement(chord))
-                except IndexError:
-                    new_chords.append(chord)
-            self._chords = new_chords
-
         # new_chords = []
         # for chord in self.chords:
         #     if not chord.flags:
@@ -267,18 +254,6 @@ class TreeBeat(object):
         #         chord.implement_flag(flag)
         #         new_chords.append(chord)
         #     self._chords = new_chords
-
-    def update_tuplets(self):
-        tuplet_divisions = [3, 5, 6, 7, 9, 10]
-        non_grace_chords = [chord for chord in self.chords if chord.quarter_duration != 0]
-        if self.best_div in tuplet_divisions:
-            for i in range(len(non_grace_chords)):
-                if i == 0:
-                    non_grace_chords[0].add_tuplet('start')
-                elif i == len(self.chords) - 1:
-                    non_grace_chords[-1].add_tuplet('stop')
-                else:
-                    non_grace_chords[i].add_tuplet('continue')
 
     def split_not_notatable(self):
 
@@ -504,6 +479,31 @@ class TreeBeat(object):
             else:
                 output.append(chord)
         self._chords = output
+
+    def implement_flags(self):
+        flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
+        while flag_types:
+            flag_type = flag_types.pop()
+            new_chords = []
+            for chord in self.chords:
+                try:
+                    chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
+                    new_chords.extend(chord_flag.implement(chord))
+                except IndexError:
+                    new_chords.append(chord)
+            self._chords = new_chords
+
+    def update_tuplets(self):
+        tuplet_divisions = [3, 5, 6, 7, 9, 10]
+        non_grace_chords = [chord for chord in self.chords if chord.quarter_duration != 0]
+        if self.best_div in tuplet_divisions:
+            for i in range(len(non_grace_chords)):
+                if i == 0:
+                    non_grace_chords[0].add_tuplet('start')
+                elif i == len(self.chords) - 1:
+                    non_grace_chords[-1].add_tuplet('stop')
+                else:
+                    non_grace_chords[i].add_tuplet('continue')
 
     def substitute_sextoles(self):
         six_divisions = (

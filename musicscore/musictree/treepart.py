@@ -435,22 +435,14 @@ class TreePartVoice(object):
         # else:
         #     warnings.warn('{} already quantized. No action took place.'.format(self))
 
-    def implement_flags(self):
-        if not self._quantized:
-            raise Exception('quantize() first')
-        if not self._flags_implemented:
-            for beat in self.beats:
-                beat.implement_flags()
-            self._flags_implemented = True
-
     def clear_zero_heads_tails(self):
         for chord in self.chords:
             if chord.quarter_duration == 0 and (chord._head or chord._tail):
                 chord.remove_from_score()
 
     def split_not_notatable(self):
-        if not self._flags_implemented:
-            raise Exception('implement_flags() first')
+        if not self._quantized:
+            raise Exception('quantize() first')
 
         if not self._not_notatable_split:
             self._chords = []
@@ -461,9 +453,19 @@ class TreePartVoice(object):
         # else:
         #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
-    def adjoin_ties(self):
+    def implement_flags(self):
         if not self._not_notatable_split:
             raise Exception('split_not_notatable() first')
+
+        if not self._flags_implemented:
+            for beat in self.beats:
+                beat.implement_flags()
+            self._flags_implemented = True
+
+    def adjoin_ties(self):
+        if not self._flags_implemented:
+            raise Exception('implement_flags() first')
+
         if not self._ties_adjoined:
             # notatables = [1, 1.5, 2, 3, 4, 6, 8]
             notatables = [1, 2, 3, 4, 6, 8]
@@ -967,13 +969,13 @@ class TreePart(timewise.Part):
             voice.quantize()
             voice.clear_zero_heads_tails()
 
-    def implement_flags(self):
-        for voice in self.voices.values():
-            voice.implement_flags()
-
     def split_not_notatable(self):
         for voice in self.voices.values():
             voice.split_not_notatable()
+
+    def implement_flags(self):
+        for voice in self.voices.values():
+            voice.implement_flags()
 
     def adjoin_ties(self):
         for voice in self.voices.values():
@@ -1025,9 +1027,9 @@ class TreePart(timewise.Part):
 
             self.quantize()
 
-            self.implement_flags()
-
             self.split_not_notatable()
+
+            self.implement_flags()
 
             self.adjoin_ties()
 

@@ -414,15 +414,15 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.quantize()
 
-    def implement_flags(self):
-        for measure in self.get_children_by_type(TreeMeasure):
-            for part in measure.get_children_by_type(TreePart):
-                part.implement_flags()
-
     def split_not_notatable(self):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 part.split_not_notatable()
+
+    def implement_flags(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.implement_flags()
 
     def adjoin_ties(self):
         for measure in self.get_children_by_type(TreeMeasure):
@@ -485,8 +485,8 @@ class TreeScoreTimewise(timewise.Score):
             self.fill_with_rest()
             self.add_beats()
             self.quantize()
-            self.implement_flags()
             self.split_not_notatable()
+            self.implement_flags()
             self.adjoin_ties()
             self.adjoin_rests()
             self.update_tuplets()
