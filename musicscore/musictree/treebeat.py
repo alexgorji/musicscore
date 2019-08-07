@@ -3,6 +3,7 @@ import warnings
 
 from quicktions import Fraction
 
+from musicscore.basic_functions import flatten
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musicxml.elements.note import TimeModification
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
@@ -211,6 +212,61 @@ class TreeBeat(object):
             for chord, quarter_duration in zip(self.chords, quarter_durations):
                 chord.quarter_duration = quarter_duration
                 chord._offset = None
+
+    def implement_flags(self):
+        flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
+        while flag_types:
+            flag_type = flag_types.pop()
+            new_chords = []
+            for chord in self.chords:
+                try:
+                    chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
+                    new_chords.extend(chord_flag.implement(chord))
+                except IndexError:
+                    new_chords.append(chord)
+            self._chords = new_chords
+
+        # new_chords = []
+        # for chord in self.chords:
+        #     if not chord.flags:
+        #         new_chords.append(chord)
+        #     else:
+        #         for flag in chord.flags:
+        #             new_chords.
+        #     flag = None
+        #     if 'pizz' in chord.flags:
+        #         flag = 'pizz'
+        #     elif 'percussion' in chord.flags:
+        #         flag = 'percussion'
+        #     if flag is None:
+        #         new_chords.append(chord)
+        #     elif chord.is_tied_to_previous:
+        #         chord.to_rest()
+        #         new_chords.append(chord)
+        #     elif chord.position_in_beat == 0:
+        #         split = [chord]
+        #         if chord.quarter_duration == 1:
+        #             split = chord.split(1, 1)
+        #         elif chord.quarter_duration == 2:
+        #             split = chord.split(1, 3)
+        #         elif chord.quarter_duration == 3:
+        #             split = chord.split(1, 5)
+        #         elif chord.quarter_duration == 4:
+        #             split = chord.split(1, 7)
+        #         elif chord.quarter_duration == 6:
+        #             split = chord.split(1, 11)
+        #         else:
+        #             pass
+        #         split[0].implement_flag(flag)
+        #         try:
+        #             split[1].to_rest()
+        #         except IndexError:
+        #             pass
+        #         new_chords.extend(split)
+        #     else:
+        #         chord.implement_flag(flag)
+        #         new_chords.append(chord)
+        #     self._chords = new_chords
 
     def update_tuplets(self):
         tuplet_divisions = [3, 5, 6, 7, 9, 10]

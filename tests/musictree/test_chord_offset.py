@@ -21,9 +21,11 @@ class Test(TestCase):
         self.score.fill_with_rest()
         self.score.add_beats()
         self.score.quantize()
+        self.score.implement_flags()
         self.score.split_not_notatable()
         for chord in self.score.get_measure(1).get_part(1).get_voice(1).chords:
             chord.add_lyric(round(float(chord.offset), 2))
-        with self.assertWarns(UserWarning):
-            self.score.write(path=result_path)
+        # with self.assertWarns(UserWarning):
+        #     self.score.write(path=result_path)
+        self.score.write(path=result_path)
         TestScore().assert_template(result_path=result_path)

@@ -2,6 +2,7 @@ from quicktions import Fraction
 
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
 from musicscore.musictree.midi import Midi
+from musicscore.musictree.treechordflags import TreeChordFlag
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.groups.musicdata import Direction, Attributes
 from musicscore.musicxml.groups.common import EditorialVoice, Staff, Voice
@@ -63,6 +64,8 @@ class TreeChord(XMLTree):
         self._tail = False
         self._head = False
         self._is_adjoinable = True
+        self._flags = set()
+        self._percussion_notation = False
 
     @property
     def __name__(self):
@@ -196,12 +199,22 @@ class TreeChord(XMLTree):
     def end_position(self):
         return self.offset + self.quarter_duration
 
+    @property
+    def flags(self):
+        return self._flags
+
+    def add_flag(self, flag):
+        if not isinstance(flag, TreeChordFlag):
+            raise TypeError('flag must be of type TreeChordFlag not {}'.format(flag.__class__))
+        self._flags.add(flag)
+
     def split_copy(self, quarter_duration):
         new_chord = TreeChord(quarter_duration=quarter_duration)
 
         new_chord.midis = self.midis
         new_chord.parent_voice = self.parent_voice
         new_chord.parent_beat = self.parent_beat
+        new_chord._flags = self._flags
         new_chord._offset = None
         try:
             voice = self.get_children_by_type(Voice)[0]
@@ -461,6 +474,7 @@ class TreeChord(XMLTree):
             new_chord.add_child(child)
 
         new_chord.is_adjoinable = self.is_adjoinable
+        new_chord._flags = self._flags
         # for attribute in self.__dir__():
         #     print(attribute)
         return new_chord

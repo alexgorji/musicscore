@@ -7,7 +7,6 @@ from musicscore.musictree.treepagestyle import TreePageStyle
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescorepart import TreeScorePart
 from musicscore.musicxml.elements import partwise
-from musicscore.musicxml.elements.note import Stem
 from musicscore.musicxml.elements.scoreheader import PartList, Credit
 from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWords
 from musicscore.musicxml.types.complextypes.encoding import Supports
@@ -415,6 +414,11 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.quantize()
 
+    def implement_flags(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.implement_flags()
+
     def split_not_notatable(self):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
@@ -481,6 +485,7 @@ class TreeScoreTimewise(timewise.Score):
             self.fill_with_rest()
             self.add_beats()
             self.quantize()
+            self.implement_flags()
             self.split_not_notatable()
             self.adjoin_ties()
             self.adjoin_rests()

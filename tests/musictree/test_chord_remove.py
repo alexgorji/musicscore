@@ -26,8 +26,9 @@ class Test(TestCase):
 
         result_path = path + '_test_1'
 
-        with self.assertWarns(UserWarning):
-            self.score.write(result_path)
+        # with self.assertWarns(UserWarning):
+        #     self.score.write(path=result_path)
+        self.score.write(path=result_path)
 
         TestScore().assert_template(result_path=result_path)
 
@@ -47,8 +48,9 @@ class Test(TestCase):
 
         result_path = path + '_test_2'
 
-        with self.assertWarns(UserWarning):
-            self.score.write(result_path)
+        # with self.assertWarns(UserWarning):
+        #     self.score.write(path=result_path)
+        self.score.write(path=result_path)
 
         TestScore().assert_template(result_path=result_path)
 

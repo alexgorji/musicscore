@@ -103,6 +103,7 @@ class TreePartVoice(object):
         self._filled_with_rest = False
         self._beats_added = False
         self._quantized = False
+        self._flags_implemented = False
         self._not_notatable_split = False
         self._ties_adjoined = False
         self._rests_adjoined = False
@@ -434,14 +435,22 @@ class TreePartVoice(object):
         # else:
         #     warnings.warn('{} already quantized. No action took place.'.format(self))
 
+    def implement_flags(self):
+        if not self._quantized:
+            raise Exception('quantize() first')
+        if not self._flags_implemented:
+            for beat in self.beats:
+                beat.implement_flags()
+            self._flags_implemented = True
+
     def clear_zero_heads_tails(self):
         for chord in self.chords:
             if chord.quarter_duration == 0 and (chord._head or chord._tail):
                 chord.remove_from_score()
 
     def split_not_notatable(self):
-        if not self._quantized:
-            raise Exception('quantize() first')
+        if not self._flags_implemented:
+            raise Exception('implement_flags() first')
 
         if not self._not_notatable_split:
             self._chords = []
@@ -958,6 +967,10 @@ class TreePart(timewise.Part):
             voice.quantize()
             voice.clear_zero_heads_tails()
 
+    def implement_flags(self):
+        for voice in self.voices.values():
+            voice.implement_flags()
+
     def split_not_notatable(self):
         for voice in self.voices.values():
             voice.split_not_notatable()
@@ -1011,6 +1024,8 @@ class TreePart(timewise.Part):
             self.add_beats()
 
             self.quantize()
+
+            self.implement_flags()
 
             self.split_not_notatable()
 
