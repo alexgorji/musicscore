@@ -214,7 +214,7 @@ class TreeChord(XMLTree):
         new_chord.midis = self.midis
         new_chord.parent_voice = self.parent_voice
         new_chord.parent_beat = self.parent_beat
-        new_chord._flags = self._flags
+        new_chord._flags = self._flags.copy()
         new_chord._offset = None
         try:
             voice = self.get_children_by_type(Voice)[0]

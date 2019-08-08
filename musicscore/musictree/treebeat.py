@@ -481,7 +481,7 @@ class TreeBeat(object):
                 output.append(chord)
         self._chords = output
 
-    def implement_flags_2(self):
+    def implement_flags(self):
         flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
         while flag_types:
             flag_type = flag_types.pop()
@@ -489,17 +489,17 @@ class TreeBeat(object):
             for chord in self.chords:
                 try:
                     chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
-                    new_chords = chord_flag.implement_2(chord)
-                    # if len(new_chords) == 2:
-                    #     diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
-                    #     if diff > 0:
-                    #         split = new_chords[1].split(new_chords[1].quarter_duration - diff, diff)
-                    #         next_beat = self.next
-                    #         if next_beat.chords == []:
-                    #             next_beat.add_chord(split[1])
-                    #             split[1]._flags.remove(chord_flag)
-                    #         else:
-                    #             raise Exception()
+                    new_chords = chord_flag.implement(chord)
+                    if len(new_chords) == 2:
+                        diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
+                        if diff > 0:
+                            split = new_chords[1].split(new_chords[1].quarter_duration - diff, diff)
+                            next_beat = self.next
+                            if next_beat.chords == []:
+                                next_beat.add_chord(split[1])
+                                split[1]._flags.remove(chord_flag)
+                            else:
+                                raise Exception()
                     output.extend(new_chords)
                 except IndexError:
                     output.append(chord)
