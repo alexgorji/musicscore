@@ -3,7 +3,7 @@ import warnings
 from lxml import etree as et
 from quicktions import Fraction
 
-from musicscore.basic_functions import lcm, substitute
+from musicscore.basic_functions import lcm, substitute, flatten
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
@@ -100,10 +100,11 @@ class TreePartVoice(object):
         self._forbidden_divisions = None
         self._chords = []
         self._beats = None
+        self._flags_implemented_1 = False
         self._filled_with_rest = False
         self._beats_added = False
         self._quantized = False
-        self._flags_implemented = False
+        self._flags_implemented_2 = False
         self._not_notatable_split = False
         self._ties_adjoined = False
         self._rests_adjoined = False
@@ -397,12 +398,41 @@ class TreePartVoice(object):
                 if last_chord.end_position > beat.end_position:
                     head_duration = (beat.end_position - last_chord.offset)
                     ratios = [head_duration, last_chord.quarter_duration - head_duration]
+                    # print(ratios)
                     split = last_chord.split(ratios)
                     self._chords = substitute(self._chords, last_chord, split)
                     beat.next.chords.insert(0, split[1])
                     split[1].parent_beat = beat.next
                     split[0]._head = True
                     split[1]._tail = True
+
+    def implement_flags_1(self):
+        if not self._flags_implemented_1:
+            for chord in self.chords:
+                flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
+                while flag_types:
+                    flag_type = flag_types.pop()
+                    output = []
+                    for chord in self.chords:
+                        try:
+                            chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
+                            new_chords = chord_flag.implement_1(chord)
+                            # if len(new_chords) == 2:
+                            #     diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
+                            #     if diff > 0:
+                            #         split = new_chords[1].split(new_chords[1].quarter_duration - diff, diff)
+                            #         next_beat = self.next
+                            #         if next_beat.chords == []:
+                            #             next_beat.add_chord(split[1])
+                            #             split[1]._flags.remove(chord_flag)
+                            #         else:
+                            #             raise Exception()
+                            output.extend(new_chords)
+                        except IndexError:
+                            output.append(chord)
+                    self._chords = output
+
+            self._flags_implemented_1 = True
 
     def fill_with_rest(self):
         if not self._filled_with_rest:
@@ -441,31 +471,34 @@ class TreePartVoice(object):
                 chord.remove_from_score()
 
     def split_not_notatable(self):
+        # print([ch.quarter_duration for ch in self.chords])
         if not self._quantized:
             raise Exception('quantize() first')
-
+        # self._not_notatable_split = False
         if not self._not_notatable_split:
             self._chords = []
             for beat in self.beats:
                 beat.split_not_notatable()
                 self._chords.extend(beat.chords)
             self._not_notatable_split = True
+        # print([ch.quarter_duration for ch in self.chords])
+        # print('split')
         # else:
         #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
-    def implement_flags(self):
+    def implement_flags_2(self):
         if not self._not_notatable_split:
             raise Exception('split_not_notatable() first')
-
-        if not self._flags_implemented:
+        if not self._flags_implemented_2:
+            self._chords = []
             for beat in self.beats:
-                beat.implement_flags()
+                beat.implement_flags_2()
+                self._chords.extend(beat.chords)
             self._flags_implemented = True
 
     def adjoin_ties(self):
         if not self._flags_implemented:
             raise Exception('implement_flags() first')
-
         if not self._ties_adjoined:
             # notatables = [1, 1.5, 2, 3, 4, 6, 8]
             notatables = [1, 2, 3, 4, 6, 8]
@@ -553,7 +586,7 @@ class TreePartVoice(object):
     def adjoin_rests(self):
         if not self._ties_adjoined:
             raise Exception('adjoin_ties() first')
-
+        # self._rests_adjoined = True
         if not self._rests_adjoined:
             notatables = [1, 1.5, 2, 3, 4, 6, 8]
 
@@ -954,6 +987,10 @@ class TreePart(timewise.Part):
         else:
             raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
 
+    def implement_flags_1(self):
+        for voice in self.voices.values():
+            voice.implement_flags_1()
+
     def fill_with_rest(self):
         if self.voices == {}:
             self.set_voice(1)
@@ -973,9 +1010,9 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.split_not_notatable()
 
-    def implement_flags(self):
+    def implement_flags_2(self):
         for voice in self.voices.values():
-            voice.implement_flags()
+            voice.implement_flags_2()
 
     def adjoin_ties(self):
         for voice in self.voices.values():
@@ -1021,6 +1058,8 @@ class TreePart(timewise.Part):
 
     def finish(self):
         if not self._finished:
+            self.implement_flags_1()
+
             self.fill_with_rest()
 
             self.add_beats()
@@ -1029,7 +1068,7 @@ class TreePart(timewise.Part):
 
             self.split_not_notatable()
 
-            self.implement_flags()
+            self.implement_flags_2()
 
             self.adjoin_ties()
 

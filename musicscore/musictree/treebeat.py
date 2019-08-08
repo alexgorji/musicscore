@@ -151,6 +151,9 @@ class TreeBeat(object):
         chord.parent_beat = self
         self.chords.append(chord)
 
+    def clear_chords(self):
+        self._chords = []
+
     def get_quantized_locations(self, subdivision):
         return _find_quantized_locations(self.duration, subdivision)
 
@@ -370,7 +373,6 @@ class TreeBeat(object):
                     split = chord.split(3, 6)
                 elif chord.position_in_beat == Fraction(1, 10):
                     split = chord.split(3, 6)
-
             # elif chord.quarter_duration == Fraction(5, 11):
             #     if chord.position_in_beat == Fraction(0, 11):
             #         split = chord.split(Fraction(4, 11), Fraction(1, 11))
@@ -473,25 +475,57 @@ class TreeBeat(object):
             #
             #     elif chord.position_in_beat == Fraction(1, 12):
             #         split = chord.split(Fraction(3, 12), Fraction(8, 12))
-
             if split:
                 output.extend(split)
             else:
                 output.append(chord)
         self._chords = output
 
-    def implement_flags(self):
+    def implement_flags_2(self):
         flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
         while flag_types:
             flag_type = flag_types.pop()
-            new_chords = []
+            output = []
             for chord in self.chords:
                 try:
                     chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
-                    new_chords.extend(chord_flag.implement(chord))
+                    new_chords = chord_flag.implement_2(chord)
+                    # if len(new_chords) == 2:
+                    #     diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
+                    #     if diff > 0:
+                    #         split = new_chords[1].split(new_chords[1].quarter_duration - diff, diff)
+                    #         next_beat = self.next
+                    #         if next_beat.chords == []:
+                    #             next_beat.add_chord(split[1])
+                    #             split[1]._flags.remove(chord_flag)
+                    #         else:
+                    #             raise Exception()
+                    output.extend(new_chords)
                 except IndexError:
-                    new_chords.append(chord)
-            self._chords = new_chords
+                    output.append(chord)
+            self._chords = output
+
+        # flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
+        # while flag_types:
+        #     flag_type = flag_types.pop()
+        #     new_chords = []
+        #     for chord in self.chords:
+        #         # new_chords.extend(chord.split(1, 1))
+        #         new_chords.extend([chord])
+        #         # try:
+        #         #     chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
+        #         #     # new_chords.extend(chord_flag.implement(chord))
+        #         #
+        #         # except IndexError:
+        #         #     new_chords.append(chord)
+        #     self._chords = new_chords
+        #     # self.clear_chords()
+        #     # for ch in new_chords:
+        #     #     self.add_chord(ch)
+        #     # self.quantize()
+        #     # self.split_not_notatable()
+        # print([ch.quarter_duration for ch in self.chords])
+        # print([ch.is_rest for ch in self.chords])
 
     def update_tuplets(self):
         tuplet_divisions = [3, 5, 6, 7, 9, 10]

@@ -18,11 +18,12 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[1.8, 0.2, 0.4, 0.5, 1])
+        sf = SimpleFormat(durations=[4, 2, 1, 1.5, 1.8, 0.2, 0.4, 0.5, 1])
+        # sf = SimpleFormat(durations=[4])
 
         for chord in sf.chords:
             chord.add_flag(PizzFlag())
-            chord.add_flag(PercussionFlag())
+            # chord.add_flag(PercussionFlag())
         v = sf.to_stream_voice()
         v.add_to_score(self.score, 1, 1)
         result_path = path + '_test_1'
