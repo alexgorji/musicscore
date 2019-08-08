@@ -420,11 +420,6 @@ class TreeScoreTimewise(timewise.Score):
                 part.split_not_notatable()
 
     def implement_flags(self):
-        print('score')
-        for measure in self.get_children_by_type(TreeMeasure):
-            for part in measure.get_children_by_type(TreePart):
-                for voice in part.voices.values():
-                    print([ch.flags.__repr__ for ch in voice.chords])
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 part.implement_flags()

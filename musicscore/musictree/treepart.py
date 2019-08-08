@@ -461,9 +461,6 @@ class TreePartVoice(object):
         if not self._not_notatable_split:
             raise Exception('split_not_notatable() first')
         if not self._flags_implemented:
-            print('part_voice')
-            print([ch.quarter_duration for ch in self.chords])
-            print([ch.flags for ch in self.chords])
             self._chords = []
             for beat in self.beats:
                 beat.implement_flags()
