@@ -1025,7 +1025,6 @@ class TreePart(timewise.Part):
 
     def finish(self):
         if not self._finished:
-            self.implement_flags_1()
 
             self.fill_with_rest()
 
@@ -1035,7 +1034,7 @@ class TreePart(timewise.Part):
 
             self.split_not_notatable()
 
-            self.implement_flags_2()
+            self.implement_flags()
 
             self.adjoin_ties()
 
