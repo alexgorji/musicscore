@@ -1,4 +1,5 @@
 from musicscore.musicxml.elements.fullnote import Pitch, Rest
+from musicscore.musicxml.elements.note import Notehead
 
 
 class Midi(object):
@@ -126,12 +127,14 @@ class Midi(object):
         11: ('A', 2, 0)
     }
 
-    def __init__(self, value, accidental_mode='standard', *args, **kwargs):
+    def __init__(self, value, accidental_mode='standard', note_head=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._value = None
         self._accidental_mode = None
+        self._note_head = None
         self.value = value
         self.accidental_mode = accidental_mode
+        self.note_head = note_head
 
     @property
     def value(self):
@@ -156,6 +159,16 @@ class Midi(object):
         if value not in permitted:
             raise TypeError('accidental_mode.value {} must be in {}'.format(value, permitted))
         self._accidental_mode = value
+
+    @property
+    def note_head(self):
+        return self._note_head
+
+    @note_head.setter
+    def note_head(self, val):
+        if val is not None and not isinstance(val, Notehead):
+            val = Notehead(val)
+        self._note_head = val
 
     def get_pitch_name(self):
         if self.accidental_mode == 'standard':
@@ -196,7 +209,7 @@ class Midi(object):
         return Midi(value=self.value + val, accidental_mode=self.accidental_mode)
 
     def __deepcopy__(self, memodict={}):
-        output = Midi(self.value, self.accidental_mode)
+        output = Midi(self.value, self.accidental_mode, self.note_head)
         return output
 
 

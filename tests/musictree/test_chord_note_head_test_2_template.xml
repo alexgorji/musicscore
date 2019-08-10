@@ -50,6 +50,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
+        <notehead>diamond</notehead>
       </note>
       <note>
         <chord/>
@@ -62,6 +63,7 @@
         <voice>1</voice>
         <type>whole</type>
         <accidental>flat</accidental>
+        <notehead>diamond</notehead>
       </note>
     </part>
   </measure>

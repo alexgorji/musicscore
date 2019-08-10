@@ -60,6 +60,7 @@ class TreeChord(XMLTree):
         self._quarter_duration = None
         self.quarter_duration = quarter_duration
         self._midis = None
+
         self.midis = midis
         self._tail = False
         self._head = False
@@ -260,13 +261,16 @@ class TreeChord(XMLTree):
     def _notes(self):
         output = []
         for index, midi in enumerate(self.midis):
+            # print(midi)
             note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration)
-
+            # print(midi.note_head)
+            if midi.note_head:
+                note.add_child(midi.note_head)
             for child in self.get_children():
                 if isinstance(child, Lyric) and index != 0:
                     pass
-                elif isinstance(child, Notehead) and index != 0:
-                    pass
+                # elif isinstance(child, Notehead) and index != 0:
+                #     pass
                 elif isinstance(child, Notations) and index != 0:
                     grandchildren = child.get_children()
                     for grandchild in grandchildren:

@@ -29,4 +29,14 @@ class Test(TestCase):
         sf.to_stream_voice().add_to_score(self.score)
         xml_path = path + '_test_2.xml'
         self.score.write(xml_path)
-        # TestScore().assert_template(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_3(self):
+        sf = SimpleFormat(midis=[(60, 62, 63)], durations=[4])
+        sf.chords[0].midis[0].note_head = Notehead('diamond')
+        sf.chords[0].midis[1].note_head = Notehead('square')
+        sf.chords[0].midis[2].note_head = Notehead('normal')
+        sf.to_stream_voice().add_to_score(self.score)
+        xml_path = path + '_test_3.xml'
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
