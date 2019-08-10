@@ -7,7 +7,7 @@ import os
 from musicscore.musicxml.elements.note import Notehead
 from tests.score_templates.xml_test_score import TestScore
 
-xml_path = os.path.abspath(__file__).split('.')[0] + '.xml'
+path = os.path.abspath(__file__).split('.')[0]
 
 
 class Test(TestCase):
@@ -16,9 +16,17 @@ class Test(TestCase):
 
     def test_1(self):
         sf = SimpleFormat(durations=[1, 2, 3, 2, 1])
-        TreeChord()
         sf.chords[1].add_child(Notehead('square'))
         sf.chords[2].add_child(Notehead('diamond'))
         sf.to_stream_voice().add_to_score(self.score)
+        xml_path = path + '_test_1.xml'
         self.score.write(xml_path)
         TestScore().assert_template(xml_path)
+
+    def test_2(self):
+        sf = SimpleFormat(midis=[(60, 62, 63)], durations=[4])
+        sf.chords[0].add_child(Notehead('diamond'))
+        sf.to_stream_voice().add_to_score(self.score)
+        xml_path = path + '_test_2.xml'
+        self.score.write(xml_path)
+        # TestScore().assert_template(xml_path)
