@@ -51,7 +51,7 @@ class Test(TestCase):
         measure_number = 1
         for midi in midis:
             chord = TreeChord(midi, quarter_duration=0.5)
-            chord.add_lyric(midi)
+            chord.add_lyric([m.value for m in chord.midis])
             self.score.add_chord(measure_number, 1, chord)
             remaining_duration = self.score.get_measure(measure_number).get_part(1).get_voice(1).remaining_duration
             if remaining_duration == 0:

@@ -88,8 +88,18 @@
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+      <note>
+        <chord/>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -110,18 +120,8 @@
       <note>
         <chord/>
         <pitch>
-          <step>E</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-      <note>
-        <chord/>
-        <pitch>
-          <step>B</step>
-          <octave>2</octave>
+          <step>C</step>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>

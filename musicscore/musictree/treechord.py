@@ -113,6 +113,8 @@ class TreeChord(XMLTree):
             if midi.value == 0 and len(values) > 1:
                 raise ValueError('midi with value 0 must be alone.')
 
+        output = sorted(output, key=lambda midi: midi.value)
+
         self._midis = output
 
     def add_midi(self, val):

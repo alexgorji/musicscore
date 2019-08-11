@@ -43,7 +43,7 @@
         <accidental>sharp</accidental>
         <beam number="1">begin</beam>
         <lyric number="1">
-          <text>(61.0, 63)</text>
+          <text>[61.0, 63]</text>
         </lyric>
       </note>
       <note>
@@ -71,7 +71,7 @@
         <accidental>sharp</accidental>
         <beam number="1">end</beam>
         <lyric number="1">
-          <text>61.0</text>
+          <text>[61.0]</text>
         </lyric>
       </note>
       <note>
@@ -81,7 +81,7 @@
         <type>eighth</type>
         <beam number="1">begin</beam>
         <lyric number="1">
-          <text>0</text>
+          <text>[0]</text>
         </lyric>
       </note>
       <note>
@@ -94,7 +94,7 @@
         <type>eighth</type>
         <beam number="1">end</beam>
         <lyric number="1">
-          <text>62.0</text>
+          <text>[62.0]</text>
         </lyric>
       </note>
       <note>
@@ -109,7 +109,7 @@
         <accidental>sharp</accidental>
         <beam number="1">begin</beam>
         <lyric number="1">
-          <text>61</text>
+          <text>[61]</text>
         </lyric>
       </note>
       <note>
@@ -123,7 +123,7 @@
         <type>eighth</type>
         <beam number="1">end</beam>
         <lyric number="1">
-          <text>61</text>
+          <text>[61]</text>
         </lyric>
       </note>
       <note>
@@ -137,33 +137,33 @@
         <type>eighth</type>
         <beam number="1">begin</beam>
         <lyric number="1">
-          <text>61</text>
+          <text>[61]</text>
         </lyric>
       </note>
       <note>
         <pitch>
-          <step>D</step>
+          <step>C</step>
+          <alter>1</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
+        <accidental>sharp</accidental>
         <beam number="1">end</beam>
         <lyric number="1">
-          <text>(62, 61)</text>
+          <text>[61, 62]</text>
         </lyric>
       </note>
       <note>
         <chord/>
         <pitch>
-          <step>C</step>
-          <alter>1</alter>
+          <step>D</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>sharp</accidental>
         <beam number="1">end</beam>
       </note>
     </part>
