@@ -24,7 +24,7 @@
     </score-part>
     <score-part id="p2">
       <part-name print-object="yes">Violin 1</part-name>
-      <part-abbreviation>vln 1</part-abbreviation>
+      <part-abbreviation>vln. 1</part-abbreviation>
     </score-part>
   </part-list>
   <measure number="1">

@@ -4,6 +4,8 @@ from musicscore.musicstream import SimpleFormat
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 import os
 
+from tests.score_templates.xml_test_score import TestScore
+
 path = os.path.abspath(__file__).split('.')[0]
 
 
@@ -19,3 +21,4 @@ class Test(TestCase):
 
         xml_path = path + '.xml'
         score.write(xml_path)
+        TestScore().assert_template(xml_path)
