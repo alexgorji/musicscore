@@ -1,5 +1,6 @@
 from quicktions import Fraction
 
+from AGtree.basic_functions import dToX, xToD
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechordflags import TreeChordFlag
@@ -427,6 +428,11 @@ class TreeChord(XMLTree):
         for midi in self.midis:
             if midi.value != 0:
                 midi.value += interval
+
+    def inverse(self):
+        intervals = xToD([midi.value for midi in self.midis])
+        intervals = [-interval for interval in intervals]
+        self.midis = dToX(intervals, first_element=self.midis[0].value)
 
     def add_lyric(self, text, number=1, **kwargs):
         lyric = self.add_child(Lyric(number=str(number), **kwargs))

@@ -50,17 +50,23 @@ class TreeInstrument(ComplexTypeMidiInstrument):
 
 class Violin(TreeInstrument):
     def __init__(self, number=None, *args, **kwargs):
-        super().__init__(name='Violin', abbreviation='vln', number=number, *args, **kwargs)
+        super().__init__(name='Violin', abbreviation='vln.', number=number, *args, **kwargs)
         self.id = 'vln' + str(uuid.uuid4())
 
 
 class Viola(TreeInstrument):
     def __init__(self, number=None, *args, **kwargs):
-        super().__init__(name='Viola', abbreviation='vla', number=number, *args, **kwargs)
+        super().__init__(name='Viola', abbreviation='vla.', number=number, *args, **kwargs)
         self.id = 'vla' + str(uuid.uuid4())
 
 
 class Cello(TreeInstrument):
     def __init__(self, number=None, *args, **kwargs):
-        super().__init__(name='Cello', abbreviation='vc', number=number, *args, **kwargs)
+        super().__init__(name='Cello', abbreviation='vc.', number=number, *args, **kwargs)
         self.id = 'vc' + str(uuid.uuid4())
+
+
+class Accordion(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name='Accordion', abbreviation='acc.', number=number, *args, **kwargs)
+        self.id = 'acc' + str(uuid.uuid4())

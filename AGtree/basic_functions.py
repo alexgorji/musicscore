@@ -77,7 +77,7 @@ def substitute(input_list, old_element, new_elements):
     return output_list
 
 
-def dToX(input_list, first_element=0):
+def dToX(input_list: object, first_element: object = 0) -> object:
     if isinstance(input_list, list) is False:
         raise TypeError('xToD(input_list)')
     else:
