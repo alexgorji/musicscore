@@ -5,7 +5,21 @@ class TreeChordFlag(object):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def implement_percussion_notation(self, chord):
+    def get_split_ratios(self, beat, chord):
+        quarter_beat = {1.5: [2, 1], 2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
+        eighth_beat = {1: [1, 1], 1.5: [1, 2], 2: [1, 3], 3: [1, 5], 4: [1, 7], 6: [1, 11]}
+        if beat.duration == 1:
+            try:
+                return chord.split(*quarter_beat[chord.quarter_duration])
+            except KeyError:
+                return [chord]
+        elif beat.duration == 0.5:
+            try:
+                return chord.split(*eighth_beat[chord.quarter_duration])
+            except KeyError:
+                return [chord]
+
+    def implement_percussion_notation(self, chord, beat):
         if chord.is_tied_to_next:
             chord.remove_tie('start')
         output = None
@@ -13,19 +27,7 @@ class TreeChordFlag(object):
             chord.to_rest()
             output = [chord]
         elif chord.position_in_beat == 0:
-            output = [chord]
-            if chord.quarter_duration == 1:
-                output = chord.split(1, 1)
-            elif chord.quarter_duration == 2:
-                output = chord.split(1, 3)
-            elif chord.quarter_duration == 3:
-                output = chord.split(1, 5)
-            elif chord.quarter_duration == 4:
-                output = chord.split(1, 7)
-            elif chord.quarter_duration == 6:
-                output = chord.split(1, 11)
-            else:
-                pass
+            output = self.get_split_ratios(beat, chord)
             try:
                 output[1].to_rest()
             except IndexError:
@@ -39,8 +41,8 @@ class PizzFlag(TreeChordFlag):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def implement(self, chord):
-        output = self.implement_percussion_notation(chord)
+    def implement(self, chord, beat):
+        output = self.implement_percussion_notation(chord, beat)
         for ch in output:
             if not ch.is_rest:
                 ch.add_words('pizz.')
@@ -51,8 +53,8 @@ class PercussionFlag(TreeChordFlag):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def implement(self, chord):
-        output = self.implement_percussion_notation(chord)
+    def implement(self, chord, beat):
+        output = self.implement_percussion_notation(chord, beat)
         return output
 
 

@@ -489,7 +489,7 @@ class TreeBeat(object):
             for chord in self.chords:
                 try:
                     chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
-                    new_chords = chord_flag.implement(chord)
+                    new_chords = chord_flag.implement(chord, self)
                     if len(new_chords) == 2:
                         diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
                         if diff > 0:
