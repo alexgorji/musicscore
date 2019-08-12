@@ -175,7 +175,8 @@ class TreeBeat(object):
         def _get_permitted_divs():
             output = list(range(1, self.max_division + 1))
             for f in self.forbidden_divisions:
-                output.remove(f)
+                if f in output:
+                    output.remove(f)
             return output
 
         permitted_divs = _get_permitted_divs()
