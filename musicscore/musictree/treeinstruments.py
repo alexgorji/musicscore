@@ -70,3 +70,9 @@ class Accordion(TreeInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Accordion', abbreviation='acc.', number=number, *args, **kwargs)
         self.id = 'acc' + str(uuid.uuid4())
+
+
+class Percussion(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name='Percussion', abbreviation='perc.', number=number, *args, **kwargs)
+        self.id = 'perc' + str(uuid.uuid4())

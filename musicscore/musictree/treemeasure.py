@@ -56,8 +56,7 @@ class TreeMeasure(timewise.Measure):
     def barline_style(self):
         return self._barline_style
 
-    @barline_style.setter
-    def barline_style(self, value):
+    def set_barline_style(self, value):
         if value:
             for part in self.get_children_by_type(TreePart):
                 try:
@@ -72,6 +71,7 @@ class TreeMeasure(timewise.Measure):
                     bs = bl.add_child(BarStyle(value))
 
         self._barline_style = value
+
 
     def show_time_signature(self):
         for part in self.get_children_by_type(TreePart):
