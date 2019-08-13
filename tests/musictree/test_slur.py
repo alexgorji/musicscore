@@ -24,3 +24,14 @@ class Test(TestCase):
         self.score.write(xml_path)
 
         TestScore().assert_template(xml_path)
+
+    def test_2(self):
+        sf = SimpleFormat(durations=[2, 2], midis=[(60, 63), (72, 76)])
+        slur = sf.chords[0].add_slur('start')
+        slur.line_type = 'dashed'
+        sf.chords[1].add_slur('stop')
+        sf.to_stream_voice().add_to_score(self.score)
+        xml_path = path + '_test_2.xml'
+        self.score.write(xml_path)
+
+        TestScore().assert_template(xml_path)
