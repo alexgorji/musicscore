@@ -1,5 +1,4 @@
 from unittest import TestCase
-# from musicscore.musicxml.elements.barline import Barline, BarStyle
 from musicscore.musicxml.elements.barline import Barline, BarStyle
 from musicscore.musicxml.elements.timewise import Part
 

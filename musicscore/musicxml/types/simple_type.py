@@ -362,7 +362,7 @@ class TypeLineType(SimpleType):
     """
     The line-type type distinguishes between solid, dashed, dotted, and wavy lines.
     """
-    _PERMITTED = ('solid', 'dashed' 'dotted', 'wavy')
+    _PERMITTED = ('solid', 'dashed', 'dotted', 'wavy')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)

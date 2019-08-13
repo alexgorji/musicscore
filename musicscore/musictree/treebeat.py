@@ -504,29 +504,9 @@ class TreeBeat(object):
                     output.extend(new_chords)
                 except IndexError:
                     output.append(chord)
-            self._chords = output
 
-        # flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
-        # while flag_types:
-        #     flag_type = flag_types.pop()
-        #     new_chords = []
-        #     for chord in self.chords:
-        #         # new_chords.extend(chord.split(1, 1))
-        #         new_chords.extend([chord])
-        #         # try:
-        #         #     chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
-        #         #     # new_chords.extend(chord_flag.implement(chord))
-        #         #
-        #         # except IndexError:
-        #         #     new_chords.append(chord)
-        #     self._chords = new_chords
-        #     # self.clear_chords()
-        #     # for ch in new_chords:
-        #     #     self.add_chord(ch)
-        #     # self.quantize()
-        #     # self.split_not_notatable()
-        # print([ch.quarter_duration for ch in self.chords])
-        # print([ch.is_rest for ch in self.chords])
+            output = [ch for ch in output if ch.quarter_duration != 0]
+            self._chords = output
 
     def update_tuplets(self):
         tuplet_divisions = [3, 5, 6, 7, 9, 10]

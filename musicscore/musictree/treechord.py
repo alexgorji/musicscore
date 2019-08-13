@@ -17,7 +17,8 @@ from musicscore.musicxml.types.complextypes.directiontype import Words
 from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, \
     FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N
 from musicscore.musicxml.types.complextypes.lyric import Text
-from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Dynamics, Technical, Articulations
+from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Dynamics, Technical, \
+    Articulations, Slur
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
 
@@ -68,7 +69,6 @@ class TreeChord(XMLTree):
         self._head = False
         self._is_adjoinable = True
         self._flags = set()
-        self._percussion_notation = False
 
     @property
     def __name__(self):
@@ -136,6 +136,14 @@ class TreeChord(XMLTree):
         if not isinstance(value, bool):
             raise TypeError('is_joinable.value must be of type bool not{}'.format(type(value)))
         self._is_adjoinable = value
+
+    @property
+    def force_tie(self):
+        return self.is_adjoinable
+
+    @force_tie.setter
+    def force_tie(self, value):
+        self.is_adjoinable = value
 
     @property
     def tie_types(self):
@@ -212,6 +220,20 @@ class TreeChord(XMLTree):
         if not isinstance(flag, TreeChordFlag):
             raise TypeError('flag must be of type TreeChordFlag not {}'.format(flag.__class__))
         self._flags.add(flag)
+
+    def add_slur(self, slur):
+        if isinstance(slur, Slur):
+            slur = slur
+        else:
+            slur = Slur(type=slur)
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(slur)
+        return slur
 
     def split_copy(self, quarter_duration):
         new_chord = TreeChord(quarter_duration=quarter_duration)

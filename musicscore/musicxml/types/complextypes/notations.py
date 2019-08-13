@@ -44,11 +44,10 @@ class Tied(ComplexTypeTied):
 
 
 class Slur(ComplexTypeSlur):
-    """"""
+    _TAG = 'slur'
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='slur', value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)
 
 
 class Tuplet(ComplexTypeTuplet):
@@ -101,7 +100,6 @@ class Articulations(XMLElement):
 class Dynamics(ComplexTypeDynamics):
     _TAG = 'dynamics'
     """"""
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)

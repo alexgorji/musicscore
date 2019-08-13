@@ -505,7 +505,7 @@ class TreePartVoice(object):
                     # _print_condition('_result_is_notatable', condition)
                     return condition
 
-                if _chords_are_adjoinable() and _current_chord_is_all_tied() and _chords_are_not_rest() and _chords_have_right_positions() and _result_is_notatable() and next_chord.parent_beat.best_div != 6:
+                if not current_chord.force_tie and _chords_are_adjoinable() and _current_chord_is_all_tied() and _chords_are_not_rest() and _chords_have_right_positions() and _result_is_notatable() and next_chord.parent_beat.best_div != 6:
 
                     current_chord.quarter_duration += next_chord.quarter_duration
 
@@ -1025,7 +1025,6 @@ class TreePart(timewise.Part):
 
     def finish(self):
         if not self._finished:
-
             self.fill_with_rest()
 
             self.add_beats()
