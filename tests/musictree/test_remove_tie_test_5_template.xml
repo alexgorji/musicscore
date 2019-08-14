@@ -39,7 +39,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notehead>x</notehead>
         <notations>
           <slur number="1" type="start" line-type="dashed"/>
         </notations>
@@ -50,12 +49,10 @@
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop"/>
         <voice>1</voice>
         <type>quarter</type>
-        <notehead>x</notehead>
         <notations>
-          <tied number="1" type="stop"/>
+          <slur number="1" type="stop"/>
         </notations>
       </note>
       <note>

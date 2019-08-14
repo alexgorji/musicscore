@@ -483,6 +483,7 @@ class TreeBeat(object):
         self._chords = output
 
     def implement_flags(self):
+        print('implement flags for', self)
         flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
         while flag_types:
             flag_type = flag_types.pop()
@@ -494,10 +495,15 @@ class TreeBeat(object):
                     if len(new_chords) == 2:
                         diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
                         if diff > 0:
+                            """
+                            HERE IS THE PROBLEM! 
+                            """
+                            print('splitting')
                             split = new_chords[1].split(new_chords[1].quarter_duration - diff, diff)
                             next_beat = self.next
                             if next_beat.chords == []:
                                 next_beat.add_chord(split[1])
+                                print(split[1].__dict__)
                                 split[1]._flags.remove(chord_flag)
                             else:
                                 raise Exception()

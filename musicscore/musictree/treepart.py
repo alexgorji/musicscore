@@ -10,13 +10,14 @@ from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treenote import TreeNote, TreeBackup
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.fullnote import Pitch, Rest
-from musicscore.musicxml.elements.note import Beam, Type, Tie
+from musicscore.musicxml.elements.note import Beam, Type, Tie, Notations
 from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.groups.musicdata import Direction, Attributes
 from musicscore.musicxml.types.complextypes.attributes import Divisions
 from musicscore.musicxml.types.complextypes.direction import DirectionType, Sound
 from musicscore.musicxml.types.complextypes.directiontype import Metronome
 from musicscore.musicxml.types.complextypes.metronome import BeatUnit, PerMinute
+from musicscore.musicxml.types.complextypes.notations import Slur
 
 
 class XMLChord(object):
@@ -485,7 +486,6 @@ class TreePartVoice(object):
 
                 def _current_chord_is_all_tied():
                     condition = current_chord.is_tied_to_next
-                    # _print_condition('_current_note_is_all_tied', condition)
                     return condition
 
                 def _chords_are_not_rest():
@@ -511,6 +511,16 @@ class TreePartVoice(object):
 
                     if 'stop' in next_chord.tie_types and 'start' not in next_chord.tie_types:
                         current_chord.remove_tie('start')
+
+                    try:
+                        notations = next_chord.get_children_by_type(Notations)
+                        slurs = []
+                        for notation in notations:
+                            slurs.extend(notation.get_children_by_type(Slur))
+                        for slur in slurs:
+                            current_chord.add_slur_object(slur)
+                    except IndexError:
+                        pass
 
                     next_chord.marked = True
 

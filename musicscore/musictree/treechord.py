@@ -68,7 +68,7 @@ class TreeChord(XMLTree):
         self._tail = False
         self._head = False
         self._is_adjoinable = True
-        self._flags = set()
+        self._flags = None
 
     @property
     def __name__(self):
@@ -214,19 +214,19 @@ class TreeChord(XMLTree):
 
     @property
     def flags(self):
+
+        if self._flags is None:
+            self._flags = set()
         return self._flags
 
     def add_flag(self, flag):
         if not isinstance(flag, TreeChordFlag):
             raise TypeError('flag must be of type TreeChordFlag not {}'.format(flag.__class__))
+        if self._flags is None:
+            self._flags = set()
         self._flags.add(flag)
 
-    def add_slur(self, slur):
-        if isinstance(slur, Slur):
-            slur = slur
-        else:
-            slur = Slur(type=slur)
-
+    def add_slur_object(self, slur):
         try:
             notations = self.get_children_by_type(Notations)[0]
         except IndexError:
@@ -235,13 +235,32 @@ class TreeChord(XMLTree):
         notations.add_child(slur)
         return slur
 
+    def add_slur(self, type, **kwargs):
+        slur = Slur(type, **kwargs)
+        return self.add_slur_object(slur)
+
+    # def add_slur(self, slur):
+    #     if isinstance(slur, Slur):
+    #         slur = slur
+    #     else:
+    #         slur = Slur(type=slur)
+    #
+    #     try:
+    #         notations = self.get_children_by_type(Notations)[0]
+    #     except IndexError:
+    #         notations = self.add_child(Notations())
+    #
+    #     notations.add_child(slur)
+    #     return slur
+
     def split_copy(self, quarter_duration):
         new_chord = TreeChord(quarter_duration=quarter_duration)
 
         new_chord.midis = self.midis
         new_chord.parent_voice = self.parent_voice
         new_chord.parent_beat = self.parent_beat
-        new_chord._flags = self._flags.copy()
+        if self._flags is not None:
+            new_chord._flags = self._flags.copy()
         new_chord._offset = None
         try:
             voice = self.get_children_by_type(Voice)[0]

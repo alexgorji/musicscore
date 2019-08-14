@@ -33,36 +33,66 @@
       </attributes>
       <note>
         <pitch>
-          <step>B</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
-        <notehead>x</notehead>
+        <type>half</type>
         <notations>
-          <slur number="1" type="start" line-type="dashed"/>
+          <slur number="1" type="start"/>
+          <slur number="2" type="start" line-type="dashed"/>
         </notations>
       </note>
       <note>
         <pitch>
-          <step>B</step>
+          <step>E</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notehead>x</notehead>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
-      </note>
-      <note>
-        <rest/>
         <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
+        <accidental>flat</accidental>
+        <notations>
+          <slur number="4" type="start" line-type="wavy"/>
+        </notations>
+      </note>
+    </part>
+  </measure>
+  <measure number="2">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <accidental>sharp</accidental>
+        <notations>
+          <slur number="2" type="stop"/>
+          <slur number="3" type="start" line-type="dotted"/>
+          <slur number="4" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur number="1" type="stop"/>
+          <slur number="3" type="stop"/>
+        </notations>
       </note>
     </part>
   </measure>

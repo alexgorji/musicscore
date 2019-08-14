@@ -31,19 +31,29 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <direction>
+        <direction-type>
+          <words>1</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
+        <tie type="start"/>
         <voice>1</voice>
         <type>quarter</type>
-        <notehead>x</notehead>
         <notations>
-          <slur number="1" type="start" line-type="dashed"/>
+          <tied number="1" type="start"/>
         </notations>
       </note>
+      <direction>
+        <direction-type>
+          <words>2</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -53,16 +63,45 @@
         <tie type="stop"/>
         <voice>1</voice>
         <type>quarter</type>
-        <notehead>x</notehead>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction>
+        <direction-type>
+          <words>3</words>
+        </direction-type>
+      </direction>
       <note>
-        <rest/>
-        <duration>2</duration>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
         <voice>1</voice>
-        <type>half</type>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
+      </note>
+      <direction>
+        <direction-type>
+          <words>4</words>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
       </note>
     </part>
   </measure>
