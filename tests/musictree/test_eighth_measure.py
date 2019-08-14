@@ -5,6 +5,7 @@ from quicktions import Fraction
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treemeasure import TreeMeasure
+from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 

@@ -362,7 +362,6 @@ class TreePartVoice(object):
             beats = iter(self.beats)
             current_beat = beats.__next__()
             next_beat = beats.__next__()
-            # while_loop = True
 
             for chord in self.chords:
                 while True and (chord.offset < current_beat.offset or chord.offset >= next_beat.offset):
@@ -370,7 +369,6 @@ class TreePartVoice(object):
                         current_beat = next_beat
                         next_beat = beats.__next__()
                     except StopIteration:
-                        # while_loop = False
                         break
 
                 current_beat.add_chord(chord)
@@ -419,6 +417,7 @@ class TreePartVoice(object):
     def add_beats(self, list_of_beats=None):
         if not self._filled_with_rest:
             raise Exception('fill_with_rest() first')
+
         if not self._beats_added:
             self.set_beats(list_of_beats)
             self._add_chords_to_beats()
@@ -443,7 +442,6 @@ class TreePartVoice(object):
                 chord.remove_from_score()
 
     def split_not_notatable(self):
-        # print([ch.quarter_duration for ch in self.chords])
         if not self._quantized:
             raise Exception('quantize() first')
         # self._not_notatable_split = False
@@ -453,8 +451,7 @@ class TreePartVoice(object):
                 beat.split_not_notatable()
                 self._chords.extend(beat.chords)
             self._not_notatable_split = True
-        # print([ch.quarter_duration for ch in self.chords])
-        # print('split')
+
         # else:
         #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 

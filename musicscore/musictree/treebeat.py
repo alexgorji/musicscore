@@ -9,6 +9,16 @@ from musicscore.musicxml.elements.note import TimeModification
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
 
+class BeatException(BaseException):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+
+
+class WrongPositionInBeat(BeatException):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+
+
 def _find_nearest_quantized_value(quantized_values, values):
     output = []
     for value in values:
@@ -150,6 +160,12 @@ class TreeBeat(object):
             raise TypeError('{} must be of type TreeChord'.format(chord))
         chord.parent_beat = self
         self.chords.append(chord)
+        if chord.position_in_beat > self.duration:
+            self.chords.remove(chord)
+            raise WrongPositionInBeat()
+
+    def remove_chords(self):
+        self._chords = []
 
     def clear_chords(self):
         self._chords = []
@@ -217,50 +233,8 @@ class TreeBeat(object):
                 chord.quarter_duration = quarter_duration
                 chord._offset = None
 
-        # new_chords = []
-        # for chord in self.chords:
-        #     if not chord.flags:
-        #         new_chords.append(chord)
-        #     else:
-        #         for flag in chord.flags:
-        #             new_chords.
-        #     flag = None
-        #     if 'pizz' in chord.flags:
-        #         flag = 'pizz'
-        #     elif 'percussion' in chord.flags:
-        #         flag = 'percussion'
-        #     if flag is None:
-        #         new_chords.append(chord)
-        #     elif chord.is_tied_to_previous:
-        #         chord.to_rest()
-        #         new_chords.append(chord)
-        #     elif chord.position_in_beat == 0:
-        #         split = [chord]
-        #         if chord.quarter_duration == 1:
-        #             split = chord.split(1, 1)
-        #         elif chord.quarter_duration == 2:
-        #             split = chord.split(1, 3)
-        #         elif chord.quarter_duration == 3:
-        #             split = chord.split(1, 5)
-        #         elif chord.quarter_duration == 4:
-        #             split = chord.split(1, 7)
-        #         elif chord.quarter_duration == 6:
-        #             split = chord.split(1, 11)
-        #         else:
-        #             pass
-        #         split[0].implement_flag(flag)
-        #         try:
-        #             split[1].to_rest()
-        #         except IndexError:
-        #             pass
-        #         new_chords.extend(split)
-        #     else:
-        #         chord.implement_flag(flag)
-        #         new_chords.append(chord)
-        #     self._chords = new_chords
-
     def split_not_notatable(self):
-
+        # print(self.offset, [ch.quarter_duration for ch in self.chords])
         output = []
         for chord in self.chords:
             split = None
@@ -480,10 +454,28 @@ class TreeBeat(object):
                 output.extend(split)
             else:
                 output.append(chord)
-        self._chords = output
+        self.remove_chords()
+        for ch in output:
+            try:
+                self.add_chord(ch)
+            except WrongPositionInBeat:
+                number_of_next_beats = (self.chords[-1].position_in_beat + self.chords[
+                    -1].quarter_duration) / self.duration
+                if number_of_next_beats != int(number_of_next_beats):
+                    raise Exception()
+                next_beat = self.next
+                while number_of_next_beats > 1:
+                    next_beat = next_beat.next
+                    number_of_next_beats -= 1
+                if next_beat.chords:
+                    raise Exception()
+                next_beat.add_chord(ch)
+        # self._chords = output
 
     def implement_flags(self):
-        # print('implement flags for', self)
+        # print('implement flags for', self.offset)
+        # print('chords', self.chords)
+        # print([ch.quarter_duration for ch in self.chords])
 
         def check_implement_output(chords):
             if not isinstance(chords, list):
@@ -497,21 +489,31 @@ class TreeBeat(object):
                     raise Exception('output of implement can only be a list of chords')
 
         flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
+
         while flag_types:
+            # print('flag_types', flag_types)
             flag_type = flag_types.pop()
             output = []
             for chord in self.chords:
+                # print('chord', chord, 'beat', self.offset)
                 try:
                     chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
                     new_chords = chord_flag.implement(chord, self)
+                    # print(new_chords)
+                    # print([ch.quarter_duration for ch in new_chords])
                     check_implement_output(new_chords)
                     diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
-
                     if len(new_chords) == 1:
                         output.extend(new_chords)
                     else:
                         if diff > 0:
                             next_beat = self.next
+                            # number_of_beats = int(new_chords[0].quarter_duration / self.duration)
+                            # print('number_of_beats', number_of_beats)
+                            # while number_of_beats > 1:
+                            #     next_beat = next_beat.next
+                            #     number_of_beats -= 1
+
                             if not next_beat.chords:
                                 next_beat.add_chord(new_chords[1])
                             else:
