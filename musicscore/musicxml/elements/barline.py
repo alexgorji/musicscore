@@ -5,14 +5,16 @@ from musicscore.musicxml.attributes.color import Color
 from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.segno import ComplexTypeSegno
+from musicscore.musicxml.types.complextypes.wavyline import ComplexTypeWavyLine
 from musicscore.musicxml.types.simple_type import TypeBarStyle, TypeBackwardForward
 from musicscore.musicxml.elements.xml_element import XMLElement
 
 
-class WavyLine(XMLElement):
+class WavyLine(ComplexTypeWavyLine):
+    _TAG = 'wavy-line'
+
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='wavy-line', *args, **kwargs)
-        raise NotImplementedError('WavyLine')
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Segno(ComplexTypeSegno):

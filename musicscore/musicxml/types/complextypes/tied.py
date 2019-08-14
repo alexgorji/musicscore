@@ -58,5 +58,3 @@ class ComplexTypeTied(ComplexType, LineType, DashedFormatting, Position, Placeme
             TypeTiedType(value)
             self._ATTRIBUTES.insert(0, 'type')
             self.set_attribute('type', value)
-
-

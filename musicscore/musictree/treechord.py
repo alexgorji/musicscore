@@ -19,6 +19,7 @@ from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PP
 from musicscore.musicxml.types.complextypes.lyric import Text
 from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Dynamics, Technical, \
     Articulations, Slur
+from musicscore.musicxml.types.complextypes.ornaments import Tremolo
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
 
@@ -243,19 +244,19 @@ class TreeChord(XMLTree):
         slur = Slur(type, **kwargs)
         return self.add_slur_object(slur)
 
-    # def add_slur(self, slur):
-    #     if isinstance(slur, Slur):
-    #         slur = slur
-    #     else:
-    #         slur = Slur(type=slur)
-    #
-    #     try:
-    #         notations = self.get_children_by_type(Notations)[0]
-    #     except IndexError:
-    #         notations = self.add_child(Notations())
-    #
-    #     notations.add_child(slur)
-    #     return slur
+    def add_tremolo(self, number=3):
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            ornaments = notations.get_children_by_type(Ornaments)[0]
+        except IndexError:
+            ornaments = notations.add_child(Ornaments())
+
+        ornaments.add_child(Tremolo(number))
 
     def split_copy(self, quarter_duration):
         new_chord = TreeChord(quarter_duration=quarter_duration)
@@ -268,6 +269,7 @@ class TreeChord(XMLTree):
             new_chord._flags = self._flags.copy()
 
         new_chord._offset = None
+
         try:
             voice = self.get_children_by_type(Voice)[0]
             new_chord.add_child(voice)
@@ -300,6 +302,14 @@ class TreeChord(XMLTree):
         if not self.is_adjoinable:
             self.is_adjoinable = True
             new_chords[-1].is_adjoinable = False
+
+        try:
+            tremolos = self.get_children_by_type(Notations)[0].get_children_by_type(Ornaments)[0].get_children_by_type(
+                Tremolo)
+            for tremolo in tremolos:
+                new_chords[-1].add_tremolo(number=tremolo.value)
+        except IndexError:
+            pass
 
         new_chords.insert(0, self)
 

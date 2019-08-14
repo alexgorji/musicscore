@@ -837,7 +837,7 @@ class TypeYesNoNumber(SimpleType):
     def value(self, v):
         if v is not None and v not in self._PERMITTED and not Decimal(v):
             raise ValueError(
-                '{}.value {} must be yes no ord decimal')
+                '{}.value {} must be yes no or decimal')
         self._value = v
 
 
@@ -855,6 +855,69 @@ class TypePositiveIntegerOrEmpty(SimpleType):
             raise ValueError(
                 '{}.value {}  can be either a positive integer or an empty string')
         self._value = v
+
+
+class TypeTrillBeatsSimpleType(SimpleType):
+    """
+    The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value
+    with a minimum value of 2.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v is not None:
+            if not TypeDecimal(v):
+                raise TypeError('{}.value {} must be of type Decimal not {}.'.format(self.__class__, v, v.__class__))
+        if v < 2:
+            raise ValueError('{}.value {} must be greater than or equal to 2.'.format(self.__class__, v))
+        self._value = v
+
+
+class TypeStartNote(SimpleType):
+    """
+    The start-note type describes the starting note of trills and mordents for playback, relative to the current note.
+    """
+
+    _PERMITTED = ["upper", "main", "below"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTrillStep(SimpleType):
+    """
+    The trill-step type describes the alternating note of trills and mordents for playback, relative to the current note.
+    """
+
+    _PERMITTED = ["whole", "half", "unison"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTwoNoteTurn(SimpleType):
+    """
+    The two-note-turn type describes the ending notes of trills and mordents for playback, relative to the current note.
+    """
+
+    _PERMITTED = ["whole", "half", "none"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTremoloType(SimpleType):
+    """
+    The tremolo-type is used to distinguish multi-note, single-note, and unmeasured tremolos.
+    """
+
+    _PERMITTED = ["start", "stop", "single", "unmeasured"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
 
 
 ''''
@@ -931,17 +994,6 @@ class TypePositiveIntegerOrEmpty(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="start-note">
-		<xs:annotation>
-			<xs:documentation>The start-note type describes the starting note of trills and mordents for playback, relative to the current note.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="upper"/>
-			<xs:enumeration value="main"/>
-			<xs:enumeration value="below"/>
-		</xs:restriction>
-	</xs:simpleType>
-
 	<xs:simpleType name="start-stop-single">
 		<xs:annotation>
 			<xs:documentation>The start-stop-single type is used for an attribute of musical elements that can be used for either multi-note or single-note musical elements, as for groupings.</xs:documentation>
@@ -970,48 +1022,7 @@ class TypePositiveIntegerOrEmpty(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="tremolo-type">
-		<xs:annotation>
-			<xs:documentation>The tremolo-type is used to distinguish multi-note, single-note, and unmeasured tremolos.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="start"/>
-			<xs:enumeration value="stop"/>
-			<xs:enumeration value="single"/>
-			<xs:enumeration value="unmeasured"/>
-		</xs:restriction>
-	</xs:simpleType>
 
-	<xs:simpleType name="trill-beats">
-		<xs:annotation>
-			<xs:documentation>The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value with a minimum value of 2.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:decimal">
-			<xs:minInclusive value="2"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="trill-step">
-		<xs:annotation>
-			<xs:documentation>The trill-step type describes the alternating note of trills and mordents for playback, relative to the current note.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="whole"/>
-			<xs:enumeration value="half"/>
-			<xs:enumeration value="unison"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="two-note-turn">
-		<xs:annotation>
-			<xs:documentation>The two-note-turn type describes the ending notes of trills and mordents for playback, relative to the current note.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="whole"/>
-			<xs:enumeration value="half"/>
-			<xs:enumeration value="none"/>
-		</xs:restriction>
-	</xs:simpleType>
 
 	<xs:simpleType name="upright-inverted">
 		<xs:annotation>
@@ -1876,6 +1887,24 @@ class TypeNoteheadValue(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeTremoloMarks(SimpleType):
+    """
+    The number of tremolo marks is represented by a number from 0 to 8: the same as beam-level with 0 added.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        Integer(v)
+        if not (0 <= v <= 8):
+            raise ValueError(
+                '{}.value {} must be must be greater than or equal to 0. It  must be less than or equal to 8'.format(
+                    self.__class__, v))
+        self._value = v
+
+
 '''
 	<!-- Simple types derived from note.mod elements -->
 
@@ -2024,16 +2053,6 @@ class TypeNoteheadValue(SimpleType):
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="left"/>
 			<xs:enumeration value="right"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="tremolo-marks">
-		<xs:annotation>
-			<xs:documentation>The number of tremolo marks is represented by a number from 0 to 8: the same as beam-level with 0 added.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:integer">
-			<xs:minInclusive value="0"/>
-			<xs:maxInclusive value="8"/>
 		</xs:restriction>
 	</xs:simpleType>
 '''
