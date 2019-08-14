@@ -69,12 +69,12 @@ class Test(TestCase):
         durations = [3.5]
         self.score.set_time_signatures(durations=[3.5])
         sf = SimpleFormat(durations=durations)
-        # sf.to_stream_voice().add_to_score(self.score, part_number=1)
+        sf.to_stream_voice().add_to_score(self.score, part_number=1)
 
         for chord in sf.chords:
             chord.add_flag(XFlag())
 
-        sf.to_stream_voice().add_to_score(self.score, part_number=1)
+        sf.to_stream_voice().add_to_score(self.score, part_number=2)
 
         self.score.write(xml_path)
-        # TestScore().assert_template(xml_path)
+        TestScore().assert_template(xml_path)
