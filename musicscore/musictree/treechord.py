@@ -226,6 +226,10 @@ class TreeChord(XMLTree):
             self._flags = set()
         self._flags.add(flag)
 
+    def remove_flag(self, flag):
+        if flag in self._flags:
+            self._flags.remove(flag)
+
     def add_slur_object(self, slur):
         try:
             notations = self.get_children_by_type(Notations)[0]
@@ -259,8 +263,10 @@ class TreeChord(XMLTree):
         new_chord.midis = self.midis
         new_chord.parent_voice = self.parent_voice
         new_chord.parent_beat = self.parent_beat
+
         if self._flags is not None:
             new_chord._flags = self._flags.copy()
+
         new_chord._offset = None
         try:
             voice = self.get_children_by_type(Voice)[0]
@@ -290,6 +296,10 @@ class TreeChord(XMLTree):
 
         if 'start' in self.tie_types:
             new_chords[-1].add_tie('start')
+
+        if not self.is_adjoinable:
+            self.is_adjoinable = True
+            new_chords[-1].is_adjoinable = False
 
         new_chords.insert(0, self)
 

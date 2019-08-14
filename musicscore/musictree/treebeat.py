@@ -483,7 +483,19 @@ class TreeBeat(object):
         self._chords = output
 
     def implement_flags(self):
-        print('implement flags for', self)
+        # print('implement flags for', self)
+
+        def check_implement_output(chords):
+            if not isinstance(chords, list):
+                raise Exception('output of implement can only be a list of chords')
+
+            if len(chords) not in [1, 2]:
+                raise Exception('output of implement can have 1 or 2 chords')
+
+            for ch in chords:
+                if not isinstance(ch, TreeChord):
+                    raise Exception('output of implement can only be a list of chords')
+
         flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
         while flag_types:
             flag_type = flag_types.pop()
@@ -492,26 +504,42 @@ class TreeBeat(object):
                 try:
                     chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
                     new_chords = chord_flag.implement(chord, self)
-                    if len(new_chords) == 2:
-                        diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
+                    check_implement_output(new_chords)
+                    diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
+
+                    if len(new_chords) == 1:
+                        output.extend(new_chords)
+                    else:
                         if diff > 0:
-                            """
-                            HERE IS THE PROBLEM! 
-                            """
-                            print('splitting')
-                            split = new_chords[1].split(new_chords[1].quarter_duration - diff, diff)
                             next_beat = self.next
-                            if next_beat.chords == []:
-                                next_beat.add_chord(split[1])
-                                print(split[1].__dict__)
-                                split[1]._flags.remove(chord_flag)
+                            if not next_beat.chords:
+                                next_beat.add_chord(new_chords[1])
                             else:
-                                raise Exception()
-                    output.extend(new_chords)
+                                raise Exception('next_beat is not empty.')
+                        output.append(new_chords[0])
                 except IndexError:
                     output.append(chord)
+                    #     output.append(chord)
+                    # diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
+                    # if diff > 0:
+                    #     """
+                    #     HERE IS THE PROBLEM!
+                    #     """
+                    #     print('splitting')
+                    #     split = new_chords[1].split(new_chords[1].quarter_duration - diff, diff)
+                    #     next_beat = self.next
+                    #     if next_beat.chords == []:
+                    #         next_beat.add_chord(split[1])
+                    #         print(split[1].__dict__)
+                    #         split[1]._flags.remove(chord_flag)
+                    #     else:
+                    #         raise Exception()
+                #
+                #     output.extend(new_chords)
+                # except IndexError:
+                #     output.append(chord)
 
-            output = [ch for ch in output if ch.quarter_duration != 0]
+            # output = [ch for ch in output if ch.quarter_duration != 0]
             self._chords = output
 
     def update_tuplets(self):

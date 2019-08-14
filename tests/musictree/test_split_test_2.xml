@@ -37,11 +37,11 @@
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
+        <tie type="start"/>
         <voice>1</voice>
         <type>quarter</type>
-        <notehead>x</notehead>
         <notations>
-          <slur number="1" type="start" line-type="dashed"/>
+          <tied number="1" type="start"/>
         </notations>
       </note>
       <note>
@@ -50,18 +50,71 @@
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
+        <tie type="start"/>
+        <tie type="stop"/>
         <voice>1</voice>
         <type>quarter</type>
-        <notehead>x</notehead>
         <notations>
-          <slur number="1" type="stop"/>
+          <tied number="1" type="start"/>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="start"/>
+          <tied number="1" type="stop"/>
+        </notations>
+      </note>
+    </part>
+  </measure>
+  <measure number="2">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied number="1" type="stop"/>
         </notations>
       </note>
       <note>
         <rest/>
-        <duration>2</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>half</type>
+        <dot/>
       </note>
     </part>
   </measure>

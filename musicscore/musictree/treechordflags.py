@@ -29,6 +29,7 @@ class TreeChordFlag(object):
         elif chord.position_in_beat == 0:
             output = self._get_split(beat, chord)
             try:
+                output[1].remove_flag(self)
                 output[1].to_rest()
             except IndexError:
                 pass
@@ -72,8 +73,8 @@ class XFlag(TreeChordFlag):
         super().__init__(*args, **kwargs)
 
     def _get_split(self, chord, beat):
-        quarter_beat = {2: [1, 1], 3: 3 * [1], 4: 4 * [1], 6: 6 * [1]}
-        eighth_beat = {2: [1, 3], 3: [1, 2], 4: [1, 7], 6: [1, 11]}
+        quarter_beat = {2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
+        eighth_beat = {2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
 
         if beat.duration == 1:
             try:
@@ -87,68 +88,17 @@ class XFlag(TreeChordFlag):
             except KeyError:
                 return [chord]
 
-    def _substitute_ties(self, chords):
-        output = chords
-        # output[0].add_words(str(len(output)))
-        # tem = [ch.is_tied_to_next for ch in output]
-        # words = ''
-        # for w in tem:
-        #     if w is True:
-        #         words += 't '
-        #
-        #     else:
-        #         words += 'f '
-        #
-        # output[0].add_words(words, relative_y=40)
-        # tem = [ch.is_tied_to_previous for ch in output]
-        # words = ''
-        # for w in tem:
-        #     if w is True:
-        #         words += 't '
-        #
-        #     else:
-        #         words += 'f '
-        #
-        # output[0].add_words(words, relative_y=20)
+    def _substitute_ties(self, chord):
+        if chord.is_tied_to_previous:
+            chord.remove_tie('stop')
+            chord.add_slur('stop')
 
-        for ch in output:
-            if ch.is_tied_to_next:
-                ch.remove_tie('start')
-                ch.add_slur('start', line_type='dashed')
-
-        for ch in output:
-            if ch.is_tied_to_previous:
-                ch.remove_tie('stop')
-                ch.add_slur('stop')
-        # for ch in output:
-        #     if ch.is_tied_to_next:
-        #         ch.remove_tie('start')
-        #         # slur = Slur(type='start')
-        #         # ch.add_slur(slur)
-        #         # ch.add_words('start removed')
-        #         # slur = ch.add_slur('start')
-        #         # slur.line_type = 'dashed'
-        #
-        #     if ch.is_tied_to_previous:
-        #         ch.remove_tie('stop')
-        #         # slur = Slur(type='stop')
-        #         # ch.add_slur(slur)
-        #         # ch.add_slur('stop')
-
-        return output
+        if chord.is_tied_to_next:
+            chord.remove_tie('start')
+            chord.add_slur('start', line_type='dashed')
 
     def implement(self, chord, beat):
         output = self._get_split(chord, beat)
-        for ch in output:
-            print([ch.is_tied_to_next])
-        for ch in output:
-            print([ch.is_tied_to_previous])
-
-        # output[0].remove_tie('start')
-        # output[0].add_slur(type='start', line_type='dashed')
-        # output[1].remove_tie('stop')
-        # output[1].add_slur(type='stop')
-        output = self._substitute_ties(output)
-        for ch in output:
-            ch.add_child(Notehead('x'))
+        output[0].add_child(Notehead('x'))
+        self._substitute_ties(output[0])
         return output
