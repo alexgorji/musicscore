@@ -1905,6 +1905,27 @@ class TypeTremoloMarks(SimpleType):
         self._value = v
 
 
+class TypeHoleClosedLocation(SimpleType):
+    """The hole-closed-location type indicates which portion of the hole is filled in when the corresponding
+    hole-closed-value is half.
+    """
+
+    _PERMITTED = ["right", "bottom", "left", "top"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeHoleClosedValue(SimpleType):
+    """The hole-closed-value type represents whether the hole is closed, open, or half-open.
+    """
+
+    _PERMITTED = ["yes", "no", "half"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 '''
 	<!-- Simple types derived from note.mod elements -->
 
@@ -1992,29 +2013,6 @@ class TypeTremoloMarks(SimpleType):
 	<xs:simpleType name="harmon-closed-value">
 		<xs:annotation>
 			<xs:documentation>The harmon-closed-value type represents whether the harmon mute is closed, open, or half-open.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="yes"/>
-			<xs:enumeration value="no"/>
-			<xs:enumeration value="half"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="hole-closed-location">
-		<xs:annotation>
-			<xs:documentation>The hole-closed-location type indicates which portion of the hole is filled in when the corresponding hole-closed-value is half.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="right"/>
-			<xs:enumeration value="bottom"/>
-			<xs:enumeration value="left"/>
-			<xs:enumeration value="top"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="hole-closed-value">
-		<xs:annotation>
-			<xs:documentation>The hole-closed-value type represents whether the hole is closed, open, or half-open.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="yes"/>

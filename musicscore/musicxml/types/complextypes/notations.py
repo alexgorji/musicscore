@@ -63,8 +63,8 @@ class Technical(ComplexTypeTechnical):
 
     _TAG = 'technical'
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Articulations(ComplexTypeArticulations):

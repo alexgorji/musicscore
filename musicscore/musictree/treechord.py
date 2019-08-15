@@ -404,6 +404,20 @@ class TreeChord(XMLTree):
         tm.add_child(NormalNotes(normal_notes))
         tm.add_child(NormalType(normal_type))
 
+    def add_technical_object(self, technical_object):
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            technical = notations.get_children_by_type(Technical)[0]
+        except IndexError:
+            technical = notations.add_child(Technical())
+
+        technical.add_child(technical_object)
+
     def add_articulation_object(self, articulation_object):
 
         try:

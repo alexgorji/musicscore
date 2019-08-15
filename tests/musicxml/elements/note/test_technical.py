@@ -2,8 +2,10 @@ from unittest import TestCase
 
 from musicscore.musicxml.elements.fullnote import Pitch
 from musicscore.musicxml.elements.note import Note, Duration, Notations
-from musicscore.musicxml.types.complextypes.articulations import Accent, Staccato
-from musicscore.musicxml.types.complextypes.notations import Articulations
+from musicscore.musicxml.types.complextypes.hole import HoleClosed
+
+from musicscore.musicxml.types.complextypes.notations import Technical
+from musicscore.musicxml.types.complextypes.technical import Hole, SnapPizzicato
 
 
 class Test(TestCase):
@@ -14,9 +16,10 @@ class Test(TestCase):
 
     def test_1(self):
         notations = self.note.add_child(Notations())
-        articulations = notations.add_child(Articulations())
-        articulations.add_child(Accent())
-        articulations.add_child(Staccato(relative_y=20))
+        technical = notations.add_child(Technical())
+        hole = technical.add_child(Hole())
+        hole.add_child(HoleClosed(value='no'))
+        technical.add_child(SnapPizzicato(relative_y=20))
 
         result = """<note>
   <pitch>
@@ -25,10 +28,12 @@ class Test(TestCase):
   </pitch>
   <duration>1</duration>
   <notations>
-    <articulations>
-      <accent/>
-      <staccato relative-y="20"/>
-    </articulations>
+    <technical>
+      <hole>
+        <hole-closed>no</hole-closed>
+      </hole>
+      <snap-pizzicato relative-y="20"/>
+    </technical>
   </notations>
 </note>
 """
