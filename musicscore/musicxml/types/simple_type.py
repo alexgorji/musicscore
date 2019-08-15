@@ -207,7 +207,7 @@ class TypeRightLeftMiddle(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class TypeStopStartDiscontinue(SimpleType):
+class TypeStartStopDiscontinue(SimpleType):
     """
     The start-stop-discontinue type is used to specify ending types. Typically, the start type is associated with the
     left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline
@@ -1223,6 +1223,17 @@ class TypeWedgeType(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeLineEnd(SimpleType):
+    """
+    The line-end type specifies if there is a jog up or down (or both), an arrow, or nothing at the start or end of a
+    bracket.
+    """
+    _PERMITTED = ('up', 'down', 'both', 'arrow', 'none')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 '''
 <!-- Simple types derived from direction.mod elements -->
 
@@ -1418,18 +1429,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="line-end">
-		<xs:annotation>
-			<xs:documentation>The line-end type specifies if there is a jog up or down (or both), an arrow, or nothing at the start or end of a bracket.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="up"/>
-			<xs:enumeration value="down"/>
-			<xs:enumeration value="both"/>
-			<xs:enumeration value="arrow"/>
-			<xs:enumeration value="none"/>
-		</xs:restriction>
-	</xs:simpleType>
+
 
 	<xs:simpleType name="measure-numbering-value">
 		<xs:annotation>

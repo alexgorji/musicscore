@@ -1,6 +1,7 @@
 from musicscore.dtd.dtd import Choice, Element
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.complextypes.bracket import ComplexTypeBracket
 from musicscore.musicxml.types.complextypes.coda import ComplexTypeCoda
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, EmptyPrintStyleAlignId
 from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics
@@ -81,12 +82,11 @@ class Dashes(XMLElement):
         NotImplementedError()
 
 
-class Bracket(XMLElement):
-    """<xs:element name="bracket" type="bracket"/>"""
+class Bracket(ComplexTypeBracket):
+    _TAG = 'bracket'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='bracket', *args, **kwargs)
-        NotImplementedError()
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Pedal(XMLElement):
