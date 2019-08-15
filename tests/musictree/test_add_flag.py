@@ -1,3 +1,4 @@
+from itertools import cycle
 from unittest import TestCase
 import os
 
@@ -73,6 +74,23 @@ class Test(TestCase):
 
         for chord in sf.chords:
             chord.add_flag(XFlag())
+
+        sf.to_stream_voice().add_to_score(self.score, part_number=2)
+
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_6(self):
+        xml_path = path + '_test_6.xml'
+        durations = 5 * [3.5]
+        sf = SimpleFormat(durations=durations)
+        sf.to_stream_voice().add_to_score(self.score, part_number=1)
+
+        slur_type = cycle([None, 'tie', 'dashed'])
+        for chord in sf.chords:
+            type = slur_type.__next__()
+            chord.add_flag(XFlag(slur=type))
+            chord.add_words(str(type))
 
         sf.to_stream_voice().add_to_score(self.score, part_number=2)
 

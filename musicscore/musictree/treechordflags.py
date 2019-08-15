@@ -69,8 +69,9 @@ class NoiseFlag(TreeChordFlag):
 
 
 class XFlag(TreeChordFlag):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, slur='dashed', *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.slur = slur
 
     def _get_split(self, chord, beat):
         quarter_beat = {2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
@@ -90,12 +91,20 @@ class XFlag(TreeChordFlag):
 
     def _substitute_ties(self, chord):
         if chord.is_tied_to_previous:
-            chord.remove_tie('stop')
-            chord.add_slur('stop')
+            if self.slur == 'tie':
+                chord.is_adjoinable = False
+            else:
+                chord.remove_tie('stop')
+                if self.slur is not None:
+                    chord.add_slur('stop')
 
         if chord.is_tied_to_next:
-            chord.remove_tie('start')
-            chord.add_slur('start', line_type='dashed')
+            if self.slur == 'tie':
+                chord.is_adjoinable = False
+            else:
+                chord.remove_tie('start')
+                if self.slur is not None:
+                    chord.add_slur('start', line_type=self.slur)
 
     def implement(self, chord, beat):
         output = self._get_split(chord, beat)
