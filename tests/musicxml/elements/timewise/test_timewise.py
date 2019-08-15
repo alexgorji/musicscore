@@ -1,3 +1,4 @@
+from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicscore.musicxml.elements.fullnote import Rest
 from musicscore.musicxml.elements.note import Note, Duration
 from musicscore.musicxml.elements.scoreheader import PartList
@@ -50,3 +51,4 @@ class TestTimewise(TestScore):
         # print(self.score.to_string())
         self.score.write(path=path)
         self.assert_template(path)
+

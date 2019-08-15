@@ -85,7 +85,7 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>None</words>
         </direction-type>
@@ -131,7 +131,7 @@
         <notehead>x</notehead>
         <beam number="1">begin</beam>
       </note>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>tie</words>
         </direction-type>
@@ -236,7 +236,7 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>dashed</words>
         </direction-type>
@@ -366,7 +366,7 @@
           <slur number="1" type="stop"/>
         </notations>
       </note>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>None</words>
         </direction-type>
@@ -450,7 +450,7 @@
         <type>quarter</type>
         <notehead>x</notehead>
       </note>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>tie</words>
         </direction-type>

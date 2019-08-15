@@ -7,8 +7,10 @@ from musicscore.musictree.treepagestyle import TreePageStyle
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescorepart import TreeScorePart
 from musicscore.musicxml.elements import partwise
-from musicscore.musicxml.elements.scoreheader import PartList, Credit
+from musicscore.musicxml.elements.scoreheader import PartList, Credit, Defaults
+from musicscore.musicxml.types.complextypes.appearance import LineWidth
 from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWords
+from musicscore.musicxml.types.complextypes.defaults import Appearance
 from musicscore.musicxml.types.complextypes.encoding import Supports
 from musicscore.musicxml.types.complextypes.identification import Encoding
 from musicscore.musicxml.types.complextypes.scorepart import PartName, Identification, PartAbbreviation
@@ -24,6 +26,7 @@ class TreeScoreTimewise(timewise.Score):
         super().__init__(*args, **kwargs)
         self._part_list = self.add_child(PartList())
         self.version = '3.0'
+        self._tuplet_line_width = None
         self._finished = False
         self._pre_quantized = False
         self._quantized = False
@@ -34,6 +37,33 @@ class TreeScoreTimewise(timewise.Score):
         self._accidental_mode = 'normal'
 
         self._identifications_added = False
+
+    @property
+    def tuplet_line_width(self):
+        return self._tuplet_line_width
+
+    @tuplet_line_width.setter
+    def tuplet_line_width(self, val):
+
+        if not isinstance(val, float):
+            raise TypeError('tuplet_line_width.value must be of type float not{}'.format(type(val)))
+        self._tuplet_line_width = val
+        try:
+            defaults = self.get_children_by_type(Defaults)[0]
+        except IndexError:
+            defaults = self.add_child(Defaults())
+
+        try:
+            appearance = defaults.get_children_by_type(Appearance)[0]
+        except IndexError:
+            appearance = defaults.add_child(Appearance())
+
+        try:
+            line_width = [lw for lw in appearance.get_children_by_type(LineWidth) if lw.type == 'tuplet bracket'][0]
+        except IndexError:
+            line_width = appearance.add_child(LineWidth(type='tuplet bracket'))
+
+        line_width.value = val
 
     @property
     def max_division(self):

@@ -31,10 +31,12 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>a</words>
         </direction-type>
+      </direction>
+      <direction placement="above">
         <direction-type>
           <words relative-y="-15">aa</words>
         </direction-type>
@@ -48,7 +50,7 @@
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>b</words>
         </direction-type>

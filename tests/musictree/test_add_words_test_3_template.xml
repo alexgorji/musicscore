@@ -33,7 +33,12 @@
       </attributes>
       <direction placement="above">
         <direction-type>
-          <words>first word</words>
+          <words>a</words>
+        </direction-type>
+      </direction>
+      <direction placement="above">
+        <direction-type>
+          <words relative-y="-15">aa</words>
         </direction-type>
       </direction>
       <note>
@@ -41,13 +46,13 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
       </note>
       <direction placement="above">
         <direction-type>
-          <words font-family="DejaVu Sans" font-style="italic" font-size="14" font-weight="bold">second word</words>
+          <words>b</words>
         </direction-type>
       </direction>
       <note>
@@ -55,12 +60,6 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <rest/>
         <duration>2</duration>
         <voice>1</voice>
         <type>half</type>

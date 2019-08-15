@@ -1063,8 +1063,10 @@ class TypeCancelLocation(SimpleType):
 class TypeClefSign(SimpleType):
     """
     The clef-sign element represents the different clef symbols.
-    The jianpu sign indicates that the music that follows should be in jianpu numbered notation,
-    just as the TAB sign indicates that the music that follows should be in tablature notation.
+
+    The jianpu sign indicates that the music that follows should be in jianpu numbered notation, just as the TAB sign
+    indicates that the music that follows should be in tablature notation.
+
     Unlike TAB, a jianpu sign does not correspond to a visual clef notation.
     """
     _PERMITTED = ('G', 'F', 'C', 'percussion', 'TAB', 'jianpu', 'none')
@@ -1232,6 +1234,18 @@ class TypeLineEnd(SimpleType):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
+
+
+class TypeLineWidthType(Token):
+    """
+    The line-width-type defines what type of line is being defined in a line-width element. Values include beam,
+    bracket, dashes, enclosure, ending, extend, heavy barline, leger, light barline, octave shift, pedal, slur middle,
+    slur tip, staff, stem, tie middle, tie tip, tuplet bracket, and wedge. This is left as a string so that other
+    application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 '''
@@ -1705,12 +1719,7 @@ A quarter-rest type specifies the glyph to use when a note has a rest element an
 		<xs:restriction base="xs:token"/>
 	</xs:simpleType>
 
-	<xs:simpleType name="line-width-type">
-		<xs:annotation>
-			<xs:documentation>The line-width-type defines what type of line is being defined in a line-width element. Values include beam, bracket, dashes, enclosure, ending, extend, heavy barline, leger, light barline, octave shift, pedal, slur middle, slur tip, staff, stem, tie middle, tie tip, tuplet bracket, and wedge. This is left as a string so that other application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token"/>
-	</xs:simpleType>
+
 
 
 	<xs:simpleType name="note-size-type">

@@ -1,4 +1,5 @@
 from musicscore.musicxml.attributes.accidental import Smulf
+from musicscore.musicxml.attributes.font import Font
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.placement import Placement
 from musicscore.musicxml.attributes.printobject import PrintObject
@@ -61,7 +62,16 @@ class EmptyPrintObjectStyleAlign(Empty, PrintObject, PrintStyleAlign):
 
 class EmptyPlacementSmulf(Empty, Placement, Smulf):
     """
-    The empty-placement-smufl type represents an empty element with print-style, placement, and smufl attributes
+    The empty-placement-smufl type represents an empty element with print-style, placement, and smufl attributes.
+    """
+
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+
+
+class EmptyFont(Empty, Font):
+    """
+    >The empty-font type represents an empty element with font attributes.
     """
 
     def __init__(self, tag, *args, **kwargs):

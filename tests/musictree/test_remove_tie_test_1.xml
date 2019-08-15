@@ -31,7 +31,7 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>1</words>
         </direction-type>
@@ -49,7 +49,7 @@
           <tied number="1" type="start"/>
         </notations>
       </note>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>2</words>
         </direction-type>
@@ -67,7 +67,7 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>3</words>
         </direction-type>
@@ -85,7 +85,7 @@
           <tied number="1" type="start"/>
         </notations>
       </note>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>4</words>
         </direction-type>

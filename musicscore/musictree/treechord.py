@@ -42,7 +42,7 @@ class TreeChord(XMLTree):
             ),
         ),
         Element(Attributes, 0),
-        Element(Direction, 0),
+        Element(Direction, 0, None),
         Element(Instrument, 0),
         GroupReference(EditorialVoice, 0),
         Element(Type, 0),
@@ -601,11 +601,8 @@ class TreeChord(XMLTree):
         dt = d.add_child(DirectionType())
         dt.add_child(Bracket(type=type, line_end=line_end, **kwargs))
 
-    def add_words(self, text, **kwargs):
-        try:
-            d = self.get_children_by_type(Direction)[0]
-        except IndexError:
-            d = self.add_child(Direction())
+    def add_words(self, text, placement='above', **kwargs):
+        d = self.add_child(Direction(placement=placement))
 
         dt = d.add_child(DirectionType())
         dt.add_child(Words(value=str(text), **kwargs))

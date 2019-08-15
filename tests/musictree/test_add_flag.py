@@ -81,6 +81,7 @@ class Test(TestCase):
         TestScore().assert_template(xml_path)
 
     def test_6(self):
+        self.maxDiff = None
         xml_path = path + '_test_6.xml'
         durations = 5 * [3.5]
         sf = SimpleFormat(durations=durations)

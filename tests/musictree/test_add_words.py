@@ -49,6 +49,6 @@ class Test(TestCase):
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
-        result_path = path + 'test_3'
+        result_path = path + '_test_3'
         self.score.write(path=result_path)
         # TestScore().assert_template(result_path=result_path)

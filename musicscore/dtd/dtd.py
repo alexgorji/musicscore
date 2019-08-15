@@ -9,8 +9,8 @@ class DTDError(Exception):
 
 
 class ChildTypeDTDConflict(DTDError):
-    def __init__(self, child):
-        msg = 'child of type {} cannot be added due to DTD Type conflicts'.format(type(child))
+    def __init__(self, child, parent):
+        msg = 'child of type {} cannot be added to {} due to DTD Type conflicts'.format(type(child), parent.__class__)
         super().__init__(msg)
 
 
@@ -21,8 +21,9 @@ class ChildOccurrenceDTDConflict(DTDError):
 
 
 class ChildIsNotOptional(DTDError):
-    def __init__(self, node):
-        msg = 'child of type {} is due to DTD Occurrence not optional'.format(node.type_.__name__)
+    def __init__(self, node, parent):
+        msg = 'child of type {} is due to DTD Occurrence not optional for {}'.format(node.type_.__name__,
+                                                                                     parent.__class__)
         super().__init__(msg)
 
 

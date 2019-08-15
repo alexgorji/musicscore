@@ -31,7 +31,7 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words>first word</words>
         </direction-type>
@@ -45,7 +45,7 @@
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <direction>
+      <direction placement="above">
         <direction-type>
           <words font-family="DejaVu Sans" font-style="italic" font-size="14" font-weight="bold">second word</words>
         </direction-type>
