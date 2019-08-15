@@ -156,13 +156,7 @@ class OtherArticulation(object):
         NotImplementedError()
 
 
-'''
-	<xs:complexType name="articulations">
-			<xs:element name="strong-accent" type="strong-accent">
-'''
-
-
-class Articulations(ComplexType, OptionalUniqueId):
+class ComplexTypeArticulations(ComplexType, OptionalUniqueId):
     """Articulations and accents are grouped together here."""
 
     _CHILDREN = [Accent, StrongAccent, Staccato, Tenuto, DetachedLegato, Staccatissimo, Spiccato, Scoop, Plop, Doit,
@@ -189,5 +183,5 @@ class Articulations(ComplexType, OptionalUniqueId):
         max_occurrence=None
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)

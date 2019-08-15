@@ -402,6 +402,21 @@ class TreeChord(XMLTree):
         tm.add_child(NormalNotes(normal_notes))
         tm.add_child(NormalType(normal_type))
 
+    def add_articulations_object(self, articulations):
+        if not isinstance(articulations, Articulations):
+            raise TypeError()
+        # try:
+        #     notations = self.get_children_by_type(Notations)[0]
+        # except IndexError:
+        #     notations = self.add_child(Notations())
+        #
+        # notations.add_child(slur)
+        # return slur
+
+    # def add_slur(self, type, **kwargs):
+    #     slur = Slur(type, **kwargs)
+    #     return self.add_slur_object(slur)
+
     def update_type(self):
         """get type of a Note() depending on its quantized duration and return it [whole, half, quarter, eighth, 16th,
         32nd, 64th]"""

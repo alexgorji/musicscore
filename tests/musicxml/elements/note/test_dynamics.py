@@ -12,4 +12,12 @@ class Test(TestCase):
         direction_type = direction.add_child(DirectionType())
         dynamics = direction_type.add_child(Dynamics())
         dynamics.add_child(P())
-        print(direction.to_string())
+        result = """<direction>
+  <direction-type>
+    <dynamics placement="below">
+      <p/>
+    </dynamics>
+  </direction-type>
+</direction>
+"""
+        self.assertEqual(direction.to_string(), result)
