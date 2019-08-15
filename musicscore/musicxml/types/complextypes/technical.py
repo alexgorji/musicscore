@@ -1,10 +1,19 @@
 from musicscore.dtd.dtd import Choice, Element
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
-from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.complextypes.arrow import ComplexTypeArrow
+from musicscore.musicxml.types.complextypes.bend import ComplexTypeBend
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, EmptyPlacement, EmptyPlacementSmulf, \
     PlacementText, OtherPlacementText
 from musicscore.musicxml.types.complextypes.fingering import ComplexTypeFingering
+from musicscore.musicxml.types.complextypes.fret import ComplexTypeFret
+from musicscore.musicxml.types.complextypes.hammeronpulloff import ComplexTypeHammerOnPullOff
+from musicscore.musicxml.types.complextypes.handbell import ComplexTypeHandbell
 from musicscore.musicxml.types.complextypes.harmonic import ComplexTypeHarmonic
+from musicscore.musicxml.types.complextypes.harmonmute import ComplexTypeHarmonMute
+from musicscore.musicxml.types.complextypes.heeltoe import ComplexTypeHeelToe
+from musicscore.musicxml.types.complextypes.hole import ComplexTypeHole
+from musicscore.musicxml.types.complextypes.string_ import ComplexTypeString_
+from musicscore.musicxml.types.complextypes.tap import ComplexTypeTap
 
 
 class UpBow(EmptyPlacement):
@@ -127,7 +136,7 @@ class Fret(ComplexTypeFret):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class String(ComplexTypeString):
+class String_(ComplexTypeString_):
     """"""
 
     _TAG = 'string'
@@ -163,10 +172,10 @@ class Bend(ComplexTypeBend):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class Tap(ComplexTypeBand):
+class Tap(ComplexTypeTap):
     """"""
 
-    _TAG = 'band'
+    _TAG = 'tap'
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)
@@ -323,7 +332,7 @@ class ComplexTypeTechnical(ComplexType, OptionalUniqueId):
         Element(Stopped),
         Element(SnapPizzicato),
         Element(Fret),
-        Element(String),
+        Element(String_),
         Element(HammerOn),
         Element(PullOff),
         Element(Bend),
