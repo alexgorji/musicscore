@@ -15,7 +15,7 @@ from musicscore.musicxml.elements.xml_element import XMLTree
 from musicscore.musicxml.types.complextypes.articulations import Accent, StrongAccent, DetachedLegato, Tenuto, Spiccato, \
     Staccato, Staccatissimo, BreathMark, Caesura, Stress, Unstress, SoftAccent, Plop, Scoop, Doit, Falloff
 from musicscore.musicxml.types.complextypes.direction import DirectionType
-from musicscore.musicxml.types.complextypes.directiontype import Words
+from musicscore.musicxml.types.complextypes.directiontype import Words, Bracket
 from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, \
     FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N
 from musicscore.musicxml.types.complextypes.lyric import Text
@@ -595,6 +595,11 @@ class TreeChord(XMLTree):
         dynamics.add_child(dynamic_classes[index]())
 
         return dynamics
+
+    def add_bracket(self, type, line_end, placement='above', **kwargs):
+        d = self.add_child(Direction(placement=placement))
+        dt = d.add_child(DirectionType())
+        dt.add_child(Bracket(type=type, line_end=line_end, **kwargs))
 
     def add_words(self, text, **kwargs):
         try:
