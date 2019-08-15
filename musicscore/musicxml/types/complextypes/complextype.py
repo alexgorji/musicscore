@@ -1,8 +1,10 @@
+from musicscore.musicxml.attributes.accidental import Smulf
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.placement import Placement
 from musicscore.musicxml.attributes.printobject import PrintObject
 from musicscore.musicxml.attributes.printstyle import PrintStyle, PrintStyleAlign
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.simple_type import String
 
 
 class ComplexType(XMLElement):
@@ -49,7 +51,37 @@ class EmptyPrintStyleAlignId(Empty, PrintStyleAlign, OptionalUniqueId):
 
 class EmptyPrintObjectStyleAlign(Empty, PrintObject, PrintStyleAlign):
     """
-    The empty-print-style-align-object type represents an empty element with print-object and print-style-align attribute groups.
+    The empty-print-style-align-object type represents an empty element with print-object and print-style-align
+    attribute groups.
+    """
+
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+
+
+class EmptyPlacementSmulf(Empty, Placement, Smulf):
+    """
+    The empty-placement-smufl type represents an empty element with print-style, placement, and smufl attributes
+    """
+
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+
+
+class PlacementText(ComplexType, String, PrintStyle, Placement):
+    """
+    The placement-text type represents a text element with print-style and placement attribute groups.
+    """
+
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+
+
+class OtherPlacementText(ComplexType, String, PrintStyle, Placement, Smulf):
+    """
+    The other-placement-text type represents a text element with print-style, placement, and smufl attribute groups.
+    This type is used by MusicXML notation extension elements to allow specification of specific SMuFL glyphs without
+    needed to add every glyph as a MusicXML element.
     """
 
     def __init__(self, tag, *args, **kwargs):
