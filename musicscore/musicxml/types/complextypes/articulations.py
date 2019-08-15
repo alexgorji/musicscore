@@ -100,7 +100,7 @@ class Falloff(ComplexTypeEmptyLine):
 
 
 class BreathMark(ComplexTypeBreathMark):
-    _TAG = 'breath_mark'
+    _TAG = 'breath-mark'
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)
@@ -159,8 +159,11 @@ class OtherArticulation(object):
 class ComplexTypeArticulations(ComplexType, OptionalUniqueId):
     """Articulations and accents are grouped together here."""
 
+    # _CHILDREN = [Accent, StrongAccent, Staccato, Tenuto, DetachedLegato, Staccatissimo, Spiccato, Scoop, Plop, Doit,
+    #              Falloff, BreathMark, Caesura, Stress, Unstress, SoftAccent]
+
     _CHILDREN = [Accent, StrongAccent, Staccato, Tenuto, DetachedLegato, Staccatissimo, Spiccato, Scoop, Plop, Doit,
-                 Falloff, BreathMark, Caesura, Stress, Unstress, SoftAccent]
+                 Falloff, BreathMark, Caesura, Stress, Unstress]
 
     _DTD = Choice(
         Element(Accent),
@@ -178,7 +181,7 @@ class ComplexTypeArticulations(ComplexType, OptionalUniqueId):
         Element(Caesura),
         Element(Stress),
         Element(Unstress),
-        Element(SoftAccent),
+        # Element(SoftAccent),
         min_occurrence=0,
         max_occurrence=None
     )

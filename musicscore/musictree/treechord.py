@@ -12,6 +12,8 @@ from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
     Type, Dot, Notehead, NoteheadText, Beam, Duration
 from musicscore.musicxml.elements.xml_element import XMLTree
+from musicscore.musicxml.types.complextypes.articulations import Accent, StrongAccent, DetachedLegato, Tenuto, Spiccato, \
+    Staccato, Staccatissimo, BreathMark, Caesura, Stress, Unstress, SoftAccent, Plop, Scoop, Doit, Falloff
 from musicscore.musicxml.types.complextypes.direction import DirectionType
 from musicscore.musicxml.types.complextypes.directiontype import Words
 from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, \
@@ -402,20 +404,54 @@ class TreeChord(XMLTree):
         tm.add_child(NormalNotes(normal_notes))
         tm.add_child(NormalType(normal_type))
 
-    def add_articulations_object(self, articulations):
-        if not isinstance(articulations, Articulations):
-            raise TypeError()
-        # try:
-        #     notations = self.get_children_by_type(Notations)[0]
-        # except IndexError:
-        #     notations = self.add_child(Notations())
-        #
-        # notations.add_child(slur)
-        # return slur
+    def add_articulation_object(self, articulation_object):
 
-    # def add_slur(self, type, **kwargs):
-    #     slur = Slur(type, **kwargs)
-    #     return self.add_slur_object(slur)
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            articulations = notations.get_children_by_type(Articulations)[0]
+        except IndexError:
+            articulations = notations.add_child(Articulations())
+
+        articulations.add_child(articulation_object)
+
+    def add_articulation(self, articulation, **kwargs):
+
+        def add_type(dict):
+            new_dict = dict.copy()
+            if 'type' not in new_dict:
+                new_dict['type'] = 'up'
+            return new_dict
+
+        def add_breath_mark_value(dict):
+            new_dict = dict.copy()
+            if 'value' not in new_dict:
+                new_dict['value'] = 'comma'
+            return new_dict
+
+        articulations = {'accent': Accent(**kwargs),
+                         'strong-accent': StrongAccent(**add_type(kwargs)),
+                         'staccato': Staccato(**kwargs),
+                         'tenuto': Tenuto(**kwargs),
+                         'detached-lagato': DetachedLegato(**kwargs),
+                         'staccatissimo': Staccatissimo(**kwargs),
+                         'spiccato': Spiccato(**kwargs),
+                         'scoop': Scoop(**kwargs),
+                         'plop': Plop(**kwargs),
+                         'doit': Doit(**kwargs),
+                         'falloff': Falloff(**kwargs),
+                         'breath-mark': BreathMark(**add_breath_mark_value(kwargs)),
+                         'caesura': Caesura(**kwargs),
+                         'stress': Stress(**kwargs),
+                         'unstress': Unstress(**kwargs)}
+
+        if articulation not in articulations:
+            raise ValueError('articulation {}  must be in {}'.format(articulation, list(articulations.keys())))
+
+        return self.add_articulation_object(articulations[articulation])
 
     def update_type(self):
         """get type of a Note() depending on its quantized duration and return it [whole, half, quarter, eighth, 16th,
