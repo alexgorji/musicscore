@@ -386,18 +386,18 @@ class TreeChord(XMLTree):
         for voice in self.get_children_by_type(Voice):
             self.remove_child(voice)
 
-    def add_tuplet(self, position, number=1):
+    def add_tuplet(self, type, number=1):
         normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
         types = {8: '32nd', 4: '16th', 2: 'eighth'}
         actual_notes = self.parent_beat.best_div
         normal_notes = normals[actual_notes]
         normal_type = types[normal_notes / self.parent_beat.duration]
-        if position != 'continue':
+        if type != 'continue':
             try:
                 notations = self.notations
             except AttributeError:
                 notations = self.add_child(Notations())
-            notations.add_child(Tuplet(type=position, number=number, bracket='yes', placement='above'))
+            notations.add_child(Tuplet(type=type, number=number, bracket='yes', placement='above'))
 
         tm = self.add_child(TimeModification())
         tm.add_child(ActualNotes(actual_notes))
