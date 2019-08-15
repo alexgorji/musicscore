@@ -4,7 +4,6 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, EmptyPlacement, EmptyPlacementSmulf, \
     PlacementText, OtherPlacementText
 from musicscore.musicxml.types.complextypes.fingering import ComplexTypeFingering
-from musicscore.musicxml.types.complextypes.fret import ComplexTypeFret
 from musicscore.musicxml.types.complextypes.harmonic import ComplexTypeHarmonic
 
 

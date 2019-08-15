@@ -8,7 +8,7 @@ from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics
 from musicscore.musicxml.types.complextypes.ornaments import ComplexTypeOrnaments
 from musicscore.musicxml.types.complextypes.slur import ComplexTypeSlur
-from musicscore.musicxml.types.complextypes.technical import ComplexTypeTechnical
+# from musicscore.musicxml.types.complextypes.technical import ComplexTypeTechnical
 from musicscore.musicxml.types.complextypes.tied import ComplexTypeTied
 from musicscore.musicxml.types.complextypes.tuplet import ComplexTypeTuplet
 
@@ -58,14 +58,14 @@ class Ornaments(ComplexTypeOrnaments):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class Technical(ComplexTypeTechnical):
+class Technical(XMLElement):
     """"""
 
     _TAG = 'technical'
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(tag=self._TAG, value=value, *args, **kwargs)
-
+        raise NotImplementedError()
 
 class Articulations(ComplexTypeArticulations):
     """"""
