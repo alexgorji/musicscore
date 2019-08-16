@@ -37,3 +37,10 @@ class Test(TestCase):
 
         self.score.write(path=result_path)
         TestScore().assert_template(result_path=result_path)
+
+    def test_2(self):
+        self.score.add_title("TITLE")
+        self.score.add_subtitle("SUBTITLE")
+        self.score.add_composer("blablabla 2019")
+        xml_path = path + '_test_2.xml'
+        self.score.write(path=xml_path)

@@ -10,7 +10,7 @@ from musicscore.musicxml.elements import partwise
 from musicscore.musicxml.elements.scoreheader import PartList, Credit, Defaults
 from musicscore.musicxml.types.complextypes.appearance import LineWidth
 from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWords
-from musicscore.musicxml.types.complextypes.defaults import Appearance
+from musicscore.musicxml.types.complextypes.defaults import Appearance, WordFont
 from musicscore.musicxml.types.complextypes.encoding import Supports
 from musicscore.musicxml.types.complextypes.identification import Encoding
 from musicscore.musicxml.types.complextypes.scorepart import PartName, Identification, PartAbbreviation
@@ -35,8 +35,51 @@ class TreeScoreTimewise(timewise.Score):
         self._forbidden_divisions = None
         self._page_style = TreePageStyle(score=self, **kwargs)
         self._accidental_mode = 'normal'
+        self._title = None
+        self._subtitle = None
+        self._composer = None
 
         self._identifications_added = False
+
+    @property
+    def title(self):
+        return self._title
+
+    @property
+    def subtitle(self):
+        return self._subtitle
+
+    @property
+    def composer(self):
+        return self._composer
+
+    @property
+    def defaults(self):
+        try:
+            return self.get_children_by_type(Defaults)[0]
+        except IndexError:
+            return None
+
+    def make_defaults(self):
+        if self.defaults is None:
+            self.add_child(Defaults())
+        else:
+            raise Exception('defaults already exists')
+
+    @property
+    def word_font(self):
+        try:
+            return self.defaults.get_children_by_type(WordFont)[0]
+        except (AttributeError, IndexError):
+            return None
+
+    def make_word_font(self, **kwargs):
+        if self.defaults is None:
+            self.make_defaults()
+        if self.word_font is None:
+            self.defaults.add_child(WordFont(**kwargs))
+        else:
+            raise Exception('word-font already exists')
 
     @property
     def tuplet_line_width(self):
@@ -48,15 +91,14 @@ class TreeScoreTimewise(timewise.Score):
         if not isinstance(val, float):
             raise TypeError('tuplet_line_width.value must be of type float not{}'.format(type(val)))
         self._tuplet_line_width = val
-        try:
-            defaults = self.get_children_by_type(Defaults)[0]
-        except IndexError:
-            defaults = self.add_child(Defaults())
+
+        if self.defaults is None:
+            self.make_defaults()
 
         try:
-            appearance = defaults.get_children_by_type(Appearance)[0]
+            appearance = self.defaults.get_children_by_type(Appearance)[0]
         except IndexError:
-            appearance = defaults.add_child(Appearance())
+            appearance = self.defaults.add_child(Appearance())
 
         try:
             line_width = [lw for lw in appearance.get_children_by_type(LineWidth) if lw.type == 'tuplet bracket'][0]
@@ -64,6 +106,12 @@ class TreeScoreTimewise(timewise.Score):
             line_width = appearance.add_child(LineWidth(type='tuplet bracket'))
 
         line_width.value = val
+
+    def add_word_font(self, **kwargs):
+        if self.defaults is None:
+            self.make_defaults()
+
+        self.defaults
 
     @property
     def max_division(self):
@@ -119,13 +167,13 @@ class TreeScoreTimewise(timewise.Score):
     def add_score_part(self, score_part):
         score_part.parent_score = self
         instrument = score_part.instrument
-        if instrument is not None:
-            part_name = score_part.add_child(PartName(name=instrument.name))
-            part_name.print_object = 'yes'
-            score_part.add_child(PartAbbreviation(value=instrument.abbreviation))
-        else:
-            part_name = score_part.add_child(PartName(name='none'))
-            part_name.print_object = 'no'
+        # if instrument is not None:
+        #     part_name = score_part.add_child(instrument._part_name)
+        #     part_name.print_object = 'yes'
+        #     score_part.add_child(instrument._part_abbreviation)
+        # else:
+        #     part_name = score_part.add_child(PartName(name='none'))
+        #     part_name.print_object = 'no'
 
         return self._part_list.add_child(score_part)
 
@@ -385,8 +433,9 @@ class TreeScoreTimewise(timewise.Score):
 
         c = self.add_child(Credit(page=page))
         c.add_child(CreditType('title'))
-        c.add_child(CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
-                                valign=valign, **kwargs))
+        self._title = c.add_child(
+            CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
+                        valign=valign, **kwargs))
 
     def add_subtitle(self, text, page=None, font_size=None, default_x=None, default_y=None, justify=None, valign=None,
                      **kwargs):
@@ -405,8 +454,31 @@ class TreeScoreTimewise(timewise.Score):
 
         c = self.add_child(Credit(page=page))
         c.add_child(CreditType('subtitle'))
-        c.add_child(CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
-                                valign=valign, **kwargs))
+        self._subtitle = c.add_child(
+            CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
+                        valign=valign, **kwargs))
+
+    def add_composer(self, text, page=None, font_size=None, default_x=None, default_y=None, justify=None, valign=None,
+                     **kwargs):
+        if not page:
+            page = 1
+        if not font_size:
+            font_size = 12
+        if not default_x:
+            default_x = int(self.page_style.page_width.value - 50)
+        if not default_y:
+            default_y = self.page_style.page_height.value - 143
+        if not justify:
+            justify = 'right'
+        if not valign:
+            valign = 'top'
+
+        c = self.add_child(Credit(page=page))
+        c.add_child(CreditType('composer'))
+
+        self._composer = c.add_child(
+            CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
+                        valign=valign, **kwargs))
 
     def update_measures(self):
         measures = self.get_children_by_type(TreeMeasure)

@@ -15,8 +15,8 @@ class ChildTypeDTDConflict(DTDError):
 
 
 class ChildOccurrenceDTDConflict(DTDError):
-    def __init__(self, child):
-        msg = 'child of type {} cannot be added due to DTD Occurrence conflicts'.format(type(child))
+    def __init__(self, child, parent):
+        msg = 'child of type {} cannot be added to {} due to DTD Occurrence conflicts'.format(type(child), parent.__class__)
         super().__init__(msg)
 
 

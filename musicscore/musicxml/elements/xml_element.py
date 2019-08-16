@@ -102,7 +102,7 @@ class XMLTree(Tree):
                     self.goto_next_dtd_choice()
                     self.add_xml_child(xml_child)
                 except Exception:
-                    raise ChildOccurrenceDTDConflict(xml_child)
+                    raise ChildOccurrenceDTDConflict(xml_child, self)
 
             if child_added:
                 self.update_current_children()

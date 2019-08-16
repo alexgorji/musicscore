@@ -2,7 +2,6 @@ from musicscore.musicxml.types.complextypes.midiinstrument import ComplexTypeMid
 from musicscore.musicxml.types.complextypes.scorepart import PartName, PartAbbreviation
 import uuid
 
-
 class TreeInstrument(ComplexTypeMidiInstrument):
     _TAG = 'midi-instrument'
 
@@ -13,6 +12,14 @@ class TreeInstrument(ComplexTypeMidiInstrument):
         self.abbreviation = abbreviation
         self._number = None
         self.number = number
+
+    @property
+    def part_name(self):
+        return self._part_name
+
+    @property
+    def part_abbreviation(self):
+        return self._part_abbreviation
 
     @property
     def number(self):
