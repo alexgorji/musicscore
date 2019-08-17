@@ -222,6 +222,13 @@ class TreeChord(XMLTree):
             self._flags = set()
         return self._flags
 
+    @property
+    def tremoli(self):
+        try:
+            return self.get_children_by_type(Notations)[0].get_children_by_type(Ornaments)[0].get_children_by_type(Tremolo)
+        except IndexError:
+            return []
+
     def add_flag(self, flag):
         if not isinstance(flag, TreeChordFlag):
             raise TypeError('flag must be of type TreeChordFlag not {}'.format(flag.__class__))
@@ -246,7 +253,7 @@ class TreeChord(XMLTree):
         slur = Slur(type, **kwargs)
         return self.add_slur_object(slur)
 
-    def add_tremolo(self, number=3):
+    def add_tremolo(self, number=3, **kwargs):
 
         try:
             notations = self.get_children_by_type(Notations)[0]
@@ -258,7 +265,7 @@ class TreeChord(XMLTree):
         except IndexError:
             ornaments = notations.add_child(Ornaments())
 
-        ornaments.add_child(Tremolo(number))
+        ornaments.add_child(Tremolo(number, **kwargs))
 
     def split_copy(self, quarter_duration):
         new_chord = TreeChord(quarter_duration=quarter_duration)
@@ -305,13 +312,16 @@ class TreeChord(XMLTree):
             self.is_adjoinable = True
             new_chords[-1].is_adjoinable = False
 
-        try:
-            tremolos = self.get_children_by_type(Notations)[0].get_children_by_type(Ornaments)[0].get_children_by_type(
-                Tremolo)
-            for tremolo in tremolos:
-                new_chords[-1].add_tremolo(number=tremolo.value)
-        except IndexError:
-            pass
+        for tremolo in self.tremoli:
+            new_chords[-1].add_tremolo(number=tremolo.value)
+
+        # try:
+        #     tremolos = self.get_children_by_type(Notations)[0].get_children_by_type(Ornaments)[0].get_children_by_type(
+        #         Tremolo)
+        #     for tremolo in tremolos:
+        #         new_chords[-1].add_tremolo(number=tremolo.value)
+        # except IndexError:
+        #     pass
 
         new_chords.insert(0, self)
 

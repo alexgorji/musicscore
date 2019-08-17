@@ -16,8 +16,19 @@ class Test(TestCase):
         sf = SimpleFormat(durations=[7])
 
         sf.chords[0].add_tremolo()
+
         sf.to_stream_voice().add_to_score(self.score, 1, 1)
         result_path = path + '_test_1'
+        self.score.write(path=result_path)
+        TestScore().assert_template(result_path=result_path)
+
+    def test_2(self):
+        sf = SimpleFormat(durations=[2, 2])
+
+        sf.chords[0].add_tremolo(type='start')
+        sf.chords[1].add_tremolo(type='stop')
+        sf.to_stream_voice().add_to_score(self.score, 1, 1)
+        result_path = path + '_test_2'
         self.score.write(path=result_path)
         # TestScore().assert_template(result_path=result_path)
 
