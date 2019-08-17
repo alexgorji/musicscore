@@ -225,7 +225,8 @@ class TreeChord(XMLTree):
     @property
     def tremoli(self):
         try:
-            return self.get_children_by_type(Notations)[0].get_children_by_type(Ornaments)[0].get_children_by_type(Tremolo)
+            return self.get_children_by_type(Notations)[0].get_children_by_type(Ornaments)[0].get_children_by_type(
+                Tremolo)
         except IndexError:
             return []
 
@@ -521,8 +522,17 @@ class TreeChord(XMLTree):
                   (6, 1): 'whole',
                   (8, 1): 'breve'}
 
+        tremoli_types = [tremolo.type for tremolo in self.tremoli]
+
         if self.quarter_duration == 0:
             value = 'eighth'
+
+        elif 'start' in tremoli_types or 'stop' in tremoli_types:
+            value = _types[(self.quarter_duration.numerator * 2, self.quarter_duration.denominator)]
+            tm = TimeModification()
+            tm.add_child(ActualNotes(2))
+            tm.add_child(NormalNotes(1))
+            self.add_child(tm)
         else:
             value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
 
