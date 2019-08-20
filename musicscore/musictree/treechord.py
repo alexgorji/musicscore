@@ -1,3 +1,4 @@
+from musicscore.musicxml.attributes.position import XPosition
 from quicktions import Fraction
 
 from AGtree.basic_functions import dToX, xToD
@@ -82,6 +83,8 @@ class TreeChord(XMLTree):
 
         self.manual_type = False
         self.is_finger_tremolo = False
+        self.relative_x = None
+        self.tie_orientation = None
 
     @property
     def __name__(self):
@@ -319,6 +322,8 @@ class TreeChord(XMLTree):
         self.quarter_duration *= new_ratios[0]
 
         new_chords = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
+        for ch in new_chords:
+            ch.tie_orientation = self.tie_orientation
 
         if 'start' in self.tie_types:
             new_chords[-1].add_tie('start')
@@ -347,6 +352,9 @@ class TreeChord(XMLTree):
         for index, midi in enumerate(self.midis):
             # print(midi)
             note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration, parent_chord=self)
+            if self.relative_x is not None:
+                note.relative_x = self.relative_x
+
             # print(midi.note_head)
             if midi.note_head:
                 note.add_child(midi.note_head)
@@ -382,7 +390,7 @@ class TreeChord(XMLTree):
 
         if value == 'start' and 'start' not in self.tie_types:
             self.add_child(Tie('start'))
-            notations.add_child(Tied('start'))
+            notations.add_child(Tied('start', orientation=self.tie_orientation))
 
         elif value == 'stop' and 'stop' not in self.tie_types:
             self.add_child(Tie('stop'))
@@ -661,6 +669,7 @@ class TreeChord(XMLTree):
         new_chord.is_adjoinable = self.is_adjoinable
         new_chord._flags = self._flags
         new_chord.manual_type = self.manual_type
+        new_chord.tie_orientation = self.tie_orientation
         # for attribute in self.__dir__():
         #     print(attribute)
         return new_chord

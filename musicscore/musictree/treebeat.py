@@ -511,7 +511,9 @@ class TreeBeat(object):
                             else:
                                 raise Exception('next_beat is not empty.')
 
-                        output.extend(new_chords[:-1])
+                            output.extend(new_chords[:-1])
+                        else:
+                            output.extend(new_chords)
                 except IndexError:
                     output.append(chord)
                     #     output.append(chord)

@@ -1,3 +1,4 @@
+from musicscore.musicxml.attributes.position import Position
 from musicscore.musicxml.elements.note import Notehead, TimeModification, Stem
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes
 
@@ -208,8 +209,9 @@ class FingerTremoloFlag(BeatwiseFlag):
     #     return [chord, self.tremolo_chord]
 
     def implement(self, chord, beat):
-        output = super().implement(chord, beat)
-        output.insert(1, self.tremolo_chord)
+        # output = super().implement(chord, beat)
+        # output.insert(1, self.tremolo_chord)
+        chord.tie_orientation = 'over'
         if self.tremolo_chord.midis[0].value < chord.midis[0].value:
             chord.add_words('\uF415', font_family='bravura', font_size=16, relative_x=30, relative_y=-50)
         else:
@@ -217,4 +219,4 @@ class FingerTremoloFlag(BeatwiseFlag):
         self.tremolo_chord.parent_voice = chord.parent_voice
         self.tremolo_chord.parent_beat = chord.parent_beat
 
-        return output
+        return [chord, self.tremolo_chord]

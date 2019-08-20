@@ -191,6 +191,7 @@ class TreePartVoice(object):
             return None
 
     def add_chord(self, chord):
+        # print('treepart add_chord, chord.tie_orientation', chord.tie_orientation)
         remain = chord.quarter_duration - self.remaining_duration
         if self.remaining_duration == 0:
             return chord
