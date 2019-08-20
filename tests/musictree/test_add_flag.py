@@ -118,15 +118,22 @@ class Test(TestCase):
         sf.to_stream_voice().add_to_score(self.score)
 
         self.score.write(xml_path)
-        # TestScore().assert_template(xml_path)
+        TestScore().assert_template(xml_path)
 
     def test_9(self):
         xml_path = path + "_test_9.xml"
         sf = SimpleFormat(midis=[60, 63], durations=[2, 5.33, 2.666])
         sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
-        # sf.chords[1].add_flag(TreeFingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
-        # sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
         sf.to_stream_voice().add_to_score(self.score)
 
         self.score.write(xml_path)
-        # TestScore().assert_template(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_10(self):
+        xml_path = path + "_test_10.xml"
+        sf = SimpleFormat(midis=[60, 63], durations=[2, 5.33, 2.666])
+        sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=67)))
+        sf.to_stream_voice().add_to_score(self.score)
+
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
