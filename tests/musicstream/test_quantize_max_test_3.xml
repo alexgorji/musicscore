@@ -1244,6 +1244,9 @@
           </dynamics>
           <tied number="1" type="start"/>
         </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
         <lyric number="1">
           <text>3</text>
         </lyric>
@@ -1372,6 +1375,9 @@
             <f/>
           </dynamics>
           <tied number="1" type="start"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>7</text>
@@ -2840,6 +2846,9 @@
           <dynamics relative-y="-20" halign="center" placement="below">
             <p/>
           </dynamics>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>13</text>

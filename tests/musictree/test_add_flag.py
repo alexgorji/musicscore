@@ -2,8 +2,8 @@ from itertools import cycle
 from unittest import TestCase
 import os
 
-from musicscore.musicstream import SimpleFormat
-from musicscore.musictree.treechordflags import PercussionFlag, XFlag
+from musicscore.musicstream import SimpleFormat, TreeChord
+from musicscore.musictree.treechordflags import PercussionFlag, XFlag, BeatwiseFlag, FingerTremoloFlag
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 
@@ -97,3 +97,36 @@ class Test(TestCase):
 
         self.score.write(xml_path)
         TestScore().assert_template(xml_path)
+
+    def test_7(self):
+        xml_path = path + "_test_7.xml"
+        sf = SimpleFormat(midis=[60, 63], durations=[2, 5.33, 2.666])
+        sf.chords[1].add_flag(BeatwiseFlag())
+        # sf.chords[1].add_flag(TreeFingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
+        # sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
+        sf.to_stream_voice().add_to_score(self.score)
+
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_8(self):
+        xml_path = path + "_test_8.xml"
+        sf = SimpleFormat(midis=[60, 63], durations=[2, 5.33, 2.666])
+        sf.chords[1].add_flag(XFlag(slur='dashed'))
+        # sf.chords[1].add_flag(TreeFingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
+        # sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
+        sf.to_stream_voice().add_to_score(self.score)
+
+        self.score.write(xml_path)
+        # TestScore().assert_template(xml_path)
+
+    def test_9(self):
+        xml_path = path + "_test_9.xml"
+        sf = SimpleFormat(midis=[60, 63], durations=[2, 5.33, 2.666])
+        sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
+        # sf.chords[1].add_flag(TreeFingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
+        # sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
+        sf.to_stream_voice().add_to_score(self.score)
+
+        self.score.write(xml_path)
+        # TestScore().assert_template(xml_path)

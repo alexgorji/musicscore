@@ -240,7 +240,7 @@ class TreePartVoice(object):
         if False:
             raise Exception()
         else:
-            chords = self.chords
+            chords = [chord for chord in self.chords if not chord.is_finger_tremolo]
             grouped_chords = []
             group_positions = [0]
             for group in grouping_list:

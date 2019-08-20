@@ -1,4 +1,4 @@
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeLineEnd
 from musicscore.musicxml.attributes.color import Color
 from musicscore.musicxml.attributes.dahsedformatting import DashedFormatting
 from musicscore.musicxml.attributes.linetype import LineType
@@ -14,6 +14,7 @@ class LineEnd(AttributeAbstract):
     def __init__(self, line_end, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.generate_attribute('line-end', line_end, 'TypeLineEnd')
+        TypeLineEnd
 
 
 class EndLength(AttributeAbstract):

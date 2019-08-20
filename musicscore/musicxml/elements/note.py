@@ -1,7 +1,12 @@
 from musicscore.dtd.dtd import Element, GroupReference, Sequence, Choice
 from musicscore.musicxml.attributes.accidental import Cautionary, Editorial, Smulf
+from musicscore.musicxml.attributes.color import Color
+from musicscore.musicxml.attributes.font import Font
 from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
 from musicscore.musicxml.attributes.leveldisplay import LevelDisplay
+from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
+from musicscore.musicxml.attributes.position import XPosition
+from musicscore.musicxml.attributes.printout import Printout
 from musicscore.musicxml.attributes.printstyle import PrintStyle
 from musicscore.musicxml.groups.common import EditorialVoice, Staff
 from musicscore.musicxml.elements.fullnote import FullNote
@@ -11,6 +16,8 @@ from musicscore.musicxml.types.complextypes.complextype import EmptyPlacement, C
 from musicscore.musicxml.types.complextypes.lyric import ComplexTypeLyric
 from musicscore.musicxml.types.complextypes.notations import ComplexTypeNotations
 from musicscore.musicxml.types.complextypes.notehead import ComplexTypeNotehead
+from musicscore.musicxml.types.complextypes.notetype import ComplexTypeNoteType
+from musicscore.musicxml.types.complextypes.stem import ComplexTypeStem
 from musicscore.musicxml.types.complextypes.tie import ComplexTypeTie
 from musicscore.musicxml.types.complextypes.timemodification import ComplexTypeTimeModification
 from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeNoteTypeValue, TypeAccidentalValue
@@ -79,11 +86,12 @@ class Instrument(XMLElement):
         super().__init__(tag='instrument', *args, **kwargs)
 
 
-class Type(XMLElement, TypeNoteTypeValue):
+class Type(ComplexTypeNoteType):
     """"""
+    _TAG = 'type'
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='type', value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Dot(EmptyPlacement):
@@ -114,12 +122,12 @@ class TimeModification(ComplexTypeTimeModification):
         super().__init__(*args, **kwargs)
 
 
-class Stem(XMLElement):
+class Stem(ComplexTypeStem):
     """"""
+    _TAG = 'stem'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='stem', *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Notehead(ComplexTypeNotehead):
@@ -163,7 +171,22 @@ class Play(XMLElement):
         raise NotImplementedError()
 
 
-class Note(XMLElement):
+"""
+        <xs:attributeGroup ref="x-position"/>
+        <xs:attributeGroup ref="font"/>
+        <xs:attributeGroup ref="color"/>
+        <xs:attributeGroup ref="printout"/>
+        <xs:attribute name="print-leger" type="yes-no"/>
+        <xs:attribute name="dynamics" type="non-negative-decimal"/>
+        <xs:attribute name="end-dynamics" type="non-negative-decimal"/>
+        <xs:attribute name="attack" type="divisions"/>
+        <xs:attribute name="release" type="divisions"/>
+        <xs:attribute name="time-only" type="time-only"/>
+        <xs:attribute name="pizzicato" type="yes-no"/>
+        <xs:attributeGroup ref="optional-unique-id"/>"""
+
+
+class Note(XMLElement, XPosition, Font, Color, Printout, OptionalUniqueId):
     """
     Notes are the most common type of MusicXML data. The MusicXML format keeps the MuseData distinction between
     elements used for sound information and elements used for notation information (e.g., tie is used for sound,

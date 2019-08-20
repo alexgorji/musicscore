@@ -1,6 +1,7 @@
 import math
 import warnings
 
+from musicscore.musictree.treechordflags import FingerTremoloFlag
 from quicktions import Fraction
 
 from musicscore.basic_functions import flatten
@@ -481,8 +482,8 @@ class TreeBeat(object):
             if not isinstance(chords, list):
                 raise Exception('output of implement can only be a list of chords')
 
-            if len(chords) not in [1, 2]:
-                raise Exception('output of implement can have 1 or 2 chords')
+            # if len(chords) not in [1, 2]:
+            #     raise Exception('output of implement can have 1 or 2 chords')
 
             for ch in chords:
                 if not isinstance(ch, TreeChord):
@@ -491,16 +492,12 @@ class TreeBeat(object):
         flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
 
         while flag_types:
-            # print('flag_types', flag_types)
             flag_type = flag_types.pop()
             output = []
             for chord in self.chords:
-                # print('chord', chord, 'beat', self.offset)
                 try:
                     chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
                     new_chords = chord_flag.implement(chord, self)
-                    # print(new_chords)
-                    # print([ch.quarter_duration for ch in new_chords])
                     check_implement_output(new_chords)
                     diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
                     if len(new_chords) == 1:
@@ -508,17 +505,13 @@ class TreeBeat(object):
                     else:
                         if diff > 0:
                             next_beat = self.next
-                            # number_of_beats = int(new_chords[0].quarter_duration / self.duration)
-                            # print('number_of_beats', number_of_beats)
-                            # while number_of_beats > 1:
-                            #     next_beat = next_beat.next
-                            #     number_of_beats -= 1
 
                             if not next_beat.chords:
-                                next_beat.add_chord(new_chords[1])
+                                next_beat.add_chord(new_chords[-1])
                             else:
                                 raise Exception('next_beat is not empty.')
-                        output.append(new_chords[0])
+
+                        output.extend(new_chords[:-1])
                 except IndexError:
                     output.append(chord)
                     #     output.append(chord)
@@ -546,12 +539,14 @@ class TreeBeat(object):
 
     def update_tuplets(self):
         tuplet_divisions = [3, 5, 6, 7, 9, 10]
-        non_grace_chords = [chord for chord in self.chords if chord.quarter_duration != 0]
+        non_grace_chords = [chord for chord in self.chords if
+                            chord.quarter_duration != 0 and not chord.is_finger_tremolo]
+
         if self.best_div in tuplet_divisions:
             for i in range(len(non_grace_chords)):
                 if i == 0:
                     non_grace_chords[0].add_tuplet('start')
-                elif i == len(self.chords) - 1:
+                elif i == len(non_grace_chords) - 1:
                     non_grace_chords[-1].add_tuplet('stop')
                 else:
                     non_grace_chords[i].add_tuplet('continue')

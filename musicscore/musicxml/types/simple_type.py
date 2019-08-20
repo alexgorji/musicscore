@@ -1926,10 +1926,21 @@ class TypeHoleClosedLocation(SimpleType):
 
 
 class TypeHoleClosedValue(SimpleType):
-    """The hole-closed-value type represents whether the hole is closed, open, or half-open.
+    """
+    The hole-closed-value type represents whether the hole is closed, open, or half-open.
     """
 
     _PERMITTED = ["yes", "no", "half"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+class TypeStemValue(SimpleType):
+    """
+    The stem type represents the notated stem direction.
+    """
+
+    _PERMITTED = ["down", "up", "double", "none"]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
