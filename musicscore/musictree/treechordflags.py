@@ -120,55 +120,8 @@ class XFlag(BeatwiseFlag):
 
     def implement(self, chord, beat):
         output = super().implement(chord, beat)
-        # output = self._get_split(chord, beat)
         output[0].add_child(Notehead('x'))
-        # self._substitute_ties(output[0])
         return output
-
-
-# class XFlag(TreeChordFlag):
-#     def __init__(self, slur='dashed', *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.slur = slur
-#
-#     def _get_split(self, chord, beat):
-#         quarter_beat = {2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
-#         eighth_beat = {2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
-#
-#         if beat.duration == 1:
-#             try:
-#                 return chord.split(*quarter_beat[chord.quarter_duration])
-#             except KeyError:
-#                 return [chord]
-#
-#         elif beat.duration == 0.5:
-#             try:
-#                 return chord.split(*eighth_beat[chord.quarter_duration])
-#             except KeyError:
-#                 return [chord]
-#
-#     def _substitute_ties(self, chord):
-#         if chord.is_tied_to_previous:
-#             if self.slur == 'tie':
-#                 chord.is_adjoinable = False
-#             else:
-#                 chord.remove_tie('stop')
-#                 if self.slur is not None:
-#                     chord.add_slur('stop')
-#
-#         if chord.is_tied_to_next:
-#             if self.slur == 'tie':
-#                 chord.is_adjoinable = False
-#             else:
-#                 chord.remove_tie('start')
-#                 if self.slur is not None:
-#                     chord.add_slur('start', line_type=self.slur)
-#
-#     def implement(self, chord, beat):
-#         output = self._get_split(chord, beat)
-#         output[0].add_child(Notehead('x'))
-#         self._substitute_ties(output[0])
-#         return output
 
 
 class FingerTremoloFlag(BeatwiseFlag):
@@ -197,25 +150,15 @@ class FingerTremoloFlag(BeatwiseFlag):
             val.quarter_duration = 0
         self._tremolo_chord = val
 
-    # def implement(self, chord, beat):
-    #
-    #     if self.tremolo_chord.midis[0].value < chord.midis[0].value:
-    #         chord.add_words('\uF415', font_family='bravura', font_size=16, relative_x=30, relative_y=-50)
-    #     else:
-    #         chord.add_words('\uF417', font_family='bravura', font_size=16, relative_x=30, relative_y=-50)
-    #     self.tremolo_chord.parent_voice = chord.parent_voice
-    #     self.tremolo_chord.parent_beat = chord.parent_beat
-    #
-    #     return [chord, self.tremolo_chord]
-
     def implement(self, chord, beat):
         # output = super().implement(chord, beat)
         # output.insert(1, self.tremolo_chord)
-        chord.set_tie_orientation('over')
         if self.tremolo_chord.midis[0].value < chord.midis[0].value:
             chord.add_words('\uF415', font_family='bravura', font_size=16, relative_x=30, relative_y=-50)
+            chord.set_tie_orientation('over')
         else:
             chord.add_words('\uF417', font_family='bravura', font_size=16, relative_x=30, relative_y=-50)
+            chord.set_tie_orientation('under')
         self.tremolo_chord.parent_voice = chord.parent_voice
         self.tremolo_chord.parent_beat = chord.parent_beat
 
