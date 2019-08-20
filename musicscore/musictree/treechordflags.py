@@ -211,7 +211,7 @@ class FingerTremoloFlag(BeatwiseFlag):
     def implement(self, chord, beat):
         # output = super().implement(chord, beat)
         # output.insert(1, self.tremolo_chord)
-        chord.tie_orientation = 'over'
+        chord.set_tie_orientation('over')
         if self.tremolo_chord.midis[0].value < chord.midis[0].value:
             chord.add_words('\uF415', font_family='bravura', font_size=16, relative_x=30, relative_y=-50)
         else:

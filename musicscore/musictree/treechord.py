@@ -183,6 +183,12 @@ class TreeChord(XMLTree):
             return True
         return False
 
+    def set_tie_orientation(self, orientation):
+        if self.is_tied_to_next:
+            tied = [t for t in self.get_children_by_type(Notations)[0].get_children_by_type(Tied) if t.type == 'start']
+            for t in tied:
+                t.orientation = orientation
+
     def to_rest(self):
         self.midis = [0]
         self.remove_tie('stop')

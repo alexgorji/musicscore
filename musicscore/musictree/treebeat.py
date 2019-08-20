@@ -1,7 +1,6 @@
 import math
 import warnings
 
-from musicscore.musictree.treechordflags import FingerTremoloFlag
 from quicktions import Fraction
 
 from musicscore.basic_functions import flatten
