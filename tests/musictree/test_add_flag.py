@@ -124,7 +124,7 @@ class Test(TestCase):
     def test_9(self):
         xml_path = path + "_test_9.xml"
         sf = SimpleFormat(midis=[60, 63], durations=[2, 5.33, 2.666])
-        sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
+        sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=57), mode='modern'))
         sf.to_stream_voice().add_to_score(self.score)
 
         self.score.write(xml_path)
@@ -136,7 +136,7 @@ class Test(TestCase):
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
 
         sf = SimpleFormat(midis=[60, 63], durations=[2, 5.33, 2.666])
-        sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=68)))
+        sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=68), mode='modern'))
         sf.to_stream_voice(2).add_to_score(self.score, first_measure=1)
 
         self.score.write(xml_path)
@@ -148,7 +148,7 @@ class Test(TestCase):
                           durations=[Fraction(3, 2), Fraction(3, 2), Fraction(1, 2), Fraction(1, 2), 1, Fraction(1, 2),
                                      Fraction(3, 2)])
         for ch in sf.chords:
-            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63])))
+            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='modern'))
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
 
         self.score.write(xml_path)
@@ -159,8 +159,63 @@ class Test(TestCase):
         sf = SimpleFormat(midis=[60, 60, 60, 60],
                           durations=[1, 1, 1, 1])
         for ch in sf.chords:
-            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63])))
+            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='modern'))
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
         self.score.accidental_mode = 'modern'
         self.score.write(xml_path)
         TestScore().assert_template(xml_path)
+
+    def test_13(self):
+        xml_path = path + "_test_13.xml"
+        sf = SimpleFormat(midis=[60, 60, 60, 60],
+                          durations=[1, 1, 1, 1])
+        for ch in sf.chords:
+            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='conventional'))
+        sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
+        self.score.accidental_mode = 'modern'
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_14(self):
+        xml_path = path + "_test_14.xml"
+        sf = SimpleFormat(midis=[60, 60, 60, 60],
+                          durations=[2, 2, 2, 2])
+        for ch in sf.chords:
+            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='conventional'))
+        sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
+        self.score.accidental_mode = 'modern'
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_15(self):
+        xml_path = path + "_test_15.xml"
+        sf = SimpleFormat(midis=[60],
+                          durations=[0.5])
+        for ch in sf.chords:
+            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='conventional'))
+        sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
+        self.score.accidental_mode = 'modern'
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_16(self):
+        xml_path = path + "_test_16.xml"
+        sf = SimpleFormat(midis=[60],
+                          durations=[1.5])
+        for ch in sf.chords:
+            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='conventional'))
+        sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
+        self.score.accidental_mode = 'modern'
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_17(self):
+        xml_path = path + "_test_17.xml"
+        sf = SimpleFormat(midis=[60, 61, 62, 63, 64],
+                          durations=[1.5, 1, 2, 2.5, 1])
+        for ch in sf.chords:
+            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[67]), mode='conventional'))
+        sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
+        self.score.accidental_mode = 'modern'
+        self.score.write(xml_path)
+        # TestScore().assert_template(xml_path)

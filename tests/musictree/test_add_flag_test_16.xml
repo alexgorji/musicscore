@@ -25,7 +25,7 @@
   <measure number="1">
     <part id="p1">
       <attributes>
-        <divisions>2</divisions>
+        <divisions>4</divisions>
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
@@ -36,7 +36,8 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
+        <tie type="start"/>
         <voice>1</voice>
         <type>quarter</type>
         <time-modification>
@@ -44,6 +45,7 @@
           <normal-notes>1</normal-notes>
         </time-modification>
         <notations>
+          <tied number="1" type="start"/>
           <ornaments>
             <tremolo type="start">3</tremolo>
           </ornaments>
@@ -55,7 +57,7 @@
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
         <accidental>flat</accidental>
@@ -70,11 +72,59 @@
         </notations>
       </note>
       <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+          <ornaments>
+            <tremolo type="start">3</tremolo>
+          </ornaments>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <notations>
+          <ornaments>
+            <tremolo type="stop">3</tremolo>
+          </ornaments>
+        </notations>
+      </note>
+      <note>
         <rest/>
-        <duration>6</duration>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+      </note>
+      <note>
+        <rest/>
+        <duration>8</duration>
         <voice>1</voice>
         <type>half</type>
-        <dot/>
       </note>
     </part>
   </measure>

@@ -49,32 +49,12 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>7</duration>
-        <tie type="start"/>
-        <voice>1</voice>
-        <type>eighth</type>
-        <beam number="1">end</beam>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
-        <lyric number="1">
-          <text>0.5</text>
-        </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>14</duration>
-        <tie type="stop"/>
+        <duration>21</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
+        <dot/>
         <lyric number="1">
-          <text>1.0</text>
+          <text>0.5</text>
         </lyric>
       </note>
       <note>

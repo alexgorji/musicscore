@@ -193,6 +193,10 @@ class TreeChord(XMLTree):
         self.midis = [0]
         self.remove_tie('stop')
         self.remove_tie('start')
+        for notation in self.get_children_by_type(Notations):
+            articulations = notation.get_children_by_type(Articulations)
+            for articulation in articulations:
+                notation.remove_child(articulation)
 
     @property
     def position_in_beat(self):
@@ -249,8 +253,8 @@ class TreeChord(XMLTree):
         except IndexError:
             return []
 
-    def add_finger_tremolo(self, chord, number=3):
-        self.finger_tremolo = FingerTremolo(chord, number)
+    # def add_finger_tremolo(self, chord, number=3):
+    #     self.finger_tremolo = FingerTremolo(chord, number)
 
     def add_flag(self, flag):
         if not isinstance(flag, TreeChordFlag):
@@ -298,7 +302,9 @@ class TreeChord(XMLTree):
         new_chord.parent_beat = self.parent_beat
 
         if self._flags is not None:
-            new_chord._flags = self._flags.copy()
+            new_chord._flags = []
+            for flag in self._flags:
+                new_chord._flags.append(flag.__deepcopy__())
 
         new_chord._offset = None
         new_chord.is_finger_tremolo = self.is_finger_tremolo
@@ -565,13 +571,14 @@ class TreeChord(XMLTree):
             if self.quarter_duration == 0:
                 value = 'eighth'
 
-            elif 'start' in tremoli_types or 'stop' in tremoli_types:
-                show_duration = self.quarter_duration.numerator * 2
+            elif ('start' in tremoli_types or 'stop' in tremoli_types):
+                show_duration = self.quarter_duration * 2
                 value = _types[(show_duration.numerator, show_duration.denominator)]
-                tm = TimeModification()
-                tm.add_child(ActualNotes(2))
-                tm.add_child(NormalNotes(1))
-                self.add_child(tm)
+                if not self.get_children_by_type(TimeModification):
+                    tm = TimeModification()
+                    tm.add_child(ActualNotes(2))
+                    tm.add_child(NormalNotes(1))
+                    self.add_child(tm)
             else:
                 value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
 
@@ -606,11 +613,16 @@ class TreeChord(XMLTree):
         for i in range(_dot):
             self.add_child(Dot())
 
-    def copy(self):
-        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+    # def copy(self):
+    #     new_chord = TreeChord(quarter_duration=self.quarter_duration)
+    #     new_chord.midis = self.midis
+    #     for child in self.get_children():
+    #         new_chord.add_child(child)
+
+    def tremolo_flag_copy(self):
+        new_chord = TreeChord()
         new_chord.midis = self.midis
-        for child in self.get_children():
-            new_chord.add_child(child)
+        return new_chord
 
     def transpose(self, interval):
         for midi in self.midis:
@@ -681,6 +693,11 @@ class TreeChord(XMLTree):
             new_chord.add_child(child)
 
         new_chord.is_adjoinable = self.is_adjoinable
+        if self._flags:
+            new_chord._flags = []
+            for flag in self._flags:
+                new_chord._flags.append(flag.__deepcopy__())
+
         new_chord._flags = self._flags
         new_chord.manual_type = self.manual_type
         new_chord.tie_orientation = self.tie_orientation

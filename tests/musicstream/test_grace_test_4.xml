@@ -36,27 +36,10 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
-        <tie type="start"/>
+        <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type>eighth</type>
-        <beam number="1">begin</beam>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
+        <dot/>
       </note>
       <note>
         <grace/>

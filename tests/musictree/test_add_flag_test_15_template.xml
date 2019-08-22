@@ -25,7 +25,7 @@
   <measure number="1">
     <part id="p1">
       <attributes>
-        <divisions>2</divisions>
+        <divisions>4</divisions>
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
@@ -38,11 +38,12 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <time-modification>
           <actual-notes>2</actual-notes>
           <normal-notes>1</normal-notes>
         </time-modification>
+        <beam number="1">begin</beam>
         <notations>
           <ornaments>
             <tremolo type="start">3</tremolo>
@@ -57,12 +58,13 @@
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <accidental>flat</accidental>
         <time-modification>
           <actual-notes>2</actual-notes>
           <normal-notes>1</normal-notes>
         </time-modification>
+        <beam number="1">continue</beam>
         <notations>
           <ornaments>
             <tremolo type="stop">3</tremolo>
@@ -71,7 +73,14 @@
       </note>
       <note>
         <rest/>
-        <duration>6</duration>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+      </note>
+      <note>
+        <rest/>
+        <duration>12</duration>
         <voice>1</voice>
         <type>half</type>
         <dot/>

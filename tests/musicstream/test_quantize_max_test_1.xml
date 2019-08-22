@@ -460,35 +460,16 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
-        <tie type="start"/>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>eighth</type>
-        <beam number="1">end</beam>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type>eighth</type>
-        <beam number="1">begin</beam>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
+        <type>quarter</type>
       </note>
       <note>
         <rest/>
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <beam number="1">end</beam>
+        <beam number="1"/>
       </note>
       <note>
         <rest/>
@@ -520,38 +501,19 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
-        <tie type="start"/>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>eighth</type>
-        <beam number="1">end</beam>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
+        <type>quarter</type>
         <lyric number="1">
           <text>10</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type>eighth</type>
-        <beam number="1">begin</beam>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
       </note>
       <note>
         <rest/>
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <beam number="1">end</beam>
+        <beam number="1"/>
       </note>
       <note>
         <rest/>

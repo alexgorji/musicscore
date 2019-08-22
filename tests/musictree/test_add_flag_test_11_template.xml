@@ -113,7 +113,7 @@
         <tie type="start"/>
         <voice>1</voice>
         <type>eighth</type>
-        <beam number="1">continue</beam>
+        <beam number="1">end</beam>
         <notations>
           <tied number="1" type="start" orientation="under"/>
         </notations>
@@ -179,7 +179,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <beam number="1">end</beam>
+        <beam number="1">begin</beam>
       </note>
       <note>
         <grace/>
@@ -209,7 +209,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <beam number="1"/>
+        <beam number="1">end</beam>
       </note>
       <note>
         <grace/>

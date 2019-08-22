@@ -470,8 +470,8 @@ class TreePartVoice(object):
         if not self._flags_implemented:
             raise Exception('implement_flags() first')
         if not self._ties_adjoined:
-            # notatables = [1, 1.5, 2, 3, 4, 6, 8]
-            notatables = [1, 2, 3, 4, 6, 8]
+            notatables = [1, 1.5, 2, 3, 4, 6, 8]
+            # notatables = [1, 2, 3, 4, 6, 8]
 
             # chord_iterator = iter(reversed(self.chords))
             chord_iterator = iter(self.chords)
@@ -493,8 +493,12 @@ class TreePartVoice(object):
 
                 def _chords_have_right_positions():
                     # print 'in _chords_have_right_positions', current_chord.name, next_chord.name
-                    condition = current_chord.offset % (
-                        1) == 0 and next_chord.offset % 1 == 0
+                    if current_chord.quarter_duration == 0.5:
+                        condition = current_chord.offset % (
+                            1) in [0, 0.5] and next_chord.offset % 1 == 0
+                    else:
+                        condition = current_chord.offset % (
+                            1) == 0 and next_chord.offset % 1 == 0
                     # _print_condition('_chords_have_right_positions', condition)
                     return condition
 

@@ -515,27 +515,7 @@ class TreeBeat(object):
                             output.extend(new_chords)
                 except IndexError:
                     output.append(chord)
-                    #     output.append(chord)
-                    # diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
-                    # if diff > 0:
-                    #     """
-                    #     HERE IS THE PROBLEM!
-                    #     """
-                    #     print('splitting')
-                    #     split = new_chords[1].split(new_chords[1].quarter_duration - diff, diff)
-                    #     next_beat = self.next
-                    #     if next_beat.chords == []:
-                    #         next_beat.add_chord(split[1])
-                    #         print(split[1].__dict__)
-                    #         split[1]._flags.remove(chord_flag)
-                    #     else:
-                    #         raise Exception()
-                #
-                #     output.extend(new_chords)
-                # except IndexError:
-                #     output.append(chord)
 
-            # output = [ch for ch in output if ch.quarter_duration != 0]
             self._chords = output
 
     def update_tuplets(self):

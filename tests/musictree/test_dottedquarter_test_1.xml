@@ -33,48 +33,29 @@
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <time-modification>
-          <actual-notes>2</actual-notes>
-          <normal-notes>1</normal-notes>
-        </time-modification>
-        <notations>
-          <ornaments>
-            <tremolo type="start">3</tremolo>
-          </ornaments>
-        </notations>
+        <dot/>
       </note>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>flat</accidental>
-        <time-modification>
-          <actual-notes>2</actual-notes>
-          <normal-notes>1</normal-notes>
-        </time-modification>
-        <notations>
-          <ornaments>
-            <tremolo type="stop">3</tremolo>
-          </ornaments>
-        </notations>
+        <dot/>
       </note>
       <note>
         <rest/>
-        <duration>6</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>half</type>
-        <dot/>
+        <type>quarter</type>
       </note>
     </part>
   </measure>

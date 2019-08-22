@@ -36,10 +36,10 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
-        <tie type="start"/>
+        <duration>3</duration>
         <voice>1</voice>
         <type>half</type>
+        <dot/>
         <time-modification>
           <actual-notes>2</actual-notes>
           <normal-notes>1</normal-notes>
@@ -48,7 +48,6 @@
           <ornaments>
             <tremolo type="start">3</tremolo>
           </ornaments>
-          <tied number="1" type="start"/>
         </notations>
       </note>
       <note>
@@ -56,27 +55,10 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type>eighth</type>
-        <beam number="1">begin</beam>
-        <notations>
-          <ornaments>
-            <tremolo type="single">3</tremolo>
-          </ornaments>
-          <tied number="1" type="stop"/>
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <tie type="start"/>
+        <duration>3</duration>
         <voice>1</voice>
         <type>half</type>
+        <dot/>
         <time-modification>
           <actual-notes>2</actual-notes>
           <normal-notes>1</normal-notes>
@@ -85,23 +67,6 @@
           <ornaments>
             <tremolo type="stop">3</tremolo>
           </ornaments>
-          <tied number="1" type="start"/>
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <ornaments>
-            <tremolo type="single">3</tremolo>
-          </ornaments>
-          <tied number="1" type="stop"/>
         </notations>
       </note>
       <note>

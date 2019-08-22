@@ -1,0 +1,18 @@
+from unittest import TestCase
+import os
+
+from musicscore.musicstream import SimpleFormat
+from musicscore.musictree.treescoretimewise import TreeScoreTimewise
+
+path = os.path.abspath(__file__).split('.')[0]
+
+
+class Test(TestCase):
+    def setUp(self) -> None:
+        self.score = TreeScoreTimewise()
+
+    def test_1(self):
+        sf = SimpleFormat(durations=[1.5, 1.5])
+        sf.to_stream_voice().add_to_score(self.score)
+        xml_path = path + '_test_1.xml'
+        self.score.write(xml_path)
