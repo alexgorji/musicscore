@@ -567,7 +567,8 @@ class TreePartVoice(object):
             raise Exception('adjoin_ties() first')
         # self._rests_adjoined = True
         if not self._rests_adjoined:
-            notatables = [1, 1.5, 2, 3, 4, 6, 8]
+            # notatables = [1, 1.5, 2, 3, 4, 6, 8]
+            notatables = [1, 2, 3, 4, 6, 8]
 
             chord_iterator = iter(self.chords)
 

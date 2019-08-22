@@ -34,40 +34,15 @@
       <note>
         <pitch>
           <step>C</step>
-          <octave>6</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>half</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>6</octave>
-        </pitch>
-        <duration>2</duration>
-        <tie type="start"/>
-        <voice>1</voice>
-        <type>half</type>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
-      </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
-      <note>
-        <pitch>
-          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <voice>2</voice>
+        <voice>1</voice>
         <type>half</type>
       </note>
       <direction placement="above">
         <direction-type>
-          <words relative-x="30" relative-y="-50" font-family="bravura" font-size="16"></words>
+          <words relative-x="30" relative-y="-50" font-family="bravura" font-size="16"></words>
         </direction-type>
       </direction>
       <note>
@@ -78,23 +53,21 @@
         </pitch>
         <duration>2</duration>
         <tie type="start"/>
-        <voice>2</voice>
+        <voice>1</voice>
         <type>half</type>
         <accidental>flat</accidental>
         <notations>
-          <tied number="1" type="start" orientation="under"/>
+          <tied number="1" type="start" orientation="over"/>
         </notations>
       </note>
       <note>
         <grace/>
         <pitch>
           <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
+          <octave>3</octave>
         </pitch>
-        <voice>2</voice>
+        <voice>1</voice>
         <type size="full">quarter</type>
-        <accidental>flat</accidental>
         <time-modification>
           <actual-notes>0</actual-notes>
           <normal-notes>1</normal-notes>
@@ -108,10 +81,16 @@
       <attributes>
         <divisions>3</divisions>
       </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words relative-x="30" relative-y="-50" font-family="bravura" font-size="16"></words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>6</octave>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
         </pitch>
         <duration>9</duration>
         <tie type="stop"/>
@@ -121,13 +100,33 @@
         <dot/>
         <notations>
           <tied number="1" type="stop"/>
-          <tied number="1" type="start"/>
+          <tied number="1" type="start" orientation="over"/>
         </notations>
       </note>
       <note>
+        <grace/>
         <pitch>
-          <step>C</step>
-          <octave>6</octave>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <voice>1</voice>
+        <type size="full">quarter</type>
+        <time-modification>
+          <actual-notes>0</actual-notes>
+          <normal-notes>1</normal-notes>
+        </time-modification>
+        <stem>none</stem>
+      </note>
+      <direction placement="above">
+        <direction-type>
+          <words relative-x="30" relative-y="-50" font-family="bravura" font-size="16"></words>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <tie type="stop"/>
@@ -147,9 +146,23 @@
         </notations>
       </note>
       <note>
+        <grace/>
         <pitch>
-          <step>C</step>
-          <octave>6</octave>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <voice>1</voice>
+        <type size="full">quarter</type>
+        <time-modification>
+          <actual-notes>0</actual-notes>
+          <normal-notes>1</normal-notes>
+        </time-modification>
+        <stem>none</stem>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
         </pitch>
         <duration>2</duration>
         <tie type="start"/>
@@ -167,111 +180,6 @@
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
       </note>
-      <backup>
-        <duration>12</duration>
-      </backup>
-      <direction placement="above">
-        <direction-type>
-          <words relative-x="30" relative-y="-50" font-family="bravura" font-size="16"></words>
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>9</duration>
-        <tie type="stop"/>
-        <tie type="start"/>
-        <voice>2</voice>
-        <type>half</type>
-        <dot/>
-        <notations>
-          <tied number="1" type="stop"/>
-          <tied number="1" type="start" orientation="under"/>
-        </notations>
-      </note>
-      <note>
-        <grace/>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <voice>2</voice>
-        <type size="full">quarter</type>
-        <accidental>flat</accidental>
-        <time-modification>
-          <actual-notes>0</actual-notes>
-          <normal-notes>1</normal-notes>
-        </time-modification>
-        <stem>none</stem>
-      </note>
-      <direction placement="above">
-        <direction-type>
-          <words relative-x="30" relative-y="-50" font-family="bravura" font-size="16"></words>
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <tie type="stop"/>
-        <voice>2</voice>
-        <type>eighth</type>
-        <time-modification>
-          <actual-notes>3</actual-notes>
-          <normal-notes>2</normal-notes>
-          <normal-type>eighth</normal-type>
-        </time-modification>
-        <beam number="1">begin</beam>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
-        <notations>
-          <tuplet number="1" type="start" bracket="yes" placement="below"/>
-        </notations>
-      </note>
-      <note>
-        <grace/>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <voice>2</voice>
-        <type size="full">quarter</type>
-        <time-modification>
-          <actual-notes>0</actual-notes>
-          <normal-notes>1</normal-notes>
-        </time-modification>
-        <stem>none</stem>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <tie type="start"/>
-        <voice>2</voice>
-        <type>quarter</type>
-        <time-modification>
-          <actual-notes>3</actual-notes>
-          <normal-notes>2</normal-notes>
-          <normal-type>eighth</normal-type>
-        </time-modification>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
-        <notations>
-          <tuplet number="1" type="stop" bracket="yes" placement="below"/>
-        </notations>
-      </note>
     </part>
   </measure>
   <measure number="3">
@@ -281,34 +189,12 @@
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>6</octave>
-        </pitch>
-        <duration>2</duration>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type>half</type>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
-      </note>
-      <note>
-        <rest/>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>half</type>
-      </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
-      <note>
-        <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
         <tie type="stop"/>
-        <voice>2</voice>
+        <voice>1</voice>
         <type>half</type>
         <notations>
           <tied number="1" type="stop"/>
@@ -317,7 +203,7 @@
       <note>
         <rest/>
         <duration>2</duration>
-        <voice>2</voice>
+        <voice>1</voice>
         <type>half</type>
       </note>
     </part>

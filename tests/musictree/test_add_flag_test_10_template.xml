@@ -233,7 +233,7 @@
           <tied number="1" type="stop"/>
         </notations>
         <notations>
-          <tuplet number="1" type="start" bracket="yes" placement="above"/>
+          <tuplet number="1" type="start" bracket="yes" placement="below"/>
         </notations>
       </note>
       <note>
@@ -269,7 +269,7 @@
           <tied number="1" type="start"/>
         </notations>
         <notations>
-          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+          <tuplet number="1" type="stop" bracket="yes" placement="below"/>
         </notations>
       </note>
     </part>

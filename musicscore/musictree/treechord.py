@@ -429,7 +429,14 @@ class TreeChord(XMLTree):
                 notations = self.notations
             except AttributeError:
                 notations = self.add_child(Notations())
-            notations.add_child(Tuplet(type=type, number=number, bracket='yes', placement='above'))
+
+            v = self.get_children_by_type(Voice)[0]
+            if int(v.value) % 2 == 0:
+                placement = 'below'
+            else:
+                placement = 'above'
+
+            notations.add_child(Tuplet(type=type, number=number, bracket='yes', placement=placement))
 
         tm = self.add_child(TimeModification())
         tm.add_child(ActualNotes(actual_notes))
