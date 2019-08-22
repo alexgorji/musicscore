@@ -5,6 +5,7 @@ import os
 from musicscore.musicstream import SimpleFormat, TreeChord
 from musicscore.musictree.treechordflags import PercussionFlag, XFlag, BeatwiseFlag, FingerTremoloFlag
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
+from quicktions import Fraction
 from tests.score_templates.xml_test_score import TestScore
 
 path = os.path.abspath(__file__).split('.')[0]
@@ -131,9 +132,35 @@ class Test(TestCase):
 
     def test_10(self):
         xml_path = path + "_test_10.xml"
-        sf = SimpleFormat(midis=[60, 63], durations=[2, 5.33, 2.666])
-        sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=67)))
-        sf.to_stream_voice().add_to_score(self.score)
+        sf = SimpleFormat(midis=[84, 84, 84], durations=[2, 5.33, 2.666])
+        sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
 
+        sf = SimpleFormat(midis=[60, 63], durations=[2, 5.33, 2.666])
+        sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=68)))
+        sf.to_stream_voice(2).add_to_score(self.score, first_measure=1)
+
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_11(self):
+        xml_path = path + "_test_11.xml"
+        sf = SimpleFormat(midis=[60, 60, 60, 60, 60, 60, 60],
+                          durations=[Fraction(3, 2), Fraction(3, 2), Fraction(1, 2), Fraction(1, 2), 1, Fraction(1, 2),
+                                     Fraction(3, 2)])
+        for ch in sf.chords:
+            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63])))
+        sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
+
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_12(self):
+        xml_path = path + "_test_12.xml"
+        sf = SimpleFormat(midis=[60, 60, 60, 60],
+                          durations=[1, 1, 1, 1])
+        for ch in sf.chords:
+            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63])))
+        sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
+        self.score.accidental_mode = 'modern'
         self.score.write(xml_path)
         TestScore().assert_template(xml_path)

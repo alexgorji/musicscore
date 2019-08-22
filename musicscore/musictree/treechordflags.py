@@ -1,5 +1,6 @@
 from musicscore.musicxml.attributes.position import Position
 from musicscore.musicxml.elements.note import Notehead, TimeModification, Stem
+from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes
 
 
@@ -161,5 +162,8 @@ class FingerTremoloFlag(BeatwiseFlag):
             chord.set_tie_orientation('under')
         self.tremolo_chord.parent_voice = chord.parent_voice
         self.tremolo_chord.parent_beat = chord.parent_beat
+        v = chord.get_children_by_type(Voice)[0]
+        if not self.tremolo_chord.get_children_by_type(Voice):
+            self.tremolo_chord.add_child(v)
 
         return [chord, self.tremolo_chord]

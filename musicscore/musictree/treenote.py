@@ -67,6 +67,7 @@ class TreeNote(Note):
         self._offset = None
         self._is_tied = False
         self.is_tied = is_tied
+        self.is_finger_tremolo = False
 
     @property
     def quarter_duration(self):

@@ -933,7 +933,7 @@ class TreePart(timewise.Part):
                         if isinstance(note.event, Rest):
                             break
                         # natural
-                        if not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
+                        elif not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
                             if note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type for t in
                                                                                                 note.get_children_by_type(
                                                                                                     Tie)]:
@@ -956,10 +956,12 @@ class TreePart(timewise.Part):
                                 _set_natural.remove(note.pitch.step.value)
                         # non natural
                         else:
-                            if is_in_repetition(xml_chord):
+                            if note.is_finger_tremolo:
+                                note.accidental.show = True
+                            elif is_in_repetition(xml_chord):
                                 break
-
-                            elif 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
+                            elif 'stop' not in [t.type for t in
+                                                note.get_children_by_type(Tie)]:
                                 note.accidental.show = True
 
                             _set_natural.add(note.pitch.step.value)
