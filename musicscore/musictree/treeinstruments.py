@@ -1,6 +1,8 @@
+from musicscore.musictree.midi import G, D, A, E, C, MidiNote
 from musicscore.musicxml.types.complextypes.midiinstrument import ComplexTypeMidiInstrument
 from musicscore.musicxml.types.complextypes.scorepart import PartName, PartAbbreviation
 import uuid
+
 
 class TreeInstrument(ComplexTypeMidiInstrument):
     _TAG = 'midi-instrument'
@@ -55,22 +57,59 @@ class TreeInstrument(ComplexTypeMidiInstrument):
         self._part_abbreviation.value = val
 
 
-class Violin(TreeInstrument):
+class String(object):
+    def __init__(self, number, tuning, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._tuning = None
+        self.number = number
+        self.tuning = tuning
+
+    @property
+    def tuning(self):
+        return self._tuning
+
+    @tuning.setter
+    def tuning(self, val):
+        if not isinstance(val, MidiNote):
+            raise TypeError('tuning.value must be of type MidiNote not{}'.format(type(val)))
+        self._tuning = val
+
+
+class StringInstrument(TreeInstrument):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.strings = {}
+
+
+class Violin(StringInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Violin', abbreviation='vln.', number=number, *args, **kwargs)
-        self.id = 'vln' + str(uuid.uuid4())
+        self.strings = {4: String(4, G(3)),
+                        3: String(3, D(4)),
+                        2: String(2, A(4)),
+                        1: String(1, E(5))
+                        }
 
 
-class Viola(TreeInstrument):
+class Viola(StringInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Viola', abbreviation='vla.', number=number, *args, **kwargs)
-        self.id = 'vla' + str(uuid.uuid4())
+        self.strings = {4: String(4, C(3)),
+                        3: String(3, G(3)),
+                        2: String(2, D(4)),
+                        1: String(1, A(4))
+                        }
 
 
-class Cello(TreeInstrument):
+class Cello(StringInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Cello', abbreviation='vc.', number=number, *args, **kwargs)
         self.id = 'vc' + str(uuid.uuid4())
+        self.strings = {4: String(4, C(2)),
+                        3: String(3, G(2)),
+                        2: String(2, D(3)),
+                        1: String(1, A(3))
+                        }
 
 
 class Accordion(TreeInstrument):

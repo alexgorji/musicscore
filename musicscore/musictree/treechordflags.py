@@ -186,9 +186,9 @@ class FingerTremoloFlag(BeatwiseFlag):
         self._tremolo_chord = val
 
     def _implement_conventional(self, chord, beat):
-        # self.slur = None
-        # output = super().implement(chord, beat)
-        output = [chord]
+        self.slur = None
+        output = super().implement(chord, beat)
+        # output = [chord]
 
         output[0].quarter_duration /= 2
         output[0].add_tremolo(type='start')

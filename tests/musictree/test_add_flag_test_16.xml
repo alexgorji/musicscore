@@ -37,7 +37,6 @@
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <tie type="start"/>
         <voice>1</voice>
         <type>quarter</type>
         <time-modification>
@@ -45,7 +44,6 @@
           <normal-notes>1</normal-notes>
         </time-modification>
         <notations>
-          <tied number="1" type="start"/>
           <ornaments>
             <tremolo type="start">3</tremolo>
           </ornaments>
@@ -77,7 +75,6 @@
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop"/>
         <voice>1</voice>
         <type>eighth</type>
         <time-modification>
@@ -86,7 +83,6 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tied number="1" type="stop"/>
           <ornaments>
             <tremolo type="start">3</tremolo>
           </ornaments>
