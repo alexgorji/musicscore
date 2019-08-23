@@ -134,7 +134,7 @@ class Midi(object):
         self._note_head = None
         self.value = value
         self.accidental_mode = accidental_mode
-        self.note_head = note_head
+        self.notehead = note_head
 
     @property
     def value(self):
@@ -161,14 +161,22 @@ class Midi(object):
         self._accidental_mode = value
 
     @property
-    def note_head(self):
+    def notehead(self):
         return self._note_head
 
-    @note_head.setter
-    def note_head(self, val):
+    @notehead.setter
+    def notehead(self, val):
         if val is not None and not isinstance(val, Notehead):
             val = Notehead(val)
         self._note_head = val
+
+    def add_notehead_object(self, val):
+        if not isinstance(val, Notehead):
+            raise TypeError()
+        self.notehead = val
+
+    def add_notehead(self, val, **kwargs):
+        self.add_notehead_object(Notehead(val, **kwargs))
 
     def get_pitch_name(self):
         if self.accidental_mode == 'standard':
@@ -209,7 +217,7 @@ class Midi(object):
         return Midi(value=self.value + val, accidental_mode=self.accidental_mode)
 
     def __deepcopy__(self, memodict={}):
-        output = Midi(self.value, self.accidental_mode, self.note_head)
+        output = Midi(self.value, self.accidental_mode, self.notehead)
         return output
 
 

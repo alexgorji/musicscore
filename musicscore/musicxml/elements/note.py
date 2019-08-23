@@ -8,9 +8,9 @@ from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.position import XPosition
 from musicscore.musicxml.attributes.printout import Printout
 from musicscore.musicxml.attributes.printstyle import PrintStyle
-from musicscore.musicxml.groups.common import EditorialVoice, Staff
 from musicscore.musicxml.elements.fullnote import FullNote
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.groups.common import EditorialVoice, Staff
 from musicscore.musicxml.types.complextypes.beam import ComplexTypeBeam
 from musicscore.musicxml.types.complextypes.complextype import EmptyPlacement, ComplexType
 from musicscore.musicxml.types.complextypes.lyric import ComplexTypeLyric
@@ -20,7 +20,7 @@ from musicscore.musicxml.types.complextypes.notetype import ComplexTypeNoteType
 from musicscore.musicxml.types.complextypes.stem import ComplexTypeStem
 from musicscore.musicxml.types.complextypes.tie import ComplexTypeTie
 from musicscore.musicxml.types.complextypes.timemodification import ComplexTypeTimeModification
-from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeNoteTypeValue, TypeAccidentalValue
+from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeAccidentalValue
 
 
 class Grace(XMLElement, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):

@@ -143,6 +143,12 @@ class TreeChord(XMLTree):
 
         self._midis.append(val)
 
+    def add_harmonic(self, interval):
+        if len(self.midis) != 1:
+            raise Exception('harmonic can only be added to chords with one midi')
+        self.add_midi(self.midis[0].value + interval)
+        self.midis[-1].add_notehead('diamond', filled='no')
+
     @property
     def is_adjoinable(self):
         return self._is_adjoinable
@@ -369,8 +375,8 @@ class TreeChord(XMLTree):
                 note.relative_x = self.relative_x
 
             # print(midi.note_head)
-            if midi.note_head:
-                note.add_child(midi.note_head)
+            if midi.notehead:
+                note.add_child(midi.notehead)
             for child in self.get_children():
                 if isinstance(child, Lyric) and index != 0:
                     pass
