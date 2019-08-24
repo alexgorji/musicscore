@@ -271,7 +271,14 @@ class ComplexTypeDynamics(ComplexType, PrintStyleAlign, Placement, TextDecoratio
         max_occurrence=None
     )
 
-
     def __init__(self, tag, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
         self.placement = 'below'
+
+
+class Dynamics(ComplexTypeDynamics):
+    _TAG = 'dynamics'
+    """"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)

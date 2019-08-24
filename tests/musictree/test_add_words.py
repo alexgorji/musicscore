@@ -2,7 +2,9 @@ from unittest import TestCase
 import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat
+from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
+from musicscore.musicxml.elements.note import Duration
 from tests.score_templates.xml_test_score import TestScore
 
 path = os.path.abspath(__file__).split('.')[0]
@@ -11,6 +13,13 @@ path = os.path.abspath(__file__).split('.')[0]
 class Test(TestCase):
     def setUp(self) -> None:
         self.score = TreeScoreTimewise()
+
+    def test_0(self):
+        ch = TreeChord()
+        ch.add_words('bla')
+        note = ch._notes[0]
+        note.add_child(Duration(1))
+        print(note.to_string())
 
     def test_1(self):
         sf = SimpleFormat(durations=[1, 1])

@@ -5,7 +5,7 @@ from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.articulations import ComplexTypeArticulations
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
-from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics
+from musicscore.musicxml.types.complextypes.dynamics import Dynamics
 from musicscore.musicxml.types.complextypes.ornaments import ComplexTypeOrnaments
 from musicscore.musicxml.types.complextypes.slur import ComplexTypeSlur
 from musicscore.musicxml.types.complextypes.technical import ComplexTypeTechnical
@@ -70,14 +70,6 @@ class Technical(ComplexTypeTechnical):
 class Articulations(ComplexTypeArticulations):
     """"""
     _TAG = 'articulations'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
-
-
-class Dynamics(ComplexTypeDynamics):
-    _TAG = 'dynamics'
-    """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)

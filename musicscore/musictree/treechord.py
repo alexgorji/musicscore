@@ -18,9 +18,9 @@ from musicscore.musicxml.types.complextypes.articulations import Accent, StrongA
 from musicscore.musicxml.types.complextypes.direction import DirectionType
 from musicscore.musicxml.types.complextypes.directiontype import Words, Bracket
 from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, \
-    FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N
+    FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N, Dynamics
 from musicscore.musicxml.types.complextypes.lyric import Text
-from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Dynamics, Technical, \
+from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Technical, \
     Articulations, Slur
 from musicscore.musicxml.types.complextypes.ornaments import Tremolo
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
@@ -374,14 +374,13 @@ class TreeChord(XMLTree):
             if self.relative_x is not None:
                 note.relative_x = self.relative_x
 
-            # print(midi.note_head)
             if midi.notehead:
                 note.add_child(midi.notehead)
+
             for child in self.get_children():
                 if isinstance(child, Lyric) and index != 0:
                     pass
-                # elif isinstance(child, Notehead) and index != 0:
-                #     pass
+
                 elif isinstance(child, Notations) and index != 0:
                     grandchildren = child.get_children()
                     for grandchild in grandchildren:
@@ -652,7 +651,7 @@ class TreeChord(XMLTree):
         lyric.add_child(Text(str(text)))
         return lyric
 
-    def add_dynamics(self, value):
+    def add_dynamics(self, value, placement='below', **kwargs):
         dynamic_classes = [P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, FFFFFF, MP, MF, SF, SFP, SFPP, FP,
                            RF, RFZ, SFZ, SFFZ, FZ, N, PF, SFZP]
 
@@ -662,12 +661,9 @@ class TreeChord(XMLTree):
         except ValueError:
             raise ValueError('wrong dynamics value')
 
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-        except IndexError:
-            notations = self.add_child(Notations())
-
-        dynamics = notations.add_child(Dynamics())
+        direction = self.add_child(Direction(placement=placement))
+        direction_type = direction.add_child(DirectionType())
+        dynamics = direction_type.add_child(Dynamics(**kwargs))
 
         dynamics.add_child(dynamic_classes[index]())
 

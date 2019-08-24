@@ -1,4 +1,4 @@
-from musicscore.musictree.midi import G, D, A, E, C, MidiNote
+from musicscore.musictree.midi import G, D, A, E, C, MidiNote, Midi, B
 from musicscore.musicxml.types.complextypes.midiinstrument import ComplexTypeMidiInstrument
 from musicscore.musicxml.types.complextypes.scorepart import PartName, PartAbbreviation
 import uuid
@@ -104,7 +104,6 @@ class Viola(StringInstrument):
 class Cello(StringInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Cello', abbreviation='vc.', number=number, *args, **kwargs)
-        self.id = 'vc' + str(uuid.uuid4())
         self.strings = {4: String(4, C(2)),
                         3: String(3, G(2)),
                         2: String(2, D(3)),
@@ -115,10 +114,16 @@ class Cello(StringInstrument):
 class Accordion(TreeInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Accordion', abbreviation='acc.', number=number, *args, **kwargs)
-        self.id = 'acc' + str(uuid.uuid4())
+
+
+class TamTam(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name='Tam-tam', abbreviation='Tam-t.', number=number, *args, **kwargs)
+        self.midi = B(3)
+        self.midi.notehead = 'x'
 
 
 class Percussion(TreeInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Percussion', abbreviation='perc.', number=number, *args, **kwargs)
-        self.id = 'perc' + str(uuid.uuid4())
+        self.tamtam = TamTam()

@@ -4,7 +4,7 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.bracket import ComplexTypeBracket
 from musicscore.musicxml.types.complextypes.coda import ComplexTypeCoda
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, EmptyPrintStyleAlignId
-from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics
+from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics, Dynamics
 from musicscore.musicxml.types.complextypes.formattedsymbolid import ComplexTypeFormattedSymbolId
 from musicscore.musicxml.types.complextypes.formattedtextid import ComplexTypeFormattedTextId
 from musicscore.musicxml.types.complextypes.metronome import ComplexTypeMetronome
@@ -64,14 +64,6 @@ class Wedge(ComplexTypeWedge):
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)
-
-
-class Dynamics(ComplexTypeDynamics):
-    _TAG = 'dynamics'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
-        # NotImplementedError()
 
 
 class Dashes(XMLElement):
