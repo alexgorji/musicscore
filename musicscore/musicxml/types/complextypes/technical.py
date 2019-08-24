@@ -32,7 +32,7 @@ class DownBow(EmptyPlacement):
     The down-bow element represents the symbol that is used both for down-bowing on bowed instruments, and down-stroke
     on plucked instruments.
     """
-    _TAG = 'up-bow'
+    _TAG = 'down-bow'
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)
