@@ -669,6 +669,21 @@ class TreeChord(XMLTree):
 
         return dynamics
 
+    def add_action_dynamics(self, value, **kwargs):
+        dynamics = self.add_dynamics(value, **kwargs)
+        direction = dynamics.up.up
+        direction_type = direction.add_child(DirectionType())
+
+        direction_type.add_child(Words(value='"', font_size=20))
+        for child in direction.get_children():
+            if child.get_children_by_type(Dynamics):
+                direction.remove_child(child)
+
+        direction_type = direction.add_child(DirectionType())
+        direction_type.add_child(dynamics)
+        direction_type = direction.add_child(DirectionType())
+        direction_type.add_child(Words(value=' "', font_size=20))
+
     def add_bracket(self, type, line_end, placement='above', **kwargs):
         d = self.add_child(Direction(placement=placement))
         dt = d.add_child(DirectionType())

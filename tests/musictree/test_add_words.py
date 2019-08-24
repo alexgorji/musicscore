@@ -14,13 +14,6 @@ class Test(TestCase):
     def setUp(self) -> None:
         self.score = TreeScoreTimewise()
 
-    def test_0(self):
-        ch = TreeChord()
-        ch.add_words('bla')
-        note = ch._notes[0]
-        note.add_child(Duration(1))
-        print(note.to_string())
-
     def test_1(self):
         sf = SimpleFormat(durations=[1, 1])
 

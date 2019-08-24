@@ -33,14 +33,15 @@
       </attributes>
       <direction placement="below">
         <direction-type>
+          <words font-size="20">"</words>
+        </direction-type>
+        <direction-type>
           <dynamics placement="below">
             <ff/>
           </dynamics>
         </direction-type>
-      </direction>
-      <direction placement="above">
         <direction-type>
-          <words>"</words>
+          <words font-size="20"> "</words>
         </direction-type>
       </direction>
       <note>

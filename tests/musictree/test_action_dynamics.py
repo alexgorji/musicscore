@@ -13,9 +13,9 @@ class Test(TestCase):
 
     def test_1(self):
         sf = SimpleFormat(durations=[2, 2])
-        sf.chords[0].add_dynamics('ff')
-        sf.chords[0].add_words('\"')
+        sf.chords[0].add_action_dynamics('ff')
         sf.chords[1].add_dynamics('ff')
+
         sf.to_stream_voice().add_to_score(self.score)
         xml_path = path + '_test_1.xml'
         self.score.write(xml_path)
