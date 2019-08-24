@@ -992,6 +992,7 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.split_not_notatable()
 
+
     def implement_flags(self):
         for voice in self.voices.values():
             voice.implement_flags()

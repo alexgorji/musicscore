@@ -13,7 +13,7 @@ from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWord
 from musicscore.musicxml.types.complextypes.defaults import Appearance, WordFont
 from musicscore.musicxml.types.complextypes.encoding import Supports
 from musicscore.musicxml.types.complextypes.identification import Encoding
-from musicscore.musicxml.types.complextypes.scorepart import PartName, Identification, PartAbbreviation
+from musicscore.musicxml.types.complextypes.scorepart import Identification
 from musicscore.musicxml.elements.barline import Barline, BarStyle
 
 
@@ -437,6 +437,14 @@ class TreeScoreTimewise(timewise.Score):
             CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
                         valign=valign, **kwargs))
 
+    def remove_title(self):
+        title_credit = [c for c in self.get_children_by_type(Credit) if
+                        c.get_children_by_type(CreditType)[0].value == 'title']
+        try:
+            self.remove_child(title_credit[0])
+        except IndexError:
+            pass
+
     def add_subtitle(self, text, page=None, font_size=None, default_x=None, default_y=None, justify=None, valign=None,
                      **kwargs):
         if not page:
@@ -457,6 +465,14 @@ class TreeScoreTimewise(timewise.Score):
         self._subtitle = c.add_child(
             CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
                         valign=valign, **kwargs))
+
+    def remove_subtitle(self):
+        subtitle_credit = [c for c in self.get_children_by_type(Credit) if
+                           c.get_children_by_type(CreditType)[0].value == 'subtitle']
+        try:
+            self.remove_child(subtitle_credit[0])
+        except IndexError:
+            pass
 
     def add_composer(self, text, page=None, font_size=None, default_x=None, default_y=None, justify=None, valign=None,
                      **kwargs):

@@ -25,37 +25,65 @@
   <measure number="1">
     <part id="p1">
       <attributes>
-        <divisions>2</divisions>
+        <divisions>10</divisions>
         <time>
-          <beats>5</beats>
-          <beat-type>8</beat-type>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
         </time>
       </attributes>
       <note>
         <pitch>
-          <step>B</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
-        <tie type="start"/>
+        <duration>5</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+      </note>
+      <note>
+        <rest/>
+        <duration>5</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+      </note>
+      <note>
+        <rest/>
+        <duration>20</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">begin</beam>
         <notations>
-          <tied number="1" type="start"/>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
       <note>
         <pitch>
-          <step>B</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
-        <tie type="stop"/>
+        <duration>8</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <dot/>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
         <notations>
-          <tied number="1" type="stop"/>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
       </note>
     </part>

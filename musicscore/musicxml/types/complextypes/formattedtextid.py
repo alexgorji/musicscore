@@ -10,5 +10,5 @@ class ComplexTypeFormattedTextId(ComplexType, String, TextFormatting, OptionalUn
 
     """
 
-    def __init__(self, tag, value=None, *args, **kwargs):
+    def __init__(self, tag, value, *args, **kwargs):
         super().__init__(tag=tag, value=value, *args, **kwargs)

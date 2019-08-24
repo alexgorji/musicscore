@@ -500,7 +500,7 @@ class TreeChord(XMLTree):
                          'strong-accent': StrongAccent(**add_type(kwargs)),
                          'staccato': Staccato(**kwargs),
                          'tenuto': Tenuto(**kwargs),
-                         'detached-lagato': DetachedLegato(**kwargs),
+                         'detached-legato': DetachedLegato(**kwargs),
                          'staccatissimo': Staccatissimo(**kwargs),
                          'spiccato': Spiccato(**kwargs),
                          'scoop': Scoop(**kwargs),

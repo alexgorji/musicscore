@@ -225,13 +225,8 @@ class Tree(object):
             self._up = None
 
     def traverse_leaves(self):
-        # for node in self.traverse():
-        #     if node.is_leaf:
-        #         yield node
         for leaf in flatten(self.get_leaves()):
             yield leaf
-        # for leaf in self.get_flatten_leaves():
-        #     yield leaf
 
     def find_leaf(self, condition):
         for leaf in self.traverse_leaves():
