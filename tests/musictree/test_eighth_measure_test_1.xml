@@ -25,53 +25,38 @@
   <measure number="1">
     <part id="p1">
       <attributes>
-        <divisions>1</divisions>
+        <divisions>2</divisions>
         <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
+          <beats>5</beats>
+          <beat-type>8</beat-type>
         </time>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
+        <tie type="start"/>
         <voice>1</voice>
-        <type>half</type>
-        <time-modification>
-          <actual-notes>2</actual-notes>
-          <normal-notes>1</normal-notes>
-        </time-modification>
+        <type>quarter</type>
         <notations>
-          <ornaments>
-            <tremolo type="start">3</tremolo>
-          </ornaments>
+          <tied number="1" type="start"/>
         </notations>
       </note>
       <note>
         <pitch>
-          <step>G</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>3</duration>
+        <tie type="stop"/>
         <voice>1</voice>
-        <type>half</type>
-        <time-modification>
-          <actual-notes>2</actual-notes>
-          <normal-notes>1</normal-notes>
-        </time-modification>
+        <type>quarter</type>
+        <dot/>
         <notations>
-          <ornaments>
-            <tremolo type="stop">3</tremolo>
-          </ornaments>
+          <tied number="1" type="stop"/>
         </notations>
-      </note>
-      <note>
-        <rest/>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>half</type>
       </note>
     </part>
   </measure>
