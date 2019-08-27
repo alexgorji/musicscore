@@ -14,7 +14,7 @@ from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance, 
 class TreePageStyle(object):
     sizes = {'A4': (210, 297), 'A3': (297, 420)}
 
-    def __init__(self, score, scale=1, size='A4', format='portrait', left_margin=111, right_margin=55, top_margin=83,
+    def __init__(self, score, scale=1, size='A4', orientation='portrait', left_margin=111, right_margin=55, top_margin=83,
                  bottom_margin=83, system_distance=None, system_left_margin=None, system_right_margin=None,
                  top_system_distance=None, staff_distance=None):
 
@@ -23,7 +23,7 @@ class TreePageStyle(object):
         self.tenth = 40
 
         self._size = None
-        self._format = 'portrait'
+        self._orientation = 'portrait'
 
         self._defaults = None
         self._scaling = None
@@ -49,7 +49,7 @@ class TreePageStyle(object):
 
         self.scale = scale
         self.size = size
-        self.format = format
+        self.orientation = orientation
 
         self.left_margin = left_margin
         self.right_margin = right_margin
@@ -153,11 +153,11 @@ class TreePageStyle(object):
             self._page_width = self._page_layout.add_child(PageWidth(value))
 
     @property
-    def format(self):
-        return self._format
+    def orientation(self):
+        return self._orientation
 
-    @format.setter
-    def format(self, value):
+    @orientation.setter
+    def orientation(self, value):
         if value == 'landscape':
             self.page_height, self.page_width = self.size[1], self.size[0]
         elif value == 'portrait':
@@ -165,7 +165,7 @@ class TreePageStyle(object):
         else:
             raise ValueError()
 
-        self._format = value
+        self._orientation = value
 
     @property
     def left_margin(self):
@@ -296,7 +296,7 @@ class TreePageStyle(object):
     @size.setter
     def size(self, value):
         self._size = value
-        self.format = self._format
+        self.orientation = self._orientation
         # self.page_height = self.size[0]
         # self.page_width = self.size[1]
 

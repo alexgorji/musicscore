@@ -25,38 +25,44 @@
   <measure number="1">
     <part id="p1">
       <attributes>
-        <divisions>2</divisions>
+        <divisions>1</divisions>
         <time>
-          <beats>5</beats>
-          <beat-type>8</beat-type>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
         </time>
       </attributes>
       <note>
         <pitch>
-          <step>B</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
-        <tie type="start"/>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
         <notations>
-          <tied number="1" type="start"/>
+          <ornaments>
+            <tremolo type="start">3</tremolo>
+          </ornaments>
         </notations>
       </note>
       <note>
         <pitch>
-          <step>B</step>
+          <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
-        <tie type="stop"/>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
-        <dot/>
         <notations>
-          <tied number="1" type="stop"/>
+          <ornaments>
+            <tremolo type="stop">3</tremolo>
+          </ornaments>
         </notations>
+      </note>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
       </note>
     </part>
   </measure>

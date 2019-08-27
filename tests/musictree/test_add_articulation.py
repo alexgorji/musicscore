@@ -28,7 +28,7 @@ class Test(TestCase):
 
     def test_2(self):
         xml_path = path + '_test_2.xml'
-        articulations = ['accent', 'strong-accent', 'staccato', 'tenuto', 'detached-lagato', 'staccatissimo',
+        articulations = ['accent', 'strong-accent', 'staccato', 'tenuto', 'detached-legato', 'staccatissimo',
                          'spiccato', 'scoop', 'plop', 'doit', 'falloff', 'breath-mark', 'caesura', 'stress', 'unstress']
         durations = len(articulations) * [1.25]
         sf = SimpleFormat(durations=durations)

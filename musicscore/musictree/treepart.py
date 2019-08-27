@@ -469,6 +469,7 @@ class TreePartVoice(object):
     def adjoin_ties(self):
         if not self._flags_implemented:
             raise Exception('implement_flags() first')
+
         if not self._ties_adjoined:
             notatables = [1, 1.5, 2, 3, 4, 6, 8]
             # notatables = [1, 2, 3, 4, 6, 8]
@@ -991,6 +992,7 @@ class TreePart(timewise.Part):
     def split_not_notatable(self):
         for voice in self.voices.values():
             voice.split_not_notatable()
+
 
     def implement_flags(self):
         for voice in self.voices.values():

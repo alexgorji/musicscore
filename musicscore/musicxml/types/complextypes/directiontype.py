@@ -43,8 +43,8 @@ class Words(ComplexTypeFormattedTextId):
     """
     _TAG = 'words'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Symbol(ComplexTypeFormattedSymbolId):

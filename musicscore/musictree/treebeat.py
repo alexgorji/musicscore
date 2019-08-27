@@ -247,7 +247,10 @@ class TreeBeat(object):
 
             if chord.quarter_duration == Fraction(5, 2):
                 if chord.position_in_beat == 0:
+                    split = chord.split(2, 3)
+                elif chord.position_in_beat == 0.5:
                     split = chord.split(3, 2)
+
             if chord.quarter_duration == Fraction(7, 2):
                 if chord.position_in_beat == 0:
                     split = chord.split(4, 3)
@@ -499,6 +502,7 @@ class TreeBeat(object):
                     new_chords = chord_flag.implement(chord, self)
                     check_implement_output(new_chords)
                     diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
+                    print(diff)
                     if len(new_chords) == 1:
                         output.extend(new_chords)
                     else:
@@ -517,6 +521,7 @@ class TreeBeat(object):
                     output.append(chord)
 
             self._chords = output
+            self.split_not_notatable()
 
     def update_tuplets(self):
         tuplet_divisions = [3, 5, 6, 7, 9, 10]
