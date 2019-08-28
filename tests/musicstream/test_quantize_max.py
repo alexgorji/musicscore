@@ -110,6 +110,17 @@ class Test(TestCase):
         result_path = path + '_test_3'
 
         self.score.write(path=result_path)
+        TestScore().assert_template(result_path=result_path)
+
+    def test_4(self):
+        sf = SimpleFormat(
+            durations=[Fraction(3, 10), Fraction(3, 10), Fraction(3, 10), Fraction(3, 10), Fraction(3, 10),
+                       Fraction(3, 2), Fraction(1, 2), Fraction(1, 3)])
+        xml_path = path + '_test_4.xml'
+        sf.to_stream_voice().add_to_score(self.score)
+        self.score.write(xml_path)
+        TestScore().assert_template(result_path=xml_path)
+
 
     # def test_4(self):
     #

@@ -538,6 +538,7 @@ class TreeBeat(object):
                 else:
                     non_grace_chords[i].add_tuplet('continue')
 
+
     def substitute_sextoles(self):
         six_divisions = (
             [Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6)],

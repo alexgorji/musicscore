@@ -526,8 +526,11 @@ class TreePartVoice(object):
                 def _chords_have_right_positions():
                     # print 'in _chords_have_right_positions', current_chord.name, next_chord.name
                     if current_chord.quarter_duration == 0.5:
-                        condition = current_chord.offset % (
-                            1) in [0, 0.5] and next_chord.offset % 1 == 0
+                        if current_chord.parent_beat.best_div in [6, 12]:
+                            condition = False
+                        else:
+                            condition = current_chord.offset % (
+                                1) in [0, 0.5] and next_chord.offset % 1 == 0
                     else:
                         condition = current_chord.offset % (
                             1) == 0 and next_chord.offset % 1 == 0
