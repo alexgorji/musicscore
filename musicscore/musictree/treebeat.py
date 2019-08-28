@@ -1,6 +1,7 @@
 import math
 import warnings
 
+from musicscore.musictree.treechordflags import TreeChordFlag
 from quicktions import Fraction
 
 from musicscore.basic_functions import flatten
@@ -491,7 +492,8 @@ class TreeBeat(object):
                 if not isinstance(ch, TreeChord):
                     raise Exception('output of implement can only be a list of chords')
 
-        flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords])])
+        flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
+                          isinstance(flag, TreeChordFlag)])
 
         while flag_types:
             flag_type = flag_types.pop()
@@ -502,7 +504,6 @@ class TreeBeat(object):
                     new_chords = chord_flag.implement(chord, self)
                     check_implement_output(new_chords)
                     diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
-                    print(diff)
                     if len(new_chords) == 1:
                         output.extend(new_chords)
                     else:

@@ -1,6 +1,7 @@
 import warnings
 
 from lxml import etree as et
+from musicscore.musictree.treechordflags2 import TreeChordFlag2
 from quicktions import Fraction
 
 from musicscore.basic_functions import lcm, substitute, flatten
@@ -112,6 +113,7 @@ class TreePartVoice(object):
         self._sextoles_substituted = False
         self._types_updated = False
         self._dots_updated = False
+        self._flags2_implemented = False
         self.parent_part = None
         self._xml_chords = None
 
@@ -208,6 +210,9 @@ class TreePartVoice(object):
             self.chords.append(chord)
             chord.parent_voice = self
             chord.add_child(Voice(str(self.number)))
+
+    def remove_chords(self):
+        self._chords = []
 
     @property
     def remaining_duration(self):
@@ -460,7 +465,7 @@ class TreePartVoice(object):
         if not self._not_notatable_split:
             raise Exception('split_not_notatable() first')
         if not self._flags_implemented:
-            self._chords = []
+            self.remove_chords()
             for beat in self.beats:
                 beat.implement_flags()
                 self._chords.extend(beat.chords)
@@ -689,6 +694,46 @@ class TreePartVoice(object):
             self._dots_updated = True
         # else:
         #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+
+    def implement_flags_2(self):
+        def check_implement_output(chords):
+            if not isinstance(chords, list):
+                raise Exception('output of implement can only be a list of chords')
+
+            # if len(chords) not in [1, 2]:
+            #     raise Exception('output of implement can have 1 or 2 chords')
+
+            for ch in chords:
+                if not isinstance(ch, TreeChord):
+                    raise Exception('output of implement can only be a list of chords')
+
+        if not self._flags2_implemented:
+            flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
+                              isinstance(flag, TreeChordFlag2)])
+
+            while flag_types:
+                flag_type = flag_types.pop()
+                output = []
+                for chord in self.chords:
+                    try:
+                        chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
+                        new_chords = chord_flag.implement(chord)
+                        check_implement_output(new_chords)
+                        output.extend(new_chords)
+
+                    except IndexError:
+                        output.append(chord)
+
+                self.remove_chords()
+                for chord in output:
+                    try:
+                        v = chord.get_children_by_type(Voice)[0]
+                        chord.remove_child(v)
+                    except IndexError:
+                        pass
+                    if self.add_chord(chord) is not None:
+                        raise Exception()
+        self._flags2_implemented = True
 
 
 class TreePart(timewise.Part):
@@ -993,7 +1038,6 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.split_not_notatable()
 
-
     def implement_flags(self):
         for voice in self.voices.values():
             voice.implement_flags()
@@ -1021,6 +1065,10 @@ class TreePart(timewise.Part):
     def update_dots(self):
         for voice in self.voices.values():
             voice.update_dots()
+
+    def implement_flags_2(self):
+        for voice in self.voices.values():
+            voice.implement_flags_2()
 
     def update_durations(self):
         for note in self.get_children_by_type(TreeNote):
@@ -1059,6 +1107,8 @@ class TreePart(timewise.Part):
             self.update_tuplets()
 
             self.substitute_sextoles()
+
+            self.implement_flags_2()
 
             self.update_types()
 

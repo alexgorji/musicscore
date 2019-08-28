@@ -1,3 +1,4 @@
+from musicscore.musictree.treechordflags2 import TreeChordFlag2
 from musicscore.musicxml.attributes.position import XPosition
 from quicktions import Fraction
 
@@ -263,8 +264,8 @@ class TreeChord(XMLTree):
     #     self.finger_tremolo = FingerTremolo(chord, number)
 
     def add_flag(self, flag):
-        if not isinstance(flag, TreeChordFlag):
-            raise TypeError('flag must be of type TreeChordFlag not {}'.format(flag.__class__))
+        if not isinstance(flag, TreeChordFlag) and not isinstance(flag, TreeChordFlag2):
+            raise TypeError('flag must be of type TreeChordFlag or TreeChordFlag2 not {}'.format(flag.__class__))
         if self._flags is None:
             self._flags = set()
         self._flags.add(flag)
