@@ -62,8 +62,8 @@ class Symbol(ComplexTypeFormattedSymbolId):
 class Wedge(ComplexTypeWedge):
     _TAG = 'wedge'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)
 
 
 class Dashes(XMLElement):

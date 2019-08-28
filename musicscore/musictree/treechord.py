@@ -17,12 +17,12 @@ from musicscore.musicxml.elements.xml_element import XMLTree
 from musicscore.musicxml.types.complextypes.articulations import Accent, StrongAccent, DetachedLegato, Tenuto, Spiccato, \
     Staccato, Staccatissimo, BreathMark, Caesura, Stress, Unstress, SoftAccent, Plop, Scoop, Doit, Falloff
 from musicscore.musicxml.types.complextypes.direction import DirectionType
-from musicscore.musicxml.types.complextypes.directiontype import Words, Bracket
+from musicscore.musicxml.types.complextypes.directiontype import Words, Bracket, Wedge
 from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, \
     FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N, Dynamics
 from musicscore.musicxml.types.complextypes.lyric import Text
 from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Technical, \
-    Articulations, Slur
+    Articulations, Slur, Fermata
 from musicscore.musicxml.types.complextypes.ornaments import Tremolo
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
@@ -669,6 +669,37 @@ class TreeChord(XMLTree):
         dynamics.add_child(dynamic_classes[index]())
 
         return dynamics
+
+    @property
+    def dynamics(self):
+        directions = self.get_children_by_type(Direction)
+        for direction in directions:
+            direction_types = direction.get_children_by_type(DirectionType)
+            for direction_type in direction_types:
+                for child in direction_type.get_children():
+                    if isinstance(child, Dynamics):
+                        return child.get_children()[0].to_string()[1:-3]
+        return None
+
+    def add_wedge(self, value, placement='below', **kwargs):
+        wedge_object = Wedge(value, **kwargs)
+
+        direction = self.add_child(Direction(placement=placement))
+        direction_type = direction.add_child(DirectionType())
+        wedge = direction_type.add_child(wedge_object)
+        #
+        # dynamics.add_child(dynamic_classes[index]())
+
+        return wedge
+
+    def add_fermata(self, value='normal', **kwargs):
+        fermata = Fermata(value, **kwargs)
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(fermata)
 
     def add_action_dynamics(self, value, **kwargs):
         dynamics = self.add_dynamics(value, **kwargs)

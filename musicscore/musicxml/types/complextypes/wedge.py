@@ -28,9 +28,9 @@ class ComplexTypeWedge(ComplexType, Spread, Niente, LineType, DashedFormatting, 
     nothing or diminuendo to nothing. It is no by default, and used only when the type is crescendo, or the type is
     stop for a wedge that began with a diminuendo type. The line-type is solid by default."""
 
-    def __init__(self, tag, type_, *args, **kwargs):
+    def __init__(self, tag, type, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-        self.type = type_
+        self.type = type
 
     @property
     def type(self):

@@ -920,6 +920,28 @@ class TypeTremoloType(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeFermataShape(SimpleType):
+    """
+    The fermata-shape type represents the shape of the fermata sign. The empty value is equivalent to the normal value.
+    """
+    _PERMITTED = ["normal", "angled", "square", "double-angled", "double-square", "double-dot", "half-curve", "curlew",
+                  ""]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeUprightInverted(SimpleType):
+    """
+    The upright-inverted type describes the appearance of a fermata element. The value is upright if not specified.
+    """
+    _PERMITTED = ["upright", "inverted"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+
 ''''
 	<!-- Simple types derived from common.mod entities and elements -->
 
@@ -936,23 +958,6 @@ class TypeTremoloType(SimpleType):
 			<xs:enumeration value="large"/>
 			<xs:enumeration value="x-large"/>
 			<xs:enumeration value="xx-large"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="fermata-shape">
-		<xs:annotation>
-			<xs:documentation>The fermata-shape type represents the shape of the fermata sign. The empty value is equivalent to the normal value.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="normal"/>
-			<xs:enumeration value="angled"/>
-			<xs:enumeration value="square"/>
-			<xs:enumeration value="double-angled"/>
-			<xs:enumeration value="double-square"/>
-			<xs:enumeration value="double-dot"/>
-			<xs:enumeration value="half-curve"/>
-			<xs:enumeration value="curlew"/>
-			<xs:enumeration value=""/>
 		</xs:restriction>
 	</xs:simpleType>
 
@@ -1022,17 +1027,6 @@ class TypeTremoloType(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-
-
-	<xs:simpleType name="upright-inverted">
-		<xs:annotation>
-			<xs:documentation>The upright-inverted type describes the appearance of a fermata element. The value is upright if not specified.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="upright"/>
-			<xs:enumeration value="inverted"/>
-		</xs:restriction>
-	</xs:simpleType>
 
 	<xs:simpleType name="yyyy-mm-dd">
 		<xs:annotation>
@@ -1934,6 +1928,7 @@ class TypeHoleClosedValue(SimpleType):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
+
 
 class TypeStemValue(SimpleType):
     """

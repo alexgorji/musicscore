@@ -1,15 +1,11 @@
+import os
 from unittest import TestCase
 
 from musicscore.musicstream import SimpleFormat
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicscore.musicxml.elements.note import Notations, Duration
-from musicscore.musicxml.groups.musicdata import Direction
-from musicscore.musicxml.types.complextypes.direction import DirectionType
 from musicscore.musicxml.types.complextypes.dynamics import FF, Dynamics
-
-import os
-
 from tests.score_templates.xml_test_score import TestScore
 
 path = os.path.abspath(__file__).split('.')[0]
