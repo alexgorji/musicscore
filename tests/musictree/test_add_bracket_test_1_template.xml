@@ -59,6 +59,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -163,6 +164,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -225,6 +227,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>

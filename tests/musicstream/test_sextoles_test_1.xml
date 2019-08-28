@@ -62,6 +62,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
       </note>
       <note>
         <pitch>
@@ -77,6 +78,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>

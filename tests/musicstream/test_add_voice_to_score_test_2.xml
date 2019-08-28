@@ -59,6 +59,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -228,6 +229,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -276,6 +278,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>

@@ -98,6 +98,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>2</text>
         </lyric>
@@ -178,6 +179,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -198,6 +200,8 @@
         <voice>1</voice>
         <type>32nd</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+        <beam number="3">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -243,6 +247,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -271,6 +276,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>6</text>
         </lyric>
@@ -364,6 +370,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>2</text>
         </lyric>
@@ -444,6 +451,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -469,6 +477,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -523,6 +532,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -551,6 +561,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>6</text>
         </lyric>
@@ -644,6 +655,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>2</text>
         </lyric>
@@ -724,6 +736,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -749,6 +762,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -778,6 +792,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -823,6 +838,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -851,6 +867,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>6</text>
         </lyric>
@@ -911,6 +928,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <lyric number="1">
           <text>1</text>
         </lyric>
@@ -931,6 +949,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>2</text>
         </lyric>
@@ -1001,6 +1020,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -1041,6 +1061,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -1114,6 +1135,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <lyric number="1">
           <text>1</text>
         </lyric>
@@ -1134,6 +1156,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>2</text>
         </lyric>
@@ -1193,6 +1216,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <lyric number="1">
           <text>4</text>
         </lyric>
@@ -1230,6 +1254,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -1752,6 +1777,8 @@
         <voice>1</voice>
         <type>32nd</type>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+        <beam number="3">continue</beam>
         <lyric number="1">
           <text>9</text>
         </lyric>
@@ -1773,6 +1800,8 @@
         <voice>1</voice>
         <type>32nd</type>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
+        <beam number="3">end</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -1898,6 +1927,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>12</text>
         </lyric>
@@ -1923,6 +1953,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -2032,6 +2063,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -2163,6 +2195,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>12</text>
         </lyric>
@@ -2188,6 +2221,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -2297,6 +2331,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -2413,6 +2448,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <lyric number="1">
           <text>13</text>
         </lyric>
@@ -2519,6 +2555,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -2635,6 +2672,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <lyric number="1">
           <text>13</text>
         </lyric>
@@ -2728,6 +2766,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <lyric number="1">
           <text>9</text>
         </lyric>
@@ -2841,6 +2880,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <lyric number="1">
           <text>13</text>
         </lyric>
@@ -4244,6 +4284,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4309,6 +4350,8 @@
         <voice>1</voice>
         <type>32nd</type>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+        <beam number="3">continue</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4331,6 +4374,7 @@
         <type>16th</type>
         <dot/>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -4348,6 +4392,8 @@
         <voice>1</voice>
         <type>32nd</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+        <beam number="3">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4412,6 +4458,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4470,6 +4517,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4581,6 +4629,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
@@ -4635,6 +4684,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4693,6 +4743,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4722,6 +4773,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -4824,6 +4876,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
@@ -4853,6 +4906,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>
@@ -4898,6 +4952,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4956,6 +5011,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -5102,6 +5158,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -5155,6 +5212,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -5285,6 +5343,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>

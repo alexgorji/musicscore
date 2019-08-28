@@ -48,6 +48,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>

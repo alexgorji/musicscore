@@ -83,6 +83,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <notations>
           <articulations>
             <accent/>
@@ -98,6 +99,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <articulations>
             <accent/>

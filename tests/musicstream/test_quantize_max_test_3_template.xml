@@ -49,6 +49,13 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -64,17 +71,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>1</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -89,15 +98,18 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>2</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -115,9 +127,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -148,6 +157,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -163,10 +179,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -186,10 +200,19 @@
         <voice>1</voice>
         <type>32nd</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+        <beam number="3">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -203,9 +226,6 @@
         <dot/>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -227,6 +247,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -234,6 +255,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -248,15 +276,18 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
-        </notations>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>6</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -272,9 +303,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -293,6 +321,13 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -308,17 +343,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>1</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -333,15 +370,18 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>2</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -359,9 +399,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -392,6 +429,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -407,10 +451,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -435,6 +477,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -442,6 +485,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -458,9 +508,6 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -485,6 +532,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -492,6 +540,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -506,15 +561,18 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
-        </notations>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>6</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -530,9 +588,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -551,6 +606,13 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -566,17 +628,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>1</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -591,15 +655,18 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>2</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -617,9 +684,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -650,6 +714,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -665,10 +736,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -693,6 +762,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -700,6 +770,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -715,10 +792,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -763,6 +838,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -770,6 +846,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -784,15 +867,18 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
-        </notations>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>6</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -808,9 +894,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -829,6 +912,13 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -838,15 +928,18 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
+        <beam number="2">begin</beam>
         <lyric number="1">
           <text>1</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -856,15 +949,18 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">continue</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>2</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -876,9 +972,6 @@
         <type>eighth</type>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -906,6 +999,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -920,11 +1020,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
-        </notations>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -932,6 +1028,13 @@
           <text>4</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -942,9 +1045,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -961,10 +1061,18 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -973,15 +1081,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>6</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -994,9 +1104,6 @@
         <dot/>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -1012,6 +1119,13 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1021,15 +1135,18 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
+        <beam number="2">begin</beam>
         <lyric number="1">
           <text>1</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1039,15 +1156,18 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">continue</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>2</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1059,9 +1179,6 @@
         <type>eighth</type>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -1083,6 +1200,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1092,15 +1216,18 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
-        </notations>
+        <beam number="2">end</beam>
         <lyric number="1">
           <text>4</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1111,9 +1238,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -1130,10 +1254,18 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -1142,15 +1274,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>6</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1163,9 +1297,6 @@
         <dot/>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -1181,6 +1312,13 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1196,17 +1334,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>1</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -1215,15 +1355,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>2</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1239,9 +1381,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -1272,6 +1411,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1287,17 +1433,19 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>4</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1308,9 +1456,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -1339,6 +1484,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -1347,15 +1499,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>6</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1371,9 +1525,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -1392,6 +1543,13 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1401,15 +1559,17 @@
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">begin</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>1</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -1418,15 +1578,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>2</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1436,15 +1598,17 @@
         <voice>1</voice>
         <type>quarter</type>
         <dot/>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>3</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -1453,15 +1617,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>4</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1470,15 +1636,17 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>5</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1488,15 +1656,17 @@
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">begin</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>6</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1508,9 +1678,6 @@
         <type>eighth</type>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -1547,6 +1714,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1563,9 +1737,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -1590,6 +1761,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1599,15 +1777,19 @@
         <voice>1</voice>
         <type>32nd</type>
         <beam number="1">continue</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
-        </notations>
+        <beam number="2">continue</beam>
+        <beam number="3">continue</beam>
         <lyric number="1">
           <text>9</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1618,10 +1800,9 @@
         <voice>1</voice>
         <type>32nd</type>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
+        <beam number="3">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -1650,6 +1831,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1665,9 +1853,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -1721,6 +1906,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1735,15 +1927,18 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
-        </notations>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>12</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1758,11 +1953,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
-        </notations>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -1798,6 +1989,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1814,9 +2012,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -1847,6 +2042,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1861,11 +2063,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
-        </notations>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -1873,6 +2071,13 @@
           <text>9</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1888,17 +2093,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>10</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1914,9 +2121,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -1970,6 +2174,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -1984,15 +2195,18 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
-        </notations>
+        <beam number="2">continue</beam>
         <lyric number="1">
           <text>12</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2007,11 +2221,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
-        </notations>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -2047,6 +2257,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2063,9 +2280,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -2096,6 +2310,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2110,11 +2331,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
-        </notations>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -2122,6 +2339,13 @@
           <text>9</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2137,17 +2361,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>10</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2163,9 +2389,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -2190,6 +2413,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -2198,15 +2428,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>12</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2216,11 +2448,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
-        </notations>
+        <beam number="2">end</beam>
         <lyric number="1">
           <text>13</text>
         </lyric>
@@ -2253,6 +2481,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2269,9 +2504,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -2302,6 +2534,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2316,11 +2555,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
-        </notations>
+        <beam number="2">end</beam>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -2328,6 +2563,13 @@
           <text>9</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2343,17 +2585,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>10</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2369,9 +2613,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -2396,6 +2637,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -2404,15 +2652,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>12</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2422,11 +2672,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
-        </notations>
+        <beam number="2">end</beam>
         <lyric number="1">
           <text>13</text>
         </lyric>
@@ -2457,6 +2703,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2473,9 +2726,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -2500,6 +2750,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2509,15 +2766,18 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
-        </notations>
+        <beam number="2">end</beam>
         <lyric number="1">
           <text>9</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2533,17 +2793,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>10</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2559,9 +2821,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -2586,6 +2845,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -2594,15 +2860,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>12</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2612,11 +2880,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
-        </notations>
+        <beam number="2">end</beam>
         <lyric number="1">
           <text>13</text>
         </lyric>
@@ -2647,6 +2911,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2663,9 +2934,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -2696,6 +2964,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2711,17 +2986,19 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>9</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2737,17 +3014,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>10</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2763,9 +3042,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -2796,6 +3072,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -2804,15 +3087,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>12</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2827,11 +3112,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">end</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
-        </notations>
         <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
@@ -2858,6 +3138,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2867,15 +3154,17 @@
         <voice>1</voice>
         <type>quarter</type>
         <dot/>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>8</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -2884,15 +3173,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>9</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2902,15 +3193,17 @@
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">begin</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>10</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2919,15 +3212,17 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>11</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2937,15 +3232,17 @@
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1"/>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>12</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -2954,11 +3251,6 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>13</text>
         </lyric>
@@ -2970,6 +3262,13 @@
       <attributes>
         <divisions>15</divisions>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2985,17 +3284,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>14</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3011,9 +3312,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3046,6 +3344,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3062,9 +3367,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3087,6 +3389,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3098,11 +3407,6 @@
         <type>quarter</type>
         <notations>
           <tied number="1" type="start"/>
-        </notations>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
         </notations>
         <lyric number="1">
           <text>17</text>
@@ -3113,6 +3417,13 @@
       <attributes>
         <divisions>15</divisions>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3128,17 +3439,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>14</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3154,9 +3467,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3189,6 +3499,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3205,9 +3522,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3230,6 +3544,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3241,11 +3562,6 @@
         <type>quarter</type>
         <notations>
           <tied number="1" type="start"/>
-        </notations>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
         </notations>
         <lyric number="1">
           <text>17</text>
@@ -3256,6 +3572,13 @@
       <attributes>
         <divisions>15</divisions>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3271,17 +3594,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>14</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3297,9 +3622,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3332,6 +3654,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3348,9 +3677,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3373,6 +3699,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3384,11 +3717,6 @@
         <type>quarter</type>
         <notations>
           <tied number="1" type="start"/>
-        </notations>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
         </notations>
         <lyric number="1">
           <text>17</text>
@@ -3399,6 +3727,13 @@
       <attributes>
         <divisions>15</divisions>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3414,17 +3749,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>14</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3440,9 +3777,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3475,6 +3809,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3491,9 +3832,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3516,6 +3854,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3527,11 +3872,6 @@
         <type>quarter</type>
         <notations>
           <tied number="1" type="start"/>
-        </notations>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
         </notations>
         <lyric number="1">
           <text>17</text>
@@ -3542,6 +3882,13 @@
       <attributes>
         <divisions>3</divisions>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3557,17 +3904,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>14</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3583,9 +3932,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3616,6 +3962,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3632,9 +3985,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3657,6 +4007,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3668,11 +4025,6 @@
         <type>quarter</type>
         <notations>
           <tied number="1" type="start"/>
-        </notations>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
         </notations>
         <lyric number="1">
           <text>17</text>
@@ -3683,6 +4035,13 @@
       <attributes>
         <divisions>3</divisions>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3698,17 +4057,19 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>14</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3724,9 +4085,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3757,6 +4115,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3773,9 +4138,6 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3798,6 +4160,13 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3806,11 +4175,6 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>17</text>
         </lyric>
@@ -3820,6 +4184,13 @@
       <attributes>
         <divisions>2</divisions>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3829,15 +4200,17 @@
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">begin</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>14</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3846,15 +4219,17 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <mf/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>15</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3864,15 +4239,17 @@
         <voice>1</voice>
         <type>quarter</type>
         <dot/>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <f/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>16</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3881,11 +4258,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ff/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>17</text>
         </lyric>
@@ -3912,6 +4284,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -3919,6 +4292,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3935,9 +4315,6 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -3973,10 +4350,19 @@
         <voice>1</voice>
         <type>32nd</type>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+        <beam number="3">continue</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3988,10 +4374,8 @@
         <type>16th</type>
         <dot/>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -4008,10 +4392,19 @@
         <voice>1</voice>
         <type>32nd</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+        <beam number="3">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -4020,15 +4413,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>20</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4042,9 +4437,6 @@
         <dot/>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -4066,6 +4458,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4073,6 +4466,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4088,9 +4488,6 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -4120,6 +4517,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4127,6 +4525,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4143,9 +4548,6 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -4178,6 +4580,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4193,17 +4602,19 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>19</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4218,11 +4629,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
+        <beam number="2">begin</beam>
         <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
@@ -4230,6 +4637,13 @@
           <text>20</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4246,9 +4660,6 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -4273,6 +4684,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4280,6 +4692,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4295,9 +4714,6 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -4327,6 +4743,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4334,6 +4751,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4349,10 +4773,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -4405,6 +4827,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4420,17 +4849,19 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>19</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4445,11 +4876,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
+        <beam number="2">begin</beam>
         <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
@@ -4457,6 +4884,13 @@
           <text>20</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4472,10 +4906,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -4520,6 +4952,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4527,6 +4960,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4542,9 +4982,6 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -4574,6 +5011,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4581,6 +5019,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4596,9 +5041,6 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -4631,6 +5073,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4646,17 +5095,19 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>19</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -4665,15 +5116,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>20</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4684,9 +5137,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -4708,6 +5158,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
@@ -4715,6 +5166,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4730,9 +5188,6 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -4757,10 +5212,18 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4773,9 +5236,6 @@
         <dot/>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -4803,6 +5263,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4818,17 +5285,19 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>19</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -4837,15 +5306,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>20</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4856,9 +5327,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -4875,10 +5343,18 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4891,9 +5367,6 @@
         <dot/>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -4905,6 +5378,13 @@
       <attributes>
         <divisions>3</divisions>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4915,9 +5395,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -4945,6 +5422,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4960,17 +5444,19 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
-        <notations>
           <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
         <lyric number="1">
           <text>19</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -4979,15 +5465,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>20</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -4998,9 +5486,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">
@@ -5029,6 +5514,13 @@
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -5044,9 +5536,6 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <notations>
@@ -5061,6 +5550,13 @@
       <attributes>
         <divisions>2</divisions>
       </attributes>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -5070,15 +5566,17 @@
         <voice>1</voice>
         <type>quarter</type>
         <dot/>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <fff/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>18</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -5088,15 +5586,17 @@
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1"/>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pppp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>19</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <ppp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <grace/>
         <pitch>
@@ -5105,15 +5605,17 @@
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <ppp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>20</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -5122,15 +5624,17 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <pp/>
-          </dynamics>
-        </notations>
         <lyric number="1">
           <text>21</text>
         </lyric>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <dynamics relative-y="-20" halign="center" placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -5141,9 +5645,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics relative-y="-20" halign="center" placement="below">
-            <p/>
-          </dynamics>
           <tied number="1" type="start"/>
         </notations>
         <lyric number="1">

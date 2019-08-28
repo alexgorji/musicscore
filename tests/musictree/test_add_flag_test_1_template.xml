@@ -78,6 +78,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
       </note>
       <note>
         <pitch>
@@ -88,6 +89,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
       </note>
     </part>
   </measure>
