@@ -40,9 +40,9 @@
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
+          <articulations>
+            <accent/>
+          </articulations>
         </notations>
       </note>
       <note>
@@ -54,9 +54,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
+          <articulations>
+            <accent/>
+          </articulations>
         </notations>
       </note>
       <note>
@@ -69,9 +69,9 @@
         <type>eighth</type>
         <beam number="1">begin</beam>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
+          <articulations>
+            <accent/>
+          </articulations>
         </notations>
       </note>
       <note>
@@ -85,9 +85,9 @@
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
+          <articulations>
+            <accent/>
+          </articulations>
         </notations>
       </note>
       <note>
@@ -101,9 +101,9 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
+          <articulations>
+            <accent/>
+          </articulations>
         </notations>
       </note>
     </part>
@@ -122,9 +122,9 @@
         <voice>1</voice>
         <type>whole</type>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
+          <articulations>
+            <accent/>
+          </articulations>
         </notations>
       </note>
     </part>
@@ -143,9 +143,9 @@
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
+          <articulations>
+            <accent/>
+          </articulations>
         </notations>
       </note>
       <note>
@@ -158,9 +158,9 @@
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
+          <articulations>
+            <accent/>
+          </articulations>
           <tied number="1" type="start"/>
         </notations>
       </note>

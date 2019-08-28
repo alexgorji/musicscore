@@ -36,14 +36,19 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
+        <tie type="start"/>
         <voice>1</voice>
-        <type>half</type>
+        <type>quarter</type>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
+          <tied number="1" type="start"/>
         </notations>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
       </note>
       <note>
         <pitch>
@@ -53,11 +58,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <technical>
-            <up-bow/>
-          </technical>
-        </notations>
       </note>
       <note>
         <pitch>
@@ -68,11 +68,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">begin</beam>
-        <notations>
-          <technical>
-            <up-bow/>
-          </technical>
-        </notations>
       </note>
       <note>
         <pitch>
@@ -84,11 +79,6 @@
         <type>16th</type>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
-        <notations>
-          <technical>
-            <up-bow/>
-          </technical>
-        </notations>
       </note>
       <note>
         <pitch>
@@ -100,11 +90,6 @@
         <type>16th</type>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
-        <notations>
-          <technical>
-            <up-bow/>
-          </technical>
-        </notations>
       </note>
     </part>
   </measure>
@@ -118,14 +103,20 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
+        <tie type="start"/>
         <voice>1</voice>
-        <type>whole</type>
+        <type>quarter</type>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
+          <tied number="1" type="start"/>
         </notations>
+      </note>
+      <note>
+        <rest/>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <dot/>
       </note>
     </part>
   </measure>
@@ -139,30 +130,38 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
+        <tie type="start"/>
         <voice>1</voice>
-        <type>half</type>
+        <type>quarter</type>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
+          <tied number="1" type="start"/>
         </notations>
+      </note>
+      <note>
+        <rest/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
       </note>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <tie type="start"/>
         <voice>1</voice>
-        <type>half</type>
+        <type>quarter</type>
         <notations>
-          <technical>
-            <up-bow/>
-          </technical>
           <tied number="1" type="start"/>
         </notations>
+      </note>
+      <note>
+        <rest/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
       </note>
     </part>
   </measure>
@@ -172,24 +171,10 @@
         <divisions>1</divisions>
       </attributes>
       <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
-      </note>
-      <note>
         <rest/>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
-        <dot/>
+        <type>whole</type>
       </note>
     </part>
   </measure>

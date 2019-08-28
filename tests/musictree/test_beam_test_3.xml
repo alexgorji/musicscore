@@ -33,51 +33,60 @@
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <time-modification>
-          <actual-notes>2</actual-notes>
-          <normal-notes>1</normal-notes>
-        </time-modification>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
-        <notations>
-          <ornaments>
-            <tremolo type="start">3</tremolo>
-          </ornaments>
-        </notations>
       </note>
       <note>
         <pitch>
-          <step>G</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>16th</type>
-        <time-modification>
-          <actual-notes>2</actual-notes>
-          <normal-notes>1</normal-notes>
-        </time-modification>
+        <type>32nd</type>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
-        <notations>
-          <ornaments>
-            <tremolo type="stop">3</tremolo>
-          </ornaments>
-        </notations>
+        <beam number="3">continue</beam>
       </note>
       <note>
-        <rest/>
-        <duration>6</duration>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
-        <dot/>
+        <type>32nd</type>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+        <beam number="3">continue</beam>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
       </note>
       <note>
         <rest/>

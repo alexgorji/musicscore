@@ -39,6 +39,18 @@ class Test(TestCase):
 
     def test_3(self):
         xml_path = path + '_test_3.xml'
+        durations = [0.25]
+        midis = [60]
+        sf = SimpleFormat(durations=durations, midis=midis)
+        for chord in sf.chords:
+            chord.add_flag(FingerTremoloFlag2(tremolo_chord=TreeChord(midis=[67])))
+
+        sf.to_stream_voice().add_to_score(self.score)
+        self.score.write(xml_path)
+        # TestScore().assert_template(xml_path)
+
+    def test_4(self):
+        xml_path = path + '_test_4.xml'
         durations = [0.2, 0.8, 1]
         midis = [60, 62, 63]
         sf = SimpleFormat(durations=durations, midis=midis)

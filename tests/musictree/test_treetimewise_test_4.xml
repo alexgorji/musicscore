@@ -16,6 +16,9 @@
         <bottom-margin>83</bottom-margin>
       </page-margins>
     </page-layout>
+    <appearance>
+      <line-width type="tuplet bracket">2.4</line-width>
+    </appearance>
   </defaults>
   <part-list>
     <score-part id="p1">
@@ -25,7 +28,7 @@
   <measure number="1">
     <part id="p1">
       <attributes>
-        <divisions>8</divisions>
+        <divisions>5</divisions>
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
@@ -33,55 +36,43 @@
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
         <time-modification>
-          <actual-notes>2</actual-notes>
-          <normal-notes>1</normal-notes>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <ornaments>
-            <tremolo type="start">3</tremolo>
-          </ornaments>
+          <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
       </note>
       <note>
         <pitch>
-          <step>G</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <time-modification>
-          <actual-notes>2</actual-notes>
-          <normal-notes>1</normal-notes>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
         </time-modification>
-        <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
         <notations>
-          <ornaments>
-            <tremolo type="stop">3</tremolo>
-          </ornaments>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
       </note>
       <note>
         <rest/>
-        <duration>6</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <dot/>
-        <beam number="1">end</beam>
-      </note>
-      <note>
-        <rest/>
-        <duration>24</duration>
+        <duration>15</duration>
         <voice>1</voice>
         <type>half</type>
         <dot/>
