@@ -1,4 +1,4 @@
-from musicscore.musictree.midi import G, D, A, E, C, MidiNote, Midi, B
+from musicscore.musictree.midi import G, D, A, E, C, MidiNote, Midi, B, F
 from musicscore.musicxml.types.complextypes.midiinstrument import ComplexTypeMidiInstrument
 from musicscore.musicxml.types.complextypes.scorepart import PartName, PartAbbreviation
 import uuid
@@ -111,9 +111,27 @@ class Cello(StringInstrument):
                         }
 
 
+class ViolaDamore(StringInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name='Viola d\'more', abbreviation='vla.', number=number, *args, **kwargs)
+        self.strings = {7: String(7, E(5, 'b')),
+                        6: String(6, B(4)),
+                        5: String(5, F(4, '#')),
+                        4: String(4, C(4)),
+                        3: String(3, G(3)),
+                        2: String(2, D(4)),
+                        1: String(1, A(4))
+                        }
+
+
 class Accordion(TreeInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Accordion', abbreviation='acc.', number=number, *args, **kwargs)
+
+
+class Horn(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name='Horn', abbreviation='hrn.', number=number, *args, **kwargs)
 
 
 class TamTam(TreeInstrument):

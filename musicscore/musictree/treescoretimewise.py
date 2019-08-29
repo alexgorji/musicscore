@@ -437,6 +437,27 @@ class TreeScoreTimewise(timewise.Score):
             CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
                         valign=valign, **kwargs))
 
+    def add_text(self, text, page=None, font_size=None, default_x=None, default_y=None, justify=None, valign=None,
+                 **kwargs):
+
+        if not page:
+            page = 1
+        if not font_size:
+            font_size = 12
+        if not default_x:
+            default_x = 50
+        if not default_y:
+            default_y = self.page_style.page_height.value - 143
+        if not justify:
+            justify = 'left'
+        if not valign:
+            valign = 'top'
+
+        c = self.add_child(Credit(page=page))
+        self._title = c.add_child(
+            CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
+                        valign=valign, **kwargs))
+
     def remove_title(self):
         title_credit = [c for c in self.get_children_by_type(Credit) if
                         c.get_children_by_type(CreditType)[0].value == 'title']
