@@ -120,13 +120,13 @@ class ViolaDamore(StringInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Viola d\'more', abbreviation='vla.', number=number, *args, **kwargs)
         # skordatura
-        self.strings = {7: String(7, B(4)),
-                        6: String(6, B(4)),
-                        5: String(5, F(4, '#')),
+        self.strings = {1: String(1, B(4)),
+                        2: String(2, B(4)),
+                        3: String(3, F(4, '#')),
                         4: String(4, C(4)),
-                        3: String(3, G(3)),
-                        2: String(2, D(4)),
-                        1: String(1, A(4))
+                        5: String(5, G(3)),
+                        6: String(6, D(3)),
+                        7: String(7, A(2))
                         }
 
 

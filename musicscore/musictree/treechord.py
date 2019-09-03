@@ -369,12 +369,10 @@ class TreeChord(XMLTree):
     def _notes(self):
         output = []
         for index, midi in enumerate(self.midis):
-            # print(midi)
             note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration, parent_chord=self)
             note.is_finger_tremolo = self.is_finger_tremolo
             if self.relative_x is not None:
                 note.relative_x = self.relative_x
-
             if midi.notehead:
                 note.add_child(midi.notehead)
 

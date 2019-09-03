@@ -11,7 +11,7 @@ class TreeChordFlag(object):
         if minimum_duration == 1:
             spl = {1.5: [2, 1], 2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
         elif minimum_duration == 0.5:
-            spl = {1.5: [1, 2], 2: [1, 3], 3: [1, 5], 4: [1, 7], 6: [1, 11]}
+            spl = {1:[1, 1], 1.5: [1, 2], 2: [1, 3], 3: [1, 5], 4: [1, 7], 6: [1, 11]}
         else:
             raise ValueError('minimum_duration can only be 1 or 0.5')
 

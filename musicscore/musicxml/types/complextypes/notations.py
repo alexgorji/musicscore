@@ -3,6 +3,7 @@ from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.printobject import PrintObject
 from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.complextypes.arpeggiate import ComplexTypeArpeggiate
 from musicscore.musicxml.types.complextypes.articulations import ComplexTypeArticulations
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.dynamics import Dynamics
@@ -84,12 +85,12 @@ class Fermata(ComplexTypeFermata):
         super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
-class Arpeggiate(XMLElement):
+class Arpeggiate(ComplexTypeArpeggiate):
     """"""
+    _TAG = 'arpeggiate'
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='arpeggiate', value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class NonArpeggiate(XMLElement):
