@@ -74,6 +74,11 @@ class String(object):
             raise TypeError('tuning.value must be of type MidiNote not{}'.format(type(val)))
         self._tuning = val
 
+    def get_step(self, number):
+        step = self.tuning.__deepcopy__()
+        step.transpose(number)
+        return step
+
 
 class StringInstrument(TreeInstrument):
     def __init__(self, *args, **kwargs):
@@ -114,7 +119,8 @@ class Cello(StringInstrument):
 class ViolaDamore(StringInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Viola d\'more', abbreviation='vla.', number=number, *args, **kwargs)
-        self.strings = {7: String(7, E(5, 'b')),
+        # skordatura
+        self.strings = {7: String(7, B(4)),
                         6: String(6, B(4)),
                         5: String(5, F(4, '#')),
                         4: String(4, C(4)),
