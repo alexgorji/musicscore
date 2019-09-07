@@ -1,5 +1,3 @@
-from musicscore.musictree.treechordflags2 import TreeChordFlag2
-from musicscore.musicxml.attributes.position import XPosition
 from quicktions import Fraction
 
 from AGtree.basic_functions import dToX, xToD
@@ -7,15 +5,17 @@ from musicscore.basic_functions import Scale
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechordflags import TreeChordFlag
+from musicscore.musictree.treechordflags2 import TreeChordFlag2
+from musicscore.musictree.treechordflags3 import TreeChordFlag3
 from musicscore.musictree.treenote import TreeNote
-from musicscore.musicxml.groups.musicdata import Direction, Attributes
-from musicscore.musicxml.groups.common import EditorialVoice, Staff, Voice
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
     Type, Dot, Notehead, NoteheadText, Beam, Duration
 from musicscore.musicxml.elements.xml_element import XMLTree
+from musicscore.musicxml.groups.common import EditorialVoice, Staff, Voice
+from musicscore.musicxml.groups.musicdata import Direction, Attributes
 from musicscore.musicxml.types.complextypes.articulations import Accent, StrongAccent, DetachedLegato, Tenuto, Spiccato, \
-    Staccato, Staccatissimo, BreathMark, Caesura, Stress, Unstress, SoftAccent, Plop, Scoop, Doit, Falloff
+    Staccato, Staccatissimo, BreathMark, Caesura, Stress, Unstress, Plop, Scoop, Doit, Falloff
 from musicscore.musicxml.types.complextypes.direction import DirectionType
 from musicscore.musicxml.types.complextypes.directiontype import Words, Bracket, Wedge
 from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, \
@@ -157,16 +157,11 @@ class TreeChord(XMLTree):
     @is_adjoinable.setter
     def is_adjoinable(self, value):
         if not isinstance(value, bool):
-            raise TypeError('is_joinable.value must be of type bool not{}'.format(type(value)))
+            raise TypeError('is_adjoinable.value must be of type bool not{}'.format(type(value)))
         self._is_adjoinable = value
 
-    @property
     def force_tie(self):
         return self.is_adjoinable
-
-    @force_tie.setter
-    def force_tie(self, value):
-        self.is_adjoinable = value
 
     @property
     def tie_types(self):
@@ -264,8 +259,10 @@ class TreeChord(XMLTree):
     #     self.finger_tremolo = FingerTremolo(chord, number)
 
     def add_flag(self, flag):
-        if not isinstance(flag, TreeChordFlag) and not isinstance(flag, TreeChordFlag2):
-            raise TypeError('flag must be of type TreeChordFlag or TreeChordFlag2 not {}'.format(flag.__class__))
+        if not isinstance(flag, TreeChordFlag) and not isinstance(flag, TreeChordFlag2) \
+                and not isinstance(flag, TreeChordFlag3):
+            raise TypeError(
+                'flag must be of type TreeChordFlag, TreeChordFlag2 or TreeChordFlag3 not {}'.format(flag.__class__))
         if self._flags is None:
             self._flags = set()
         self._flags.add(flag)
@@ -286,6 +283,17 @@ class TreeChord(XMLTree):
     def add_slur(self, type, **kwargs):
         slur = Slur(type, **kwargs)
         return self.add_slur_object(slur)
+
+    def remove_slur(self, type):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+            slurs = [s for s in notations.get_children_by_type(Slur) if s.type == type]
+            for slur in slurs:
+                notations.remove_child(slur)
+            if not notations.get_children():
+                self.remove_child(notations)
+        except IndexError:
+            pass
 
     def add_tremolo(self, number=3, **kwargs):
 

@@ -1,4 +1,4 @@
-from musicscore.musictree.midi import G, D, A, E, C, MidiNote, Midi, B, F
+from musicscore.musictree.midi import G, D, A, E, C, MidiNote, Midi, B, F, midi_to_frequency, frequency_to_midi
 from musicscore.musicxml.types.complextypes.midiinstrument import ComplexTypeMidiInstrument
 from musicscore.musicxml.types.complextypes.scorepart import PartName, PartAbbreviation
 import uuid
@@ -80,6 +80,58 @@ class String(object):
         return step
 
 
+class NaturalInstrument(TreeInstrument):
+
+    def __init__(self, key, a4=440, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._a4 = None
+        self._key = None
+        self._transposition = None
+        self.a4 = a4
+        self.key = key
+
+    @property
+    def a4(self):
+        return self._a4
+
+    @a4.setter
+    def a4(self, val):
+        try:
+            float(val)
+        except AttributeError:
+            raise TypeError()
+        self._a4 = val
+
+    @property
+    def key(self):
+        return self._key
+
+    @key.setter
+    def key(self, val):
+        if not isinstance(val, MidiNote):
+            raise TypeError('key.value must be of type MidiNote not{}'.format(type(val)))
+        self._key = val
+
+    @property
+    def transposition(self):
+        return self._transposition
+
+    @transposition.setter
+    def transposition(self, val):
+        self._transposition = val
+
+    def get_fundamental_frequency(self):
+        return midi_to_frequency(self.key, self.a4)
+
+    def get_partial_midi_value(self, number):
+        if not isinstance(number, int):
+            return TypeError()
+        if number <= 0:
+            return ValueError()
+
+        return frequency_to_midi(self.get_fundamental_frequency() * number, self.a4)
+
+
 class StringInstrument(TreeInstrument):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -138,6 +190,12 @@ class Accordion(TreeInstrument):
 class Horn(TreeInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Horn', abbreviation='hrn.', number=number, *args, **kwargs)
+
+
+class NaturalHorn(NaturalInstrument):
+    def __init__(self, key=E(1, 'b'), a4=430, *args, **kwargs):
+        super().__init__(name='Horn', abbreviation='hrn.', key=key, a4=a4, *args, **kwargs)
+        self.transposition = 9
 
 
 class TamTam(TreeInstrument):

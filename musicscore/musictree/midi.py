@@ -1,3 +1,5 @@
+from math import log2
+
 from musicscore.musicxml.elements.fullnote import Pitch, Rest
 from musicscore.musicxml.elements.note import Notehead
 
@@ -316,3 +318,18 @@ class A(MidiNote):
 
 class B(MidiNote):
     _VALUE = 71
+
+
+def midi_to_frequency(midi, a4=440):
+    try:
+        midi = midi.value
+    except AttributeError:
+        pass
+
+    f = 2 ** ((midi - 69) / 12) * a4
+    return f
+
+
+def frequency_to_midi(frequency, a4=440):
+    m = 69 + 12 * log2(frequency / a4)
+    return m

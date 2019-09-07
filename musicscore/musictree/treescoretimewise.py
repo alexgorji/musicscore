@@ -603,6 +603,11 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.implement_flags_2()
 
+    def implement_flags_3(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.implement_flags_3()
+
     def chord_to_notes(self):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
@@ -639,6 +644,7 @@ class TreeScoreTimewise(timewise.Score):
             self.update_types()
             self.update_dots()
             self.group_beams()
+            self.implement_flags_3()
             self.chord_to_notes()
             self.update_divisions()
             self.update_accidentals(mode=self.accidental_mode)

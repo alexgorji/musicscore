@@ -1,4 +1,4 @@
-from musicscore.musicxml.elements.note import Notehead, TimeModification, Stem, Notations
+from musicscore.musicxml.elements.note import Notehead, TimeModification, Stem, Notations, Type
 from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes
 
@@ -97,4 +97,5 @@ class FingerTremoloFlag2(TreeChordFlag2):
             return self._implement_modern(chord)
         elif self.mode == 'conventional':
             return self._implement_conventional(chord)
+
 

@@ -11,7 +11,7 @@ class TreeChordFlag(object):
         if minimum_duration == 1:
             spl = {1.5: [2, 1], 2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
         elif minimum_duration == 0.5:
-            spl = {1:[1, 1], 1.5: [1, 2], 2: [1, 3], 3: [1, 5], 4: [1, 7], 6: [1, 11]}
+            spl = {1: [1, 1], 1.5: [1, 2], 2: [1, 3], 3: [1, 5], 4: [1, 7], 6: [1, 11]}
         else:
             raise ValueError('minimum_duration can only be 1 or 0.5')
 
@@ -70,15 +70,6 @@ class PercussionFlag(TreeChordFlag):
 
     def __deepcopy__(self, memodict={}):
         return self.__class__(minimum_duration=self.minimum_duration)
-
-
-class NoiseFlag(TreeChordFlag):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def implement(self, chord):
-        chord.add_child(Notehead('square'))
-        return [chord]
 
 
 class BeatwiseFlag(TreeChordFlag):
@@ -228,3 +219,21 @@ class FingerTremoloFlag(BeatwiseFlag):
             return self._implement_modern(chord, beat)
         elif self.mode == 'conventional':
             return self._implement_conventional(chord, beat)
+
+
+class GlissFlag(BeatwiseFlag):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._head = True
+        self.slur = None
+
+    def __deepcopy__(self, memodict={}):
+        copied = self.__class__()
+        copied._head = False
+        return copied
+
+    def implement(self, chord, beat):
+        output = super().implement(chord, beat)
+        if not self._head:
+            output[0].add_child(Notehead('none'))
+        return output

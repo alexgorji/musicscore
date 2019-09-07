@@ -8,6 +8,7 @@ from musicscore.basic_functions import lcm, substitute, flatten
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treechordflags3 import TreeChordFlag3
 from musicscore.musictree.treenote import TreeNote, TreeBackup
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.fullnote import Pitch, Rest
@@ -114,6 +115,7 @@ class TreePartVoice(object):
         self._types_updated = False
         self._dots_updated = False
         self._flags2_implemented = False
+        self._flags3_implemented = False
         self.parent_part = None
         self._xml_chords = None
 
@@ -746,6 +748,7 @@ class TreePartVoice(object):
                 for chord in self.chords:
                     try:
                         chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
+                        print(chord)
                         new_chords = chord_flag.implement(chord)
                         check_implement_output(new_chords)
                         output.extend(new_chords)
@@ -762,6 +765,47 @@ class TreePartVoice(object):
                         pass
                     if self.add_chord(chord) is not None:
                         raise Exception()
+        self._flags2_implemented = True
+
+    def implement_flags_3(self):
+        def check_implement_output(chords):
+            if not isinstance(chords, list):
+                raise Exception('output of implement can only be a list of chords')
+
+            # if len(chords) not in [1, 2]:
+            #     raise Exception('output of implement can have 1 or 2 chords')
+
+            for ch in chords:
+                if not isinstance(ch, TreeChord):
+                    raise Exception('output of implement can only be a list of chords')
+
+        if not self._flags3_implemented:
+            flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
+                              isinstance(flag, TreeChordFlag3)])
+
+            while flag_types:
+                flag_type = flag_types.pop()
+                output = []
+                for chord in self.chords:
+                    try:
+                        chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
+                        new_chords = chord_flag.implement(chord)
+                        check_implement_output(new_chords)
+                        output.extend(new_chords)
+
+                    except IndexError:
+                        output.append(chord)
+
+                self.remove_chords()
+                for chord in output:
+                    try:
+                        v = chord.get_children_by_type(Voice)[0]
+                        chord.remove_child(v)
+                    except IndexError:
+                        pass
+                    if self.add_chord(chord) is not None:
+                        raise Exception()
+
         self._flags2_implemented = True
 
 
@@ -1099,6 +1143,10 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.implement_flags_2()
 
+    def implement_flags_3(self):
+        for voice in self.voices.values():
+            voice.implement_flags_3()
+
     def update_durations(self):
         for note in self.get_children_by_type(TreeNote):
             if note.quarter_duration != 0:
@@ -1144,6 +1192,8 @@ class TreePart(timewise.Part):
             self.update_dots()
 
             self.group_beams()
+
+            self.implement_flags_3()
 
             self.chord_to_notes()
 
