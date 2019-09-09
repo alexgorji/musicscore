@@ -55,7 +55,8 @@ class TreeNote(Note):
     quarter_duration = 0 means grace note
     """
 
-    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, parent_chord=None, *args, **kwargs):
+    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, parent_chord=None, *args,
+                 **kwargs):
         super().__init__(*args, **kwargs)
         self.parent_chord = parent_chord
         self._accidental = TreeAccidental(show=False, value='natural')
@@ -68,6 +69,7 @@ class TreeNote(Note):
         self._is_tied = False
         self.is_tied = is_tied
         self.is_finger_tremolo = False
+
 
     @property
     def quarter_duration(self):

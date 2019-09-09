@@ -205,7 +205,23 @@ class TamTam(TreeInstrument):
         self.midi.notehead = 'x'
 
 
+class Cymbal(TreeInstrument):
+    midis = {1: E(4), 2: G(4), 3: B(4), 4: D(5), 5: F(5)}
+
+    def __init__(self, number=1, *args, **kwargs):
+        super().__init__(name='cymbal-' + str(number), abbreviation='cym-' + str(number), number=number, *args,
+                         **kwargs)
+
+        self.midi = self.midis[self.number]
+        self.midi.notehead = 'x'
+
+
 class Percussion(TreeInstrument):
     def __init__(self, number=None, *args, **kwargs):
         super().__init__(name='Percussion', abbreviation='perc.', number=number, *args, **kwargs)
         self.tamtam = TamTam()
+        self.cymbal_1 = Cymbal(1)
+        self.cymbal_2 = Cymbal(2)
+        self.cymbal_3 = Cymbal(3)
+        self.cymbal_4 = Cymbal(4)
+        self.cymbal_5 = Cymbal(5)

@@ -67,12 +67,14 @@ class TreeChord(XMLTree):
         Element(Play, 0)
     )
 
-    def __init__(self, midis=71, quarter_duration=1, **kwargs):
+    def __init__(self, midis=71, quarter_duration=1, zero_mode='grace', **kwargs):
         super().__init__(**kwargs)
         self.parent_voice = None
         self.parent_beat = None
         self._offset = None
         self._quarter_duration = None
+        self._zero_mode = None
+        self.zero_mode = zero_mode
         self.quarter_duration = quarter_duration
         self._midis = None
 
@@ -108,6 +110,17 @@ class TreeChord(XMLTree):
             self._quarter_duration = Fraction(value).limit_denominator(1000)
         else:
             self._quarter_duration = value
+
+    @property
+    def zero_mode(self):
+        return self._zero_mode
+
+    @zero_mode.setter
+    def zero_mode(self, val):
+        permitted = ['remove', 'grace']
+        if val not in permitted:
+            raise ValueError('zero_mode.value {} must be in {}'.format(val, permitted))
+        self._zero_mode = val
 
     @property
     def midis(self):
@@ -376,6 +389,9 @@ class TreeChord(XMLTree):
     @property
     def _notes(self):
         output = []
+        if self.zero_mode == 'remove' and self.quarter_duration == 0:
+            return output
+
         for index, midi in enumerate(self.midis):
             note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration, parent_chord=self)
             note.is_finger_tremolo = self.is_finger_tremolo
@@ -742,7 +758,7 @@ class TreeChord(XMLTree):
         attributes.add_child(clef)
 
     def __deepcopy__(self, memodict={}):
-        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+        new_chord = TreeChord(quarter_duration=self.quarter_duration, zero_mode=self.zero_mode)
         new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
         for child in self.get_children():
             new_chord.add_child(child)
@@ -796,7 +812,7 @@ class TreeChord(XMLTree):
         self.parent_voice.chords.remove(self)
 
     def deepcopy_for_SimpleFormat(self):
-        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+        new_chord = TreeChord(quarter_duration=self.quarter_duration, zero_mode=self.zero_mode)
         new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
         for child in self.get_children():
             if not isinstance(child, Voice):

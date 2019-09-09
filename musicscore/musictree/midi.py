@@ -217,6 +217,7 @@ class Midi(object):
 
     def transpose(self, val):
         self.value += val
+        return self
         # return Midi(value=self.value + val, accidental_mode=self.accidental_mode)
 
     # def __repr__(self):
