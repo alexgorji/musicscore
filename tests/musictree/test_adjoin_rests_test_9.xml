@@ -25,7 +25,7 @@
   <measure number="1">
     <part id="p1">
       <attributes>
-        <divisions>5</divisions>
+        <divisions>1</divisions>
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
@@ -33,52 +33,22 @@
       </attributes>
       <note>
         <rest/>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>16th</type>
-        <time-modification>
-          <actual-notes>5</actual-notes>
-          <normal-notes>4</normal-notes>
-          <normal-type>16th</normal-type>
-        </time-modification>
-        <beam number="1">begin</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tuplet number="1" type="start" bracket="yes" placement="above"/>
-        </notations>
-      </note>
-      <note>
-        <rest/>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <time-modification>
-          <actual-notes>5</actual-notes>
-          <normal-notes>4</normal-notes>
-          <normal-type>16th</normal-type>
-        </time-modification>
-        <notations>
-          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
-        </notations>
-      </note>
-      <note>
-        <rest/>
-        <duration>5</duration>
-        <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
       </note>
       <note>
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>5</duration>
+        <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
       </note>
       <note>
         <rest/>
-        <duration>5</duration>
+        <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
       </note>

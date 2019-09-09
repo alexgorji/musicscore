@@ -523,6 +523,97 @@ class TreeBeat(object):
 
             self._chords = output
             self.split_not_notatable()
+    #
+    # def adjoin_rests(self):
+    #     _adjoin = True
+    #     if len(self.chords) > 1:
+    #         for chord in self.chords:
+    #             if not chord.is_rest or not chord.is_adjoinable:
+    #                 _adjoin = False
+    #                 break
+    #
+    #         if _adjoin:
+    #             first_chord = self.chords[0]
+    #             first_chord.quarter_duration = self.duration
+    #             for chord in self.chords[1:]:
+    #                 chord.parent_voice.chords.remove(chord)
+    #
+    #             self.remove_chords()
+    #             self.add_chord(first_chord)
+
+        # chord_iterator = iter(self.chords)
+
+        #
+        #
+        # def _adjoin(current_chord, next_chord):
+        #
+        #     def _chords_are_adjoinable():
+        #         condition = current_chord.is_adjoinable and next_chord.is_adjoinable
+        #         return condition
+        #
+        #     def _chords_are_rest():
+        #         condition = current_chord.is_rest and next_chord.is_rest
+        #         # _print_condition('_chords_are_not_rest', condition)
+        #         return condition
+        #
+        #     # def _chords_have_right_positions():
+        #     #     # print 'in _chords_have_right_positions', current_chord.name, next_chord.name
+        #     #     condition = current_chord.offset % (
+        #     #         1) == 0 and next_chord.offset % 1 == 0
+        #     #     # _print_condition('_chords_have_right_positions', condition)
+        #     #     return condition
+        #
+        #     # def _result_is_notatable():
+        #     #     condition = current_chord.quarter_duration + next_chord.quarter_duration in notatables
+        #     #     # _print_condition('_result_is_notatable', condition)
+        #     #     return condition
+        #
+        #     if _chords_are_adjoinable() and _chords_are_rest():
+        #         current_chord.quarter_duration += next_chord.quarter_duration
+        #         next_chord.marked = True
+        #
+        #         try:
+        #             next_chord = chord_iterator.__next__()
+        #             next_chord = _adjoin(current_chord, next_chord)
+        #         except StopIteration:
+        #             pass
+        #
+        #     return next_chord
+        #
+        # adjoin = True
+        #
+        # try:
+        #     current_chord = chord_iterator.__next__()
+        #     next_chord = chord_iterator.__next__()
+        # except StopIteration:
+        #     adjoin = False
+        #
+        # while adjoin:
+        #     try:
+        #         next_chord = _adjoin(current_chord, next_chord)
+        #         current_chord = next_chord
+        #         next_chord = chord_iterator.__next__()
+        #     except StopIteration:
+        #         break
+        #
+        # beat_new_chords = []
+        # for chord in self.chords:
+        #     try:
+        #         if chord.marked:
+        #             # chord.parent_voice.chords.remove(chord)
+        #             pass
+        #         else:
+        #             beat_new_chords.append(chord)
+        #     except AttributeError:
+        #         beat_new_chords.append(chord)
+        #
+        # if self.chords != beat_new_chords:
+        #     print([ch.quarter_duration for ch in self.chords])
+        #     print([ch.quarter_duration for ch in beat_new_chords])
+        #     self.remove_chords()
+        #     for ch in beat_new_chords:
+        #         self.add_chord(ch)
+        #     self.split_not_notatable()
 
     def update_tuplets(self):
         tuplet_divisions = [3, 5, 6, 7, 9, 10]
@@ -537,7 +628,6 @@ class TreeBeat(object):
                     non_grace_chords[-1].add_tuplet('stop')
                 else:
                     non_grace_chords[i].add_tuplet('continue')
-
 
     def substitute_sextoles(self):
         six_divisions = (

@@ -537,6 +537,11 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.fill_with_rest()
 
+    def preliminary_adjoin_rests(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.preliminary_adjoin_rests()
+
     def add_beats(self, list_of_beats=None):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
@@ -552,6 +557,11 @@ class TreeScoreTimewise(timewise.Score):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 part.quantize()
+
+    # def adjoin_rests_in_beat(self):
+    #     for measure in self.get_children_by_type(TreeMeasure):
+    #         for part in measure.get_children_by_type(TreePart):
+    #             part.adjoin_rests_in_beat()
 
     def split_not_notatable(self):
         for measure in self.get_children_by_type(TreeMeasure):
@@ -632,8 +642,10 @@ class TreeScoreTimewise(timewise.Score):
         if not self._finished:
             self.update_measures()
             self.fill_with_rest()
+            self.preliminary_adjoin_rests()
             self.add_beats()
             self.quantize()
+            # self.adjoin_rests_in_beat()
             self.split_not_notatable()
             self.implement_flags()
             self.adjoin_ties()

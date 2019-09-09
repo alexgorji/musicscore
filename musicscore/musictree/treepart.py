@@ -104,6 +104,7 @@ class TreePartVoice(object):
         self._chords = []
         self._beats = None
         self._filled_with_rest = False
+        self._preliminary_rests_ajoined = False
         self._beats_added = False
         self._quantized = False
         self._flags_implemented = False
@@ -448,9 +449,61 @@ class TreePartVoice(object):
                     self.add_chord(rest)
             self._filled_with_rest = True
 
-    def add_beats(self, list_of_beats=None):
+    def preliminary_adjoin_rests(self):
         if not self._filled_with_rest:
             raise Exception('fill_with_rest() first')
+
+        if not self._preliminary_rests_ajoined:
+            for ch in self.chords:
+                ch.marked = False
+
+            chord_iterator = iter(self.chords)
+
+            def _adjoin(current_chord, next_chord):
+                def _chords_are_adjoinable():
+                    condition = current_chord.is_adjoinable and next_chord.is_adjoinable
+                    return condition
+
+                def _chords_are_rest():
+                    condition = current_chord.is_rest and next_chord.is_rest
+                    # _print_condition('_chords_are_not_rest', condition)
+                    return condition
+
+                if _chords_are_adjoinable() and _chords_are_rest():
+                    current_chord.quarter_duration += next_chord.quarter_duration
+                    next_chord.marked = True
+
+                    try:
+                        next_chord = chord_iterator.__next__()
+                        next_chord = _adjoin(current_chord, next_chord)
+                    except StopIteration:
+                        pass
+
+                return next_chord
+
+            adjoin = True
+            current_chord = chord_iterator.__next__()
+            try:
+                next_chord = chord_iterator.__next__()
+            except StopIteration:
+                adjoin = False
+
+            while adjoin:
+                try:
+                    next_chord = _adjoin(current_chord, next_chord)
+                    current_chord = next_chord
+                    next_chord = chord_iterator.__next__()
+                except StopIteration:
+                    break
+
+            voice_new_chords = [ch for ch in self.chords if not ch.marked]
+
+            self._chords = voice_new_chords
+            self._preliminary_rests_ajoined = True
+
+    def add_beats(self, list_of_beats=None):
+        if not self._preliminary_rests_ajoined:
+            raise Exception('preliminary_adjoin_rests() first')
 
         if not self._beats_added:
             self.set_beats(list_of_beats)
@@ -474,6 +527,10 @@ class TreePartVoice(object):
         for chord in self.chords:
             if chord.quarter_duration == 0 and (chord._head or chord._tail):
                 chord.remove_from_score()
+
+    # def adjoin_rests_in_beat(self):
+    #     for beat in self.beats:
+    #         beat.adjoin_rests()
 
     def split_not_notatable(self):
         if not self._quantized:
@@ -608,8 +665,6 @@ class TreePartVoice(object):
             raise Exception('adjoin_ties() first')
         # self._rests_adjoined = True
         if not self._rests_adjoined:
-            for beat in self.beats:
-                beat.adjoin_rests()
             # notatables = [1, 1.5, 2, 3, 4, 6, 8]
             notatables = [1, 2, 3, 4, 6, 8]
 
@@ -1100,6 +1155,10 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.fill_with_rest()
 
+    def preliminary_adjoin_rests(self):
+        for voice in self.voices.values():
+            voice.preliminary_adjoin_rests()
+
     def add_beats(self, list_of_beats=None):
         for voice in self.voices.values():
             voice.add_beats(list_of_beats)
@@ -1108,6 +1167,10 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.quantize()
             voice.clear_zero_heads_tails()
+
+    # def adjoin_rests_in_beat(self):
+    #     for voice in self.voices.values():
+    #         voice.adjoin_rests_in_beat()
 
     def split_not_notatable(self):
         for voice in self.voices.values():
@@ -1171,9 +1234,13 @@ class TreePart(timewise.Part):
         if not self._finished:
             self.fill_with_rest()
 
+            self.preliminary_adjoin_rests()
+
             self.add_beats()
 
             self.quantize()
+
+            # self.adjoin_rests_in_beat()
 
             self.split_not_notatable()
 
