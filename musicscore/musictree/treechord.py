@@ -745,7 +745,6 @@ class TreeChord(XMLTree):
 
     def add_words(self, text, placement='above', **kwargs):
         d = self.add_child(Direction(placement=placement))
-
         dt = d.add_child(DirectionType())
         dt.add_child(Words(value=str(text), **kwargs))
 

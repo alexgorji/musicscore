@@ -217,6 +217,7 @@ class ComplexTypeDirectionType(ComplexType, OptionalUniqueId):
             # Element(Symbol),
             max_occurrence=None
         ),
+        # Element(Words, max_occurrence=None),
         Element(Wedge),
         Element(Dynamics, max_occurrence=None),
         Element(Dashes),

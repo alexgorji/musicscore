@@ -16,7 +16,8 @@ class ChildTypeDTDConflict(DTDError):
 
 class ChildOccurrenceDTDConflict(DTDError):
     def __init__(self, child, parent):
-        msg = 'child of type {} cannot be added to {} due to DTD Occurrence conflicts'.format(type(child), parent.__class__)
+        msg = 'child of type {} cannot be added to {} due to DTD Occurrence conflicts'.format(type(child),
+                                                                                              parent.__class__)
         super().__init__(msg)
 
 
@@ -305,7 +306,12 @@ class Element(DTDLeaf):
             if isinstance(self.up, Sequence):
                 return False
             else:
-                raise NotImplementedError()
+                # self.up.xml_children.append(xml_child)
+                # xml_child.node = self.up
+                self.xml_children.append(xml_child)
+                xml_child.node = self
+                return True
+                # raise NotImplementedError()
 
         else:
             return False
