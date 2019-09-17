@@ -78,6 +78,8 @@ class TreeBeat(object):
             parent_max_division = self.parent_voice.max_division
             if parent_max_division:
                 self._max_division = math.floor(parent_max_division * self.duration)
+                if self._max_division == 0:
+                    self._max_division = 1
 
         if self._max_division is None:
             if self.duration == 0.5:

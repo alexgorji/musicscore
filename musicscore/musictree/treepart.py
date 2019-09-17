@@ -805,7 +805,7 @@ class TreePartVoice(object):
                 for chord in self.chords:
                     try:
                         chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
-                        print(chord)
+                        # print(chord)
                         new_chords = chord_flag.implement(chord)
                         check_implement_output(new_chords)
                         output.extend(new_chords)

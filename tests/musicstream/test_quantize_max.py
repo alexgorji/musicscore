@@ -28,7 +28,6 @@ class Test(TestCase):
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
-
         self.score.fill_with_rest()
         self.score.preliminary_adjoin_rests()
         self.score.add_beats()
@@ -102,6 +101,7 @@ class Test(TestCase):
         add_to_score(5)
         add_to_score(6)
         add_to_score(7)
+        add_to_score(8)
 
         self.score.get_score_parts()[0].max_division = 8
         self.score.get_score_parts()[1].max_division = 7
@@ -110,6 +110,7 @@ class Test(TestCase):
         self.score.get_score_parts()[4].max_division = 4
         self.score.get_score_parts()[5].max_division = 3
         self.score.get_score_parts()[6].max_division = 2
+        self.score.get_score_parts()[7].max_division = 1
         result_path = path + '_test_3'
 
         self.score.write(path=result_path)
@@ -124,6 +125,15 @@ class Test(TestCase):
         self.score.write(xml_path)
         TestScore().assert_template(result_path=xml_path)
 
+    def test_5(self):
+        self.score.set_time_signatures(
+            [Fraction(3, 2)])
+        sf = SimpleFormat(durations=[0.666, 0.333, 0.5])
+        xml_path = path + '_test_5.xml'
+        sf.to_stream_voice().add_to_score(self.score)
+        self.score.get_score_parts()[0].max_division = 1
+        self.score.write(xml_path)
+        # TestScore().assert_template(result_path=xml_path)
 
     # def test_4(self):
     #
