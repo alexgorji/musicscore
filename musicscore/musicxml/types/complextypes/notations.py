@@ -9,6 +9,7 @@ from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.dynamics import Dynamics
 from musicscore.musicxml.types.complextypes.fermata import ComplexTypeFermata
 from musicscore.musicxml.types.complextypes.ornaments import ComplexTypeOrnaments
+from musicscore.musicxml.types.complextypes.slide import ComplexTypeSlide
 from musicscore.musicxml.types.complextypes.slur import ComplexTypeSlur
 from musicscore.musicxml.types.complextypes.technical import ComplexTypeTechnical
 from musicscore.musicxml.types.complextypes.tied import ComplexTypeTied
@@ -44,12 +45,12 @@ class Glissando(XMLElement):
         raise NotImplementedError()
 
 
-class Slide(XMLElement):
+class Slide(ComplexTypeSlide):
     """"""
+    _TAG = 'slide'
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='slide', value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)
 
 
 class Ornaments(ComplexTypeOrnaments):

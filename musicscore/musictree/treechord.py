@@ -22,7 +22,7 @@ from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PP
     FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N, Dynamics
 from musicscore.musicxml.types.complextypes.lyric import Text
 from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Technical, \
-    Articulations, Slur, Fermata
+    Articulations, Slur, Fermata, Slide
 from musicscore.musicxml.types.complextypes.ornaments import Tremolo
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
@@ -307,6 +307,19 @@ class TreeChord(XMLTree):
                 self.remove_child(notations)
         except IndexError:
             pass
+
+    def add_notations_object(self, object):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(object)
+        return object
+
+    def add_slide(self, type, **kwargs):
+        object = Slide(type, **kwargs)
+        return self.add_notations_object(object)
 
     def add_tremolo(self, number=3, **kwargs):
 

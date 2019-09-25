@@ -857,7 +857,7 @@ class TypePositiveIntegerOrEmpty(SimpleType):
         self._value = v
 
 
-class TypeTrillBeatsSimpleType(SimpleType):
+class TypeTrillBeats(SimpleType):
     """
     The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value
     with a minimum value of 2.
