@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from musicscore.musicstream import SimpleFormat
-from musicscore.musictree.treeinstruments import TreeInstrument, Violin
+from musicscore.musictree.treeinstruments import TreeInstrument, Violin, ViolaDamore
 from musicscore.musictree.treescorepart import TreeScorePart
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 
@@ -27,3 +27,8 @@ class Test(TestCase):
         # xml_path = path.split('.')[0] + '.xml'
         # score.write(xml_path)
         # TestScore().assert_template(result_path=xml_path)
+
+    def test_2(self):
+        instrument = ViolaDamore()
+        string = instrument.strings[3]
+        print(string.tuning)

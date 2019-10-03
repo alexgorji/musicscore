@@ -53,9 +53,9 @@ class PizzFlag(TreeChordFlag):
 
     def implement(self, chord, beat):
         output = self.implement_percussion_notation(chord, beat)
-        for ch in output:
-            if not ch.is_rest:
-                ch.add_words('pizz.')
+        # for ch in output:
+        #     if not ch.is_rest:
+        #         ch.add_words('pizz.')
         return output
 
 

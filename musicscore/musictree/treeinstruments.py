@@ -70,8 +70,8 @@ class String(object):
 
     @tuning.setter
     def tuning(self, val):
-        if not isinstance(val, MidiNote):
-            raise TypeError('tuning.value must be of type MidiNote not{}'.format(type(val)))
+        if not isinstance(val, Midi):
+            raise TypeError('tuning.value must be of type Midi not{}'.format(type(val)))
         self._tuning = val
 
     def get_step(self, number):
