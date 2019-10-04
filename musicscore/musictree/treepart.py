@@ -104,7 +104,7 @@ class TreePartVoice(object):
         self._chords = []
         self._beats = None
         self._filled_with_rest = False
-        self._preliminary_rests_ajoined = False
+        self._preliminary_rests_adjoined = False
         self._beats_added = False
         self._quantized = False
         self._flags_implemented = False
@@ -203,16 +203,23 @@ class TreePartVoice(object):
 
         elif remain > 0:
             split = chord.split([chord.quarter_duration - remain, remain])
-            self.chords.append(split[0])
-            split[0].parent_voice = self
-            split[0].add_child(Voice(str(self.number)))
-            split[0]._head = True
+            first_chord = split[0]
+            self.chords.append(first_chord)
+            first_chord.parent_voice = self
+            if first_chord.manual_voice_number:
+                first_chord.add_child(Voice(str(first_chord.manual_voice_number)))
+            else:
+                first_chord.add_child(Voice(str(self.number)))
+            first_chord._head = True
             split[1]._tail = True
             return split[1]
         else:
             self.chords.append(chord)
             chord.parent_voice = self
-            chord.add_child(Voice(str(self.number)))
+            if chord.manual_voice_number:
+                chord.add_child(Voice(str(chord.manual_voice_number)))
+            else:
+                chord.add_child(Voice(str(self.number)))
 
     def remove_chords(self):
         self._chords = []
@@ -453,7 +460,7 @@ class TreePartVoice(object):
         if not self._filled_with_rest:
             raise Exception('fill_with_rest() first')
 
-        if not self._preliminary_rests_ajoined:
+        if not self._preliminary_rests_adjoined:
             for ch in self.chords:
                 ch.marked = False
 
@@ -499,10 +506,10 @@ class TreePartVoice(object):
             voice_new_chords = [ch for ch in self.chords if not ch.marked]
 
             self._chords = voice_new_chords
-            self._preliminary_rests_ajoined = True
+            self._preliminary_rests_adjoined = True
 
     def add_beats(self, list_of_beats=None):
-        if not self._preliminary_rests_ajoined:
+        if not self._preliminary_rests_adjoined:
             raise Exception('preliminary_adjoin_rests() first')
 
         if not self._beats_added:
@@ -863,7 +870,7 @@ class TreePartVoice(object):
                     if self.add_chord(chord) is not None:
                         raise Exception()
 
-        self._flags2_implemented = True
+        self._flags3_implemented = True
 
 
 class TreePart(timewise.Part):
@@ -987,6 +994,15 @@ class TreePart(timewise.Part):
 
         voice = self.get_voice(voice_number)
         return voice.add_chord(chord)
+
+    def remove_chord(self, chord):
+        if not isinstance(chord, TreeChord):
+            raise TypeError()
+
+        tree_voice = self.get_voice(chord.parent_voice.number)
+        xml_voice = chord.get_children_by_type(Voice)[0]
+        chord.remove_child(xml_voice)
+        tree_voice.chords.remove(chord)
 
     def get_beats(self):
         output = []

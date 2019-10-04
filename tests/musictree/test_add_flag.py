@@ -231,4 +231,15 @@ class Test(TestCase):
         self.score.write(xml_path)
         # TestScore().assert_template(xml_path)
 
+    def test_19(self):
+        xml_path = path + "_test_19.xml"
+        sf = SimpleFormat(durations=[1.5])
+        self.score.set_time_signatures(durations=[1.5])
+        for ch in sf.chords:
+            ch.add_flag(BeatwiseFlag(slur='tie'))
+        sf.to_stream_voice().add_to_score(self.score)
+
+        self.score.write(xml_path)
+        # TestScore().assert_template(xml_path)
+
 

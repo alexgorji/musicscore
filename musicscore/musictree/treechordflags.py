@@ -82,7 +82,7 @@ class BeatwiseFlag(TreeChordFlag):
 
     def _get_split(self, chord, beat):
         quarter_beat = {2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
-        eighth_beat = {2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
+        eighth_beat = {1: [1, 1], 1.5: [1, 2], 2: [1, 3], 3: [1, 5]}
 
         if beat.duration == 1:
             try:
@@ -91,8 +91,12 @@ class BeatwiseFlag(TreeChordFlag):
                 return [chord]
 
         elif beat.duration == 0.5:
+
             try:
-                return chord.split(*eighth_beat[chord.quarter_duration])
+                split = chord.split(*eighth_beat[chord.quarter_duration])
+                # for ch in split:
+                #     ch.force_tie()
+                return split
             except KeyError:
                 return [chord]
 

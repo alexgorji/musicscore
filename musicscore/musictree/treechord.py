@@ -85,6 +85,7 @@ class TreeChord(XMLTree):
         self._flags = None
 
         self.manual_type = False
+        self.manual_voice_number = False
         self.is_finger_tremolo = False
         self.relative_x = None
         self.tie_orientation = None
@@ -97,6 +98,12 @@ class TreeChord(XMLTree):
     @property
     def quarter_duration(self):
         return self._quarter_duration
+
+    def set_voice_number(self, voice_number):
+        # voice = self.get_children_by_type(Voice)[0]
+        # self.remove_child(voice)
+        # self.add_child(Voice(str(voice_number)))
+        self.manual_voice_number = voice_number
 
     @quarter_duration.setter
     def quarter_duration(self, value):
@@ -174,7 +181,7 @@ class TreeChord(XMLTree):
         self._is_adjoinable = value
 
     def force_tie(self):
-        return self.is_adjoinable
+        self.is_adjoinable = False
 
     @property
     def tie_types(self):
@@ -227,6 +234,7 @@ class TreeChord(XMLTree):
         index = self.parent_voice.chords.index(self)
         if index == 0:
             return None
+
         return self.parent_voice.chords[index - 1]
 
     @property
@@ -235,6 +243,17 @@ class TreeChord(XMLTree):
         if index == len(self.parent_voice.chords) - 1:
             return None
         return self.parent_voice.chords[index + 1]
+
+    @property
+    def previous_in_score_part(self):
+        if self.previous is None:
+            previous_voice = self.parent_voice.previous
+            if previous_voice:
+                return previous_voice.chords[-1]
+            else:
+                return None
+        else:
+            return self.previous
 
     def update_offset(self):
         if self.previous:
@@ -460,6 +479,28 @@ class TreeChord(XMLTree):
             notations.remove_child(tied)
             if not notations.get_children():
                 self.remove_child(notations)
+
+    def remove_previous_tie(self):
+        if 'stop' in self.tie_types:
+            self.remove_tie('stop')
+            try:
+                self.previous_in_score_part.remove_tie('start')
+            except AttributeError:
+                pass
+
+    def untie(self):
+        if 'start' in self.tie_types:
+            self.remove_tie('start')
+            try:
+                self.next.remove_tie('stop')
+            except AttributeError:
+                pass
+        # if 'stop' in self.tie_types:
+        #     self.remove_tie('stop')
+        #     try:
+        #         self.previous.remove_tie('start')
+        #     except AttributeError:
+        #         pass
 
     def remove_voice(self):
         for voice in self.get_children_by_type(Voice):
@@ -715,6 +756,9 @@ class TreeChord(XMLTree):
                     if isinstance(child, Dynamics):
                         return child.get_children()[0].to_string()[1:-3]
         return None
+
+    def get_dynamics(self):
+        return self.dynamics
 
     def add_wedge(self, value, placement='below', **kwargs):
         wedge_object = Wedge(value, **kwargs)
