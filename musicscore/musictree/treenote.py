@@ -51,6 +51,7 @@ class TreeAccidental(Accidental):
 
 
 class TreeNote(Note):
+    # todo: Inheritance Chain must be Midi, MidiNote, TreeMidiNote (or TreeNote)
     """
     quarter_duration = 0 means grace note
     """
