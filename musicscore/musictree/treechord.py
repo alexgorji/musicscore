@@ -495,12 +495,6 @@ class TreeChord(XMLTree):
                 self.next.remove_tie('stop')
             except AttributeError:
                 pass
-        # if 'stop' in self.tie_types:
-        #     self.remove_tie('stop')
-        #     try:
-        #         self.previous.remove_tie('start')
-        #     except AttributeError:
-        #         pass
 
     def remove_voice(self):
         for voice in self.get_children_by_type(Voice):

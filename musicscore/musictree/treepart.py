@@ -841,7 +841,7 @@ class TreePartVoice(object):
 
             for ch in chords:
                 if not isinstance(ch, TreeChord):
-                    raise Exception('output of implement can only be a list of chords')
+                    raise Exception('output of implement can only be a list of chords not {}'.format(type(ch)))
 
         if not self._flags3_implemented:
             flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
@@ -1065,6 +1065,7 @@ class TreePart(timewise.Part):
         return previous_measure_last_notes
 
     def update_accidentals(self, mode):
+        self._accidental_mode = mode
 
         def _get_previous_measure_last_signed_notes():
             previous_measure_last_notes = self.get_previous_measure_last_notes()

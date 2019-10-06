@@ -1,6 +1,7 @@
 import os
 from unittest import TestCase
 
+from musicscore.musictree.treechordflags3 import TreeChordFlag3
 from quicktions import Fraction
 
 from musicscore.musicstream.streamvoice import SimpleFormat
@@ -94,3 +95,25 @@ class Test(TestCase):
         self.score.accidental_mode = 'modern'
         self.score.write(result_path)
         TestScore().assert_template(result_path=result_path)
+
+    def test_7(self):
+        # todo update_accidental does not work ...
+        class TestFlag3(TreeChordFlag3):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+
+            def implement(self, chord):
+                split = chord.split(2, 2)
+                split[0].to_rest()
+                for ch in split:
+                    ch.update_type()
+                    ch.update_dot()
+                return split
+
+        xml_path = path + '_test_7.xml'
+        sf = SimpleFormat(midis=[61], durations=[4])
+        sf.to_stream_voice().add_to_score(self.score, part_number=1)
+        chord = sf.chords[0]
+        chord.add_flag(TestFlag3())
+        sf.to_stream_voice().add_to_score(self.score, part_number=2)
+        self.score.write(xml_path)
