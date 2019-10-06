@@ -170,7 +170,7 @@ class Cello(StringInstrument):
 
 class ViolaDamore(StringInstrument):
     def __init__(self, number=None, *args, **kwargs):
-        super().__init__(name='Viola d\'more', abbreviation='vla.', number=number, *args, **kwargs)
+        super().__init__(name='Viola d\'amore', abbreviation='vla.', number=number, *args, **kwargs)
         # skordatura
         self.strings = {1: String(1, B(4)),
                         2: String(2, B(4)),
