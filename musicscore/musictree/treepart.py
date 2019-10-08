@@ -867,8 +867,10 @@ class TreePartVoice(object):
                         chord.remove_child(v)
                     except IndexError:
                         pass
-                    if self.add_chord(chord) is not None:
-                        raise Exception()
+                    tmp = self.add_chord(chord)
+                    # if tmp is not None:
+                    #     print(tmp.quarter_duration)
+                    #     raise Exception()
 
         self._flags3_implemented = True
 

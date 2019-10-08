@@ -21,6 +21,7 @@ class Test(TestCase):
         v.add_to_score(self.score, 1, 1)
         chord = self.score.get_measure(1).get_part(1).get_voice(1).chords[1]
         self.score.fill_with_rest()
+        self.score.preliminary_adjoin_rests()
         self.score.add_beats()
         chord.remove_from_score()
 
@@ -43,6 +44,7 @@ class Test(TestCase):
         v.add_to_score(self.score, 1, 1)
         chord = self.score.get_measure(1).get_part(1).get_voice(1).chords[1]
         self.score.fill_with_rest()
+        self.score.preliminary_adjoin_rests()
         self.score.add_beats()
         chord.remove_from_score()
 

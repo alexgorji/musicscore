@@ -38,6 +38,6 @@ class Test(TestCase):
 
     def test_3(self):
         midi = E(6)
-        print(midi.value)
+        # print(midi.value)
         midi.transpose(3)
-        print(midi.value)
+        # print(midi.value)

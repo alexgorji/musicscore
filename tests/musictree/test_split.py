@@ -32,7 +32,7 @@ class Test(TestCase):
         v = sf.to_stream_voice()
         # print([ch.quarter_duration for ch in v.chords])
         # print([ch.is_tied_to_next for ch in v.chords])
-        print([ch.is_adjoinable for ch in v.chords])
+        # print([ch.is_adjoinable for ch in v.chords])
 
         sf.to_stream_voice().add_to_score(self.score, part_number=1)
 

@@ -21,6 +21,7 @@ class Test(TestCase):
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
         self.score.fill_with_rest()
+        self.score.preliminary_adjoin_rests()
         self.score.add_beats()
         self.score.quantize()
 

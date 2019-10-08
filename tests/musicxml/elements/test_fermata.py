@@ -9,7 +9,7 @@ class Test(TestCase):
         fermata = Fermata()
         notations = Notations()
         notations.add_child(fermata)
-        print(notations.to_string())
+        # print(notations.to_string())
         result = '''<notations>
   <fermata>normal</fermata>
 </notations>

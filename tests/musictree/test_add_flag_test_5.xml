@@ -75,10 +75,11 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <notehead>x</notehead>
+        <beam number="1"/>
         <notations>
           <slur number="1" type="start" line-type="dashed"/>
         </notations>
@@ -88,10 +89,11 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <notehead>x</notehead>
+        <beam number="1"/>
         <notations>
           <slur number="1" type="stop"/>
           <slur number="1" type="start" line-type="dashed"/>
@@ -102,11 +104,71 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
-        <dot/>
+        <type>eighth</type>
         <notehead>x</notehead>
+        <beam number="1"/>
+        <notations>
+          <slur number="1" type="stop"/>
+          <slur number="1" type="start" line-type="dashed"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notehead>x</notehead>
+        <beam number="1"/>
+        <notations>
+          <slur number="1" type="stop"/>
+          <slur number="1" type="start" line-type="dashed"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notehead>x</notehead>
+        <beam number="1"/>
+        <notations>
+          <slur number="1" type="stop"/>
+          <slur number="1" type="start" line-type="dashed"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notehead>x</notehead>
+        <beam number="1"/>
+        <notations>
+          <slur number="1" type="stop"/>
+          <slur number="1" type="start" line-type="dashed"/>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notehead>x</notehead>
+        <beam number="1"/>
         <notations>
           <slur number="1" type="stop"/>
         </notations>

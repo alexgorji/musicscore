@@ -19,6 +19,7 @@ class Test(TestCase):
 
         result_path = path + '_test_1'
         self.score.fill_with_rest()
+        self.score.preliminary_adjoin_rests()
         self.score.add_beats()
         self.score.quantize()
         self.score.split_not_notatable()

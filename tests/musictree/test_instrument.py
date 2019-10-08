@@ -31,4 +31,4 @@ class Test(TestCase):
     def test_2(self):
         instrument = ViolaDamore()
         string = instrument.strings[3]
-        print(string.tuning)
+        # print(string.tuning)

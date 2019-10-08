@@ -43,6 +43,6 @@ class CheckPreviousFlag(TreeChordFlag3):
         super().__init__(*args, **kwargs)
 
     def implement(self, chord):
-        print('CheckPrevious:')
-        print(chord.previous_in_score_part)
+        # print('CheckPrevious:')
+        # print(chord.previous_in_score_part)
         return [chord]

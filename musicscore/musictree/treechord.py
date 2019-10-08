@@ -91,6 +91,10 @@ class TreeChord(XMLTree):
         self.tie_orientation = None
 
     @property
+    def is_head(self):
+        return self._head
+
+    @property
     def __name__(self):
         # return self.parent_voice.__name__ + ' ' + 'ch:' + str(self.parent_voice.chords.index(self) + 1)
         return self.parent_voice.__name__ + '.' + str(self.parent_voice.chords.index(self) + 1)
