@@ -226,13 +226,14 @@ class FingerTremoloFlag(BeatwiseFlag):
 
 
 class GlissFlag(BeatwiseFlag):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, mode=1, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._head = True
         self.slur = None
+        self.mode = mode
 
     def __deepcopy__(self, memodict={}):
-        copied = self.__class__()
+        copied = self.__class__(mode=self.mode)
         copied._head = False
         return copied
 
@@ -240,4 +241,8 @@ class GlissFlag(BeatwiseFlag):
         output = super().implement(chord, beat)
         if not self._head:
             output[0].add_child(Notehead('none'))
+        else:
+            if self.mode != 1:
+                output[0].add_slide('stop')
+            output[0].add_slide('start')
         return output

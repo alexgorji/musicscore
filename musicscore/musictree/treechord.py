@@ -94,6 +94,9 @@ class TreeChord(XMLTree):
     def is_head(self):
         return self._head
 
+    def is_tail(self):
+        return self._tail
+
     @property
     def __name__(self):
         # return self.parent_voice.__name__ + ' ' + 'ch:' + str(self.parent_voice.chords.index(self) + 1)
@@ -104,9 +107,6 @@ class TreeChord(XMLTree):
         return self._quarter_duration
 
     def set_voice_number(self, voice_number):
-        # voice = self.get_children_by_type(Voice)[0]
-        # self.remove_child(voice)
-        # self.add_child(Voice(str(voice_number)))
         self.manual_voice_number = voice_number
 
     @quarter_duration.setter
@@ -592,6 +592,14 @@ class TreeChord(XMLTree):
 
         return self.add_articulation_object(articulations[articulation])
 
+    def get_articulations(self):
+        output = []
+        for notations in self.get_children_by_type(Notations):
+            articulations = notations.get_children_by_type(Articulations)
+            for articulation in articulations:
+                output.extend(articulation.get_children())
+        return output
+
     def set_manual_type(self, val, **kwargs):
         try:
             chord_type = self.get_children_by_type(Type)[0]
@@ -802,6 +810,21 @@ class TreeChord(XMLTree):
         d = self.add_child(Direction(placement=placement))
         dt = d.add_child(DirectionType())
         dt.add_child(Words(value=str(text), **kwargs))
+
+    def get_direction_types(self):
+        output = []
+        for direction in self.get_children_by_type(Direction):
+            for dt in direction.get_children_by_type(DirectionType):
+                output.append(dt)
+        return output
+
+    def get_words(self):
+        output = []
+        for dt in self.get_direction_types():
+            for child in dt.get_children():
+                if isinstance(child, Words):
+                    output.append(child)
+        return output
 
     def add_clef(self, clef):
         try:
