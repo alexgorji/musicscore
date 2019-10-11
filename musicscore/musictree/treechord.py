@@ -340,6 +340,11 @@ class TreeChord(XMLTree):
         notations.add_child(object)
         return object
 
+    def remove_notations(self):
+        notations = self.get_children_by_type(Notations)
+        for notation in notations:
+            self.remove_child(notation)
+
     def add_slide(self, type, **kwargs):
         object = Slide(type, **kwargs)
         return self.add_notations_object(object)
@@ -838,7 +843,13 @@ class TreeChord(XMLTree):
         new_chord = TreeChord(quarter_duration=self.quarter_duration, zero_mode=self.zero_mode)
         new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
         for child in self.get_children():
-            new_chord.add_child(child)
+            if isinstance(child, Notations):
+                copied_notations = Notations()
+                for grand_child in child.get_children():
+                    copied_notations.add_child(grand_child)
+                new_chord.add_child(copied_notations)
+            else:
+                new_chord.add_child(child)
 
         new_chord.is_adjoinable = self.is_adjoinable
         if self._flags:

@@ -170,7 +170,7 @@ class Cello(StringInstrument):
 
 class ViolaDamore(StringInstrument):
     def __init__(self, number=None, *args, **kwargs):
-        super().__init__(name='Viola d\'amore', abbreviation='vla.', number=number, *args, **kwargs)
+        super().__init__(name='Viola d\'amore\n430', abbreviation='vla.', number=number, *args, **kwargs)
         # skordatura
         self.strings = {1: String(1, B(4)),
                         2: String(2, B(4)),
@@ -194,7 +194,7 @@ class Horn(TreeInstrument):
 
 class NaturalHorn(NaturalInstrument):
     def __init__(self, key=E(1, 'b'), a4=430, *args, **kwargs):
-        super().__init__(name='Horn', abbreviation='hrn.', key=key, a4=a4, *args, **kwargs)
+        super().__init__(name='Horn in E♭\n430', abbreviation='hrn.', key=key, a4=a4, *args, **kwargs)
         self.transposition = 9
 
 
