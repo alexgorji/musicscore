@@ -241,12 +241,70 @@ class TreeBeat(object):
         output = []
         for chord in self.chords:
             split = None
-            if chord.quarter_duration == Fraction(9, 2):
-                if chord.position_in_beat == 0:
-                    split = chord.split(8, 1)
             if chord.quarter_duration == Fraction(5, 1):
                 if chord.position_in_beat == 0:
                     split = chord.split(3, 2)
+            elif chord.quarter_duration == Fraction(7, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(4, 3)
+            elif chord.quarter_duration == Fraction(9, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(4, 5)
+            elif chord.quarter_duration == Fraction(10, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(4, 6)
+            elif chord.quarter_duration == Fraction(11, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(4, 7)
+            # elif chord.quarter_duration == Fraction(12, 1):
+            #     if chord.position_in_beat == 0:
+            #         split = chord.split(8, )
+            elif chord.quarter_duration == Fraction(13, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 5)
+            elif chord.quarter_duration == Fraction(14, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 6)
+            elif chord.quarter_duration == Fraction(15, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 7)
+            elif chord.quarter_duration == Fraction(16, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 8)
+            elif chord.quarter_duration == Fraction(17, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 9)
+            elif chord.quarter_duration == Fraction(18, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 10)
+            elif chord.quarter_duration == Fraction(19, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 11)
+            elif chord.quarter_duration == Fraction(20, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 12)
+            elif chord.quarter_duration == Fraction(21, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 13)
+            elif chord.quarter_duration == Fraction(22, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 14)
+
+            elif chord.quarter_duration == Fraction(23, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 15)
+
+            elif chord.quarter_duration == Fraction(24, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 16)
+
+            elif chord.quarter_duration == Fraction(25, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 17)
+
+            if chord.quarter_duration == Fraction(9, 2):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 1)
 
             if chord.quarter_duration == Fraction(5, 2):
                 if chord.position_in_beat == 0:
@@ -525,6 +583,7 @@ class TreeBeat(object):
 
             self._chords = output
             self.split_not_notatable()
+
     #
     # def adjoin_rests(self):
     #     _adjoin = True
@@ -543,79 +602,79 @@ class TreeBeat(object):
     #             self.remove_chords()
     #             self.add_chord(first_chord)
 
-        # chord_iterator = iter(self.chords)
+    # chord_iterator = iter(self.chords)
 
-        #
-        #
-        # def _adjoin(current_chord, next_chord):
-        #
-        #     def _chords_are_adjoinable():
-        #         condition = current_chord.is_adjoinable and next_chord.is_adjoinable
-        #         return condition
-        #
-        #     def _chords_are_rest():
-        #         condition = current_chord.is_rest and next_chord.is_rest
-        #         # _print_condition('_chords_are_not_rest', condition)
-        #         return condition
-        #
-        #     # def _chords_have_right_positions():
-        #     #     # print 'in _chords_have_right_positions', current_chord.name, next_chord.name
-        #     #     condition = current_chord.offset % (
-        #     #         1) == 0 and next_chord.offset % 1 == 0
-        #     #     # _print_condition('_chords_have_right_positions', condition)
-        #     #     return condition
-        #
-        #     # def _result_is_notatable():
-        #     #     condition = current_chord.quarter_duration + next_chord.quarter_duration in notatables
-        #     #     # _print_condition('_result_is_notatable', condition)
-        #     #     return condition
-        #
-        #     if _chords_are_adjoinable() and _chords_are_rest():
-        #         current_chord.quarter_duration += next_chord.quarter_duration
-        #         next_chord.marked = True
-        #
-        #         try:
-        #             next_chord = chord_iterator.__next__()
-        #             next_chord = _adjoin(current_chord, next_chord)
-        #         except StopIteration:
-        #             pass
-        #
-        #     return next_chord
-        #
-        # adjoin = True
-        #
-        # try:
-        #     current_chord = chord_iterator.__next__()
-        #     next_chord = chord_iterator.__next__()
-        # except StopIteration:
-        #     adjoin = False
-        #
-        # while adjoin:
-        #     try:
-        #         next_chord = _adjoin(current_chord, next_chord)
-        #         current_chord = next_chord
-        #         next_chord = chord_iterator.__next__()
-        #     except StopIteration:
-        #         break
-        #
-        # beat_new_chords = []
-        # for chord in self.chords:
-        #     try:
-        #         if chord.marked:
-        #             # chord.parent_voice.chords.remove(chord)
-        #             pass
-        #         else:
-        #             beat_new_chords.append(chord)
-        #     except AttributeError:
-        #         beat_new_chords.append(chord)
-        #
-        # if self.chords != beat_new_chords:
-        #     print([ch.quarter_duration for ch in self.chords])
-        #     print([ch.quarter_duration for ch in beat_new_chords])
-        #     self.remove_chords()
-        #     for ch in beat_new_chords:
-        #         self.add_chord(ch)
-        #     self.split_not_notatable()
+    #
+    #
+    # def _adjoin(current_chord, next_chord):
+    #
+    #     def _chords_are_adjoinable():
+    #         condition = current_chord.is_adjoinable and next_chord.is_adjoinable
+    #         return condition
+    #
+    #     def _chords_are_rest():
+    #         condition = current_chord.is_rest and next_chord.is_rest
+    #         # _print_condition('_chords_are_not_rest', condition)
+    #         return condition
+    #
+    #     # def _chords_have_right_positions():
+    #     #     # print 'in _chords_have_right_positions', current_chord.name, next_chord.name
+    #     #     condition = current_chord.offset % (
+    #     #         1) == 0 and next_chord.offset % 1 == 0
+    #     #     # _print_condition('_chords_have_right_positions', condition)
+    #     #     return condition
+    #
+    #     # def _result_is_notatable():
+    #     #     condition = current_chord.quarter_duration + next_chord.quarter_duration in notatables
+    #     #     # _print_condition('_result_is_notatable', condition)
+    #     #     return condition
+    #
+    #     if _chords_are_adjoinable() and _chords_are_rest():
+    #         current_chord.quarter_duration += next_chord.quarter_duration
+    #         next_chord.marked = True
+    #
+    #         try:
+    #             next_chord = chord_iterator.__next__()
+    #             next_chord = _adjoin(current_chord, next_chord)
+    #         except StopIteration:
+    #             pass
+    #
+    #     return next_chord
+    #
+    # adjoin = True
+    #
+    # try:
+    #     current_chord = chord_iterator.__next__()
+    #     next_chord = chord_iterator.__next__()
+    # except StopIteration:
+    #     adjoin = False
+    #
+    # while adjoin:
+    #     try:
+    #         next_chord = _adjoin(current_chord, next_chord)
+    #         current_chord = next_chord
+    #         next_chord = chord_iterator.__next__()
+    #     except StopIteration:
+    #         break
+    #
+    # beat_new_chords = []
+    # for chord in self.chords:
+    #     try:
+    #         if chord.marked:
+    #             # chord.parent_voice.chords.remove(chord)
+    #             pass
+    #         else:
+    #             beat_new_chords.append(chord)
+    #     except AttributeError:
+    #         beat_new_chords.append(chord)
+    #
+    # if self.chords != beat_new_chords:
+    #     print([ch.quarter_duration for ch in self.chords])
+    #     print([ch.quarter_duration for ch in beat_new_chords])
+    #     self.remove_chords()
+    #     for ch in beat_new_chords:
+    #         self.add_chord(ch)
+    #     self.split_not_notatable()
 
     def update_tuplets(self):
         tuplet_divisions = [3, 5, 6, 7, 9, 10]

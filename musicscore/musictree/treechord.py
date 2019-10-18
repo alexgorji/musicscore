@@ -656,7 +656,9 @@ class TreeChord(XMLTree):
                   (3, 1): 'half',
                   (4, 1): 'whole',
                   (6, 1): 'whole',
-                  (8, 1): 'breve'}
+                  (8, 1): 'breve',
+                  (12, 1): 'breve'
+                  }
 
         if self.manual_type is False:
             tremoli_types = [tremolo.type for tremolo in self.tremoli]

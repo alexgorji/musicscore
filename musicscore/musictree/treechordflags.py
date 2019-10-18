@@ -234,7 +234,7 @@ class GlissFlag(BeatwiseFlag):
         self.mode = mode
 
     def __deepcopy__(self, memodict={}):
-        copied = self.__class__(mode=self.mode)
+        copied = self.__class__(mode=self.mode, clef=self.clef)
         copied._head = False
         return copied
 
