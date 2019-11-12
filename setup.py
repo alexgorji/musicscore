@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="musicscore-alexgorji",
+    name="musicscore",
     version="0.0.1",
     author="Alex Gorji",
     author_email="aligorji@hotmail.com",
