@@ -295,9 +295,17 @@ class ComplexTypeDynamics(ComplexType, PrintStyleAlign, Placement, TextDecoratio
         max_occurrence=None
     )
 
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
+        self.placement = &#39;below&#39;
+
+
+class Dynamics(ComplexTypeDynamics):
+    _TAG = &#39;dynamics&#39;
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
     def __init__(self, *args, **kwargs):
-        super().__init__(tag=&#39;dynamics&#39;, *args, **kwargs)
-        self.placement = &#39;below&#39;</code></pre>
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
 </details>
 </section>
 <section>
@@ -311,7 +319,7 @@ class ComplexTypeDynamics(ComplexType, PrintStyleAlign, Placement, TextDecoratio
 <dl>
 <dt id="musicscore.musicxml.types.complextypes.dynamics.ComplexTypeDynamics"><code class="flex name class">
 <span>class <span class="ident">ComplexTypeDynamics</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>tag, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Dynamics can be associated either with a note or a general musical direction. To avoid inconsistencies between and
@@ -375,8 +383,8 @@ analysis or synthesis of dynamics.</p></section>
         max_occurrence=None
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=&#39;dynamics&#39;, *args, **kwargs)
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
         self.placement = &#39;below&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -411,7 +419,64 @@ analysis or synthesis of dynamics.</p></section>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="musicscore.musicxml.types.complextypes.notations.Dynamics" href="notations.html#musicscore.musicxml.types.complextypes.notations.Dynamics">Dynamics</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.dynamics.Dynamics" href="#musicscore.musicxml.types.complextypes.dynamics.Dynamics">Dynamics</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.dynamics.Dynamics"><code class="flex name class">
+<span>class <span class="ident">Dynamics</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Dynamics can be associated either with a note or a general musical direction. To avoid inconsistencies between and
+amongst the letter abbreviations for dynamics (what is sf vs. sfz, standing alone or with a trailing dynamic that
+is not always piano), we use the actual letters as the names of these dynamic elements. The other-dynamics element
+allows other dynamic marks that are not covered here, but many of those should perhaps be included in a more general
+musical direction element. Dynamics elements may also be combined to create marks not covered by a single element,
+such as sfmp.</p>
+<p>These letter dynamic symbols are separated from crescendo, decrescendo, and wedge indications. Dynamic
+representation is inconsistent in scores. Many things are assumed by the composer and left out, such as returns to
+original dynamics. Systematic representations are quite complex: for example, Humdrum has at least 3 representation
+formats related to dynamics. The MusicXML format captures what is in the score, but does not try to be optimal for
+analysis or synthesis of dynamics.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Dynamics(ComplexTypeDynamics):
+    _TAG = &#39;dynamics&#39;
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.dynamics.ComplexTypeDynamics" href="#musicscore.musicxml.types.complextypes.dynamics.ComplexTypeDynamics">ComplexTypeDynamics</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyleAlign" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyleAlign">PrintStyleAlign</a></li>
+<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.align.Halign" href="../../attributes/align.html#musicscore.musicxml.attributes.align.Halign">Halign</a></li>
+<li><a title="musicscore.musicxml.attributes.align.Valign" href="../../attributes/align.html#musicscore.musicxml.attributes.align.Valign">Valign</a></li>
+<li><a title="musicscore.musicxml.attributes.placement.Placement" href="../../attributes/placement.html#musicscore.musicxml.attributes.placement.Placement">Placement</a></li>
+<li><a title="musicscore.musicxml.attributes.textdecoration.TextDecoration" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.TextDecoration">TextDecoration</a></li>
+<li><a title="musicscore.musicxml.attributes.textdecoration.Underline" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.Underline">Underline</a></li>
+<li><a title="musicscore.musicxml.attributes.textdecoration.Overline" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.Overline">Overline</a></li>
+<li><a title="musicscore.musicxml.attributes.textdecoration.LineThrough" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.LineThrough">LineThrough</a></li>
+<li><a title="musicscore.musicxml.attributes.enclosure.Enclosure" href="../../attributes/enclosure.html#musicscore.musicxml.attributes.enclosure.Enclosure">Enclosure</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.dynamics.F"><code class="flex name class">
@@ -1079,6 +1144,9 @@ analysis or synthesis of dynamics.</p></section>
 <ul>
 <li>
 <h4><code><a title="musicscore.musicxml.types.complextypes.dynamics.ComplexTypeDynamics" href="#musicscore.musicxml.types.complextypes.dynamics.ComplexTypeDynamics">ComplexTypeDynamics</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.dynamics.Dynamics" href="#musicscore.musicxml.types.complextypes.dynamics.Dynamics">Dynamics</a></code></h4>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.complextypes.dynamics.F" href="#musicscore.musicxml.types.complextypes.dynamics.F">F</a></code></h4>

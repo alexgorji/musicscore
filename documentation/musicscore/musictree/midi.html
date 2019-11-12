@@ -22,7 +22,10 @@
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from musicscore.musicxml.elements.fullnote import Pitch, Rest
+<pre><code class="python">from math import log2
+
+from musicscore.musicxml.elements.fullnote import Pitch, Rest
+from musicscore.musicxml.elements.note import Notehead
 
 
 class Midi(object):
@@ -78,12 +81,12 @@ class Midi(object):
         9.5: (&#39;B&#39;, -1.5, 0),
         10: (&#39;B&#39;, -1, 0),
         10.5: (&#39;B&#39;, -0.5, 0),
-        11: (&#39;B&#39;, 0, 0),
+        11: (&#39;C&#39;, -1, 1),
         11.5: (&#39;C&#39;, -0.5, 1)
     }
 
     sharp = {
-        0: (&#39;C&#39;, 0, 0),
+        0: (&#39;B&#39;, 1, -1),
         0.5: (&#39;C&#39;, 0.5, 0),
         1: (&#39;C&#39;, 1, 0),
         1.5: (&#39;C&#39;, 1.5, 0),
@@ -150,12 +153,14 @@ class Midi(object):
         11: (&#39;A&#39;, 2, 0)
     }
 
-    def __init__(self, value, accidental_mode=&#39;standard&#39;, *args, **kwargs):
+    def __init__(self, value=None, accidental_mode=&#39;standard&#39;, note_head=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._value = None
         self._accidental_mode = None
+        self._note_head = None
         self.value = value
         self.accidental_mode = accidental_mode
+        self.notehead = note_head
 
     @property
     def value(self):
@@ -163,11 +168,11 @@ class Midi(object):
 
     @value.setter
     def value(self, v):
-
-        if not isinstance(v, float) and not isinstance(v, int):
-            raise TypeError(&#39;midi.value must be of type float or int not{}&#39;.format(type(v)))
-        if v &lt; 16 and v != 0:
-            raise ValueError(&#39;midi.value {} must be greater than 16&#39;.format(v))
+        if v is not None:
+            if not isinstance(v, float) and not isinstance(v, int):
+                raise TypeError(&#39;midi.value must be of type float or int not{}&#39;.format(type(v)))
+            if v &lt; 16 and v != 0:
+                raise ValueError(&#39;midi.value {} must be greater than 16&#39;.format(v))
         self._value = v
 
     @property
@@ -180,6 +185,24 @@ class Midi(object):
         if value not in permitted:
             raise TypeError(&#39;accidental_mode.value {} must be in {}&#39;.format(value, permitted))
         self._accidental_mode = value
+
+    @property
+    def notehead(self):
+        return self._note_head
+
+    @notehead.setter
+    def notehead(self, val):
+        if val is not None and not isinstance(val, Notehead):
+            val = Notehead(val)
+        self._note_head = val
+
+    def add_notehead_object(self, val):
+        if not isinstance(val, Notehead):
+            raise TypeError()
+        self.notehead = val
+
+    def add_notehead(self, val, **kwargs):
+        self.add_notehead_object(Notehead(val, **kwargs))
 
     def get_pitch_name(self):
         if self.accidental_mode == &#39;standard&#39;:
@@ -210,9 +233,131 @@ class Midi(object):
         else:
             return Pitch(*self.get_pitch_name())
 
-    def __deepcopy__(self, memodict={}):
-        output = Midi(self.value, self.accidental_mode)
-        return output</code></pre>
+    def get_flat(self):
+        return Midi(value=self.value - 1, accidental_mode=&#39;flat&#39;)
+
+    def get_sharp(self):
+        return Midi(value=self.value + 1, accidental_mode=&#39;sharp&#39;)
+
+    def transpose(self, val):
+        self.value += val
+        return self
+        # return Midi(value=self.value + val, accidental_mode=self.accidental_mode)
+
+    # def __repr__(self):
+    #     return self.
+
+    def __deepcopy__(self, memodict={}, **kwargs):
+        output = self.__class__(value=self.value, accidental_mode=self.accidental_mode, note_head=self.notehead,
+                                **kwargs)
+        return output
+
+
+class MidiNote(Midi):
+    _VALUE = 60
+
+    def __init__(self, octave, accidental=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._accidental = None
+        self._octave = None
+
+        self.octave = octave
+        self.accidental = accidental
+
+    def _set_new_value(self):
+        if self._get_accidental_value() == -1:
+            self.accidental_mode = &#39;flat&#39;
+        if self._get_accidental_value() == 1:
+            self.accidental_mode = &#39;sharp&#39;
+        self.value = (self._VALUE + self._get_accidental_value()) - (4 - self.octave) * 12
+
+    def _get_accidental_value(self):
+        if self.accidental is None:
+            return 0
+        if self.accidental in (&#39;flat&#39;, &#39;f&#39;, &#39;b&#39;):
+            return -1
+        if self.accidental in (&#39;sharp&#39;, &#39;s&#39;, &#39;#&#39;):
+            return 1
+
+    @property
+    def octave(self):
+        return self._octave
+
+    @octave.setter
+    def octave(self, val):
+        self._octave = val
+        self._set_new_value()
+
+    @property
+    def accidental(self):
+        return self._accidental
+
+    @accidental.setter
+    def accidental(self, val):
+        self._accidental = val
+        self._set_new_value()
+
+    def __deepcopy__(self, memodict={}, **kwargs):
+        output = super().__deepcopy__(octave=self.octave, accidental=self.accidental, **kwargs)
+        return output
+
+    def __repr__(self):
+        pitch_step = self.get_pitch_name()[1]
+
+        if not pitch_step:
+            accidental = &#39;&#39;
+        elif pitch_step == 1:
+            accidental = &#39;#&#39;
+        elif pitch_step == -1:
+            accidental = &#39;b&#39;
+        else:
+            accidental = str(pitch_step)
+
+        return &#34;{}{}{} at {}&#34;.format(self.get_pitch_name()[0], self.octave,
+                                     accidental, id(self))
+
+
+class C(MidiNote):
+    _VALUE = 60
+
+
+class D(MidiNote):
+    _VALUE = 62
+
+
+class E(MidiNote):
+    _VALUE = 64
+
+
+class F(MidiNote):
+    _VALUE = 65
+
+
+class G(MidiNote):
+    _VALUE = 67
+
+
+class A(MidiNote):
+    _VALUE = 69
+
+
+class B(MidiNote):
+    _VALUE = 71
+
+
+def midi_to_frequency(midi, a4=440):
+    try:
+        midi = midi.value
+    except AttributeError:
+        pass
+
+    f = 2 ** ((midi - 69) / 12) * a4
+    return f
+
+
+def frequency_to_midi(frequency, a4=440):
+    m = 69 + 12 * log2(frequency / a4)
+    return m</code></pre>
 </details>
 </section>
 <section>
@@ -220,13 +365,164 @@ class Midi(object):
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="musicscore.musictree.midi.frequency_to_midi"><code class="name flex">
+<span>def <span class="ident">frequency_to_midi</span></span>(<span>frequency, a4=440)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def frequency_to_midi(frequency, a4=440):
+    m = 69 + 12 * log2(frequency / a4)
+    return m</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.midi.midi_to_frequency"><code class="name flex">
+<span>def <span class="ident">midi_to_frequency</span></span>(<span>midi, a4=440)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def midi_to_frequency(midi, a4=440):
+    try:
+        midi = midi.value
+    except AttributeError:
+        pass
+
+    f = 2 ** ((midi - 69) / 12) * a4
+    return f</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="musicscore.musictree.midi.A"><code class="flex name class">
+<span>class <span class="ident">A</span></span>
+<span>(</span><span>octave, accidental=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class A(MidiNote):
+    _VALUE = 69</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.midi.MidiNote" href="#musicscore.musictree.midi.MidiNote">MidiNote</a></li>
+<li><a title="musicscore.musictree.midi.Midi" href="#musicscore.musictree.midi.Midi">Midi</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.midi.B"><code class="flex name class">
+<span>class <span class="ident">B</span></span>
+<span>(</span><span>octave, accidental=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class B(MidiNote):
+    _VALUE = 71</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.midi.MidiNote" href="#musicscore.musictree.midi.MidiNote">MidiNote</a></li>
+<li><a title="musicscore.musictree.midi.Midi" href="#musicscore.musictree.midi.Midi">Midi</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.midi.C"><code class="flex name class">
+<span>class <span class="ident">C</span></span>
+<span>(</span><span>octave, accidental=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class C(MidiNote):
+    _VALUE = 60</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.midi.MidiNote" href="#musicscore.musictree.midi.MidiNote">MidiNote</a></li>
+<li><a title="musicscore.musictree.midi.Midi" href="#musicscore.musictree.midi.Midi">Midi</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.midi.D"><code class="flex name class">
+<span>class <span class="ident">D</span></span>
+<span>(</span><span>octave, accidental=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class D(MidiNote):
+    _VALUE = 62</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.midi.MidiNote" href="#musicscore.musictree.midi.MidiNote">MidiNote</a></li>
+<li><a title="musicscore.musictree.midi.Midi" href="#musicscore.musictree.midi.Midi">Midi</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.midi.E"><code class="flex name class">
+<span>class <span class="ident">E</span></span>
+<span>(</span><span>octave, accidental=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class E(MidiNote):
+    _VALUE = 64</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.midi.MidiNote" href="#musicscore.musictree.midi.MidiNote">MidiNote</a></li>
+<li><a title="musicscore.musictree.midi.Midi" href="#musicscore.musictree.midi.Midi">Midi</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.midi.F"><code class="flex name class">
+<span>class <span class="ident">F</span></span>
+<span>(</span><span>octave, accidental=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class F(MidiNote):
+    _VALUE = 65</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.midi.MidiNote" href="#musicscore.musictree.midi.MidiNote">MidiNote</a></li>
+<li><a title="musicscore.musictree.midi.Midi" href="#musicscore.musictree.midi.Midi">Midi</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.midi.G"><code class="flex name class">
+<span>class <span class="ident">G</span></span>
+<span>(</span><span>octave, accidental=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class G(MidiNote):
+    _VALUE = 67</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.midi.MidiNote" href="#musicscore.musictree.midi.MidiNote">MidiNote</a></li>
+<li><a title="musicscore.musictree.midi.Midi" href="#musicscore.musictree.midi.Midi">Midi</a></li>
+</ul>
+</dd>
 <dt id="musicscore.musictree.midi.Midi"><code class="flex name class">
 <span>class <span class="ident">Midi</span></span>
-<span>(</span><span>value, accidental_mode='standard', *args, **kwargs)</span>
+<span>(</span><span>value=None, accidental_mode='standard', note_head=None, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -285,12 +581,12 @@ class Midi(object):
         9.5: (&#39;B&#39;, -1.5, 0),
         10: (&#39;B&#39;, -1, 0),
         10.5: (&#39;B&#39;, -0.5, 0),
-        11: (&#39;B&#39;, 0, 0),
+        11: (&#39;C&#39;, -1, 1),
         11.5: (&#39;C&#39;, -0.5, 1)
     }
 
     sharp = {
-        0: (&#39;C&#39;, 0, 0),
+        0: (&#39;B&#39;, 1, -1),
         0.5: (&#39;C&#39;, 0.5, 0),
         1: (&#39;C&#39;, 1, 0),
         1.5: (&#39;C&#39;, 1.5, 0),
@@ -357,12 +653,14 @@ class Midi(object):
         11: (&#39;A&#39;, 2, 0)
     }
 
-    def __init__(self, value, accidental_mode=&#39;standard&#39;, *args, **kwargs):
+    def __init__(self, value=None, accidental_mode=&#39;standard&#39;, note_head=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._value = None
         self._accidental_mode = None
+        self._note_head = None
         self.value = value
         self.accidental_mode = accidental_mode
+        self.notehead = note_head
 
     @property
     def value(self):
@@ -370,11 +668,11 @@ class Midi(object):
 
     @value.setter
     def value(self, v):
-
-        if not isinstance(v, float) and not isinstance(v, int):
-            raise TypeError(&#39;midi.value must be of type float or int not{}&#39;.format(type(v)))
-        if v &lt; 16 and v != 0:
-            raise ValueError(&#39;midi.value {} must be greater than 16&#39;.format(v))
+        if v is not None:
+            if not isinstance(v, float) and not isinstance(v, int):
+                raise TypeError(&#39;midi.value must be of type float or int not{}&#39;.format(type(v)))
+            if v &lt; 16 and v != 0:
+                raise ValueError(&#39;midi.value {} must be greater than 16&#39;.format(v))
         self._value = v
 
     @property
@@ -387,6 +685,24 @@ class Midi(object):
         if value not in permitted:
             raise TypeError(&#39;accidental_mode.value {} must be in {}&#39;.format(value, permitted))
         self._accidental_mode = value
+
+    @property
+    def notehead(self):
+        return self._note_head
+
+    @notehead.setter
+    def notehead(self, val):
+        if val is not None and not isinstance(val, Notehead):
+            val = Notehead(val)
+        self._note_head = val
+
+    def add_notehead_object(self, val):
+        if not isinstance(val, Notehead):
+            raise TypeError()
+        self.notehead = val
+
+    def add_notehead(self, val, **kwargs):
+        self.add_notehead_object(Notehead(val, **kwargs))
 
     def get_pitch_name(self):
         if self.accidental_mode == &#39;standard&#39;:
@@ -417,10 +733,29 @@ class Midi(object):
         else:
             return Pitch(*self.get_pitch_name())
 
-    def __deepcopy__(self, memodict={}):
-        output = Midi(self.value, self.accidental_mode)
+    def get_flat(self):
+        return Midi(value=self.value - 1, accidental_mode=&#39;flat&#39;)
+
+    def get_sharp(self):
+        return Midi(value=self.value + 1, accidental_mode=&#39;sharp&#39;)
+
+    def transpose(self, val):
+        self.value += val
+        return self
+        # return Midi(value=self.value + val, accidental_mode=self.accidental_mode)
+
+    # def __repr__(self):
+    #     return self.
+
+    def __deepcopy__(self, memodict={}, **kwargs):
+        output = self.__class__(value=self.value, accidental_mode=self.accidental_mode, note_head=self.notehead,
+                                **kwargs)
         return output</code></pre>
 </details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.midi.MidiNote" href="#musicscore.musictree.midi.MidiNote">MidiNote</a></li>
+</ul>
 <h3>Class variables</h3>
 <dl>
 <dt id="musicscore.musictree.midi.Midi.enharmonic_1"><code class="name">var <span class="ident">enharmonic_1</span></code></dt>
@@ -456,6 +791,16 @@ def accidental_mode(self):
     return self._accidental_mode</code></pre>
 </details>
 </dd>
+<dt id="musicscore.musictree.midi.Midi.notehead"><code class="name">var <span class="ident">notehead</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def notehead(self):
+    return self._note_head</code></pre>
+</details>
+</dd>
 <dt id="musicscore.musictree.midi.Midi.value"><code class="name">var <span class="ident">value</span></code></dt>
 <dd>
 <section class="desc"></section>
@@ -469,6 +814,41 @@ def value(self):
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="musicscore.musictree.midi.Midi.add_notehead"><code class="name flex">
+<span>def <span class="ident">add_notehead</span></span>(<span>self, val, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_notehead(self, val, **kwargs):
+    self.add_notehead_object(Notehead(val, **kwargs))</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.midi.Midi.add_notehead_object"><code class="name flex">
+<span>def <span class="ident">add_notehead_object</span></span>(<span>self, val)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_notehead_object(self, val):
+    if not isinstance(val, Notehead):
+        raise TypeError()
+    self.notehead = val</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.midi.Midi.get_flat"><code class="name flex">
+<span>def <span class="ident">get_flat</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_flat(self):
+    return Midi(value=self.value - 1, accidental_mode=&#39;flat&#39;)</code></pre>
+</details>
+</dd>
 <dt id="musicscore.musictree.midi.Midi.get_pitch_name"><code class="name flex">
 <span>def <span class="ident">get_pitch_name</span></span>(<span>self)</span>
 </code></dt>
@@ -514,6 +894,138 @@ def value(self):
         return Pitch(*self.get_pitch_name())</code></pre>
 </details>
 </dd>
+<dt id="musicscore.musictree.midi.Midi.get_sharp"><code class="name flex">
+<span>def <span class="ident">get_sharp</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_sharp(self):
+    return Midi(value=self.value + 1, accidental_mode=&#39;sharp&#39;)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.midi.Midi.transpose"><code class="name flex">
+<span>def <span class="ident">transpose</span></span>(<span>self, val)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def transpose(self, val):
+    self.value += val
+    return self</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.midi.MidiNote"><code class="flex name class">
+<span>class <span class="ident">MidiNote</span></span>
+<span>(</span><span>octave, accidental=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MidiNote(Midi):
+    _VALUE = 60
+
+    def __init__(self, octave, accidental=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._accidental = None
+        self._octave = None
+
+        self.octave = octave
+        self.accidental = accidental
+
+    def _set_new_value(self):
+        if self._get_accidental_value() == -1:
+            self.accidental_mode = &#39;flat&#39;
+        if self._get_accidental_value() == 1:
+            self.accidental_mode = &#39;sharp&#39;
+        self.value = (self._VALUE + self._get_accidental_value()) - (4 - self.octave) * 12
+
+    def _get_accidental_value(self):
+        if self.accidental is None:
+            return 0
+        if self.accidental in (&#39;flat&#39;, &#39;f&#39;, &#39;b&#39;):
+            return -1
+        if self.accidental in (&#39;sharp&#39;, &#39;s&#39;, &#39;#&#39;):
+            return 1
+
+    @property
+    def octave(self):
+        return self._octave
+
+    @octave.setter
+    def octave(self, val):
+        self._octave = val
+        self._set_new_value()
+
+    @property
+    def accidental(self):
+        return self._accidental
+
+    @accidental.setter
+    def accidental(self, val):
+        self._accidental = val
+        self._set_new_value()
+
+    def __deepcopy__(self, memodict={}, **kwargs):
+        output = super().__deepcopy__(octave=self.octave, accidental=self.accidental, **kwargs)
+        return output
+
+    def __repr__(self):
+        pitch_step = self.get_pitch_name()[1]
+
+        if not pitch_step:
+            accidental = &#39;&#39;
+        elif pitch_step == 1:
+            accidental = &#39;#&#39;
+        elif pitch_step == -1:
+            accidental = &#39;b&#39;
+        else:
+            accidental = str(pitch_step)
+
+        return &#34;{}{}{} at {}&#34;.format(self.get_pitch_name()[0], self.octave,
+                                     accidental, id(self))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.midi.Midi" href="#musicscore.musictree.midi.Midi">Midi</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.midi.C" href="#musicscore.musictree.midi.C">C</a></li>
+<li><a title="musicscore.musictree.midi.D" href="#musicscore.musictree.midi.D">D</a></li>
+<li><a title="musicscore.musictree.midi.E" href="#musicscore.musictree.midi.E">E</a></li>
+<li><a title="musicscore.musictree.midi.F" href="#musicscore.musictree.midi.F">F</a></li>
+<li><a title="musicscore.musictree.midi.G" href="#musicscore.musictree.midi.G">G</a></li>
+<li><a title="musicscore.musictree.midi.A" href="#musicscore.musictree.midi.A">A</a></li>
+<li><a title="musicscore.musictree.midi.B" href="#musicscore.musictree.midi.B">B</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musictree.midi.MidiNote.accidental"><code class="name">var <span class="ident">accidental</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def accidental(self):
+    return self._accidental</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.midi.MidiNote.octave"><code class="name">var <span class="ident">octave</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def octave(self):
+    return self._octave</code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -530,20 +1042,60 @@ def value(self):
 <li><code><a title="musicscore.musictree" href="index.html">musicscore.musictree</a></code></li>
 </ul>
 </li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="musicscore.musictree.midi.frequency_to_midi" href="#musicscore.musictree.midi.frequency_to_midi">frequency_to_midi</a></code></li>
+<li><code><a title="musicscore.musictree.midi.midi_to_frequency" href="#musicscore.musictree.midi.midi_to_frequency">midi_to_frequency</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="musicscore.musictree.midi.A" href="#musicscore.musictree.midi.A">A</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.midi.B" href="#musicscore.musictree.midi.B">B</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.midi.C" href="#musicscore.musictree.midi.C">C</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.midi.D" href="#musicscore.musictree.midi.D">D</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.midi.E" href="#musicscore.musictree.midi.E">E</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.midi.F" href="#musicscore.musictree.midi.F">F</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.midi.G" href="#musicscore.musictree.midi.G">G</a></code></h4>
+</li>
 <li>
 <h4><code><a title="musicscore.musictree.midi.Midi" href="#musicscore.musictree.midi.Midi">Midi</a></code></h4>
 <ul class="two-column">
 <li><code><a title="musicscore.musictree.midi.Midi.accidental_mode" href="#musicscore.musictree.midi.Midi.accidental_mode">accidental_mode</a></code></li>
+<li><code><a title="musicscore.musictree.midi.Midi.add_notehead" href="#musicscore.musictree.midi.Midi.add_notehead">add_notehead</a></code></li>
+<li><code><a title="musicscore.musictree.midi.Midi.add_notehead_object" href="#musicscore.musictree.midi.Midi.add_notehead_object">add_notehead_object</a></code></li>
 <li><code><a title="musicscore.musictree.midi.Midi.enharmonic_1" href="#musicscore.musictree.midi.Midi.enharmonic_1">enharmonic_1</a></code></li>
 <li><code><a title="musicscore.musictree.midi.Midi.enharmonic_2" href="#musicscore.musictree.midi.Midi.enharmonic_2">enharmonic_2</a></code></li>
 <li><code><a title="musicscore.musictree.midi.Midi.flat" href="#musicscore.musictree.midi.Midi.flat">flat</a></code></li>
+<li><code><a title="musicscore.musictree.midi.Midi.get_flat" href="#musicscore.musictree.midi.Midi.get_flat">get_flat</a></code></li>
 <li><code><a title="musicscore.musictree.midi.Midi.get_pitch_name" href="#musicscore.musictree.midi.Midi.get_pitch_name">get_pitch_name</a></code></li>
 <li><code><a title="musicscore.musictree.midi.Midi.get_pitch_rest" href="#musicscore.musictree.midi.Midi.get_pitch_rest">get_pitch_rest</a></code></li>
+<li><code><a title="musicscore.musictree.midi.Midi.get_sharp" href="#musicscore.musictree.midi.Midi.get_sharp">get_sharp</a></code></li>
+<li><code><a title="musicscore.musictree.midi.Midi.notehead" href="#musicscore.musictree.midi.Midi.notehead">notehead</a></code></li>
 <li><code><a title="musicscore.musictree.midi.Midi.sharp" href="#musicscore.musictree.midi.Midi.sharp">sharp</a></code></li>
 <li><code><a title="musicscore.musictree.midi.Midi.standard" href="#musicscore.musictree.midi.Midi.standard">standard</a></code></li>
+<li><code><a title="musicscore.musictree.midi.Midi.transpose" href="#musicscore.musictree.midi.Midi.transpose">transpose</a></code></li>
 <li><code><a title="musicscore.musictree.midi.Midi.value" href="#musicscore.musictree.midi.Midi.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.midi.MidiNote" href="#musicscore.musictree.midi.MidiNote">MidiNote</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.midi.MidiNote.accidental" href="#musicscore.musictree.midi.MidiNote.accidental">accidental</a></code></li>
+<li><code><a title="musicscore.musictree.midi.MidiNote.octave" href="#musicscore.musictree.midi.MidiNote.octave">octave</a></code></li>
 </ul>
 </li>
 </ul>

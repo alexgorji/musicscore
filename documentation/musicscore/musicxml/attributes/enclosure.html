@@ -22,7 +22,7 @@
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+<pre><code class="python">from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeEnclosureShape
 
 
 class Enclosure(AttributeAbstract):
@@ -32,7 +32,8 @@ class Enclosure(AttributeAbstract):
 
     def __init__(self, enclosure=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute(&#39;enclosure&#39;, enclosure, &#34;TypeEnclosureShape&#34;)</code></pre>
+        self.generate_attribute(&#39;enclosure&#39;, enclosure, &#34;TypeEnclosureShape&#34;)
+        TypeEnclosureShape</code></pre>
 </details>
 </section>
 <section>
@@ -59,7 +60,8 @@ class Enclosure(AttributeAbstract):
 
     def __init__(self, enclosure=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute(&#39;enclosure&#39;, enclosure, &#34;TypeEnclosureShape&#34;)</code></pre>
+        self.generate_attribute(&#39;enclosure&#39;, enclosure, &#34;TypeEnclosureShape&#34;)
+        TypeEnclosureShape</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

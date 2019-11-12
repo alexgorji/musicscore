@@ -22,7 +22,7 @@
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+<pre><code class="python">from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeLineType
 
 
 class LineType(AttributeAbstract):
@@ -32,7 +32,8 @@ class LineType(AttributeAbstract):
 
     def __init__(self, line_type=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute(&#39;line-type&#39;, line_type, &#34;TypeLineType&#34;)</code></pre>
+        self.generate_attribute(&#39;line-type&#39;, line_type, &#34;TypeLineType&#34;)
+        TypeLineType</code></pre>
 </details>
 </section>
 <section>
@@ -59,7 +60,8 @@ class LineType(AttributeAbstract):
 
     def __init__(self, line_type=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute(&#39;line-type&#39;, line_type, &#34;TypeLineType&#34;)</code></pre>
+        self.generate_attribute(&#39;line-type&#39;, line_type, &#34;TypeLineType&#34;)
+        TypeLineType</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -67,9 +69,12 @@ class LineType(AttributeAbstract):
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="musicscore.musicxml.types.complextypes.tied.ComplexTypeTied" href="../types/complextypes/tied.html#musicscore.musicxml.types.complextypes.tied.ComplexTypeTied">ComplexTypeTied</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.wedge.ComplexTypeWedge" href="../types/complextypes/wedge.html#musicscore.musicxml.types.complextypes.wedge.ComplexTypeWedge">ComplexTypeWedge</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.emptyline.ComplexTypeEmptyLine" href="../types/complextypes/emptyline.html#musicscore.musicxml.types.complextypes.emptyline.ComplexTypeEmptyLine">ComplexTypeEmptyLine</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.slide.ComplexTypeSlide" href="../types/complextypes/slide.html#musicscore.musicxml.types.complextypes.slide.ComplexTypeSlide">ComplexTypeSlide</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.slur.ComplexTypeSlur" href="../types/complextypes/slur.html#musicscore.musicxml.types.complextypes.slur.ComplexTypeSlur">ComplexTypeSlur</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.tied.ComplexTypeTied" href="../types/complextypes/tied.html#musicscore.musicxml.types.complextypes.tied.ComplexTypeTied">ComplexTypeTied</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.bracket.ComplexTypeBracket" href="../types/complextypes/bracket.html#musicscore.musicxml.types.complextypes.bracket.ComplexTypeBracket">ComplexTypeBracket</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.wedge.ComplexTypeWedge" href="../types/complextypes/wedge.html#musicscore.musicxml.types.complextypes.wedge.ComplexTypeWedge">ComplexTypeWedge</a></li>
 </ul>
 </dd>
 </dl>

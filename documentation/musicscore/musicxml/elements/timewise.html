@@ -68,7 +68,8 @@ class Score(XMLElement, DocumentAttributes):
         doctype = &#39;&lt;!DOCTYPE score-timewise PUBLIC &#34;-//Recordare//DTD MusicXML {} Timewise//EN&#34; &#34;http://www.musicxml.org/dtds/timewise.dtd&#34;&gt;\n&#39;.format(
             self.version)
 
-        path += &#39;.xml&#39;
+        if path[-4:] != &#39;.xml&#39;:
+            path += &#39;.xml&#39;
         output_file = open(path, &#39;w&#39;)
         output_file.write(xmlversion)
         output_file.write(doctype)
@@ -179,7 +180,8 @@ attribute.</p></section>
         doctype = &#39;&lt;!DOCTYPE score-timewise PUBLIC &#34;-//Recordare//DTD MusicXML {} Timewise//EN&#34; &#34;http://www.musicxml.org/dtds/timewise.dtd&#34;&gt;\n&#39;.format(
             self.version)
 
-        path += &#39;.xml&#39;
+        if path[-4:] != &#39;.xml&#39;:
+            path += &#39;.xml&#39;
         output_file = open(path, &#39;w&#39;)
         output_file.write(xmlversion)
         output_file.write(doctype)
@@ -213,7 +215,8 @@ attribute.</p></section>
     doctype = &#39;&lt;!DOCTYPE score-timewise PUBLIC &#34;-//Recordare//DTD MusicXML {} Timewise//EN&#34; &#34;http://www.musicxml.org/dtds/timewise.dtd&#34;&gt;\n&#39;.format(
         self.version)
 
-    path += &#39;.xml&#39;
+    if path[-4:] != &#39;.xml&#39;:
+        path += &#39;.xml&#39;
     output_file = open(path, &#39;w&#39;)
     output_file.write(xmlversion)
     output_file.write(doctype)

@@ -24,22 +24,38 @@
 <summary>Source code</summary>
 <pre><code class="python">from quicktions import Fraction
 
+from AGtree.basic_functions import dToX, xToD
+from musicscore.basic_functions import Scale
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
 from musicscore.musictree.midi import Midi
+from musicscore.musictree.treechordflags import TreeChordFlag
+from musicscore.musictree.treechordflags2 import TreeChordFlag2
+from musicscore.musictree.treechordflags3 import TreeChordFlag3
 from musicscore.musictree.treenote import TreeNote
-from musicscore.musicxml.groups.musicdata import Direction, Attributes
-from musicscore.musicxml.groups.common import EditorialVoice, Staff, Voice
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
     Type, Dot, Notehead, NoteheadText, Beam, Duration
 from musicscore.musicxml.elements.xml_element import XMLTree
+from musicscore.musicxml.groups.common import EditorialVoice, Staff, Voice
+from musicscore.musicxml.groups.musicdata import Direction, Attributes
+from musicscore.musicxml.types.complextypes.articulations import Accent, StrongAccent, DetachedLegato, Tenuto, Spiccato, \
+    Staccato, Staccatissimo, BreathMark, Caesura, Stress, Unstress, Plop, Scoop, Doit, Falloff
 from musicscore.musicxml.types.complextypes.direction import DirectionType
-from musicscore.musicxml.types.complextypes.directiontype import Words
+from musicscore.musicxml.types.complextypes.directiontype import Words, Bracket, Wedge
 from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, \
-    FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N
+    FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N, Dynamics
 from musicscore.musicxml.types.complextypes.lyric import Text
-from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Dynamics, Technical, Articulations
+from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Technical, \
+    Articulations, Slur, Fermata, Slide
+from musicscore.musicxml.types.complextypes.ornaments import Tremolo
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
+
+
+class FingerTremolo(object):
+    def __init__(self, chord, number=3, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.chord = chord
+        self.number = number
 
 
 class TreeChord(XMLTree):
@@ -59,7 +75,7 @@ class TreeChord(XMLTree):
             ),
         ),
         Element(Attributes, 0),
-        Element(Direction, 0),
+        Element(Direction, 0, None),
         Element(Instrument, 0),
         GroupReference(EditorialVoice, 0),
         Element(Type, 0),
@@ -75,18 +91,35 @@ class TreeChord(XMLTree):
         Element(Play, 0)
     )
 
-    def __init__(self, midis=71, quarter_duration=1, **kwargs):
+    def __init__(self, midis=71, quarter_duration=1, zero_mode=&#39;grace&#39;, **kwargs):
         super().__init__(**kwargs)
         self.parent_voice = None
         self.parent_beat = None
         self._offset = None
         self._quarter_duration = None
+        self._zero_mode = None
+        self.zero_mode = zero_mode
         self.quarter_duration = quarter_duration
         self._midis = None
+
         self.midis = midis
         self._tail = False
         self._head = False
         self._is_adjoinable = True
+        self._flags = None
+
+        self.manual_type = False
+        self.manual_voice_number = False
+        self.is_finger_tremolo = False
+        self.relative_x = None
+        self.tie_orientation = None
+
+    @property
+    def is_head(self):
+        return self._head
+
+    def is_tail(self):
+        return self._tail
 
     @property
     def __name__(self):
@@ -96,6 +129,9 @@ class TreeChord(XMLTree):
     @property
     def quarter_duration(self):
         return self._quarter_duration
+
+    def set_voice_number(self, voice_number):
+        self.manual_voice_number = voice_number
 
     @quarter_duration.setter
     def quarter_duration(self, value):
@@ -109,6 +145,17 @@ class TreeChord(XMLTree):
             self._quarter_duration = Fraction(value).limit_denominator(1000)
         else:
             self._quarter_duration = value
+
+    @property
+    def zero_mode(self):
+        return self._zero_mode
+
+    @zero_mode.setter
+    def zero_mode(self, val):
+        permitted = [&#39;remove&#39;, &#39;grace&#39;]
+        if val not in permitted:
+            raise ValueError(&#39;zero_mode.value {} must be in {}&#39;.format(val, permitted))
+        self._zero_mode = val
 
     @property
     def midis(self):
@@ -132,7 +179,24 @@ class TreeChord(XMLTree):
             if midi.value == 0 and len(values) &gt; 1:
                 raise ValueError(&#39;midi with value 0 must be alone.&#39;)
 
+        output = sorted(output, key=lambda midi: midi.value)
+
         self._midis = output
+
+    def add_midi(self, val):
+        if val == 0:
+            raise ValueError(&#39;midi with value 0 can not be added.&#39;)
+
+        if not isinstance(val, Midi):
+            val = Midi(val)
+
+        self._midis.append(val)
+
+    def add_harmonic(self, interval):
+        if len(self.midis) != 1:
+            raise Exception(&#39;harmonic can only be added to chords with one midi&#39;)
+        self.add_midi(self.midis[0].value + interval)
+        self.midis[-1].add_notehead(&#39;diamond&#39;, filled=&#39;no&#39;)
 
     @property
     def is_adjoinable(self):
@@ -141,8 +205,11 @@ class TreeChord(XMLTree):
     @is_adjoinable.setter
     def is_adjoinable(self, value):
         if not isinstance(value, bool):
-            raise TypeError(&#39;is_joinable.value must be of type bool not{}&#39;.format(type(value)))
+            raise TypeError(&#39;is_adjoinable.value must be of type bool not{}&#39;.format(type(value)))
         self._is_adjoinable = value
+
+    def force_tie(self):
+        self.is_adjoinable = False
 
     @property
     def tie_types(self):
@@ -166,6 +233,21 @@ class TreeChord(XMLTree):
             return True
         return False
 
+    def set_tie_orientation(self, orientation):
+        if self.is_tied_to_next:
+            tied = [t for t in self.get_children_by_type(Notations)[0].get_children_by_type(Tied) if t.type == &#39;start&#39;]
+            for t in tied:
+                t.orientation = orientation
+
+    def to_rest(self):
+        self.midis = [0]
+        self.remove_tie(&#39;stop&#39;)
+        self.remove_tie(&#39;start&#39;)
+        for notation in self.get_children_by_type(Notations):
+            articulations = notation.get_children_by_type(Articulations)
+            for articulation in articulations:
+                notation.remove_child(articulation)
+
     @property
     def position_in_beat(self):
         index_in_beat = self.parent_beat.chords.index(self)
@@ -180,6 +262,7 @@ class TreeChord(XMLTree):
         index = self.parent_voice.chords.index(self)
         if index == 0:
             return None
+
         return self.parent_voice.chords[index - 1]
 
     @property
@@ -188,6 +271,17 @@ class TreeChord(XMLTree):
         if index == len(self.parent_voice.chords) - 1:
             return None
         return self.parent_voice.chords[index + 1]
+
+    @property
+    def previous_in_score_part(self):
+        if self.previous is None:
+            previous_voice = self.parent_voice.previous
+            if previous_voice:
+                return previous_voice.chords[-1]
+            else:
+                return None
+        else:
+            return self.previous
 
     def update_offset(self):
         if self.previous:
@@ -206,15 +300,117 @@ class TreeChord(XMLTree):
     def end_position(self):
         return self.offset + self.quarter_duration
 
+    @property
+    def flags(self):
+
+        if self._flags is None:
+            self._flags = set()
+        return self._flags
+
+    @property
+    def tremoli(self):
+        try:
+            return self.get_children_by_type(Notations)[0].get_children_by_type(Ornaments)[0].get_children_by_type(
+                Tremolo)
+        except IndexError:
+            return []
+
+    # def add_finger_tremolo(self, chord, number=3):
+    #     self.finger_tremolo = FingerTremolo(chord, number)
+
+    def add_flag(self, flag):
+        if not isinstance(flag, TreeChordFlag) and not isinstance(flag, TreeChordFlag2) \
+                and not isinstance(flag, TreeChordFlag3):
+            raise TypeError(
+                &#39;flag must be of type TreeChordFlag, TreeChordFlag2 or TreeChordFlag3 not {}&#39;.format(flag.__class__))
+        if self._flags is None:
+            self._flags = set()
+        self._flags.add(flag)
+
+    def remove_flag(self, flag):
+        if flag in self._flags:
+            self._flags.remove(flag)
+
+    def add_slur_object(self, slur):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(slur)
+        return slur
+
+    def add_slur(self, type, **kwargs):
+        slur = Slur(type, **kwargs)
+        return self.add_slur_object(slur)
+
+    def remove_slur(self, type):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+            slurs = [s for s in notations.get_children_by_type(Slur) if s.type == type]
+            for slur in slurs:
+                notations.remove_child(slur)
+            if not notations.get_children():
+                self.remove_child(notations)
+        except IndexError:
+            pass
+
+    def add_notations_object(self, object):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(object)
+        return object
+
+    def remove_notations(self):
+        notations = self.get_children_by_type(Notations)
+        for notation in notations:
+            self.remove_child(notation)
+
+    def add_slide(self, type, **kwargs):
+        object = Slide(type, **kwargs)
+        return self.add_notations_object(object)
+
+    def add_tremolo(self, number=3, **kwargs):
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            ornaments = notations.get_children_by_type(Ornaments)[0]
+        except IndexError:
+            ornaments = notations.add_child(Ornaments())
+
+        ornaments.add_child(Tremolo(number, **kwargs))
+
     def split_copy(self, quarter_duration):
         new_chord = TreeChord(quarter_duration=quarter_duration)
+
         new_chord.midis = self.midis
         new_chord.parent_voice = self.parent_voice
         new_chord.parent_beat = self.parent_beat
+
+        if self._flags is not None:
+            new_chord._flags = []
+            for flag in self._flags:
+                new_chord._flags.append(flag.__deepcopy__())
+
         new_chord._offset = None
+        new_chord.is_finger_tremolo = self.is_finger_tremolo
+
         try:
             voice = self.get_children_by_type(Voice)[0]
             new_chord.add_child(voice)
+        except IndexError:
+            pass
+
+        try:
+            notehead = self.get_children_by_type(Notehead)[0]
+            new_chord.add_child(notehead)
         except IndexError:
             pass
 
@@ -231,9 +427,18 @@ class TreeChord(XMLTree):
         self.quarter_duration *= new_ratios[0]
 
         new_chords = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
+        for ch in new_chords:
+            ch.tie_orientation = self.tie_orientation
 
         if &#39;start&#39; in self.tie_types:
             new_chords[-1].add_tie(&#39;start&#39;)
+
+        if not self.is_adjoinable:
+            self.is_adjoinable = True
+            new_chords[-1].is_adjoinable = False
+
+        for tremolo in self.tremoli:
+            new_chords[-1].add_tremolo(number=tremolo.value)
 
         new_chords.insert(0, self)
 
@@ -249,14 +454,21 @@ class TreeChord(XMLTree):
     @property
     def _notes(self):
         output = []
+        if self.zero_mode == &#39;remove&#39; and self.quarter_duration == 0:
+            return output
+
         for index, midi in enumerate(self.midis):
-            note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration)
+            note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration, parent_chord=self)
+            note.is_finger_tremolo = self.is_finger_tremolo
+            if self.relative_x is not None:
+                note.relative_x = self.relative_x
+            if midi.notehead:
+                note.add_child(midi.notehead)
 
             for child in self.get_children():
                 if isinstance(child, Lyric) and index != 0:
                     pass
-                elif isinstance(child, Notehead) and index != 0:
-                    pass
+
                 elif isinstance(child, Notations) and index != 0:
                     grandchildren = child.get_children()
                     for grandchild in grandchildren:
@@ -284,7 +496,7 @@ class TreeChord(XMLTree):
 
         if value == &#39;start&#39; and &#39;start&#39; not in self.tie_types:
             self.add_child(Tie(&#39;start&#39;))
-            notations.add_child(Tied(&#39;start&#39;))
+            notations.add_child(Tied(&#39;start&#39;, orientation=self.tie_orientation))
 
         elif value == &#39;stop&#39; and &#39;stop&#39; not in self.tie_types:
             self.add_child(Tie(&#39;stop&#39;))
@@ -301,27 +513,130 @@ class TreeChord(XMLTree):
             if not notations.get_children():
                 self.remove_child(notations)
 
+    def remove_previous_tie(self):
+        if &#39;stop&#39; in self.tie_types:
+            self.remove_tie(&#39;stop&#39;)
+            try:
+                self.previous_in_score_part.remove_tie(&#39;start&#39;)
+            except AttributeError:
+                pass
+
+    def untie(self):
+        if &#39;start&#39; in self.tie_types:
+            self.remove_tie(&#39;start&#39;)
+            try:
+                self.next.remove_tie(&#39;stop&#39;)
+            except AttributeError:
+                pass
+
     def remove_voice(self):
         for voice in self.get_children_by_type(Voice):
             self.remove_child(voice)
 
-    def add_tuplet(self, position, number=1):
+    def add_tuplet(self, type, number=1):
         normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
         types = {8: &#39;32nd&#39;, 4: &#39;16th&#39;, 2: &#39;eighth&#39;}
         actual_notes = self.parent_beat.best_div
         normal_notes = normals[actual_notes]
         normal_type = types[normal_notes / self.parent_beat.duration]
-        if position != &#39;continue&#39;:
+        if type != &#39;continue&#39;:
             try:
                 notations = self.notations
             except AttributeError:
                 notations = self.add_child(Notations())
-            notations.add_child(Tuplet(type=position, number=number, bracket=&#39;yes&#39;, placement=&#39;above&#39;))
+
+            v = self.get_children_by_type(Voice)[0]
+            if int(v.value) % 2 == 0:
+                placement = &#39;below&#39;
+            else:
+                placement = &#39;above&#39;
+
+            notations.add_child(Tuplet(type=type, number=number, bracket=&#39;yes&#39;, placement=placement))
 
         tm = self.add_child(TimeModification())
         tm.add_child(ActualNotes(actual_notes))
         tm.add_child(NormalNotes(normal_notes))
         tm.add_child(NormalType(normal_type))
+
+    def add_technical_object(self, technical_object):
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            technical = notations.get_children_by_type(Technical)[0]
+        except IndexError:
+            technical = notations.add_child(Technical())
+
+        technical.add_child(technical_object)
+
+    def add_articulation_object(self, articulation_object):
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            articulations = notations.get_children_by_type(Articulations)[0]
+        except IndexError:
+            articulations = notations.add_child(Articulations())
+
+        articulations.add_child(articulation_object)
+
+    def add_articulation(self, articulation, **kwargs):
+
+        def add_type(dict):
+            new_dict = dict.copy()
+            if &#39;type&#39; not in new_dict:
+                new_dict[&#39;type&#39;] = &#39;up&#39;
+            return new_dict
+
+        def add_breath_mark_value(dict):
+            new_dict = dict.copy()
+            if &#39;value&#39; not in new_dict:
+                new_dict[&#39;value&#39;] = &#39;comma&#39;
+            return new_dict
+
+        articulations = {&#39;accent&#39;: Accent(**kwargs),
+                         &#39;strong-accent&#39;: StrongAccent(**add_type(kwargs)),
+                         &#39;staccato&#39;: Staccato(**kwargs),
+                         &#39;tenuto&#39;: Tenuto(**kwargs),
+                         &#39;detached-legato&#39;: DetachedLegato(**kwargs),
+                         &#39;staccatissimo&#39;: Staccatissimo(**kwargs),
+                         &#39;spiccato&#39;: Spiccato(**kwargs),
+                         &#39;scoop&#39;: Scoop(**kwargs),
+                         &#39;plop&#39;: Plop(**kwargs),
+                         &#39;doit&#39;: Doit(**kwargs),
+                         &#39;falloff&#39;: Falloff(**kwargs),
+                         &#39;breath-mark&#39;: BreathMark(**add_breath_mark_value(kwargs)),
+                         &#39;caesura&#39;: Caesura(**kwargs),
+                         &#39;stress&#39;: Stress(**kwargs),
+                         &#39;unstress&#39;: Unstress(**kwargs)}
+
+        if articulation not in articulations:
+            raise ValueError(&#39;articulation {}  must be in {}&#39;.format(articulation, list(articulations.keys())))
+
+        return self.add_articulation_object(articulations[articulation])
+
+    def get_articulations(self):
+        output = []
+        for notations in self.get_children_by_type(Notations):
+            articulations = notations.get_children_by_type(Articulations)
+            for articulation in articulations:
+                output.extend(articulation.get_children())
+        return output
+
+    def set_manual_type(self, val, **kwargs):
+        try:
+            chord_type = self.get_children_by_type(Type)[0]
+            self.remove_child(chord_type)
+        except IndexError:
+            self.add_child(Type(value=val, **kwargs))
+
+        self.manual_type = True
 
     def update_type(self):
         &#34;&#34;&#34;get type of a Note() depending on its quantized duration and return it [whole, half, quarter, eighth, 16th,
@@ -365,18 +680,32 @@ class TreeChord(XMLTree):
                   (3, 1): &#39;half&#39;,
                   (4, 1): &#39;whole&#39;,
                   (6, 1): &#39;whole&#39;,
-                  (8, 1): &#39;breve&#39;}
+                  (8, 1): &#39;breve&#39;,
+                  (12, 1): &#39;breve&#39;
+                  }
 
-        if self.quarter_duration == 0:
-            value = &#39;eighth&#39;
-        else:
-            value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
+        if self.manual_type is False:
+            tremoli_types = [tremolo.type for tremolo in self.tremoli]
 
-        try:
-            chord_type = self.get_children_by_type(Type)[0]
-            chord_type.value = value
-        except IndexError:
-            self.add_child(Type(value))
+            if self.quarter_duration == 0:
+                value = &#39;eighth&#39;
+
+            elif (&#39;start&#39; in tremoli_types or &#39;stop&#39; in tremoli_types):
+                show_duration = self.quarter_duration * 2
+                value = _types[(show_duration.numerator, show_duration.denominator)]
+                if not self.get_children_by_type(TimeModification):
+                    tm = TimeModification()
+                    tm.add_child(ActualNotes(2))
+                    tm.add_child(NormalNotes(1))
+                    self.add_child(tm)
+            else:
+                value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
+
+            try:
+                chord_type = self.get_children_by_type(Type)[0]
+                chord_type.value = value
+            except IndexError:
+                self.add_child(Type(value))
 
     def update_dot(self):
         _dot = 0
@@ -403,22 +732,40 @@ class TreeChord(XMLTree):
         for i in range(_dot):
             self.add_child(Dot())
 
-    def copy(self):
-        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+    # def copy(self):
+    #     new_chord = TreeChord(quarter_duration=self.quarter_duration)
+    #     new_chord.midis = self.midis
+    #     for child in self.get_children():
+    #         new_chord.add_child(child)
+
+    def tremolo_flag_copy(self):
+        new_chord = TreeChord()
         new_chord.midis = self.midis
-        for child in self.get_children():
-            new_chord.add_child(child)
+        return new_chord
 
     def transpose(self, interval):
         for midi in self.midis:
-            midi.value += interval
+            if midi.value != 0:
+                midi.value += interval
+
+    def inverse(self):
+        intervals = xToD([midi.value for midi in self.midis])
+        intervals = [-interval for interval in intervals]
+        self.midis = dToX(intervals, first_element=self.midis[0].value)
+
+    def change_range(self, min_midi, max_midi, microtone=2):
+        if self.is_rest:
+            pass
+        else:
+            scale = Scale(self.midis[0].value, self.midis[-1].value, min_midi, max_midi, step=2 / microtone)
+            self.midis = [scale(midi.value) for midi in self.midis]
 
     def add_lyric(self, text, number=1, **kwargs):
         lyric = self.add_child(Lyric(number=str(number), **kwargs))
         lyric.add_child(Text(str(text)))
         return lyric
 
-    def add_dynamics(self, value):
+    def add_dynamics(self, value, placement=&#39;below&#39;, **kwargs):
         dynamic_classes = [P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, FFFFFF, MP, MF, SF, SFP, SFPP, FP,
                            RF, RFZ, SFZ, SFFZ, FZ, N, PF, SFZP]
 
@@ -428,25 +775,87 @@ class TreeChord(XMLTree):
         except ValueError:
             raise ValueError(&#39;wrong dynamics value&#39;)
 
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-        except IndexError:
-            notations = self.add_child(Notations())
-
-        dynamics = notations.add_child(Dynamics())
+        direction = self.add_child(Direction(placement=placement))
+        direction_type = direction.add_child(DirectionType())
+        dynamics = direction_type.add_child(Dynamics(**kwargs))
 
         dynamics.add_child(dynamic_classes[index]())
 
         return dynamics
 
-    def add_words(self, text, **kwargs):
-        try:
-            d = self.get_children_by_type(Direction)[0]
-        except IndexError:
-            d = self.add_child(Direction())
+    @property
+    def dynamics(self):
+        directions = self.get_children_by_type(Direction)
+        for direction in directions:
+            direction_types = direction.get_children_by_type(DirectionType)
+            for direction_type in direction_types:
+                for child in direction_type.get_children():
+                    if isinstance(child, Dynamics):
+                        return child.get_children()[0].to_string()[1:-3]
+        return None
 
+    def get_dynamics(self):
+        return self.dynamics
+
+    def add_wedge(self, value, placement=&#39;below&#39;, **kwargs):
+        wedge_object = Wedge(value, **kwargs)
+
+        direction = self.add_child(Direction(placement=placement))
+        direction_type = direction.add_child(DirectionType())
+        wedge = direction_type.add_child(wedge_object)
+        #
+        # dynamics.add_child(dynamic_classes[index]())
+
+        return wedge
+
+    def add_fermata(self, value=&#39;normal&#39;, **kwargs):
+        fermata = Fermata(value, **kwargs)
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(fermata)
+
+    def add_action_dynamics(self, value, **kwargs):
+        dynamics = self.add_dynamics(value, **kwargs)
+        direction = dynamics.up.up
+        direction_type = direction.add_child(DirectionType())
+
+        direction_type.add_child(Words(value=&#39;&#34;&#39;, font_size=20))
+        for child in direction.get_children():
+            if child.get_children_by_type(Dynamics):
+                direction.remove_child(child)
+
+        direction_type = direction.add_child(DirectionType())
+        direction_type.add_child(dynamics)
+        direction_type = direction.add_child(DirectionType())
+        direction_type.add_child(Words(value=&#39; &#34;&#39;, font_size=20))
+
+    def add_bracket(self, type, line_end, placement=&#39;above&#39;, **kwargs):
+        d = self.add_child(Direction(placement=placement))
+        dt = d.add_child(DirectionType())
+        dt.add_child(Bracket(type=type, line_end=line_end, **kwargs))
+
+    def add_words(self, text, placement=&#39;above&#39;, **kwargs):
+        d = self.add_child(Direction(placement=placement))
         dt = d.add_child(DirectionType())
         dt.add_child(Words(value=str(text), **kwargs))
+
+    def get_direction_types(self):
+        output = []
+        for direction in self.get_children_by_type(Direction):
+            for dt in direction.get_children_by_type(DirectionType):
+                output.append(dt)
+        return output
+
+    def get_words(self):
+        output = []
+        for dt in self.get_direction_types():
+            for child in dt.get_children():
+                if isinstance(child, Words):
+                    output.append(child)
+        return output
 
     def add_clef(self, clef):
         try:
@@ -457,12 +866,26 @@ class TreeChord(XMLTree):
         attributes.add_child(clef)
 
     def __deepcopy__(self, memodict={}):
-        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+        new_chord = TreeChord(quarter_duration=self.quarter_duration, zero_mode=self.zero_mode)
         new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
         for child in self.get_children():
-            new_chord.add_child(child)
+            if isinstance(child, Notations):
+                copied_notations = Notations()
+                for grand_child in child.get_children():
+                    copied_notations.add_child(grand_child)
+                new_chord.add_child(copied_notations)
+            else:
+                new_chord.add_child(child)
 
         new_chord.is_adjoinable = self.is_adjoinable
+        if self._flags:
+            new_chord._flags = []
+            for flag in self._flags:
+                new_chord._flags.append(flag.__deepcopy__())
+
+        new_chord._flags = self._flags
+        new_chord.manual_type = self.manual_type
+        new_chord.tie_orientation = self.tie_orientation
         # for attribute in self.__dir__():
         #     print(attribute)
         return new_chord
@@ -496,12 +919,14 @@ class TreeChord(XMLTree):
                 next_chord.add_child(l)
             for n in self.get_children_by_type(Notations):
                 next_chord.add_child(n)
+            for d in self.get_children_by_type(Direction):
+                next_chord.add_child(d)
 
         self.parent_beat.chords.remove(self)
         self.parent_voice.chords.remove(self)
 
     def deepcopy_for_SimpleFormat(self):
-        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+        new_chord = TreeChord(quarter_duration=self.quarter_duration, zero_mode=self.zero_mode)
         new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
         for child in self.get_children():
             if not isinstance(child, Voice):
@@ -518,9 +943,24 @@ class TreeChord(XMLTree):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="musicscore.musictree.treechord.FingerTremolo"><code class="flex name class">
+<span>class <span class="ident">FingerTremolo</span></span>
+<span>(</span><span>chord, number=3, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FingerTremolo(object):
+    def __init__(self, chord, number=3, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.chord = chord
+        self.number = number</code></pre>
+</details>
+</dd>
 <dt id="musicscore.musictree.treechord.TreeChord"><code class="flex name class">
 <span>class <span class="ident">TreeChord</span></span>
-<span>(</span><span>midis=71, quarter_duration=1, **kwargs)</span>
+<span>(</span><span>midis=71, quarter_duration=1, zero_mode='grace', **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -543,7 +983,7 @@ class TreeChord(XMLTree):
             ),
         ),
         Element(Attributes, 0),
-        Element(Direction, 0),
+        Element(Direction, 0, None),
         Element(Instrument, 0),
         GroupReference(EditorialVoice, 0),
         Element(Type, 0),
@@ -559,18 +999,35 @@ class TreeChord(XMLTree):
         Element(Play, 0)
     )
 
-    def __init__(self, midis=71, quarter_duration=1, **kwargs):
+    def __init__(self, midis=71, quarter_duration=1, zero_mode=&#39;grace&#39;, **kwargs):
         super().__init__(**kwargs)
         self.parent_voice = None
         self.parent_beat = None
         self._offset = None
         self._quarter_duration = None
+        self._zero_mode = None
+        self.zero_mode = zero_mode
         self.quarter_duration = quarter_duration
         self._midis = None
+
         self.midis = midis
         self._tail = False
         self._head = False
         self._is_adjoinable = True
+        self._flags = None
+
+        self.manual_type = False
+        self.manual_voice_number = False
+        self.is_finger_tremolo = False
+        self.relative_x = None
+        self.tie_orientation = None
+
+    @property
+    def is_head(self):
+        return self._head
+
+    def is_tail(self):
+        return self._tail
 
     @property
     def __name__(self):
@@ -580,6 +1037,9 @@ class TreeChord(XMLTree):
     @property
     def quarter_duration(self):
         return self._quarter_duration
+
+    def set_voice_number(self, voice_number):
+        self.manual_voice_number = voice_number
 
     @quarter_duration.setter
     def quarter_duration(self, value):
@@ -593,6 +1053,17 @@ class TreeChord(XMLTree):
             self._quarter_duration = Fraction(value).limit_denominator(1000)
         else:
             self._quarter_duration = value
+
+    @property
+    def zero_mode(self):
+        return self._zero_mode
+
+    @zero_mode.setter
+    def zero_mode(self, val):
+        permitted = [&#39;remove&#39;, &#39;grace&#39;]
+        if val not in permitted:
+            raise ValueError(&#39;zero_mode.value {} must be in {}&#39;.format(val, permitted))
+        self._zero_mode = val
 
     @property
     def midis(self):
@@ -616,7 +1087,24 @@ class TreeChord(XMLTree):
             if midi.value == 0 and len(values) &gt; 1:
                 raise ValueError(&#39;midi with value 0 must be alone.&#39;)
 
+        output = sorted(output, key=lambda midi: midi.value)
+
         self._midis = output
+
+    def add_midi(self, val):
+        if val == 0:
+            raise ValueError(&#39;midi with value 0 can not be added.&#39;)
+
+        if not isinstance(val, Midi):
+            val = Midi(val)
+
+        self._midis.append(val)
+
+    def add_harmonic(self, interval):
+        if len(self.midis) != 1:
+            raise Exception(&#39;harmonic can only be added to chords with one midi&#39;)
+        self.add_midi(self.midis[0].value + interval)
+        self.midis[-1].add_notehead(&#39;diamond&#39;, filled=&#39;no&#39;)
 
     @property
     def is_adjoinable(self):
@@ -625,8 +1113,11 @@ class TreeChord(XMLTree):
     @is_adjoinable.setter
     def is_adjoinable(self, value):
         if not isinstance(value, bool):
-            raise TypeError(&#39;is_joinable.value must be of type bool not{}&#39;.format(type(value)))
+            raise TypeError(&#39;is_adjoinable.value must be of type bool not{}&#39;.format(type(value)))
         self._is_adjoinable = value
+
+    def force_tie(self):
+        self.is_adjoinable = False
 
     @property
     def tie_types(self):
@@ -650,6 +1141,21 @@ class TreeChord(XMLTree):
             return True
         return False
 
+    def set_tie_orientation(self, orientation):
+        if self.is_tied_to_next:
+            tied = [t for t in self.get_children_by_type(Notations)[0].get_children_by_type(Tied) if t.type == &#39;start&#39;]
+            for t in tied:
+                t.orientation = orientation
+
+    def to_rest(self):
+        self.midis = [0]
+        self.remove_tie(&#39;stop&#39;)
+        self.remove_tie(&#39;start&#39;)
+        for notation in self.get_children_by_type(Notations):
+            articulations = notation.get_children_by_type(Articulations)
+            for articulation in articulations:
+                notation.remove_child(articulation)
+
     @property
     def position_in_beat(self):
         index_in_beat = self.parent_beat.chords.index(self)
@@ -664,6 +1170,7 @@ class TreeChord(XMLTree):
         index = self.parent_voice.chords.index(self)
         if index == 0:
             return None
+
         return self.parent_voice.chords[index - 1]
 
     @property
@@ -672,6 +1179,17 @@ class TreeChord(XMLTree):
         if index == len(self.parent_voice.chords) - 1:
             return None
         return self.parent_voice.chords[index + 1]
+
+    @property
+    def previous_in_score_part(self):
+        if self.previous is None:
+            previous_voice = self.parent_voice.previous
+            if previous_voice:
+                return previous_voice.chords[-1]
+            else:
+                return None
+        else:
+            return self.previous
 
     def update_offset(self):
         if self.previous:
@@ -690,15 +1208,117 @@ class TreeChord(XMLTree):
     def end_position(self):
         return self.offset + self.quarter_duration
 
+    @property
+    def flags(self):
+
+        if self._flags is None:
+            self._flags = set()
+        return self._flags
+
+    @property
+    def tremoli(self):
+        try:
+            return self.get_children_by_type(Notations)[0].get_children_by_type(Ornaments)[0].get_children_by_type(
+                Tremolo)
+        except IndexError:
+            return []
+
+    # def add_finger_tremolo(self, chord, number=3):
+    #     self.finger_tremolo = FingerTremolo(chord, number)
+
+    def add_flag(self, flag):
+        if not isinstance(flag, TreeChordFlag) and not isinstance(flag, TreeChordFlag2) \
+                and not isinstance(flag, TreeChordFlag3):
+            raise TypeError(
+                &#39;flag must be of type TreeChordFlag, TreeChordFlag2 or TreeChordFlag3 not {}&#39;.format(flag.__class__))
+        if self._flags is None:
+            self._flags = set()
+        self._flags.add(flag)
+
+    def remove_flag(self, flag):
+        if flag in self._flags:
+            self._flags.remove(flag)
+
+    def add_slur_object(self, slur):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(slur)
+        return slur
+
+    def add_slur(self, type, **kwargs):
+        slur = Slur(type, **kwargs)
+        return self.add_slur_object(slur)
+
+    def remove_slur(self, type):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+            slurs = [s for s in notations.get_children_by_type(Slur) if s.type == type]
+            for slur in slurs:
+                notations.remove_child(slur)
+            if not notations.get_children():
+                self.remove_child(notations)
+        except IndexError:
+            pass
+
+    def add_notations_object(self, object):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(object)
+        return object
+
+    def remove_notations(self):
+        notations = self.get_children_by_type(Notations)
+        for notation in notations:
+            self.remove_child(notation)
+
+    def add_slide(self, type, **kwargs):
+        object = Slide(type, **kwargs)
+        return self.add_notations_object(object)
+
+    def add_tremolo(self, number=3, **kwargs):
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            ornaments = notations.get_children_by_type(Ornaments)[0]
+        except IndexError:
+            ornaments = notations.add_child(Ornaments())
+
+        ornaments.add_child(Tremolo(number, **kwargs))
+
     def split_copy(self, quarter_duration):
         new_chord = TreeChord(quarter_duration=quarter_duration)
+
         new_chord.midis = self.midis
         new_chord.parent_voice = self.parent_voice
         new_chord.parent_beat = self.parent_beat
+
+        if self._flags is not None:
+            new_chord._flags = []
+            for flag in self._flags:
+                new_chord._flags.append(flag.__deepcopy__())
+
         new_chord._offset = None
+        new_chord.is_finger_tremolo = self.is_finger_tremolo
+
         try:
             voice = self.get_children_by_type(Voice)[0]
             new_chord.add_child(voice)
+        except IndexError:
+            pass
+
+        try:
+            notehead = self.get_children_by_type(Notehead)[0]
+            new_chord.add_child(notehead)
         except IndexError:
             pass
 
@@ -715,9 +1335,18 @@ class TreeChord(XMLTree):
         self.quarter_duration *= new_ratios[0]
 
         new_chords = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
+        for ch in new_chords:
+            ch.tie_orientation = self.tie_orientation
 
         if &#39;start&#39; in self.tie_types:
             new_chords[-1].add_tie(&#39;start&#39;)
+
+        if not self.is_adjoinable:
+            self.is_adjoinable = True
+            new_chords[-1].is_adjoinable = False
+
+        for tremolo in self.tremoli:
+            new_chords[-1].add_tremolo(number=tremolo.value)
 
         new_chords.insert(0, self)
 
@@ -733,14 +1362,21 @@ class TreeChord(XMLTree):
     @property
     def _notes(self):
         output = []
+        if self.zero_mode == &#39;remove&#39; and self.quarter_duration == 0:
+            return output
+
         for index, midi in enumerate(self.midis):
-            note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration)
+            note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration, parent_chord=self)
+            note.is_finger_tremolo = self.is_finger_tremolo
+            if self.relative_x is not None:
+                note.relative_x = self.relative_x
+            if midi.notehead:
+                note.add_child(midi.notehead)
 
             for child in self.get_children():
                 if isinstance(child, Lyric) and index != 0:
                     pass
-                elif isinstance(child, Notehead) and index != 0:
-                    pass
+
                 elif isinstance(child, Notations) and index != 0:
                     grandchildren = child.get_children()
                     for grandchild in grandchildren:
@@ -768,7 +1404,7 @@ class TreeChord(XMLTree):
 
         if value == &#39;start&#39; and &#39;start&#39; not in self.tie_types:
             self.add_child(Tie(&#39;start&#39;))
-            notations.add_child(Tied(&#39;start&#39;))
+            notations.add_child(Tied(&#39;start&#39;, orientation=self.tie_orientation))
 
         elif value == &#39;stop&#39; and &#39;stop&#39; not in self.tie_types:
             self.add_child(Tie(&#39;stop&#39;))
@@ -785,27 +1421,130 @@ class TreeChord(XMLTree):
             if not notations.get_children():
                 self.remove_child(notations)
 
+    def remove_previous_tie(self):
+        if &#39;stop&#39; in self.tie_types:
+            self.remove_tie(&#39;stop&#39;)
+            try:
+                self.previous_in_score_part.remove_tie(&#39;start&#39;)
+            except AttributeError:
+                pass
+
+    def untie(self):
+        if &#39;start&#39; in self.tie_types:
+            self.remove_tie(&#39;start&#39;)
+            try:
+                self.next.remove_tie(&#39;stop&#39;)
+            except AttributeError:
+                pass
+
     def remove_voice(self):
         for voice in self.get_children_by_type(Voice):
             self.remove_child(voice)
 
-    def add_tuplet(self, position, number=1):
+    def add_tuplet(self, type, number=1):
         normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
         types = {8: &#39;32nd&#39;, 4: &#39;16th&#39;, 2: &#39;eighth&#39;}
         actual_notes = self.parent_beat.best_div
         normal_notes = normals[actual_notes]
         normal_type = types[normal_notes / self.parent_beat.duration]
-        if position != &#39;continue&#39;:
+        if type != &#39;continue&#39;:
             try:
                 notations = self.notations
             except AttributeError:
                 notations = self.add_child(Notations())
-            notations.add_child(Tuplet(type=position, number=number, bracket=&#39;yes&#39;, placement=&#39;above&#39;))
+
+            v = self.get_children_by_type(Voice)[0]
+            if int(v.value) % 2 == 0:
+                placement = &#39;below&#39;
+            else:
+                placement = &#39;above&#39;
+
+            notations.add_child(Tuplet(type=type, number=number, bracket=&#39;yes&#39;, placement=placement))
 
         tm = self.add_child(TimeModification())
         tm.add_child(ActualNotes(actual_notes))
         tm.add_child(NormalNotes(normal_notes))
         tm.add_child(NormalType(normal_type))
+
+    def add_technical_object(self, technical_object):
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            technical = notations.get_children_by_type(Technical)[0]
+        except IndexError:
+            technical = notations.add_child(Technical())
+
+        technical.add_child(technical_object)
+
+    def add_articulation_object(self, articulation_object):
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            articulations = notations.get_children_by_type(Articulations)[0]
+        except IndexError:
+            articulations = notations.add_child(Articulations())
+
+        articulations.add_child(articulation_object)
+
+    def add_articulation(self, articulation, **kwargs):
+
+        def add_type(dict):
+            new_dict = dict.copy()
+            if &#39;type&#39; not in new_dict:
+                new_dict[&#39;type&#39;] = &#39;up&#39;
+            return new_dict
+
+        def add_breath_mark_value(dict):
+            new_dict = dict.copy()
+            if &#39;value&#39; not in new_dict:
+                new_dict[&#39;value&#39;] = &#39;comma&#39;
+            return new_dict
+
+        articulations = {&#39;accent&#39;: Accent(**kwargs),
+                         &#39;strong-accent&#39;: StrongAccent(**add_type(kwargs)),
+                         &#39;staccato&#39;: Staccato(**kwargs),
+                         &#39;tenuto&#39;: Tenuto(**kwargs),
+                         &#39;detached-legato&#39;: DetachedLegato(**kwargs),
+                         &#39;staccatissimo&#39;: Staccatissimo(**kwargs),
+                         &#39;spiccato&#39;: Spiccato(**kwargs),
+                         &#39;scoop&#39;: Scoop(**kwargs),
+                         &#39;plop&#39;: Plop(**kwargs),
+                         &#39;doit&#39;: Doit(**kwargs),
+                         &#39;falloff&#39;: Falloff(**kwargs),
+                         &#39;breath-mark&#39;: BreathMark(**add_breath_mark_value(kwargs)),
+                         &#39;caesura&#39;: Caesura(**kwargs),
+                         &#39;stress&#39;: Stress(**kwargs),
+                         &#39;unstress&#39;: Unstress(**kwargs)}
+
+        if articulation not in articulations:
+            raise ValueError(&#39;articulation {}  must be in {}&#39;.format(articulation, list(articulations.keys())))
+
+        return self.add_articulation_object(articulations[articulation])
+
+    def get_articulations(self):
+        output = []
+        for notations in self.get_children_by_type(Notations):
+            articulations = notations.get_children_by_type(Articulations)
+            for articulation in articulations:
+                output.extend(articulation.get_children())
+        return output
+
+    def set_manual_type(self, val, **kwargs):
+        try:
+            chord_type = self.get_children_by_type(Type)[0]
+            self.remove_child(chord_type)
+        except IndexError:
+            self.add_child(Type(value=val, **kwargs))
+
+        self.manual_type = True
 
     def update_type(self):
         &#34;&#34;&#34;get type of a Note() depending on its quantized duration and return it [whole, half, quarter, eighth, 16th,
@@ -849,18 +1588,32 @@ class TreeChord(XMLTree):
                   (3, 1): &#39;half&#39;,
                   (4, 1): &#39;whole&#39;,
                   (6, 1): &#39;whole&#39;,
-                  (8, 1): &#39;breve&#39;}
+                  (8, 1): &#39;breve&#39;,
+                  (12, 1): &#39;breve&#39;
+                  }
 
-        if self.quarter_duration == 0:
-            value = &#39;eighth&#39;
-        else:
-            value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
+        if self.manual_type is False:
+            tremoli_types = [tremolo.type for tremolo in self.tremoli]
 
-        try:
-            chord_type = self.get_children_by_type(Type)[0]
-            chord_type.value = value
-        except IndexError:
-            self.add_child(Type(value))
+            if self.quarter_duration == 0:
+                value = &#39;eighth&#39;
+
+            elif (&#39;start&#39; in tremoli_types or &#39;stop&#39; in tremoli_types):
+                show_duration = self.quarter_duration * 2
+                value = _types[(show_duration.numerator, show_duration.denominator)]
+                if not self.get_children_by_type(TimeModification):
+                    tm = TimeModification()
+                    tm.add_child(ActualNotes(2))
+                    tm.add_child(NormalNotes(1))
+                    self.add_child(tm)
+            else:
+                value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
+
+            try:
+                chord_type = self.get_children_by_type(Type)[0]
+                chord_type.value = value
+            except IndexError:
+                self.add_child(Type(value))
 
     def update_dot(self):
         _dot = 0
@@ -887,22 +1640,40 @@ class TreeChord(XMLTree):
         for i in range(_dot):
             self.add_child(Dot())
 
-    def copy(self):
-        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+    # def copy(self):
+    #     new_chord = TreeChord(quarter_duration=self.quarter_duration)
+    #     new_chord.midis = self.midis
+    #     for child in self.get_children():
+    #         new_chord.add_child(child)
+
+    def tremolo_flag_copy(self):
+        new_chord = TreeChord()
         new_chord.midis = self.midis
-        for child in self.get_children():
-            new_chord.add_child(child)
+        return new_chord
 
     def transpose(self, interval):
         for midi in self.midis:
-            midi.value += interval
+            if midi.value != 0:
+                midi.value += interval
+
+    def inverse(self):
+        intervals = xToD([midi.value for midi in self.midis])
+        intervals = [-interval for interval in intervals]
+        self.midis = dToX(intervals, first_element=self.midis[0].value)
+
+    def change_range(self, min_midi, max_midi, microtone=2):
+        if self.is_rest:
+            pass
+        else:
+            scale = Scale(self.midis[0].value, self.midis[-1].value, min_midi, max_midi, step=2 / microtone)
+            self.midis = [scale(midi.value) for midi in self.midis]
 
     def add_lyric(self, text, number=1, **kwargs):
         lyric = self.add_child(Lyric(number=str(number), **kwargs))
         lyric.add_child(Text(str(text)))
         return lyric
 
-    def add_dynamics(self, value):
+    def add_dynamics(self, value, placement=&#39;below&#39;, **kwargs):
         dynamic_classes = [P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, FFFFFF, MP, MF, SF, SFP, SFPP, FP,
                            RF, RFZ, SFZ, SFFZ, FZ, N, PF, SFZP]
 
@@ -912,25 +1683,87 @@ class TreeChord(XMLTree):
         except ValueError:
             raise ValueError(&#39;wrong dynamics value&#39;)
 
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-        except IndexError:
-            notations = self.add_child(Notations())
-
-        dynamics = notations.add_child(Dynamics())
+        direction = self.add_child(Direction(placement=placement))
+        direction_type = direction.add_child(DirectionType())
+        dynamics = direction_type.add_child(Dynamics(**kwargs))
 
         dynamics.add_child(dynamic_classes[index]())
 
         return dynamics
 
-    def add_words(self, text, **kwargs):
-        try:
-            d = self.get_children_by_type(Direction)[0]
-        except IndexError:
-            d = self.add_child(Direction())
+    @property
+    def dynamics(self):
+        directions = self.get_children_by_type(Direction)
+        for direction in directions:
+            direction_types = direction.get_children_by_type(DirectionType)
+            for direction_type in direction_types:
+                for child in direction_type.get_children():
+                    if isinstance(child, Dynamics):
+                        return child.get_children()[0].to_string()[1:-3]
+        return None
 
+    def get_dynamics(self):
+        return self.dynamics
+
+    def add_wedge(self, value, placement=&#39;below&#39;, **kwargs):
+        wedge_object = Wedge(value, **kwargs)
+
+        direction = self.add_child(Direction(placement=placement))
+        direction_type = direction.add_child(DirectionType())
+        wedge = direction_type.add_child(wedge_object)
+        #
+        # dynamics.add_child(dynamic_classes[index]())
+
+        return wedge
+
+    def add_fermata(self, value=&#39;normal&#39;, **kwargs):
+        fermata = Fermata(value, **kwargs)
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(fermata)
+
+    def add_action_dynamics(self, value, **kwargs):
+        dynamics = self.add_dynamics(value, **kwargs)
+        direction = dynamics.up.up
+        direction_type = direction.add_child(DirectionType())
+
+        direction_type.add_child(Words(value=&#39;&#34;&#39;, font_size=20))
+        for child in direction.get_children():
+            if child.get_children_by_type(Dynamics):
+                direction.remove_child(child)
+
+        direction_type = direction.add_child(DirectionType())
+        direction_type.add_child(dynamics)
+        direction_type = direction.add_child(DirectionType())
+        direction_type.add_child(Words(value=&#39; &#34;&#39;, font_size=20))
+
+    def add_bracket(self, type, line_end, placement=&#39;above&#39;, **kwargs):
+        d = self.add_child(Direction(placement=placement))
+        dt = d.add_child(DirectionType())
+        dt.add_child(Bracket(type=type, line_end=line_end, **kwargs))
+
+    def add_words(self, text, placement=&#39;above&#39;, **kwargs):
+        d = self.add_child(Direction(placement=placement))
         dt = d.add_child(DirectionType())
         dt.add_child(Words(value=str(text), **kwargs))
+
+    def get_direction_types(self):
+        output = []
+        for direction in self.get_children_by_type(Direction):
+            for dt in direction.get_children_by_type(DirectionType):
+                output.append(dt)
+        return output
+
+    def get_words(self):
+        output = []
+        for dt in self.get_direction_types():
+            for child in dt.get_children():
+                if isinstance(child, Words):
+                    output.append(child)
+        return output
 
     def add_clef(self, clef):
         try:
@@ -941,12 +1774,26 @@ class TreeChord(XMLTree):
         attributes.add_child(clef)
 
     def __deepcopy__(self, memodict={}):
-        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+        new_chord = TreeChord(quarter_duration=self.quarter_duration, zero_mode=self.zero_mode)
         new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
         for child in self.get_children():
-            new_chord.add_child(child)
+            if isinstance(child, Notations):
+                copied_notations = Notations()
+                for grand_child in child.get_children():
+                    copied_notations.add_child(grand_child)
+                new_chord.add_child(copied_notations)
+            else:
+                new_chord.add_child(child)
 
         new_chord.is_adjoinable = self.is_adjoinable
+        if self._flags:
+            new_chord._flags = []
+            for flag in self._flags:
+                new_chord._flags.append(flag.__deepcopy__())
+
+        new_chord._flags = self._flags
+        new_chord.manual_type = self.manual_type
+        new_chord.tie_orientation = self.tie_orientation
         # for attribute in self.__dir__():
         #     print(attribute)
         return new_chord
@@ -980,12 +1827,14 @@ class TreeChord(XMLTree):
                 next_chord.add_child(l)
             for n in self.get_children_by_type(Notations):
                 next_chord.add_child(n)
+            for d in self.get_children_by_type(Direction):
+                next_chord.add_child(d)
 
         self.parent_beat.chords.remove(self)
         self.parent_voice.chords.remove(self)
 
     def deepcopy_for_SimpleFormat(self):
-        new_chord = TreeChord(quarter_duration=self.quarter_duration)
+        new_chord = TreeChord(quarter_duration=self.quarter_duration, zero_mode=self.zero_mode)
         new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
         for child in self.get_children():
             if not isinstance(child, Voice):
@@ -999,6 +1848,23 @@ class TreeChord(XMLTree):
 </ul>
 <h3>Instance variables</h3>
 <dl>
+<dt id="musicscore.musictree.treechord.TreeChord.dynamics"><code class="name">var <span class="ident">dynamics</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def dynamics(self):
+    directions = self.get_children_by_type(Direction)
+    for direction in directions:
+        direction_types = direction.get_children_by_type(DirectionType)
+        for direction_type in direction_types:
+            for child in direction_type.get_children():
+                if isinstance(child, Dynamics):
+                    return child.get_children()[0].to_string()[1:-3]
+    return None</code></pre>
+</details>
+</dd>
 <dt id="musicscore.musictree.treechord.TreeChord.end_position"><code class="name">var <span class="ident">end_position</span></code></dt>
 <dd>
 <section class="desc"></section>
@@ -1009,6 +1875,19 @@ def end_position(self):
     return self.offset + self.quarter_duration</code></pre>
 </details>
 </dd>
+<dt id="musicscore.musictree.treechord.TreeChord.flags"><code class="name">var <span class="ident">flags</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def flags(self):
+
+    if self._flags is None:
+        self._flags = set()
+    return self._flags</code></pre>
+</details>
+</dd>
 <dt id="musicscore.musictree.treechord.TreeChord.is_adjoinable"><code class="name">var <span class="ident">is_adjoinable</span></code></dt>
 <dd>
 <section class="desc"></section>
@@ -1017,6 +1896,16 @@ def end_position(self):
 <pre><code class="python">@property
 def is_adjoinable(self):
     return self._is_adjoinable</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.is_head"><code class="name">var <span class="ident">is_head</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def is_head(self):
+    return self._head</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musictree.treechord.TreeChord.is_rest"><code class="name">var <span class="ident">is_rest</span></code></dt>
@@ -1115,7 +2004,25 @@ def previous(self):
     index = self.parent_voice.chords.index(self)
     if index == 0:
         return None
+
     return self.parent_voice.chords[index - 1]</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.previous_in_score_part"><code class="name">var <span class="ident">previous_in_score_part</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def previous_in_score_part(self):
+    if self.previous is None:
+        previous_voice = self.parent_voice.previous
+        if previous_voice:
+            return previous_voice.chords[-1]
+        else:
+            return None
+    else:
+        return self.previous</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musictree.treechord.TreeChord.quarter_duration"><code class="name">var <span class="ident">quarter_duration</span></code></dt>
@@ -1138,9 +2045,134 @@ def tie_types(self):
     return [tie.type for tie in self.get_children_by_type(Tie)]</code></pre>
 </details>
 </dd>
+<dt id="musicscore.musictree.treechord.TreeChord.tremoli"><code class="name">var <span class="ident">tremoli</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def tremoli(self):
+    try:
+        return self.get_children_by_type(Notations)[0].get_children_by_type(Ornaments)[0].get_children_by_type(
+            Tremolo)
+    except IndexError:
+        return []</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.zero_mode"><code class="name">var <span class="ident">zero_mode</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def zero_mode(self):
+    return self._zero_mode</code></pre>
+</details>
+</dd>
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="musicscore.musictree.treechord.TreeChord.add_action_dynamics"><code class="name flex">
+<span>def <span class="ident">add_action_dynamics</span></span>(<span>self, value, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_action_dynamics(self, value, **kwargs):
+    dynamics = self.add_dynamics(value, **kwargs)
+    direction = dynamics.up.up
+    direction_type = direction.add_child(DirectionType())
+
+    direction_type.add_child(Words(value=&#39;&#34;&#39;, font_size=20))
+    for child in direction.get_children():
+        if child.get_children_by_type(Dynamics):
+            direction.remove_child(child)
+
+    direction_type = direction.add_child(DirectionType())
+    direction_type.add_child(dynamics)
+    direction_type = direction.add_child(DirectionType())
+    direction_type.add_child(Words(value=&#39; &#34;&#39;, font_size=20))</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_articulation"><code class="name flex">
+<span>def <span class="ident">add_articulation</span></span>(<span>self, articulation, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_articulation(self, articulation, **kwargs):
+
+    def add_type(dict):
+        new_dict = dict.copy()
+        if &#39;type&#39; not in new_dict:
+            new_dict[&#39;type&#39;] = &#39;up&#39;
+        return new_dict
+
+    def add_breath_mark_value(dict):
+        new_dict = dict.copy()
+        if &#39;value&#39; not in new_dict:
+            new_dict[&#39;value&#39;] = &#39;comma&#39;
+        return new_dict
+
+    articulations = {&#39;accent&#39;: Accent(**kwargs),
+                     &#39;strong-accent&#39;: StrongAccent(**add_type(kwargs)),
+                     &#39;staccato&#39;: Staccato(**kwargs),
+                     &#39;tenuto&#39;: Tenuto(**kwargs),
+                     &#39;detached-legato&#39;: DetachedLegato(**kwargs),
+                     &#39;staccatissimo&#39;: Staccatissimo(**kwargs),
+                     &#39;spiccato&#39;: Spiccato(**kwargs),
+                     &#39;scoop&#39;: Scoop(**kwargs),
+                     &#39;plop&#39;: Plop(**kwargs),
+                     &#39;doit&#39;: Doit(**kwargs),
+                     &#39;falloff&#39;: Falloff(**kwargs),
+                     &#39;breath-mark&#39;: BreathMark(**add_breath_mark_value(kwargs)),
+                     &#39;caesura&#39;: Caesura(**kwargs),
+                     &#39;stress&#39;: Stress(**kwargs),
+                     &#39;unstress&#39;: Unstress(**kwargs)}
+
+    if articulation not in articulations:
+        raise ValueError(&#39;articulation {}  must be in {}&#39;.format(articulation, list(articulations.keys())))
+
+    return self.add_articulation_object(articulations[articulation])</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_articulation_object"><code class="name flex">
+<span>def <span class="ident">add_articulation_object</span></span>(<span>self, articulation_object)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_articulation_object(self, articulation_object):
+
+    try:
+        notations = self.get_children_by_type(Notations)[0]
+    except IndexError:
+        notations = self.add_child(Notations())
+
+    try:
+        articulations = notations.get_children_by_type(Articulations)[0]
+    except IndexError:
+        articulations = notations.add_child(Articulations())
+
+    articulations.add_child(articulation_object)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_bracket"><code class="name flex">
+<span>def <span class="ident">add_bracket</span></span>(<span>self, type, line_end, placement='above', **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_bracket(self, type, line_end, placement=&#39;above&#39;, **kwargs):
+    d = self.add_child(Direction(placement=placement))
+    dt = d.add_child(DirectionType())
+    dt.add_child(Bracket(type=type, line_end=line_end, **kwargs))</code></pre>
+</details>
+</dd>
 <dt id="musicscore.musictree.treechord.TreeChord.add_clef"><code class="name flex">
 <span>def <span class="ident">add_clef</span></span>(<span>self, clef)</span>
 </code></dt>
@@ -1158,13 +2190,13 @@ def tie_types(self):
 </details>
 </dd>
 <dt id="musicscore.musictree.treechord.TreeChord.add_dynamics"><code class="name flex">
-<span>def <span class="ident">add_dynamics</span></span>(<span>self, value)</span>
+<span>def <span class="ident">add_dynamics</span></span>(<span>self, value, placement='below', **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def add_dynamics(self, value):
+<pre><code class="python">def add_dynamics(self, value, placement=&#39;below&#39;, **kwargs):
     dynamic_classes = [P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, FFFFFF, MP, MF, SF, SFP, SFPP, FP,
                        RF, RFZ, SFZ, SFFZ, FZ, N, PF, SFZP]
 
@@ -1174,16 +2206,61 @@ def tie_types(self):
     except ValueError:
         raise ValueError(&#39;wrong dynamics value&#39;)
 
+    direction = self.add_child(Direction(placement=placement))
+    direction_type = direction.add_child(DirectionType())
+    dynamics = direction_type.add_child(Dynamics(**kwargs))
+
+    dynamics.add_child(dynamic_classes[index]())
+
+    return dynamics</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_fermata"><code class="name flex">
+<span>def <span class="ident">add_fermata</span></span>(<span>self, value='normal', **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_fermata(self, value=&#39;normal&#39;, **kwargs):
+    fermata = Fermata(value, **kwargs)
     try:
         notations = self.get_children_by_type(Notations)[0]
     except IndexError:
         notations = self.add_child(Notations())
 
-    dynamics = notations.add_child(Dynamics())
-
-    dynamics.add_child(dynamic_classes[index]())
-
-    return dynamics</code></pre>
+    notations.add_child(fermata)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_flag"><code class="name flex">
+<span>def <span class="ident">add_flag</span></span>(<span>self, flag)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_flag(self, flag):
+    if not isinstance(flag, TreeChordFlag) and not isinstance(flag, TreeChordFlag2) \
+            and not isinstance(flag, TreeChordFlag3):
+        raise TypeError(
+            &#39;flag must be of type TreeChordFlag, TreeChordFlag2 or TreeChordFlag3 not {}&#39;.format(flag.__class__))
+    if self._flags is None:
+        self._flags = set()
+    self._flags.add(flag)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_harmonic"><code class="name flex">
+<span>def <span class="ident">add_harmonic</span></span>(<span>self, interval)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_harmonic(self, interval):
+    if len(self.midis) != 1:
+        raise Exception(&#39;harmonic can only be added to chords with one midi&#39;)
+    self.add_midi(self.midis[0].value + interval)
+    self.midis[-1].add_notehead(&#39;diamond&#39;, filled=&#39;no&#39;)</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musictree.treechord.TreeChord.add_lyric"><code class="name flex">
@@ -1197,6 +2274,103 @@ def tie_types(self):
     lyric = self.add_child(Lyric(number=str(number), **kwargs))
     lyric.add_child(Text(str(text)))
     return lyric</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_midi"><code class="name flex">
+<span>def <span class="ident">add_midi</span></span>(<span>self, val)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_midi(self, val):
+    if val == 0:
+        raise ValueError(&#39;midi with value 0 can not be added.&#39;)
+
+    if not isinstance(val, Midi):
+        val = Midi(val)
+
+    self._midis.append(val)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_notations_object"><code class="name flex">
+<span>def <span class="ident">add_notations_object</span></span>(<span>self, object)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_notations_object(self, object):
+    try:
+        notations = self.get_children_by_type(Notations)[0]
+    except IndexError:
+        notations = self.add_child(Notations())
+
+    notations.add_child(object)
+    return object</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_slide"><code class="name flex">
+<span>def <span class="ident">add_slide</span></span>(<span>self, type, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_slide(self, type, **kwargs):
+    object = Slide(type, **kwargs)
+    return self.add_notations_object(object)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_slur"><code class="name flex">
+<span>def <span class="ident">add_slur</span></span>(<span>self, type, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_slur(self, type, **kwargs):
+    slur = Slur(type, **kwargs)
+    return self.add_slur_object(slur)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_slur_object"><code class="name flex">
+<span>def <span class="ident">add_slur_object</span></span>(<span>self, slur)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_slur_object(self, slur):
+    try:
+        notations = self.get_children_by_type(Notations)[0]
+    except IndexError:
+        notations = self.add_child(Notations())
+
+    notations.add_child(slur)
+    return slur</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_technical_object"><code class="name flex">
+<span>def <span class="ident">add_technical_object</span></span>(<span>self, technical_object)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_technical_object(self, technical_object):
+
+    try:
+        notations = self.get_children_by_type(Notations)[0]
+    except IndexError:
+        notations = self.add_child(Notations())
+
+    try:
+        technical = notations.get_children_by_type(Technical)[0]
+    except IndexError:
+        technical = notations.add_child(Technical())
+
+    technical.add_child(technical_object)</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musictree.treechord.TreeChord.add_tie"><code class="name flex">
@@ -1217,32 +2391,61 @@ def tie_types(self):
 
     if value == &#39;start&#39; and &#39;start&#39; not in self.tie_types:
         self.add_child(Tie(&#39;start&#39;))
-        notations.add_child(Tied(&#39;start&#39;))
+        notations.add_child(Tied(&#39;start&#39;, orientation=self.tie_orientation))
 
     elif value == &#39;stop&#39; and &#39;stop&#39; not in self.tie_types:
         self.add_child(Tie(&#39;stop&#39;))
         notations.add_child(Tied(&#39;stop&#39;))</code></pre>
 </details>
 </dd>
-<dt id="musicscore.musictree.treechord.TreeChord.add_tuplet"><code class="name flex">
-<span>def <span class="ident">add_tuplet</span></span>(<span>self, position, number=1)</span>
+<dt id="musicscore.musictree.treechord.TreeChord.add_tremolo"><code class="name flex">
+<span>def <span class="ident">add_tremolo</span></span>(<span>self, number=3, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def add_tuplet(self, position, number=1):
+<pre><code class="python">def add_tremolo(self, number=3, **kwargs):
+
+    try:
+        notations = self.get_children_by_type(Notations)[0]
+    except IndexError:
+        notations = self.add_child(Notations())
+
+    try:
+        ornaments = notations.get_children_by_type(Ornaments)[0]
+    except IndexError:
+        ornaments = notations.add_child(Ornaments())
+
+    ornaments.add_child(Tremolo(number, **kwargs))</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_tuplet"><code class="name flex">
+<span>def <span class="ident">add_tuplet</span></span>(<span>self, type, number=1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_tuplet(self, type, number=1):
     normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
     types = {8: &#39;32nd&#39;, 4: &#39;16th&#39;, 2: &#39;eighth&#39;}
     actual_notes = self.parent_beat.best_div
     normal_notes = normals[actual_notes]
     normal_type = types[normal_notes / self.parent_beat.duration]
-    if position != &#39;continue&#39;:
+    if type != &#39;continue&#39;:
         try:
             notations = self.notations
         except AttributeError:
             notations = self.add_child(Notations())
-        notations.add_child(Tuplet(type=position, number=number, bracket=&#39;yes&#39;, placement=&#39;above&#39;))
+
+        v = self.get_children_by_type(Voice)[0]
+        if int(v.value) % 2 == 0:
+            placement = &#39;below&#39;
+        else:
+            placement = &#39;above&#39;
+
+        notations.add_child(Tuplet(type=type, number=number, bracket=&#39;yes&#39;, placement=placement))
 
     tm = self.add_child(TimeModification())
     tm.add_child(ActualNotes(actual_notes))
@@ -1250,35 +2453,51 @@ def tie_types(self):
     tm.add_child(NormalType(normal_type))</code></pre>
 </details>
 </dd>
-<dt id="musicscore.musictree.treechord.TreeChord.add_words"><code class="name flex">
-<span>def <span class="ident">add_words</span></span>(<span>self, text, **kwargs)</span>
+<dt id="musicscore.musictree.treechord.TreeChord.add_wedge"><code class="name flex">
+<span>def <span class="ident">add_wedge</span></span>(<span>self, value, placement='below', **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def add_words(self, text, **kwargs):
-    try:
-        d = self.get_children_by_type(Direction)[0]
-    except IndexError:
-        d = self.add_child(Direction())
+<pre><code class="python">def add_wedge(self, value, placement=&#39;below&#39;, **kwargs):
+    wedge_object = Wedge(value, **kwargs)
 
+    direction = self.add_child(Direction(placement=placement))
+    direction_type = direction.add_child(DirectionType())
+    wedge = direction_type.add_child(wedge_object)
+    #
+    # dynamics.add_child(dynamic_classes[index]())
+
+    return wedge</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.add_words"><code class="name flex">
+<span>def <span class="ident">add_words</span></span>(<span>self, text, placement='above', **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_words(self, text, placement=&#39;above&#39;, **kwargs):
+    d = self.add_child(Direction(placement=placement))
     dt = d.add_child(DirectionType())
     dt.add_child(Words(value=str(text), **kwargs))</code></pre>
 </details>
 </dd>
-<dt id="musicscore.musictree.treechord.TreeChord.copy"><code class="name flex">
-<span>def <span class="ident">copy</span></span>(<span>self)</span>
+<dt id="musicscore.musictree.treechord.TreeChord.change_range"><code class="name flex">
+<span>def <span class="ident">change_range</span></span>(<span>self, min_midi, max_midi, microtone=2)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def copy(self):
-    new_chord = TreeChord(quarter_duration=self.quarter_duration)
-    new_chord.midis = self.midis
-    for child in self.get_children():
-        new_chord.add_child(child)</code></pre>
+<pre><code class="python">def change_range(self, min_midi, max_midi, microtone=2):
+    if self.is_rest:
+        pass
+    else:
+        scale = Scale(self.midis[0].value, self.midis[-1].value, min_midi, max_midi, step=2 / microtone)
+        self.midis = [scale(midi.value) for midi in self.midis]</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musictree.treechord.TreeChord.deepcopy_for_SimpleFormat"><code class="name flex">
@@ -1289,12 +2508,117 @@ def tie_types(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def deepcopy_for_SimpleFormat(self):
-    new_chord = TreeChord(quarter_duration=self.quarter_duration)
+    new_chord = TreeChord(quarter_duration=self.quarter_duration, zero_mode=self.zero_mode)
     new_chord.midis = [midi.__deepcopy__() for midi in self.midis]
     for child in self.get_children():
         if not isinstance(child, Voice):
             new_chord.add_child(child)
     return new_chord</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.force_tie"><code class="name flex">
+<span>def <span class="ident">force_tie</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def force_tie(self):
+    self.is_adjoinable = False</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.get_articulations"><code class="name flex">
+<span>def <span class="ident">get_articulations</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_articulations(self):
+    output = []
+    for notations in self.get_children_by_type(Notations):
+        articulations = notations.get_children_by_type(Articulations)
+        for articulation in articulations:
+            output.extend(articulation.get_children())
+    return output</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.get_direction_types"><code class="name flex">
+<span>def <span class="ident">get_direction_types</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_direction_types(self):
+    output = []
+    for direction in self.get_children_by_type(Direction):
+        for dt in direction.get_children_by_type(DirectionType):
+            output.append(dt)
+    return output</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.get_dynamics"><code class="name flex">
+<span>def <span class="ident">get_dynamics</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_dynamics(self):
+    return self.dynamics</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.get_words"><code class="name flex">
+<span>def <span class="ident">get_words</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_words(self):
+    output = []
+    for dt in self.get_direction_types():
+        for child in dt.get_children():
+            if isinstance(child, Words):
+                output.append(child)
+    return output</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.inverse"><code class="name flex">
+<span>def <span class="ident">inverse</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def inverse(self):
+    intervals = xToD([midi.value for midi in self.midis])
+    intervals = [-interval for interval in intervals]
+    self.midis = dToX(intervals, first_element=self.midis[0].value)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.is_tail"><code class="name flex">
+<span>def <span class="ident">is_tail</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_tail(self):
+    return self._tail</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.remove_flag"><code class="name flex">
+<span>def <span class="ident">remove_flag</span></span>(<span>self, flag)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_flag(self, flag):
+    if flag in self._flags:
+        self._flags.remove(flag)</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musictree.treechord.TreeChord.remove_from_score"><code class="name flex">
@@ -1333,9 +2657,59 @@ def tie_types(self):
             next_chord.add_child(l)
         for n in self.get_children_by_type(Notations):
             next_chord.add_child(n)
+        for d in self.get_children_by_type(Direction):
+            next_chord.add_child(d)
 
     self.parent_beat.chords.remove(self)
     self.parent_voice.chords.remove(self)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.remove_notations"><code class="name flex">
+<span>def <span class="ident">remove_notations</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_notations(self):
+    notations = self.get_children_by_type(Notations)
+    for notation in notations:
+        self.remove_child(notation)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.remove_previous_tie"><code class="name flex">
+<span>def <span class="ident">remove_previous_tie</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_previous_tie(self):
+    if &#39;stop&#39; in self.tie_types:
+        self.remove_tie(&#39;stop&#39;)
+        try:
+            self.previous_in_score_part.remove_tie(&#39;start&#39;)
+        except AttributeError:
+            pass</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.remove_slur"><code class="name flex">
+<span>def <span class="ident">remove_slur</span></span>(<span>self, type)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_slur(self, type):
+    try:
+        notations = self.get_children_by_type(Notations)[0]
+        slurs = [s for s in notations.get_children_by_type(Slur) if s.type == type]
+        for slur in slurs:
+            notations.remove_child(slur)
+        if not notations.get_children():
+            self.remove_child(notations)
+    except IndexError:
+        pass</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musictree.treechord.TreeChord.remove_tie"><code class="name flex">
@@ -1369,6 +2743,48 @@ def tie_types(self):
         self.remove_child(voice)</code></pre>
 </details>
 </dd>
+<dt id="musicscore.musictree.treechord.TreeChord.set_manual_type"><code class="name flex">
+<span>def <span class="ident">set_manual_type</span></span>(<span>self, val, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_manual_type(self, val, **kwargs):
+    try:
+        chord_type = self.get_children_by_type(Type)[0]
+        self.remove_child(chord_type)
+    except IndexError:
+        self.add_child(Type(value=val, **kwargs))
+
+    self.manual_type = True</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.set_tie_orientation"><code class="name flex">
+<span>def <span class="ident">set_tie_orientation</span></span>(<span>self, orientation)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_tie_orientation(self, orientation):
+    if self.is_tied_to_next:
+        tied = [t for t in self.get_children_by_type(Notations)[0].get_children_by_type(Tied) if t.type == &#39;start&#39;]
+        for t in tied:
+            t.orientation = orientation</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.set_voice_number"><code class="name flex">
+<span>def <span class="ident">set_voice_number</span></span>(<span>self, voice_number)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_voice_number(self, voice_number):
+    self.manual_voice_number = voice_number</code></pre>
+</details>
+</dd>
 <dt id="musicscore.musictree.treechord.TreeChord.split"><code class="name flex">
 <span>def <span class="ident">split</span></span>(<span>self, *ratios)</span>
 </code></dt>
@@ -1387,9 +2803,18 @@ def tie_types(self):
     self.quarter_duration *= new_ratios[0]
 
     new_chords = [self.split_copy(quarter_duration=ratio * old_duration) for ratio in new_ratios[1:]]
+    for ch in new_chords:
+        ch.tie_orientation = self.tie_orientation
 
     if &#39;start&#39; in self.tie_types:
         new_chords[-1].add_tie(&#39;start&#39;)
+
+    if not self.is_adjoinable:
+        self.is_adjoinable = True
+        new_chords[-1].is_adjoinable = False
+
+    for tremolo in self.tremoli:
+        new_chords[-1].add_tremolo(number=tremolo.value)
 
     new_chords.insert(0, self)
 
@@ -1412,17 +2837,49 @@ def tie_types(self):
 <summary>Source code</summary>
 <pre><code class="python">def split_copy(self, quarter_duration):
     new_chord = TreeChord(quarter_duration=quarter_duration)
+
     new_chord.midis = self.midis
     new_chord.parent_voice = self.parent_voice
     new_chord.parent_beat = self.parent_beat
+
+    if self._flags is not None:
+        new_chord._flags = []
+        for flag in self._flags:
+            new_chord._flags.append(flag.__deepcopy__())
+
     new_chord._offset = None
+    new_chord.is_finger_tremolo = self.is_finger_tremolo
+
     try:
         voice = self.get_children_by_type(Voice)[0]
         new_chord.add_child(voice)
     except IndexError:
         pass
 
+    try:
+        notehead = self.get_children_by_type(Notehead)[0]
+        new_chord.add_child(notehead)
+    except IndexError:
+        pass
+
     return new_chord</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.to_rest"><code class="name flex">
+<span>def <span class="ident">to_rest</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def to_rest(self):
+    self.midis = [0]
+    self.remove_tie(&#39;stop&#39;)
+    self.remove_tie(&#39;start&#39;)
+    for notation in self.get_children_by_type(Notations):
+        articulations = notation.get_children_by_type(Articulations)
+        for articulation in articulations:
+            notation.remove_child(articulation)</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musictree.treechord.TreeChord.transpose"><code class="name flex">
@@ -1434,7 +2891,37 @@ def tie_types(self):
 <summary>Source code</summary>
 <pre><code class="python">def transpose(self, interval):
     for midi in self.midis:
-        midi.value += interval</code></pre>
+        if midi.value != 0:
+            midi.value += interval</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.tremolo_flag_copy"><code class="name flex">
+<span>def <span class="ident">tremolo_flag_copy</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def tremolo_flag_copy(self):
+    new_chord = TreeChord()
+    new_chord.midis = self.midis
+    return new_chord</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechord.TreeChord.untie"><code class="name flex">
+<span>def <span class="ident">untie</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def untie(self):
+    if &#39;start&#39; in self.tie_types:
+        self.remove_tie(&#39;start&#39;)
+        try:
+            self.next.remove_tie(&#39;stop&#39;)
+        except AttributeError:
+            pass</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musictree.treechord.TreeChord.update_dot"><code class="name flex">
@@ -1535,18 +3022,32 @@ def tie_types(self):
               (3, 1): &#39;half&#39;,
               (4, 1): &#39;whole&#39;,
               (6, 1): &#39;whole&#39;,
-              (8, 1): &#39;breve&#39;}
+              (8, 1): &#39;breve&#39;,
+              (12, 1): &#39;breve&#39;
+              }
 
-    if self.quarter_duration == 0:
-        value = &#39;eighth&#39;
-    else:
-        value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
+    if self.manual_type is False:
+        tremoli_types = [tremolo.type for tremolo in self.tremoli]
 
-    try:
-        chord_type = self.get_children_by_type(Type)[0]
-        chord_type.value = value
-    except IndexError:
-        self.add_child(Type(value))</code></pre>
+        if self.quarter_duration == 0:
+            value = &#39;eighth&#39;
+
+        elif (&#39;start&#39; in tremoli_types or &#39;stop&#39; in tremoli_types):
+            show_duration = self.quarter_duration * 2
+            value = _types[(show_duration.numerator, show_duration.denominator)]
+            if not self.get_children_by_type(TimeModification):
+                tm = TimeModification()
+                tm.add_child(ActualNotes(2))
+                tm.add_child(NormalNotes(1))
+                self.add_child(tm)
+        else:
+            value = _types[(self.quarter_duration.numerator, self.quarter_duration.denominator)]
+
+        try:
+            chord_type = self.get_children_by_type(Type)[0]
+            chord_type.value = value
+        except IndexError:
+            self.add_child(Type(value))</code></pre>
 </details>
 </dd>
 </dl>
@@ -1568,19 +3069,47 @@ def tie_types(self):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="musicscore.musictree.treechord.FingerTremolo" href="#musicscore.musictree.treechord.FingerTremolo">FingerTremolo</a></code></h4>
+</li>
+<li>
 <h4><code><a title="musicscore.musictree.treechord.TreeChord" href="#musicscore.musictree.treechord.TreeChord">TreeChord</a></code></h4>
 <ul class="">
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_action_dynamics" href="#musicscore.musictree.treechord.TreeChord.add_action_dynamics">add_action_dynamics</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_articulation" href="#musicscore.musictree.treechord.TreeChord.add_articulation">add_articulation</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_articulation_object" href="#musicscore.musictree.treechord.TreeChord.add_articulation_object">add_articulation_object</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_bracket" href="#musicscore.musictree.treechord.TreeChord.add_bracket">add_bracket</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.add_clef" href="#musicscore.musictree.treechord.TreeChord.add_clef">add_clef</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.add_dynamics" href="#musicscore.musictree.treechord.TreeChord.add_dynamics">add_dynamics</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_fermata" href="#musicscore.musictree.treechord.TreeChord.add_fermata">add_fermata</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_flag" href="#musicscore.musictree.treechord.TreeChord.add_flag">add_flag</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_harmonic" href="#musicscore.musictree.treechord.TreeChord.add_harmonic">add_harmonic</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.add_lyric" href="#musicscore.musictree.treechord.TreeChord.add_lyric">add_lyric</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_midi" href="#musicscore.musictree.treechord.TreeChord.add_midi">add_midi</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_notations_object" href="#musicscore.musictree.treechord.TreeChord.add_notations_object">add_notations_object</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_slide" href="#musicscore.musictree.treechord.TreeChord.add_slide">add_slide</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_slur" href="#musicscore.musictree.treechord.TreeChord.add_slur">add_slur</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_slur_object" href="#musicscore.musictree.treechord.TreeChord.add_slur_object">add_slur_object</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_technical_object" href="#musicscore.musictree.treechord.TreeChord.add_technical_object">add_technical_object</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.add_tie" href="#musicscore.musictree.treechord.TreeChord.add_tie">add_tie</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_tremolo" href="#musicscore.musictree.treechord.TreeChord.add_tremolo">add_tremolo</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.add_tuplet" href="#musicscore.musictree.treechord.TreeChord.add_tuplet">add_tuplet</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.add_wedge" href="#musicscore.musictree.treechord.TreeChord.add_wedge">add_wedge</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.add_words" href="#musicscore.musictree.treechord.TreeChord.add_words">add_words</a></code></li>
-<li><code><a title="musicscore.musictree.treechord.TreeChord.copy" href="#musicscore.musictree.treechord.TreeChord.copy">copy</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.change_range" href="#musicscore.musictree.treechord.TreeChord.change_range">change_range</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.deepcopy_for_SimpleFormat" href="#musicscore.musictree.treechord.TreeChord.deepcopy_for_SimpleFormat">deepcopy_for_SimpleFormat</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.dynamics" href="#musicscore.musictree.treechord.TreeChord.dynamics">dynamics</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.end_position" href="#musicscore.musictree.treechord.TreeChord.end_position">end_position</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.flags" href="#musicscore.musictree.treechord.TreeChord.flags">flags</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.force_tie" href="#musicscore.musictree.treechord.TreeChord.force_tie">force_tie</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.get_articulations" href="#musicscore.musictree.treechord.TreeChord.get_articulations">get_articulations</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.get_direction_types" href="#musicscore.musictree.treechord.TreeChord.get_direction_types">get_direction_types</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.get_dynamics" href="#musicscore.musictree.treechord.TreeChord.get_dynamics">get_dynamics</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.get_words" href="#musicscore.musictree.treechord.TreeChord.get_words">get_words</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.inverse" href="#musicscore.musictree.treechord.TreeChord.inverse">inverse</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.is_adjoinable" href="#musicscore.musictree.treechord.TreeChord.is_adjoinable">is_adjoinable</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.is_head" href="#musicscore.musictree.treechord.TreeChord.is_head">is_head</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.is_rest" href="#musicscore.musictree.treechord.TreeChord.is_rest">is_rest</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.is_tail" href="#musicscore.musictree.treechord.TreeChord.is_tail">is_tail</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.is_tied_to_next" href="#musicscore.musictree.treechord.TreeChord.is_tied_to_next">is_tied_to_next</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.is_tied_to_previous" href="#musicscore.musictree.treechord.TreeChord.is_tied_to_previous">is_tied_to_previous</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.midis" href="#musicscore.musictree.treechord.TreeChord.midis">midis</a></code></li>
@@ -1588,17 +3117,30 @@ def tie_types(self):
 <li><code><a title="musicscore.musictree.treechord.TreeChord.offset" href="#musicscore.musictree.treechord.TreeChord.offset">offset</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.position_in_beat" href="#musicscore.musictree.treechord.TreeChord.position_in_beat">position_in_beat</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.previous" href="#musicscore.musictree.treechord.TreeChord.previous">previous</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.previous_in_score_part" href="#musicscore.musictree.treechord.TreeChord.previous_in_score_part">previous_in_score_part</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.quarter_duration" href="#musicscore.musictree.treechord.TreeChord.quarter_duration">quarter_duration</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.remove_flag" href="#musicscore.musictree.treechord.TreeChord.remove_flag">remove_flag</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.remove_from_score" href="#musicscore.musictree.treechord.TreeChord.remove_from_score">remove_from_score</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.remove_notations" href="#musicscore.musictree.treechord.TreeChord.remove_notations">remove_notations</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.remove_previous_tie" href="#musicscore.musictree.treechord.TreeChord.remove_previous_tie">remove_previous_tie</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.remove_slur" href="#musicscore.musictree.treechord.TreeChord.remove_slur">remove_slur</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.remove_tie" href="#musicscore.musictree.treechord.TreeChord.remove_tie">remove_tie</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.remove_voice" href="#musicscore.musictree.treechord.TreeChord.remove_voice">remove_voice</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.set_manual_type" href="#musicscore.musictree.treechord.TreeChord.set_manual_type">set_manual_type</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.set_tie_orientation" href="#musicscore.musictree.treechord.TreeChord.set_tie_orientation">set_tie_orientation</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.set_voice_number" href="#musicscore.musictree.treechord.TreeChord.set_voice_number">set_voice_number</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.split" href="#musicscore.musictree.treechord.TreeChord.split">split</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.split_copy" href="#musicscore.musictree.treechord.TreeChord.split_copy">split_copy</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.tie_types" href="#musicscore.musictree.treechord.TreeChord.tie_types">tie_types</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.to_rest" href="#musicscore.musictree.treechord.TreeChord.to_rest">to_rest</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.transpose" href="#musicscore.musictree.treechord.TreeChord.transpose">transpose</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.tremoli" href="#musicscore.musictree.treechord.TreeChord.tremoli">tremoli</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.tremolo_flag_copy" href="#musicscore.musictree.treechord.TreeChord.tremolo_flag_copy">tremolo_flag_copy</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.untie" href="#musicscore.musictree.treechord.TreeChord.untie">untie</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.update_dot" href="#musicscore.musictree.treechord.TreeChord.update_dot">update_dot</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.update_offset" href="#musicscore.musictree.treechord.TreeChord.update_offset">update_offset</a></code></li>
 <li><code><a title="musicscore.musictree.treechord.TreeChord.update_type" href="#musicscore.musictree.treechord.TreeChord.update_type">update_type</a></code></li>
+<li><code><a title="musicscore.musictree.treechord.TreeChord.zero_mode" href="#musicscore.musictree.treechord.TreeChord.zero_mode">zero_mode</a></code></li>
 </ul>
 </li>
 </ul>

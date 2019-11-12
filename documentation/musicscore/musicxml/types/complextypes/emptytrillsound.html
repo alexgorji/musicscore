@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>musicscore.musicxml.types.complextypes.text_element_data API documentation</title>
+<title>musicscore.musicxml.types.complextypes.emptytrillsound API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,32 +17,23 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>musicscore.musicxml.types.complextypes.text_element_data</code></h1>
+<h1 class="title">Module <code>musicscore.musicxml.types.complextypes.emptytrillsound</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from musicscore.musicxml.attributes.attribute_abstract import String
-from musicscore.musicxml.attributes.color import Color
-from musicscore.musicxml.attributes.font import Font
-from musicscore.musicxml.attributes.letterspacing import LetterSpacing
-from musicscore.musicxml.attributes.text_direction import TextDirection
-from musicscore.musicxml.attributes.textdecoration import TextDecoration
-from musicscore.musicxml.attributes.textrotation import TextRotation
+<pre><code class="python">from musicscore.musicxml.attributes.placement import Placement
+from musicscore.musicxml.attributes.printstyle import PrintStyle
+from musicscore.musicxml.attributes.trillsound import TrillSound
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 
 
-# todo XMLLang
-class ComplexTypeTextElementData(ComplexType, String, Font, Color, TextDecoration, TextRotation, LetterSpacing,
-                                 TextDirection):
+class ComplexTypeEmptyTrillSound(ComplexType, PrintStyle, Placement, TrillSound):
     &#34;&#34;&#34;
-    documentation&gt;The text-element-data type represents a syllable or portion of a syllable for lyric text underlay. A
-    hyphen in the string content should only be used for an actual hyphenated word. Language names for text elements
-    come from ISO 639, with optional country subcodes from ISO 3166.
+    The empty-trill-sound type represents an empty element with print-style, placement, and trill-sound attributes.
     &#34;&#34;&#34;
-
-    def __init__(self, value=None, *args, **kwargs):
-        super().__init__(value=value, *args, **kwargs)</code></pre>
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
 </details>
 </section>
 <section>
@@ -54,26 +45,20 @@ class ComplexTypeTextElementData(ComplexType, String, Font, Color, TextDecoratio
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="musicscore.musicxml.types.complextypes.text_element_data.ComplexTypeTextElementData"><code class="flex name class">
-<span>class <span class="ident">ComplexTypeTextElementData</span></span>
-<span>(</span><span>value=None, *args, **kwargs)</span>
+<dt id="musicscore.musicxml.types.complextypes.emptytrillsound.ComplexTypeEmptyTrillSound"><code class="flex name class">
+<span>class <span class="ident">ComplexTypeEmptyTrillSound</span></span>
+<span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>documentation&gt;The text-element-data type represents a syllable or portion of a syllable for lyric text underlay. A
-hyphen in the string content should only be used for an actual hyphenated word. Language names for text elements
-come from ISO 639, with optional country subcodes from ISO 3166.</p></section>
+<section class="desc"><p>The empty-trill-sound type represents an empty element with print-style, placement, and trill-sound attributes.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class ComplexTypeTextElementData(ComplexType, String, Font, Color, TextDecoration, TextRotation, LetterSpacing,
-                                 TextDirection):
+<pre><code class="python">class ComplexTypeEmptyTrillSound(ComplexType, PrintStyle, Placement, TrillSound):
     &#34;&#34;&#34;
-    documentation&gt;The text-element-data type represents a syllable or portion of a syllable for lyric text underlay. A
-    hyphen in the string content should only be used for an actual hyphenated word. Language names for text elements
-    come from ISO 639, with optional country subcodes from ISO 3166.
+    The empty-trill-sound type represents an empty element with print-style, placement, and trill-sound attributes.
     &#34;&#34;&#34;
-
-    def __init__(self, value=None, *args, **kwargs):
-        super().__init__(value=value, *args, **kwargs)</code></pre>
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -81,28 +66,36 @@ come from ISO 639, with optional country subcodes from ISO 3166.</p></section>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
-<li><a title="musicscore.musicxml.types.simple_type.String" href="../simple_type.html#musicscore.musicxml.types.simple_type.String">String</a></li>
-<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
 <li><a title="musicscore.musicxml.attributes.font.Font" href="../../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
 <li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
 <li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
 <li><a title="musicscore.musicxml.attributes.font.FontSize" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
 <li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
 <li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
-<li><a title="musicscore.musicxml.attributes.textdecoration.TextDecoration" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.TextDecoration">TextDecoration</a></li>
-<li><a title="musicscore.musicxml.attributes.textdecoration.Underline" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.Underline">Underline</a></li>
-<li><a title="musicscore.musicxml.attributes.textdecoration.Overline" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.Overline">Overline</a></li>
-<li><a title="musicscore.musicxml.attributes.textdecoration.LineThrough" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.LineThrough">LineThrough</a></li>
-<li><a title="musicscore.musicxml.attributes.textrotation.TextRotation" href="../../attributes/textrotation.html#musicscore.musicxml.attributes.textrotation.TextRotation">TextRotation</a></li>
-<li><a title="musicscore.musicxml.attributes.textrotation.Rotation" href="../../attributes/textrotation.html#musicscore.musicxml.attributes.textrotation.Rotation">Rotation</a></li>
-<li><a title="musicscore.musicxml.attributes.letterspacing.LetterSpacing" href="../../attributes/letterspacing.html#musicscore.musicxml.attributes.letterspacing.LetterSpacing">LetterSpacing</a></li>
-<li><a title="musicscore.musicxml.attributes.text_direction.TextDirection" href="../../attributes/text_direction.html#musicscore.musicxml.attributes.text_direction.TextDirection">TextDirection</a></li>
-<li><a title="musicscore.musicxml.attributes.text_direction.Dir" href="../../attributes/text_direction.html#musicscore.musicxml.attributes.text_direction.Dir">Dir</a></li>
+<li><a title="musicscore.musicxml.attributes.placement.Placement" href="../../attributes/placement.html#musicscore.musicxml.attributes.placement.Placement">Placement</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.TrillSound" href="../../attributes/trillsound.html#musicscore.musicxml.attributes.trillsound.TrillSound">TrillSound</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.StartNote" href="../../attributes/trillsound.html#musicscore.musicxml.attributes.trillsound.StartNote">StartNote</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.TrillStep" href="../../attributes/trillsound.html#musicscore.musicxml.attributes.trillsound.TrillStep">TrillStep</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.TwoNoteTurn" href="../../attributes/trillsound.html#musicscore.musicxml.attributes.trillsound.TwoNoteTurn">TwoNoteTurn</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.Accelerate" href="../../attributes/trillsound.html#musicscore.musicxml.attributes.trillsound.Accelerate">Accelerate</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.Beats" href="../../attributes/trillsound.html#musicscore.musicxml.attributes.trillsound.Beats">Beats</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.SecondBeat" href="../../attributes/trillsound.html#musicscore.musicxml.attributes.trillsound.SecondBeat">SecondBeat</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.LastBeat" href="../../attributes/trillsound.html#musicscore.musicxml.attributes.trillsound.LastBeat">LastBeat</a></li>
 <li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="musicscore.musicxml.types.complextypes.lyric.Text" href="lyric.html#musicscore.musicxml.types.complextypes.lyric.Text">Text</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.ornaments.TrillMark" href="ornaments.html#musicscore.musicxml.types.complextypes.ornaments.TrillMark">TrillMark</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.ornaments.VerticalTurn" href="ornaments.html#musicscore.musicxml.types.complextypes.ornaments.VerticalTurn">VerticalTurn</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.ornaments.InvertedVerticalTurn" href="ornaments.html#musicscore.musicxml.types.complextypes.ornaments.InvertedVerticalTurn">InvertedVerticalTurn</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.ornaments.Shake" href="ornaments.html#musicscore.musicxml.types.complextypes.ornaments.Shake">Shake</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.ornaments.Haydn" href="ornaments.html#musicscore.musicxml.types.complextypes.ornaments.Haydn">Haydn</a></li>
 </ul>
 </dd>
 </dl>
@@ -122,7 +115,7 @@ come from ISO 639, with optional country subcodes from ISO 3166.</p></section>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="musicscore.musicxml.types.complextypes.text_element_data.ComplexTypeTextElementData" href="#musicscore.musicxml.types.complextypes.text_element_data.ComplexTypeTextElementData">ComplexTypeTextElementData</a></code></h4>
+<h4><code><a title="musicscore.musicxml.types.complextypes.emptytrillsound.ComplexTypeEmptyTrillSound" href="#musicscore.musicxml.types.complextypes.emptytrillsound.ComplexTypeEmptyTrillSound">ComplexTypeEmptyTrillSound</a></code></h4>
 </li>
 </ul>
 </li>

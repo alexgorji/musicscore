@@ -38,8 +38,8 @@ from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance, 
 class TreePageStyle(object):
     sizes = {&#39;A4&#39;: (210, 297), &#39;A3&#39;: (297, 420)}
 
-    def __init__(self, score, scale=1, size=&#39;A4&#39;, format=&#39;portrait&#39;, left_margin=20, right_margin=10, top_margin=15,
-                 bottom_margin=15, system_distance=None, system_left_margin=None, system_right_margin=None,
+    def __init__(self, score, scale=1, size=&#39;A4&#39;, orientation=&#39;portrait&#39;, left_margin=111, right_margin=55, top_margin=83,
+                 bottom_margin=83, system_distance=None, system_left_margin=None, system_right_margin=None,
                  top_system_distance=None, staff_distance=None):
 
         self._score = None
@@ -47,7 +47,7 @@ class TreePageStyle(object):
         self.tenth = 40
 
         self._size = None
-        self._format = &#39;portrait&#39;
+        self._orientation = &#39;portrait&#39;
 
         self._defaults = None
         self._scaling = None
@@ -73,7 +73,7 @@ class TreePageStyle(object):
 
         self.scale = scale
         self.size = size
-        self.format = format
+        self.orientation = orientation
 
         self.left_margin = left_margin
         self.right_margin = right_margin
@@ -177,11 +177,11 @@ class TreePageStyle(object):
             self._page_width = self._page_layout.add_child(PageWidth(value))
 
     @property
-    def format(self):
-        return self._format
+    def orientation(self):
+        return self._orientation
 
-    @format.setter
-    def format(self, value):
+    @orientation.setter
+    def orientation(self, value):
         if value == &#39;landscape&#39;:
             self.page_height, self.page_width = self.size[1], self.size[0]
         elif value == &#39;portrait&#39;:
@@ -189,7 +189,7 @@ class TreePageStyle(object):
         else:
             raise ValueError()
 
-        self._format = value
+        self._orientation = value
 
     @property
     def left_margin(self):
@@ -197,7 +197,7 @@ class TreePageStyle(object):
 
     @left_margin.setter
     def left_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.left_margin:
             self.left_margin.value = value
         else:
@@ -211,7 +211,7 @@ class TreePageStyle(object):
 
     @right_margin.setter
     def right_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.right_margin:
             self.right_margin.value = value
         else:
@@ -225,7 +225,7 @@ class TreePageStyle(object):
 
     @top_margin.setter
     def top_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.top_margin:
             self.top_margin.value = value
         else:
@@ -239,7 +239,7 @@ class TreePageStyle(object):
 
     @bottom_margin.setter
     def bottom_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.bottom_margin:
             self.bottom_margin.value = value
         else:
@@ -320,7 +320,7 @@ class TreePageStyle(object):
     @size.setter
     def size(self, value):
         self._size = value
-        self.format = self._format
+        self.orientation = self._orientation
         # self.page_height = self.size[0]
         # self.page_width = self.size[1]
 
@@ -344,7 +344,7 @@ class TreePageStyle(object):
 <dl>
 <dt id="musicscore.musictree.treepagestyle.TreePageStyle"><code class="flex name class">
 <span>class <span class="ident">TreePageStyle</span></span>
-<span>(</span><span>score, scale=1, size='A4', format='portrait', left_margin=20, right_margin=10, top_margin=15, bottom_margin=15, system_distance=None, system_left_margin=None, system_right_margin=None, top_system_distance=None, staff_distance=None)</span>
+<span>(</span><span>score, scale=1, size='A4', orientation='portrait', left_margin=111, right_margin=55, top_margin=83, bottom_margin=83, system_distance=None, system_left_margin=None, system_right_margin=None, top_system_distance=None, staff_distance=None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -353,8 +353,8 @@ class TreePageStyle(object):
 <pre><code class="python">class TreePageStyle(object):
     sizes = {&#39;A4&#39;: (210, 297), &#39;A3&#39;: (297, 420)}
 
-    def __init__(self, score, scale=1, size=&#39;A4&#39;, format=&#39;portrait&#39;, left_margin=20, right_margin=10, top_margin=15,
-                 bottom_margin=15, system_distance=None, system_left_margin=None, system_right_margin=None,
+    def __init__(self, score, scale=1, size=&#39;A4&#39;, orientation=&#39;portrait&#39;, left_margin=111, right_margin=55, top_margin=83,
+                 bottom_margin=83, system_distance=None, system_left_margin=None, system_right_margin=None,
                  top_system_distance=None, staff_distance=None):
 
         self._score = None
@@ -362,7 +362,7 @@ class TreePageStyle(object):
         self.tenth = 40
 
         self._size = None
-        self._format = &#39;portrait&#39;
+        self._orientation = &#39;portrait&#39;
 
         self._defaults = None
         self._scaling = None
@@ -388,7 +388,7 @@ class TreePageStyle(object):
 
         self.scale = scale
         self.size = size
-        self.format = format
+        self.orientation = orientation
 
         self.left_margin = left_margin
         self.right_margin = right_margin
@@ -492,11 +492,11 @@ class TreePageStyle(object):
             self._page_width = self._page_layout.add_child(PageWidth(value))
 
     @property
-    def format(self):
-        return self._format
+    def orientation(self):
+        return self._orientation
 
-    @format.setter
-    def format(self, value):
+    @orientation.setter
+    def orientation(self, value):
         if value == &#39;landscape&#39;:
             self.page_height, self.page_width = self.size[1], self.size[0]
         elif value == &#39;portrait&#39;:
@@ -504,7 +504,7 @@ class TreePageStyle(object):
         else:
             raise ValueError()
 
-        self._format = value
+        self._orientation = value
 
     @property
     def left_margin(self):
@@ -512,7 +512,7 @@ class TreePageStyle(object):
 
     @left_margin.setter
     def left_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.left_margin:
             self.left_margin.value = value
         else:
@@ -526,7 +526,7 @@ class TreePageStyle(object):
 
     @right_margin.setter
     def right_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.right_margin:
             self.right_margin.value = value
         else:
@@ -540,7 +540,7 @@ class TreePageStyle(object):
 
     @top_margin.setter
     def top_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.top_margin:
             self.top_margin.value = value
         else:
@@ -554,7 +554,7 @@ class TreePageStyle(object):
 
     @bottom_margin.setter
     def bottom_margin(self, value):
-        value = self.millimeters_to_tenth(value)
+        # value = self.millimeters_to_tenth(value)
         if self.bottom_margin:
             self.bottom_margin.value = value
         else:
@@ -635,7 +635,7 @@ class TreePageStyle(object):
     @size.setter
     def size(self, value):
         self._size = value
-        self.format = self._format
+        self.orientation = self._orientation
         # self.page_height = self.size[0]
         # self.page_width = self.size[1]
 
@@ -666,16 +666,6 @@ def bottom_margin(self):
     return self._bottom_margin</code></pre>
 </details>
 </dd>
-<dt id="musicscore.musictree.treepagestyle.TreePageStyle.format"><code class="name">var <span class="ident">format</span></code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">@property
-def format(self):
-    return self._format</code></pre>
-</details>
-</dd>
 <dt id="musicscore.musictree.treepagestyle.TreePageStyle.left_margin"><code class="name">var <span class="ident">left_margin</span></code></dt>
 <dd>
 <section class="desc"></section>
@@ -694,6 +684,16 @@ def left_margin(self):
 <pre><code class="python">@property
 def millimeters(self):
     return self.scale * 7.2319</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treepagestyle.TreePageStyle.orientation"><code class="name">var <span class="ident">orientation</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def orientation(self):
+    return self._orientation</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musictree.treepagestyle.TreePageStyle.page_height"><code class="name">var <span class="ident">page_height</span></code></dt>
@@ -868,10 +868,10 @@ def top_system_distance(self):
 <h4><code><a title="musicscore.musictree.treepagestyle.TreePageStyle" href="#musicscore.musictree.treepagestyle.TreePageStyle">TreePageStyle</a></code></h4>
 <ul class="">
 <li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.bottom_margin" href="#musicscore.musictree.treepagestyle.TreePageStyle.bottom_margin">bottom_margin</a></code></li>
-<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.format" href="#musicscore.musictree.treepagestyle.TreePageStyle.format">format</a></code></li>
 <li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.left_margin" href="#musicscore.musictree.treepagestyle.TreePageStyle.left_margin">left_margin</a></code></li>
 <li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.millimeters" href="#musicscore.musictree.treepagestyle.TreePageStyle.millimeters">millimeters</a></code></li>
 <li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.millimeters_to_tenth" href="#musicscore.musictree.treepagestyle.TreePageStyle.millimeters_to_tenth">millimeters_to_tenth</a></code></li>
+<li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.orientation" href="#musicscore.musictree.treepagestyle.TreePageStyle.orientation">orientation</a></code></li>
 <li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.page_height" href="#musicscore.musictree.treepagestyle.TreePageStyle.page_height">page_height</a></code></li>
 <li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.page_size" href="#musicscore.musictree.treepagestyle.TreePageStyle.page_size">page_size</a></code></li>
 <li><code><a title="musicscore.musictree.treepagestyle.TreePageStyle.page_width" href="#musicscore.musictree.treepagestyle.TreePageStyle.page_width">page_width</a></code></li>

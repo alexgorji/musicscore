@@ -33,20 +33,22 @@ class DTDError(Exception):
 
 
 class ChildTypeDTDConflict(DTDError):
-    def __init__(self, child):
-        msg = &#39;child of type {} cannot be added due to DTD Type conflicts&#39;.format(type(child))
+    def __init__(self, child, parent):
+        msg = &#39;child of type {} cannot be added to {} due to DTD Type conflicts&#39;.format(type(child), parent.__class__)
         super().__init__(msg)
 
 
 class ChildOccurrenceDTDConflict(DTDError):
-    def __init__(self, child):
-        msg = &#39;child of type {} cannot be added due to DTD Occurrence conflicts&#39;.format(type(child))
+    def __init__(self, child, parent):
+        msg = &#39;child of type {} cannot be added to {} due to DTD Occurrence conflicts&#39;.format(type(child),
+                                                                                              parent.__class__)
         super().__init__(msg)
 
 
 class ChildIsNotOptional(DTDError):
-    def __init__(self, node):
-        msg = &#39;child of type {} is due to DTD Occurrence not optional&#39;.format(node.type_.__name__)
+    def __init__(self, node, parent):
+        msg = &#39;child of type {} is due to DTD Occurrence not optional for {}&#39;.format(node.type_.__name__,
+                                                                                     parent.__class__)
         super().__init__(msg)
 
 
@@ -328,7 +330,12 @@ class Element(DTDLeaf):
             if isinstance(self.up, Sequence):
                 return False
             else:
-                raise NotImplementedError()
+                # self.up.xml_children.append(xml_child)
+                # xml_child.node = self.up
+                self.xml_children.append(xml_child)
+                xml_child.node = self
+                return True
+                # raise NotImplementedError()
 
         else:
             return False
@@ -360,15 +367,16 @@ class GroupReference(DTDNode):
 <dl>
 <dt id="musicscore.dtd.dtd.ChildIsNotOptional"><code class="flex name class">
 <span>class <span class="ident">ChildIsNotOptional</span></span>
-<span>(</span><span>node)</span>
+<span>(</span><span>node, parent)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class ChildIsNotOptional(DTDError):
-    def __init__(self, node):
-        msg = &#39;child of type {} is due to DTD Occurrence not optional&#39;.format(node.type_.__name__)
+    def __init__(self, node, parent):
+        msg = &#39;child of type {} is due to DTD Occurrence not optional for {}&#39;.format(node.type_.__name__,
+                                                                                     parent.__class__)
         super().__init__(msg)</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -380,15 +388,16 @@ class GroupReference(DTDNode):
 </dd>
 <dt id="musicscore.dtd.dtd.ChildOccurrenceDTDConflict"><code class="flex name class">
 <span>class <span class="ident">ChildOccurrenceDTDConflict</span></span>
-<span>(</span><span>child)</span>
+<span>(</span><span>child, parent)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class ChildOccurrenceDTDConflict(DTDError):
-    def __init__(self, child):
-        msg = &#39;child of type {} cannot be added due to DTD Occurrence conflicts&#39;.format(type(child))
+    def __init__(self, child, parent):
+        msg = &#39;child of type {} cannot be added to {} due to DTD Occurrence conflicts&#39;.format(type(child),
+                                                                                              parent.__class__)
         super().__init__(msg)</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -400,15 +409,15 @@ class GroupReference(DTDNode):
 </dd>
 <dt id="musicscore.dtd.dtd.ChildTypeDTDConflict"><code class="flex name class">
 <span>class <span class="ident">ChildTypeDTDConflict</span></span>
-<span>(</span><span>child)</span>
+<span>(</span><span>child, parent)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class ChildTypeDTDConflict(DTDError):
-    def __init__(self, child):
-        msg = &#39;child of type {} cannot be added due to DTD Type conflicts&#39;.format(type(child))
+    def __init__(self, child, parent):
+        msg = &#39;child of type {} cannot be added to {} due to DTD Type conflicts&#39;.format(type(child), parent.__class__)
         super().__init__(msg)</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1031,7 +1040,12 @@ def xml_children(self):
             if isinstance(self.up, Sequence):
                 return False
             else:
-                raise NotImplementedError()
+                # self.up.xml_children.append(xml_child)
+                # xml_child.node = self.up
+                self.xml_children.append(xml_child)
+                xml_child.node = self
+                return True
+                # raise NotImplementedError()
 
         else:
             return False</code></pre>
@@ -1070,7 +1084,12 @@ def xml_children(self):
         if isinstance(self.up, Sequence):
             return False
         else:
-            raise NotImplementedError()
+            # self.up.xml_children.append(xml_child)
+            # xml_child.node = self.up
+            self.xml_children.append(xml_child)
+            xml_child.node = self
+            return True
+            # raise NotImplementedError()
 
     else:
         return False</code></pre>

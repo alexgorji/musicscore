@@ -72,6 +72,9 @@ class Decimal(SimpleType):
         self._value = v
 
 
+TypeDecimal = Decimal
+
+
 class Integer(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -81,6 +84,9 @@ class Integer(SimpleType):
         if not isinstance(v, int):
             raise TypeError(&#39;value {} must be an int not {}&#39;.format(v, type(v).__name__))
         self._value = v
+
+
+TypeInteger = Integer
 
 
 class PositiveInteger(SimpleType):
@@ -96,6 +102,9 @@ class PositiveInteger(SimpleType):
         self._value = v
 
 
+TypePositiveInteger = PositiveInteger
+
+
 class NonNegativeInteger(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -109,6 +118,9 @@ class NonNegativeInteger(SimpleType):
         self._value = v
 
 
+TypeNonNegativeInteger = NonNegativeInteger
+
+
 class String(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -118,6 +130,9 @@ class String(SimpleType):
         if not isinstance(v, str):
             raise TypeError(&#39;value {} must a be string&#39;.format(v))
         self._value = v
+
+
+TypeString = String
 
 
 # todo xs:Token
@@ -133,6 +148,9 @@ class Token(String):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
+
+
+TypeToken = Token
 
 
 # todo xs:ID
@@ -213,7 +231,7 @@ class TypeRightLeftMiddle(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class TypeStopStartDiscontinue(SimpleType):
+class TypeStartStopDiscontinue(SimpleType):
     &#34;&#34;&#34;
     The start-stop-discontinue type is used to specify ending types. Typically, the start type is associated with the
     left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline
@@ -368,7 +386,7 @@ class TypeLineType(SimpleType):
     &#34;&#34;&#34;
     The line-type type distinguishes between solid, dashed, dotted, and wavy lines.
     &#34;&#34;&#34;
-    _PERMITTED = (&#39;solid&#39;, &#39;dashed&#39; &#39;dotted&#39;, &#39;wavy&#39;)
+    _PERMITTED = (&#39;solid&#39;, &#39;dashed&#39;, &#39;dotted&#39;, &#39;wavy&#39;)
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -843,8 +861,109 @@ class TypeYesNoNumber(SimpleType):
     def value(self, v):
         if v is not None and v not in self._PERMITTED and not Decimal(v):
             raise ValueError(
-                &#39;{}.value {} must be yes no ord decimal&#39;)
+                &#39;{}.value {} must be yes no or decimal&#39;)
         self._value = v
+
+
+class TypePositiveIntegerOrEmpty(SimpleType):
+    &#34;&#34;&#34;
+    The positive-integer-or-empty values can be either a positive integer or an empty string.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v is not None and not TypePositiveInteger(v) and v != &#39;&#39;:
+            raise ValueError(
+                &#39;{}.value {}  can be either a positive integer or an empty string&#39;)
+        self._value = v
+
+
+class TypeTrillBeats(SimpleType):
+    &#34;&#34;&#34;
+    The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value
+    with a minimum value of 2.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v is not None:
+            if not TypeDecimal(v):
+                raise TypeError(&#39;{}.value {} must be of type Decimal not {}.&#39;.format(self.__class__, v, v.__class__))
+        if v &lt; 2:
+            raise ValueError(&#39;{}.value {} must be greater than or equal to 2.&#39;.format(self.__class__, v))
+        self._value = v
+
+
+class TypeStartNote(SimpleType):
+    &#34;&#34;&#34;
+    The start-note type describes the starting note of trills and mordents for playback, relative to the current note.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;upper&#34;, &#34;main&#34;, &#34;below&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTrillStep(SimpleType):
+    &#34;&#34;&#34;
+    The trill-step type describes the alternating note of trills and mordents for playback, relative to the current note.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;whole&#34;, &#34;half&#34;, &#34;unison&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTwoNoteTurn(SimpleType):
+    &#34;&#34;&#34;
+    The two-note-turn type describes the ending notes of trills and mordents for playback, relative to the current note.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;whole&#34;, &#34;half&#34;, &#34;none&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTremoloType(SimpleType):
+    &#34;&#34;&#34;
+    The tremolo-type is used to distinguish multi-note, single-note, and unmeasured tremolos.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;start&#34;, &#34;stop&#34;, &#34;single&#34;, &#34;unmeasured&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeFermataShape(SimpleType):
+    &#34;&#34;&#34;
+    The fermata-shape type represents the shape of the fermata sign. The empty value is equivalent to the normal value.
+    &#34;&#34;&#34;
+    _PERMITTED = [&#34;normal&#34;, &#34;angled&#34;, &#34;square&#34;, &#34;double-angled&#34;, &#34;double-square&#34;, &#34;double-dot&#34;, &#34;half-curve&#34;, &#34;curlew&#34;,
+                  &#34;&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeUprightInverted(SimpleType):
+    &#34;&#34;&#34;
+    The upright-inverted type describes the appearance of a fermata element. The value is upright if not specified.
+    &#34;&#34;&#34;
+    _PERMITTED = [&#34;upright&#34;, &#34;inverted&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
 
 
 &#39;&#39;&#39;&#39;
@@ -866,23 +985,6 @@ class TypeYesNoNumber(SimpleType):
                 &lt;/xs:restriction&gt;
         &lt;/xs:simpleType&gt;
 
-        &lt;xs:simpleType name=&#34;fermata-shape&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The fermata-shape type represents the shape of the fermata sign. The empty value is equivalent to the normal value.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:string&#34;&gt;
-                        &lt;xs:enumeration value=&#34;normal&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;angled&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;square&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;double-angled&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;double-square&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;double-dot&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;half-curve&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;curlew&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
-
         &lt;xs:simpleType name=&#34;left-right&#34;&gt;
                 &lt;xs:annotation&gt;
                         &lt;xs:documentation&gt;The left-right type is used to indicate whether one element appears to the left or the right of another element.&lt;/xs:documentation&gt;
@@ -892,21 +994,6 @@ class TypeYesNoNumber(SimpleType):
                         &lt;xs:enumeration value=&#34;right&#34;/&gt;
                 &lt;/xs:restriction&gt;
         &lt;/xs:simpleType&gt;
-
-
-        &lt;xs:simpleType name=&#34;positive-integer-or-empty&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The positive-integer-or-empty values can be either a positive integer or an empty string.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:union memberTypes=&#34;xs:positiveInteger&#34;&gt;
-                        &lt;xs:simpleType&gt;
-                                &lt;xs:restriction base=&#34;xs:string&#34;&gt;
-                                        &lt;xs:enumeration value=&#34;&#34;/&gt;
-                                &lt;/xs:restriction&gt;
-                        &lt;/xs:simpleType&gt;
-                &lt;/xs:union&gt;
-        &lt;/xs:simpleType&gt;
-
 
 
         &lt;xs:simpleType name=&#34;smufl-coda-glyph-name&#34;&gt;
@@ -933,17 +1020,6 @@ class TypeYesNoNumber(SimpleType):
                 &lt;/xs:annotation&gt;
                 &lt;xs:restriction base=&#34;smufl-glyph-name&#34;&gt;
                         &lt;xs:pattern value=&#34;segno\c*&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
-
-        &lt;xs:simpleType name=&#34;start-note&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The start-note type describes the starting note of trills and mordents for playback, relative to the current note.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:token&#34;&gt;
-                        &lt;xs:enumeration value=&#34;upper&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;main&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;below&#34;/&gt;
                 &lt;/xs:restriction&gt;
         &lt;/xs:simpleType&gt;
 
@@ -975,58 +1051,6 @@ class TypeYesNoNumber(SimpleType):
                 &lt;/xs:restriction&gt;
         &lt;/xs:simpleType&gt;
 
-        &lt;xs:simpleType name=&#34;tremolo-type&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The tremolo-type is used to distinguish multi-note, single-note, and unmeasured tremolos.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:token&#34;&gt;
-                        &lt;xs:enumeration value=&#34;start&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;stop&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;single&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;unmeasured&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
-
-        &lt;xs:simpleType name=&#34;trill-beats&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value with a minimum value of 2.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:decimal&#34;&gt;
-                        &lt;xs:minInclusive value=&#34;2&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
-
-        &lt;xs:simpleType name=&#34;trill-step&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The trill-step type describes the alternating note of trills and mordents for playback, relative to the current note.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:token&#34;&gt;
-                        &lt;xs:enumeration value=&#34;whole&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;half&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;unison&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
-
-        &lt;xs:simpleType name=&#34;two-note-turn&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The two-note-turn type describes the ending notes of trills and mordents for playback, relative to the current note.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:token&#34;&gt;
-                        &lt;xs:enumeration value=&#34;whole&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;half&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;none&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
-
-        &lt;xs:simpleType name=&#34;upright-inverted&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The upright-inverted type describes the appearance of a fermata element. The value is upright if not specified.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:token&#34;&gt;
-                        &lt;xs:enumeration value=&#34;upright&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;inverted&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
 
         &lt;xs:simpleType name=&#34;yyyy-mm-dd&#34;&gt;
                 &lt;xs:annotation&gt;
@@ -1057,8 +1081,10 @@ class TypeCancelLocation(SimpleType):
 class TypeClefSign(SimpleType):
     &#34;&#34;&#34;
     The clef-sign element represents the different clef symbols.
-    The jianpu sign indicates that the music that follows should be in jianpu numbered notation,
-    just as the TAB sign indicates that the music that follows should be in tablature notation.
+
+    The jianpu sign indicates that the music that follows should be in jianpu numbered notation, just as the TAB sign
+    indicates that the music that follows should be in tablature notation.
+
     Unlike TAB, a jianpu sign does not correspond to a visual clef notation.
     &#34;&#34;&#34;
     _PERMITTED = (&#39;G&#39;, &#39;F&#39;, &#39;C&#39;, &#39;percussion&#39;, &#39;TAB&#39;, &#39;jianpu&#39;, &#39;none&#39;)
@@ -1215,6 +1241,29 @@ class TypeWedgeType(SimpleType):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
+
+
+class TypeLineEnd(SimpleType):
+    &#34;&#34;&#34;
+    The line-end type specifies if there is a jog up or down (or both), an arrow, or nothing at the start or end of a
+    bracket.
+    &#34;&#34;&#34;
+    _PERMITTED = (&#39;up&#39;, &#39;down&#39;, &#39;both&#39;, &#39;arrow&#39;, &#39;none&#39;)
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeLineWidthType(Token):
+    &#34;&#34;&#34;
+    The line-width-type defines what type of line is being defined in a line-width element. Values include beam,
+    bracket, dashes, enclosure, ending, extend, heavy barline, leger, light barline, octave shift, pedal, slur middle,
+    slur tip, staff, stem, tie middle, tie tip, tuplet bracket, and wedge. This is left as a string so that other
+    application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 &#39;&#39;&#39;
@@ -1412,18 +1461,7 @@ The &#34;other&#34; kind is used when the harmony is entirely composed of add el
                 &lt;/xs:restriction&gt;
         &lt;/xs:simpleType&gt;
 
-        &lt;xs:simpleType name=&#34;line-end&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The line-end type specifies if there is a jog up or down (or both), an arrow, or nothing at the start or end of a bracket.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:token&#34;&gt;
-                        &lt;xs:enumeration value=&#34;up&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;down&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;both&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;arrow&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;none&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
+
 
         &lt;xs:simpleType name=&#34;measure-numbering-value&#34;&gt;
                 &lt;xs:annotation&gt;
@@ -1699,12 +1737,7 @@ A quarter-rest type specifies the glyph to use when a note has a rest element an
                 &lt;xs:restriction base=&#34;xs:token&#34;/&gt;
         &lt;/xs:simpleType&gt;
 
-        &lt;xs:simpleType name=&#34;line-width-type&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The line-width-type defines what type of line is being defined in a line-width element. Values include beam, bracket, dashes, enclosure, ending, extend, heavy barline, leger, light barline, octave shift, pedal, slur middle, slur tip, staff, stem, tie middle, tie tip, tuplet bracket, and wedge. This is left as a string so that other application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:token&#34;/&gt;
-        &lt;/xs:simpleType&gt;
+
 
 
         &lt;xs:simpleType name=&#34;note-size-type&#34;&gt;
@@ -1855,6 +1888,83 @@ class TypeSyllabic(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeNoteheadValue(SimpleType):
+    &#34;&#34;&#34;
+    The notehead-value type indicates shapes other than the open and closed ovals associated with note durations.
+    The values do, re, mi, fa, fa up, so, la, and ti correspond to Aikin&#39;s 7-shape system.  The fa up shape is typically
+    used with upstems; the fa shape is typically used with downstems or no stems.
+
+    The arrow shapes differ from triangle and inverted triangle by being centered on the stem. Slashed and back slashed
+    notes include both the normal notehead and a slash. The triangle shape has the tip of the triangle pointing up;
+    the inverted triangle shape has the tip of the triangle pointing down. The left triangle shape is a right triangle
+    with the hypotenuse facing up and to the left.
+
+    The other notehead covers noteheads other than those listed here. It is usually used in combination with the smufl
+    attribute to specify a particular SMuFL notehead. The smufl attribute may be used with any notehead value to help
+    specify the appearance of symbols that share the same MusicXML semantics. Noteheads in the SMuFL &#34;Note name
+    noteheads&#34; range (U+E150–U+E1AF) should not use the smufl attribute or the &#34;other&#34; value, but instead use the
+    notehead-text element.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;slash&#34;, &#34;triangle&#34;, &#34;diamond&#34;, &#34;square&#34;, &#34;cross&#34;, &#34;x&#34;, &#34;circle-x&#34;, &#34;inverted triangle&#34;, &#34;arrow down&#34;,
+                  &#34;arrow up&#34;, &#34;circled&#34;, &#34;slashed&#34;, &#34;back slashed&#34;, &#34;normal&#34;, &#34;cluster&#34;, &#34;circle dot&#34;, &#34;left triangle&#34;,
+                  &#34;rectangle&#34;, &#34;none&#34;, &#34;do&#34;, &#34;re&#34;, &#34;mi&#34;, &#34;fa&#34;, &#34;fa up&#34;, &#34;so&#34;, &#34;la&#34;, &#34;ti&#34;, &#34;other&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTremoloMarks(SimpleType):
+    &#34;&#34;&#34;
+    The number of tremolo marks is represented by a number from 0 to 8: the same as beam-level with 0 added.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        Integer(v)
+        if not (0 &lt;= v &lt;= 8):
+            raise ValueError(
+                &#39;{}.value {} must be must be greater than or equal to 0. It  must be less than or equal to 8&#39;.format(
+                    self.__class__, v))
+        self._value = v
+
+
+class TypeHoleClosedLocation(SimpleType):
+    &#34;&#34;&#34;The hole-closed-location type indicates which portion of the hole is filled in when the corresponding
+    hole-closed-value is half.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;right&#34;, &#34;bottom&#34;, &#34;left&#34;, &#34;top&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeHoleClosedValue(SimpleType):
+    &#34;&#34;&#34;
+    The hole-closed-value type represents whether the hole is closed, open, or half-open.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;yes&#34;, &#34;no&#34;, &#34;half&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeStemValue(SimpleType):
+    &#34;&#34;&#34;
+    The stem type represents the notated stem direction.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;down&#34;, &#34;up&#34;, &#34;double&#34;, &#34;none&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 &#39;&#39;&#39;
         &lt;!-- Simple types derived from note.mod elements --&gt;
 
@@ -1950,72 +2060,6 @@ class TypeSyllabic(SimpleType):
                 &lt;/xs:restriction&gt;
         &lt;/xs:simpleType&gt;
 
-        &lt;xs:simpleType name=&#34;hole-closed-location&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The hole-closed-location type indicates which portion of the hole is filled in when the corresponding hole-closed-value is half.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:string&#34;&gt;
-                        &lt;xs:enumeration value=&#34;right&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;bottom&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;left&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;top&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
-
-        &lt;xs:simpleType name=&#34;hole-closed-value&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The hole-closed-value type represents whether the hole is closed, open, or half-open.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:string&#34;&gt;
-                        &lt;xs:enumeration value=&#34;yes&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;no&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;half&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
-
-        &lt;xs:simpleType name=&#34;notehead-value&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;
-The notehead-value type indicates shapes other than the open and closed ovals associated with note durations. 
-
-The values do, re, mi, fa, fa up, so, la, and ti correspond to Aikin&#39;s 7-shape system.  The fa up shape is typically used with upstems; the fa shape is typically used with downstems or no stems.
-
-The arrow shapes differ from triangle and inverted triangle by being centered on the stem. Slashed and back slashed notes include both the normal notehead and a slash. The triangle shape has the tip of the triangle pointing up; the inverted triangle shape has the tip of the triangle pointing down. The left triangle shape is a right triangle with the hypotenuse facing up and to the left.
-
-The other notehead covers noteheads other than those listed here. It is usually used in combination with the smufl attribute to specify a particular SMuFL notehead. The smufl attribute may be used with any notehead value to help specify the appearance of symbols that share the same MusicXML semantics. Noteheads in the SMuFL &#34;Note name noteheads&#34; range (U+E150–U+E1AF) should not use the smufl attribute or the &#34;other&#34; value, but instead use the notehead-text element.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:string&#34;&gt;
-                        &lt;xs:enumeration value=&#34;slash&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;triangle&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;diamond&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;square&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;cross&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;x&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;circle-x&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;inverted triangle&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;arrow down&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;arrow up&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;circled&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;slashed&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;back slashed&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;normal&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;cluster&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;circle dot&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;left triangle&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;rectangle&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;none&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;do&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;re&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;mi&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;fa&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;fa up&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;so&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;la&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;ti&#34;/&gt;
-                        &lt;xs:enumeration value=&#34;other&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
-
         &lt;xs:simpleType name=&#34;show-tuplet&#34;&gt;
                 &lt;xs:annotation&gt;
                         &lt;xs:documentation&gt;The show-tuplet type indicates whether to show a part of a tuplet relating to the tuplet-actual element, both the tuplet-actual and tuplet-normal elements, or neither.&lt;/xs:documentation&gt;
@@ -2048,16 +2092,6 @@ The other notehead covers noteheads other than those listed here. It is usually 
                         &lt;xs:enumeration value=&#34;right&#34;/&gt;
                 &lt;/xs:restriction&gt;
         &lt;/xs:simpleType&gt;
-
-        &lt;xs:simpleType name=&#34;tremolo-marks&#34;&gt;
-                &lt;xs:annotation&gt;
-                        &lt;xs:documentation&gt;The number of tremolo marks is represented by a number from 0 to 8: the same as beam-level with 0 added.&lt;/xs:documentation&gt;
-                &lt;/xs:annotation&gt;
-                &lt;xs:restriction base=&#34;xs:integer&#34;&gt;
-                        &lt;xs:minInclusive value=&#34;0&#34;/&gt;
-                        &lt;xs:maxInclusive value=&#34;8&#34;/&gt;
-                &lt;/xs:restriction&gt;
-        &lt;/xs:simpleType&gt;
 &#39;&#39;&#39;
 
 
@@ -2066,8 +2100,30 @@ The other notehead covers noteheads other than those listed here. It is usually 
 
 class TypeMeasureText(Token):
     &#34;&#34;&#34;
-    The measure-text type is used for the text attribute of measure elements. It has at least one character. The
-    implicit attribute of the measure element should be set to &#34;yes&#34; rather than setting the text attribute to an empty
+    The
+    measure - text
+    type is used
+    for the text attribute of measure elements.It has at least one character.The
+    implicit
+    attribute
+    of
+    the
+    measure
+    element
+    should
+    be
+    set
+    to
+    &#34;yes&#34;
+    rather
+    than
+    setting
+    the
+    text
+    attribute
+    to
+    an
+    empty
     string.
     &#34;&#34;&#34;
 
@@ -2453,7 +2509,7 @@ def value(self):
 <li><a title="musicscore.musicxml.types.simple_type.TypeBackwardForward" href="#musicscore.musicxml.types.simple_type.TypeBackwardForward">TypeBackwardForward</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeBarStyle" href="#musicscore.musicxml.types.simple_type.TypeBarStyle">TypeBarStyle</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeRightLeftMiddle" href="#musicscore.musicxml.types.simple_type.TypeRightLeftMiddle">TypeRightLeftMiddle</a></li>
-<li><a title="musicscore.musicxml.types.simple_type.TypeStopStartDiscontinue" href="#musicscore.musicxml.types.simple_type.TypeStopStartDiscontinue">TypeStopStartDiscontinue</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeStartStopDiscontinue" href="#musicscore.musicxml.types.simple_type.TypeStartStopDiscontinue">TypeStartStopDiscontinue</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeWinged" href="#musicscore.musicxml.types.simple_type.TypeWinged">TypeWinged</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeAboveBelow" href="#musicscore.musicxml.types.simple_type.TypeAboveBelow">TypeAboveBelow</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeEnclosureShape" href="#musicscore.musicxml.types.simple_type.TypeEnclosureShape">TypeEnclosureShape</a></li>
@@ -2479,11 +2535,20 @@ def value(self):
 <li><a title="musicscore.musicxml.types.simple_type.TypeValignImage" href="#musicscore.musicxml.types.simple_type.TypeValignImage">TypeValignImage</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeYesNo" href="#musicscore.musicxml.types.simple_type.TypeYesNo">TypeYesNo</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeYesNoNumber" href="#musicscore.musicxml.types.simple_type.TypeYesNoNumber">TypeYesNoNumber</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypePositiveIntegerOrEmpty" href="#musicscore.musicxml.types.simple_type.TypePositiveIntegerOrEmpty">TypePositiveIntegerOrEmpty</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeTrillBeats" href="#musicscore.musicxml.types.simple_type.TypeTrillBeats">TypeTrillBeats</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeStartNote" href="#musicscore.musicxml.types.simple_type.TypeStartNote">TypeStartNote</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeTrillStep" href="#musicscore.musicxml.types.simple_type.TypeTrillStep">TypeTrillStep</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeTwoNoteTurn" href="#musicscore.musicxml.types.simple_type.TypeTwoNoteTurn">TypeTwoNoteTurn</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeTremoloType" href="#musicscore.musicxml.types.simple_type.TypeTremoloType">TypeTremoloType</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeFermataShape" href="#musicscore.musicxml.types.simple_type.TypeFermataShape">TypeFermataShape</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeUprightInverted" href="#musicscore.musicxml.types.simple_type.TypeUprightInverted">TypeUprightInverted</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeCancelLocation" href="#musicscore.musicxml.types.simple_type.TypeCancelLocation">TypeCancelLocation</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeClefSign" href="#musicscore.musicxml.types.simple_type.TypeClefSign">TypeClefSign</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeMode" href="#musicscore.musicxml.types.simple_type.TypeMode">TypeMode</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeMarginType" href="#musicscore.musicxml.types.simple_type.TypeMarginType">TypeMarginType</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeWedgeType" href="#musicscore.musicxml.types.simple_type.TypeWedgeType">TypeWedgeType</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeLineEnd" href="#musicscore.musicxml.types.simple_type.TypeLineEnd">TypeLineEnd</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeAccidentalValue" href="#musicscore.musicxml.types.simple_type.TypeAccidentalValue">TypeAccidentalValue</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeBeamValue" href="#musicscore.musicxml.types.simple_type.TypeBeamValue">TypeBeamValue</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeBreathMarkValue" href="#musicscore.musicxml.types.simple_type.TypeBreathMarkValue">TypeBreathMarkValue</a></li>
@@ -2494,6 +2559,11 @@ def value(self):
 <li><a title="musicscore.musicxml.types.simple_type.TypeShowTuplet" href="#musicscore.musicxml.types.simple_type.TypeShowTuplet">TypeShowTuplet</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeStep" href="#musicscore.musicxml.types.simple_type.TypeStep">TypeStep</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeSyllabic" href="#musicscore.musicxml.types.simple_type.TypeSyllabic">TypeSyllabic</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeNoteheadValue" href="#musicscore.musicxml.types.simple_type.TypeNoteheadValue">TypeNoteheadValue</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeTremoloMarks" href="#musicscore.musicxml.types.simple_type.TypeTremoloMarks">TypeTremoloMarks</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeHoleClosedLocation" href="#musicscore.musicxml.types.simple_type.TypeHoleClosedLocation">TypeHoleClosedLocation</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeHoleClosedValue" href="#musicscore.musicxml.types.simple_type.TypeHoleClosedValue">TypeHoleClosedValue</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeStemValue" href="#musicscore.musicxml.types.simple_type.TypeStemValue">TypeStemValue</a></li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
@@ -2537,11 +2607,16 @@ def value(self):
 <li><a title="musicscore.musicxml.types.simple_type.ID" href="#musicscore.musicxml.types.simple_type.ID">ID</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.IDREF" href="#musicscore.musicxml.types.simple_type.IDREF">IDREF</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.AnyURI" href="#musicscore.musicxml.types.simple_type.AnyURI">AnyURI</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.PlacementText" href="complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.PlacementText">PlacementText</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.OtherPlacementText" href="complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.OtherPlacementText">OtherPlacementText</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.formattedtext.ComplexTypeFormattedText" href="complextypes/formattedtext.html#musicscore.musicxml.types.complextypes.formattedtext.ComplexTypeFormattedText">ComplexTypeFormattedText</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.level.ComplexTypeLevel" href="complextypes/level.html#musicscore.musicxml.types.complextypes.level.ComplexTypeLevel">ComplexTypeLevel</a></li>
 <li><a title="musicscore.musicxml.groups.common.Voice" href="../groups/common.html#musicscore.musicxml.groups.common.Voice">Voice</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.elision.ComplexTypeElision" href="complextypes/elision.html#musicscore.musicxml.types.complextypes.elision.ComplexTypeElision">ComplexTypeElision</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.text_element_data.ComplexTypeTextElementData" href="complextypes/text_element_data.html#musicscore.musicxml.types.complextypes.text_element_data.ComplexTypeTextElementData">ComplexTypeTextElementData</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.textelementdata.ComplexTypeTextElementData" href="complextypes/textelementdata.html#musicscore.musicxml.types.complextypes.textelementdata.ComplexTypeTextElementData">ComplexTypeTextElementData</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.fingering.ComplexTypeFingering" href="complextypes/fingering.html#musicscore.musicxml.types.complextypes.fingering.ComplexTypeFingering">ComplexTypeFingering</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.hole.HoleType" href="complextypes/hole.html#musicscore.musicxml.types.complextypes.hole.HoleType">HoleType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.hole.HoleShape" href="complextypes/hole.html#musicscore.musicxml.types.complextypes.hole.HoleShape">HoleShape</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.formattedtextid.ComplexTypeFormattedTextId" href="complextypes/formattedtextid.html#musicscore.musicxml.types.complextypes.formattedtextid.ComplexTypeFormattedTextId">ComplexTypeFormattedTextId</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.metronome.PerMinute" href="complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.PerMinute">PerMinute</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.metronome.MetronomeRelation" href="complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.MetronomeRelation">MetronomeRelation</a></li>
@@ -2552,6 +2627,11 @@ def value(self):
 <li><a title="musicscore.musicxml.types.complextypes.identification.Source" href="complextypes/identification.html#musicscore.musicxml.types.complextypes.identification.Source">Source</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.scorepart.PartAbbreviation" href="complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.PartAbbreviation">PartAbbreviation</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.credit.CreditType" href="complextypes/credit.html#musicscore.musicxml.types.complextypes.credit.CreditType">CreditType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.virtualinstrument.VirtualLibrary" href="complextypes/virtualinstrument.html#musicscore.musicxml.types.complextypes.virtualinstrument.VirtualLibrary">VirtualLibrary</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.virtualinstrument.VirtualName" href="complextypes/virtualinstrument.html#musicscore.musicxml.types.complextypes.virtualinstrument.VirtualName">VirtualName</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentName" href="complextypes/scoreinstrument.html#musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentName">InstrumentName</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentAbbreviation" href="complextypes/scoreinstrument.html#musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentAbbreviation">InstrumentAbbreviation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentSound" href="complextypes/scoreinstrument.html#musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentSound">InstrumentSound</a></li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
@@ -2604,6 +2684,7 @@ einzelnes ersetzt, und führende oder am Ende stehende Leerzeichen werden entfer
 <li><a title="musicscore.musicxml.types.simple_type.TypeCommaSeparatedText" href="#musicscore.musicxml.types.simple_type.TypeCommaSeparatedText">TypeCommaSeparatedText</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeSmulfGlyphName" href="#musicscore.musicxml.types.simple_type.TypeSmulfGlyphName">TypeSmulfGlyphName</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeTimeOnly" href="#musicscore.musicxml.types.simple_type.TypeTimeOnly">TypeTimeOnly</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeLineWidthType" href="#musicscore.musicxml.types.simple_type.TypeLineWidthType">TypeLineWidthType</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.TypeMeasureText" href="#musicscore.musicxml.types.simple_type.TypeMeasureText">TypeMeasureText</a></li>
 </ul>
 </dd>
@@ -2665,6 +2746,7 @@ and Persian music.</p></section>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.accidentalmark.ComplexTypeAccidentalMark" href="complextypes/accidentalmark.html#musicscore.musicxml.types.complextypes.accidentalmark.ComplexTypeAccidentalMark">ComplexTypeAccidentalMark</a></li>
 <li><a title="musicscore.musicxml.elements.note.Accidental" href="../elements/note.html#musicscore.musicxml.elements.note.Accidental">Accidental</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.key.ComplexKeyAccidental" href="complextypes/key.html#musicscore.musicxml.types.complextypes.key.ComplexKeyAccidental">ComplexKeyAccidental</a></li>
 </ul>
@@ -2846,10 +2928,6 @@ for each note.</p></section>
 <ul class="hlist">
 <li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
 </ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="musicscore.musicxml.types.complextypes.caesura.ComplexTypeCaesura" href="complextypes/caesura.html#musicscore.musicxml.types.complextypes.caesura.ComplexTypeCaesura">ComplexTypeCaesura</a></li>
-</ul>
 </dd>
 <dt id="musicscore.musicxml.types.simple_type.TypeCancelLocation"><code class="flex name class">
 <span>class <span class="ident">TypeCancelLocation</span></span>
@@ -2882,17 +2960,19 @@ key elements, a cancel-location of before-barline should be treated like a cance
 <span>(</span><span>value, *args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>The clef-sign element represents the different clef symbols.
-The jianpu sign indicates that the music that follows should be in jianpu numbered notation,
-just as the TAB sign indicates that the music that follows should be in tablature notation.
-Unlike TAB, a jianpu sign does not correspond to a visual clef notation.</p></section>
+<section class="desc"><p>The clef-sign element represents the different clef symbols.</p>
+<p>The jianpu sign indicates that the music that follows should be in jianpu numbered notation, just as the TAB sign
+indicates that the music that follows should be in tablature notation.</p>
+<p>Unlike TAB, a jianpu sign does not correspond to a visual clef notation.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class TypeClefSign(SimpleType):
     &#34;&#34;&#34;
     The clef-sign element represents the different clef symbols.
-    The jianpu sign indicates that the music that follows should be in jianpu numbered notation,
-    just as the TAB sign indicates that the music that follows should be in tablature notation.
+
+    The jianpu sign indicates that the music that follows should be in jianpu numbered notation, just as the TAB sign
+    indicates that the music that follows should be in tablature notation.
+
     Unlike TAB, a jianpu sign does not correspond to a visual clef notation.
     &#34;&#34;&#34;
     _PERMITTED = (&#39;G&#39;, &#39;F&#39;, &#39;C&#39;, &#39;percussion&#39;, &#39;TAB&#39;, &#39;jianpu&#39;, &#39;none&#39;)
@@ -3028,6 +3108,55 @@ def value(self):
 </dd>
 </dl>
 </dd>
+<dt id="musicscore.musicxml.types.simple_type.Decimal"><code class="flex name class">
+<span>class <span class="ident">TypeDecimal</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Decimal.value can be a float, int or None.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Decimal(SimpleType):
+    &#34;&#34;&#34;
+    Decimal.value can be a float, int or None.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v is not None and not isinstance(v, float) and not isinstance(v, int):
+            raise TypeError(&#39;value {} of {} must a be a float, int or None&#39;.format(v, self.__class__.__name__))
+        self._value = v</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.TypeFontSize" href="#musicscore.musicxml.types.simple_type.TypeFontSize">TypeFontSize</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypePercent" href="#musicscore.musicxml.types.simple_type.TypePercent">TypePercent</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeRotationDegrees" href="#musicscore.musicxml.types.simple_type.TypeRotationDegrees">TypeRotationDegrees</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeTenths" href="#musicscore.musicxml.types.simple_type.TypeTenths">TypeTenths</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeMillimeters" href="#musicscore.musicxml.types.simple_type.TypeMillimeters">TypeMillimeters</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeSemitones" href="#musicscore.musicxml.types.simple_type.TypeSemitones">TypeSemitones</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.types.simple_type.Decimal.value"><code class="name">var <span class="ident">value</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def value(self):
+    return self._value</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 <dt id="musicscore.musicxml.types.simple_type.TypeDivisions"><code class="flex name class">
 <span>class <span class="ident">TypeDivisions</span></span>
 <span>(</span><span>value, *args, **kwargs)</span>
@@ -3144,6 +3273,33 @@ ritardandos.</p></section>
 <li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
 </ul>
 </dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeFermataShape"><code class="flex name class">
+<span>class <span class="ident">TypeFermataShape</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The fermata-shape type represents the shape of the fermata sign. The empty value is equivalent to the normal value.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeFermataShape(SimpleType):
+    &#34;&#34;&#34;
+    The fermata-shape type represents the shape of the fermata sign. The empty value is equivalent to the normal value.
+    &#34;&#34;&#34;
+    _PERMITTED = [&#34;normal&#34;, &#34;angled&#34;, &#34;square&#34;, &#34;double-angled&#34;, &#34;double-square&#34;, &#34;double-dot&#34;, &#34;half-curve&#34;, &#34;curlew&#34;,
+                  &#34;&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.fermata.ComplexTypeFermata" href="complextypes/fermata.html#musicscore.musicxml.types.complextypes.fermata.ComplexTypeFermata">ComplexTypeFermata</a></li>
+</ul>
+</dd>
 <dt id="musicscore.musicxml.types.simple_type.TypeFifths"><code class="flex name class">
 <span>class <span class="ident">TypeFifths</span></span>
 <span>(</span><span>value, *args, **kwargs)</span>
@@ -3230,6 +3386,100 @@ for flats and positive numbers for sharps, reflecting the key's placement within
 <li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
 </ul>
 </dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeHoleClosedLocation"><code class="flex name class">
+<span>class <span class="ident">TypeHoleClosedLocation</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The hole-closed-location type indicates which portion of the hole is filled in when the corresponding
+hole-closed-value is half.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeHoleClosedLocation(SimpleType):
+    &#34;&#34;&#34;The hole-closed-location type indicates which portion of the hole is filled in when the corresponding
+    hole-closed-value is half.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;right&#34;, &#34;bottom&#34;, &#34;left&#34;, &#34;top&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeHoleClosedValue"><code class="flex name class">
+<span>class <span class="ident">TypeHoleClosedValue</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The hole-closed-value type represents whether the hole is closed, open, or half-open.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeHoleClosedValue(SimpleType):
+    &#34;&#34;&#34;
+    The hole-closed-value type represents whether the hole is closed, open, or half-open.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;yes&#34;, &#34;no&#34;, &#34;half&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.holeclosed.ComplexTypeHoleClosed" href="complextypes/holeclosed.html#musicscore.musicxml.types.complextypes.holeclosed.ComplexTypeHoleClosed">ComplexTypeHoleClosed</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.Integer"><code class="flex name class">
+<span>class <span class="ident">TypeInteger</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Integer(SimpleType):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if not isinstance(v, int):
+            raise TypeError(&#39;value {} must be an int not {}&#39;.format(v, type(v).__name__))
+        self._value = v</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.TypeDivisions" href="#musicscore.musicxml.types.simple_type.TypeDivisions">TypeDivisions</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeNumberOfLines" href="#musicscore.musicxml.types.simple_type.TypeNumberOfLines">TypeNumberOfLines</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeFifths" href="#musicscore.musicxml.types.simple_type.TypeFifths">TypeFifths</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.clef.ClefOctaveChange" href="complextypes/clef.html#musicscore.musicxml.types.complextypes.clef.ClefOctaveChange">ClefOctaveChange</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.types.simple_type.Integer.value"><code class="name">var <span class="ident">value</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def value(self):
+    return self._value</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 <dt id="musicscore.musicxml.types.simple_type.TypeLeftCenterRight"><code class="flex name class">
 <span>class <span class="ident">TypeLeftCenterRight</span></span>
 <span>(</span><span>value, *args, **kwargs)</span>
@@ -3243,6 +3493,30 @@ for flats and positive numbers for sharps, reflecting the key's placement within
     The left-center-right type is used to define horizontal alignment and text justification.
     &#34;&#34;&#34;
     _PERMITTED = (&#39;left&#39;, &#39;center&#39;, &#39;right&#39;)
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeLineEnd"><code class="flex name class">
+<span>class <span class="ident">TypeLineEnd</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The line-end type specifies if there is a jog up or down (or both), an arrow, or nothing at the start or end of a
+bracket.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeLineEnd(SimpleType):
+    &#34;&#34;&#34;
+    The line-end type specifies if there is a jog up or down (or both), an arrow, or nothing at the start or end of a
+    bracket.
+    &#34;&#34;&#34;
+    _PERMITTED = (&#39;up&#39;, &#39;down&#39;, &#39;both&#39;, &#39;arrow&#39;, &#39;none&#39;)
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)</code></pre>
@@ -3308,13 +3582,42 @@ for flats and positive numbers for sharps, reflecting the key's placement within
     &#34;&#34;&#34;
     The line-type type distinguishes between solid, dashed, dotted, and wavy lines.
     &#34;&#34;&#34;
-    _PERMITTED = (&#39;solid&#39;, &#39;dashed&#39; &#39;dotted&#39;, &#39;wavy&#39;)
+    _PERMITTED = (&#39;solid&#39;, &#39;dashed&#39;, &#39;dotted&#39;, &#39;wavy&#39;)
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeLineWidthType"><code class="flex name class">
+<span>class <span class="ident">TypeLineWidthType</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The line-width-type defines what type of line is being defined in a line-width element. Values include beam,
+bracket, dashes, enclosure, ending, extend, heavy barline, leger, light barline, octave shift, pedal, slur middle,
+slur tip, staff, stem, tie middle, tie tip, tuplet bracket, and wedge. This is left as a string so that other
+application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeLineWidthType(Token):
+    &#34;&#34;&#34;
+    The line-width-type defines what type of line is being defined in a line-width element. Values include beam,
+    bracket, dashes, enclosure, ending, extend, heavy barline, leger, light barline, octave shift, pedal, slur middle,
+    slur tip, staff, stem, tie middle, tie tip, tuplet bracket, and wedge. This is left as a string so that other
+    application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.Token" href="#musicscore.musicxml.types.simple_type.Token">Token</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.String" href="#musicscore.musicxml.types.simple_type.String">String</a></li>
 <li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
 </ul>
 </dd>
@@ -3345,15 +3648,59 @@ for flats and positive numbers for sharps, reflecting the key's placement within
 <span>(</span><span>value='1', *args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>The measure-text type is used for the text attribute of measure elements. It has at least one character. The
-implicit attribute of the measure element should be set to "yes" rather than setting the text attribute to an empty
+<section class="desc"><p>The
+measure - text
+type is used
+for the text attribute of measure elements.It has at least one character.The
+implicit
+attribute
+of
+the
+measure
+element
+should
+be
+set
+to
+"yes"
+rather
+than
+setting
+the
+text
+attribute
+to
+an
+empty
 string.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class TypeMeasureText(Token):
     &#34;&#34;&#34;
-    The measure-text type is used for the text attribute of measure elements. It has at least one character. The
-    implicit attribute of the measure element should be set to &#34;yes&#34; rather than setting the text attribute to an empty
+    The
+    measure - text
+    type is used
+    for the text attribute of measure elements.It has at least one character.The
+    implicit
+    attribute
+    of
+    the
+    measure
+    element
+    should
+    be
+    set
+    to
+    &#34;yes&#34;
+    rather
+    than
+    setting
+    the
+    text
+    attribute
+    to
+    an
+    empty
     string.
     &#34;&#34;&#34;
 
@@ -3653,6 +4000,50 @@ def value(self):
 </dd>
 </dl>
 </dd>
+<dt id="musicscore.musicxml.types.simple_type.NonNegativeInteger"><code class="flex name class">
+<span>class <span class="ident">TypeNonNegativeInteger</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class NonNegativeInteger(SimpleType):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        Integer(v)
+        if v &lt; 0:
+            raise ValueError(&#39;value {} must a be non negative.&#39;.format(v))
+
+        self._value = v</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.tuplet.TupletNumber" href="complextypes/tuplet.html#musicscore.musicxml.types.complextypes.tuplet.TupletNumber">TupletNumber</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.timemodification.ActualNotes" href="complextypes/timemodification.html#musicscore.musicxml.types.complextypes.timemodification.ActualNotes">ActualNotes</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.timemodification.NormalNotes" href="complextypes/timemodification.html#musicscore.musicxml.types.complextypes.timemodification.NormalNotes">NormalNotes</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.types.simple_type.NonNegativeInteger.value"><code class="name">var <span class="ident">value</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def value(self):
+    return self._value</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 <dt id="musicscore.musicxml.types.simple_type.TypeNoteTypeValue"><code class="flex name class">
 <span>class <span class="ident">TypeNoteTypeValue</span></span>
 <span>(</span><span>value, *args, **kwargs)</span>
@@ -3682,10 +4073,64 @@ shortest) to maxima (longest)</p></section>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="musicscore.musicxml.types.complextypes.tuplet.TupletType" href="complextypes/tuplet.html#musicscore.musicxml.types.complextypes.tuplet.TupletType">TupletType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notetype.ComplexTypeNoteType" href="complextypes/notetype.html#musicscore.musicxml.types.complextypes.notetype.ComplexTypeNoteType">ComplexTypeNoteType</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.timemodification.NormalType" href="complextypes/timemodification.html#musicscore.musicxml.types.complextypes.timemodification.NormalType">NormalType</a></li>
-<li><a title="musicscore.musicxml.elements.note.Type" href="../elements/note.html#musicscore.musicxml.elements.note.Type">Type</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.metronome.BeatUnit" href="complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.BeatUnit">BeatUnit</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.metronome.MetronomeType" href="complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.MetronomeType">MetronomeType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeNoteheadValue"><code class="flex name class">
+<span>class <span class="ident">TypeNoteheadValue</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The notehead-value type indicates shapes other than the open and closed ovals associated with note durations.
+The values do, re, mi, fa, fa up, so, la, and ti correspond to Aikin's 7-shape system.
+The fa up shape is typically
+used with upstems; the fa shape is typically used with downstems or no stems.</p>
+<p>The arrow shapes differ from triangle and inverted triangle by being centered on the stem. Slashed and back slashed
+notes include both the normal notehead and a slash. The triangle shape has the tip of the triangle pointing up;
+the inverted triangle shape has the tip of the triangle pointing down. The left triangle shape is a right triangle
+with the hypotenuse facing up and to the left.</p>
+<p>The other notehead covers noteheads other than those listed here. It is usually used in combination with the smufl
+attribute to specify a particular SMuFL notehead. The smufl attribute may be used with any notehead value to help
+specify the appearance of symbols that share the same MusicXML semantics. Noteheads in the SMuFL "Note name
+noteheads" range (U+E150–U+E1AF) should not use the smufl attribute or the "other" value, but instead use the
+notehead-text element.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeNoteheadValue(SimpleType):
+    &#34;&#34;&#34;
+    The notehead-value type indicates shapes other than the open and closed ovals associated with note durations.
+    The values do, re, mi, fa, fa up, so, la, and ti correspond to Aikin&#39;s 7-shape system.  The fa up shape is typically
+    used with upstems; the fa shape is typically used with downstems or no stems.
+
+    The arrow shapes differ from triangle and inverted triangle by being centered on the stem. Slashed and back slashed
+    notes include both the normal notehead and a slash. The triangle shape has the tip of the triangle pointing up;
+    the inverted triangle shape has the tip of the triangle pointing down. The left triangle shape is a right triangle
+    with the hypotenuse facing up and to the left.
+
+    The other notehead covers noteheads other than those listed here. It is usually used in combination with the smufl
+    attribute to specify a particular SMuFL notehead. The smufl attribute may be used with any notehead value to help
+    specify the appearance of symbols that share the same MusicXML semantics. Noteheads in the SMuFL &#34;Note name
+    noteheads&#34; range (U+E150–U+E1AF) should not use the smufl attribute or the &#34;other&#34; value, but instead use the
+    notehead-text element.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;slash&#34;, &#34;triangle&#34;, &#34;diamond&#34;, &#34;square&#34;, &#34;cross&#34;, &#34;x&#34;, &#34;circle-x&#34;, &#34;inverted triangle&#34;, &#34;arrow down&#34;,
+                  &#34;arrow up&#34;, &#34;circled&#34;, &#34;slashed&#34;, &#34;back slashed&#34;, &#34;normal&#34;, &#34;cluster&#34;, &#34;circle dot&#34;, &#34;left triangle&#34;,
+                  &#34;rectangle&#34;, &#34;none&#34;, &#34;do&#34;, &#34;re&#34;, &#34;mi&#34;, &#34;fa&#34;, &#34;fa up&#34;, &#34;so&#34;, &#34;la&#34;, &#34;ti&#34;, &#34;other&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.notehead.ComplexTypeNotehead" href="complextypes/notehead.html#musicscore.musicxml.types.complextypes.notehead.ComplexTypeNotehead">ComplexTypeNotehead</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.types.simple_type.TypeNumberLevel"><code class="flex name class">
@@ -3980,6 +4425,103 @@ def value(self):
 <li><a title="musicscore.musicxml.elements.note.Duration" href="../elements/note.html#musicscore.musicxml.elements.note.Duration">Duration</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.attributes.Divisions" href="complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.Divisions">Divisions</a></li>
 </ul>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.PositiveInteger"><code class="flex name class">
+<span>class <span class="ident">TypePositiveInteger</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PositiveInteger(SimpleType):
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        Integer(v)
+        if v &lt; 1:
+            raise ValueError(&#39;value {} must a be positive.&#39;.format(v))
+
+        self._value = v</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.TypeBeamLevel" href="#musicscore.musicxml.types.simple_type.TypeBeamLevel">TypeBeamLevel</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeMidi16" href="#musicscore.musicxml.types.simple_type.TypeMidi16">TypeMidi16</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeMidi128" href="#musicscore.musicxml.types.simple_type.TypeMidi128">TypeMidi128</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeMidi16384" href="#musicscore.musicxml.types.simple_type.TypeMidi16384">TypeMidi16384</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeNumberLevel" href="#musicscore.musicxml.types.simple_type.TypeNumberLevel">TypeNumberLevel</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypePositiveDivisions" href="#musicscore.musicxml.types.simple_type.TypePositiveDivisions">TypePositiveDivisions</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeStaffLine" href="#musicscore.musicxml.types.simple_type.TypeStaffLine">TypeStaffLine</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeStaffNumber" href="#musicscore.musicxml.types.simple_type.TypeStaffNumber">TypeStaffNumber</a></li>
+<li><a title="musicscore.musicxml.groups.common.StaffElement" href="../groups/common.html#musicscore.musicxml.groups.common.StaffElement">StaffElement</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.Beats" href="complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.Beats">Beats</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.attributes.BeatType" href="complextypes/attributes.html#musicscore.musicxml.types.complextypes.attributes.BeatType">BeatType</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.types.simple_type.PositiveInteger.value"><code class="name">var <span class="ident">value</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def value(self):
+    return self._value</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypePositiveIntegerOrEmpty"><code class="flex name class">
+<span>class <span class="ident">TypePositiveIntegerOrEmpty</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The positive-integer-or-empty values can be either a positive integer or an empty string.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypePositiveIntegerOrEmpty(SimpleType):
+    &#34;&#34;&#34;
+    The positive-integer-or-empty values can be either a positive integer or an empty string.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v is not None and not TypePositiveInteger(v) and v != &#39;&#39;:
+            raise ValueError(
+                &#39;{}.value {}  can be either a positive integer or an empty string&#39;)
+        self._value = v</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.scoreinstrument.Ensemble" href="complextypes/scoreinstrument.html#musicscore.musicxml.types.complextypes.scoreinstrument.Ensemble">Ensemble</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.types.simple_type.TypePositiveIntegerOrEmpty.value"><code class="name">var <span class="ident">value</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def value(self):
+    return self._value</code></pre>
+</details>
+</dd>
+</dl>
 </dd>
 <dt id="musicscore.musicxml.types.simple_type.TypeRightLeftMiddle"><code class="flex name class">
 <span>class <span class="ident">TypeRightLeftMiddle</span></span>
@@ -4320,6 +4862,29 @@ with 1 being the top staff on a part.</p></section>
 <li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
 </ul>
 </dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeStartNote"><code class="flex name class">
+<span>class <span class="ident">TypeStartNote</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The start-note type describes the starting note of trills and mordents for playback, relative to the current note.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeStartNote(SimpleType):
+    &#34;&#34;&#34;
+    The start-note type describes the starting note of trills and mordents for playback, relative to the current note.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;upper&#34;, &#34;main&#34;, &#34;below&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
 <dt id="musicscore.musicxml.types.simple_type.TypeStartStop"><code class="flex name class">
 <span>class <span class="ident">TypeStartStop</span></span>
 <span>(</span><span>value, *args, **kwargs)</span>
@@ -4385,6 +4950,63 @@ may appear in staff 1 before the starting point for the slur appears in staff 2 
 <li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
 </ul>
 </dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeStartStopDiscontinue"><code class="flex name class">
+<span>class <span class="ident">TypeStartStopDiscontinue</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The start-stop-discontinue type is used to specify ending types. Typically, the start type is associated with the
+left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline
+of the last measure in an ending. Stop is used when the ending mark concludes with a downward jog, as is typical for
+first endings. Discontinue is used when there is no downward jog, as is typical for second endings that do not
+conclude a pieceThe right-left-middle type is used to specify barline location.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeStartStopDiscontinue(SimpleType):
+    &#34;&#34;&#34;
+    The start-stop-discontinue type is used to specify ending types. Typically, the start type is associated with the
+    left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline
+    of the last measure in an ending. Stop is used when the ending mark concludes with a downward jog, as is typical for
+    first endings. Discontinue is used when there is no downward jog, as is typical for second endings that do not
+    conclude a pieceThe right-left-middle type is used to specify barline location.
+    &#34;&#34;&#34;
+    _PERMITTED = [&#34;start&#34;, &#34;stop&#34;, &#34;discontinue&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeStemValue"><code class="flex name class">
+<span>class <span class="ident">TypeStemValue</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The stem type represents the notated stem direction.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeStemValue(SimpleType):
+    &#34;&#34;&#34;
+    The stem type represents the notated stem direction.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;down&#34;, &#34;up&#34;, &#34;double&#34;, &#34;none&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.stem.ComplexTypeStem" href="complextypes/stem.html#musicscore.musicxml.types.complextypes.stem.ComplexTypeStem">ComplexTypeStem</a></li>
+</ul>
+</dd>
 <dt id="musicscore.musicxml.types.simple_type.TypeStep"><code class="flex name class">
 <span>class <span class="ident">TypeStep</span></span>
 <span>(</span><span>value, *args, **kwargs)</span>
@@ -4410,35 +5032,73 @@ may appear in staff 1 before the starting point for the slur appears in staff 2 
 <li><a title="musicscore.musicxml.types.complextypes.key.KeyStep" href="complextypes/key.html#musicscore.musicxml.types.complextypes.key.KeyStep">KeyStep</a></li>
 </ul>
 </dd>
-<dt id="musicscore.musicxml.types.simple_type.TypeStopStartDiscontinue"><code class="flex name class">
-<span>class <span class="ident">TypeStopStartDiscontinue</span></span>
+<dt id="musicscore.musicxml.types.simple_type.String"><code class="flex name class">
+<span>class <span class="ident">TypeString</span></span>
 <span>(</span><span>value, *args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>The start-stop-discontinue type is used to specify ending types. Typically, the start type is associated with the
-left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline
-of the last measure in an ending. Stop is used when the ending mark concludes with a downward jog, as is typical for
-first endings. Discontinue is used when there is no downward jog, as is typical for second endings that do not
-conclude a pieceThe right-left-middle type is used to specify barline location.</p></section>
+<section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class TypeStopStartDiscontinue(SimpleType):
-    &#34;&#34;&#34;
-    The start-stop-discontinue type is used to specify ending types. Typically, the start type is associated with the
-    left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline
-    of the last measure in an ending. Stop is used when the ending mark concludes with a downward jog, as is typical for
-    first endings. Discontinue is used when there is no downward jog, as is typical for second endings that do not
-    conclude a pieceThe right-left-middle type is used to specify barline location.
-    &#34;&#34;&#34;
-    _PERMITTED = [&#34;start&#34;, &#34;stop&#34;, &#34;discontinue&#34;]
-
+<pre><code class="python">class String(SimpleType):
     def __init__(self, value, *args, **kwargs):
-        super().__init__(value=value, *args, **kwargs)</code></pre>
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if not isinstance(v, str):
+            raise TypeError(&#39;value {} must a be string&#39;.format(v))
+        self._value = v</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
 </ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.Token" href="#musicscore.musicxml.types.simple_type.Token">Token</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.ID" href="#musicscore.musicxml.types.simple_type.ID">ID</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.IDREF" href="#musicscore.musicxml.types.simple_type.IDREF">IDREF</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.AnyURI" href="#musicscore.musicxml.types.simple_type.AnyURI">AnyURI</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.PlacementText" href="complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.PlacementText">PlacementText</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.OtherPlacementText" href="complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.OtherPlacementText">OtherPlacementText</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.formattedtext.ComplexTypeFormattedText" href="complextypes/formattedtext.html#musicscore.musicxml.types.complextypes.formattedtext.ComplexTypeFormattedText">ComplexTypeFormattedText</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.level.ComplexTypeLevel" href="complextypes/level.html#musicscore.musicxml.types.complextypes.level.ComplexTypeLevel">ComplexTypeLevel</a></li>
+<li><a title="musicscore.musicxml.groups.common.Voice" href="../groups/common.html#musicscore.musicxml.groups.common.Voice">Voice</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.elision.ComplexTypeElision" href="complextypes/elision.html#musicscore.musicxml.types.complextypes.elision.ComplexTypeElision">ComplexTypeElision</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.textelementdata.ComplexTypeTextElementData" href="complextypes/textelementdata.html#musicscore.musicxml.types.complextypes.textelementdata.ComplexTypeTextElementData">ComplexTypeTextElementData</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.fingering.ComplexTypeFingering" href="complextypes/fingering.html#musicscore.musicxml.types.complextypes.fingering.ComplexTypeFingering">ComplexTypeFingering</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.hole.HoleType" href="complextypes/hole.html#musicscore.musicxml.types.complextypes.hole.HoleType">HoleType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.hole.HoleShape" href="complextypes/hole.html#musicscore.musicxml.types.complextypes.hole.HoleShape">HoleShape</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.formattedtextid.ComplexTypeFormattedTextId" href="complextypes/formattedtextid.html#musicscore.musicxml.types.complextypes.formattedtextid.ComplexTypeFormattedTextId">ComplexTypeFormattedTextId</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.metronome.PerMinute" href="complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.PerMinute">PerMinute</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.metronome.MetronomeRelation" href="complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.MetronomeRelation">MetronomeRelation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.mididevice.ComplexTypeMidiDevice" href="complextypes/mididevice.html#musicscore.musicxml.types.complextypes.mididevice.ComplexTypeMidiDevice">ComplexTypeMidiDevice</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiName" href="complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiName">MidiName</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.play.Ipa" href="complextypes/play.html#musicscore.musicxml.types.complextypes.play.Ipa">Ipa</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.typedtext.ComplexTypeTypedText" href="complextypes/typedtext.html#musicscore.musicxml.types.complextypes.typedtext.ComplexTypeTypedText">ComplexTypeTypedText</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.identification.Source" href="complextypes/identification.html#musicscore.musicxml.types.complextypes.identification.Source">Source</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.PartAbbreviation" href="complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.PartAbbreviation">PartAbbreviation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.credit.CreditType" href="complextypes/credit.html#musicscore.musicxml.types.complextypes.credit.CreditType">CreditType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.virtualinstrument.VirtualLibrary" href="complextypes/virtualinstrument.html#musicscore.musicxml.types.complextypes.virtualinstrument.VirtualLibrary">VirtualLibrary</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.virtualinstrument.VirtualName" href="complextypes/virtualinstrument.html#musicscore.musicxml.types.complextypes.virtualinstrument.VirtualName">VirtualName</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentName" href="complextypes/scoreinstrument.html#musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentName">InstrumentName</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentAbbreviation" href="complextypes/scoreinstrument.html#musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentAbbreviation">InstrumentAbbreviation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentSound" href="complextypes/scoreinstrument.html#musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentSound">InstrumentSound</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.types.simple_type.String.value"><code class="name">var <span class="ident">value</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def value(self):
+    return self._value</code></pre>
+</details>
+</dd>
+</dl>
 </dd>
 <dt id="musicscore.musicxml.types.simple_type.TypeSyllabic"><code class="flex name class">
 <span>class <span class="ident">TypeSyllabic</span></span>
@@ -4541,6 +5201,7 @@ Tenths allows the value None.</p></section>
 <li><a title="musicscore.musicxml.types.complextypes.stafflayout.StaffDistance" href="complextypes/stafflayout.html#musicscore.musicxml.types.complextypes.stafflayout.StaffDistance">StaffDistance</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.systemlayout.SystemDistance" href="complextypes/systemlayout.html#musicscore.musicxml.types.complextypes.systemlayout.SystemDistance">SystemDistance</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.systemlayout.TopSystemDistance" href="complextypes/systemlayout.html#musicscore.musicxml.types.complextypes.systemlayout.TopSystemDistance">TopSystemDistance</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.linewidth.ComplexTypeLineWidth" href="complextypes/linewidth.html#musicscore.musicxml.types.complextypes.linewidth.ComplexTypeLineWidth">ComplexTypeLineWidth</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.scaling.Tenths" href="complextypes/scaling.html#musicscore.musicxml.types.complextypes.scaling.Tenths">Tenths</a></li>
 </ul>
 </dd>
@@ -4673,6 +5334,208 @@ def value(self):
 </dd>
 </dl>
 </dd>
+<dt id="musicscore.musicxml.types.simple_type.Token"><code class="flex name class">
+<span>class <span class="ident">TypeToken</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Der lexikalische und der Werteraum von xs:token sind die Menge aller Strings nach Whitespace-Ersetzung,
+d.h., nachdem jedes Vorkommen von #x9 (Tab), #xA (Linefeed) und #xD (Carriage Return) durch ein #x20 (Leerzeichen)
+ersetzt und dann Whitespace zusammengefaßt (d.h., unmittelbar aufeinanderfolgende Leerzeichen werden durch ein
+einzelnes ersetzt, und führende oder am Ende stehende Leerzeichen werden entfernt) wurde.</p>
+<p>Einfacher ausgedrückt, ist xs:token der geeignetste Datentyp für Strings, bei denen es nicht auf Whitespace ankommt.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Token(String):
+    &#34;&#34;&#34;
+    Der lexikalische und der Werteraum von xs:token sind die Menge aller Strings nach Whitespace-Ersetzung,
+    d.h., nachdem jedes Vorkommen von #x9 (Tab), #xA (Linefeed) und #xD (Carriage Return) durch ein #x20 (Leerzeichen)
+    ersetzt und dann Whitespace zusammengefaßt (d.h., unmittelbar aufeinanderfolgende Leerzeichen werden durch ein
+    einzelnes ersetzt, und führende oder am Ende stehende Leerzeichen werden entfernt) wurde.
+
+    Einfacher ausgedrückt, ist xs:token der geeignetste Datentyp für Strings, bei denen es nicht auf Whitespace ankommt.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.String" href="#musicscore.musicxml.types.simple_type.String">String</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.TypeEndingNumber" href="#musicscore.musicxml.types.simple_type.TypeEndingNumber">TypeEndingNumber</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeColor" href="#musicscore.musicxml.types.simple_type.TypeColor">TypeColor</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeCommaSeparatedText" href="#musicscore.musicxml.types.simple_type.TypeCommaSeparatedText">TypeCommaSeparatedText</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeSmulfGlyphName" href="#musicscore.musicxml.types.simple_type.TypeSmulfGlyphName">TypeSmulfGlyphName</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeTimeOnly" href="#musicscore.musicxml.types.simple_type.TypeTimeOnly">TypeTimeOnly</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeLineWidthType" href="#musicscore.musicxml.types.simple_type.TypeLineWidthType">TypeLineWidthType</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeMeasureText" href="#musicscore.musicxml.types.simple_type.TypeMeasureText">TypeMeasureText</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeTremoloMarks"><code class="flex name class">
+<span>class <span class="ident">TypeTremoloMarks</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The number of tremolo marks is represented by a number from 0 to 8: the same as beam-level with 0 added.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeTremoloMarks(SimpleType):
+    &#34;&#34;&#34;
+    The number of tremolo marks is represented by a number from 0 to 8: the same as beam-level with 0 added.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        Integer(v)
+        if not (0 &lt;= v &lt;= 8):
+            raise ValueError(
+                &#39;{}.value {} must be must be greater than or equal to 0. It  must be less than or equal to 8&#39;.format(
+                    self.__class__, v))
+        self._value = v</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.tremolo.ComplexTypeTremolo" href="complextypes/tremolo.html#musicscore.musicxml.types.complextypes.tremolo.ComplexTypeTremolo">ComplexTypeTremolo</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.types.simple_type.TypeTremoloMarks.value"><code class="name">var <span class="ident">value</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def value(self):
+    return self._value</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeTremoloType"><code class="flex name class">
+<span>class <span class="ident">TypeTremoloType</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The tremolo-type is used to distinguish multi-note, single-note, and unmeasured tremolos.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeTremoloType(SimpleType):
+    &#34;&#34;&#34;
+    The tremolo-type is used to distinguish multi-note, single-note, and unmeasured tremolos.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;start&#34;, &#34;stop&#34;, &#34;single&#34;, &#34;unmeasured&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeTrillBeats"><code class="flex name class">
+<span>class <span class="ident">TypeTrillBeats</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value
+with a minimum value of 2.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeTrillBeats(SimpleType):
+    &#34;&#34;&#34;
+    The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value
+    with a minimum value of 2.
+    &#34;&#34;&#34;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v is not None:
+            if not TypeDecimal(v):
+                raise TypeError(&#39;{}.value {} must be of type Decimal not {}.&#39;.format(self.__class__, v, v.__class__))
+        if v &lt; 2:
+            raise ValueError(&#39;{}.value {} must be greater than or equal to 2.&#39;.format(self.__class__, v))
+        self._value = v</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musicxml.types.simple_type.TypeTrillBeats.value"><code class="name">var <span class="ident">value</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def value(self):
+    return self._value</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeTrillStep"><code class="flex name class">
+<span>class <span class="ident">TypeTrillStep</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The trill-step type describes the alternating note of trills and mordents for playback, relative to the current note.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeTrillStep(SimpleType):
+    &#34;&#34;&#34;
+    The trill-step type describes the alternating note of trills and mordents for playback, relative to the current note.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;whole&#34;, &#34;half&#34;, &#34;unison&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeTwoNoteTurn"><code class="flex name class">
+<span>class <span class="ident">TypeTwoNoteTurn</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The two-note-turn type describes the ending notes of trills and mordents for playback, relative to the current note.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeTwoNoteTurn(SimpleType):
+    &#34;&#34;&#34;
+    The two-note-turn type describes the ending notes of trills and mordents for playback, relative to the current note.
+    &#34;&#34;&#34;
+
+    _PERMITTED = [&#34;whole&#34;, &#34;half&#34;, &#34;none&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
 <dt id="musicscore.musicxml.types.simple_type.TypeTypeSmulfSegnoGlyphName"><code class="flex name class">
 <span>class <span class="ident">TypeTypeSmulfSegnoGlyphName</span></span>
 <span>(</span><span>value, *args, **kwargs)</span>
@@ -4723,6 +5586,28 @@ which way the tip is pointing.</p></section>
     &#34;&#34;&#34;
 
     _PERMITTED = [&#34;up&#34;, &#34;down&#34;]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.simple_type.TypeUprightInverted"><code class="flex name class">
+<span>class <span class="ident">TypeUprightInverted</span></span>
+<span>(</span><span>value, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The upright-inverted type describes the appearance of a fermata element. The value is upright if not specified.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TypeUprightInverted(SimpleType):
+    &#34;&#34;&#34;
+    The upright-inverted type describes the appearance of a fermata element. The value is upright if not specified.
+    &#34;&#34;&#34;
+    _PERMITTED = [&#34;upright&#34;, &#34;inverted&#34;]
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)</code></pre>
@@ -4874,7 +5759,7 @@ double wings. The none value indicates no wings and is the default.</p></section
     def value(self, v):
         if v is not None and v not in self._PERMITTED and not Decimal(v):
             raise ValueError(
-                &#39;{}.value {} must be yes no ord decimal&#39;)
+                &#39;{}.value {} must be yes no or decimal&#39;)
         self._value = v</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -5015,6 +5900,12 @@ def value(self):
 </ul>
 </li>
 <li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.Decimal" href="#musicscore.musicxml.types.simple_type.Decimal">Decimal</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicxml.types.simple_type.Decimal.value" href="#musicscore.musicxml.types.simple_type.Decimal.value">value</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeDivisions" href="#musicscore.musicxml.types.simple_type.TypeDivisions">TypeDivisions</a></code></h4>
 </li>
 <li>
@@ -5031,6 +5922,9 @@ def value(self):
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeFan" href="#musicscore.musicxml.types.simple_type.TypeFan">TypeFan</a></code></h4>
 </li>
 <li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeFermataShape" href="#musicscore.musicxml.types.simple_type.TypeFermataShape">TypeFermataShape</a></code></h4>
+</li>
+<li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeFifths" href="#musicscore.musicxml.types.simple_type.TypeFifths">TypeFifths</a></code></h4>
 </li>
 <li>
@@ -5043,7 +5937,22 @@ def value(self):
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeFontWeight" href="#musicscore.musicxml.types.simple_type.TypeFontWeight">TypeFontWeight</a></code></h4>
 </li>
 <li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeHoleClosedLocation" href="#musicscore.musicxml.types.simple_type.TypeHoleClosedLocation">TypeHoleClosedLocation</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeHoleClosedValue" href="#musicscore.musicxml.types.simple_type.TypeHoleClosedValue">TypeHoleClosedValue</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.Integer" href="#musicscore.musicxml.types.simple_type.Integer">Integer</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicxml.types.simple_type.Integer.value" href="#musicscore.musicxml.types.simple_type.Integer.value">value</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeLeftCenterRight" href="#musicscore.musicxml.types.simple_type.TypeLeftCenterRight">TypeLeftCenterRight</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeLineEnd" href="#musicscore.musicxml.types.simple_type.TypeLineEnd">TypeLineEnd</a></code></h4>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeLineLength" href="#musicscore.musicxml.types.simple_type.TypeLineLength">TypeLineLength</a></code></h4>
@@ -5053,6 +5962,9 @@ def value(self):
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeLineType" href="#musicscore.musicxml.types.simple_type.TypeLineType">TypeLineType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeLineWidthType" href="#musicscore.musicxml.types.simple_type.TypeLineWidthType">TypeLineWidthType</a></code></h4>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeMarginType" href="#musicscore.musicxml.types.simple_type.TypeMarginType">TypeMarginType</a></code></h4>
@@ -5097,7 +6009,16 @@ def value(self):
 </ul>
 </li>
 <li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.NonNegativeInteger" href="#musicscore.musicxml.types.simple_type.NonNegativeInteger">NonNegativeInteger</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicxml.types.simple_type.NonNegativeInteger.value" href="#musicscore.musicxml.types.simple_type.NonNegativeInteger.value">value</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeNoteTypeValue" href="#musicscore.musicxml.types.simple_type.TypeNoteTypeValue">TypeNoteTypeValue</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeNoteheadValue" href="#musicscore.musicxml.types.simple_type.TypeNoteheadValue">TypeNoteheadValue</a></code></h4>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeNumberLevel" href="#musicscore.musicxml.types.simple_type.TypeNumberLevel">TypeNumberLevel</a></code></h4>
@@ -5139,6 +6060,18 @@ def value(self):
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypePositiveDivisions" href="#musicscore.musicxml.types.simple_type.TypePositiveDivisions">TypePositiveDivisions</a></code></h4>
 </li>
 <li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.PositiveInteger" href="#musicscore.musicxml.types.simple_type.PositiveInteger">PositiveInteger</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicxml.types.simple_type.PositiveInteger.value" href="#musicscore.musicxml.types.simple_type.PositiveInteger.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypePositiveIntegerOrEmpty" href="#musicscore.musicxml.types.simple_type.TypePositiveIntegerOrEmpty">TypePositiveIntegerOrEmpty</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicxml.types.simple_type.TypePositiveIntegerOrEmpty.value" href="#musicscore.musicxml.types.simple_type.TypePositiveIntegerOrEmpty.value">value</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeRightLeftMiddle" href="#musicscore.musicxml.types.simple_type.TypeRightLeftMiddle">TypeRightLeftMiddle</a></code></h4>
 </li>
 <li>
@@ -5175,16 +6108,28 @@ def value(self):
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeStaffNumber" href="#musicscore.musicxml.types.simple_type.TypeStaffNumber">TypeStaffNumber</a></code></h4>
 </li>
 <li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeStartNote" href="#musicscore.musicxml.types.simple_type.TypeStartNote">TypeStartNote</a></code></h4>
+</li>
+<li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeStartStop" href="#musicscore.musicxml.types.simple_type.TypeStartStop">TypeStartStop</a></code></h4>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeStartStopContinue" href="#musicscore.musicxml.types.simple_type.TypeStartStopContinue">TypeStartStopContinue</a></code></h4>
 </li>
 <li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeStartStopDiscontinue" href="#musicscore.musicxml.types.simple_type.TypeStartStopDiscontinue">TypeStartStopDiscontinue</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeStemValue" href="#musicscore.musicxml.types.simple_type.TypeStemValue">TypeStemValue</a></code></h4>
+</li>
+<li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeStep" href="#musicscore.musicxml.types.simple_type.TypeStep">TypeStep</a></code></h4>
 </li>
 <li>
-<h4><code><a title="musicscore.musicxml.types.simple_type.TypeStopStartDiscontinue" href="#musicscore.musicxml.types.simple_type.TypeStopStartDiscontinue">TypeStopStartDiscontinue</a></code></h4>
+<h4><code><a title="musicscore.musicxml.types.simple_type.String" href="#musicscore.musicxml.types.simple_type.String">String</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicxml.types.simple_type.String.value" href="#musicscore.musicxml.types.simple_type.String.value">value</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeSyllabic" href="#musicscore.musicxml.types.simple_type.TypeSyllabic">TypeSyllabic</a></code></h4>
@@ -5210,10 +6155,37 @@ def value(self):
 </ul>
 </li>
 <li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.Token" href="#musicscore.musicxml.types.simple_type.Token">Token</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeTremoloMarks" href="#musicscore.musicxml.types.simple_type.TypeTremoloMarks">TypeTremoloMarks</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicxml.types.simple_type.TypeTremoloMarks.value" href="#musicscore.musicxml.types.simple_type.TypeTremoloMarks.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeTremoloType" href="#musicscore.musicxml.types.simple_type.TypeTremoloType">TypeTremoloType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeTrillBeats" href="#musicscore.musicxml.types.simple_type.TypeTrillBeats">TypeTrillBeats</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicxml.types.simple_type.TypeTrillBeats.value" href="#musicscore.musicxml.types.simple_type.TypeTrillBeats.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeTrillStep" href="#musicscore.musicxml.types.simple_type.TypeTrillStep">TypeTrillStep</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeTwoNoteTurn" href="#musicscore.musicxml.types.simple_type.TypeTwoNoteTurn">TypeTwoNoteTurn</a></code></h4>
+</li>
+<li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeTypeSmulfSegnoGlyphName" href="#musicscore.musicxml.types.simple_type.TypeTypeSmulfSegnoGlyphName">TypeTypeSmulfSegnoGlyphName</a></code></h4>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeUpDown" href="#musicscore.musicxml.types.simple_type.TypeUpDown">TypeUpDown</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.simple_type.TypeUprightInverted" href="#musicscore.musicxml.types.simple_type.TypeUprightInverted">TypeUprightInverted</a></code></h4>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.simple_type.TypeValign" href="#musicscore.musicxml.types.simple_type.TypeValign">TypeValign</a></code></h4>

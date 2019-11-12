@@ -28,12 +28,19 @@ from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.simple_type import TypeCaesuraValue
 
 
-class ComplexTypeCaesura(ComplexType, TypeCaesuraValue, PrintStyle, Placement):
+# class ComplexTypeCaesura(ComplexType, TypeCaesuraValue, PrintStyle, Placement):
+#     &#34;&#34;&#34;The caesura element indicates a slight pause. It is notated using a &#34;railroad tracks&#34; symbol or other variations
+#     specified in the element content.&#34;&#34;&#34;
+#
+#     def __init__(self, tag, value, *args, **kwargs):
+#         super().__init__(tag=tag, value=value, *args, **kwargs)
+
+class ComplexTypeCaesura(ComplexType, PrintStyle, Placement):
     &#34;&#34;&#34;The caesura element indicates a slight pause. It is notated using a &#34;railroad tracks&#34; symbol or other variations
     specified in the element content.&#34;&#34;&#34;
 
-    def __init__(self, tag, value, *args, **kwargs):
-        super().__init__(tag=tag, value=value, *args, **kwargs)</code></pre>
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)</code></pre>
 </details>
 </section>
 <section>
@@ -47,19 +54,19 @@ class ComplexTypeCaesura(ComplexType, TypeCaesuraValue, PrintStyle, Placement):
 <dl>
 <dt id="musicscore.musicxml.types.complextypes.caesura.ComplexTypeCaesura"><code class="flex name class">
 <span>class <span class="ident">ComplexTypeCaesura</span></span>
-<span>(</span><span>tag, value, *args, **kwargs)</span>
+<span>(</span><span>tag, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>The caesura element indicates a slight pause. It is notated using a "railroad tracks" symbol or other variations
 specified in the element content.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class ComplexTypeCaesura(ComplexType, TypeCaesuraValue, PrintStyle, Placement):
+<pre><code class="python">class ComplexTypeCaesura(ComplexType, PrintStyle, Placement):
     &#34;&#34;&#34;The caesura element indicates a slight pause. It is notated using a &#34;railroad tracks&#34; symbol or other variations
     specified in the element content.&#34;&#34;&#34;
 
-    def __init__(self, tag, value, *args, **kwargs):
-        super().__init__(tag=tag, value=value, *args, **kwargs)</code></pre>
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -67,8 +74,6 @@ specified in the element content.</p></section>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
-<li><a title="musicscore.musicxml.types.simple_type.TypeCaesuraValue" href="../simple_type.html#musicscore.musicxml.types.simple_type.TypeCaesuraValue">TypeCaesuraValue</a></li>
-<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
 <li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
 <li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
 <li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>

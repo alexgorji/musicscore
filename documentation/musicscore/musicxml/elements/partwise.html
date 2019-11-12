@@ -91,13 +91,13 @@ class Score(XMLElement, DocumentAttributes):
         doctype = &#39;&lt;!DOCTYPE score-partwise PUBLIC &#34;-//Recordare//DTD MusicXML {} Partwise//EN&#34; &#34;http://www.musicxml.org/dtds/partwise.dtd&#34;&gt;\n&#39;.format(
             self.version)
 
-        path += &#39;.xml&#39;
+        if path[-4:] != &#39;.xml&#39;:
+            path += &#39;.xml&#39;
         output_file = open(path, &#39;w&#39;)
         output_file.write(xmlversion)
         output_file.write(doctype)
         output_file.write(self.to_string())
-        output_file.close()
-        print(&#39;writing finished&#39;)</code></pre>
+        output_file.close()</code></pre>
 </details>
 </section>
 <section>
@@ -194,13 +194,13 @@ attribute.</p></section>
         doctype = &#39;&lt;!DOCTYPE score-partwise PUBLIC &#34;-//Recordare//DTD MusicXML {} Partwise//EN&#34; &#34;http://www.musicxml.org/dtds/partwise.dtd&#34;&gt;\n&#39;.format(
             self.version)
 
-        path += &#39;.xml&#39;
+        if path[-4:] != &#39;.xml&#39;:
+            path += &#39;.xml&#39;
         output_file = open(path, &#39;w&#39;)
         output_file.write(xmlversion)
         output_file.write(doctype)
         output_file.write(self.to_string())
-        output_file.close()
-        print(&#39;writing finished&#39;)</code></pre>
+        output_file.close()</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -225,13 +225,13 @@ attribute.</p></section>
     doctype = &#39;&lt;!DOCTYPE score-partwise PUBLIC &#34;-//Recordare//DTD MusicXML {} Partwise//EN&#34; &#34;http://www.musicxml.org/dtds/partwise.dtd&#34;&gt;\n&#39;.format(
         self.version)
 
-    path += &#39;.xml&#39;
+    if path[-4:] != &#39;.xml&#39;:
+        path += &#39;.xml&#39;
     output_file = open(path, &#39;w&#39;)
     output_file.write(xmlversion)
     output_file.write(doctype)
     output_file.write(self.to_string())
-    output_file.close()
-    print(&#39;writing finished&#39;)</code></pre>
+    output_file.close()</code></pre>
 </details>
 </dd>
 </dl>

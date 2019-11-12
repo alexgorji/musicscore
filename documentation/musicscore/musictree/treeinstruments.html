@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musictree.treeinstruments API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musictree.treeinstruments</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from musicscore.musictree.midi import G, D, A, E, C, MidiNote, Midi, B, F, midi_to_frequency, frequency_to_midi
+from musicscore.musicxml.types.complextypes.midiinstrument import ComplexTypeMidiInstrument
+from musicscore.musicxml.types.complextypes.scorepart import PartName, PartAbbreviation
+import uuid
+
+
+class TreeInstrument(ComplexTypeMidiInstrument):
+    _TAG = &#39;midi-instrument&#39;
+
+    def __init__(self, name, abbreviation=None, number=None, *args, **kwargs):
+        super().__init__(tag=self._TAG, id_=&#39;inst&#39; + str(uuid.uuid4()), *args, **kwargs)
+        self._part_name = PartName(name=name)
+        self._part_abbreviation = PartAbbreviation()
+        self.abbreviation = abbreviation
+        self._number = None
+        self.number = number
+
+    @property
+    def part_name(self):
+        return self._part_name
+
+    @property
+    def part_abbreviation(self):
+        return self._part_abbreviation
+
+    @property
+    def number(self):
+        return self._number
+
+    @number.setter
+    def number(self, val):
+        if self._number is not None:
+            raise AttributeError(&#39;number can only be set once&#39;)
+
+        if val is not None and not isinstance(val, int):
+            raise TypeError(&#39;number.value must be of type int not{}&#39;.format(type(val)))
+        self._number = val
+
+        if self._number is not None:
+            self.name += &#39; &#39; + str(self._number)
+            self.abbreviation += &#39; &#39; + str(self._number)
+
+    @property
+    def name(self):
+        return self._part_name.name
+
+    @name.setter
+    def name(self, val):
+        self._part_name.name = val
+
+    @property
+    def abbreviation(self):
+        return self._part_abbreviation.value
+
+    @abbreviation.setter
+    def abbreviation(self, val):
+        self._part_abbreviation.value = val
+
+
+class String(object):
+    def __init__(self, number, tuning, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._tuning = None
+        self.number = number
+        self.tuning = tuning
+
+    @property
+    def tuning(self):
+        return self._tuning
+
+    @tuning.setter
+    def tuning(self, val):
+        if not isinstance(val, Midi):
+            raise TypeError(&#39;tuning.value must be of type Midi not{}&#39;.format(type(val)))
+        self._tuning = val
+
+    def get_step(self, number):
+        step = self.tuning.__deepcopy__()
+        step.transpose(number)
+        return step
+
+
+class NaturalInstrument(TreeInstrument):
+
+    def __init__(self, key, a4=440, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._a4 = None
+        self._key = None
+        self._transposition = None
+        self.a4 = a4
+        self.key = key
+
+    @property
+    def a4(self):
+        return self._a4
+
+    @a4.setter
+    def a4(self, val):
+        try:
+            float(val)
+        except AttributeError:
+            raise TypeError()
+        self._a4 = val
+
+    @property
+    def key(self):
+        return self._key
+
+    @key.setter
+    def key(self, val):
+        if not isinstance(val, MidiNote):
+            raise TypeError(&#39;key.value must be of type MidiNote not{}&#39;.format(type(val)))
+        self._key = val
+
+    @property
+    def transposition(self):
+        return self._transposition
+
+    @transposition.setter
+    def transposition(self, val):
+        self._transposition = val
+
+    def get_fundamental_frequency(self):
+        return midi_to_frequency(self.key, self.a4)
+
+    def get_partial_midi_value(self, number):
+        if not isinstance(number, int):
+            return TypeError()
+        if number &lt;= 0:
+            return ValueError()
+
+        return frequency_to_midi(self.get_fundamental_frequency() * number, self.a4)
+
+
+class StringInstrument(TreeInstrument):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.strings = {}
+
+
+class Violin(StringInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Violin&#39;, abbreviation=&#39;vln.&#39;, number=number, *args, **kwargs)
+        self.strings = {4: String(4, G(3)),
+                        3: String(3, D(4)),
+                        2: String(2, A(4)),
+                        1: String(1, E(5))
+                        }
+
+
+class Viola(StringInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Viola&#39;, abbreviation=&#39;vla.&#39;, number=number, *args, **kwargs)
+        self.strings = {4: String(4, C(3)),
+                        3: String(3, G(3)),
+                        2: String(2, D(4)),
+                        1: String(1, A(4))
+                        }
+
+
+class Cello(StringInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Cello&#39;, abbreviation=&#39;vc.&#39;, number=number, *args, **kwargs)
+        self.strings = {4: String(4, C(2)),
+                        3: String(3, G(2)),
+                        2: String(2, D(3)),
+                        1: String(1, A(3))
+                        }
+
+
+class ViolaDamore(StringInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Viola d\&#39;amore\n430&#39;, abbreviation=&#39;vla.&#39;, number=number, *args, **kwargs)
+        # skordatura
+        self.strings = {1: String(1, B(4)),
+                        2: String(2, B(4)),
+                        3: String(3, F(4, &#39;#&#39;)),
+                        4: String(4, C(4)),
+                        5: String(5, G(3)),
+                        6: String(6, D(3)),
+                        7: String(7, A(2))
+                        }
+
+
+class Accordion(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Accordion&#39;, abbreviation=&#39;acc.&#39;, number=number, *args, **kwargs)
+
+
+class Horn(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Horn&#39;, abbreviation=&#39;hrn.&#39;, number=number, *args, **kwargs)
+
+
+class NaturalHorn(NaturalInstrument):
+    def __init__(self, key=E(1, &#39;b&#39;), a4=430, *args, **kwargs):
+        super().__init__(name=&#39;Horn in E♭\n430&#39;, abbreviation=&#39;hrn.&#39;, key=key, a4=a4, *args, **kwargs)
+        self.transposition = 9
+
+
+class TamTam(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Tam-tam&#39;, abbreviation=&#39;Tam-t.&#39;, number=number, *args, **kwargs)
+        self.midi = B(3)
+        self.midi.notehead = &#39;x&#39;
+
+
+class Cymbal(TreeInstrument):
+    midis = {1: E(4), 2: G(4), 3: B(4), 4: D(5), 5: F(5)}
+
+    def __init__(self, number=1, *args, **kwargs):
+        super().__init__(name=&#39;cymbal-&#39; + str(number), abbreviation=&#39;cym-&#39; + str(number), number=number, *args,
+                         **kwargs)
+
+        self.midi = self.midis[self.number]
+        self.midi.notehead = &#39;x&#39;
+
+
+class Percussion(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Percussion&#39;, abbreviation=&#39;perc.&#39;, number=number, *args, **kwargs)
+        self.tamtam = TamTam()
+        self.cymbal_1 = Cymbal(1)
+        self.cymbal_2 = Cymbal(2)
+        self.cymbal_3 = Cymbal(3)
+        self.cymbal_4 = Cymbal(4)
+        self.cymbal_5 = Cymbal(5)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musictree.treeinstruments.Accordion"><code class="flex name class">
+<span>class <span class="ident">Accordion</span></span>
+<span>(</span><span>number=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Accordion(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Accordion&#39;, abbreviation=&#39;acc.&#39;, number=number, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.Cello"><code class="flex name class">
+<span>class <span class="ident">Cello</span></span>
+<span>(</span><span>number=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Cello(StringInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Cello&#39;, abbreviation=&#39;vc.&#39;, number=number, *args, **kwargs)
+        self.strings = {4: String(4, C(2)),
+                        3: String(3, G(2)),
+                        2: String(2, D(3)),
+                        1: String(1, A(3))
+                        }</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.StringInstrument" href="#musicscore.musictree.treeinstruments.StringInstrument">StringInstrument</a></li>
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.Cymbal"><code class="flex name class">
+<span>class <span class="ident">Cymbal</span></span>
+<span>(</span><span>number=1, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Cymbal(TreeInstrument):
+    midis = {1: E(4), 2: G(4), 3: B(4), 4: D(5), 5: F(5)}
+
+    def __init__(self, number=1, *args, **kwargs):
+        super().__init__(name=&#39;cymbal-&#39; + str(number), abbreviation=&#39;cym-&#39; + str(number), number=number, *args,
+                         **kwargs)
+
+        self.midi = self.midis[self.number]
+        self.midi.notehead = &#39;x&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="musicscore.musictree.treeinstruments.Cymbal.midis"><code class="name">var <span class="ident">midis</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.Horn"><code class="flex name class">
+<span>class <span class="ident">Horn</span></span>
+<span>(</span><span>number=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Horn(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Horn&#39;, abbreviation=&#39;hrn.&#39;, number=number, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.NaturalHorn"><code class="flex name class">
+<span>class <span class="ident">NaturalHorn</span></span>
+<span>(</span><span>key=E1b at 4371653016, a4=430, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class NaturalHorn(NaturalInstrument):
+    def __init__(self, key=E(1, &#39;b&#39;), a4=430, *args, **kwargs):
+        super().__init__(name=&#39;Horn in E♭\n430&#39;, abbreviation=&#39;hrn.&#39;, key=key, a4=a4, *args, **kwargs)
+        self.transposition = 9</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.NaturalInstrument" href="#musicscore.musictree.treeinstruments.NaturalInstrument">NaturalInstrument</a></li>
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.NaturalInstrument"><code class="flex name class">
+<span>class <span class="ident">NaturalInstrument</span></span>
+<span>(</span><span>key, a4=440, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class NaturalInstrument(TreeInstrument):
+
+    def __init__(self, key, a4=440, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._a4 = None
+        self._key = None
+        self._transposition = None
+        self.a4 = a4
+        self.key = key
+
+    @property
+    def a4(self):
+        return self._a4
+
+    @a4.setter
+    def a4(self, val):
+        try:
+            float(val)
+        except AttributeError:
+            raise TypeError()
+        self._a4 = val
+
+    @property
+    def key(self):
+        return self._key
+
+    @key.setter
+    def key(self, val):
+        if not isinstance(val, MidiNote):
+            raise TypeError(&#39;key.value must be of type MidiNote not{}&#39;.format(type(val)))
+        self._key = val
+
+    @property
+    def transposition(self):
+        return self._transposition
+
+    @transposition.setter
+    def transposition(self, val):
+        self._transposition = val
+
+    def get_fundamental_frequency(self):
+        return midi_to_frequency(self.key, self.a4)
+
+    def get_partial_midi_value(self, number):
+        if not isinstance(number, int):
+            return TypeError()
+        if number &lt;= 0:
+            return ValueError()
+
+        return frequency_to_midi(self.get_fundamental_frequency() * number, self.a4)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.NaturalHorn" href="#musicscore.musictree.treeinstruments.NaturalHorn">NaturalHorn</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musictree.treeinstruments.NaturalInstrument.a4"><code class="name">var <span class="ident">a4</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def a4(self):
+    return self._a4</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.NaturalInstrument.key"><code class="name">var <span class="ident">key</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def key(self):
+    return self._key</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.NaturalInstrument.transposition"><code class="name">var <span class="ident">transposition</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def transposition(self):
+    return self._transposition</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treeinstruments.NaturalInstrument.get_fundamental_frequency"><code class="name flex">
+<span>def <span class="ident">get_fundamental_frequency</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_fundamental_frequency(self):
+    return midi_to_frequency(self.key, self.a4)</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.NaturalInstrument.get_partial_midi_value"><code class="name flex">
+<span>def <span class="ident">get_partial_midi_value</span></span>(<span>self, number)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_partial_midi_value(self, number):
+    if not isinstance(number, int):
+        return TypeError()
+    if number &lt;= 0:
+        return ValueError()
+
+    return frequency_to_midi(self.get_fundamental_frequency() * number, self.a4)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.Percussion"><code class="flex name class">
+<span>class <span class="ident">Percussion</span></span>
+<span>(</span><span>number=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Percussion(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Percussion&#39;, abbreviation=&#39;perc.&#39;, number=number, *args, **kwargs)
+        self.tamtam = TamTam()
+        self.cymbal_1 = Cymbal(1)
+        self.cymbal_2 = Cymbal(2)
+        self.cymbal_3 = Cymbal(3)
+        self.cymbal_4 = Cymbal(4)
+        self.cymbal_5 = Cymbal(5)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.String"><code class="flex name class">
+<span>class <span class="ident">String</span></span>
+<span>(</span><span>number, tuning, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class String(object):
+    def __init__(self, number, tuning, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._tuning = None
+        self.number = number
+        self.tuning = tuning
+
+    @property
+    def tuning(self):
+        return self._tuning
+
+    @tuning.setter
+    def tuning(self, val):
+        if not isinstance(val, Midi):
+            raise TypeError(&#39;tuning.value must be of type Midi not{}&#39;.format(type(val)))
+        self._tuning = val
+
+    def get_step(self, number):
+        step = self.tuning.__deepcopy__()
+        step.transpose(number)
+        return step</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musictree.treeinstruments.String.tuning"><code class="name">var <span class="ident">tuning</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def tuning(self):
+    return self._tuning</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treeinstruments.String.get_step"><code class="name flex">
+<span>def <span class="ident">get_step</span></span>(<span>self, number)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_step(self, number):
+    step = self.tuning.__deepcopy__()
+    step.transpose(number)
+    return step</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.StringInstrument"><code class="flex name class">
+<span>class <span class="ident">StringInstrument</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class StringInstrument(TreeInstrument):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.strings = {}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.Violin" href="#musicscore.musictree.treeinstruments.Violin">Violin</a></li>
+<li><a title="musicscore.musictree.treeinstruments.Viola" href="#musicscore.musictree.treeinstruments.Viola">Viola</a></li>
+<li><a title="musicscore.musictree.treeinstruments.Cello" href="#musicscore.musictree.treeinstruments.Cello">Cello</a></li>
+<li><a title="musicscore.musictree.treeinstruments.ViolaDamore" href="#musicscore.musictree.treeinstruments.ViolaDamore">ViolaDamore</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.TamTam"><code class="flex name class">
+<span>class <span class="ident">TamTam</span></span>
+<span>(</span><span>number=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TamTam(TreeInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Tam-tam&#39;, abbreviation=&#39;Tam-t.&#39;, number=number, *args, **kwargs)
+        self.midi = B(3)
+        self.midi.notehead = &#39;x&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.TreeInstrument"><code class="flex name class">
+<span>class <span class="ident">TreeInstrument</span></span>
+<span>(</span><span>name, abbreviation=None, number=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TreeInstrument(ComplexTypeMidiInstrument):
+    _TAG = &#39;midi-instrument&#39;
+
+    def __init__(self, name, abbreviation=None, number=None, *args, **kwargs):
+        super().__init__(tag=self._TAG, id_=&#39;inst&#39; + str(uuid.uuid4()), *args, **kwargs)
+        self._part_name = PartName(name=name)
+        self._part_abbreviation = PartAbbreviation()
+        self.abbreviation = abbreviation
+        self._number = None
+        self.number = number
+
+    @property
+    def part_name(self):
+        return self._part_name
+
+    @property
+    def part_abbreviation(self):
+        return self._part_abbreviation
+
+    @property
+    def number(self):
+        return self._number
+
+    @number.setter
+    def number(self, val):
+        if self._number is not None:
+            raise AttributeError(&#39;number can only be set once&#39;)
+
+        if val is not None and not isinstance(val, int):
+            raise TypeError(&#39;number.value must be of type int not{}&#39;.format(type(val)))
+        self._number = val
+
+        if self._number is not None:
+            self.name += &#39; &#39; + str(self._number)
+            self.abbreviation += &#39; &#39; + str(self._number)
+
+    @property
+    def name(self):
+        return self._part_name.name
+
+    @name.setter
+    def name(self, val):
+        self._part_name.name = val
+
+    @property
+    def abbreviation(self):
+        return self._part_abbreviation.value
+
+    @abbreviation.setter
+    def abbreviation(self, val):
+        self._part_abbreviation.value = val</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.NaturalInstrument" href="#musicscore.musictree.treeinstruments.NaturalInstrument">NaturalInstrument</a></li>
+<li><a title="musicscore.musictree.treeinstruments.StringInstrument" href="#musicscore.musictree.treeinstruments.StringInstrument">StringInstrument</a></li>
+<li><a title="musicscore.musictree.treeinstruments.Accordion" href="#musicscore.musictree.treeinstruments.Accordion">Accordion</a></li>
+<li><a title="musicscore.musictree.treeinstruments.Horn" href="#musicscore.musictree.treeinstruments.Horn">Horn</a></li>
+<li><a title="musicscore.musictree.treeinstruments.TamTam" href="#musicscore.musictree.treeinstruments.TamTam">TamTam</a></li>
+<li><a title="musicscore.musictree.treeinstruments.Cymbal" href="#musicscore.musictree.treeinstruments.Cymbal">Cymbal</a></li>
+<li><a title="musicscore.musictree.treeinstruments.Percussion" href="#musicscore.musictree.treeinstruments.Percussion">Percussion</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musictree.treeinstruments.TreeInstrument.abbreviation"><code class="name">var <span class="ident">abbreviation</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def abbreviation(self):
+    return self._part_abbreviation.value</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.TreeInstrument.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def name(self):
+    return self._part_name.name</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.TreeInstrument.number"><code class="name">var <span class="ident">number</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def number(self):
+    return self._number</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.TreeInstrument.part_abbreviation"><code class="name">var <span class="ident">part_abbreviation</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def part_abbreviation(self):
+    return self._part_abbreviation</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.TreeInstrument.part_name"><code class="name">var <span class="ident">part_name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def part_name(self):
+    return self._part_name</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.Viola"><code class="flex name class">
+<span>class <span class="ident">Viola</span></span>
+<span>(</span><span>number=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Viola(StringInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Viola&#39;, abbreviation=&#39;vla.&#39;, number=number, *args, **kwargs)
+        self.strings = {4: String(4, C(3)),
+                        3: String(3, G(3)),
+                        2: String(2, D(4)),
+                        1: String(1, A(4))
+                        }</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.StringInstrument" href="#musicscore.musictree.treeinstruments.StringInstrument">StringInstrument</a></li>
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.ViolaDamore"><code class="flex name class">
+<span>class <span class="ident">ViolaDamore</span></span>
+<span>(</span><span>number=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ViolaDamore(StringInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Viola d\&#39;amore\n430&#39;, abbreviation=&#39;vla.&#39;, number=number, *args, **kwargs)
+        # skordatura
+        self.strings = {1: String(1, B(4)),
+                        2: String(2, B(4)),
+                        3: String(3, F(4, &#39;#&#39;)),
+                        4: String(4, C(4)),
+                        5: String(5, G(3)),
+                        6: String(6, D(3)),
+                        7: String(7, A(2))
+                        }</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.StringInstrument" href="#musicscore.musictree.treeinstruments.StringInstrument">StringInstrument</a></li>
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musictree.treeinstruments.Violin"><code class="flex name class">
+<span>class <span class="ident">Violin</span></span>
+<span>(</span><span>number=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The midi-instrument type defines MIDI 1.0 instrument playback. The midi-instrument element can be a part of
+either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
+refers to the score-instrument affected by the change.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Violin(StringInstrument):
+    def __init__(self, number=None, *args, **kwargs):
+        super().__init__(name=&#39;Violin&#39;, abbreviation=&#39;vln.&#39;, number=number, *args, **kwargs)
+        self.strings = {4: String(4, G(3)),
+                        3: String(3, D(4)),
+                        2: String(2, A(4)),
+                        1: String(1, E(5))
+                        }</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treeinstruments.StringInstrument" href="#musicscore.musictree.treeinstruments.StringInstrument">StringInstrument</a></li>
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument" href="../musicxml/types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.ComplexTypeMidiInstrument">ComplexTypeMidiInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../musicxml/types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musictree" href="index.html">musicscore.musictree</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.Accordion" href="#musicscore.musictree.treeinstruments.Accordion">Accordion</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.Cello" href="#musicscore.musictree.treeinstruments.Cello">Cello</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.Cymbal" href="#musicscore.musictree.treeinstruments.Cymbal">Cymbal</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treeinstruments.Cymbal.midis" href="#musicscore.musictree.treeinstruments.Cymbal.midis">midis</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.Horn" href="#musicscore.musictree.treeinstruments.Horn">Horn</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.NaturalHorn" href="#musicscore.musictree.treeinstruments.NaturalHorn">NaturalHorn</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.NaturalInstrument" href="#musicscore.musictree.treeinstruments.NaturalInstrument">NaturalInstrument</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treeinstruments.NaturalInstrument.a4" href="#musicscore.musictree.treeinstruments.NaturalInstrument.a4">a4</a></code></li>
+<li><code><a title="musicscore.musictree.treeinstruments.NaturalInstrument.get_fundamental_frequency" href="#musicscore.musictree.treeinstruments.NaturalInstrument.get_fundamental_frequency">get_fundamental_frequency</a></code></li>
+<li><code><a title="musicscore.musictree.treeinstruments.NaturalInstrument.get_partial_midi_value" href="#musicscore.musictree.treeinstruments.NaturalInstrument.get_partial_midi_value">get_partial_midi_value</a></code></li>
+<li><code><a title="musicscore.musictree.treeinstruments.NaturalInstrument.key" href="#musicscore.musictree.treeinstruments.NaturalInstrument.key">key</a></code></li>
+<li><code><a title="musicscore.musictree.treeinstruments.NaturalInstrument.transposition" href="#musicscore.musictree.treeinstruments.NaturalInstrument.transposition">transposition</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.Percussion" href="#musicscore.musictree.treeinstruments.Percussion">Percussion</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.String" href="#musicscore.musictree.treeinstruments.String">String</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treeinstruments.String.get_step" href="#musicscore.musictree.treeinstruments.String.get_step">get_step</a></code></li>
+<li><code><a title="musicscore.musictree.treeinstruments.String.tuning" href="#musicscore.musictree.treeinstruments.String.tuning">tuning</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.StringInstrument" href="#musicscore.musictree.treeinstruments.StringInstrument">StringInstrument</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.TamTam" href="#musicscore.musictree.treeinstruments.TamTam">TamTam</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treeinstruments.TreeInstrument.abbreviation" href="#musicscore.musictree.treeinstruments.TreeInstrument.abbreviation">abbreviation</a></code></li>
+<li><code><a title="musicscore.musictree.treeinstruments.TreeInstrument.name" href="#musicscore.musictree.treeinstruments.TreeInstrument.name">name</a></code></li>
+<li><code><a title="musicscore.musictree.treeinstruments.TreeInstrument.number" href="#musicscore.musictree.treeinstruments.TreeInstrument.number">number</a></code></li>
+<li><code><a title="musicscore.musictree.treeinstruments.TreeInstrument.part_abbreviation" href="#musicscore.musictree.treeinstruments.TreeInstrument.part_abbreviation">part_abbreviation</a></code></li>
+<li><code><a title="musicscore.musictree.treeinstruments.TreeInstrument.part_name" href="#musicscore.musictree.treeinstruments.TreeInstrument.part_name">part_name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.Viola" href="#musicscore.musictree.treeinstruments.Viola">Viola</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.ViolaDamore" href="#musicscore.musictree.treeinstruments.ViolaDamore">ViolaDamore</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treeinstruments.Violin" href="#musicscore.musictree.treeinstruments.Violin">Violin</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
