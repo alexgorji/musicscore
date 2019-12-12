@@ -1,3 +1,3 @@
-from musicscore import musictree, dtd, musicxml, musicstream
+from musicscore import musictree, musicstream
 
 name = "musicscore"
