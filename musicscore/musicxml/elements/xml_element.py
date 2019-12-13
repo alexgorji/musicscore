@@ -1,4 +1,4 @@
-from AGtree.tree import Tree
+from MStree.tree import Tree
 from lxml import etree as et
 
 from musicscore.basic_functions import replace_dash

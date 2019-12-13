@@ -1,6 +1,6 @@
 import copy
 
-from AGtree.basic_functions import flatten
+from MStree.basic_functions import flatten
 
 
 class Tree(object):

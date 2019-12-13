@@ -1,6 +1,6 @@
 import warnings
 
-from AGtree.tree import Tree
+from MStree.tree import Tree
 
 
 class DTDError(Exception):

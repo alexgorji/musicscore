@@ -1,6 +1,6 @@
 from quicktions import Fraction
 
-from AGtree.basic_functions import dToX, xToD
+from MStree.basic_functions import dToX, xToD
 from musicscore.basic_functions import Scale
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
 from musicscore.musictree.midi import Midi
