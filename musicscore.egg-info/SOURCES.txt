@@ -3,18 +3,14 @@ setup.py
 AGtree/__init__.py
 AGtree/basic_functions.py
 AGtree/tree.py
-musicscore/__init__.py
 musicscore/basic_functions.py
 musicscore.egg-info/PKG-INFO
 musicscore.egg-info/SOURCES.txt
 musicscore.egg-info/dependency_links.txt
 musicscore.egg-info/requires.txt
 musicscore.egg-info/top_level.txt
-musicscore/dtd/__init__.py
 musicscore/dtd/dtd.py
-musicscore/musicstream/__init__.py
 musicscore/musicstream/streamvoice.py
-musicscore/musictree/__init__.py
 musicscore/musictree/exceptions.py
 musicscore/musictree/midi.py
 musicscore/musictree/treebeat.py
@@ -31,9 +27,7 @@ musicscore/musictree/treepart.py
 musicscore/musictree/treescorepart.py
 musicscore/musictree/treescoretimewise.py
 musicscore/musictree/treetime.py
-musicscore/musicxml/__init__.py
 musicscore/musicxml/exceptions.py
-musicscore/musicxml/attributes/__init__.py
 musicscore/musicxml/attributes/accidental.py
 musicscore/musicxml/attributes/align.py
 musicscore/musicxml/attributes/attribute_abstract.py
@@ -78,7 +72,6 @@ musicscore/musicxml/attributes/textformatting.py
 musicscore/musicxml/attributes/textrotation.py
 musicscore/musicxml/attributes/timeonly.py
 musicscore/musicxml/attributes/trillsound.py
-musicscore/musicxml/elements/__init__.py
 musicscore/musicxml/elements/barline.py
 musicscore/musicxml/elements/fullnote.py
 musicscore/musicxml/elements/layouts.py
@@ -88,7 +81,6 @@ musicscore/musicxml/elements/scoreheader.py
 musicscore/musicxml/elements/timewise.py
 musicscore/musicxml/elements/xml_element.py
 musicscore/musicxml/elements/xml_example.py
-musicscore/musicxml/groups/__init__.py
 musicscore/musicxml/groups/common.py
 musicscore/musicxml/groups/layout.py
 musicscore/musicxml/groups/margins.py
