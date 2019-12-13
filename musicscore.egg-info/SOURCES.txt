@@ -1,8 +1,8 @@
 README.md
 setup.py
-AGtree/__init__.py
-AGtree/basic_functions.py
-AGtree/tree.py
+MStree/__init__.py
+MStree/basic_functions.py
+MStree/tree.py
 musicscore/basic_functions.py
 musicscore.egg-info/PKG-INFO
 musicscore.egg-info/SOURCES.txt
