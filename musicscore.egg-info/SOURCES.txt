@@ -1,8 +1,6 @@
 README.md
 setup.py
-MStree/__init__.py
-MStree/basic_functions.py
-MStree/tree.py
+musicscore/__init__.py
 musicscore/basic_functions.py
 musicscore.egg-info/PKG-INFO
 musicscore.egg-info/SOURCES.txt
@@ -185,6 +183,9 @@ musicscore/musicxml/types/complextypes/typedtext.py
 musicscore/musicxml/types/complextypes/virtualinstrument.py
 musicscore/musicxml/types/complextypes/wavyline.py
 musicscore/musicxml/types/complextypes/wedge.py
+musicscore/tree/__init__.py
+musicscore/tree/basic_functions.py
+musicscore/tree/tree.py
 tests/__init__.py
 tests/test_substitute.py
 tests/dtd/__init__.py
