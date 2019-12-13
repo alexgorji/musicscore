@@ -1,3 +1,4 @@
+from musicscore.musictree import *
 from musicscore.musictree.midi import *
 from musicscore.musictree.treechordflags import *
 from musicscore.musictree.treechordflags2 import *
