@@ -1,6 +1,6 @@
 import warnings
 
-from MStree.tree import Tree
+from musicscore.tree.tree import Tree
 
 
 class DTDError(Exception):

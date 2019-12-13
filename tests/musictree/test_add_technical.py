@@ -1,7 +1,7 @@
 from unittest import TestCase
 import os
 
-from musicscore.musicstream import SimpleFormat
+from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicscore.musicxml.types.complextypes.hole import HoleClosed
 from musicscore.musicxml.types.complextypes.technical import Hole, UpBow

@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from musicscore.musicstream import SimpleFormat
+from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treeinstruments import TreeInstrument, Violin, ViolaDamore
 from musicscore.musictree.treescorepart import TreeScorePart
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise

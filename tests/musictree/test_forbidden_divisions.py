@@ -2,7 +2,7 @@ from unittest import TestCase
 import random
 import os
 
-from musicscore.musicstream import SimpleFormat, TreeMeasure, TreePart
+from musicscore.musicstream.streamvoice import SimpleFormat, TreeMeasure, TreePart
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 

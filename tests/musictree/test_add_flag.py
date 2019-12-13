@@ -2,7 +2,7 @@ from itertools import cycle
 from unittest import TestCase
 import os
 
-from musicscore.musicstream import SimpleFormat, TreeChord
+from musicscore.musicstream.streamvoice import SimpleFormat, TreeChord
 from musicscore.musictree.treechordflags import PercussionFlag, XFlag, BeatwiseFlag, FingerTremoloFlag, GlissFlag
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from quicktions import Fraction

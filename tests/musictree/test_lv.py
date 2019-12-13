@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
 
-from musicscore.musicstream import SimpleFormat
+from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 
 path = os.path.abspath(__file__).split('.')[0]

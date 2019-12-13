@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from musicscore.musicstream import SimpleFormat
+from musicscore.musicstream.streamvoice import SimpleFormat
 import os
 
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
