@@ -30,8 +30,6 @@ from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.barline import Barline, BarStyle
 from musicscore.musicxml.groups.layout import SystemLayout
 from musicscore.musicxml.groups.musicdata import Print, Attributes
-from musicscore.musicxml.types.complextypes.identification import Encoding
-from musicscore.musicxml.types.complextypes.scorepart import Identification
 from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance
 
 
@@ -82,8 +80,7 @@ class TreeMeasure(timewise.Measure):
     def barline_style(self):
         return self._barline_style
 
-    @barline_style.setter
-    def barline_style(self, value):
+    def set_barline_style(self, value):
         if value:
             for part in self.get_children_by_type(TreePart):
                 try:
@@ -98,6 +95,7 @@ class TreeMeasure(timewise.Measure):
                     bs = bl.add_child(BarStyle(value))
 
         self._barline_style = value
+
 
     def show_time_signature(self):
         for part in self.get_children_by_type(TreePart):
@@ -270,8 +268,7 @@ class TreeMeasure(timewise.Measure):
     def barline_style(self):
         return self._barline_style
 
-    @barline_style.setter
-    def barline_style(self, value):
+    def set_barline_style(self, value):
         if value:
             for part in self.get_children_by_type(TreePart):
                 try:
@@ -286,6 +283,7 @@ class TreeMeasure(timewise.Measure):
                     bs = bl.add_child(BarStyle(value))
 
         self._barline_style = value
+
 
     def show_time_signature(self):
         for part in self.get_children_by_type(TreePart):
@@ -581,6 +579,30 @@ def time(self):
         part.get_children_by_type(Attributes)[0].remove_child(self.time)</code></pre>
 </details>
 </dd>
+<dt id="musicscore.musictree.treemeasure.TreeMeasure.set_barline_style"><code class="name flex">
+<span>def <span class="ident">set_barline_style</span></span>(<span>self, value)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_barline_style(self, value):
+    if value:
+        for part in self.get_children_by_type(TreePart):
+            try:
+                bl = part.get_children_by_type(Barline)[0]
+            except IndexError:
+                bl = part.add_child(Barline())
+
+            try:
+                bs = bl.get_children_by_type(BarStyle)[0]
+                bs.value = value
+            except IndexError:
+                bs = bl.add_child(BarStyle(value))
+
+    self._barline_style = value</code></pre>
+</details>
+</dd>
 <dt id="musicscore.musictree.treemeasure.TreeMeasure.show_time_signature"><code class="name flex">
 <span>def <span class="ident">show_time_signature</span></span>(<span>self)</span>
 </code></dt>
@@ -639,6 +661,7 @@ def time(self):
 <li><code><a title="musicscore.musictree.treemeasure.TreeMeasure.offset" href="#musicscore.musictree.treemeasure.TreeMeasure.offset">offset</a></code></li>
 <li><code><a title="musicscore.musictree.treemeasure.TreeMeasure.previous" href="#musicscore.musictree.treemeasure.TreeMeasure.previous">previous</a></code></li>
 <li><code><a title="musicscore.musictree.treemeasure.TreeMeasure.quarter_duration" href="#musicscore.musictree.treemeasure.TreeMeasure.quarter_duration">quarter_duration</a></code></li>
+<li><code><a title="musicscore.musictree.treemeasure.TreeMeasure.set_barline_style" href="#musicscore.musictree.treemeasure.TreeMeasure.set_barline_style">set_barline_style</a></code></li>
 <li><code><a title="musicscore.musictree.treemeasure.TreeMeasure.show_time_signature" href="#musicscore.musictree.treemeasure.TreeMeasure.show_time_signature">show_time_signature</a></code></li>
 <li><code><a title="musicscore.musictree.treemeasure.TreeMeasure.time" href="#musicscore.musictree.treemeasure.TreeMeasure.time">time</a></code></li>
 <li><code><a title="musicscore.musictree.treemeasure.TreeMeasure.update_offset" href="#musicscore.musictree.treemeasure.TreeMeasure.update_offset">update_offset</a></code></li>

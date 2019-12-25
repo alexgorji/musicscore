@@ -17,7 +17,7 @@ class Test(TestCase):
         v.add_to_score(self.score, 1, 1)
 
     def test_1(self):
-        self.score.page_style.format = 'landscape'
+        self.score.page_style.orientation = 'landscape'
 
         for index, measure in enumerate(self.score.get_children_by_type(TreeMeasure)):
             if index % 4 == 0:

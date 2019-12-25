@@ -30,9 +30,9 @@ class ComplexTypeStrongAccent(EmptyPlacement):
     &#34;&#34;&#34;The strong-accent type indicates a vertical accent mark. The type attribute indicates if the point of the
     accent is down or up.&#34;&#34;&#34;
 
-    def __init__(self, tag, type_, *args, **kwargs):
+    def __init__(self, tag, type, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-        self.type = type_
+        self.type = type
 
     @property
     def type(self):
@@ -59,7 +59,7 @@ class ComplexTypeStrongAccent(EmptyPlacement):
 <dl>
 <dt id="musicscore.musicxml.types.complextypes.strongaccent.ComplexTypeStrongAccent"><code class="flex name class">
 <span>class <span class="ident">ComplexTypeStrongAccent</span></span>
-<span>(</span><span>tag, type_, *args, **kwargs)</span>
+<span>(</span><span>tag, type, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>The strong-accent type indicates a vertical accent mark. The type attribute indicates if the point of the
@@ -70,9 +70,9 @@ accent is down or up.</p></section>
     &#34;&#34;&#34;The strong-accent type indicates a vertical accent mark. The type attribute indicates if the point of the
     accent is down or up.&#34;&#34;&#34;
 
-    def __init__(self, tag, type_, *args, **kwargs):
+    def __init__(self, tag, type, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-        self.type = type_
+        self.type = type
 
     @property
     def type(self):

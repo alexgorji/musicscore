@@ -6,9 +6,9 @@ class ComplexTypeStrongAccent(EmptyPlacement):
     """The strong-accent type indicates a vertical accent mark. The type attribute indicates if the point of the
     accent is down or up."""
 
-    def __init__(self, tag, type_, *args, **kwargs):
+    def __init__(self, tag, type, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-        self.type = type_
+        self.type = type
 
     @property
     def type(self):

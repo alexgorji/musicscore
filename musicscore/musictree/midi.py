@@ -1,4 +1,7 @@
+from math import log2
+
 from musicscore.musicxml.elements.fullnote import Pitch, Rest
+from musicscore.musicxml.elements.note import Notehead
 
 
 class Midi(object):
@@ -126,12 +129,14 @@ class Midi(object):
         11: ('A', 2, 0)
     }
 
-    def __init__(self, value, accidental_mode='standard', *args, **kwargs):
+    def __init__(self, value=None, accidental_mode='standard', note_head=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._value = None
         self._accidental_mode = None
+        self._note_head = None
         self.value = value
         self.accidental_mode = accidental_mode
+        self.notehead = note_head
 
     @property
     def value(self):
@@ -139,11 +144,11 @@ class Midi(object):
 
     @value.setter
     def value(self, v):
-
-        if not isinstance(v, float) and not isinstance(v, int):
-            raise TypeError('midi.value must be of type float or int not{}'.format(type(v)))
-        if v < 16 and v != 0:
-            raise ValueError('midi.value {} must be greater than 16'.format(v))
+        if v is not None:
+            if not isinstance(v, float) and not isinstance(v, int):
+                raise TypeError('midi.value must be of type float or int not{}'.format(type(v)))
+            if v < 16 and v != 0:
+                raise ValueError('midi.value {} must be greater than 16'.format(v))
         self._value = v
 
     @property
@@ -156,6 +161,24 @@ class Midi(object):
         if value not in permitted:
             raise TypeError('accidental_mode.value {} must be in {}'.format(value, permitted))
         self._accidental_mode = value
+
+    @property
+    def notehead(self):
+        return self._note_head
+
+    @notehead.setter
+    def notehead(self, val):
+        if val is not None and not isinstance(val, Notehead):
+            val = Notehead(val)
+        self._note_head = val
+
+    def add_notehead_object(self, val):
+        if not isinstance(val, Notehead):
+            raise TypeError()
+        self.notehead = val
+
+    def add_notehead(self, val, **kwargs):
+        self.add_notehead_object(Notehead(val, **kwargs))
 
     def get_pitch_name(self):
         if self.accidental_mode == 'standard':
@@ -193,10 +216,16 @@ class Midi(object):
         return Midi(value=self.value + 1, accidental_mode='sharp')
 
     def transpose(self, val):
-        return Midi(value=self.value + val, accidental_mode=self.accidental_mode)
+        self.value += val
+        return self
+        # return Midi(value=self.value + val, accidental_mode=self.accidental_mode)
 
-    def __deepcopy__(self, memodict={}):
-        output = Midi(self.value, self.accidental_mode)
+    # def __repr__(self):
+    #     return self.
+
+    def __deepcopy__(self, memodict={}, **kwargs):
+        output = self.__class__(value=self.value, accidental_mode=self.accidental_mode, note_head=self.notehead,
+                                **kwargs)
         return output
 
 
@@ -204,7 +233,7 @@ class MidiNote(Midi):
     _VALUE = 60
 
     def __init__(self, octave, accidental=None, *args, **kwargs):
-        super().__init__(value=60, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._accidental = None
         self._octave = None
 
@@ -244,6 +273,25 @@ class MidiNote(Midi):
         self._accidental = val
         self._set_new_value()
 
+    def __deepcopy__(self, memodict={}, **kwargs):
+        output = super().__deepcopy__(octave=self.octave, accidental=self.accidental, **kwargs)
+        return output
+
+    def __repr__(self):
+        pitch_step = self.get_pitch_name()[1]
+
+        if not pitch_step:
+            accidental = ''
+        elif pitch_step == 1:
+            accidental = '#'
+        elif pitch_step == -1:
+            accidental = 'b'
+        else:
+            accidental = str(pitch_step)
+
+        return "{}{}{} at {}".format(self.get_pitch_name()[0], self.octave,
+                                     accidental, id(self))
+
 
 class C(MidiNote):
     _VALUE = 60
@@ -271,3 +319,18 @@ class A(MidiNote):
 
 class B(MidiNote):
     _VALUE = 71
+
+
+def midi_to_frequency(midi, a4=440):
+    try:
+        midi = midi.value
+    except AttributeError:
+        pass
+
+    f = 2 ** ((midi - 69) / 12) * a4
+    return f
+
+
+def frequency_to_midi(frequency, a4=440):
+    m = 69 + 12 * log2(frequency / a4)
+    return m

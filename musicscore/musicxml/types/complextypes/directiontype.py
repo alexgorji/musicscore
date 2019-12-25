@@ -1,9 +1,10 @@
 from musicscore.dtd.dtd import Choice, Element
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.complextypes.bracket import ComplexTypeBracket
 from musicscore.musicxml.types.complextypes.coda import ComplexTypeCoda
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, EmptyPrintStyleAlignId
-from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics
+from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics, Dynamics
 from musicscore.musicxml.types.complextypes.formattedsymbolid import ComplexTypeFormattedSymbolId
 from musicscore.musicxml.types.complextypes.formattedtextid import ComplexTypeFormattedTextId
 from musicscore.musicxml.types.complextypes.metronome import ComplexTypeMetronome
@@ -42,8 +43,8 @@ class Words(ComplexTypeFormattedTextId):
     """
     _TAG = 'words'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Symbol(ComplexTypeFormattedSymbolId):
@@ -61,16 +62,8 @@ class Symbol(ComplexTypeFormattedSymbolId):
 class Wedge(ComplexTypeWedge):
     _TAG = 'wedge'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
-
-
-class Dynamics(ComplexTypeDynamics):
-    _TAG = 'dynamics'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
-        # NotImplementedError()
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)
 
 
 class Dashes(XMLElement):
@@ -81,12 +74,11 @@ class Dashes(XMLElement):
         NotImplementedError()
 
 
-class Bracket(XMLElement):
-    """<xs:element name="bracket" type="bracket"/>"""
+class Bracket(ComplexTypeBracket):
+    _TAG = 'bracket'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='bracket', *args, **kwargs)
-        NotImplementedError()
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Pedal(XMLElement):
@@ -225,6 +217,7 @@ class ComplexTypeDirectionType(ComplexType, OptionalUniqueId):
             # Element(Symbol),
             max_occurrence=None
         ),
+        # Element(Words, max_occurrence=None),
         Element(Wedge),
         Element(Dynamics, max_occurrence=None),
         Element(Dashes),

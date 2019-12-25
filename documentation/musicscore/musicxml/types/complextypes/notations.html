@@ -5,10 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
 <title>musicscore.musicxml.types.complextypes.notations API documentation</title>
-<meta name="description" content="&lt;xs:complexType name=&#34;notations&#34;&gt;
-&lt;xs:sequence&gt;
-&lt;xs:group ref=&#34;editorial&#34;/&gt;
-&lt;xs:choice minOccurs=&#34;0&#34; …" />
+<meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -23,65 +20,22 @@
 <h1 class="title">Module <code>musicscore.musicxml.types.complextypes.notations</code></h1>
 </header>
 <section id="section-intro">
-<p><xs:complexType name="notations">
-<xs:sequence>
-<xs:group ref="editorial"/>
-<xs:choice minOccurs="0" maxOccurs="unbounded">
-<xs:element name="tied" type="tied"/>
-<xs:element name="slur" type="slur"/>
-<xs:element name="tuplet" type="tuplet"/>
-<xs:element name="glissando" type="glissando"/>
-<xs:element name="slide" type="slide"/>
-<xs:element name="ornaments" type="ornaments"/>
-<xs:element name="technical" type="technical"/>
-<xs:element name="articulations" type="articulations"/>
-<xs:element name="dynamics" type="dynamics"/>
-<xs:element name="fermata" type="fermata"/>
-<xs:element name="arpeggiate" type="arpeggiate"/>
-<xs:element name="non-arpeggiate" type="non-arpeggiate"/>
-<xs:element name="accidental-mark" type="accidental-mark"/>
-<xs:element name="other-notation" type="other-notation"/>
-</xs:choice>
-</xs:sequence>
-<xs:attributeGroup ref="print-object"/>
-<xs:attributeGroup ref="optional-unique-id"/>
-</xs:complexType></p>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">&#39;&#39;&#39;
-        &lt;xs:complexType name=&#34;notations&#34;&gt;
-                &lt;xs:sequence&gt;
-                        &lt;xs:group ref=&#34;editorial&#34;/&gt;
-                        &lt;xs:choice minOccurs=&#34;0&#34; maxOccurs=&#34;unbounded&#34;&gt;
-                                &lt;xs:element name=&#34;tied&#34; type=&#34;tied&#34;/&gt;
-                                &lt;xs:element name=&#34;slur&#34; type=&#34;slur&#34;/&gt;
-                                &lt;xs:element name=&#34;tuplet&#34; type=&#34;tuplet&#34;/&gt;
-                                &lt;xs:element name=&#34;glissando&#34; type=&#34;glissando&#34;/&gt;
-                                &lt;xs:element name=&#34;slide&#34; type=&#34;slide&#34;/&gt;
-                                &lt;xs:element name=&#34;ornaments&#34; type=&#34;ornaments&#34;/&gt;
-                                &lt;xs:element name=&#34;technical&#34; type=&#34;technical&#34;/&gt;
-                                &lt;xs:element name=&#34;articulations&#34; type=&#34;articulations&#34;/&gt;
-                                &lt;xs:element name=&#34;dynamics&#34; type=&#34;dynamics&#34;/&gt;
-                                &lt;xs:element name=&#34;fermata&#34; type=&#34;fermata&#34;/&gt;
-                                &lt;xs:element name=&#34;arpeggiate&#34; type=&#34;arpeggiate&#34;/&gt;
-                                &lt;xs:element name=&#34;non-arpeggiate&#34; type=&#34;non-arpeggiate&#34;/&gt;
-                                &lt;xs:element name=&#34;accidental-mark&#34; type=&#34;accidental-mark&#34;/&gt;
-                                &lt;xs:element name=&#34;other-notation&#34; type=&#34;other-notation&#34;/&gt;
-                        &lt;/xs:choice&gt;
-                &lt;/xs:sequence&gt;
-                &lt;xs:attributeGroup ref=&#34;print-object&#34;/&gt;
-                &lt;xs:attributeGroup ref=&#34;optional-unique-id&#34;/&gt;
-        &lt;/xs:complexType&gt;
-&#39;&#39;&#39;
-
-from musicscore.dtd.dtd import Sequence, GroupReference, Choice, Element
+<pre><code class="python">from musicscore.dtd.dtd import Sequence, GroupReference, Choice, Element
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.printobject import PrintObject
 from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.complextypes.arpeggiate import ComplexTypeArpeggiate
+from musicscore.musicxml.types.complextypes.articulations import ComplexTypeArticulations
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
-from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics
+from musicscore.musicxml.types.complextypes.dynamics import Dynamics
+from musicscore.musicxml.types.complextypes.fermata import ComplexTypeFermata
+from musicscore.musicxml.types.complextypes.ornaments import ComplexTypeOrnaments
+from musicscore.musicxml.types.complextypes.slide import ComplexTypeSlide
 from musicscore.musicxml.types.complextypes.slur import ComplexTypeSlur
+from musicscore.musicxml.types.complextypes.technical import ComplexTypeTechnical
 from musicscore.musicxml.types.complextypes.tied import ComplexTypeTied
 from musicscore.musicxml.types.complextypes.tuplet import ComplexTypeTuplet
 
@@ -94,11 +48,10 @@ class Tied(ComplexTypeTied):
 
 
 class Slur(ComplexTypeSlur):
-    &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;slur&#39;
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;slur&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)
 
 
 class Tuplet(ComplexTypeTuplet):
@@ -116,59 +69,53 @@ class Glissando(XMLElement):
         raise NotImplementedError()
 
 
-class Slide(XMLElement):
+class Slide(ComplexTypeSlide):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;slide&#39;
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;slide&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)
 
 
-class Ornaments(XMLElement):
+class Ornaments(ComplexTypeOrnaments):
     &#34;&#34;&#34;&#34;&#34;&#34;
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;ornaments&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()
-
-
-class Technical(XMLElement):
-    &#34;&#34;&#34;&#34;&#34;&#34;
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;technical&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()
-
-
-class Articulations(XMLElement):
-    &#34;&#34;&#34;&#34;&#34;&#34;
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;articulations&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()
-
-
-class Dynamics(ComplexTypeDynamics):
-    &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;ornaments&#39;
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class Fermata(XMLElement):
+class Technical(ComplexTypeTechnical):
     &#34;&#34;&#34;&#34;&#34;&#34;
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;fermata&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()
+    _TAG = &#39;technical&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class Arpeggiate(XMLElement):
+class Articulations(ComplexTypeArticulations):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;articulations&#39;
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;arpeggiate&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class Fermata(ComplexTypeFermata):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;fermata&#39;
+
+    def __init__(self, value=&#39;normal&#39;, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
+
+
+class Arpeggiate(ComplexTypeArpeggiate):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;arpeggiate&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class NonArpeggiate(XMLElement):
@@ -260,46 +207,61 @@ class ComplexTypeNotations(ComplexType, PrintObject, OptionalUniqueId):
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.notations.Arpeggiate"><code class="flex name class">
 <span>class <span class="ident">Arpeggiate</span></span>
-<span>(</span><span>value, *args, **kwargs)</span>
+<span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Arpeggiate(XMLElement):
+<pre><code class="python">class Arpeggiate(ComplexTypeArpeggiate):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;arpeggiate&#39;
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;arpeggiate&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()</code></pre>
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.arpeggiate.ComplexTypeArpeggiate" href="arpeggiate.html#musicscore.musicxml.types.complextypes.arpeggiate.ComplexTypeArpeggiate">ComplexTypeArpeggiate</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.placement.Placement" href="../../attributes/placement.html#musicscore.musicxml.attributes.placement.Placement">Placement</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.notations.Articulations"><code class="flex name class">
 <span>class <span class="ident">Articulations</span></span>
-<span>(</span><span>value, *args, **kwargs)</span>
+<span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Articulations(XMLElement):
+<pre><code class="python">class Articulations(ComplexTypeArticulations):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;articulations&#39;
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;articulations&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()</code></pre>
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.articulations.ComplexTypeArticulations" href="articulations.html#musicscore.musicxml.types.complextypes.articulations.ComplexTypeArticulations">ComplexTypeArticulations</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.notations.ComplexTypeNotations"><code class="flex name class">
@@ -358,28 +320,30 @@ of performance technique, such as fingerings, without having them appear in the 
 <li><a title="musicscore.musicxml.elements.note.Notations" href="../../elements/note.html#musicscore.musicxml.elements.note.Notations">Notations</a></li>
 </ul>
 </dd>
-<dt id="musicscore.musicxml.types.complextypes.notations.Dynamics"><code class="flex name class">
-<span>class <span class="ident">Dynamics</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<dt id="musicscore.musicxml.types.complextypes.notations.Fermata"><code class="flex name class">
+<span>class <span class="ident">Fermata</span></span>
+<span>(</span><span>value='normal', *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Dynamics(ComplexTypeDynamics):
+<pre><code class="python">class Fermata(ComplexTypeFermata):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;fermata&#39;
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)</code></pre>
+    def __init__(self, value=&#39;normal&#39;, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="musicscore.musicxml.types.complextypes.dynamics.ComplexTypeDynamics" href="dynamics.html#musicscore.musicxml.types.complextypes.dynamics.ComplexTypeDynamics">ComplexTypeDynamics</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.fermata.ComplexTypeFermata" href="fermata.html#musicscore.musicxml.types.complextypes.fermata.ComplexTypeFermata">ComplexTypeFermata</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
-<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyleAlign" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyleAlign">PrintStyleAlign</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeFermataShape" href="../simple_type.html#musicscore.musicxml.types.simple_type.TypeFermataShape">TypeFermataShape</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
 <li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
 <li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
 <li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
@@ -392,38 +356,8 @@ of performance technique, such as fingerings, without having them appear in the 
 <li><a title="musicscore.musicxml.attributes.font.FontSize" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
 <li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
 <li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
-<li><a title="musicscore.musicxml.attributes.align.Halign" href="../../attributes/align.html#musicscore.musicxml.attributes.align.Halign">Halign</a></li>
-<li><a title="musicscore.musicxml.attributes.align.Valign" href="../../attributes/align.html#musicscore.musicxml.attributes.align.Valign">Valign</a></li>
-<li><a title="musicscore.musicxml.attributes.placement.Placement" href="../../attributes/placement.html#musicscore.musicxml.attributes.placement.Placement">Placement</a></li>
-<li><a title="musicscore.musicxml.attributes.textdecoration.TextDecoration" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.TextDecoration">TextDecoration</a></li>
-<li><a title="musicscore.musicxml.attributes.textdecoration.Underline" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.Underline">Underline</a></li>
-<li><a title="musicscore.musicxml.attributes.textdecoration.Overline" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.Overline">Overline</a></li>
-<li><a title="musicscore.musicxml.attributes.textdecoration.LineThrough" href="../../attributes/textdecoration.html#musicscore.musicxml.attributes.textdecoration.LineThrough">LineThrough</a></li>
-<li><a title="musicscore.musicxml.attributes.enclosure.Enclosure" href="../../attributes/enclosure.html#musicscore.musicxml.attributes.enclosure.Enclosure">Enclosure</a></li>
 <li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
 <li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
-</ul>
-</dd>
-<dt id="musicscore.musicxml.types.complextypes.notations.Fermata"><code class="flex name class">
-<span>class <span class="ident">Fermata</span></span>
-<span>(</span><span>value, *args, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">class Fermata(XMLElement):
-    &#34;&#34;&#34;&#34;&#34;&#34;
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;fermata&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
-<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
-<li>AGtree.tree.Tree</li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.notations.Glissando"><code class="flex name class">
@@ -472,24 +406,28 @@ of performance technique, such as fingerings, without having them appear in the 
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.notations.Ornaments"><code class="flex name class">
 <span>class <span class="ident">Ornaments</span></span>
-<span>(</span><span>value, *args, **kwargs)</span>
+<span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Ornaments(XMLElement):
+<pre><code class="python">class Ornaments(ComplexTypeOrnaments):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;ornaments&#39;
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;ornaments&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()</code></pre>
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.ornaments.ComplexTypeOrnaments" href="ornaments.html#musicscore.musicxml.types.complextypes.ornaments.ComplexTypeOrnaments">ComplexTypeOrnaments</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.notations.OtherNotation"><code class="flex name class">
@@ -516,70 +454,124 @@ of performance technique, such as fingerings, without having them appear in the 
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.notations.Slide"><code class="flex name class">
 <span>class <span class="ident">Slide</span></span>
-<span>(</span><span>value, *args, **kwargs)</span>
+<span>(</span><span>type, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Slide(XMLElement):
+<pre><code class="python">class Slide(ComplexTypeSlide):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;slide&#39;
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;slide&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()</code></pre>
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
-<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
-<li>AGtree.tree.Tree</li>
-</ul>
-</dd>
-<dt id="musicscore.musicxml.types.complextypes.notations.Slur"><code class="flex name class">
-<span>class <span class="ident">Slur</span></span>
-<span>(</span><span>value, *args, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">class Slur(ComplexTypeSlur):
-    &#34;&#34;&#34;&#34;&#34;&#34;
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;slur&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="musicscore.musicxml.types.complextypes.slur.ComplexTypeSlur" href="slur.html#musicscore.musicxml.types.complextypes.slur.ComplexTypeSlur">ComplexTypeSlur</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.slide.ComplexTypeSlide" href="slide.html#musicscore.musicxml.types.complextypes.slide.ComplexTypeSlide">ComplexTypeSlide</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.Empty" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.Empty">Empty</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.linetype.LineType" href="../../attributes/linetype.html#musicscore.musicxml.attributes.linetype.LineType">LineType</a></li>
+<li><a title="musicscore.musicxml.attributes.dahsedformatting.DashedFormatting" href="../../attributes/dahsedformatting.html#musicscore.musicxml.attributes.dahsedformatting.DashedFormatting">DashedFormatting</a></li>
+<li><a title="musicscore.musicxml.attributes.dahsedformatting.DashLength" href="../../attributes/dahsedformatting.html#musicscore.musicxml.attributes.dahsedformatting.DashLength">DashLength</a></li>
+<li><a title="musicscore.musicxml.attributes.dahsedformatting.SpaceLength" href="../../attributes/dahsedformatting.html#musicscore.musicxml.attributes.dahsedformatting.SpaceLength">SpaceLength</a></li>
+<li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.bendsound.BendSound" href="../../attributes/bendsound.html#musicscore.musicxml.attributes.bendsound.BendSound">BendSound</a></li>
+<li><a title="musicscore.musicxml.attributes.bendsound.Accelerate" href="../../attributes/bendsound.html#musicscore.musicxml.attributes.bendsound.Accelerate">Accelerate</a></li>
+<li><a title="musicscore.musicxml.attributes.bendsound.Beats" href="../../attributes/bendsound.html#musicscore.musicxml.attributes.bendsound.Beats">Beats</a></li>
+<li><a title="musicscore.musicxml.attributes.bendsound.FirstBeat" href="../../attributes/bendsound.html#musicscore.musicxml.attributes.bendsound.FirstBeat">FirstBeat</a></li>
+<li><a title="musicscore.musicxml.attributes.bendsound.LastBeat" href="../../attributes/bendsound.html#musicscore.musicxml.attributes.bendsound.LastBeat">LastBeat</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.notations.Slur"><code class="flex name class">
+<span>class <span class="ident">Slur</span></span>
+<span>(</span><span>type, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Slur types are empty. Most slurs are represented with two elements: one with a start type, and one with a stop type.
+Slurs can add more elements using a continue type. This is typically used to specify the formatting of cross-system
+slurs, or to specify the shape of very complex slurs.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Slur(ComplexTypeSlur):
+    _TAG = &#39;slur&#39;
+
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.slur.ComplexTypeSlur" href="slur.html#musicscore.musicxml.types.complextypes.slur.ComplexTypeSlur">ComplexTypeSlur</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.Empty" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.Empty">Empty</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.linetype.LineType" href="../../attributes/linetype.html#musicscore.musicxml.attributes.linetype.LineType">LineType</a></li>
+<li><a title="musicscore.musicxml.attributes.dahsedformatting.DashedFormatting" href="../../attributes/dahsedformatting.html#musicscore.musicxml.attributes.dahsedformatting.DashedFormatting">DashedFormatting</a></li>
+<li><a title="musicscore.musicxml.attributes.dahsedformatting.DashLength" href="../../attributes/dahsedformatting.html#musicscore.musicxml.attributes.dahsedformatting.DashLength">DashLength</a></li>
+<li><a title="musicscore.musicxml.attributes.dahsedformatting.SpaceLength" href="../../attributes/dahsedformatting.html#musicscore.musicxml.attributes.dahsedformatting.SpaceLength">SpaceLength</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.placement.Placement" href="../../attributes/placement.html#musicscore.musicxml.attributes.placement.Placement">Placement</a></li>
+<li><a title="musicscore.musicxml.attributes.orientation.Orientation" href="../../attributes/orientation.html#musicscore.musicxml.attributes.orientation.Orientation">Orientation</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.Bezier" href="../../attributes/bezier.html#musicscore.musicxml.attributes.bezier.Bezier">Bezier</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierX" href="../../attributes/bezier.html#musicscore.musicxml.attributes.bezier.BezierX">BezierX</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierY" href="../../attributes/bezier.html#musicscore.musicxml.attributes.bezier.BezierY">BezierY</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierX2" href="../../attributes/bezier.html#musicscore.musicxml.attributes.bezier.BezierX2">BezierX2</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierY2" href="../../attributes/bezier.html#musicscore.musicxml.attributes.bezier.BezierY2">BezierY2</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierOffset" href="../../attributes/bezier.html#musicscore.musicxml.attributes.bezier.BezierOffset">BezierOffset</a></li>
+<li><a title="musicscore.musicxml.attributes.bezier.BezierOffset2" href="../../attributes/bezier.html#musicscore.musicxml.attributes.bezier.BezierOffset2">BezierOffset2</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.notations.Technical"><code class="flex name class">
 <span>class <span class="ident">Technical</span></span>
-<span>(</span><span>value, *args, **kwargs)</span>
+<span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Technical(XMLElement):
+<pre><code class="python">class Technical(ComplexTypeTechnical):
     &#34;&#34;&#34;&#34;&#34;&#34;
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;technical&#39;, value=value, *args, **kwargs)
-        raise NotImplementedError()</code></pre>
+    _TAG = &#39;technical&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.technical.ComplexTypeTechnical" href="technical.html#musicscore.musicxml.types.complextypes.technical.ComplexTypeTechnical">ComplexTypeTechnical</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.notations.Tied"><code class="flex name class">
@@ -688,9 +680,6 @@ of performance technique, such as fingerings, without having them appear in the 
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.complextypes.notations.ComplexTypeNotations" href="#musicscore.musicxml.types.complextypes.notations.ComplexTypeNotations">ComplexTypeNotations</a></code></h4>
-</li>
-<li>
-<h4><code><a title="musicscore.musicxml.types.complextypes.notations.Dynamics" href="#musicscore.musicxml.types.complextypes.notations.Dynamics">Dynamics</a></code></h4>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.complextypes.notations.Fermata" href="#musicscore.musicxml.types.complextypes.notations.Fermata">Fermata</a></code></h4>

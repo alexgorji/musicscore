@@ -51,12 +51,15 @@ class TreeAccidental(Accidental):
 
 
 class TreeNote(Note):
+    # todo: Inheritance Chain must be Midi, MidiNote, TreeMidiNote (or TreeNote)
     """
     quarter_duration = 0 means grace note
     """
 
-    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, *args, **kwargs):
+    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, parent_chord=None, *args,
+                 **kwargs):
         super().__init__(*args, **kwargs)
+        self.parent_chord = parent_chord
         self._accidental = TreeAccidental(show=False, value='natural')
         self._accidental._note = self
         self._quarter_duration = None
@@ -66,6 +69,8 @@ class TreeNote(Note):
         self._offset = None
         self._is_tied = False
         self.is_tied = is_tied
+        self.is_finger_tremolo = False
+
 
     @property
     def quarter_duration(self):
@@ -94,6 +99,10 @@ class TreeNote(Note):
                     else:
                         del child
                 self.add_child(Grace())
+            # if not self.is_finger_tremolo:
+            #
+            # else:
+            #     self._quarter_duration = 1
 
     @property
     def previous(self):
@@ -141,6 +150,13 @@ class TreeNote(Note):
             pass
         self._event = self.add_child(value)
         self.update_accidental()
+
+    # @property
+    # def is_finger_tremolo(self):
+    #     try:
+    #         return self.parent_chord.is_finger_tremolo
+    #     except AttributeError:
+    #         return False
 
     def update_accidental(self):
         _accidentals = {-1.5: 'three-quarters-flat',

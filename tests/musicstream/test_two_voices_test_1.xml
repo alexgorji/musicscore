@@ -88,56 +88,22 @@
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
-        <tie type="start"/>
-        <voice>2</voice>
-        <type>eighth</type>
-        <beam number="1">end</beam>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>1</duration>
-        <tie type="stop"/>
-        <voice>2</voice>
-        <type>eighth</type>
-        <beam number="1">begin</beam>
-        <notations>
-          <tied number="1" type="stop"/>
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>1</duration>
-        <tie type="start"/>
-        <voice>2</voice>
-        <type>eighth</type>
-        <beam number="1">end</beam>
-        <notations>
-          <tied number="1" type="start"/>
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>3</octave>
-        </pitch>
         <duration>2</duration>
-        <tie type="start"/>
-        <tie type="stop"/>
         <voice>2</voice>
         <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <tie type="start"/>
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot/>
         <notations>
           <tied number="1" type="start"/>
-          <tied number="1" type="stop"/>
         </notations>
       </note>
       <note>

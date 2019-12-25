@@ -56,7 +56,6 @@ class Identification(ComplexTypeIdentification):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-
 class PartName(ComplexTypePartName):
 
     def __init__(self, name, *args, **kwargs):
@@ -85,9 +84,10 @@ class PartNameDisplay(XMLElement):
 
 class PartAbbreviation(ComplexTypePartName, String):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;part-abbreviation&#39;
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;part-abbreviation&#39;, value=value, *args, **kwargs)
+    def __init__(self, value=&#39;none&#39;, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class PartAbbreviationDisplay(XMLElement):
@@ -381,7 +381,7 @@ source, and relation elements are based on Dublin Core.</p></section>
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.scorepart.PartAbbreviation"><code class="flex name class">
 <span>class <span class="ident">PartAbbreviation</span></span>
-<span>(</span><span>value, *args, **kwargs)</span>
+<span>(</span><span>value='none', *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -389,9 +389,10 @@ source, and relation elements are based on Dublin Core.</p></section>
 <summary>Source code</summary>
 <pre><code class="python">class PartAbbreviation(ComplexTypePartName, String):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;part-abbreviation&#39;
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;part-abbreviation&#39;, value=value, *args, **kwargs)</code></pre>
+    def __init__(self, value=&#39;none&#39;, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

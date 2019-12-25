@@ -52,9 +52,9 @@ class ComplexTypeWedge(ComplexType, Spread, Niente, LineType, DashedFormatting, 
     nothing or diminuendo to nothing. It is no by default, and used only when the type is crescendo, or the type is
     stop for a wedge that began with a diminuendo type. The line-type is solid by default.&#34;&#34;&#34;
 
-    def __init__(self, tag, type_, *args, **kwargs):
+    def __init__(self, tag, type, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-        self.type = type_
+        self.type = type
 
     @property
     def type(self):
@@ -94,7 +94,7 @@ class ComplexTypeWedge(ComplexType, Spread, Niente, LineType, DashedFormatting, 
 <dl>
 <dt id="musicscore.musicxml.types.complextypes.wedge.ComplexTypeWedge"><code class="flex name class">
 <span>class <span class="ident">ComplexTypeWedge</span></span>
-<span>(</span><span>tag, type_, *args, **kwargs)</span>
+<span>(</span><span>tag, type, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>The wedge type represents crescendo and diminuendo wedge symbols. The type attribute is crescendo for the start
@@ -113,9 +113,9 @@ stop for a wedge that began with a diminuendo type. The line-type is solid by de
     nothing or diminuendo to nothing. It is no by default, and used only when the type is crescendo, or the type is
     stop for a wedge that began with a diminuendo type. The line-type is solid by default.&#34;&#34;&#34;
 
-    def __init__(self, tag, type_, *args, **kwargs):
+    def __init__(self, tag, type, *args, **kwargs):
         super().__init__(tag=tag, *args, **kwargs)
-        self.type = type_
+        self.type = type
 
     @property
     def type(self):

@@ -28,13 +28,6 @@ from musicscore.musicxml.attributes.font import Font
 from musicscore.musicxml.attributes.position import Position
 
 
-# class PrintStyle(Position, Font, Color):
-#     def __init__(self, default_x=None, default_y=None, relative_x=None, relative_y=None, font_family=None,
-#                  font_style=None, font_size=None, font_weight=None, color=None, *args, **kwargs):
-#         super().__init__(default_x=default_x, default_y=default_y, relative_x=relative_x,
-#                          relative_y=relative_y, font_family=font_family, font_style=font_style, font_size=font_size,
-#                          font_weight=font_weight, color=color, *args, **kwargs)
-
 class PrintStyle(Position, Font, Color):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -119,13 +112,24 @@ tenths of a staff resized by the staff-size element.</p></section>
 <ul class="hlist">
 <li><a title="musicscore.musicxml.attributes.printstyle.PrintStyleAlign" href="#musicscore.musicxml.attributes.printstyle.PrintStyleAlign">PrintStyleAlign</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.complextype.EmptyPlacement" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.EmptyPlacement">EmptyPlacement</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.PlacementText" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.PlacementText">PlacementText</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.OtherPlacementText" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.OtherPlacementText">OtherPlacementText</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.breathmark.ComplexTypeBreathMark" href="../types/complextypes/breathmark.html#musicscore.musicxml.types.complextypes.breathmark.ComplexTypeBreathMark">ComplexTypeBreathMark</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.caesura.ComplexTypeCaesura" href="../types/complextypes/caesura.html#musicscore.musicxml.types.complextypes.caesura.ComplexTypeCaesura">ComplexTypeCaesura</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.emptyline.ComplexTypeEmptyLine" href="../types/complextypes/emptyline.html#musicscore.musicxml.types.complextypes.emptyline.ComplexTypeEmptyLine">ComplexTypeEmptyLine</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.fermata.ComplexTypeFermata" href="../types/complextypes/fermata.html#musicscore.musicxml.types.complextypes.fermata.ComplexTypeFermata">ComplexTypeFermata</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.accidentalmark.ComplexTypeAccidentalMark" href="../types/complextypes/accidentalmark.html#musicscore.musicxml.types.complextypes.accidentalmark.ComplexTypeAccidentalMark">ComplexTypeAccidentalMark</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.emptytrillsound.ComplexTypeEmptyTrillSound" href="../types/complextypes/emptytrillsound.html#musicscore.musicxml.types.complextypes.emptytrillsound.ComplexTypeEmptyTrillSound">ComplexTypeEmptyTrillSound</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.horizontalturn.ComplexTypeHorizontalTurn" href="../types/complextypes/horizontalturn.html#musicscore.musicxml.types.complextypes.horizontalturn.ComplexTypeHorizontalTurn">ComplexTypeHorizontalTurn</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.tremolo.ComplexTypeTremolo" href="../types/complextypes/tremolo.html#musicscore.musicxml.types.complextypes.tremolo.ComplexTypeTremolo">ComplexTypeTremolo</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.slide.ComplexTypeSlide" href="../types/complextypes/slide.html#musicscore.musicxml.types.complextypes.slide.ComplexTypeSlide">ComplexTypeSlide</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.fingering.ComplexTypeFingering" href="../types/complextypes/fingering.html#musicscore.musicxml.types.complextypes.fingering.ComplexTypeFingering">ComplexTypeFingering</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.harmonic.ComplexTypeHarmonic" href="../types/complextypes/harmonic.html#musicscore.musicxml.types.complextypes.harmonic.ComplexTypeHarmonic">ComplexTypeHarmonic</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.hole.ComplexTypeHole" href="../types/complextypes/hole.html#musicscore.musicxml.types.complextypes.hole.ComplexTypeHole">ComplexTypeHole</a></li>
 <li><a title="musicscore.musicxml.elements.note.Accidental" href="../elements/note.html#musicscore.musicxml.elements.note.Accidental">Accidental</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.clef.ComplexTypeClef" href="../types/complextypes/clef.html#musicscore.musicxml.types.complextypes.clef.ComplexTypeClef">ComplexTypeClef</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.key.TypeKey" href="../types/complextypes/key.html#musicscore.musicxml.types.complextypes.key.TypeKey">TypeKey</a></li>
 <li><a title="musicscore.musicxml.attributes.partname_text.PartNameText" href="partname_text.html#musicscore.musicxml.attributes.partname_text.PartNameText">PartNameText</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.breathmark.ComplexTypeBreathMark" href="../types/complextypes/breathmark.html#musicscore.musicxml.types.complextypes.breathmark.ComplexTypeBreathMark">ComplexTypeBreathMark</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.emptyline.ComplexTypeEmptyLine" href="../types/complextypes/emptyline.html#musicscore.musicxml.types.complextypes.emptyline.ComplexTypeEmptyLine">ComplexTypeEmptyLine</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.caesura.ComplexTypeCaesura" href="../types/complextypes/caesura.html#musicscore.musicxml.types.complextypes.caesura.ComplexTypeCaesura">ComplexTypeCaesura</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.attributes.printstyle.PrintStyleAlign"><code class="flex name class">

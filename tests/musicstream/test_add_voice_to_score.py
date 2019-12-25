@@ -28,7 +28,7 @@ class Test(TestCase):
 
     def test_2(self):
         simpleformat = SimpleFormat(midis=list(range(60, 68)), durations=[1.2] * 8)
-        voice = simpleformat.to_stream_voice(2)
+        voice = simpleformat.to_stream_voice(1)
         self.score.add_part()
         self.score.add_measure()
         voice.add_to_score(self.score, 1)

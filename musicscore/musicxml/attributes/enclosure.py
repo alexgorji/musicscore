@@ -1,4 +1,4 @@
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeEnclosureShape
 
 
 class Enclosure(AttributeAbstract):
@@ -9,3 +9,4 @@ class Enclosure(AttributeAbstract):
     def __init__(self, enclosure=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.generate_attribute('enclosure', enclosure, "TypeEnclosureShape")
+        TypeEnclosureShape

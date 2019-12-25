@@ -24,12 +24,60 @@
 <summary>Source code</summary>
 <pre><code class="python">from musicscore.dtd.dtd import Sequence, Element, GroupReference
 from musicscore.musicxml.groups.layout import Layout
-from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from musicscore.musicxml.types.complextypes.appearance import ComplexTypeAppearance
+from musicscore.musicxml.types.complextypes.complextype import ComplexType, EmptyFont
+from musicscore.musicxml.types.complextypes.lyricfont import ComplexTypeLyricFont
+from musicscore.musicxml.types.complextypes.lyriclanguage import ComplexTypeLyricLanguage
 from musicscore.musicxml.types.complextypes.scaling import ComplexTypeScaling
 
 
 class Scaling(ComplexTypeScaling):
     _TAG = &#39;scaling&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class Appearance(ComplexTypeAppearance):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    _TAG = &#39;appearance&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class MusicFont(EmptyFont):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    _TAG = &#39;music-font&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class WordFont(EmptyFont):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    _TAG = &#39;word-font&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class LyricFont(ComplexTypeLyricFont):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    _TAG = &#39;lyric-font&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class LyricLanguage(ComplexTypeLyricLanguage):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    _TAG = &#39;lyric-language&#39;
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)
@@ -45,23 +93,13 @@ class ComplexTypeDefaults(ComplexType):
 
     _DTD = Sequence(
         Element(Scaling, min_occurrence=0),
-        GroupReference(Layout)
-    )
-
-
-&#39;&#39;&#39;
-    &lt;xs:complexType name=&#34;defaults&#34;&gt;
-        &lt;xs:sequence&gt;
-            &lt;xs:element name=&#34;scaling&#34; type=&#34;scaling&#34; minOccurs=&#34;0&#34;/&gt;
-            &lt;xs:group ref=&#34;layout&#34;/&gt;
-            &lt;xs:element name=&#34;appearance&#34; type=&#34;appearance&#34; minOccurs=&#34;0&#34;/&gt;
-            &lt;xs:element name=&#34;music-font&#34; type=&#34;empty-font&#34; minOccurs=&#34;0&#34;/&gt;
-            &lt;xs:element name=&#34;word-font&#34; type=&#34;empty-font&#34; minOccurs=&#34;0&#34;/&gt;
-            &lt;xs:element name=&#34;lyric-font&#34; type=&#34;lyric-font&#34; minOccurs=&#34;0&#34; maxOccurs=&#34;unbounded&#34;/&gt;
-            &lt;xs:element name=&#34;lyric-language&#34; type=&#34;lyric-language&#34; minOccurs=&#34;0&#34; maxOccurs=&#34;unbounded&#34;/&gt;
-        &lt;/xs:sequence&gt;
-    &lt;/xs:complexType&gt;
-&#39;&#39;&#39;</code></pre>
+        GroupReference(Layout),
+        Element(Appearance, 0),
+        Element(MusicFont, 0),
+        Element(WordFont, 0),
+        Element(LyricFont, 0, None),
+        Element(LyricLanguage, 0, None)
+    )</code></pre>
 </details>
 </section>
 <section>
@@ -73,6 +111,31 @@ class ComplexTypeDefaults(ComplexType):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="musicscore.musicxml.types.complextypes.defaults.Appearance"><code class="flex name class">
+<span>class <span class="ident">Appearance</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Appearance(ComplexTypeAppearance):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    _TAG = &#39;appearance&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.appearance.ComplexTypeAppearance" href="appearance.html#musicscore.musicxml.types.complextypes.appearance.ComplexTypeAppearance">ComplexTypeAppearance</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
 <dt id="musicscore.musicxml.types.complextypes.defaults.ComplexTypeDefaults"><code class="flex name class">
 <span>class <span class="ident">ComplexTypeDefaults</span></span>
 <span>(</span><span>tag, *args, **kwargs)</span>
@@ -91,7 +154,12 @@ class ComplexTypeDefaults(ComplexType):
 
     _DTD = Sequence(
         Element(Scaling, min_occurrence=0),
-        GroupReference(Layout)
+        GroupReference(Layout),
+        Element(Appearance, 0),
+        Element(MusicFont, 0),
+        Element(WordFont, 0),
+        Element(LyricFont, 0, None),
+        Element(LyricLanguage, 0, None)
     )</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -104,6 +172,88 @@ class ComplexTypeDefaults(ComplexType):
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="musicscore.musicxml.elements.scoreheader.Defaults" href="../../elements/scoreheader.html#musicscore.musicxml.elements.scoreheader.Defaults">Defaults</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.defaults.LyricFont"><code class="flex name class">
+<span>class <span class="ident">LyricFont</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class LyricFont(ComplexTypeLyricFont):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    _TAG = &#39;lyric-font&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.lyricfont.ComplexTypeLyricFont" href="lyricfont.html#musicscore.musicxml.types.complextypes.lyricfont.ComplexTypeLyricFont">ComplexTypeLyricFont</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.defaults.LyricLanguage"><code class="flex name class">
+<span>class <span class="ident">LyricLanguage</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class LyricLanguage(ComplexTypeLyricLanguage):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    _TAG = &#39;lyric-language&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.lyriclanguage.ComplexTypeLyricLanguage" href="lyriclanguage.html#musicscore.musicxml.types.complextypes.lyriclanguage.ComplexTypeLyricLanguage">ComplexTypeLyricLanguage</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.defaults.MusicFont"><code class="flex name class">
+<span>class <span class="ident">MusicFont</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MusicFont(EmptyFont):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    _TAG = &#39;music-font&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.complextype.EmptyFont" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.EmptyFont">EmptyFont</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.Empty" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.Empty">Empty</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.defaults.Scaling"><code class="flex name class">
@@ -132,6 +282,38 @@ is set to 40. The ability to set a formula rather than a single scaling factor h
 <li>AGtree.tree.Tree</li>
 </ul>
 </dd>
+<dt id="musicscore.musicxml.types.complextypes.defaults.WordFont"><code class="flex name class">
+<span>class <span class="ident">WordFont</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class WordFont(EmptyFont):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+
+    _TAG = &#39;word-font&#39;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.complextype.EmptyFont" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.EmptyFont">EmptyFont</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.Empty" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.Empty">Empty</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
 </dl>
 </section>
 </article>
@@ -149,10 +331,25 @@ is set to 40. The ability to set a formula rather than a single scaling factor h
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.defaults.Appearance" href="#musicscore.musicxml.types.complextypes.defaults.Appearance">Appearance</a></code></h4>
+</li>
+<li>
 <h4><code><a title="musicscore.musicxml.types.complextypes.defaults.ComplexTypeDefaults" href="#musicscore.musicxml.types.complextypes.defaults.ComplexTypeDefaults">ComplexTypeDefaults</a></code></h4>
 </li>
 <li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.defaults.LyricFont" href="#musicscore.musicxml.types.complextypes.defaults.LyricFont">LyricFont</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.defaults.LyricLanguage" href="#musicscore.musicxml.types.complextypes.defaults.LyricLanguage">LyricLanguage</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.defaults.MusicFont" href="#musicscore.musicxml.types.complextypes.defaults.MusicFont">MusicFont</a></code></h4>
+</li>
+<li>
 <h4><code><a title="musicscore.musicxml.types.complextypes.defaults.Scaling" href="#musicscore.musicxml.types.complextypes.defaults.Scaling">Scaling</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.defaults.WordFont" href="#musicscore.musicxml.types.complextypes.defaults.WordFont">WordFont</a></code></h4>
 </li>
 </ul>
 </li>

@@ -22,7 +22,7 @@
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+<pre><code class="python">from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeLeftCenterRight
 
 
 class Justify(AttributeAbstract):
@@ -34,7 +34,8 @@ class Justify(AttributeAbstract):
 
     def __init__(self, justify=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute(&#39;justify&#39;, justify, &#34;TypeLeftCenterRight&#34;)</code></pre>
+        self.generate_attribute(&#39;justify&#39;, justify, &#34;TypeLeftCenterRight&#34;)
+        TypeLeftCenterRight</code></pre>
 </details>
 </section>
 <section>
@@ -65,7 +66,8 @@ attribute indicates horizontal alignment as well as justification.</p></section>
 
     def __init__(self, justify=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.generate_attribute(&#39;justify&#39;, justify, &#34;TypeLeftCenterRight&#34;)</code></pre>
+        self.generate_attribute(&#39;justify&#39;, justify, &#34;TypeLeftCenterRight&#34;)
+        TypeLeftCenterRight</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

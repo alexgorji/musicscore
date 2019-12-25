@@ -10,7 +10,7 @@ path = os.path.abspath(__file__).split('.')[0]
 class TestAddMeasure(TestCase):
     def setUp(self):
         self.score = TreeScoreTimewise()
-        self.score.add_part('one')
+        self.score.add_part()
 
     def test_1(self):
         self.score.add_measure().time = (3, 4)

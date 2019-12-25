@@ -7,12 +7,13 @@ from musicscore.musictree.treepagestyle import TreePageStyle
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescorepart import TreeScorePart
 from musicscore.musicxml.elements import partwise
-from musicscore.musicxml.elements.note import Stem
-from musicscore.musicxml.elements.scoreheader import PartList, Credit
+from musicscore.musicxml.elements.scoreheader import PartList, Credit, Defaults
+from musicscore.musicxml.types.complextypes.appearance import LineWidth
 from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWords
+from musicscore.musicxml.types.complextypes.defaults import Appearance, WordFont
 from musicscore.musicxml.types.complextypes.encoding import Supports
 from musicscore.musicxml.types.complextypes.identification import Encoding
-from musicscore.musicxml.types.complextypes.scorepart import PartName, Identification
+from musicscore.musicxml.types.complextypes.scorepart import Identification
 from musicscore.musicxml.elements.barline import Barline, BarStyle
 
 
@@ -25,6 +26,7 @@ class TreeScoreTimewise(timewise.Score):
         super().__init__(*args, **kwargs)
         self._part_list = self.add_child(PartList())
         self.version = '3.0'
+        self._tuplet_line_width = None
         self._finished = False
         self._pre_quantized = False
         self._quantized = False
@@ -33,8 +35,83 @@ class TreeScoreTimewise(timewise.Score):
         self._forbidden_divisions = None
         self._page_style = TreePageStyle(score=self, **kwargs)
         self._accidental_mode = 'normal'
+        self._title = None
+        self._subtitle = None
+        self._composer = None
 
         self._identifications_added = False
+
+    @property
+    def title(self):
+        return self._title
+
+    @property
+    def subtitle(self):
+        return self._subtitle
+
+    @property
+    def composer(self):
+        return self._composer
+
+    @property
+    def defaults(self):
+        try:
+            return self.get_children_by_type(Defaults)[0]
+        except IndexError:
+            return None
+
+    def make_defaults(self):
+        if self.defaults is None:
+            self.add_child(Defaults())
+        else:
+            raise Exception('defaults already exists')
+
+    @property
+    def word_font(self):
+        try:
+            return self.defaults.get_children_by_type(WordFont)[0]
+        except (AttributeError, IndexError):
+            return None
+
+    def make_word_font(self, **kwargs):
+        if self.defaults is None:
+            self.make_defaults()
+        if self.word_font is None:
+            self.defaults.add_child(WordFont(**kwargs))
+        else:
+            raise Exception('word-font already exists')
+
+    @property
+    def tuplet_line_width(self):
+        return self._tuplet_line_width
+
+    @tuplet_line_width.setter
+    def tuplet_line_width(self, val):
+
+        if not isinstance(val, float):
+            raise TypeError('tuplet_line_width.value must be of type float not{}'.format(type(val)))
+        self._tuplet_line_width = val
+
+        if self.defaults is None:
+            self.make_defaults()
+
+        try:
+            appearance = self.defaults.get_children_by_type(Appearance)[0]
+        except IndexError:
+            appearance = self.defaults.add_child(Appearance())
+
+        try:
+            line_width = [lw for lw in appearance.get_children_by_type(LineWidth) if lw.type == 'tuplet bracket'][0]
+        except IndexError:
+            line_width = appearance.add_child(LineWidth(type='tuplet bracket'))
+
+        line_width.value = val
+
+    def add_word_font(self, **kwargs):
+        if self.defaults is None:
+            self.make_defaults()
+
+        self.defaults
 
     @property
     def max_division(self):
@@ -87,19 +164,27 @@ class TreeScoreTimewise(timewise.Score):
                 return score_part
         return None
 
-    def add_score_part(self, score_part, name='none', print_object='no'):
+    def add_score_part(self, score_part):
         score_part.parent_score = self
-        part_name = score_part.add_child(PartName(name=name))
-        part_name.print_object = print_object
-        self._part_list.add_child(score_part)
+        instrument = score_part.instrument
+        # if instrument is not None:
+        #     part_name = score_part.add_child(instrument._part_name)
+        #     part_name.print_object = 'yes'
+        #     score_part.add_child(instrument._part_abbreviation)
+        # else:
+        #     part_name = score_part.add_child(PartName(name='none'))
+        #     part_name.print_object = 'no'
+
+        return self._part_list.add_child(score_part)
 
     @property
     def number_of_parts(self):
         return len(self._part_list.get_children_by_type(TreeScorePart))
 
-    def add_part(self, name='none', print_object='no'):
+    def add_part(self, instrument=None):
         new_score_part = self._generate_score_part()
-        self.add_score_part(new_score_part, name, print_object)
+        new_score_part.instrument = instrument
+        self.add_score_part(new_score_part)
 
         for measure in self.get_children_by_type(TreeMeasure):
             part = new_score_part.add_part()
@@ -274,7 +359,7 @@ class TreeScoreTimewise(timewise.Score):
                     if remaining_duration == 0:
                         break
             if barline_style:
-                self.get_children_by_type(TreeMeasure)[-1].barline_style = barline_style
+                self.get_children_by_type(TreeMeasure)[-1].set_barline_style(barline_style)
             return current_measure_number
 
         if durations:
@@ -348,8 +433,38 @@ class TreeScoreTimewise(timewise.Score):
 
         c = self.add_child(Credit(page=page))
         c.add_child(CreditType('title'))
-        c.add_child(CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
-                                valign=valign, **kwargs))
+        self._title = c.add_child(
+            CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
+                        valign=valign, **kwargs))
+
+    def add_text(self, text, page=None, font_size=None, default_x=None, default_y=None, justify=None, valign=None,
+                 **kwargs):
+
+        if not page:
+            page = 1
+        if not font_size:
+            font_size = 12
+        if not default_x:
+            default_x = 50
+        if not default_y:
+            default_y = self.page_style.page_height.value - 143
+        if not justify:
+            justify = 'left'
+        if not valign:
+            valign = 'top'
+
+        c = self.add_child(Credit(page=page))
+        self._title = c.add_child(
+            CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
+                        valign=valign, **kwargs))
+
+    def remove_title(self):
+        title_credit = [c for c in self.get_children_by_type(Credit) if
+                        c.get_children_by_type(CreditType)[0].value == 'title']
+        try:
+            self.remove_child(title_credit[0])
+        except IndexError:
+            pass
 
     def add_subtitle(self, text, page=None, font_size=None, default_x=None, default_y=None, justify=None, valign=None,
                      **kwargs):
@@ -368,8 +483,39 @@ class TreeScoreTimewise(timewise.Score):
 
         c = self.add_child(Credit(page=page))
         c.add_child(CreditType('subtitle'))
-        c.add_child(CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
-                                valign=valign, **kwargs))
+        self._subtitle = c.add_child(
+            CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
+                        valign=valign, **kwargs))
+
+    def remove_subtitle(self):
+        subtitle_credit = [c for c in self.get_children_by_type(Credit) if
+                           c.get_children_by_type(CreditType)[0].value == 'subtitle']
+        try:
+            self.remove_child(subtitle_credit[0])
+        except IndexError:
+            pass
+
+    def add_composer(self, text, page=None, font_size=None, default_x=None, default_y=None, justify=None, valign=None,
+                     **kwargs):
+        if not page:
+            page = 1
+        if not font_size:
+            font_size = 12
+        if not default_x:
+            default_x = int(self.page_style.page_width.value - 50)
+        if not default_y:
+            default_y = self.page_style.page_height.value - 143
+        if not justify:
+            justify = 'right'
+        if not valign:
+            valign = 'top'
+
+        c = self.add_child(Credit(page=page))
+        c.add_child(CreditType('composer'))
+
+        self._composer = c.add_child(
+            CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
+                        valign=valign, **kwargs))
 
     def update_measures(self):
         measures = self.get_children_by_type(TreeMeasure)
@@ -391,6 +537,11 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.fill_with_rest()
 
+    def preliminary_adjoin_rests(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.preliminary_adjoin_rests()
+
     def add_beats(self, list_of_beats=None):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
@@ -407,10 +558,20 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.quantize()
 
+    # def adjoin_rests_in_beat(self):
+    #     for measure in self.get_children_by_type(TreeMeasure):
+    #         for part in measure.get_children_by_type(TreePart):
+    #             part.adjoin_rests_in_beat()
+
     def split_not_notatable(self):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 part.split_not_notatable()
+
+    def implement_flags(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.implement_flags()
 
     def adjoin_ties(self):
         for measure in self.get_children_by_type(TreeMeasure):
@@ -447,6 +608,16 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.group_beams()
 
+    def implement_flags_2(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.implement_flags_2()
+
+    def implement_flags_3(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.implement_flags_3()
+
     def chord_to_notes(self):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
@@ -471,16 +642,21 @@ class TreeScoreTimewise(timewise.Score):
         if not self._finished:
             self.update_measures()
             self.fill_with_rest()
+            self.preliminary_adjoin_rests()
             self.add_beats()
             self.quantize()
+            # self.adjoin_rests_in_beat()
             self.split_not_notatable()
+            self.implement_flags()
             self.adjoin_ties()
             self.adjoin_rests()
             self.update_tuplets()
             self.substitute_sextoles()
+            self.implement_flags_2()
             self.update_types()
             self.update_dots()
             self.group_beams()
+            self.implement_flags_3()
             self.chord_to_notes()
             self.update_divisions()
             self.update_accidentals(mode=self.accidental_mode)

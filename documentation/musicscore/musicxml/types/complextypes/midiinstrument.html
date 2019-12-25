@@ -105,6 +105,7 @@ class ComplexTypeMidiInstrument(ComplexType):
     either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
     refers to the score-instrument affected by the change.&#34;&#34;&#34;
 
+    _ATTRIBUTES = []
     _DTD = Sequence(
         Element(MidiChannel, min_occurrence=0),
         Element(MidiName, min_occurrence=0),
@@ -158,6 +159,7 @@ refers to the score-instrument affected by the change.</p></section>
     either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
     refers to the score-instrument affected by the change.&#34;&#34;&#34;
 
+    _ATTRIBUTES = []
     _DTD = Sequence(
         Element(MidiChannel, min_occurrence=0),
         Element(MidiName, min_occurrence=0),
@@ -196,6 +198,7 @@ refers to the score-instrument affected by the change.</p></section>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="musicscore.musicxml.types.complextypes.sound.MidiInstrument" href="sound.html#musicscore.musicxml.types.complextypes.sound.MidiInstrument">MidiInstrument</a></li>
+<li><a title="musicscore.musictree.treeinstruments.TreeInstrument" href="../../../musictree/treeinstruments.html#musicscore.musictree.treeinstruments.TreeInstrument">TreeInstrument</a></li>
 </ul>
 <h3>Instance variables</h3>
 <dl>

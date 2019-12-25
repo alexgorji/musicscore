@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musictree.treechordflags API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musictree.treechordflags</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from musicscore.musicxml.elements.note import Notehead, TimeModification, Stem, Notations
+from musicscore.musicxml.groups.common import Voice
+from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes
+
+
+class TreeChordFlag(object):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def _get_split(self, beat, chord, minimum_duration):
+        if minimum_duration == 1:
+            spl = {1.5: [2, 1], 2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
+        elif minimum_duration == 0.5:
+            spl = {1: [1, 1], 1.5: [1, 2], 2: [1, 3], 3: [1, 5], 4: [1, 7], 6: [1, 11]}
+        else:
+            raise ValueError(&#39;minimum_duration can only be 1 or 0.5&#39;)
+
+        try:
+            return chord.split(*spl[chord.quarter_duration])
+        except KeyError:
+            return [chord]
+
+        # if beat.duration == 1:
+        #     try:
+        #         return chord.split(*spl[chord.quarter_duration])
+        #     except KeyError:
+        #         return [chord]
+
+    def implement_percussion_notation(self, chord, beat, minimum_duration=1):
+        if chord.is_tied_to_next:
+            chord.remove_tie(&#39;start&#39;)
+        if chord.is_tied_to_previous:
+            chord.to_rest()
+            output = [chord]
+        elif chord.position_in_beat == 0 and chord.is_rest is False:
+            output = self._get_split(beat, chord, minimum_duration)
+            try:
+                output[1].remove_flag(self)
+                output[1].to_rest()
+            except IndexError:
+                pass
+        else:
+            output = [chord]
+        return output
+
+    def __deepcopy__(self, memodict={}):
+        return self.__class__()
+
+
+class PizzFlag(TreeChordFlag):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def implement(self, chord, beat):
+        output = self.implement_percussion_notation(chord, beat)
+        # for ch in output:
+        #     if not ch.is_rest:
+        #         ch.add_words(&#39;pizz.&#39;)
+        return output
+
+
+class PercussionFlag(TreeChordFlag):
+    def __init__(self, minimum_duration=1, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.minimum_duration = minimum_duration
+
+    def implement(self, chord, beat):
+        output = self.implement_percussion_notation(chord, beat, self.minimum_duration)
+        return output
+
+    def __deepcopy__(self, memodict={}):
+        return self.__class__(minimum_duration=self.minimum_duration)
+
+
+class BeatwiseFlag(TreeChordFlag):
+    def __init__(self, slur=&#39;dashed&#39;, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.slur = slur
+
+    def __deepcopy__(self, memodict={}):
+        return self.__class__(slur=self.slur)
+
+    def _get_split(self, chord, beat):
+        quarter_beat = {2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
+        eighth_beat = {1: [1, 1], 1.5: [1, 2], 2: [1, 3], 3: [1, 5]}
+
+        if beat.duration == 1:
+            try:
+                return chord.split(*quarter_beat[chord.quarter_duration])
+            except KeyError:
+                return [chord]
+
+        elif beat.duration == 0.5:
+
+            try:
+                split = chord.split(*eighth_beat[chord.quarter_duration])
+                # for ch in split:
+                #     ch.force_tie()
+                return split
+            except KeyError:
+                return [chord]
+
+    def _substitute_ties(self, chord):
+        if chord.is_tied_to_previous:
+            if self.slur == &#39;tie&#39;:
+                chord.is_adjoinable = False
+            else:
+                chord.remove_tie(&#39;stop&#39;)
+                if self.slur is not None:
+                    chord.add_slur(&#39;stop&#39;)
+
+        if chord.is_tied_to_next:
+            if self.slur == &#39;tie&#39;:
+                chord.is_adjoinable = False
+            else:
+                chord.remove_tie(&#39;start&#39;)
+                if self.slur is not None:
+                    chord.add_slur(&#39;start&#39;, line_type=self.slur)
+
+    def implement(self, chord, beat):
+        output = self._get_split(chord, beat)
+        self._substitute_ties(output[0])
+        return output
+
+
+class XFlag(BeatwiseFlag):
+    def __init__(self, slur=&#39;dashed&#39;, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.slur = slur
+
+    def __deepcopy__(self, memodict={}):
+        return self.__class__(slur=self.slur)
+
+    def implement(self, chord, beat):
+        output = super().implement(chord, beat)
+        output[0].add_child(Notehead(&#39;x&#39;))
+        return output
+
+
+class FingerTremoloFlag(BeatwiseFlag):
+    def __init__(self, tremolo_chord, number=3, mode=&#39;conventional&#39;, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._mode = None
+        self.mode = mode
+        self._tremolo_chord = None
+        self.tremolo_chord = tremolo_chord
+        self.number = number
+        self.slur = None
+
+    def __deepcopy__(self, memodict={}):
+        return self.__class__(tremolo_chord=self.tremolo_chord.tremolo_flag_copy(), number=self.number, mode=self.mode)
+
+    @property
+    def mode(self):
+        return self._mode
+
+    @mode.setter
+    def mode(self, val):
+        permitted = [&#39;conventional&#39;, &#39;modern&#39;]
+        if val not in permitted:
+            raise ValueError(&#39;mode.value {} must be of in {}&#39;.format(type(val), permitted))
+        self._mode = val
+
+    @property
+    def tremolo_chord(self):
+        return self._tremolo_chord
+
+    @tremolo_chord.setter
+    def tremolo_chord(self, val):
+        if val is not None and self.mode == &#39;modern&#39;:
+            val.is_finger_tremolo = True
+            val.add_child(Stem(&#39;none&#39;))
+            val.set_manual_type(&#39;quarter&#39;, size=&#39;full&#39;)
+            tm = TimeModification()
+            tm.add_child(ActualNotes(0))
+            tm.add_child(NormalNotes(1))
+            val.add_child(tm)
+            val.is_adjoinable = False
+            val.quarter_duration = 0
+
+        self._tremolo_chord = val
+
+    def _implement_conventional(self, chord, beat):
+        self.slur = None
+        output = super().implement(chord, beat)
+        # output = [chord]
+
+        output[0].quarter_duration /= 2
+        output[0].add_tremolo(type=&#39;start&#39;)
+
+        if not self.tremolo_chord.tremoli:
+            self.tremolo_chord.add_tremolo(type=&#39;stop&#39;)
+
+        self.tremolo_chord.quarter_duration = chord.quarter_duration
+        self.tremolo_chord.parent_voice = chord.parent_voice
+        self.tremolo_chord.parent_beat = chord.parent_beat
+        v = chord.get_children_by_type(Voice)[0]
+
+        if not self.tremolo_chord.get_children_by_type(Voice):
+            self.tremolo_chord.add_child(v)
+
+        output.insert(1, self.tremolo_chord)
+        return output
+
+    def _implement_modern(self, chord, beat):
+
+        if self.tremolo_chord.midis[0].value &lt; chord.midis[0].value:
+            chord.add_words(&#39;\uF415&#39;, font_family=&#39;bravura&#39;, font_size=16, relative_x=30, relative_y=-50)
+            chord.set_tie_orientation(&#39;over&#39;)
+        else:
+            chord.add_words(&#39;\uF417&#39;, font_family=&#39;bravura&#39;, font_size=16, relative_x=30, relative_y=-50)
+            chord.set_tie_orientation(&#39;under&#39;)
+        self.tremolo_chord.parent_voice = chord.parent_voice
+        self.tremolo_chord.parent_beat = chord.parent_beat
+        v = chord.get_children_by_type(Voice)[0]
+        if not self.tremolo_chord.get_children_by_type(Voice):
+            self.tremolo_chord.add_child(v)
+
+        return [chord, self.tremolo_chord]
+
+    def implement(self, chord, beat):
+        if self.mode == &#39;modern&#39;:
+            return self._implement_modern(chord, beat)
+        elif self.mode == &#39;conventional&#39;:
+            return self._implement_conventional(chord, beat)
+
+
+class GlissFlag(BeatwiseFlag):
+    def __init__(self, mode=1, clef=&#39;bass&#39;, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._head = True
+        self.slur = None
+        self.clef = clef
+        self.mode = mode
+
+    def __deepcopy__(self, memodict={}):
+        copied = self.__class__(mode=self.mode, clef=self.clef)
+        copied._head = False
+        return copied
+
+    def implement(self, chord, beat):
+        output = super().implement(chord, beat)
+        if not self._head:
+            if output[0].quarter_duration == 1:
+                if self.clef == &#39;bass&#39;:
+                    midi = 59
+                elif self.clef == &#39;treble&#39;:
+                    midi = 79
+                else:
+                    raise NotImplementedError()
+                output[0].midis = [midi]
+            output[0].add_child(Notehead(&#39;none&#39;))
+
+        else:
+            if self.mode != 1:
+                output[0].add_slide(&#39;stop&#39;)
+            output[0].add_slide(&#39;start&#39;)
+        return output</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musictree.treechordflags.BeatwiseFlag"><code class="flex name class">
+<span>class <span class="ident">BeatwiseFlag</span></span>
+<span>(</span><span>slur='dashed', *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BeatwiseFlag(TreeChordFlag):
+    def __init__(self, slur=&#39;dashed&#39;, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.slur = slur
+
+    def __deepcopy__(self, memodict={}):
+        return self.__class__(slur=self.slur)
+
+    def _get_split(self, chord, beat):
+        quarter_beat = {2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
+        eighth_beat = {1: [1, 1], 1.5: [1, 2], 2: [1, 3], 3: [1, 5]}
+
+        if beat.duration == 1:
+            try:
+                return chord.split(*quarter_beat[chord.quarter_duration])
+            except KeyError:
+                return [chord]
+
+        elif beat.duration == 0.5:
+
+            try:
+                split = chord.split(*eighth_beat[chord.quarter_duration])
+                # for ch in split:
+                #     ch.force_tie()
+                return split
+            except KeyError:
+                return [chord]
+
+    def _substitute_ties(self, chord):
+        if chord.is_tied_to_previous:
+            if self.slur == &#39;tie&#39;:
+                chord.is_adjoinable = False
+            else:
+                chord.remove_tie(&#39;stop&#39;)
+                if self.slur is not None:
+                    chord.add_slur(&#39;stop&#39;)
+
+        if chord.is_tied_to_next:
+            if self.slur == &#39;tie&#39;:
+                chord.is_adjoinable = False
+            else:
+                chord.remove_tie(&#39;start&#39;)
+                if self.slur is not None:
+                    chord.add_slur(&#39;start&#39;, line_type=self.slur)
+
+    def implement(self, chord, beat):
+        output = self._get_split(chord, beat)
+        self._substitute_ties(output[0])
+        return output</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treechordflags.TreeChordFlag" href="#musicscore.musictree.treechordflags.TreeChordFlag">TreeChordFlag</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treechordflags.XFlag" href="#musicscore.musictree.treechordflags.XFlag">XFlag</a></li>
+<li><a title="musicscore.musictree.treechordflags.FingerTremoloFlag" href="#musicscore.musictree.treechordflags.FingerTremoloFlag">FingerTremoloFlag</a></li>
+<li><a title="musicscore.musictree.treechordflags.GlissFlag" href="#musicscore.musictree.treechordflags.GlissFlag">GlissFlag</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treechordflags.BeatwiseFlag.implement"><code class="name flex">
+<span>def <span class="ident">implement</span></span>(<span>self, chord, beat)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def implement(self, chord, beat):
+    output = self._get_split(chord, beat)
+    self._substitute_ties(output[0])
+    return output</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treechordflags.FingerTremoloFlag"><code class="flex name class">
+<span>class <span class="ident">FingerTremoloFlag</span></span>
+<span>(</span><span>tremolo_chord, number=3, mode='conventional', *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FingerTremoloFlag(BeatwiseFlag):
+    def __init__(self, tremolo_chord, number=3, mode=&#39;conventional&#39;, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._mode = None
+        self.mode = mode
+        self._tremolo_chord = None
+        self.tremolo_chord = tremolo_chord
+        self.number = number
+        self.slur = None
+
+    def __deepcopy__(self, memodict={}):
+        return self.__class__(tremolo_chord=self.tremolo_chord.tremolo_flag_copy(), number=self.number, mode=self.mode)
+
+    @property
+    def mode(self):
+        return self._mode
+
+    @mode.setter
+    def mode(self, val):
+        permitted = [&#39;conventional&#39;, &#39;modern&#39;]
+        if val not in permitted:
+            raise ValueError(&#39;mode.value {} must be of in {}&#39;.format(type(val), permitted))
+        self._mode = val
+
+    @property
+    def tremolo_chord(self):
+        return self._tremolo_chord
+
+    @tremolo_chord.setter
+    def tremolo_chord(self, val):
+        if val is not None and self.mode == &#39;modern&#39;:
+            val.is_finger_tremolo = True
+            val.add_child(Stem(&#39;none&#39;))
+            val.set_manual_type(&#39;quarter&#39;, size=&#39;full&#39;)
+            tm = TimeModification()
+            tm.add_child(ActualNotes(0))
+            tm.add_child(NormalNotes(1))
+            val.add_child(tm)
+            val.is_adjoinable = False
+            val.quarter_duration = 0
+
+        self._tremolo_chord = val
+
+    def _implement_conventional(self, chord, beat):
+        self.slur = None
+        output = super().implement(chord, beat)
+        # output = [chord]
+
+        output[0].quarter_duration /= 2
+        output[0].add_tremolo(type=&#39;start&#39;)
+
+        if not self.tremolo_chord.tremoli:
+            self.tremolo_chord.add_tremolo(type=&#39;stop&#39;)
+
+        self.tremolo_chord.quarter_duration = chord.quarter_duration
+        self.tremolo_chord.parent_voice = chord.parent_voice
+        self.tremolo_chord.parent_beat = chord.parent_beat
+        v = chord.get_children_by_type(Voice)[0]
+
+        if not self.tremolo_chord.get_children_by_type(Voice):
+            self.tremolo_chord.add_child(v)
+
+        output.insert(1, self.tremolo_chord)
+        return output
+
+    def _implement_modern(self, chord, beat):
+
+        if self.tremolo_chord.midis[0].value &lt; chord.midis[0].value:
+            chord.add_words(&#39;\uF415&#39;, font_family=&#39;bravura&#39;, font_size=16, relative_x=30, relative_y=-50)
+            chord.set_tie_orientation(&#39;over&#39;)
+        else:
+            chord.add_words(&#39;\uF417&#39;, font_family=&#39;bravura&#39;, font_size=16, relative_x=30, relative_y=-50)
+            chord.set_tie_orientation(&#39;under&#39;)
+        self.tremolo_chord.parent_voice = chord.parent_voice
+        self.tremolo_chord.parent_beat = chord.parent_beat
+        v = chord.get_children_by_type(Voice)[0]
+        if not self.tremolo_chord.get_children_by_type(Voice):
+            self.tremolo_chord.add_child(v)
+
+        return [chord, self.tremolo_chord]
+
+    def implement(self, chord, beat):
+        if self.mode == &#39;modern&#39;:
+            return self._implement_modern(chord, beat)
+        elif self.mode == &#39;conventional&#39;:
+            return self._implement_conventional(chord, beat)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treechordflags.BeatwiseFlag" href="#musicscore.musictree.treechordflags.BeatwiseFlag">BeatwiseFlag</a></li>
+<li><a title="musicscore.musictree.treechordflags.TreeChordFlag" href="#musicscore.musictree.treechordflags.TreeChordFlag">TreeChordFlag</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="musicscore.musictree.treechordflags.FingerTremoloFlag.mode"><code class="name">var <span class="ident">mode</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def mode(self):
+    return self._mode</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treechordflags.FingerTremoloFlag.tremolo_chord"><code class="name">var <span class="ident">tremolo_chord</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def tremolo_chord(self):
+    return self._tremolo_chord</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treechordflags.FingerTremoloFlag.implement"><code class="name flex">
+<span>def <span class="ident">implement</span></span>(<span>self, chord, beat)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def implement(self, chord, beat):
+    if self.mode == &#39;modern&#39;:
+        return self._implement_modern(chord, beat)
+    elif self.mode == &#39;conventional&#39;:
+        return self._implement_conventional(chord, beat)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treechordflags.GlissFlag"><code class="flex name class">
+<span>class <span class="ident">GlissFlag</span></span>
+<span>(</span><span>mode=1, clef='bass', *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class GlissFlag(BeatwiseFlag):
+    def __init__(self, mode=1, clef=&#39;bass&#39;, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._head = True
+        self.slur = None
+        self.clef = clef
+        self.mode = mode
+
+    def __deepcopy__(self, memodict={}):
+        copied = self.__class__(mode=self.mode, clef=self.clef)
+        copied._head = False
+        return copied
+
+    def implement(self, chord, beat):
+        output = super().implement(chord, beat)
+        if not self._head:
+            if output[0].quarter_duration == 1:
+                if self.clef == &#39;bass&#39;:
+                    midi = 59
+                elif self.clef == &#39;treble&#39;:
+                    midi = 79
+                else:
+                    raise NotImplementedError()
+                output[0].midis = [midi]
+            output[0].add_child(Notehead(&#39;none&#39;))
+
+        else:
+            if self.mode != 1:
+                output[0].add_slide(&#39;stop&#39;)
+            output[0].add_slide(&#39;start&#39;)
+        return output</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treechordflags.BeatwiseFlag" href="#musicscore.musictree.treechordflags.BeatwiseFlag">BeatwiseFlag</a></li>
+<li><a title="musicscore.musictree.treechordflags.TreeChordFlag" href="#musicscore.musictree.treechordflags.TreeChordFlag">TreeChordFlag</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treechordflags.GlissFlag.implement"><code class="name flex">
+<span>def <span class="ident">implement</span></span>(<span>self, chord, beat)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def implement(self, chord, beat):
+    output = super().implement(chord, beat)
+    if not self._head:
+        if output[0].quarter_duration == 1:
+            if self.clef == &#39;bass&#39;:
+                midi = 59
+            elif self.clef == &#39;treble&#39;:
+                midi = 79
+            else:
+                raise NotImplementedError()
+            output[0].midis = [midi]
+        output[0].add_child(Notehead(&#39;none&#39;))
+
+    else:
+        if self.mode != 1:
+            output[0].add_slide(&#39;stop&#39;)
+        output[0].add_slide(&#39;start&#39;)
+    return output</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treechordflags.PercussionFlag"><code class="flex name class">
+<span>class <span class="ident">PercussionFlag</span></span>
+<span>(</span><span>minimum_duration=1, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PercussionFlag(TreeChordFlag):
+    def __init__(self, minimum_duration=1, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.minimum_duration = minimum_duration
+
+    def implement(self, chord, beat):
+        output = self.implement_percussion_notation(chord, beat, self.minimum_duration)
+        return output
+
+    def __deepcopy__(self, memodict={}):
+        return self.__class__(minimum_duration=self.minimum_duration)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treechordflags.TreeChordFlag" href="#musicscore.musictree.treechordflags.TreeChordFlag">TreeChordFlag</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treechordflags.PercussionFlag.implement"><code class="name flex">
+<span>def <span class="ident">implement</span></span>(<span>self, chord, beat)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def implement(self, chord, beat):
+    output = self.implement_percussion_notation(chord, beat, self.minimum_duration)
+    return output</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treechordflags.PizzFlag"><code class="flex name class">
+<span>class <span class="ident">PizzFlag</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PizzFlag(TreeChordFlag):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def implement(self, chord, beat):
+        output = self.implement_percussion_notation(chord, beat)
+        # for ch in output:
+        #     if not ch.is_rest:
+        #         ch.add_words(&#39;pizz.&#39;)
+        return output</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treechordflags.TreeChordFlag" href="#musicscore.musictree.treechordflags.TreeChordFlag">TreeChordFlag</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treechordflags.PizzFlag.implement"><code class="name flex">
+<span>def <span class="ident">implement</span></span>(<span>self, chord, beat)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def implement(self, chord, beat):
+    output = self.implement_percussion_notation(chord, beat)
+    # for ch in output:
+    #     if not ch.is_rest:
+    #         ch.add_words(&#39;pizz.&#39;)
+    return output</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treechordflags.TreeChordFlag"><code class="flex name class">
+<span>class <span class="ident">TreeChordFlag</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TreeChordFlag(object):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def _get_split(self, beat, chord, minimum_duration):
+        if minimum_duration == 1:
+            spl = {1.5: [2, 1], 2: [1, 1], 3: [1, 2], 4: [1, 3], 6: [1, 5]}
+        elif minimum_duration == 0.5:
+            spl = {1: [1, 1], 1.5: [1, 2], 2: [1, 3], 3: [1, 5], 4: [1, 7], 6: [1, 11]}
+        else:
+            raise ValueError(&#39;minimum_duration can only be 1 or 0.5&#39;)
+
+        try:
+            return chord.split(*spl[chord.quarter_duration])
+        except KeyError:
+            return [chord]
+
+        # if beat.duration == 1:
+        #     try:
+        #         return chord.split(*spl[chord.quarter_duration])
+        #     except KeyError:
+        #         return [chord]
+
+    def implement_percussion_notation(self, chord, beat, minimum_duration=1):
+        if chord.is_tied_to_next:
+            chord.remove_tie(&#39;start&#39;)
+        if chord.is_tied_to_previous:
+            chord.to_rest()
+            output = [chord]
+        elif chord.position_in_beat == 0 and chord.is_rest is False:
+            output = self._get_split(beat, chord, minimum_duration)
+            try:
+                output[1].remove_flag(self)
+                output[1].to_rest()
+            except IndexError:
+                pass
+        else:
+            output = [chord]
+        return output
+
+    def __deepcopy__(self, memodict={}):
+        return self.__class__()</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treechordflags.PizzFlag" href="#musicscore.musictree.treechordflags.PizzFlag">PizzFlag</a></li>
+<li><a title="musicscore.musictree.treechordflags.PercussionFlag" href="#musicscore.musictree.treechordflags.PercussionFlag">PercussionFlag</a></li>
+<li><a title="musicscore.musictree.treechordflags.BeatwiseFlag" href="#musicscore.musictree.treechordflags.BeatwiseFlag">BeatwiseFlag</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treechordflags.TreeChordFlag.implement_percussion_notation"><code class="name flex">
+<span>def <span class="ident">implement_percussion_notation</span></span>(<span>self, chord, beat, minimum_duration=1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def implement_percussion_notation(self, chord, beat, minimum_duration=1):
+    if chord.is_tied_to_next:
+        chord.remove_tie(&#39;start&#39;)
+    if chord.is_tied_to_previous:
+        chord.to_rest()
+        output = [chord]
+    elif chord.position_in_beat == 0 and chord.is_rest is False:
+        output = self._get_split(beat, chord, minimum_duration)
+        try:
+            output[1].remove_flag(self)
+            output[1].to_rest()
+        except IndexError:
+            pass
+    else:
+        output = [chord]
+    return output</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musictree.treechordflags.XFlag"><code class="flex name class">
+<span>class <span class="ident">XFlag</span></span>
+<span>(</span><span>slur='dashed', *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class XFlag(BeatwiseFlag):
+    def __init__(self, slur=&#39;dashed&#39;, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.slur = slur
+
+    def __deepcopy__(self, memodict={}):
+        return self.__class__(slur=self.slur)
+
+    def implement(self, chord, beat):
+        output = super().implement(chord, beat)
+        output[0].add_child(Notehead(&#39;x&#39;))
+        return output</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musictree.treechordflags.BeatwiseFlag" href="#musicscore.musictree.treechordflags.BeatwiseFlag">BeatwiseFlag</a></li>
+<li><a title="musicscore.musictree.treechordflags.TreeChordFlag" href="#musicscore.musictree.treechordflags.TreeChordFlag">TreeChordFlag</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musictree.treechordflags.XFlag.implement"><code class="name flex">
+<span>def <span class="ident">implement</span></span>(<span>self, chord, beat)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def implement(self, chord, beat):
+    output = super().implement(chord, beat)
+    output[0].add_child(Notehead(&#39;x&#39;))
+    return output</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musictree" href="index.html">musicscore.musictree</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musictree.treechordflags.BeatwiseFlag" href="#musicscore.musictree.treechordflags.BeatwiseFlag">BeatwiseFlag</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treechordflags.BeatwiseFlag.implement" href="#musicscore.musictree.treechordflags.BeatwiseFlag.implement">implement</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treechordflags.FingerTremoloFlag" href="#musicscore.musictree.treechordflags.FingerTremoloFlag">FingerTremoloFlag</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treechordflags.FingerTremoloFlag.implement" href="#musicscore.musictree.treechordflags.FingerTremoloFlag.implement">implement</a></code></li>
+<li><code><a title="musicscore.musictree.treechordflags.FingerTremoloFlag.mode" href="#musicscore.musictree.treechordflags.FingerTremoloFlag.mode">mode</a></code></li>
+<li><code><a title="musicscore.musictree.treechordflags.FingerTremoloFlag.tremolo_chord" href="#musicscore.musictree.treechordflags.FingerTremoloFlag.tremolo_chord">tremolo_chord</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treechordflags.GlissFlag" href="#musicscore.musictree.treechordflags.GlissFlag">GlissFlag</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treechordflags.GlissFlag.implement" href="#musicscore.musictree.treechordflags.GlissFlag.implement">implement</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treechordflags.PercussionFlag" href="#musicscore.musictree.treechordflags.PercussionFlag">PercussionFlag</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treechordflags.PercussionFlag.implement" href="#musicscore.musictree.treechordflags.PercussionFlag.implement">implement</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treechordflags.PizzFlag" href="#musicscore.musictree.treechordflags.PizzFlag">PizzFlag</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treechordflags.PizzFlag.implement" href="#musicscore.musictree.treechordflags.PizzFlag.implement">implement</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treechordflags.TreeChordFlag" href="#musicscore.musictree.treechordflags.TreeChordFlag">TreeChordFlag</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treechordflags.TreeChordFlag.implement_percussion_notation" href="#musicscore.musictree.treechordflags.TreeChordFlag.implement_percussion_notation">implement_percussion_notation</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musictree.treechordflags.XFlag" href="#musicscore.musictree.treechordflags.XFlag">XFlag</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musictree.treechordflags.XFlag.implement" href="#musicscore.musictree.treechordflags.XFlag.implement">implement</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

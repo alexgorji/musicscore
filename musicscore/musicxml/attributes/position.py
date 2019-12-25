@@ -74,10 +74,22 @@ class Position(DefaultX, DefaultY, RelativeX, RelativeY):
     tenths of a staff resized by the staff-size element.
     """
 
-    # def __init__(self, default_x=None, default_y=None, relative_x=None, relative_y=None, *args, **kwargs):
-    #     super().__init__(default_x=default_x, default_y=default_y, relative_x=relative_x,
-    #                      relative_y=relative_y,
-    #                      *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+class YPosition(DefaultX, DefaultY, RelativeX, RelativeY):
+    """The y-position attribute group is used for elements like stems where specifying y position is common, but
+    specifying x position is rare.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+class XPosition(DefaultX, DefaultY, RelativeX, RelativeY):
+    """The x-position attribute group is used for elements like notes where specifying x position is common, but
+    specifying y position is rare.
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

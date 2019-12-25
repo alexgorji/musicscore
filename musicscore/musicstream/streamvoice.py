@@ -78,6 +78,7 @@ class StreamChordFormula(object):
 
     def condition(self, chord):
         pass
+
     def change_chord(self, chord):
         pass
 
@@ -260,6 +261,10 @@ class SimpleFormat(object):
                     break
 
     def extend(self, simple_format):
-        self.chords
+        # self.chords
         for chord in simple_format.chords:
             self.add_chord(chord)
+
+    def transpose(self, interval):
+        for ch in self.chords:
+            ch.transpose(interval)

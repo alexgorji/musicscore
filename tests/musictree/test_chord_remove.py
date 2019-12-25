@@ -21,13 +21,15 @@ class Test(TestCase):
         v.add_to_score(self.score, 1, 1)
         chord = self.score.get_measure(1).get_part(1).get_voice(1).chords[1]
         self.score.fill_with_rest()
+        self.score.preliminary_adjoin_rests()
         self.score.add_beats()
         chord.remove_from_score()
 
         result_path = path + '_test_1'
 
-        with self.assertWarns(UserWarning):
-            self.score.write(result_path)
+        # with self.assertWarns(UserWarning):
+        #     self.score.write(path=result_path)
+        self.score.write(path=result_path)
 
         TestScore().assert_template(result_path=result_path)
 
@@ -42,13 +44,15 @@ class Test(TestCase):
         v.add_to_score(self.score, 1, 1)
         chord = self.score.get_measure(1).get_part(1).get_voice(1).chords[1]
         self.score.fill_with_rest()
+        self.score.preliminary_adjoin_rests()
         self.score.add_beats()
         chord.remove_from_score()
 
         result_path = path + '_test_2'
 
-        with self.assertWarns(UserWarning):
-            self.score.write(result_path)
+        # with self.assertWarns(UserWarning):
+        #     self.score.write(path=result_path)
+        self.score.write(path=result_path)
 
         TestScore().assert_template(result_path=result_path)
 

@@ -25,8 +25,10 @@
 <pre><code class="python">from musicscore.dtd.dtd import Choice, Element
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.complextypes.bracket import ComplexTypeBracket
 from musicscore.musicxml.types.complextypes.coda import ComplexTypeCoda
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, EmptyPrintStyleAlignId
+from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics, Dynamics
 from musicscore.musicxml.types.complextypes.formattedsymbolid import ComplexTypeFormattedSymbolId
 from musicscore.musicxml.types.complextypes.formattedtextid import ComplexTypeFormattedTextId
 from musicscore.musicxml.types.complextypes.metronome import ComplexTypeMetronome
@@ -65,8 +67,8 @@ class Words(ComplexTypeFormattedTextId):
     &#34;&#34;&#34;
     _TAG = &#39;words&#39;
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Symbol(ComplexTypeFormattedSymbolId):
@@ -84,16 +86,8 @@ class Symbol(ComplexTypeFormattedSymbolId):
 class Wedge(ComplexTypeWedge):
     _TAG = &#39;wedge&#39;
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)
-
-
-class Dynamics(XMLElement):
-    &#34;&#34;&#34;&lt;xs:element name=&#34;dynamics&#34; type=&#34;dynamics&#34; maxOccurs=&#34;unbounded&#34;/&gt;&#34;&#34;&#34;
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=&#39;dynamics&#39;, *args, **kwargs)
-        NotImplementedError()
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)
 
 
 class Dashes(XMLElement):
@@ -104,12 +98,11 @@ class Dashes(XMLElement):
         NotImplementedError()
 
 
-class Bracket(XMLElement):
-    &#34;&#34;&#34;&lt;xs:element name=&#34;bracket&#34; type=&#34;bracket&#34;/&gt;&#34;&#34;&#34;
+class Bracket(ComplexTypeBracket):
+    _TAG = &#39;bracket&#39;
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag=&#39;bracket&#39;, *args, **kwargs)
-        NotImplementedError()
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Pedal(XMLElement):
@@ -248,6 +241,7 @@ class ComplexTypeDirectionType(ComplexType, OptionalUniqueId):
             # Element(Symbol),
             max_occurrence=None
         ),
+        # Element(Words, max_occurrence=None),
         Element(Wedge),
         Element(Dynamics, max_occurrence=None),
         Element(Dashes),
@@ -309,21 +303,36 @@ class ComplexTypeDirectionType(ComplexType, OptionalUniqueId):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p><xs:element name="bracket" type="bracket"/></p></section>
+<section class="desc"><p>A simple Tree class</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Bracket(XMLElement):
-    &#34;&#34;&#34;&lt;xs:element name=&#34;bracket&#34; type=&#34;bracket&#34;/&gt;&#34;&#34;&#34;
+<pre><code class="python">class Bracket(ComplexTypeBracket):
+    _TAG = &#39;bracket&#39;
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag=&#39;bracket&#39;, *args, **kwargs)
-        NotImplementedError()</code></pre>
+        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.bracket.ComplexTypeBracket" href="bracket.html#musicscore.musicxml.types.complextypes.bracket.ComplexTypeBracket">ComplexTypeBracket</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.complextypes.bracket.LineEnd" href="bracket.html#musicscore.musicxml.types.complextypes.bracket.LineEnd">LineEnd</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.bracket.EndLength" href="bracket.html#musicscore.musicxml.types.complextypes.bracket.EndLength">EndLength</a></li>
+<li><a title="musicscore.musicxml.attributes.linetype.LineType" href="../../attributes/linetype.html#musicscore.musicxml.attributes.linetype.LineType">LineType</a></li>
+<li><a title="musicscore.musicxml.attributes.dahsedformatting.DashedFormatting" href="../../attributes/dahsedformatting.html#musicscore.musicxml.attributes.dahsedformatting.DashedFormatting">DashedFormatting</a></li>
+<li><a title="musicscore.musicxml.attributes.dahsedformatting.DashLength" href="../../attributes/dahsedformatting.html#musicscore.musicxml.attributes.dahsedformatting.DashLength">DashLength</a></li>
+<li><a title="musicscore.musicxml.attributes.dahsedformatting.SpaceLength" href="../../attributes/dahsedformatting.html#musicscore.musicxml.attributes.dahsedformatting.SpaceLength">SpaceLength</a></li>
+<li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.directiontype.Coda"><code class="flex name class">
@@ -392,6 +401,7 @@ not to the overall direction.</p></section>
             # Element(Symbol),
             max_occurrence=None
         ),
+        # Element(Words, max_occurrence=None),
         Element(Wedge),
         Element(Dynamics, max_occurrence=None),
         Element(Dashes),
@@ -529,28 +539,6 @@ not to the overall direction.</p></section>
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=&#39;dashes&#39;, *args, **kwargs)
-        NotImplementedError()</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
-<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
-<li>AGtree.tree.Tree</li>
-</ul>
-</dd>
-<dt id="musicscore.musicxml.types.complextypes.directiontype.Dynamics"><code class="flex name class">
-<span>class <span class="ident">Dynamics</span></span>
-<span>(</span><span>*args, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p><xs:element name="dynamics" type="dynamics" maxOccurs="unbounded"/></p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">class Dynamics(XMLElement):
-    &#34;&#34;&#34;&lt;xs:element name=&#34;dynamics&#34; type=&#34;dynamics&#34; maxOccurs=&#34;unbounded&#34;/&gt;&#34;&#34;&#34;
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=&#39;dynamics&#39;, *args, **kwargs)
         NotImplementedError()</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1042,7 +1030,7 @@ marks that mix text and symbols. Left justification is assumed if not specified.
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.directiontype.Wedge"><code class="flex name class">
 <span>class <span class="ident">Wedge</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>type, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>The wedge type represents crescendo and diminuendo wedge symbols. The type attribute is crescendo for the start
@@ -1056,8 +1044,8 @@ stop for a wedge that began with a diminuendo type. The line-type is solid by de
 <pre><code class="python">class Wedge(ComplexTypeWedge):
     _TAG = &#39;wedge&#39;
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1084,7 +1072,7 @@ stop for a wedge that began with a diminuendo type. The line-type is solid by de
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.directiontype.Words"><code class="flex name class">
 <span>class <span class="ident">Words</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>value, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>The words element specifies a standard text direction. Left justification is assumed if not specified. Language is
@@ -1098,8 +1086,8 @@ Italian ("it") by default. Enclosure is none by default.</p></section>
     &#34;&#34;&#34;
     _TAG = &#39;words&#39;
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1178,9 +1166,6 @@ Italian ("it") by default. Enclosure is none by default.</p></section>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.complextypes.directiontype.Dashes" href="#musicscore.musicxml.types.complextypes.directiontype.Dashes">Dashes</a></code></h4>
-</li>
-<li>
-<h4><code><a title="musicscore.musicxml.types.complextypes.directiontype.Dynamics" href="#musicscore.musicxml.types.complextypes.directiontype.Dynamics">Dynamics</a></code></h4>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.complextypes.directiontype.EyeGlasses" href="#musicscore.musicxml.types.complextypes.directiontype.EyeGlasses">EyeGlasses</a></code></h4>

@@ -6,8 +6,6 @@ from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.barline import Barline, BarStyle
 from musicscore.musicxml.groups.layout import SystemLayout
 from musicscore.musicxml.groups.musicdata import Print, Attributes
-from musicscore.musicxml.types.complextypes.identification import Encoding
-from musicscore.musicxml.types.complextypes.scorepart import Identification
 from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance
 
 
@@ -58,8 +56,7 @@ class TreeMeasure(timewise.Measure):
     def barline_style(self):
         return self._barline_style
 
-    @barline_style.setter
-    def barline_style(self, value):
+    def set_barline_style(self, value):
         if value:
             for part in self.get_children_by_type(TreePart):
                 try:
@@ -74,6 +71,7 @@ class TreeMeasure(timewise.Measure):
                     bs = bl.add_child(BarStyle(value))
 
         self._barline_style = value
+
 
     def show_time_signature(self):
         for part in self.get_children_by_type(TreePart):

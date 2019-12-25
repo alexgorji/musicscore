@@ -48,6 +48,9 @@ class Decimal(SimpleType):
         self._value = v
 
 
+TypeDecimal = Decimal
+
+
 class Integer(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -57,6 +60,9 @@ class Integer(SimpleType):
         if not isinstance(v, int):
             raise TypeError('value {} must be an int not {}'.format(v, type(v).__name__))
         self._value = v
+
+
+TypeInteger = Integer
 
 
 class PositiveInteger(SimpleType):
@@ -72,6 +78,9 @@ class PositiveInteger(SimpleType):
         self._value = v
 
 
+TypePositiveInteger = PositiveInteger
+
+
 class NonNegativeInteger(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -85,6 +94,9 @@ class NonNegativeInteger(SimpleType):
         self._value = v
 
 
+TypeNonNegativeInteger = NonNegativeInteger
+
+
 class String(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -94,6 +106,9 @@ class String(SimpleType):
         if not isinstance(v, str):
             raise TypeError('value {} must a be string'.format(v))
         self._value = v
+
+
+TypeString = String
 
 
 # todo xs:Token
@@ -109,6 +124,9 @@ class Token(String):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
+
+
+TypeToken = Token
 
 
 # todo xs:ID
@@ -189,7 +207,7 @@ class TypeRightLeftMiddle(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-class TypeStopStartDiscontinue(SimpleType):
+class TypeStartStopDiscontinue(SimpleType):
     """
     The start-stop-discontinue type is used to specify ending types. Typically, the start type is associated with the
     left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline
@@ -344,7 +362,7 @@ class TypeLineType(SimpleType):
     """
     The line-type type distinguishes between solid, dashed, dotted, and wavy lines.
     """
-    _PERMITTED = ('solid', 'dashed' 'dotted', 'wavy')
+    _PERMITTED = ('solid', 'dashed', 'dotted', 'wavy')
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -819,8 +837,109 @@ class TypeYesNoNumber(SimpleType):
     def value(self, v):
         if v is not None and v not in self._PERMITTED and not Decimal(v):
             raise ValueError(
-                '{}.value {} must be yes no ord decimal')
+                '{}.value {} must be yes no or decimal')
         self._value = v
+
+
+class TypePositiveIntegerOrEmpty(SimpleType):
+    """
+    The positive-integer-or-empty values can be either a positive integer or an empty string.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v is not None and not TypePositiveInteger(v) and v != '':
+            raise ValueError(
+                '{}.value {}  can be either a positive integer or an empty string')
+        self._value = v
+
+
+class TypeTrillBeats(SimpleType):
+    """
+    The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value
+    with a minimum value of 2.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        if v is not None:
+            if not TypeDecimal(v):
+                raise TypeError('{}.value {} must be of type Decimal not {}.'.format(self.__class__, v, v.__class__))
+        if v < 2:
+            raise ValueError('{}.value {} must be greater than or equal to 2.'.format(self.__class__, v))
+        self._value = v
+
+
+class TypeStartNote(SimpleType):
+    """
+    The start-note type describes the starting note of trills and mordents for playback, relative to the current note.
+    """
+
+    _PERMITTED = ["upper", "main", "below"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTrillStep(SimpleType):
+    """
+    The trill-step type describes the alternating note of trills and mordents for playback, relative to the current note.
+    """
+
+    _PERMITTED = ["whole", "half", "unison"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTwoNoteTurn(SimpleType):
+    """
+    The two-note-turn type describes the ending notes of trills and mordents for playback, relative to the current note.
+    """
+
+    _PERMITTED = ["whole", "half", "none"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTremoloType(SimpleType):
+    """
+    The tremolo-type is used to distinguish multi-note, single-note, and unmeasured tremolos.
+    """
+
+    _PERMITTED = ["start", "stop", "single", "unmeasured"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeFermataShape(SimpleType):
+    """
+    The fermata-shape type represents the shape of the fermata sign. The empty value is equivalent to the normal value.
+    """
+    _PERMITTED = ["normal", "angled", "square", "double-angled", "double-square", "double-dot", "half-curve", "curlew",
+                  ""]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeUprightInverted(SimpleType):
+    """
+    The upright-inverted type describes the appearance of a fermata element. The value is upright if not specified.
+    """
+    _PERMITTED = ["upright", "inverted"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
 
 
 ''''
@@ -842,23 +961,6 @@ class TypeYesNoNumber(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="fermata-shape">
-		<xs:annotation>
-			<xs:documentation>The fermata-shape type represents the shape of the fermata sign. The empty value is equivalent to the normal value.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="normal"/>
-			<xs:enumeration value="angled"/>
-			<xs:enumeration value="square"/>
-			<xs:enumeration value="double-angled"/>
-			<xs:enumeration value="double-square"/>
-			<xs:enumeration value="double-dot"/>
-			<xs:enumeration value="half-curve"/>
-			<xs:enumeration value="curlew"/>
-			<xs:enumeration value=""/>
-		</xs:restriction>
-	</xs:simpleType>
-
 	<xs:simpleType name="left-right">
 		<xs:annotation>
 			<xs:documentation>The left-right type is used to indicate whether one element appears to the left or the right of another element.</xs:documentation>
@@ -868,21 +970,6 @@ class TypeYesNoNumber(SimpleType):
 			<xs:enumeration value="right"/>
 		</xs:restriction>
 	</xs:simpleType>
-
-
-	<xs:simpleType name="positive-integer-or-empty">
-		<xs:annotation>
-			<xs:documentation>The positive-integer-or-empty values can be either a positive integer or an empty string.</xs:documentation>
-		</xs:annotation>
-		<xs:union memberTypes="xs:positiveInteger">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value=""/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:union>
-	</xs:simpleType>
-
 
 
 	<xs:simpleType name="smufl-coda-glyph-name">
@@ -909,17 +996,6 @@ class TypeYesNoNumber(SimpleType):
 		</xs:annotation>
 		<xs:restriction base="smufl-glyph-name">
 			<xs:pattern value="segno\c*"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="start-note">
-		<xs:annotation>
-			<xs:documentation>The start-note type describes the starting note of trills and mordents for playback, relative to the current note.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="upper"/>
-			<xs:enumeration value="main"/>
-			<xs:enumeration value="below"/>
 		</xs:restriction>
 	</xs:simpleType>
 
@@ -951,58 +1027,6 @@ class TypeYesNoNumber(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="tremolo-type">
-		<xs:annotation>
-			<xs:documentation>The tremolo-type is used to distinguish multi-note, single-note, and unmeasured tremolos.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="start"/>
-			<xs:enumeration value="stop"/>
-			<xs:enumeration value="single"/>
-			<xs:enumeration value="unmeasured"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="trill-beats">
-		<xs:annotation>
-			<xs:documentation>The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value with a minimum value of 2.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:decimal">
-			<xs:minInclusive value="2"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="trill-step">
-		<xs:annotation>
-			<xs:documentation>The trill-step type describes the alternating note of trills and mordents for playback, relative to the current note.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="whole"/>
-			<xs:enumeration value="half"/>
-			<xs:enumeration value="unison"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="two-note-turn">
-		<xs:annotation>
-			<xs:documentation>The two-note-turn type describes the ending notes of trills and mordents for playback, relative to the current note.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="whole"/>
-			<xs:enumeration value="half"/>
-			<xs:enumeration value="none"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="upright-inverted">
-		<xs:annotation>
-			<xs:documentation>The upright-inverted type describes the appearance of a fermata element. The value is upright if not specified.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="upright"/>
-			<xs:enumeration value="inverted"/>
-		</xs:restriction>
-	</xs:simpleType>
 
 	<xs:simpleType name="yyyy-mm-dd">
 		<xs:annotation>
@@ -1033,8 +1057,10 @@ class TypeCancelLocation(SimpleType):
 class TypeClefSign(SimpleType):
     """
     The clef-sign element represents the different clef symbols.
-    The jianpu sign indicates that the music that follows should be in jianpu numbered notation,
-    just as the TAB sign indicates that the music that follows should be in tablature notation.
+
+    The jianpu sign indicates that the music that follows should be in jianpu numbered notation, just as the TAB sign
+    indicates that the music that follows should be in tablature notation.
+
     Unlike TAB, a jianpu sign does not correspond to a visual clef notation.
     """
     _PERMITTED = ('G', 'F', 'C', 'percussion', 'TAB', 'jianpu', 'none')
@@ -1191,6 +1217,29 @@ class TypeWedgeType(SimpleType):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
+
+
+class TypeLineEnd(SimpleType):
+    """
+    The line-end type specifies if there is a jog up or down (or both), an arrow, or nothing at the start or end of a
+    bracket.
+    """
+    _PERMITTED = ('up', 'down', 'both', 'arrow', 'none')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeLineWidthType(Token):
+    """
+    The line-width-type defines what type of line is being defined in a line-width element. Values include beam,
+    bracket, dashes, enclosure, ending, extend, heavy barline, leger, light barline, octave shift, pedal, slur middle,
+    slur tip, staff, stem, tie middle, tie tip, tuplet bracket, and wedge. This is left as a string so that other
+    application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 '''
@@ -1388,18 +1437,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="line-end">
-		<xs:annotation>
-			<xs:documentation>The line-end type specifies if there is a jog up or down (or both), an arrow, or nothing at the start or end of a bracket.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="up"/>
-			<xs:enumeration value="down"/>
-			<xs:enumeration value="both"/>
-			<xs:enumeration value="arrow"/>
-			<xs:enumeration value="none"/>
-		</xs:restriction>
-	</xs:simpleType>
+
 
 	<xs:simpleType name="measure-numbering-value">
 		<xs:annotation>
@@ -1675,12 +1713,7 @@ A quarter-rest type specifies the glyph to use when a note has a rest element an
 		<xs:restriction base="xs:token"/>
 	</xs:simpleType>
 
-	<xs:simpleType name="line-width-type">
-		<xs:annotation>
-			<xs:documentation>The line-width-type defines what type of line is being defined in a line-width element. Values include beam, bracket, dashes, enclosure, ending, extend, heavy barline, leger, light barline, octave shift, pedal, slur middle, slur tip, staff, stem, tie middle, tie tip, tuplet bracket, and wedge. This is left as a string so that other application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token"/>
-	</xs:simpleType>
+
 
 
 	<xs:simpleType name="note-size-type">
@@ -1831,6 +1864,83 @@ class TypeSyllabic(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeNoteheadValue(SimpleType):
+    """
+    The notehead-value type indicates shapes other than the open and closed ovals associated with note durations.
+    The values do, re, mi, fa, fa up, so, la, and ti correspond to Aikin's 7-shape system.  The fa up shape is typically
+    used with upstems; the fa shape is typically used with downstems or no stems.
+
+    The arrow shapes differ from triangle and inverted triangle by being centered on the stem. Slashed and back slashed
+    notes include both the normal notehead and a slash. The triangle shape has the tip of the triangle pointing up;
+    the inverted triangle shape has the tip of the triangle pointing down. The left triangle shape is a right triangle
+    with the hypotenuse facing up and to the left.
+
+    The other notehead covers noteheads other than those listed here. It is usually used in combination with the smufl
+    attribute to specify a particular SMuFL notehead. The smufl attribute may be used with any notehead value to help
+    specify the appearance of symbols that share the same MusicXML semantics. Noteheads in the SMuFL "Note name
+    noteheads" range (U+E150–U+E1AF) should not use the smufl attribute or the "other" value, but instead use the
+    notehead-text element.
+    """
+
+    _PERMITTED = ["slash", "triangle", "diamond", "square", "cross", "x", "circle-x", "inverted triangle", "arrow down",
+                  "arrow up", "circled", "slashed", "back slashed", "normal", "cluster", "circle dot", "left triangle",
+                  "rectangle", "none", "do", "re", "mi", "fa", "fa up", "so", "la", "ti", "other"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeTremoloMarks(SimpleType):
+    """
+    The number of tremolo marks is represented by a number from 0 to 8: the same as beam-level with 0 added.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        Integer(v)
+        if not (0 <= v <= 8):
+            raise ValueError(
+                '{}.value {} must be must be greater than or equal to 0. It  must be less than or equal to 8'.format(
+                    self.__class__, v))
+        self._value = v
+
+
+class TypeHoleClosedLocation(SimpleType):
+    """The hole-closed-location type indicates which portion of the hole is filled in when the corresponding
+    hole-closed-value is half.
+    """
+
+    _PERMITTED = ["right", "bottom", "left", "top"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeHoleClosedValue(SimpleType):
+    """
+    The hole-closed-value type represents whether the hole is closed, open, or half-open.
+    """
+
+    _PERMITTED = ["yes", "no", "half"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeStemValue(SimpleType):
+    """
+    The stem type represents the notated stem direction.
+    """
+
+    _PERMITTED = ["down", "up", "double", "none"]
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 '''
 	<!-- Simple types derived from note.mod elements -->
 
@@ -1926,72 +2036,6 @@ class TypeSyllabic(SimpleType):
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="hole-closed-location">
-		<xs:annotation>
-			<xs:documentation>The hole-closed-location type indicates which portion of the hole is filled in when the corresponding hole-closed-value is half.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="right"/>
-			<xs:enumeration value="bottom"/>
-			<xs:enumeration value="left"/>
-			<xs:enumeration value="top"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="hole-closed-value">
-		<xs:annotation>
-			<xs:documentation>The hole-closed-value type represents whether the hole is closed, open, or half-open.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="yes"/>
-			<xs:enumeration value="no"/>
-			<xs:enumeration value="half"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="notehead-value">
-		<xs:annotation>
-			<xs:documentation>
-The notehead-value type indicates shapes other than the open and closed ovals associated with note durations. 
-
-The values do, re, mi, fa, fa up, so, la, and ti correspond to Aikin's 7-shape system.  The fa up shape is typically used with upstems; the fa shape is typically used with downstems or no stems.
-
-The arrow shapes differ from triangle and inverted triangle by being centered on the stem. Slashed and back slashed notes include both the normal notehead and a slash. The triangle shape has the tip of the triangle pointing up; the inverted triangle shape has the tip of the triangle pointing down. The left triangle shape is a right triangle with the hypotenuse facing up and to the left.
-
-The other notehead covers noteheads other than those listed here. It is usually used in combination with the smufl attribute to specify a particular SMuFL notehead. The smufl attribute may be used with any notehead value to help specify the appearance of symbols that share the same MusicXML semantics. Noteheads in the SMuFL "Note name noteheads" range (U+E150–U+E1AF) should not use the smufl attribute or the "other" value, but instead use the notehead-text element.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="slash"/>
-			<xs:enumeration value="triangle"/>
-			<xs:enumeration value="diamond"/>
-			<xs:enumeration value="square"/>
-			<xs:enumeration value="cross"/>
-			<xs:enumeration value="x"/>
-			<xs:enumeration value="circle-x"/>
-			<xs:enumeration value="inverted triangle"/>
-			<xs:enumeration value="arrow down"/>
-			<xs:enumeration value="arrow up"/>
-			<xs:enumeration value="circled"/>
-			<xs:enumeration value="slashed"/>
-			<xs:enumeration value="back slashed"/>
-			<xs:enumeration value="normal"/>
-			<xs:enumeration value="cluster"/>
-			<xs:enumeration value="circle dot"/>
-			<xs:enumeration value="left triangle"/>
-			<xs:enumeration value="rectangle"/>
-			<xs:enumeration value="none"/>
-			<xs:enumeration value="do"/>
-			<xs:enumeration value="re"/>
-			<xs:enumeration value="mi"/>
-			<xs:enumeration value="fa"/>
-			<xs:enumeration value="fa up"/>
-			<xs:enumeration value="so"/>
-			<xs:enumeration value="la"/>
-			<xs:enumeration value="ti"/>
-			<xs:enumeration value="other"/>
-		</xs:restriction>
-	</xs:simpleType>
-
 	<xs:simpleType name="show-tuplet">
 		<xs:annotation>
 			<xs:documentation>The show-tuplet type indicates whether to show a part of a tuplet relating to the tuplet-actual element, both the tuplet-actual and tuplet-normal elements, or neither.</xs:documentation>
@@ -2024,16 +2068,6 @@ The other notehead covers noteheads other than those listed here. It is usually 
 			<xs:enumeration value="right"/>
 		</xs:restriction>
 	</xs:simpleType>
-
-	<xs:simpleType name="tremolo-marks">
-		<xs:annotation>
-			<xs:documentation>The number of tremolo marks is represented by a number from 0 to 8: the same as beam-level with 0 added.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:integer">
-			<xs:minInclusive value="0"/>
-			<xs:maxInclusive value="8"/>
-		</xs:restriction>
-	</xs:simpleType>
 '''
 
 
@@ -2042,8 +2076,30 @@ The other notehead covers noteheads other than those listed here. It is usually 
 
 class TypeMeasureText(Token):
     """
-    The measure-text type is used for the text attribute of measure elements. It has at least one character. The
-    implicit attribute of the measure element should be set to "yes" rather than setting the text attribute to an empty
+    The
+    measure - text
+    type is used
+    for the text attribute of measure elements.It has at least one character.The
+    implicit
+    attribute
+    of
+    the
+    measure
+    element
+    should
+    be
+    set
+    to
+    "yes"
+    rather
+    than
+    setting
+    the
+    text
+    attribute
+    to
+    an
+    empty
     string.
     """
 

@@ -59,7 +59,7 @@ class XMLTree(Tree):
     def check_non_optional(self):
         for leaf in self.current_dtd_choice.traverse_leaves():
             if not leaf.check_min_occurrence():
-                raise ChildIsNotOptional(leaf)
+                raise ChildIsNotOptional(leaf, self)
 
     def reset_dtd(self):
         self._not_sorted_children = []
@@ -76,7 +76,7 @@ class XMLTree(Tree):
                 self.goto_next_dtd_choice()
                 self.add_xml_child(xml_child)
             except Exception:
-                raise ChildTypeDTDConflict(xml_child)
+                raise ChildTypeDTDConflict(xml_child, self)
 
         else:
             child_added = False
@@ -101,8 +101,8 @@ class XMLTree(Tree):
                 try:
                     self.goto_next_dtd_choice()
                     self.add_xml_child(xml_child)
-                except Exception:
-                    raise ChildOccurrenceDTDConflict(xml_child)
+                except Exception as err:
+                    raise ChildOccurrenceDTDConflict(xml_child, self)
 
             if child_added:
                 self.update_current_children()

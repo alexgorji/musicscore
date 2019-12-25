@@ -21,6 +21,7 @@ class Test(TestCase):
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
         self.score.fill_with_rest()
+        self.score.preliminary_adjoin_rests()
         self.score.add_beats()
         self.score.quantize()
 
@@ -28,6 +29,7 @@ class Test(TestCase):
         chord.remove_from_score()
 
         result_path = path + '_test_1'
-        with self.assertWarns(UserWarning):
-            self.score.write(path=result_path)
-            TestScore().assert_template(result_path=result_path)
+        # with self.assertWarns(UserWarning):
+        #     self.score.write(path=result_path)
+        self.score.write(path=result_path)
+        TestScore().assert_template(result_path=result_path)

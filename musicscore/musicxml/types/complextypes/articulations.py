@@ -100,7 +100,7 @@ class Falloff(ComplexTypeEmptyLine):
 
 
 class BreathMark(ComplexTypeBreathMark):
-    _TAG = 'breath_mark'
+    _TAG = 'breath-mark'
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)
@@ -156,17 +156,14 @@ class OtherArticulation(object):
         NotImplementedError()
 
 
-'''
-	<xs:complexType name="articulations">
-			<xs:element name="strong-accent" type="strong-accent">
-'''
-
-
-class Articulations(ComplexType, OptionalUniqueId):
+class ComplexTypeArticulations(ComplexType, OptionalUniqueId):
     """Articulations and accents are grouped together here."""
 
+    # _CHILDREN = [Accent, StrongAccent, Staccato, Tenuto, DetachedLegato, Staccatissimo, Spiccato, Scoop, Plop, Doit,
+    #              Falloff, BreathMark, Caesura, Stress, Unstress, SoftAccent]
+
     _CHILDREN = [Accent, StrongAccent, Staccato, Tenuto, DetachedLegato, Staccatissimo, Spiccato, Scoop, Plop, Doit,
-                 Falloff, BreathMark, Caesura, Stress, Unstress, SoftAccent]
+                 Falloff, BreathMark, Caesura, Stress, Unstress]
 
     _DTD = Choice(
         Element(Accent),
@@ -184,10 +181,10 @@ class Articulations(ComplexType, OptionalUniqueId):
         Element(Caesura),
         Element(Stress),
         Element(Unstress),
-        Element(SoftAccent),
+        # Element(SoftAccent),
         min_occurrence=0,
         max_occurrence=None
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)

@@ -98,10 +98,22 @@ class Position(DefaultX, DefaultY, RelativeX, RelativeY):
     tenths of a staff resized by the staff-size element.
     &#34;&#34;&#34;
 
-    # def __init__(self, default_x=None, default_y=None, relative_x=None, relative_y=None, *args, **kwargs):
-    #     super().__init__(default_x=default_x, default_y=default_y, relative_x=relative_x,
-    #                      relative_y=relative_y,
-    #                      *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+class YPosition(DefaultX, DefaultY, RelativeX, RelativeY):
+    &#34;&#34;&#34;The y-position attribute group is used for elements like stems where specifying y position is common, but
+    specifying x position is rare.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+class XPosition(DefaultX, DefaultY, RelativeX, RelativeY):
+    &#34;&#34;&#34;The x-position attribute group is used for elements like notes where specifying x position is common, but
+    specifying y position is rare.
+    &#34;&#34;&#34;
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)</code></pre>
@@ -136,6 +148,8 @@ class Position(DefaultX, DefaultY, RelativeX, RelativeY):
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="musicscore.musicxml.attributes.position.Position" href="#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.YPosition" href="#musicscore.musicxml.attributes.position.YPosition">YPosition</a></li>
+<li><a title="musicscore.musicxml.attributes.position.XPosition" href="#musicscore.musicxml.attributes.position.XPosition">XPosition</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.attributes.position.DefaultY"><code class="flex name class">
@@ -158,6 +172,8 @@ class Position(DefaultX, DefaultY, RelativeX, RelativeY):
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="musicscore.musicxml.attributes.position.Position" href="#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.YPosition" href="#musicscore.musicxml.attributes.position.YPosition">YPosition</a></li>
+<li><a title="musicscore.musicxml.attributes.position.XPosition" href="#musicscore.musicxml.attributes.position.XPosition">XPosition</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.attributes.position.Position"><code class="flex name class">
@@ -251,11 +267,6 @@ tenths of a staff resized by the staff-size element.</p></section>
     tenths of a staff resized by the staff-size element.
     &#34;&#34;&#34;
 
-    # def __init__(self, default_x=None, default_y=None, relative_x=None, relative_y=None, *args, **kwargs):
-    #     super().__init__(default_x=default_x, default_y=default_y, relative_x=relative_x,
-    #                      relative_y=relative_y,
-    #                      *args, **kwargs)
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)</code></pre>
 </details>
@@ -272,8 +283,11 @@ tenths of a staff resized by the staff-size element.</p></section>
 <li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.extend.ComplexTypeExtend" href="../types/complextypes/extend.html#musicscore.musicxml.types.complextypes.extend.ComplexTypeExtend">ComplexTypeExtend</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.lyric.ComplexTypeLyric" href="../types/complextypes/lyric.html#musicscore.musicxml.types.complextypes.lyric.ComplexTypeLyric">ComplexTypeLyric</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.arpeggiate.ComplexTypeArpeggiate" href="../types/complextypes/arpeggiate.html#musicscore.musicxml.types.complextypes.arpeggiate.ComplexTypeArpeggiate">ComplexTypeArpeggiate</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.slur.ComplexTypeSlur" href="../types/complextypes/slur.html#musicscore.musicxml.types.complextypes.slur.ComplexTypeSlur">ComplexTypeSlur</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.tied.ComplexTypeTied" href="../types/complextypes/tied.html#musicscore.musicxml.types.complextypes.tied.ComplexTypeTied">ComplexTypeTied</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.tuplet.ComplexTypeTuplet" href="../types/complextypes/tuplet.html#musicscore.musicxml.types.complextypes.tuplet.ComplexTypeTuplet">ComplexTypeTuplet</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.bracket.ComplexTypeBracket" href="../types/complextypes/bracket.html#musicscore.musicxml.types.complextypes.bracket.ComplexTypeBracket">ComplexTypeBracket</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.wedge.ComplexTypeWedge" href="../types/complextypes/wedge.html#musicscore.musicxml.types.complextypes.wedge.ComplexTypeWedge">ComplexTypeWedge</a></li>
 <li><a title="musicscore.musicxml.attributes.elementposition.ElementPosition" href="elementposition.html#musicscore.musicxml.attributes.elementposition.ElementPosition">ElementPosition</a></li>
 <li><a title="musicscore.musicxml.attributes.image.ImageAttributes" href="image.html#musicscore.musicxml.attributes.image.ImageAttributes">ImageAttributes</a></li>
@@ -300,6 +314,8 @@ tenths of a staff resized by the staff-size element.</p></section>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="musicscore.musicxml.attributes.position.Position" href="#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.YPosition" href="#musicscore.musicxml.attributes.position.YPosition">YPosition</a></li>
+<li><a title="musicscore.musicxml.attributes.position.XPosition" href="#musicscore.musicxml.attributes.position.XPosition">XPosition</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.attributes.position.RelativeY"><code class="flex name class">
@@ -322,6 +338,68 @@ tenths of a staff resized by the staff-size element.</p></section>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="musicscore.musicxml.attributes.position.Position" href="#musicscore.musicxml.attributes.position.Position">Position</a></li>
+<li><a title="musicscore.musicxml.attributes.position.YPosition" href="#musicscore.musicxml.attributes.position.YPosition">YPosition</a></li>
+<li><a title="musicscore.musicxml.attributes.position.XPosition" href="#musicscore.musicxml.attributes.position.XPosition">XPosition</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.attributes.position.XPosition"><code class="flex name class">
+<span>class <span class="ident">XPosition</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The x-position attribute group is used for elements like notes where specifying x position is common, but
+specifying y position is rare.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class XPosition(DefaultX, DefaultY, RelativeX, RelativeY):
+    &#34;&#34;&#34;The x-position attribute group is used for elements like notes where specifying x position is common, but
+    specifying y position is rare.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.elements.note.Note" href="../elements/note.html#musicscore.musicxml.elements.note.Note">Note</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.attributes.position.YPosition"><code class="flex name class">
+<span>class <span class="ident">YPosition</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The y-position attribute group is used for elements like stems where specifying y position is common, but
+specifying x position is rare.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class YPosition(DefaultX, DefaultY, RelativeX, RelativeY):
+    &#34;&#34;&#34;The y-position attribute group is used for elements like stems where specifying y position is common, but
+    specifying x position is rare.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.stem.ComplexTypeStem" href="../types/complextypes/stem.html#musicscore.musicxml.types.complextypes.stem.ComplexTypeStem">ComplexTypeStem</a></li>
 </ul>
 </dd>
 </dl>
@@ -354,6 +432,12 @@ tenths of a staff resized by the staff-size element.</p></section>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.attributes.position.RelativeY" href="#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.attributes.position.XPosition" href="#musicscore.musicxml.attributes.position.XPosition">XPosition</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.attributes.position.YPosition" href="#musicscore.musicxml.attributes.position.YPosition">YPosition</a></code></h4>
 </li>
 </ul>
 </li>

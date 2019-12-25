@@ -1,4 +1,4 @@
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeLeftCenterRight
 
 
 class Justify(AttributeAbstract):
@@ -11,3 +11,4 @@ class Justify(AttributeAbstract):
     def __init__(self, justify=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.generate_attribute('justify', justify, "TypeLeftCenterRight")
+        TypeLeftCenterRight

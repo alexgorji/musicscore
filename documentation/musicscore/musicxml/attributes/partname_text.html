@@ -34,11 +34,8 @@ class PartNameText(PrintStyle, PrintObject, Justify):
     part-abbreviation-display elements
     &#34;&#34;&#34;
 
-    def __init__(self, default_x=None, default_y=None, relative_x=None, relative_y=None, font_family=None,
-                 font_style=None, font_size=None, font_weight=None, color=None, print_object=None, *args, **kwargs):
-        super().__init__(default_x=default_x, default_y=default_y, relative_x=relative_x,
-                         relative_y=relative_y, font_family=font_family, font_style=font_style, font_size=font_size,
-                         font_weight=font_weight, color=color, print_object=print_object, *args, **kwargs)</code></pre>
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
 </details>
 </section>
 <section>
@@ -52,7 +49,7 @@ class PartNameText(PrintStyle, PrintObject, Justify):
 <dl>
 <dt id="musicscore.musicxml.attributes.partname_text.PartNameText"><code class="flex name class">
 <span>class <span class="ident">PartNameText</span></span>
-<span>(</span><span>default_x=None, default_y=None, relative_x=None, relative_y=None, font_family=None, font_style=None, font_size=None, font_weight=None, color=None, print_object=None, *args, **kwargs)</span>
+<span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>The part-name-text attribute group is used by the part-name and part-abbreviation elements. The print-style and
@@ -67,11 +64,8 @@ part-abbreviation-display elements</p></section>
     part-abbreviation-display elements
     &#34;&#34;&#34;
 
-    def __init__(self, default_x=None, default_y=None, relative_x=None, relative_y=None, font_family=None,
-                 font_style=None, font_size=None, font_weight=None, color=None, print_object=None, *args, **kwargs):
-        super().__init__(default_x=default_x, default_y=default_y, relative_x=relative_x,
-                         relative_y=relative_y, font_family=font_family, font_style=font_style, font_size=font_size,
-                         font_weight=font_weight, color=color, print_object=print_object, *args, **kwargs)</code></pre>
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

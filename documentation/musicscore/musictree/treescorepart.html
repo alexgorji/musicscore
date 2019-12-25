@@ -22,19 +22,62 @@
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from musicscore.musictree.treepart import TreePart
+<pre><code class="python">from musicscore.musictree.treeinstruments import TreeInstrument
+from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.types.complextypes.partlist import ScorePart
+import uuid
+
+from musicscore.musicxml.types.complextypes.scorepart import PartName, PartAbbreviation
 
 
 class TreeScorePart(ScorePart):
     &#34;&#34;&#34;&#34;&#34;&#34;
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, id, instrument=None, *args, **kwargs):
+        super().__init__(id=id, *args, **kwargs)
+        self.add_child(PartName(name=&#39;none&#39;, print_object=&#39;no&#39;))
+        self._instrument = None
+        self.instrument = instrument
         self._max_division = None
         self._forbidden_divisions = None
         self._parts = []
         self.parent_score = None
+        # self.add_child(PartAbbreviation())
+        # self._part_name = None
+        # self._part_abbreviation = None
+
+    @property
+    def part_name(self):
+        try:
+            return self.get_children_by_type(PartName)[0]
+        except IndexError:
+            return None
+
+    @property
+    def part_abbreviation(self):
+        try:
+            return self.get_children_by_type(PartAbbreviation)[0]
+        except IndexError:
+            return None
+
+    @property
+    def instrument(self):
+        return self._instrument
+
+    @instrument.setter
+    def instrument(self, val):
+        if val is not None and not isinstance(val, TreeInstrument):
+            raise TypeError(&#39;instrument.value must be of type TreeInstrument not{}&#39;.format(type(val)))
+        self._instrument = val
+        if val is not None:
+            val.id = self.id
+            if self.part_name is not None:
+                self.remove_child(self.part_name)
+            self.add_child(self.instrument.part_name)
+
+            if self.part_abbreviation is not None:
+                self.remove_child(self.part_abbreviation)
+            self.add_child(self.instrument.part_abbreviation)
 
     @property
     def max_division(self):
@@ -68,8 +111,12 @@ class TreeScorePart(ScorePart):
     def get_parts(self):
         return self._parts
 
-    def add_part(self):
-        part = TreePart(id=self.id)
+    def add_part(self, part=None):
+        if not part:
+            part = TreePart(id=self.id)
+        else:
+            if part.id != self.id:
+                raise ValueError(&#39;Part must have the same id as TreeScorePart&#39;)
         part.parent_score_part = self
         self._parts.append(part)
         return part</code></pre>
@@ -86,7 +133,7 @@ class TreeScorePart(ScorePart):
 <dl>
 <dt id="musicscore.musictree.treescorepart.TreeScorePart"><code class="flex name class">
 <span>class <span class="ident">TreeScorePart</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>id, instrument=None, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -95,12 +142,51 @@ class TreeScorePart(ScorePart):
 <pre><code class="python">class TreeScorePart(ScorePart):
     &#34;&#34;&#34;&#34;&#34;&#34;
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, id, instrument=None, *args, **kwargs):
+        super().__init__(id=id, *args, **kwargs)
+        self.add_child(PartName(name=&#39;none&#39;, print_object=&#39;no&#39;))
+        self._instrument = None
+        self.instrument = instrument
         self._max_division = None
         self._forbidden_divisions = None
         self._parts = []
         self.parent_score = None
+        # self.add_child(PartAbbreviation())
+        # self._part_name = None
+        # self._part_abbreviation = None
+
+    @property
+    def part_name(self):
+        try:
+            return self.get_children_by_type(PartName)[0]
+        except IndexError:
+            return None
+
+    @property
+    def part_abbreviation(self):
+        try:
+            return self.get_children_by_type(PartAbbreviation)[0]
+        except IndexError:
+            return None
+
+    @property
+    def instrument(self):
+        return self._instrument
+
+    @instrument.setter
+    def instrument(self, val):
+        if val is not None and not isinstance(val, TreeInstrument):
+            raise TypeError(&#39;instrument.value must be of type TreeInstrument not{}&#39;.format(type(val)))
+        self._instrument = val
+        if val is not None:
+            val.id = self.id
+            if self.part_name is not None:
+                self.remove_child(self.part_name)
+            self.add_child(self.instrument.part_name)
+
+            if self.part_abbreviation is not None:
+                self.remove_child(self.part_abbreviation)
+            self.add_child(self.instrument.part_abbreviation)
 
     @property
     def max_division(self):
@@ -134,8 +220,12 @@ class TreeScorePart(ScorePart):
     def get_parts(self):
         return self._parts
 
-    def add_part(self):
-        part = TreePart(id=self.id)
+    def add_part(self, part=None):
+        if not part:
+            part = TreePart(id=self.id)
+        else:
+            if part.id != self.id:
+                raise ValueError(&#39;Part must have the same id as TreeScorePart&#39;)
         part.parent_score_part = self
         self._parts.append(part)
         return part</code></pre>
@@ -166,6 +256,16 @@ def forbidden_divisions(self):
     return self._forbidden_divisions</code></pre>
 </details>
 </dd>
+<dt id="musicscore.musictree.treescorepart.TreeScorePart.instrument"><code class="name">var <span class="ident">instrument</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def instrument(self):
+    return self._instrument</code></pre>
+</details>
+</dd>
 <dt id="musicscore.musictree.treescorepart.TreeScorePart.max_division"><code class="name">var <span class="ident">max_division</span></code></dt>
 <dd>
 <section class="desc"></section>
@@ -178,18 +278,48 @@ def max_division(self):
     return self._max_division</code></pre>
 </details>
 </dd>
+<dt id="musicscore.musictree.treescorepart.TreeScorePart.part_abbreviation"><code class="name">var <span class="ident">part_abbreviation</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def part_abbreviation(self):
+    try:
+        return self.get_children_by_type(PartAbbreviation)[0]
+    except IndexError:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musictree.treescorepart.TreeScorePart.part_name"><code class="name">var <span class="ident">part_name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def part_name(self):
+    try:
+        return self.get_children_by_type(PartName)[0]
+    except IndexError:
+        return None</code></pre>
+</details>
+</dd>
 </dl>
 <h3>Methods</h3>
 <dl>
 <dt id="musicscore.musictree.treescorepart.TreeScorePart.add_part"><code class="name flex">
-<span>def <span class="ident">add_part</span></span>(<span>self)</span>
+<span>def <span class="ident">add_part</span></span>(<span>self, part=None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def add_part(self):
-    part = TreePart(id=self.id)
+<pre><code class="python">def add_part(self, part=None):
+    if not part:
+        part = TreePart(id=self.id)
+    else:
+        if part.id != self.id:
+            raise ValueError(&#39;Part must have the same id as TreeScorePart&#39;)
     part.parent_score_part = self
     self._parts.append(part)
     return part</code></pre>
@@ -226,11 +356,14 @@ def max_division(self):
 <ul>
 <li>
 <h4><code><a title="musicscore.musictree.treescorepart.TreeScorePart" href="#musicscore.musictree.treescorepart.TreeScorePart">TreeScorePart</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="musicscore.musictree.treescorepart.TreeScorePart.add_part" href="#musicscore.musictree.treescorepart.TreeScorePart.add_part">add_part</a></code></li>
 <li><code><a title="musicscore.musictree.treescorepart.TreeScorePart.forbidden_divisions" href="#musicscore.musictree.treescorepart.TreeScorePart.forbidden_divisions">forbidden_divisions</a></code></li>
 <li><code><a title="musicscore.musictree.treescorepart.TreeScorePart.get_parts" href="#musicscore.musictree.treescorepart.TreeScorePart.get_parts">get_parts</a></code></li>
+<li><code><a title="musicscore.musictree.treescorepart.TreeScorePart.instrument" href="#musicscore.musictree.treescorepart.TreeScorePart.instrument">instrument</a></code></li>
 <li><code><a title="musicscore.musictree.treescorepart.TreeScorePart.max_division" href="#musicscore.musictree.treescorepart.TreeScorePart.max_division">max_division</a></code></li>
+<li><code><a title="musicscore.musictree.treescorepart.TreeScorePart.part_abbreviation" href="#musicscore.musictree.treescorepart.TreeScorePart.part_abbreviation">part_abbreviation</a></code></li>
+<li><code><a title="musicscore.musictree.treescorepart.TreeScorePart.part_name" href="#musicscore.musictree.treescorepart.TreeScorePart.part_name">part_name</a></code></li>
 </ul>
 </li>
 </ul>

@@ -124,6 +124,9 @@
           <tied number="1" type="start"/>
           <tied number="1" type="stop"/>
         </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
+        </notations>
       </note>
       <note>
         <pitch>
@@ -214,6 +217,9 @@
         <beam number="1">end</beam>
         <notations>
           <tied number="1" type="stop"/>
+        </notations>
+        <notations>
+          <tuplet number="1" type="stop" bracket="yes" placement="above"/>
         </notations>
       </note>
     </part>

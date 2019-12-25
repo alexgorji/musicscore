@@ -1,11 +1,23 @@
 import math
 import warnings
 
+from musicscore.musictree.treechordflags import TreeChordFlag
 from quicktions import Fraction
 
+from musicscore.basic_functions import flatten
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musicxml.elements.note import TimeModification
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
+
+
+class BeatException(BaseException):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+
+
+class WrongPositionInBeat(BeatException):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
 
 
 def _find_nearest_quantized_value(quantized_values, values):
@@ -66,6 +78,8 @@ class TreeBeat(object):
             parent_max_division = self.parent_voice.max_division
             if parent_max_division:
                 self._max_division = math.floor(parent_max_division * self.duration)
+                if self._max_division == 0:
+                    self._max_division = 1
 
         if self._max_division is None:
             if self.duration == 0.5:
@@ -149,6 +163,15 @@ class TreeBeat(object):
             raise TypeError('{} must be of type TreeChord'.format(chord))
         chord.parent_beat = self
         self.chords.append(chord)
+        if chord.position_in_beat > self.duration:
+            self.chords.remove(chord)
+            raise WrongPositionInBeat()
+
+    def remove_chords(self):
+        self._chords = []
+
+    def clear_chords(self):
+        self._chords = []
 
     def get_quantized_locations(self, subdivision):
         return _find_quantized_locations(self.duration, subdivision)
@@ -171,7 +194,8 @@ class TreeBeat(object):
         def _get_permitted_divs():
             output = list(range(1, self.max_division + 1))
             for f in self.forbidden_divisions:
-                output.remove(f)
+                if f in output:
+                    output.remove(f)
             return output
 
         permitted_divs = _get_permitted_divs()
@@ -212,33 +236,82 @@ class TreeBeat(object):
                 chord.quarter_duration = quarter_duration
                 chord._offset = None
 
-    def update_tuplets(self):
-        tuplet_divisions = [3, 5, 6, 7, 9, 10]
-        non_grace_chords = [chord for chord in self.chords if chord.quarter_duration != 0]
-        if self.best_div in tuplet_divisions:
-            for i in range(len(non_grace_chords)):
-                if i == 0:
-                    non_grace_chords[0].add_tuplet('start')
-                elif i == len(self.chords) - 1:
-                    non_grace_chords[-1].add_tuplet('stop')
-                else:
-                    non_grace_chords[i].add_tuplet('continue')
-
     def split_not_notatable(self):
-
+        # print(self.offset, [ch.quarter_duration for ch in self.chords])
         output = []
         for chord in self.chords:
             split = None
-            if chord.quarter_duration == Fraction(9, 2):
-                if chord.position_in_beat == 0:
-                    split = chord.split(8, 1)
             if chord.quarter_duration == Fraction(5, 1):
                 if chord.position_in_beat == 0:
                     split = chord.split(3, 2)
+            elif chord.quarter_duration == Fraction(7, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(4, 3)
+            elif chord.quarter_duration == Fraction(9, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(4, 5)
+            elif chord.quarter_duration == Fraction(10, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(4, 6)
+            elif chord.quarter_duration == Fraction(11, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(4, 7)
+            # elif chord.quarter_duration == Fraction(12, 1):
+            #     if chord.position_in_beat == 0:
+            #         split = chord.split(8, )
+            elif chord.quarter_duration == Fraction(13, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 5)
+            elif chord.quarter_duration == Fraction(14, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 6)
+            elif chord.quarter_duration == Fraction(15, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 7)
+            elif chord.quarter_duration == Fraction(16, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 8)
+            elif chord.quarter_duration == Fraction(17, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 9)
+            elif chord.quarter_duration == Fraction(18, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 10)
+            elif chord.quarter_duration == Fraction(19, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 11)
+            elif chord.quarter_duration == Fraction(20, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 12)
+            elif chord.quarter_duration == Fraction(21, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 13)
+            elif chord.quarter_duration == Fraction(22, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 14)
+
+            elif chord.quarter_duration == Fraction(23, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 15)
+
+            elif chord.quarter_duration == Fraction(24, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 16)
+
+            elif chord.quarter_duration == Fraction(25, 1):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 17)
+
+            if chord.quarter_duration == Fraction(9, 2):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 1)
 
             if chord.quarter_duration == Fraction(5, 2):
                 if chord.position_in_beat == 0:
+                    split = chord.split(2, 3)
+                elif chord.position_in_beat == 0.5:
                     split = chord.split(3, 2)
+
             if chord.quarter_duration == Fraction(7, 2):
                 if chord.position_in_beat == 0:
                     split = chord.split(4, 3)
@@ -339,7 +412,6 @@ class TreeBeat(object):
                     split = chord.split(3, 6)
                 elif chord.position_in_beat == Fraction(1, 10):
                     split = chord.split(3, 6)
-
             # elif chord.quarter_duration == Fraction(5, 11):
             #     if chord.position_in_beat == Fraction(0, 11):
             #         split = chord.split(Fraction(4, 11), Fraction(1, 11))
@@ -442,12 +514,181 @@ class TreeBeat(object):
             #
             #     elif chord.position_in_beat == Fraction(1, 12):
             #         split = chord.split(Fraction(3, 12), Fraction(8, 12))
-
             if split:
                 output.extend(split)
             else:
                 output.append(chord)
-        self._chords = output
+        self.remove_chords()
+        for ch in output:
+            try:
+                self.add_chord(ch)
+            except WrongPositionInBeat:
+                number_of_next_beats = (self.chords[-1].position_in_beat + self.chords[
+                    -1].quarter_duration) / self.duration
+                if number_of_next_beats != int(number_of_next_beats):
+                    raise Exception()
+                next_beat = self.next
+                while number_of_next_beats > 1:
+                    next_beat = next_beat.next
+                    number_of_next_beats -= 1
+                if next_beat.chords:
+                    raise Exception()
+                next_beat.add_chord(ch)
+        # self._chords = output
+
+    def implement_flags(self):
+        # print('implement flags for', self.offset)
+        # print('chords', self.chords)
+        # print([ch.quarter_duration for ch in self.chords])
+
+        def check_implement_output(chords):
+            if not isinstance(chords, list):
+                raise Exception('output of implement can only be a list of chords')
+
+            # if len(chords) not in [1, 2]:
+            #     raise Exception('output of implement can have 1 or 2 chords')
+
+            for ch in chords:
+                if not isinstance(ch, TreeChord):
+                    raise Exception('output of implement can only be a list of chords')
+
+        flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
+                          isinstance(flag, TreeChordFlag)])
+
+        while flag_types:
+            flag_type = flag_types.pop()
+            output = []
+            for chord in self.chords:
+                try:
+                    chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
+                    new_chords = chord_flag.implement(chord, self)
+                    check_implement_output(new_chords)
+                    diff = sum([ch.quarter_duration for ch in new_chords]) - self.duration
+                    if len(new_chords) == 1:
+                        output.extend(new_chords)
+                    else:
+                        if diff > 0:
+                            next_beat = self.next
+
+                            if not next_beat.chords:
+                                next_beat.add_chord(new_chords[-1])
+                            else:
+                                raise Exception('next_beat is not empty.')
+
+                            output.extend(new_chords[:-1])
+                        else:
+                            output.extend(new_chords)
+                except IndexError:
+                    output.append(chord)
+
+            self._chords = output
+            self.split_not_notatable()
+
+    #
+    # def adjoin_rests(self):
+    #     _adjoin = True
+    #     if len(self.chords) > 1:
+    #         for chord in self.chords:
+    #             if not chord.is_rest or not chord.is_adjoinable:
+    #                 _adjoin = False
+    #                 break
+    #
+    #         if _adjoin:
+    #             first_chord = self.chords[0]
+    #             first_chord.quarter_duration = self.duration
+    #             for chord in self.chords[1:]:
+    #                 chord.parent_voice.chords.remove(chord)
+    #
+    #             self.remove_chords()
+    #             self.add_chord(first_chord)
+
+    # chord_iterator = iter(self.chords)
+
+    #
+    #
+    # def _adjoin(current_chord, next_chord):
+    #
+    #     def _chords_are_adjoinable():
+    #         condition = current_chord.is_adjoinable and next_chord.is_adjoinable
+    #         return condition
+    #
+    #     def _chords_are_rest():
+    #         condition = current_chord.is_rest and next_chord.is_rest
+    #         # _print_condition('_chords_are_not_rest', condition)
+    #         return condition
+    #
+    #     # def _chords_have_right_positions():
+    #     #     # print 'in _chords_have_right_positions', current_chord.name, next_chord.name
+    #     #     condition = current_chord.offset % (
+    #     #         1) == 0 and next_chord.offset % 1 == 0
+    #     #     # _print_condition('_chords_have_right_positions', condition)
+    #     #     return condition
+    #
+    #     # def _result_is_notatable():
+    #     #     condition = current_chord.quarter_duration + next_chord.quarter_duration in notatables
+    #     #     # _print_condition('_result_is_notatable', condition)
+    #     #     return condition
+    #
+    #     if _chords_are_adjoinable() and _chords_are_rest():
+    #         current_chord.quarter_duration += next_chord.quarter_duration
+    #         next_chord.marked = True
+    #
+    #         try:
+    #             next_chord = chord_iterator.__next__()
+    #             next_chord = _adjoin(current_chord, next_chord)
+    #         except StopIteration:
+    #             pass
+    #
+    #     return next_chord
+    #
+    # adjoin = True
+    #
+    # try:
+    #     current_chord = chord_iterator.__next__()
+    #     next_chord = chord_iterator.__next__()
+    # except StopIteration:
+    #     adjoin = False
+    #
+    # while adjoin:
+    #     try:
+    #         next_chord = _adjoin(current_chord, next_chord)
+    #         current_chord = next_chord
+    #         next_chord = chord_iterator.__next__()
+    #     except StopIteration:
+    #         break
+    #
+    # beat_new_chords = []
+    # for chord in self.chords:
+    #     try:
+    #         if chord.marked:
+    #             # chord.parent_voice.chords.remove(chord)
+    #             pass
+    #         else:
+    #             beat_new_chords.append(chord)
+    #     except AttributeError:
+    #         beat_new_chords.append(chord)
+    #
+    # if self.chords != beat_new_chords:
+    #     print([ch.quarter_duration for ch in self.chords])
+    #     print([ch.quarter_duration for ch in beat_new_chords])
+    #     self.remove_chords()
+    #     for ch in beat_new_chords:
+    #         self.add_chord(ch)
+    #     self.split_not_notatable()
+
+    def update_tuplets(self):
+        tuplet_divisions = [3, 5, 6, 7, 9, 10]
+        non_grace_chords = [chord for chord in self.chords if
+                            chord.quarter_duration != 0 and not chord.is_finger_tremolo]
+
+        if self.best_div in tuplet_divisions:
+            for i in range(len(non_grace_chords)):
+                if i == 0:
+                    non_grace_chords[0].add_tuplet('start')
+                elif i == len(non_grace_chords) - 1:
+                    non_grace_chords[-1].add_tuplet('stop')
+                else:
+                    non_grace_chords[i].add_tuplet('continue')
 
     def substitute_sextoles(self):
         six_divisions = (

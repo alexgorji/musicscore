@@ -75,12 +75,15 @@ class TreeAccidental(Accidental):
 
 
 class TreeNote(Note):
+    # todo: Inheritance Chain must be Midi, MidiNote, TreeMidiNote (or TreeNote)
     &#34;&#34;&#34;
     quarter_duration = 0 means grace note
     &#34;&#34;&#34;
 
-    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, *args, **kwargs):
+    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, parent_chord=None, *args,
+                 **kwargs):
         super().__init__(*args, **kwargs)
+        self.parent_chord = parent_chord
         self._accidental = TreeAccidental(show=False, value=&#39;natural&#39;)
         self._accidental._note = self
         self._quarter_duration = None
@@ -90,6 +93,8 @@ class TreeNote(Note):
         self._offset = None
         self._is_tied = False
         self.is_tied = is_tied
+        self.is_finger_tremolo = False
+
 
     @property
     def quarter_duration(self):
@@ -118,6 +123,10 @@ class TreeNote(Note):
                     else:
                         del child
                 self.add_child(Grace())
+            # if not self.is_finger_tremolo:
+            #
+            # else:
+            #     self._quarter_duration = 1
 
     @property
     def previous(self):
@@ -165,6 +174,13 @@ class TreeNote(Note):
             pass
         self._event = self.add_child(value)
         self.update_accidental()
+
+    # @property
+    # def is_finger_tremolo(self):
+    #     try:
+    #         return self.parent_chord.is_finger_tremolo
+    #     except AttributeError:
+    #         return False
 
     def update_accidental(self):
         _accidentals = {-1.5: &#39;three-quarters-flat&#39;,
@@ -371,19 +387,22 @@ def quarter_duration(self):
 </dd>
 <dt id="musicscore.musictree.treenote.TreeNote"><code class="flex name class">
 <span>class <span class="ident">TreeNote</span></span>
-<span>(</span><span>event=Rest at 0x10be85978, quarter_duration=1, is_tied=False, *args, **kwargs)</span>
+<span>(</span><span>event=Rest at 0x10476cac8, quarter_duration=1, is_tied=False, parent_chord=None, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>quarter_duration = 0 means grace note</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class TreeNote(Note):
+    # todo: Inheritance Chain must be Midi, MidiNote, TreeMidiNote (or TreeNote)
     &#34;&#34;&#34;
     quarter_duration = 0 means grace note
     &#34;&#34;&#34;
 
-    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, *args, **kwargs):
+    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, parent_chord=None, *args,
+                 **kwargs):
         super().__init__(*args, **kwargs)
+        self.parent_chord = parent_chord
         self._accidental = TreeAccidental(show=False, value=&#39;natural&#39;)
         self._accidental._note = self
         self._quarter_duration = None
@@ -393,6 +412,8 @@ def quarter_duration(self):
         self._offset = None
         self._is_tied = False
         self.is_tied = is_tied
+        self.is_finger_tremolo = False
+
 
     @property
     def quarter_duration(self):
@@ -421,6 +442,10 @@ def quarter_duration(self):
                     else:
                         del child
                 self.add_child(Grace())
+            # if not self.is_finger_tremolo:
+            #
+            # else:
+            #     self._quarter_duration = 1
 
     @property
     def previous(self):
@@ -468,6 +493,13 @@ def quarter_duration(self):
             pass
         self._event = self.add_child(value)
         self.update_accidental()
+
+    # @property
+    # def is_finger_tremolo(self):
+    #     try:
+    #         return self.parent_chord.is_finger_tremolo
+    #     except AttributeError:
+    #         return False
 
     def update_accidental(self):
         _accidentals = {-1.5: &#39;three-quarters-flat&#39;,
@@ -522,6 +554,24 @@ def quarter_duration(self):
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../musicxml/elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.position.XPosition" href="../musicxml/attributes/position.html#musicscore.musicxml.attributes.position.XPosition">XPosition</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../musicxml/attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../musicxml/attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../musicxml/attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../musicxml/attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../musicxml/attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../musicxml/attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../musicxml/attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../musicxml/attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../musicxml/attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../musicxml/attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.printout.Printout" href="../musicxml/attributes/printout.html#musicscore.musicxml.attributes.printout.Printout">Printout</a></li>
+<li><a title="musicscore.musicxml.attributes.printobject.PrintObject" href="../musicxml/attributes/printobject.html#musicscore.musicxml.attributes.printobject.PrintObject">PrintObject</a></li>
+<li><a title="musicscore.musicxml.attributes.printout.PrintDot" href="../musicxml/attributes/printout.html#musicscore.musicxml.attributes.printout.PrintDot">PrintDot</a></li>
+<li><a title="musicscore.musicxml.attributes.printspacing.PrintSpacing" href="../musicxml/attributes/printspacing.html#musicscore.musicxml.attributes.printspacing.PrintSpacing">PrintSpacing</a></li>
+<li><a title="musicscore.musicxml.attributes.printout.PrintLyric" href="../musicxml/attributes/printout.html#musicscore.musicxml.attributes.printout.PrintLyric">PrintLyric</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../musicxml/attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../musicxml/attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 <h3>Instance variables</h3>
 <dl>

@@ -1,0 +1,12 @@
+Metadata-Version: 1.1
+Name: musicscore
+Version: 0.0.1
+Summary: generating musicxml
+Home-page: https://github.com/alexgorji/musicscore.git
+Author: Alex Gorji
+Author-email: aligorji@hotmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent

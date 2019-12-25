@@ -1,37 +1,17 @@
-'''
-	<xs:complexType name="notations">
-		<xs:sequence>
-			<xs:group ref="editorial"/>
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element name="tied" type="tied"/>
-				<xs:element name="slur" type="slur"/>
-				<xs:element name="tuplet" type="tuplet"/>
-				<xs:element name="glissando" type="glissando"/>
-				<xs:element name="slide" type="slide"/>
-				<xs:element name="ornaments" type="ornaments"/>
-				<xs:element name="technical" type="technical"/>
-				<xs:element name="articulations" type="articulations"/>
-				<xs:element name="dynamics" type="dynamics"/>
-				<xs:element name="fermata" type="fermata"/>
-				<xs:element name="arpeggiate" type="arpeggiate"/>
-				<xs:element name="non-arpeggiate" type="non-arpeggiate"/>
-				<xs:element name="accidental-mark" type="accidental-mark"/>
-				<xs:element name="other-notation" type="other-notation"/>
-			</xs:choice>
-		</xs:sequence>
-		<xs:attributeGroup ref="print-object"/>
-		<xs:attributeGroup ref="optional-unique-id"/>
-	</xs:complexType>
-'''
-
 from musicscore.dtd.dtd import Sequence, GroupReference, Choice, Element
 from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
 from musicscore.musicxml.attributes.printobject import PrintObject
 from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.complextypes.arpeggiate import ComplexTypeArpeggiate
+from musicscore.musicxml.types.complextypes.articulations import ComplexTypeArticulations
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
-from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics
+from musicscore.musicxml.types.complextypes.dynamics import Dynamics
+from musicscore.musicxml.types.complextypes.fermata import ComplexTypeFermata
+from musicscore.musicxml.types.complextypes.ornaments import ComplexTypeOrnaments
+from musicscore.musicxml.types.complextypes.slide import ComplexTypeSlide
 from musicscore.musicxml.types.complextypes.slur import ComplexTypeSlur
+from musicscore.musicxml.types.complextypes.technical import ComplexTypeTechnical
 from musicscore.musicxml.types.complextypes.tied import ComplexTypeTied
 from musicscore.musicxml.types.complextypes.tuplet import ComplexTypeTuplet
 
@@ -44,11 +24,10 @@ class Tied(ComplexTypeTied):
 
 
 class Slur(ComplexTypeSlur):
-    """"""
+    _TAG = 'slur'
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='slur', value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)
 
 
 class Tuplet(ComplexTypeTuplet):
@@ -66,61 +45,53 @@ class Glissando(XMLElement):
         raise NotImplementedError()
 
 
-class Slide(XMLElement):
+class Slide(ComplexTypeSlide):
     """"""
+    _TAG = 'slide'
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='slide', value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(tag=self._TAG, type=type, *args, **kwargs)
 
 
-class Ornaments(XMLElement):
+class Ornaments(ComplexTypeOrnaments):
     """"""
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='ornaments', value=value, *args, **kwargs)
-        raise NotImplementedError()
-
-
-class Technical(XMLElement):
-    """"""
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='technical', value=value, *args, **kwargs)
-        raise NotImplementedError()
-
-
-class Articulations(XMLElement):
-    """"""
-
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='articulations', value=value, *args, **kwargs)
-        raise NotImplementedError()
-
-
-class Dynamics(ComplexTypeDynamics):
-    _TAG = 'dynamics'
-    """"""
-
+    _TAG = 'ornaments'
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class Fermata(XMLElement):
+class Technical(ComplexTypeTechnical):
     """"""
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='fermata', value=value, *args, **kwargs)
-        raise NotImplementedError()
+    _TAG = 'technical'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class Arpeggiate(XMLElement):
+class Articulations(ComplexTypeArticulations):
     """"""
+    _TAG = 'articulations'
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='arpeggiate', value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class Fermata(ComplexTypeFermata):
+    """"""
+    _TAG = 'fermata'
+
+    def __init__(self, value='normal', *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
+
+
+class Arpeggiate(ComplexTypeArpeggiate):
+    """"""
+    _TAG = 'arpeggiate'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class NonArpeggiate(XMLElement):

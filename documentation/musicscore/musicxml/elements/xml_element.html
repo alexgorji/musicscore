@@ -83,7 +83,7 @@ class XMLTree(Tree):
     def check_non_optional(self):
         for leaf in self.current_dtd_choice.traverse_leaves():
             if not leaf.check_min_occurrence():
-                raise ChildIsNotOptional(leaf)
+                raise ChildIsNotOptional(leaf, self)
 
     def reset_dtd(self):
         self._not_sorted_children = []
@@ -100,7 +100,7 @@ class XMLTree(Tree):
                 self.goto_next_dtd_choice()
                 self.add_xml_child(xml_child)
             except Exception:
-                raise ChildTypeDTDConflict(xml_child)
+                raise ChildTypeDTDConflict(xml_child, self)
 
         else:
             child_added = False
@@ -125,8 +125,8 @@ class XMLTree(Tree):
                 try:
                     self.goto_next_dtd_choice()
                     self.add_xml_child(xml_child)
-                except Exception:
-                    raise ChildOccurrenceDTDConflict(xml_child)
+                except Exception as err:
+                    raise ChildOccurrenceDTDConflict(xml_child, self)
 
             if child_added:
                 self.update_current_children()
@@ -436,12 +436,6 @@ class XMLElement(XMLTree):
 <li><a title="musicscore.musicxml.types.complextypes.tuplet.TupletNumber" href="../types/complextypes/tuplet.html#musicscore.musicxml.types.complextypes.tuplet.TupletNumber">TupletNumber</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.tuplet.TupletType" href="../types/complextypes/tuplet.html#musicscore.musicxml.types.complextypes.tuplet.TupletType">TupletType</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.notations.Glissando" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Glissando">Glissando</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.notations.Slide" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Slide">Slide</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.notations.Ornaments" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Ornaments">Ornaments</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.notations.Technical" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Technical">Technical</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.notations.Articulations" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Articulations">Articulations</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.notations.Fermata" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Fermata">Fermata</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.notations.Arpeggiate" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.Arpeggiate">Arpeggiate</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.notations.NonArpeggiate" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.NonArpeggiate">NonArpeggiate</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.notations.AccidentalMark" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.AccidentalMark">AccidentalMark</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.notations.OtherNotation" href="../types/complextypes/notations.html#musicscore.musicxml.types.complextypes.notations.OtherNotation">OtherNotation</a></li>
@@ -452,13 +446,9 @@ class XMLElement(XMLTree):
 <li><a title="musicscore.musicxml.elements.note.Cue" href="note.html#musicscore.musicxml.elements.note.Cue">Cue</a></li>
 <li><a title="musicscore.musicxml.elements.note.Duration" href="note.html#musicscore.musicxml.elements.note.Duration">Duration</a></li>
 <li><a title="musicscore.musicxml.elements.note.Instrument" href="note.html#musicscore.musicxml.elements.note.Instrument">Instrument</a></li>
-<li><a title="musicscore.musicxml.elements.note.Type" href="note.html#musicscore.musicxml.elements.note.Type">Type</a></li>
-<li><a title="musicscore.musicxml.elements.note.Stem" href="note.html#musicscore.musicxml.elements.note.Stem">Stem</a></li>
-<li><a title="musicscore.musicxml.elements.note.Notehead" href="note.html#musicscore.musicxml.elements.note.Notehead">Notehead</a></li>
 <li><a title="musicscore.musicxml.elements.note.NoteheadText" href="note.html#musicscore.musicxml.elements.note.NoteheadText">NoteheadText</a></li>
 <li><a title="musicscore.musicxml.elements.note.Play" href="note.html#musicscore.musicxml.elements.note.Play">Play</a></li>
 <li><a title="musicscore.musicxml.elements.note.Note" href="note.html#musicscore.musicxml.elements.note.Note">Note</a></li>
-<li><a title="musicscore.musicxml.elements.barline.WavyLine" href="barline.html#musicscore.musicxml.elements.barline.WavyLine">WavyLine</a></li>
 <li><a title="musicscore.musicxml.elements.barline.Coda" href="barline.html#musicscore.musicxml.elements.barline.Coda">Coda</a></li>
 <li><a title="musicscore.musicxml.elements.barline.Fermata" href="barline.html#musicscore.musicxml.elements.barline.Fermata">Fermata</a></li>
 <li><a title="musicscore.musicxml.elements.barline.Ending" href="barline.html#musicscore.musicxml.elements.barline.Ending">Ending</a></li>
@@ -485,9 +475,7 @@ class XMLElement(XMLTree):
 <li><a title="musicscore.musicxml.types.complextypes.metronome.BeatUnit" href="../types/complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.BeatUnit">BeatUnit</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.metronome.MetronomeType" href="../types/complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.MetronomeType">MetronomeType</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.metronome.MetronomeRelation" href="../types/complextypes/metronome.html#musicscore.musicxml.types.complextypes.metronome.MetronomeRelation">MetronomeRelation</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.directiontype.Dynamics" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.Dynamics">Dynamics</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.directiontype.Dashes" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.Dashes">Dashes</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.directiontype.Bracket" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.Bracket">Bracket</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.directiontype.Pedal" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.Pedal">Pedal</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.directiontype.OctaveShift" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.OctaveShift">OctaveShift</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.directiontype.HarpPedals" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.HarpPedals">HarpPedals</a></li>
@@ -556,6 +544,12 @@ class XMLElement(XMLTree):
 <li><a title="musicscore.musicxml.types.complextypes.barline.Coda" href="../types/complextypes/barline.html#musicscore.musicxml.types.complextypes.barline.Coda">Coda</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.barline.Fermata" href="../types/complextypes/barline.html#musicscore.musicxml.types.complextypes.barline.Fermata">Fermata</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.barline.Ending" href="../types/complextypes/barline.html#musicscore.musicxml.types.complextypes.barline.Ending">Ending</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.virtualinstrument.VirtualLibrary" href="../types/complextypes/virtualinstrument.html#musicscore.musicxml.types.complextypes.virtualinstrument.VirtualLibrary">VirtualLibrary</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.virtualinstrument.VirtualName" href="../types/complextypes/virtualinstrument.html#musicscore.musicxml.types.complextypes.virtualinstrument.VirtualName">VirtualName</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentName" href="../types/complextypes/scoreinstrument.html#musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentName">InstrumentName</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentAbbreviation" href="../types/complextypes/scoreinstrument.html#musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentAbbreviation">InstrumentAbbreviation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentSound" href="../types/complextypes/scoreinstrument.html#musicscore.musicxml.types.complextypes.scoreinstrument.InstrumentSound">InstrumentSound</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scoreinstrument.Ensemble" href="../types/complextypes/scoreinstrument.html#musicscore.musicxml.types.complextypes.scoreinstrument.Ensemble">Ensemble</a></li>
 <li><a title="musicscore.musicxml.elements.xml_example.XMLExampleChild1" href="xml_example.html#musicscore.musicxml.elements.xml_example.XMLExampleChild1">XMLExampleChild1</a></li>
 <li><a title="musicscore.musicxml.elements.xml_example.XMLExampleChild" href="xml_example.html#musicscore.musicxml.elements.xml_example.XMLExampleChild">XMLExampleChild</a></li>
 <li><a title="musicscore.musicxml.elements.xml_example.XMLExample" href="xml_example.html#musicscore.musicxml.elements.xml_example.XMLExample">XMLExample</a></li>
@@ -738,7 +732,7 @@ def text(self):
     def check_non_optional(self):
         for leaf in self.current_dtd_choice.traverse_leaves():
             if not leaf.check_min_occurrence():
-                raise ChildIsNotOptional(leaf)
+                raise ChildIsNotOptional(leaf, self)
 
     def reset_dtd(self):
         self._not_sorted_children = []
@@ -755,7 +749,7 @@ def text(self):
                 self.goto_next_dtd_choice()
                 self.add_xml_child(xml_child)
             except Exception:
-                raise ChildTypeDTDConflict(xml_child)
+                raise ChildTypeDTDConflict(xml_child, self)
 
         else:
             child_added = False
@@ -780,8 +774,8 @@ def text(self):
                 try:
                     self.goto_next_dtd_choice()
                     self.add_xml_child(xml_child)
-                except Exception:
-                    raise ChildOccurrenceDTDConflict(xml_child)
+                except Exception as err:
+                    raise ChildOccurrenceDTDConflict(xml_child, self)
 
             if child_added:
                 self.update_current_children()
@@ -897,7 +891,7 @@ def current_dtd_choice(self):
             self.goto_next_dtd_choice()
             self.add_xml_child(xml_child)
         except Exception:
-            raise ChildTypeDTDConflict(xml_child)
+            raise ChildTypeDTDConflict(xml_child, self)
 
     else:
         child_added = False
@@ -922,8 +916,8 @@ def current_dtd_choice(self):
             try:
                 self.goto_next_dtd_choice()
                 self.add_xml_child(xml_child)
-            except Exception:
-                raise ChildOccurrenceDTDConflict(xml_child)
+            except Exception as err:
+                raise ChildOccurrenceDTDConflict(xml_child, self)
 
         if child_added:
             self.update_current_children()
@@ -942,7 +936,7 @@ def current_dtd_choice(self):
 <pre><code class="python">def check_non_optional(self):
     for leaf in self.current_dtd_choice.traverse_leaves():
         if not leaf.check_min_occurrence():
-            raise ChildIsNotOptional(leaf)</code></pre>
+            raise ChildIsNotOptional(leaf, self)</code></pre>
 </details>
 </dd>
 <dt id="musicscore.musicxml.elements.xml_element.XMLTree.close_dtd"><code class="name flex">

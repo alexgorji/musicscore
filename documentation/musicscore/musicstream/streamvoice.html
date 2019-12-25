@@ -34,27 +34,27 @@ from musicscore.musicxml.types.simple_type import PositiveInteger
 class StreamVoice(object):
     &#34;&#34;&#34;&#34;&#34;&#34;
 
-    def __init__(self, voice=1, *args, **kwargs):
+    def __init__(self, voice_number=1, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._chords = []
         self._voice = None
-        self.voice = voice
+        self.voice_number = voice_number
 
     @property
     def chords(self):
         return self._chords
 
     @property
-    def voice(self):
+    def voice_number(self):
         return self._voice
 
-    @voice.setter
-    def voice(self, value):
+    @voice_number.setter
+    def voice_number(self, value):
         PositiveInteger(value)
         self._voice = value
 
     def add_chord(self, chord):
-        chord.voice = self.voice
+        chord.voice_number = self.voice_number
         self._chords.append(chord)
 
     def add_to_part(self, part, chords=None):
@@ -63,7 +63,7 @@ class StreamVoice(object):
 
         for i in range(len(chords)):
             chord = chords[i]
-            remain = part.add_chord(chord, self.voice)
+            remain = part.add_chord(chord, self.voice_number)
             if remain:
                 remaining_chords = [remain] + chords[i + 1:]
                 return remaining_chords
@@ -94,6 +94,17 @@ class StreamVoice(object):
             measure_number += 1
             measure = _get_measure()
             remain = _add_to_part(remain)
+
+
+class StreamChordFormula(object):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def condition(self, chord):
+        pass
+
+    def change_chord(self, chord):
+        pass
 
 
 class SimpleFormat(object):
@@ -140,6 +151,19 @@ class SimpleFormat(object):
         self._durations = durations
 
     def _set_midis(self, midis):
+        def _is_value(x):
+            try:
+                float(x)
+                return True
+            except (ValueError, TypeError):
+                return False
+
+        def _is_midi(x):
+            if isinstance(x, Midi):
+                return True
+            else:
+                return False
+
         if midis is None:
             midis = []
         else:
@@ -150,11 +174,23 @@ class SimpleFormat(object):
 
         self._midis = []
         for m in midis:
-            try:
-                ms = [Midi(midi) for midi in m]
-                self._midis.append(ms)
-            except TypeError:
+            if _is_midi(m):
+                self._midis.append(m)
+            elif _is_value(m):
                 self._midis.append(Midi(m))
+            elif isinstance(m, list) or isinstance(m, tuple):
+                tmp = []
+
+                for midi in m:
+                    if _is_midi(midi):
+                        tmp.append(midi)
+                    elif _is_value(midi):
+                        tmp.append(Midi(midi))
+                    else:
+                        raise TypeError
+                self._midis.append(tmp)
+            else:
+                raise TypeError
 
     def get_durations(self):
         return [chord.duration for chord in self.chords]
@@ -184,7 +220,7 @@ class SimpleFormat(object):
         self._chords.append(chord)
         return chord
 
-    def to_voice(self, voice_number=1):
+    def to_stream_voice(self, voice_number=1):
         output = StreamVoice(voice_number)
         for chord in self.chords:
             output.add_chord(chord.__deepcopy__())
@@ -246,7 +282,16 @@ class SimpleFormat(object):
             for formula in chord_formulas:
                 if formula.condition(chord):
                     formula.change_chord(chord)
-                    break</code></pre>
+                    break
+
+    def extend(self, simple_format):
+        # self.chords
+        for chord in simple_format.chords:
+            self.add_chord(chord)
+
+    def transpose(self, interval):
+        for ch in self.chords:
+            ch.transpose(interval)</code></pre>
 </details>
 </section>
 <section>
@@ -310,6 +355,19 @@ class SimpleFormat(object):
         self._durations = durations
 
     def _set_midis(self, midis):
+        def _is_value(x):
+            try:
+                float(x)
+                return True
+            except (ValueError, TypeError):
+                return False
+
+        def _is_midi(x):
+            if isinstance(x, Midi):
+                return True
+            else:
+                return False
+
         if midis is None:
             midis = []
         else:
@@ -320,11 +378,23 @@ class SimpleFormat(object):
 
         self._midis = []
         for m in midis:
-            try:
-                ms = [Midi(midi) for midi in m]
-                self._midis.append(ms)
-            except TypeError:
+            if _is_midi(m):
+                self._midis.append(m)
+            elif _is_value(m):
                 self._midis.append(Midi(m))
+            elif isinstance(m, list) or isinstance(m, tuple):
+                tmp = []
+
+                for midi in m:
+                    if _is_midi(midi):
+                        tmp.append(midi)
+                    elif _is_value(midi):
+                        tmp.append(Midi(midi))
+                    else:
+                        raise TypeError
+                self._midis.append(tmp)
+            else:
+                raise TypeError
 
     def get_durations(self):
         return [chord.duration for chord in self.chords]
@@ -354,7 +424,7 @@ class SimpleFormat(object):
         self._chords.append(chord)
         return chord
 
-    def to_voice(self, voice_number=1):
+    def to_stream_voice(self, voice_number=1):
         output = StreamVoice(voice_number)
         for chord in self.chords:
             output.add_chord(chord.__deepcopy__())
@@ -416,7 +486,16 @@ class SimpleFormat(object):
             for formula in chord_formulas:
                 if formula.condition(chord):
                     formula.change_chord(chord)
-                    break</code></pre>
+                    break
+
+    def extend(self, simple_format):
+        # self.chords
+        for chord in simple_format.chords:
+            self.add_chord(chord)
+
+    def transpose(self, interval):
+        for ch in self.chords:
+            ch.transpose(interval)</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
@@ -538,6 +617,19 @@ def midis(self):
                 break</code></pre>
 </details>
 </dd>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.extend"><code class="name flex">
+<span>def <span class="ident">extend</span></span>(<span>self, simple_format)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def extend(self, simple_format):
+    # self.chords
+    for chord in simple_format.chords:
+        self.add_chord(chord)</code></pre>
+</details>
+</dd>
 <dt id="musicscore.musicstream.streamvoice.SimpleFormat.get_durations"><code class="name flex">
 <span>def <span class="ident">get_durations</span></span>(<span>self)</span>
 </code></dt>
@@ -560,14 +652,14 @@ def midis(self):
     return [chord.midis for chord in self.chords]</code></pre>
 </details>
 </dd>
-<dt id="musicscore.musicstream.streamvoice.SimpleFormat.to_voice"><code class="name flex">
-<span>def <span class="ident">to_voice</span></span>(<span>self, voice_number=1)</span>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.to_stream_voice"><code class="name flex">
+<span>def <span class="ident">to_stream_voice</span></span>(<span>self, voice_number=1)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def to_voice(self, voice_number=1):
+<pre><code class="python">def to_stream_voice(self, voice_number=1):
     output = StreamVoice(voice_number)
     for chord in self.chords:
         output.add_chord(chord.__deepcopy__())
@@ -575,11 +667,67 @@ def midis(self):
     return output</code></pre>
 </details>
 </dd>
+<dt id="musicscore.musicstream.streamvoice.SimpleFormat.transpose"><code class="name flex">
+<span>def <span class="ident">transpose</span></span>(<span>self, interval)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def transpose(self, interval):
+    for ch in self.chords:
+        ch.transpose(interval)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.StreamChordFormula"><code class="flex name class">
+<span>class <span class="ident">StreamChordFormula</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class StreamChordFormula(object):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def condition(self, chord):
+        pass
+
+    def change_chord(self, chord):
+        pass</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="musicscore.musicstream.streamvoice.StreamChordFormula.change_chord"><code class="name flex">
+<span>def <span class="ident">change_chord</span></span>(<span>self, chord)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def change_chord(self, chord):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="musicscore.musicstream.streamvoice.StreamChordFormula.condition"><code class="name flex">
+<span>def <span class="ident">condition</span></span>(<span>self, chord)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def condition(self, chord):
+    pass</code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 <dt id="musicscore.musicstream.streamvoice.StreamVoice"><code class="flex name class">
 <span>class <span class="ident">StreamVoice</span></span>
-<span>(</span><span>voice=1, *args, **kwargs)</span>
+<span>(</span><span>voice_number=1, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -588,27 +736,27 @@ def midis(self):
 <pre><code class="python">class StreamVoice(object):
     &#34;&#34;&#34;&#34;&#34;&#34;
 
-    def __init__(self, voice=1, *args, **kwargs):
+    def __init__(self, voice_number=1, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._chords = []
         self._voice = None
-        self.voice = voice
+        self.voice_number = voice_number
 
     @property
     def chords(self):
         return self._chords
 
     @property
-    def voice(self):
+    def voice_number(self):
         return self._voice
 
-    @voice.setter
-    def voice(self, value):
+    @voice_number.setter
+    def voice_number(self, value):
         PositiveInteger(value)
         self._voice = value
 
     def add_chord(self, chord):
-        chord.voice = self.voice
+        chord.voice_number = self.voice_number
         self._chords.append(chord)
 
     def add_to_part(self, part, chords=None):
@@ -617,7 +765,7 @@ def midis(self):
 
         for i in range(len(chords)):
             chord = chords[i]
-            remain = part.add_chord(chord, self.voice)
+            remain = part.add_chord(chord, self.voice_number)
             if remain:
                 remaining_chords = [remain] + chords[i + 1:]
                 return remaining_chords
@@ -661,13 +809,13 @@ def chords(self):
     return self._chords</code></pre>
 </details>
 </dd>
-<dt id="musicscore.musicstream.streamvoice.StreamVoice.voice"><code class="name">var <span class="ident">voice</span></code></dt>
+<dt id="musicscore.musicstream.streamvoice.StreamVoice.voice_number"><code class="name">var <span class="ident">voice_number</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def voice(self):
+def voice_number(self):
     return self._voice</code></pre>
 </details>
 </dd>
@@ -682,7 +830,7 @@ def voice(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def add_chord(self, chord):
-    chord.voice = self.voice
+    chord.voice_number = self.voice_number
     self._chords.append(chord)</code></pre>
 </details>
 </dd>
@@ -699,7 +847,7 @@ def voice(self):
 
     for i in range(len(chords)):
         chord = chords[i]
-        remain = part.add_chord(chord, self.voice)
+        remain = part.add_chord(chord, self.voice_number)
         if remain:
             remaining_chords = [remain] + chords[i + 1:]
             return remaining_chords</code></pre>
@@ -766,10 +914,19 @@ def voice(self):
 <li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.change_chord" href="#musicscore.musicstream.streamvoice.SimpleFormat.change_chord">change_chord</a></code></li>
 <li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.chords" href="#musicscore.musicstream.streamvoice.SimpleFormat.chords">chords</a></code></li>
 <li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.durations" href="#musicscore.musicstream.streamvoice.SimpleFormat.durations">durations</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.extend" href="#musicscore.musicstream.streamvoice.SimpleFormat.extend">extend</a></code></li>
 <li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.get_durations" href="#musicscore.musicstream.streamvoice.SimpleFormat.get_durations">get_durations</a></code></li>
 <li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.get_midis" href="#musicscore.musicstream.streamvoice.SimpleFormat.get_midis">get_midis</a></code></li>
 <li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.midis" href="#musicscore.musicstream.streamvoice.SimpleFormat.midis">midis</a></code></li>
-<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.to_voice" href="#musicscore.musicstream.streamvoice.SimpleFormat.to_voice">to_voice</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.to_stream_voice" href="#musicscore.musicstream.streamvoice.SimpleFormat.to_stream_voice">to_stream_voice</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.SimpleFormat.transpose" href="#musicscore.musicstream.streamvoice.SimpleFormat.transpose">transpose</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="musicscore.musicstream.streamvoice.StreamChordFormula" href="#musicscore.musicstream.streamvoice.StreamChordFormula">StreamChordFormula</a></code></h4>
+<ul class="">
+<li><code><a title="musicscore.musicstream.streamvoice.StreamChordFormula.change_chord" href="#musicscore.musicstream.streamvoice.StreamChordFormula.change_chord">change_chord</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.StreamChordFormula.condition" href="#musicscore.musicstream.streamvoice.StreamChordFormula.condition">condition</a></code></li>
 </ul>
 </li>
 <li>
@@ -779,7 +936,7 @@ def voice(self):
 <li><code><a title="musicscore.musicstream.streamvoice.StreamVoice.add_to_part" href="#musicscore.musicstream.streamvoice.StreamVoice.add_to_part">add_to_part</a></code></li>
 <li><code><a title="musicscore.musicstream.streamvoice.StreamVoice.add_to_score" href="#musicscore.musicstream.streamvoice.StreamVoice.add_to_score">add_to_score</a></code></li>
 <li><code><a title="musicscore.musicstream.streamvoice.StreamVoice.chords" href="#musicscore.musicstream.streamvoice.StreamVoice.chords">chords</a></code></li>
-<li><code><a title="musicscore.musicstream.streamvoice.StreamVoice.voice" href="#musicscore.musicstream.streamvoice.StreamVoice.voice">voice</a></code></li>
+<li><code><a title="musicscore.musicstream.streamvoice.StreamVoice.voice_number" href="#musicscore.musicstream.streamvoice.StreamVoice.voice_number">voice_number</a></code></li>
 </ul>
 </li>
 </ul>

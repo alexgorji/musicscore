@@ -26,7 +26,6 @@ class Test(TestCase):
         self.score.write(path=result_path)
         TestScore().assert_template(result_path=result_path)
 
-
     def test_2(self):
         self.make_t(False, False, True)
         result_path = path + '_test_2'
@@ -68,3 +67,10 @@ class Test(TestCase):
         result_path = path + '_test_8'
         self.score.write(path=result_path)
         TestScore().assert_template(result_path=result_path)
+
+    def test_9(self):
+        sf = SimpleFormat(durations=[0.2, 0.8, 1, 1], midis=[0, 0, 0, 60])
+        sf.to_stream_voice().add_to_score(self.score)
+        result_path = path + '_test_9'
+        self.score.write(path=result_path)
+        # TestScore().assert_template(result_path=result_path)

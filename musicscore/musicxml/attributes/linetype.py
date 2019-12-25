@@ -1,4 +1,4 @@
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeLineType
 
 
 class LineType(AttributeAbstract):
@@ -9,3 +9,4 @@ class LineType(AttributeAbstract):
     def __init__(self, line_type=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.generate_attribute('line-type', line_type, "TypeLineType")
+        TypeLineType

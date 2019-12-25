@@ -31,6 +31,12 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <attributes>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
       <note>
         <pitch>
           <step>B</step>

@@ -81,6 +81,7 @@ class ComplexTypeMidiInstrument(ComplexType):
     either the score-instrument element at the start of a part, or the sound element within a part. The id attribute
     refers to the score-instrument affected by the change."""
 
+    _ATTRIBUTES = []
     _DTD = Sequence(
         Element(MidiChannel, min_occurrence=0),
         Element(MidiName, min_occurrence=0),

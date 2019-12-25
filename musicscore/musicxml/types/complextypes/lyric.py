@@ -12,11 +12,10 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, Empty
 from musicscore.musicxml.types.complextypes.elision import ComplexTypeElision
 from musicscore.musicxml.types.complextypes.extend import ComplexTypeExtend
-from musicscore.musicxml.types.complextypes.text_element_data import ComplexTypeTextElementData
+from musicscore.musicxml.types.complextypes.textelementdata import ComplexTypeTextElementData
 from unittest import TestCase
 
 from musicscore.musicxml.types.simple_type import Token
-
 
 
 class Syllabic(XMLElement, TypeSyllabic):

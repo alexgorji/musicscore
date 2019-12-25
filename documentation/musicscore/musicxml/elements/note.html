@@ -24,19 +24,27 @@
 <summary>Source code</summary>
 <pre><code class="python">from musicscore.dtd.dtd import Element, GroupReference, Sequence, Choice
 from musicscore.musicxml.attributes.accidental import Cautionary, Editorial, Smulf
+from musicscore.musicxml.attributes.color import Color
+from musicscore.musicxml.attributes.font import Font
 from musicscore.musicxml.attributes.grace_attributes import StealTimePrevious, StealTimeFollowing, MakeTime, Slash
 from musicscore.musicxml.attributes.leveldisplay import LevelDisplay
+from musicscore.musicxml.attributes.optional_unique_id import OptionalUniqueId
+from musicscore.musicxml.attributes.position import XPosition
+from musicscore.musicxml.attributes.printout import Printout
 from musicscore.musicxml.attributes.printstyle import PrintStyle
-from musicscore.musicxml.groups.common import EditorialVoice, Staff
 from musicscore.musicxml.elements.fullnote import FullNote
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.groups.common import EditorialVoice, Staff
 from musicscore.musicxml.types.complextypes.beam import ComplexTypeBeam
 from musicscore.musicxml.types.complextypes.complextype import EmptyPlacement, ComplexType
 from musicscore.musicxml.types.complextypes.lyric import ComplexTypeLyric
 from musicscore.musicxml.types.complextypes.notations import ComplexTypeNotations
+from musicscore.musicxml.types.complextypes.notehead import ComplexTypeNotehead
+from musicscore.musicxml.types.complextypes.notetype import ComplexTypeNoteType
+from musicscore.musicxml.types.complextypes.stem import ComplexTypeStem
 from musicscore.musicxml.types.complextypes.tie import ComplexTypeTie
 from musicscore.musicxml.types.complextypes.timemodification import ComplexTypeTimeModification
-from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeNoteTypeValue, TypeAccidentalValue
+from musicscore.musicxml.types.simple_type import TypePositiveDivisions, TypeAccidentalValue
 
 
 class Grace(XMLElement, StealTimePrevious, StealTimeFollowing, MakeTime, Slash):
@@ -102,11 +110,12 @@ class Instrument(XMLElement):
         super().__init__(tag=&#39;instrument&#39;, *args, **kwargs)
 
 
-class Type(XMLElement, TypeNoteTypeValue):
+class Type(ComplexTypeNoteType):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;type&#39;
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;type&#39;, value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Dot(EmptyPlacement):
@@ -137,20 +146,20 @@ class TimeModification(ComplexTypeTimeModification):
         super().__init__(*args, **kwargs)
 
 
-class Stem(XMLElement):
+class Stem(ComplexTypeStem):
+    &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;stem&#39;
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
+
+
+class Notehead(ComplexTypeNotehead):
+    _TAG = &#39;notehead&#39;
     &#34;&#34;&#34;&#34;&#34;&#34;
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=&#39;stem&#39;, *args, **kwargs)
-        raise NotImplementedError()
-
-
-class Notehead(XMLElement):
-    &#34;&#34;&#34;&#34;&#34;&#34;
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=&#39;notehead&#39;, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, value=&#39;normal&#39;, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class NoteheadText(XMLElement):
@@ -186,7 +195,22 @@ class Play(XMLElement):
         raise NotImplementedError()
 
 
-class Note(XMLElement):
+&#34;&#34;&#34;
+        &lt;xs:attributeGroup ref=&#34;x-position&#34;/&gt;
+        &lt;xs:attributeGroup ref=&#34;font&#34;/&gt;
+        &lt;xs:attributeGroup ref=&#34;color&#34;/&gt;
+        &lt;xs:attributeGroup ref=&#34;printout&#34;/&gt;
+        &lt;xs:attribute name=&#34;print-leger&#34; type=&#34;yes-no&#34;/&gt;
+        &lt;xs:attribute name=&#34;dynamics&#34; type=&#34;non-negative-decimal&#34;/&gt;
+        &lt;xs:attribute name=&#34;end-dynamics&#34; type=&#34;non-negative-decimal&#34;/&gt;
+        &lt;xs:attribute name=&#34;attack&#34; type=&#34;divisions&#34;/&gt;
+        &lt;xs:attribute name=&#34;release&#34; type=&#34;divisions&#34;/&gt;
+        &lt;xs:attribute name=&#34;time-only&#34; type=&#34;time-only&#34;/&gt;
+        &lt;xs:attribute name=&#34;pizzicato&#34; type=&#34;yes-no&#34;/&gt;
+        &lt;xs:attributeGroup ref=&#34;optional-unique-id&#34;/&gt;&#34;&#34;&#34;
+
+
+class Note(XMLElement, XPosition, Font, Color, Printout, OptionalUniqueId):
     &#34;&#34;&#34;
     Notes are the most common type of MusicXML data. The MusicXML format keeps the MuseData distinction between
     elements used for sound information and elements used for notation information (e.g., tie is used for sound,
@@ -612,7 +636,7 @@ play the note.</p>
 changes overall playback between pizzicato and arco.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Note(XMLElement):
+<pre><code class="python">class Note(XMLElement, XPosition, Font, Color, Printout, OptionalUniqueId):
     &#34;&#34;&#34;
     Notes are the most common type of MusicXML data. The MusicXML format keeps the MuseData distinction between
     elements used for sound information and elements used for notation information (e.g., tie is used for sound,
@@ -693,6 +717,24 @@ changes overall playback between pizzicato and arco.</p></section>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.position.XPosition" href="../attributes/position.html#musicscore.musicxml.attributes.position.XPosition">XPosition</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.printout.Printout" href="../attributes/printout.html#musicscore.musicxml.attributes.printout.Printout">Printout</a></li>
+<li><a title="musicscore.musicxml.attributes.printobject.PrintObject" href="../attributes/printobject.html#musicscore.musicxml.attributes.printobject.PrintObject">PrintObject</a></li>
+<li><a title="musicscore.musicxml.attributes.printout.PrintDot" href="../attributes/printout.html#musicscore.musicxml.attributes.printout.PrintDot">PrintDot</a></li>
+<li><a title="musicscore.musicxml.attributes.printspacing.PrintSpacing" href="../attributes/printspacing.html#musicscore.musicxml.attributes.printspacing.PrintSpacing">PrintSpacing</a></li>
+<li><a title="musicscore.musicxml.attributes.printout.PrintLyric" href="../attributes/printout.html#musicscore.musicxml.attributes.printout.PrintLyric">PrintLyric</a></li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -701,24 +743,43 @@ changes overall playback between pizzicato and arco.</p></section>
 </dd>
 <dt id="musicscore.musicxml.elements.note.Notehead"><code class="flex name class">
 <span>class <span class="ident">Notehead</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>value='normal', *args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>The notehead type indicates shapes other than the open and closed ovals associated with note durations.</p>
+<p>The smufl attribute can be used to specify a particular notehead, allowing application interoperability without
+requiring every SMuFL glyph to have a MusicXML element equivalent. This attribute can be used either with the
+"other" value, or to refine a specific notehead value such as "cluster". Noteheads in the SMuFL "Note name
+noteheads" range (U+E150–U+E1AF) should not use the smufl attribute or the "other" value, but instead use the
+notehead-text elem For the enclosed shapes, the default is to be hollow for half notes and longer, and filled
+otherwise. The filled attribute can be set to change this if nee If the parentheses attribute is set to yes,
+the notehead is parenthesized. It is no by default.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Notehead(XMLElement):
+<pre><code class="python">class Notehead(ComplexTypeNotehead):
+    _TAG = &#39;notehead&#39;
     &#34;&#34;&#34;&#34;&#34;&#34;
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=&#39;notehead&#39;, *args, **kwargs)
-        raise NotImplementedError()</code></pre>
+    def __init__(self, value=&#39;normal&#39;, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.notehead.ComplexTypeNotehead" href="../types/complextypes/notehead.html#musicscore.musicxml.types.complextypes.notehead.ComplexTypeNotehead">ComplexTypeNotehead</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeNoteheadValue" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.TypeNoteheadValue">TypeNoteheadValue</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.notehead.Filled" href="../types/complextypes/notehead.html#musicscore.musicxml.types.complextypes.notehead.Filled">Filled</a></li>
+<li><a title="musicscore.musicxml.attributes.font.Font" href="../attributes/font.html#musicscore.musicxml.attributes.font.Font">Font</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontFamily" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontFamily">FontFamily</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontStyle" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontStyle">FontStyle</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontSize" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontSize">FontSize</a></li>
+<li><a title="musicscore.musicxml.attributes.font.FontWeight" href="../attributes/font.html#musicscore.musicxml.attributes.font.FontWeight">FontWeight</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.elements.note.NoteheadText"><code class="flex name class">
@@ -767,24 +828,35 @@ changes overall playback between pizzicato and arco.</p></section>
 </dd>
 <dt id="musicscore.musicxml.elements.note.Stem"><code class="flex name class">
 <span>class <span class="ident">Stem</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>value, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Stem(XMLElement):
+<pre><code class="python">class Stem(ComplexTypeStem):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;stem&#39;
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag=&#39;stem&#39;, *args, **kwargs)
-        raise NotImplementedError()</code></pre>
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.stem.ComplexTypeStem" href="../types/complextypes/stem.html#musicscore.musicxml.types.complextypes.stem.ComplexTypeStem">ComplexTypeStem</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.types.simple_type.TypeStemValue" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.TypeStemValue">TypeStemValue</a></li>
+<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../types/simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
+<li><a title="musicscore.musicxml.attributes.position.YPosition" href="../attributes/position.html#musicscore.musicxml.attributes.position.YPosition">YPosition</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.DefaultY" href="../attributes/position.html#musicscore.musicxml.attributes.position.DefaultY">DefaultY</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeX" href="../attributes/position.html#musicscore.musicxml.attributes.position.RelativeX">RelativeX</a></li>
+<li><a title="musicscore.musicxml.attributes.position.RelativeY" href="../attributes/position.html#musicscore.musicxml.attributes.position.RelativeY">RelativeY</a></li>
+<li><a title="musicscore.musicxml.attributes.color.Color" href="../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.elements.note.Tie"><code class="flex name class">
@@ -849,14 +921,17 @@ tied element indicates notation.</xs:documentation></p></section>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Type(XMLElement, TypeNoteTypeValue):
+<pre><code class="python">class Type(ComplexTypeNoteType):
     &#34;&#34;&#34;&#34;&#34;&#34;
+    _TAG = &#39;type&#39;
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag=&#39;type&#39;, value=value, *args, **kwargs)</code></pre>
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.notetype.ComplexTypeNoteType" href="../types/complextypes/notetype.html#musicscore.musicxml.types.complextypes.notetype.ComplexTypeNoteType">ComplexTypeNoteType</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="../types/complextypes/complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>

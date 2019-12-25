@@ -19,7 +19,7 @@
   </defaults>
   <part-list>
     <score-part id="p1">
-      <part-name print-object="no">one</part-name>
+      <part-name print-object="no">none</part-name>
     </score-part>
   </part-list>
   <measure number="1">

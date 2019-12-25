@@ -1,22 +1,25 @@
 import warnings
 
 from lxml import etree as et
+from musicscore.musictree.treechordflags2 import TreeChordFlag2
 from quicktions import Fraction
 
-from musicscore.basic_functions import lcm, substitute
+from musicscore.basic_functions import lcm, substitute, flatten
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treechordflags3 import TreeChordFlag3
 from musicscore.musictree.treenote import TreeNote, TreeBackup
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.fullnote import Pitch, Rest
-from musicscore.musicxml.elements.note import Beam, Type, Tie
+from musicscore.musicxml.elements.note import Beam, Type, Tie, Notations
 from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.groups.musicdata import Direction, Attributes
 from musicscore.musicxml.types.complextypes.attributes import Divisions
 from musicscore.musicxml.types.complextypes.direction import DirectionType, Sound
 from musicscore.musicxml.types.complextypes.directiontype import Metronome
 from musicscore.musicxml.types.complextypes.metronome import BeatUnit, PerMinute
+from musicscore.musicxml.types.complextypes.notations import Slur
 
 
 class XMLChord(object):
@@ -101,8 +104,10 @@ class TreePartVoice(object):
         self._chords = []
         self._beats = None
         self._filled_with_rest = False
+        self._preliminary_rests_adjoined = False
         self._beats_added = False
         self._quantized = False
+        self._flags_implemented = False
         self._not_notatable_split = False
         self._ties_adjoined = False
         self._rests_adjoined = False
@@ -110,6 +115,8 @@ class TreePartVoice(object):
         self._sextoles_substituted = False
         self._types_updated = False
         self._dots_updated = False
+        self._flags2_implemented = False
+        self._flags3_implemented = False
         self.parent_part = None
         self._xml_chords = None
 
@@ -189,22 +196,33 @@ class TreePartVoice(object):
             return None
 
     def add_chord(self, chord):
+        # print('treepart add_chord, chord.tie_orientation', chord.tie_orientation)
         remain = chord.quarter_duration - self.remaining_duration
         if self.remaining_duration == 0:
             return chord
 
         elif remain > 0:
             split = chord.split([chord.quarter_duration - remain, remain])
-            self.chords.append(split[0])
-            split[0].parent_voice = self
-            split[0].add_child(Voice(str(self.number)))
-            split[0]._head = True
+            first_chord = split[0]
+            self.chords.append(first_chord)
+            first_chord.parent_voice = self
+            if first_chord.manual_voice_number:
+                first_chord.add_child(Voice(str(first_chord.manual_voice_number)))
+            else:
+                first_chord.add_child(Voice(str(self.number)))
+            first_chord._head = True
             split[1]._tail = True
             return split[1]
         else:
             self.chords.append(chord)
             chord.parent_voice = self
-            chord.add_child(Voice(str(self.number)))
+            if chord.manual_voice_number:
+                chord.add_child(Voice(str(chord.manual_voice_number)))
+            else:
+                chord.add_child(Voice(str(self.number)))
+
+    def remove_chords(self):
+        self._chords = []
 
     @property
     def remaining_duration(self):
@@ -238,7 +256,7 @@ class TreePartVoice(object):
         if False:
             raise Exception()
         else:
-            chords = self.chords
+            chords = [chord for chord in self.chords if not chord.is_finger_tremolo]
             grouped_chords = []
             group_positions = [0]
             for group in grouping_list:
@@ -275,41 +293,67 @@ class TreePartVoice(object):
 
         def _set_beams(grouped_chords):
 
-            for group in grouped_chords:
+            global begin_beam, continue_end_beam
+
+            def add_beam(chord, chord_group, chord_group_index, number):
+                global begin_beam, continue_end_beam
+                beam = chord.add_child(Beam(None, number=number))
+                if chord_group_index != len(chord_group) - 1:
+                    if begin_beam:
+                        beam.value = 'begin'
+                    elif continue_end_beam:
+                        if chord_group_index == len(chord_group) - 1:
+                            beam.value = 'end'
+                        else:
+                            beam.value = 'continue'
+                elif len(chord_group) > 1 and chord_group[chord_group_index - 1] != []:
+                    beam.value = 'end'
+
+            for chord_group in grouped_chords:
                 begin_beam = True
                 continue_end_beam = False
 
-                for i in range(len(group)):
-                    chord = group[i]
-                    if chord.get_children_by_type(Type)[0].value in (
-                            'eighth', '16th', '32nd') and chord.quarter_duration != 0:
-                        beam = chord.add_child(Beam(None))
-                        if i != len(group) - 1:
-                            if begin_beam:
-                                beam.value = 'begin'
-                                begin_beam = False
-                                continue_end_beam = True
-
-                            elif continue_end_beam:
-                                if i == len(group) - 1:
-                                    beam.value = 'end'
-                                    begin_beam = True
-                                    continue_end_beam = False
-                                else:
-                                    beam.value = 'continue'
-                        elif len(group) > 1 and group[i - 1] != []:
-                            beam.value = 'end'
+                for i in range(len(chord_group)):
+                    chord = chord_group[i]
+                    type = chord.get_children_by_type(Type)[0].value
+                    numbers = {'eighth': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
+                    if type in numbers and chord.quarter_duration != 0:
+                        for index in range(numbers[type]):
+                            add_beam(chord, chord_group, i, number=index + 1)
+                        if begin_beam:
+                            begin_beam = False
+                            continue_end_beam = True
+                        elif continue_end_beam and i == len(chord_group) - 1:
+                            begin_beam = True
+                            continue_end_beam = False
+                        # beam = chord.add_child(Beam(None))
+                        # if i != len(group) - 1:
+                        #     if begin_beam:
+                        #         beam.value = 'begin'
+                        #         begin_beam = False
+                        #         continue_end_beam = True
+                        #
+                        #     elif continue_end_beam:
+                        #         if i == len(group) - 1:
+                        #             beam.value = 'end'
+                        #             begin_beam = True
+                        #             continue_end_beam = False
+                        #         else:
+                        #             beam.value = 'continue'
+                        # elif len(group) > 1 and group[i - 1] != []:
+                        #     beam.value = 'end'
 
                     elif i != 0:
+                        # print('treepart group_beams, elif')
                         try:
-                            beam = group[i - 1].beam
+                            beam = chord_group[i - 1].beam
 
                             if beam.value == 'begin':
-                                group[i - 1].remove_child(beam)
+                                chord_group[i - 1].remove_child(beam)
                                 begin_beam = True
                                 continue_end_beam = False
                             elif beam.value == 'continue':
-                                group[i - 1].beam.value = 'end'
+                                chord_group[i - 1].beam.value = 'end'
                                 begin_beam = True
                                 continue_end_beam = False
                         except AttributeError:
@@ -360,7 +404,6 @@ class TreePartVoice(object):
             beats = iter(self.beats)
             current_beat = beats.__next__()
             next_beat = beats.__next__()
-            # while_loop = True
 
             for chord in self.chords:
                 while True and (chord.offset < current_beat.offset or chord.offset >= next_beat.offset):
@@ -368,7 +411,6 @@ class TreePartVoice(object):
                         current_beat = next_beat
                         next_beat = beats.__next__()
                     except StopIteration:
-                        # while_loop = False
                         break
 
                 current_beat.add_chord(chord)
@@ -396,6 +438,7 @@ class TreePartVoice(object):
                 if last_chord.end_position > beat.end_position:
                     head_duration = (beat.end_position - last_chord.offset)
                     ratios = [head_duration, last_chord.quarter_duration - head_duration]
+                    # print(ratios)
                     split = last_chord.split(ratios)
                     self._chords = substitute(self._chords, last_chord, split)
                     beat.next.chords.insert(0, split[1])
@@ -413,16 +456,69 @@ class TreePartVoice(object):
                     self.add_chord(rest)
             self._filled_with_rest = True
 
-    def add_beats(self, list_of_beats=None):
+    def preliminary_adjoin_rests(self):
         if not self._filled_with_rest:
             raise Exception('fill_with_rest() first')
+
+        if not self._preliminary_rests_adjoined:
+            for ch in self.chords:
+                ch.marked = False
+
+            chord_iterator = iter(self.chords)
+
+            def _adjoin(current_chord, next_chord):
+                def _chords_are_adjoinable():
+                    condition = current_chord.is_adjoinable and next_chord.is_adjoinable
+                    return condition
+
+                def _chords_are_rest():
+                    condition = current_chord.is_rest and next_chord.is_rest
+                    # _print_condition('_chords_are_not_rest', condition)
+                    return condition
+
+                if _chords_are_adjoinable() and _chords_are_rest():
+                    current_chord.quarter_duration += next_chord.quarter_duration
+                    next_chord.marked = True
+
+                    try:
+                        next_chord = chord_iterator.__next__()
+                        next_chord = _adjoin(current_chord, next_chord)
+                    except StopIteration:
+                        pass
+
+                return next_chord
+
+            adjoin = True
+            current_chord = chord_iterator.__next__()
+            try:
+                next_chord = chord_iterator.__next__()
+            except StopIteration:
+                adjoin = False
+
+            while adjoin:
+                try:
+                    next_chord = _adjoin(current_chord, next_chord)
+                    current_chord = next_chord
+                    next_chord = chord_iterator.__next__()
+                except StopIteration:
+                    break
+
+            voice_new_chords = [ch for ch in self.chords if not ch.marked]
+
+            self._chords = voice_new_chords
+            self._preliminary_rests_adjoined = True
+
+    def add_beats(self, list_of_beats=None):
+        if not self._preliminary_rests_adjoined:
+            raise Exception('preliminary_adjoin_rests() first')
+
         if not self._beats_added:
             self.set_beats(list_of_beats)
             self._add_chords_to_beats()
             self._split_chords_beatwise()
             self._beats_added = True
-        else:
-            warnings.warn('beats already added to {}. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('beats already added to {}. No action took place.'.format(self))
 
     def quantize(self):
         if not self._beats_added:
@@ -431,33 +527,49 @@ class TreePartVoice(object):
             for beat in self.beats:
                 beat.quantize()
             self._quantized = True
-        else:
-            warnings.warn('{} already quantized. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('{} already quantized. No action took place.'.format(self))
 
     def clear_zero_heads_tails(self):
         for chord in self.chords:
             if chord.quarter_duration == 0 and (chord._head or chord._tail):
                 chord.remove_from_score()
 
+    # def adjoin_rests_in_beat(self):
+    #     for beat in self.beats:
+    #         beat.adjoin_rests()
+
     def split_not_notatable(self):
         if not self._quantized:
             raise Exception('quantize() first')
-
+        # self._not_notatable_split = False
         if not self._not_notatable_split:
             self._chords = []
             for beat in self.beats:
                 beat.split_not_notatable()
                 self._chords.extend(beat.chords)
             self._not_notatable_split = True
-        else:
-            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
-    def adjoin_ties(self):
+        # else:
+        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+
+    def implement_flags(self):
         if not self._not_notatable_split:
             raise Exception('split_not_notatable() first')
+        if not self._flags_implemented:
+            self.remove_chords()
+            for beat in self.beats:
+                beat.implement_flags()
+                self._chords.extend(beat.chords)
+            self._flags_implemented = True
+
+    def adjoin_ties(self):
+        if not self._flags_implemented:
+            raise Exception('implement_flags() first')
+
         if not self._ties_adjoined:
-            # notatables = [1, 1.5, 2, 3, 4, 6, 8]
-            notatables = [1, 2, 3, 4, 6, 8]
+            notatables = [1, 1.5, 2, 3, 4, 6, 8]
+            # notatables = [1, 2, 3, 4, 6, 8]
 
             # chord_iterator = iter(reversed(self.chords))
             chord_iterator = iter(self.chords)
@@ -470,7 +582,6 @@ class TreePartVoice(object):
 
                 def _current_chord_is_all_tied():
                     condition = current_chord.is_tied_to_next
-                    # _print_condition('_current_note_is_all_tied', condition)
                     return condition
 
                 def _chords_are_not_rest():
@@ -480,8 +591,15 @@ class TreePartVoice(object):
 
                 def _chords_have_right_positions():
                     # print 'in _chords_have_right_positions', current_chord.name, next_chord.name
-                    condition = current_chord.offset % (
-                        1) == 0 and next_chord.offset % 1 == 0
+                    if current_chord.quarter_duration == 0.5:
+                        if current_chord.parent_beat.best_div in [6, 12]:
+                            condition = False
+                        else:
+                            condition = current_chord.offset % (
+                                1) in [0, 0.5] and next_chord.offset % 1 == 0
+                    else:
+                        condition = current_chord.offset % (
+                            1) == 0 and next_chord.offset % 1 == 0
                     # _print_condition('_chords_have_right_positions', condition)
                     return condition
 
@@ -496,6 +614,16 @@ class TreePartVoice(object):
 
                     if 'stop' in next_chord.tie_types and 'start' not in next_chord.tie_types:
                         current_chord.remove_tie('start')
+
+                    try:
+                        notations = next_chord.get_children_by_type(Notations)
+                        slurs = []
+                        for notation in notations:
+                            slurs.extend(notation.get_children_by_type(Slur))
+                        for slur in slurs:
+                            current_chord.add_slur_object(slur)
+                    except IndexError:
+                        pass
 
                     next_chord.marked = True
 
@@ -536,15 +664,16 @@ class TreePartVoice(object):
             self._chords = voice_new_chords
 
             self._ties_adjoined = True
-        else:
-            warnings.warn('ties of chords in {} already adjoined. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('ties of chords in {} already adjoined. No action took place.'.format(self))
 
     def adjoin_rests(self):
         if not self._ties_adjoined:
             raise Exception('adjoin_ties() first')
-
+        # self._rests_adjoined = True
         if not self._rests_adjoined:
-            notatables = [1, 1.5, 2, 3, 4, 6, 8]
+            # notatables = [1, 1.5, 2, 3, 4, 6, 8]
+            notatables = [1, 2, 3, 4, 6, 8]
 
             chord_iterator = iter(self.chords)
 
@@ -613,19 +742,19 @@ class TreePartVoice(object):
             self._chords = voice_new_chords
 
             self._rests_adjoined = True
-        else:
-            warnings.warn('rests in {} already adjoin_rests. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('rests in {} already adjoin_rests. No action took place.'.format(self))
 
     def update_tuplets(self):
         if not self._rests_adjoined:
-            raise Exception('join_rests() first')
+            raise Exception('adjoin_rests() first')
 
         if not self._tuplets_updated:
             for beat in self.beats:
                 beat.update_tuplets()
             self._tuplets_updated = True
-        else:
-            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
     def substitute_sextoles(self):
         if not self._tuplets_updated:
@@ -635,8 +764,8 @@ class TreePartVoice(object):
             for beat in self.beats:
                 beat.substitute_sextoles()
             self._sextoles_substituted = True
-        else:
-            warnings.warn('all sextoles in  {} already checked. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('all sextoles in  {} already checked. No action took place.'.format(self))
 
     def update_types(self):
         if not self._sextoles_substituted:
@@ -646,8 +775,8 @@ class TreePartVoice(object):
             for chord in self.chords:
                 chord.update_type()
             self._types_updated = True
-        else:
-            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
     def update_dots(self):
         if not self._types_updated:
@@ -658,8 +787,92 @@ class TreePartVoice(object):
                 if chord.quarter_duration != 0:
                     chord.update_dot()
             self._dots_updated = True
-        else:
-            warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+        # else:
+        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+
+    def implement_flags_2(self):
+        def check_implement_output(chords):
+            if not isinstance(chords, list):
+                raise Exception('output of implement can only be a list of chords')
+
+            # if len(chords) not in [1, 2]:
+            #     raise Exception('output of implement can have 1 or 2 chords')
+
+            for ch in chords:
+                if not isinstance(ch, TreeChord):
+                    raise Exception('output of implement can only be a list of chords')
+
+        if not self._flags2_implemented:
+            flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
+                              isinstance(flag, TreeChordFlag2)])
+
+            while flag_types:
+                flag_type = flag_types.pop()
+                output = []
+                for chord in self.chords:
+                    try:
+                        chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
+                        # print(chord)
+                        new_chords = chord_flag.implement(chord)
+                        check_implement_output(new_chords)
+                        output.extend(new_chords)
+
+                    except IndexError:
+                        output.append(chord)
+
+                self.remove_chords()
+                for chord in output:
+                    try:
+                        v = chord.get_children_by_type(Voice)[0]
+                        chord.remove_child(v)
+                    except IndexError:
+                        pass
+                    if self.add_chord(chord) is not None:
+                        raise Exception()
+        self._flags2_implemented = True
+
+    def implement_flags_3(self):
+        def check_implement_output(chords):
+            if not isinstance(chords, list):
+                raise Exception('output of implement can only be a list of chords')
+
+            # if len(chords) not in [1, 2]:
+            #     raise Exception('output of implement can have 1 or 2 chords')
+
+            for ch in chords:
+                if not isinstance(ch, TreeChord):
+                    raise Exception('output of implement can only be a list of chords not {}'.format(type(ch)))
+
+        if not self._flags3_implemented:
+            flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
+                              isinstance(flag, TreeChordFlag3)])
+
+            while flag_types:
+                flag_type = flag_types.pop()
+                output = []
+                for chord in self.chords:
+                    try:
+                        chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
+                        new_chords = chord_flag.implement(chord)
+                        check_implement_output(new_chords)
+                        output.extend(new_chords)
+
+                    except IndexError:
+                        output.append(chord)
+
+                self.remove_chords()
+                for chord in output:
+                    try:
+                        v = chord.get_children_by_type(Voice)[0]
+                        chord.remove_child(v)
+                    except IndexError:
+                        pass
+                    tmp = self.add_chord(chord)
+                    # if tmp is not None:
+                    #     print(tmp.quarter_duration)
+                    #     raise Exception()
+
+        self._flags3_implemented = True
 
 
 class TreePart(timewise.Part):
@@ -784,6 +997,15 @@ class TreePart(timewise.Part):
         voice = self.get_voice(voice_number)
         return voice.add_chord(chord)
 
+    def remove_chord(self, chord):
+        if not isinstance(chord, TreeChord):
+            raise TypeError()
+
+        tree_voice = self.get_voice(chord.parent_voice.number)
+        xml_voice = chord.get_children_by_type(Voice)[0]
+        chord.remove_child(xml_voice)
+        tree_voice.chords.remove(chord)
+
     def get_beats(self):
         output = []
         for voice in self.voices.values():
@@ -845,6 +1067,7 @@ class TreePart(timewise.Part):
         return previous_measure_last_notes
 
     def update_accidentals(self, mode):
+        self._accidental_mode = mode
 
         def _get_previous_measure_last_signed_notes():
             previous_measure_last_notes = self.get_previous_measure_last_notes()
@@ -910,7 +1133,7 @@ class TreePart(timewise.Part):
                         if isinstance(note.event, Rest):
                             break
                         # natural
-                        if not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
+                        elif not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
                             if note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type for t in
                                                                                                 note.get_children_by_type(
                                                                                                     Tie)]:
@@ -933,10 +1156,12 @@ class TreePart(timewise.Part):
                                 _set_natural.remove(note.pitch.step.value)
                         # non natural
                         else:
-                            if is_in_repetition(xml_chord):
+                            if note.is_finger_tremolo:
+                                note.accidental.show = True
+                            elif is_in_repetition(xml_chord):
                                 break
-
-                            elif 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
+                            elif 'stop' not in [t.type for t in
+                                                note.get_children_by_type(Tie)]:
                                 note.accidental.show = True
 
                             _set_natural.add(note.pitch.step.value)
@@ -949,6 +1174,10 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.fill_with_rest()
 
+    def preliminary_adjoin_rests(self):
+        for voice in self.voices.values():
+            voice.preliminary_adjoin_rests()
+
     def add_beats(self, list_of_beats=None):
         for voice in self.voices.values():
             voice.add_beats(list_of_beats)
@@ -958,9 +1187,17 @@ class TreePart(timewise.Part):
             voice.quantize()
             voice.clear_zero_heads_tails()
 
+    # def adjoin_rests_in_beat(self):
+    #     for voice in self.voices.values():
+    #         voice.adjoin_rests_in_beat()
+
     def split_not_notatable(self):
         for voice in self.voices.values():
             voice.split_not_notatable()
+
+    def implement_flags(self):
+        for voice in self.voices.values():
+            voice.implement_flags()
 
     def adjoin_ties(self):
         for voice in self.voices.values():
@@ -986,6 +1223,14 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.update_dots()
 
+    def implement_flags_2(self):
+        for voice in self.voices.values():
+            voice.implement_flags_2()
+
+    def implement_flags_3(self):
+        for voice in self.voices.values():
+            voice.implement_flags_3()
+
     def update_durations(self):
         for note in self.get_children_by_type(TreeNote):
             if note.quarter_duration != 0:
@@ -1008,11 +1253,17 @@ class TreePart(timewise.Part):
         if not self._finished:
             self.fill_with_rest()
 
+            self.preliminary_adjoin_rests()
+
             self.add_beats()
 
             self.quantize()
 
+            # self.adjoin_rests_in_beat()
+
             self.split_not_notatable()
+
+            self.implement_flags()
 
             self.adjoin_ties()
 
@@ -1022,11 +1273,15 @@ class TreePart(timewise.Part):
 
             self.substitute_sextoles()
 
+            self.implement_flags_2()
+
             self.update_types()
 
             self.update_dots()
 
             self.group_beams()
+
+            self.implement_flags_3()
 
             self.chord_to_notes()
 

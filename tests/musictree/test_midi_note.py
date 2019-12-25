@@ -35,3 +35,9 @@ class Test(TestCase):
 
         result_path = path + '_test_2'
         self.score.write(path=result_path)
+
+    def test_3(self):
+        midi = E(6)
+        # print(midi.value)
+        midi.transpose(3)
+        # print(midi.value)

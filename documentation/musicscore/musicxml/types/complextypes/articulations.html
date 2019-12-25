@@ -124,7 +124,7 @@ class Falloff(ComplexTypeEmptyLine):
 
 
 class BreathMark(ComplexTypeBreathMark):
-    _TAG = &#39;breath_mark&#39;
+    _TAG = &#39;breath-mark&#39;
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)
@@ -180,17 +180,14 @@ class OtherArticulation(object):
         NotImplementedError()
 
 
-&#39;&#39;&#39;
-        &lt;xs:complexType name=&#34;articulations&#34;&gt;
-                        &lt;xs:element name=&#34;strong-accent&#34; type=&#34;strong-accent&#34;&gt;
-&#39;&#39;&#39;
-
-
-class Articulations(ComplexType, OptionalUniqueId):
+class ComplexTypeArticulations(ComplexType, OptionalUniqueId):
     &#34;&#34;&#34;Articulations and accents are grouped together here.&#34;&#34;&#34;
 
+    # _CHILDREN = [Accent, StrongAccent, Staccato, Tenuto, DetachedLegato, Staccatissimo, Spiccato, Scoop, Plop, Doit,
+    #              Falloff, BreathMark, Caesura, Stress, Unstress, SoftAccent]
+
     _CHILDREN = [Accent, StrongAccent, Staccato, Tenuto, DetachedLegato, Staccatissimo, Spiccato, Scoop, Plop, Doit,
-                 Falloff, BreathMark, Caesura, Stress, Unstress, SoftAccent]
+                 Falloff, BreathMark, Caesura, Stress, Unstress]
 
     _DTD = Choice(
         Element(Accent),
@@ -208,13 +205,13 @@ class Articulations(ComplexType, OptionalUniqueId):
         Element(Caesura),
         Element(Stress),
         Element(Unstress),
-        Element(SoftAccent),
+        # Element(SoftAccent),
         min_occurrence=0,
         max_occurrence=None
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)</code></pre>
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)</code></pre>
 </details>
 </section>
 <section>
@@ -265,54 +262,6 @@ class Articulations(ComplexType, OptionalUniqueId):
 <li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
 </ul>
 </dd>
-<dt id="musicscore.musicxml.types.complextypes.articulations.Articulations"><code class="flex name class">
-<span>class <span class="ident">Articulations</span></span>
-<span>(</span><span>*args, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Articulations and accents are grouped together here.</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">class Articulations(ComplexType, OptionalUniqueId):
-    &#34;&#34;&#34;Articulations and accents are grouped together here.&#34;&#34;&#34;
-
-    _CHILDREN = [Accent, StrongAccent, Staccato, Tenuto, DetachedLegato, Staccatissimo, Spiccato, Scoop, Plop, Doit,
-                 Falloff, BreathMark, Caesura, Stress, Unstress, SoftAccent]
-
-    _DTD = Choice(
-        Element(Accent),
-        Element(StrongAccent),
-        Element(Staccato),
-        Element(Tenuto),
-        Element(DetachedLegato),
-        Element(Staccatissimo),
-        Element(Spiccato),
-        Element(Scoop),
-        Element(Plop),
-        Element(Doit),
-        Element(Falloff),
-        Element(BreathMark),
-        Element(Caesura),
-        Element(Stress),
-        Element(Unstress),
-        Element(SoftAccent),
-        min_occurrence=0,
-        max_occurrence=None
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
-<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
-<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
-<li>AGtree.tree.Tree</li>
-<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
-<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
-</ul>
-</dd>
 <dt id="musicscore.musicxml.types.complextypes.articulations.BreathMark"><code class="flex name class">
 <span>class <span class="ident">BreathMark</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -322,7 +271,7 @@ class Articulations(ComplexType, OptionalUniqueId):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class BreathMark(ComplexTypeBreathMark):
-    _TAG = &#39;breath_mark&#39;
+    _TAG = &#39;breath-mark&#39;
 
     def __init__(self, *args, **kwargs):
         super().__init__(tag=self._TAG, *args, **kwargs)</code></pre>
@@ -376,8 +325,6 @@ main note and goes below the main pitch.</p></section>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
 <li>AGtree.tree.Tree</li>
-<li><a title="musicscore.musicxml.types.simple_type.TypeCaesuraValue" href="../simple_type.html#musicscore.musicxml.types.simple_type.TypeCaesuraValue">TypeCaesuraValue</a></li>
-<li><a title="musicscore.musicxml.types.simple_type.SimpleType" href="../simple_type.html#musicscore.musicxml.types.simple_type.SimpleType">SimpleType</a></li>
 <li><a title="musicscore.musicxml.attributes.printstyle.PrintStyle" href="../../attributes/printstyle.html#musicscore.musicxml.attributes.printstyle.PrintStyle">PrintStyle</a></li>
 <li><a title="musicscore.musicxml.attributes.position.Position" href="../../attributes/position.html#musicscore.musicxml.attributes.position.Position">Position</a></li>
 <li><a title="musicscore.musicxml.attributes.position.DefaultX" href="../../attributes/position.html#musicscore.musicxml.attributes.position.DefaultX">DefaultX</a></li>
@@ -392,6 +339,61 @@ main note and goes below the main pitch.</p></section>
 <li><a title="musicscore.musicxml.attributes.color.Color" href="../../attributes/color.html#musicscore.musicxml.attributes.color.Color">Color</a></li>
 <li><a title="musicscore.musicxml.attributes.placement.Placement" href="../../attributes/placement.html#musicscore.musicxml.attributes.placement.Placement">Placement</a></li>
 <li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.types.complextypes.articulations.ComplexTypeArticulations"><code class="flex name class">
+<span>class <span class="ident">ComplexTypeArticulations</span></span>
+<span>(</span><span>tag, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Articulations and accents are grouped together here.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ComplexTypeArticulations(ComplexType, OptionalUniqueId):
+    &#34;&#34;&#34;Articulations and accents are grouped together here.&#34;&#34;&#34;
+
+    # _CHILDREN = [Accent, StrongAccent, Staccato, Tenuto, DetachedLegato, Staccatissimo, Spiccato, Scoop, Plop, Doit,
+    #              Falloff, BreathMark, Caesura, Stress, Unstress, SoftAccent]
+
+    _CHILDREN = [Accent, StrongAccent, Staccato, Tenuto, DetachedLegato, Staccatissimo, Spiccato, Scoop, Plop, Doit,
+                 Falloff, BreathMark, Caesura, Stress, Unstress]
+
+    _DTD = Choice(
+        Element(Accent),
+        Element(StrongAccent),
+        Element(Staccato),
+        Element(Tenuto),
+        Element(DetachedLegato),
+        Element(Staccatissimo),
+        Element(Spiccato),
+        Element(Scoop),
+        Element(Plop),
+        Element(Doit),
+        Element(Falloff),
+        Element(BreathMark),
+        Element(Caesura),
+        Element(Stress),
+        Element(Unstress),
+        # Element(SoftAccent),
+        min_occurrence=0,
+        max_occurrence=None
+    )
+
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.complextype.ComplexType" href="complextype.html#musicscore.musicxml.types.complextypes.complextype.ComplexType">ComplexType</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLElement" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLElement">XMLElement</a></li>
+<li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="../../elements/xml_element.html#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
+<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId" href="../../attributes/optional_unique_id.html#musicscore.musicxml.attributes.optional_unique_id.OptionalUniqueId">OptionalUniqueId</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="../../attributes/attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.notations.Articulations" href="notations.html#musicscore.musicxml.types.complextypes.notations.Articulations">Articulations</a></li>
 </ul>
 </dd>
 <dt id="musicscore.musicxml.types.complextypes.articulations.DetachedLegato"><code class="flex name class">
@@ -985,13 +987,13 @@ range.</p></section>
 <h4><code><a title="musicscore.musicxml.types.complextypes.articulations.Accent" href="#musicscore.musicxml.types.complextypes.articulations.Accent">Accent</a></code></h4>
 </li>
 <li>
-<h4><code><a title="musicscore.musicxml.types.complextypes.articulations.Articulations" href="#musicscore.musicxml.types.complextypes.articulations.Articulations">Articulations</a></code></h4>
-</li>
-<li>
 <h4><code><a title="musicscore.musicxml.types.complextypes.articulations.BreathMark" href="#musicscore.musicxml.types.complextypes.articulations.BreathMark">BreathMark</a></code></h4>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.complextypes.articulations.Caesura" href="#musicscore.musicxml.types.complextypes.articulations.Caesura">Caesura</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.types.complextypes.articulations.ComplexTypeArticulations" href="#musicscore.musicxml.types.complextypes.articulations.ComplexTypeArticulations">ComplexTypeArticulations</a></code></h4>
 </li>
 <li>
 <h4><code><a title="musicscore.musicxml.types.complextypes.articulations.DetachedLegato" href="#musicscore.musicxml.types.complextypes.articulations.DetachedLegato">DetachedLegato</a></code></h4>

@@ -19,7 +19,7 @@
   </defaults>
   <part-list>
     <score-part id="p1">
-      <part-name print-object="no">one</part-name>
+      <part-name print-object="no">none</part-name>
     </score-part>
   </part-list>
   <measure number="1">
@@ -165,6 +165,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">end</beam>
+        <beam number="2">end</beam>
         <notations>
           <tied number="1" type="start"/>
         </notations>

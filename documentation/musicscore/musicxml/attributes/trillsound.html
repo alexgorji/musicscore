@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>musicscore.musicxml.attributes.trillsound API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>musicscore.musicxml.attributes.trillsound</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+
+
+class StartNote(AttributeAbstract):
+    def __init__(self, start_note=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;start-note&#39;, start_note, &#34;TypeStartNote&#34;)
+
+
+class TrillStep(AttributeAbstract):
+    def __init__(self, start_note=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;trill-step&#39;, start_note, &#34;TypeTrillStep&#34;)
+
+
+class TwoNoteTurn(AttributeAbstract):
+    def __init__(self, two_note_turn=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;two-note-turn&#39;, two_note_turn, &#34;TypeTwoNoteTurn&#34;)
+
+
+class Accelerate(AttributeAbstract):
+    def __init__(self, accelerate=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;accelerate&#39;, accelerate, &#34;TypeYesNo&#34;)
+
+
+class SecondBeat(AttributeAbstract):
+    def __init__(self, second_beat=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;second-beat&#39;, second_beat, &#34;TypePercent&#34;)
+
+
+class LastBeat(AttributeAbstract):
+    def __init__(self, last_beat=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;last-beat&#39;, last_beat, &#34;TypePercent&#34;)
+
+
+class Beats(AttributeAbstract):
+    def __init__(self, beats=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;beats&#39;, beats, &#34;TypeTrillBeats&#34;)
+
+
+class TrillSound(StartNote, TrillStep, TwoNoteTurn, Accelerate, Beats, SecondBeat, LastBeat):
+    &#34;&#34;&#34;
+    The trill-sound attribute group includes attributes used to guide the sound of trills, mordents, turns, shakes, and
+    wavy lines, based on MuseData sound suggestions. The default choices are:
+
+                start-note = &#34;upper&#34;
+                trill-step = &#34;whole&#34;
+                two-note-turn = &#34;none&#34;
+                accelerate = &#34;no&#34;
+                beats = &#34;4&#34;.
+
+                Second-beat and last-beat are percentages for landing on the indicated beat, with defaults of 25 and 75
+                respectively.
+
+                For mordent and inverted-mordent elements, the defaults are different:
+
+                The default start-note is &#34;main&#34;, not &#34;upper&#34;.
+                The default for beats is &#34;3&#34;, not &#34;4&#34;.
+                The default for second-beat is &#34;12&#34;, not &#34;25&#34;.
+                The default for last-beat is &#34;24&#34;, not &#34;75&#34;.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="musicscore.musicxml.attributes.trillsound.Accelerate"><code class="flex name class">
+<span>class <span class="ident">Accelerate</span></span>
+<span>(</span><span>accelerate=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Accelerate(AttributeAbstract):
+    def __init__(self, accelerate=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;accelerate&#39;, accelerate, &#34;TypeYesNo&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.trillsound.TrillSound" href="#musicscore.musicxml.attributes.trillsound.TrillSound">TrillSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.attributes.trillsound.Beats"><code class="flex name class">
+<span>class <span class="ident">Beats</span></span>
+<span>(</span><span>beats=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Beats(AttributeAbstract):
+    def __init__(self, beats=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;beats&#39;, beats, &#34;TypeTrillBeats&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.trillsound.TrillSound" href="#musicscore.musicxml.attributes.trillsound.TrillSound">TrillSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.attributes.trillsound.LastBeat"><code class="flex name class">
+<span>class <span class="ident">LastBeat</span></span>
+<span>(</span><span>last_beat=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class LastBeat(AttributeAbstract):
+    def __init__(self, last_beat=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;last-beat&#39;, last_beat, &#34;TypePercent&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.trillsound.TrillSound" href="#musicscore.musicxml.attributes.trillsound.TrillSound">TrillSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.attributes.trillsound.SecondBeat"><code class="flex name class">
+<span>class <span class="ident">SecondBeat</span></span>
+<span>(</span><span>second_beat=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class SecondBeat(AttributeAbstract):
+    def __init__(self, second_beat=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;second-beat&#39;, second_beat, &#34;TypePercent&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.trillsound.TrillSound" href="#musicscore.musicxml.attributes.trillsound.TrillSound">TrillSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.attributes.trillsound.StartNote"><code class="flex name class">
+<span>class <span class="ident">StartNote</span></span>
+<span>(</span><span>start_note=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class StartNote(AttributeAbstract):
+    def __init__(self, start_note=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;start-note&#39;, start_note, &#34;TypeStartNote&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.trillsound.TrillSound" href="#musicscore.musicxml.attributes.trillsound.TrillSound">TrillSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.attributes.trillsound.TrillSound"><code class="flex name class">
+<span>class <span class="ident">TrillSound</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The trill-sound attribute group includes attributes used to guide the sound of trills, mordents, turns, shakes, and
+wavy lines, based on MuseData sound suggestions. The default choices are:</p>
+<pre><code>        start-note = "upper"
+        trill-step = "whole"
+        two-note-turn = "none"
+        accelerate = "no"
+        beats = "4".
+
+        Second-beat and last-beat are percentages for landing on the indicated beat, with defaults of 25 and 75
+        respectively.
+
+        For mordent and inverted-mordent elements, the defaults are different:
+
+        The default start-note is "main", not "upper".
+        The default for beats is "3", not "4".
+        The default for second-beat is "12", not "25".
+        The default for last-beat is "24", not "75".
+</code></pre></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TrillSound(StartNote, TrillStep, TwoNoteTurn, Accelerate, Beats, SecondBeat, LastBeat):
+    &#34;&#34;&#34;
+    The trill-sound attribute group includes attributes used to guide the sound of trills, mordents, turns, shakes, and
+    wavy lines, based on MuseData sound suggestions. The default choices are:
+
+                start-note = &#34;upper&#34;
+                trill-step = &#34;whole&#34;
+                two-note-turn = &#34;none&#34;
+                accelerate = &#34;no&#34;
+                beats = &#34;4&#34;.
+
+                Second-beat and last-beat are percentages for landing on the indicated beat, with defaults of 25 and 75
+                respectively.
+
+                For mordent and inverted-mordent elements, the defaults are different:
+
+                The default start-note is &#34;main&#34;, not &#34;upper&#34;.
+                The default for beats is &#34;3&#34;, not &#34;4&#34;.
+                The default for second-beat is &#34;12&#34;, not &#34;25&#34;.
+                The default for last-beat is &#34;24&#34;, not &#34;75&#34;.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.trillsound.StartNote" href="#musicscore.musicxml.attributes.trillsound.StartNote">StartNote</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.TrillStep" href="#musicscore.musicxml.attributes.trillsound.TrillStep">TrillStep</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.TwoNoteTurn" href="#musicscore.musicxml.attributes.trillsound.TwoNoteTurn">TwoNoteTurn</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.Accelerate" href="#musicscore.musicxml.attributes.trillsound.Accelerate">Accelerate</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.Beats" href="#musicscore.musicxml.attributes.trillsound.Beats">Beats</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.SecondBeat" href="#musicscore.musicxml.attributes.trillsound.SecondBeat">SecondBeat</a></li>
+<li><a title="musicscore.musicxml.attributes.trillsound.LastBeat" href="#musicscore.musicxml.attributes.trillsound.LastBeat">LastBeat</a></li>
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.types.complextypes.emptytrillsound.ComplexTypeEmptyTrillSound" href="../types/complextypes/emptytrillsound.html#musicscore.musicxml.types.complextypes.emptytrillsound.ComplexTypeEmptyTrillSound">ComplexTypeEmptyTrillSound</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.horizontalturn.ComplexTypeHorizontalTurn" href="../types/complextypes/horizontalturn.html#musicscore.musicxml.types.complextypes.horizontalturn.ComplexTypeHorizontalTurn">ComplexTypeHorizontalTurn</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.attributes.trillsound.TrillStep"><code class="flex name class">
+<span>class <span class="ident">TrillStep</span></span>
+<span>(</span><span>start_note=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TrillStep(AttributeAbstract):
+    def __init__(self, start_note=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;trill-step&#39;, start_note, &#34;TypeTrillStep&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.trillsound.TrillSound" href="#musicscore.musicxml.attributes.trillsound.TrillSound">TrillSound</a></li>
+</ul>
+</dd>
+<dt id="musicscore.musicxml.attributes.trillsound.TwoNoteTurn"><code class="flex name class">
+<span>class <span class="ident">TwoNoteTurn</span></span>
+<span>(</span><span>two_note_turn=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TwoNoteTurn(AttributeAbstract):
+    def __init__(self, two_note_turn=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute(&#39;two-note-turn&#39;, two_note_turn, &#34;TypeTwoNoteTurn&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract" href="attribute_abstract.html#musicscore.musicxml.attributes.attribute_abstract.AttributeAbstract">AttributeAbstract</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="musicscore.musicxml.attributes.trillsound.TrillSound" href="#musicscore.musicxml.attributes.trillsound.TrillSound">TrillSound</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="musicscore.musicxml.attributes" href="index.html">musicscore.musicxml.attributes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="musicscore.musicxml.attributes.trillsound.Accelerate" href="#musicscore.musicxml.attributes.trillsound.Accelerate">Accelerate</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.attributes.trillsound.Beats" href="#musicscore.musicxml.attributes.trillsound.Beats">Beats</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.attributes.trillsound.LastBeat" href="#musicscore.musicxml.attributes.trillsound.LastBeat">LastBeat</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.attributes.trillsound.SecondBeat" href="#musicscore.musicxml.attributes.trillsound.SecondBeat">SecondBeat</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.attributes.trillsound.StartNote" href="#musicscore.musicxml.attributes.trillsound.StartNote">StartNote</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.attributes.trillsound.TrillSound" href="#musicscore.musicxml.attributes.trillsound.TrillSound">TrillSound</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.attributes.trillsound.TrillStep" href="#musicscore.musicxml.attributes.trillsound.TrillStep">TrillStep</a></code></h4>
+</li>
+<li>
+<h4><code><a title="musicscore.musicxml.attributes.trillsound.TwoNoteTurn" href="#musicscore.musicxml.attributes.trillsound.TwoNoteTurn">TwoNoteTurn</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
