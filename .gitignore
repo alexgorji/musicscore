@@ -3,5 +3,5 @@ venv
 .idea
 build
 dist
-musicscore_alexgorji.egg-info
+musicscore.egg-info
 
