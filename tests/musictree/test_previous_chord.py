@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from musicscore.musicstream import SimpleFormat
+from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treechordflags3 import CheckPreviousFlag
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 

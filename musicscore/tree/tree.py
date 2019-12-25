@@ -1,14 +1,12 @@
 import copy
 
-from AGtree.basic_functions import flatten
+from musicscore.basic_functions import flatten
 
 
 class Tree(object):
     """
     A simple Tree class
     """
-
-    COUNT_COPYING = 0
 
     def __init__(self, label=None, *args, **kwargs):
         super().__init__(*args, **kwargs)

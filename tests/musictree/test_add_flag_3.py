@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
 
-from musicscore.musicstream import SimpleFormat
+from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treechordflags3 import NoiseFlag3
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore

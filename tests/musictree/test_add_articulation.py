@@ -1,7 +1,7 @@
 from unittest import TestCase
 import os
 
-from musicscore.musicstream import SimpleFormat
+from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treechordflags import PercussionFlag, XFlag
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicscore.musicxml.types.complextypes.articulations import Accent
