@@ -22,7 +22,7 @@
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from AGtree.tree import Tree
+<pre><code class="python">from musicscore.tree.tree import Tree
 from lxml import etree as et
 
 from musicscore.basic_functions import replace_dash
@@ -418,7 +418,7 @@ class XMLElement(XMLTree):
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="musicscore.musicxml.elements.xml_element.XMLTree" href="#musicscore.musicxml.elements.xml_element.XMLTree">XMLTree</a></li>
-<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.tree.tree.Tree" href="../../tree/tree.html#musicscore.tree.tree.Tree">Tree</a></li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -449,6 +449,23 @@ class XMLElement(XMLTree):
 <li><a title="musicscore.musicxml.elements.note.NoteheadText" href="note.html#musicscore.musicxml.elements.note.NoteheadText">NoteheadText</a></li>
 <li><a title="musicscore.musicxml.elements.note.Play" href="note.html#musicscore.musicxml.elements.note.Play">Play</a></li>
 <li><a title="musicscore.musicxml.elements.note.Note" href="note.html#musicscore.musicxml.elements.note.Note">Note</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiChannel" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiChannel">MidiChannel</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiName" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiName">MidiName</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiBank" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiBank">MidiBank</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiProgram" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiProgram">MidiProgram</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiUnpitched" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiUnpitched">MidiUnpitched</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.Volume" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.Volume">Volume</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.Pan" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.Pan">Pan</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.Elevation" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.Elevation">Elevation</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.encoding.EncodingDate" href="../types/complextypes/encoding.html#musicscore.musicxml.types.complextypes.encoding.EncodingDate">EncodingDate</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.identification.Source" href="../types/complextypes/identification.html#musicscore.musicxml.types.complextypes.identification.Source">Source</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.identification.Miscellaneus" href="../types/complextypes/identification.html#musicscore.musicxml.types.complextypes.identification.Miscellaneus">Miscellaneus</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.PartNameDisplay" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.PartNameDisplay">PartNameDisplay</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.PartAbbreviationDisplay" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.PartAbbreviationDisplay">PartAbbreviationDisplay</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.Group" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.Group">Group</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.ScoreInstrument" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.ScoreInstrument">ScoreInstrument</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.MidiDevice" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.MidiDevice">MidiDevice</a></li>
+<li><a title="musicscore.musicxml.types.complextypes.scorepart.MidiInstrument" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.MidiInstrument">MidiInstrument</a></li>
 <li><a title="musicscore.musicxml.elements.barline.Coda" href="barline.html#musicscore.musicxml.elements.barline.Coda">Coda</a></li>
 <li><a title="musicscore.musicxml.elements.barline.Fermata" href="barline.html#musicscore.musicxml.elements.barline.Fermata">Fermata</a></li>
 <li><a title="musicscore.musicxml.elements.barline.Ending" href="barline.html#musicscore.musicxml.elements.barline.Ending">Ending</a></li>
@@ -487,14 +504,6 @@ class XMLElement(XMLTree):
 <li><a title="musicscore.musicxml.types.complextypes.directiontype.StaffDivide" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.StaffDivide">StaffDivide</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.directiontype.AccordionRegistration" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.AccordionRegistration">AccordionRegistration</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.directiontype.OtherDirection" href="../types/complextypes/directiontype.html#musicscore.musicxml.types.complextypes.directiontype.OtherDirection">OtherDirection</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiChannel" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiChannel">MidiChannel</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiName" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiName">MidiName</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiBank" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiBank">MidiBank</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiProgram" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiProgram">MidiProgram</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.MidiUnpitched" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.MidiUnpitched">MidiUnpitched</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.Volume" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.Volume">Volume</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.Pan" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.Pan">Pan</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.midiinstrument.Elevation" href="../types/complextypes/midiinstrument.html#musicscore.musicxml.types.complextypes.midiinstrument.Elevation">Elevation</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.play.Ipa" href="../types/complextypes/play.html#musicscore.musicxml.types.complextypes.play.Ipa">Ipa</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.play.Mute" href="../types/complextypes/play.html#musicscore.musicxml.types.complextypes.play.Mute">Mute</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.play.SemiPitched" href="../types/complextypes/play.html#musicscore.musicxml.types.complextypes.play.SemiPitched">SemiPitched</a></li>
@@ -508,15 +517,6 @@ class XMLElement(XMLTree):
 <li><a title="musicscore.musicxml.types.complextypes.stafflayout.StaffDistance" href="../types/complextypes/stafflayout.html#musicscore.musicxml.types.complextypes.stafflayout.StaffDistance">StaffDistance</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.systemlayout.SystemDistance" href="../types/complextypes/systemlayout.html#musicscore.musicxml.types.complextypes.systemlayout.SystemDistance">SystemDistance</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.systemlayout.TopSystemDistance" href="../types/complextypes/systemlayout.html#musicscore.musicxml.types.complextypes.systemlayout.TopSystemDistance">TopSystemDistance</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.encoding.EncodingDate" href="../types/complextypes/encoding.html#musicscore.musicxml.types.complextypes.encoding.EncodingDate">EncodingDate</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.identification.Source" href="../types/complextypes/identification.html#musicscore.musicxml.types.complextypes.identification.Source">Source</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.identification.Miscellaneus" href="../types/complextypes/identification.html#musicscore.musicxml.types.complextypes.identification.Miscellaneus">Miscellaneus</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.scorepart.PartNameDisplay" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.PartNameDisplay">PartNameDisplay</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.scorepart.PartAbbreviationDisplay" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.PartAbbreviationDisplay">PartAbbreviationDisplay</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.scorepart.Group" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.Group">Group</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.scorepart.ScoreInstrument" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.ScoreInstrument">ScoreInstrument</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.scorepart.MidiDevice" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.MidiDevice">MidiDevice</a></li>
-<li><a title="musicscore.musicxml.types.complextypes.scorepart.MidiInstrument" href="../types/complextypes/scorepart.html#musicscore.musicxml.types.complextypes.scorepart.MidiInstrument">MidiInstrument</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.print.MeasureLayout" href="../types/complextypes/print.html#musicscore.musicxml.types.complextypes.print.MeasureLayout">MeasureLayout</a></li>
 <li><a title="musicscore.musicxml.types.complextypes.print.MeasureNumbering" href="../types/complextypes/print.html#musicscore.musicxml.types.complextypes.print.MeasureNumbering">MeasureNumbering</a></li>
 <li><a title="musicscore.musicxml.groups.musicdata.Forward" href="../groups/musicdata.html#musicscore.musicxml.groups.musicdata.Forward">Forward</a></li>
@@ -825,7 +825,7 @@ def text(self):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li>AGtree.tree.Tree</li>
+<li><a title="musicscore.tree.tree.Tree" href="../../tree/tree.html#musicscore.tree.tree.Tree">Tree</a></li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
