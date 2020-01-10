@@ -28,4 +28,4 @@ class Test(TestCase):
 
         xml_path = path + '_test_1.xml'
         self.main_score.write(path=xml_path)
-        # TestScore().assert_template(result_path=result_path)
+        TestScore().assert_template(result_path=xml_path)
