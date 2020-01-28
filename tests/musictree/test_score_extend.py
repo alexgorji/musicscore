@@ -31,19 +31,16 @@ class Test(TestCase):
         TestScore().assert_template(result_path=xml_path)
 
     def test_2(self):
-        section_score_1 = TreeScoreTimewise()
+        # needed because of wrong system breaks
+        section_score = TreeScoreTimewise()
         sf = SimpleFormat(durations=2 * [5, 4, 3, 2, 1])
-        section_score_1.set_time_signatures(durations=sum(sf.durations), barline_style='light-light')
-        sf.to_stream_voice().add_to_score(section_score_1)
+        section_score.set_time_signatures(durations=sum(sf.durations), barline_style='light-light')
+        sf.to_stream_voice().add_to_score(section_score)
+        # section_xml_path = path + '_test_2_section.xml'
+        # section_score.write(path=section_xml_path)
 
-        section_score_2 = TreeScoreTimewise()
-        sf = SimpleFormat(durations=3 * [1, 2, 3, 4, 5])
-        section_score_2.set_time_signatures(durations=sum(sf.durations), barline_style='heavy')
-        sf.to_stream_voice().add_to_score(section_score_2)
+        self.main_score.extend(section_score)
+        main_xml_path = path + '_test_2_main.xml'
+        self.main_score.write(path=main_xml_path)
 
-        self.main_score.extend(section_score_1)
-        self.main_score.extend(section_score_2)
-
-        xml_path = path + '_test_2.xml'
-        self.main_score.write(path=xml_path)
-        # TestScore().assert_template(result_path=xml_path)
+        TestScore().assert_template(result_path=main_xml_path)

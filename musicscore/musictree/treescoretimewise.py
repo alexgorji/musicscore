@@ -737,5 +737,5 @@ class TreeScoreTimewise(timewise.Score):
                 score_part = self.get_score_part(part.id)
                 score_part.add_part(part)
 
-        if not self._identifications_added:
-            self._add_identifications()
+        # if not self._identifications_added:
+        #     self._add_identifications()
