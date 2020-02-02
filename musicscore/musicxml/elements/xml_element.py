@@ -1,9 +1,9 @@
-from musicscore.tree.tree import Tree
 from lxml import etree as et
 
 from musicscore.basic_functions import replace_dash
 from musicscore.dtd.dtd import DTDError, ChildIsNotOptional, ChildTypeDTDConflict, ChildOccurrenceDTDConflict, Sequence
 from musicscore.musicxml.exceptions import AfterInitializationError
+from musicscore.tree.tree import Tree
 
 
 class XMLTree(Tree):
@@ -21,6 +21,9 @@ class XMLTree(Tree):
     @property
     def current_children(self):
         return self._current_children
+
+    def get_choice_index(self):
+        return self._choice_index
 
     def _set_child(self, type_, tag, value):
         if value is not None and not isinstance(value, type_):
@@ -70,7 +73,7 @@ class XMLTree(Tree):
     def add_xml_child(self, xml_child):
         choice = self.current_dtd_choice
         selected_leaves = [leaf for leaf in choice.traverse_leaves() if isinstance(xml_child, leaf.type_)]
-
+        # print(selected_leaves)
         if not selected_leaves:
             try:
                 self.goto_next_dtd_choice()

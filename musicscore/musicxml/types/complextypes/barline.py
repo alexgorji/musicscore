@@ -72,7 +72,7 @@ class ComplexTypeRepeat(ComplexType, Times, Winged):
             self.remove_attribute('direction')
         else:
             TypeBackwardForward(value)
-            self._ATTRIBUTES.insert(0, 'direction')
+            self._ATTRIBUTES.(0, 'direction')
             self.set_attribute('direction', value)
 
 

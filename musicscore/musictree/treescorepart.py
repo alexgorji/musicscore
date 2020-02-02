@@ -1,7 +1,8 @@
 from musicscore.musictree.treeinstruments import TreeInstrument
 from musicscore.musictree.treepart import TreePart
-from musicscore.musicxml.types.complextypes.partlist import ScorePart
-import uuid
+from musicscore.musicxml.types.complextypes.namedisplay import DisplayText
+from musicscore.musicxml.types.complextypes.partgroup import GroupNameDisplay, GroupSymbol, GroupBarline
+from musicscore.musicxml.types.complextypes.partlist import ScorePart, PartGroup
 
 from musicscore.musicxml.types.complextypes.scorepart import PartName, PartAbbreviation
 
@@ -96,3 +97,19 @@ class TreeScorePart(ScorePart):
         part.parent_score_part = self
         self._parts.append(part)
         return part
+
+    def add_part_group(self, number, type, name=None, symbol=None, barline=None):
+        pg = PartGroup(type_=type, number=str(number))
+        pg._up = self.up
+        if name:
+            gnd = pg.add_child(GroupNameDisplay())
+            gnd.add_child(DisplayText(name))
+        if symbol:
+            pg.add_child(GroupSymbol(symbol))
+        if barline:
+            pg.add_child(GroupBarline(barline))
+        self_index = self.up.current_children.index(self)
+        if type == 'start':
+            self.up.current_children.insert(self_index, pg)
+        else:
+            self.up.current_children.insert(self_index + 1, pg)

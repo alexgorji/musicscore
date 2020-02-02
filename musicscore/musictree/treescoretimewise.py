@@ -156,7 +156,7 @@ class TreeScoreTimewise(timewise.Score):
         return TreeScorePart(id=id_)
 
     def get_score_parts(self):
-        return self._part_list.get_children()
+        return self._part_list.get_children_by_type(TreeScorePart)
 
     def get_score_part(self, id):
         for score_part in self.get_score_parts():

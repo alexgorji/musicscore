@@ -22,6 +22,10 @@
       <part-name>Violin 1</part-name>
       <part-abbreviation>vln. 1</part-abbreviation>
     </score-part>
+    <part-group number="1" type="start">
+      <group-symbol>bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
     <score-part id="p2">
       <part-name>Violin 2</part-name>
       <part-abbreviation>vln. 2</part-abbreviation>
@@ -30,6 +34,7 @@
       <part-name>Viola</part-name>
       <part-abbreviation>vla.</part-abbreviation>
     </score-part>
+    <part-group number="1" type="stop"/>
     <score-part id="p4">
       <part-name>Cello</part-name>
       <part-abbreviation>vc.</part-abbreviation>
