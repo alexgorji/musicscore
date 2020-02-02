@@ -99,7 +99,7 @@ class TreeScorePart(ScorePart):
         return part
 
     def add_part_group(self, number, type, name=None, symbol=None, barline=None):
-        pg = PartGroup(type_=type, number=str(number))
+        pg = PartGroup(type=type, number=str(number))
         pg._up = self.up
         if name:
             gnd = pg.add_child(GroupNameDisplay())

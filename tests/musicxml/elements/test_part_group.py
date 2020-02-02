@@ -45,7 +45,7 @@ class Test(TestCase):
         self.assertEqual(expected, result)
 
     def test_5(self):
-        pg = PartGroup(type_='start', number='2')
+        pg = PartGroup(type='start', number='2')
         gnd = pg.add_child(GroupNameDisplay())
         gnd.add_child(DisplayText('strings'))
         pg.add_child(GroupSymbol('bracket'))

@@ -32,9 +32,19 @@ class ComplexTypePartList(ComplexType):
     elements that indicate braces and brackets. Parts are ordered from top to bottom in a score based on the order in
     which they appear in the part-list.
     """
+    # _DTD = Sequence(
+    #     Element(PartGroup, min_occurrence=0, max_occurrence=None),
+    #     Element(ScorePart),
+    #     Choice(
+    #         Element(PartGroup),
+    #         Element(ScorePart),
+    #         min_occurrence=0, max_occurrence=None
+    #     )
+    # )
     _DTD = Sequence(
-        Element(PartGroup, min_occurrence=0, max_occurrence=None),
-        Element(ScorePart),
+        Choice(Element(PartGroup, min_occurrence=0, max_occurrence=None),
+               Element(ScorePart)
+               ),
         Choice(
             Element(PartGroup),
             Element(ScorePart),

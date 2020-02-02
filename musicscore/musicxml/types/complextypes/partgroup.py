@@ -93,9 +93,9 @@ class ComplexTypePartGroup(ComplexType):
     )
     _ATTRIBUTES = []
 
-    def __init__(self, type_, number='1', *args, **kwargs):
+    def __init__(self, type, number='1', *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.type = type_
+        self.type = type
         self.number = number
 
     @property
