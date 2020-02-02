@@ -9,5 +9,5 @@ class ComplexTypeFormattedText(ComplexType, String, TextFormatting):
 
     """
 
-    def __init__(self, tag, value=None, *args, **kwargs):
-        super().__init__(tag=tag, value=value, *args, **kwargs)
+    def __init__(self, tag, *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)

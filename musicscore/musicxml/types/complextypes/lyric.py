@@ -146,32 +146,3 @@ class ComplexTypeLyric(ComplexType, Justify, Position, Placement, Color, PrintOb
             Token(value)
             self._ATTRIBUTES.insert(0, 'name')
             self.set_attribute('name', value)
-
-
-class Test(TestCase):
-    def setUp(self):
-        self.lyric = ComplexTypeLyric()
-        self.lyric.add_child(Extend())
-        self.lyric.add_child(Syllabic('begin'))
-        self.lyric.add_child(Text('bla'))
-        # self.lyric.add_child(Elision('00A0'))
-        # self.lyric.add_child(Elision('00A0'))
-        self.lyric.add_child(EndLine())
-        self.lyric.add_child(FootNote('foot'))
-
-    def test_lyric(self):
-        result = '''<lyric number="1">
-  <syllabic>begin</syllabic>
-  <text>bla</text>
-  <extend/>
-  <end-line/>
-  <footnote>foot</footnote>
-</lyric>
-'''
-        self.assertEqual(self.lyric.to_string(), result)
-
-    def run(self):
-        self.setUp()
-        self.test_lyric()
-        print('lyric tested')
-        print()

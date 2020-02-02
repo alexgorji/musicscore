@@ -941,7 +941,6 @@ class TypeUprightInverted(SimpleType):
         super().__init__(value=value, *args, **kwargs)
 
 
-
 ''''
 	<!-- Simple types derived from common.mod entities and elements -->
 
@@ -2076,32 +2075,9 @@ class TypeStemValue(SimpleType):
 
 class TypeMeasureText(Token):
     """
-    The
-    measure - text
-    type is used
-    for the text attribute of measure elements.It has at least one character.The
-    implicit
-    attribute
-    of
-    the
-    measure
-    element
-    should
-    be
-    set
-    to
-    "yes"
-    rather
-    than
-    setting
-    the
-    text
-    attribute
-    to
-    an
-    empty
-    string.
-    """
+    The measure - text type is used for the text attribute of measure elements. It has at least one character.
+    The implicit attribute of the measure element should be set to "yes" rather than setting the text attribute to an
+    empty  string."""
 
     def __init__(self, value='1', *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -2116,28 +2092,24 @@ class TypeMeasureText(Token):
 
 '''
 	<!-- Simple types derived from score.mod elements -->
-
-   <xs:simpleType name="group-barline-value">
-		<xs:annotation>
-			<xs:documentation>The group-barline-value type indicates if the group should have common barlines.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="yes"/>
-			<xs:enumeration value="no"/>
-			<xs:enumeration value="Mensurstrich"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="group-symbol-value">
-		<xs:annotation>
-			<xs:documentation>The group-symbol-value type indicates how the symbol for a group is indicated in the score. The default value is none.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="none"/>
-			<xs:enumeration value="brace"/>
-			<xs:enumeration value="line"/>
-			<xs:enumeration value="bracket"/>
-			<xs:enumeration value="square"/>
-		</xs:restriction>
-	</xs:simpleType>
 '''
+
+
+class TypeGroupBarlineValue(SimpleType):
+    """
+    The group-barline-value type indicates if the group should have common barlines.
+    """
+    _PERMITTED = ["yes", "no", "Mensurstrich"]
+
+
+class TypeGroupSymbolValue(SimpleType):
+    """
+    The group-symbol-value type indicates how the symbol for a group is indicated in the score.
+    The default value is none.
+    """
+    _PERMITTED = ["none", "brace", "line", "bracket", "square"]
+
+    def __init__(self, value=None, *args, **kwargs):
+        if not value:
+            value = 'none'
+        super().__init__(value=value, *args, **kwargs)

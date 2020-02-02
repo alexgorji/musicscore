@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE score-timewise PUBLIC "-//Recordare//DTD MusicXML 3.0 Timewise//EN" "http://www.musicxml.org/dtds/timewise.dtd">
 <score-timewise version="3.0">
-  <identification>
-    <encoding>
-      <supports attribute="new-page" element="print" type="yes" value="yes"/>
-      <supports attribute="new-system" element="print" type="yes" value="yes"/>
-    </encoding>
-  </identification>
   <defaults>
     <scaling>
       <millimeters>7.2319</millimeters>

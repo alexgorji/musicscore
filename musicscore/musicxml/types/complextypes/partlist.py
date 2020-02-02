@@ -1,4 +1,4 @@
-from musicscore.dtd.dtd import Sequence, Element, GroupReference, Choice
+from musicscore.dtd.dtd import Sequence, Element, Choice
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.partgroup import ComplexTypePartGroup
 from musicscore.musicxml.types.complextypes.scorepart import ComplexTypeScorePart
@@ -11,16 +11,17 @@ class ScorePart(ComplexTypeScorePart):
     when there are multiple instruments per track. The midi-device element is used to make a MIDI device or port
     assignment for the given track. Initial midi-instrument assignments may be made here as well.
     """
+    _TAG = 'score-part'
 
     def __init__(self, id, *args, **kwargs):
-        super().__init__(tag='score-part', id=id, *args, **kwargs)
+        super().__init__(tag=self._TAG, id=id, *args, **kwargs)
 
 
 class PartGroup(ComplexTypePartGroup):
-    """"""
+    _TAG = 'part-group'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='part-group', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class ComplexTypePartList(ComplexType):

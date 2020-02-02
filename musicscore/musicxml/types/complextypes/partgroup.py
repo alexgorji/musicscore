@@ -1,55 +1,69 @@
 from musicscore.dtd.dtd import Sequence, Element, GroupReference
 from musicscore.musicxml.groups.common import Editorial
-from musicscore.musicxml.elements.xml_element import XMLElement
-from musicscore.musicxml.types.complextypes.complextype import ComplexType
+from musicscore.musicxml.types.complextypes.complextype import ComplexType, Empty
+from musicscore.musicxml.types.complextypes.groupbarline import ComplexTypeGroupBarline
+from musicscore.musicxml.types.complextypes.groupname import ComplexTypeGroupName
+from musicscore.musicxml.types.complextypes.groupsymbol import ComplexTypeGroupSymbol
+from musicscore.musicxml.types.complextypes.namedisplay import ComplexTypeNameDisplay
+from musicscore.musicxml.types.simple_type import TypeStartStop, Token
 
 
-class GroupName(XMLElement):
-    """"""
+class GroupName(ComplexTypeGroupName):
+    _TAG = 'group-name'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='group-name', *args, **kwargs)
-        raise NotImplementedError('GroupName')
-
-
-class GroupNameDisplay(XMLElement):
-    """"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='group-name-display', *args, **kwargs)
-        raise NotImplementedError('GroupNameDisplay')
+    def __init__(self, value='', *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
-class GroupAbbreviation(XMLElement):
-    """"""
+class GroupNameDisplay(ComplexTypeNameDisplay):
+    _TAG = 'group-name-display'
+    """Formatting specified in the group-name-display element overrides formatting specified in the group-name 
+    element."""
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='group-abbreviation', *args, **kwargs)
-        raise NotImplementedError('GroupAbbreviation')
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class GroupAbbreviationDisplay(XMLElement):
-    """"""
+class GroupAbbreviation(ComplexTypeGroupName):
+    _TAG = 'group-abbreviation'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='group-abbreviation-display', *args, **kwargs)
-        raise NotImplementedError('GroupAbbreviationDisplay')
-
-
-class GroupSymbol(XMLElement):
-    """"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='group-symbol', *args, **kwargs)
-        raise NotImplementedError('GroupSymbol')
+    def __init__(self, value='', *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
-class GroupTime(XMLElement):
-    """"""
+class GroupAbbreviationDisplay(ComplexTypeNameDisplay):
+    """
+    Formatting specified in the group-abbreviation-display element overrides formatting specified in the
+    group-abbreviation element.
+    """
+    _TAG = 'group-abbreviation-display'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='group-time', *args, **kwargs)
-        raise NotImplementedError('GroupTime')
+        super().__init__(tag=self._TAG, *args, **kwargs)
+
+
+class GroupSymbol(ComplexTypeGroupSymbol):
+    _TAG = 'group-symbol'
+
+    def __init__(self, value=None, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
+
+
+class GroupBarline(ComplexTypeGroupBarline):
+    _TAG = 'group-barline'
+
+    def __init__(self, value=None, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
+
+
+class GroupTime(Empty):
+    """The group-time element indicates that the displayed time signatures should stretch across all parts and
+    staves in the group."""
+
+    _TAG = 'group-time'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class ComplexTypePartGroup(ComplexType):
@@ -98,15 +112,40 @@ class ComplexTypePartGroup(ComplexType):
         Element(GroupAbbreviation, min_occurrence=0),
         Element(GroupAbbreviationDisplay, min_occurrence=0),
         Element(GroupSymbol, min_occurrence=0),
+        Element(GroupBarline, min_occurrence=0),
         Element(GroupTime, min_occurrence=0),
         GroupReference(Editorial)
 
     )
+    _ATTRIBUTES = []
 
-    def __init__(self, type_, number=1, *args, **kwargs):
+    def __init__(self, type_, number='1', *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._type = None
-        self.type_ = type_
-        self._number = None
+        self.type = type_
         self.number = number
-        raise NotImplementedError()
+
+    @property
+    def number(self):
+        return self.get_attribute('number')
+
+    @number.setter
+    def number(self, value):
+        if value is None:
+            self.remove_attribute('number')
+        else:
+            Token(value)
+            self._ATTRIBUTES.insert(0, 'number')
+            self.set_attribute('number', value)
+
+    @property
+    def type(self):
+        return self.get_attribute('type')
+
+    @type.setter
+    def type(self, value):
+        if value is None:
+            self.remove_attribute('type')
+        else:
+            TypeStartStop(value)
+            self._ATTRIBUTES.insert(0, 'type')
+            self.set_attribute('type', value)
