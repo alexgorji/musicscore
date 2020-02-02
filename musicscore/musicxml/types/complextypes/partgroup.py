@@ -79,32 +79,6 @@ class ComplexTypePartGroup(ComplexType):
     A part-group element is not needed for a single multi-staff part. By default, multi-staff parts include a brace
     symbol and (if appropriate given the bar-style) common barlines. The symbol formatting for a multi-staff part can
     be more fully specified using the part-symbol element.
-
-		<xs:sequence>
-			<xs:element name="group-name" type="group-name" minOccurs="0"/>
-			<xs:element name="group-name-display" type="name-display" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>Formatting specified in the group-name-display element overrides formatting specified in the group-name element.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="group-abbreviation" type="group-name" minOccurs="0"/>
-			<xs:element name="group-abbreviation-display" type="name-display" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>Formatting specified in the group-abbreviation-display element overrides formatting specified in the group-abbreviation element.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="group-symbol" type="group-symbol" minOccurs="0"/>
-			<xs:element name="group-barline" type="group-barline" minOccurs="0"/>
-			<xs:element name="group-time" type="empty" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>The group-time element indicates that the displayed time signatures should stretch across all parts and staves in the group.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:group ref="editorial"/>
-		</xs:sequence>
-		<xs:attribute name="type" type="start-stop" use="required"/>
-		<xs:attribute name="number" type="xs:token" default="1"/>
-	</xs:complexType>
     """
     _DTD = Sequence(
         Element(GroupName, min_occurrence=0),
