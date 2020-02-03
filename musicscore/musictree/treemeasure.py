@@ -23,7 +23,6 @@ class TreeMeasure(timewise.Measure):
     @property
     def __name__(self):
         index = self.up.get_children_by_type(self.__class__).index(self)
-        # return 'm:' + str(index + 1)
         return str(index + 1)
 
     @property
@@ -72,7 +71,6 @@ class TreeMeasure(timewise.Measure):
 
         self._barline_style = value
 
-
     def show_time_signature(self):
         for part in self.get_children_by_type(TreePart):
             part.get_children_by_type(Attributes)[0].add_child(self.time)
@@ -93,6 +91,8 @@ class TreeMeasure(timewise.Measure):
 
     @property
     def previous(self):
+        if not self.up:
+            return None
         index = self.up.get_children_by_type(TreeMeasure).index(self)
         if index == 0:
             return None

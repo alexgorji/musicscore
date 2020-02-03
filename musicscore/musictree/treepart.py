@@ -1,13 +1,13 @@
 import warnings
 
 from lxml import etree as et
-from musicscore.musictree.treechordflags2 import TreeChordFlag2
 from quicktions import Fraction
 
 from musicscore.basic_functions import lcm, substitute, flatten
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treechordflags2 import TreeChordFlag2
 from musicscore.musictree.treechordflags3 import TreeChordFlag3
 from musicscore.musictree.treenote import TreeNote, TreeBackup
 from musicscore.musicxml.elements import timewise as timewise
@@ -876,7 +876,6 @@ class TreePartVoice(object):
 
 
 class TreePart(timewise.Part):
-    """"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -894,7 +893,6 @@ class TreePart(timewise.Part):
     @property
     def __name__(self):
         index = self.up.get_children_by_type(self.__class__).index(self)
-        # return self.up.__name__ + ' ' + 'p:' + str(index + 1)
         return self.up.__name__ + '.' + str(index + 1)
 
     @property
@@ -951,13 +949,6 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             output.extend(voice.xml_chords)
         return output
-        # output = {}
-        # for note in self.get_children_by_type(TreeNote):
-        #     try:
-        #         output[note.offset].append(note)
-        #     except KeyError:
-        #         output[note.offset] = [note]
-        # return output
 
     def get_divisions(self):
         duration_denominators = [chord.quarter_duration.denominator for chord in
@@ -977,7 +968,6 @@ class TreePart(timewise.Part):
     def set_voice(self, voice_number):
         self.voices[voice_number] = TreePartVoice(voice_number)
         self.voices[voice_number].parent_part = self
-        # self.voices[voice_number].set_beats()
         return self.voices[voice_number]
 
     def get_voice(self, voice_number):
@@ -1016,10 +1006,18 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.group_beams()
 
-    def chord_to_notes(self):
+    def chords_to_notes(self):
         for voice in self.voices.values():
             if not voice._dots_updated:
                 raise Exception('update_dots() first')
+
+        if not self.up.previous and self.parent_score_part and self.parent_score_part.instrument:
+            clef = self.parent_score_part.instrument.standard_clef
+            if clef:
+                first_chords = [voice.chords[0] for voice in self.voices.values()]
+                first_clefs = [chord.get_clef() for chord in first_chords if chord.get_clef()]
+                if not first_clefs:
+                    first_chords[0].add_clef(clef)
 
         if not self._chords_notated:
             for index, voice in enumerate(self.voices.values()):
@@ -1283,7 +1281,7 @@ class TreePart(timewise.Part):
 
             self.implement_flags_3()
 
-            self.chord_to_notes()
+            self.chords_to_notes()
 
             self.update_divisions()
 

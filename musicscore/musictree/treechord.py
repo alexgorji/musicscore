@@ -6,6 +6,7 @@ from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechordflags import TreeChordFlag
 from musicscore.musictree.treechordflags2 import TreeChordFlag2
 from musicscore.musictree.treechordflags3 import TreeChordFlag3
+from musicscore.musictree.treeclef import TreeClef
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
@@ -26,16 +27,14 @@ from musicscore.musicxml.types.complextypes.ornaments import Tremolo
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
 
-class FingerTremolo(object):
-    def __init__(self, chord, number=3, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.chord = chord
-        self.number = number
+# class FingerTremolo(object):
+#     def __init__(self, chord, number=3, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.chord = chord
+#         self.number = number
 
 
 class TreeChord(XMLTree):
-    """"""
-
     _DTD = Sequence(
         Choice(
             Sequence(
@@ -289,9 +288,6 @@ class TreeChord(XMLTree):
                 Tremolo)
         except IndexError:
             return []
-
-    # def add_finger_tremolo(self, chord, number=3):
-    #     self.finger_tremolo = FingerTremolo(chord, number)
 
     def add_flag(self, flag):
         if not isinstance(flag, TreeChordFlag) and not isinstance(flag, TreeChordFlag2) \
@@ -707,12 +703,6 @@ class TreeChord(XMLTree):
         for i in range(_dot):
             self.add_child(Dot())
 
-    # def copy(self):
-    #     new_chord = TreeChord(quarter_duration=self.quarter_duration)
-    #     new_chord.midis = self.midis
-    #     for child in self.get_children():
-    #         new_chord.add_child(child)
-
     def tremolo_flag_copy(self):
         new_chord = TreeChord()
         new_chord.midis = self.midis
@@ -839,6 +829,13 @@ class TreeChord(XMLTree):
             attributes = self.add_child(Attributes())
 
         attributes.add_child(clef)
+
+    def get_clef(self):
+        try:
+            attributes = self.get_children_by_type(Attributes)[0]
+            return attributes.get_children_by_type(TreeClef)
+        except IndexError:
+            return None
 
     def __deepcopy__(self, memodict={}):
         new_chord = TreeChord(quarter_duration=self.quarter_duration, zero_mode=self.zero_mode)

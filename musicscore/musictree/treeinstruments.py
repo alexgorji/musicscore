@@ -1,7 +1,9 @@
+import uuid
+
 from musicscore.musictree.midi import G, D, A, E, C, MidiNote, Midi, B, F, midi_to_frequency, frequency_to_midi
+from musicscore.musictree.treeclef import TreeClef, TREBLE_CLEF, ALTO_CLEF, BASS_CLEF
 from musicscore.musicxml.types.complextypes.midiinstrument import ComplexTypeMidiInstrument
 from musicscore.musicxml.types.complextypes.scorepart import PartName, PartAbbreviation
-import uuid
 
 
 class TreeInstrument(ComplexTypeMidiInstrument):
@@ -11,8 +13,9 @@ class TreeInstrument(ComplexTypeMidiInstrument):
         super().__init__(tag=self._TAG, id_='inst' + str(uuid.uuid4()), *args, **kwargs)
         self._part_name = PartName(name=name)
         self._part_abbreviation = PartAbbreviation()
-        self.abbreviation = abbreviation
+        self._standard_clef = None
         self._number = None
+        self.abbreviation = abbreviation
         self.number = number
 
     @property
@@ -55,6 +58,16 @@ class TreeInstrument(ComplexTypeMidiInstrument):
     @abbreviation.setter
     def abbreviation(self, val):
         self._part_abbreviation.value = val
+
+    @property
+    def standard_clef(self):
+        return self._standard_clef
+
+    @standard_clef.setter
+    def standard_clef(self, val):
+        if val and not isinstance(val, TreeClef):
+            raise TypeError('standard_clef.value must be of type TreeClef not{}'.format(type(val)))
+        self._standard_clef = val
 
 
 class String(object):
@@ -146,6 +159,7 @@ class Violin(StringInstrument):
                         2: String(2, A(4)),
                         1: String(1, E(5))
                         }
+        self.standard_clef = TREBLE_CLEF
 
 
 class Viola(StringInstrument):
@@ -156,6 +170,7 @@ class Viola(StringInstrument):
                         2: String(2, D(4)),
                         1: String(1, A(4))
                         }
+        self.standard_clef = ALTO_CLEF
 
 
 class Cello(StringInstrument):
@@ -166,6 +181,7 @@ class Cello(StringInstrument):
                         2: String(2, D(3)),
                         1: String(1, A(3))
                         }
+        self.standard_clef = BASS_CLEF
 
 
 class ViolaDamore(StringInstrument):

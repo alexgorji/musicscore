@@ -105,11 +105,6 @@ class Tree(object):
             if node_in_all_branches:
                 return node
 
-        # intersection = list(set(a) - (set(a) - set(b)))
-        # print(a)
-        # print(b)
-        # print(intersection)
-
     @property
     def is_leaf(self):
         if len(self.get_children()) == 0:

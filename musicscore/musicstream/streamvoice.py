@@ -8,7 +8,6 @@ from musicscore.musicxml.types.simple_type import PositiveInteger
 
 
 class StreamVoice(object):
-    """"""
 
     def __init__(self, voice_number=1, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -8,7 +8,6 @@ from musicscore.musicxml.types.complextypes.scorepart import PartName, PartAbbre
 
 
 class TreeScorePart(ScorePart):
-    """"""
 
     def __init__(self, id, instrument=None, *args, **kwargs):
         super().__init__(id=id, *args, **kwargs)
@@ -19,9 +18,6 @@ class TreeScorePart(ScorePart):
         self._forbidden_divisions = None
         self._parts = []
         self.parent_score = None
-        # self.add_child(PartAbbreviation())
-        # self._part_name = None
-        # self._part_abbreviation = None
 
     @property
     def part_name(self):

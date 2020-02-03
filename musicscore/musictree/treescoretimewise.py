@@ -621,7 +621,7 @@ class TreeScoreTimewise(timewise.Score):
     def chord_to_notes(self):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
-                part.chord_to_notes()
+                part.chords_to_notes()
 
     def update_divisions(self):
         for measure in self.get_children_by_type(TreeMeasure):

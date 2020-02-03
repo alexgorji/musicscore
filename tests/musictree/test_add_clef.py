@@ -7,7 +7,7 @@ from musicscore.musictree.treeclef import BASS_CLEF, TREBLE_CLEF, ALTO_CLEF, TEN
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
 class Test(TestCase):
