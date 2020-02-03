@@ -29,7 +29,7 @@ It is now possible to use goto_next_dtd_choice() to go to second Choice()
 see: test_part_list.py
 
 
-v. 1.2.0:  
+v. 1.2.1:  
 TreeInstrument().standard_clef: attribute added  
 TreePart().chord_to_notes(): renamed to: chords_to_notes  
 TreeChord().FingerTremolo(): removed  
