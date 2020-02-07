@@ -220,8 +220,32 @@ class Midi(object):
         return self
         # return Midi(value=self.value + val, accidental_mode=self.accidental_mode)
 
-    # def __repr__(self):
-    #     return self.
+    @property
+    def octave(self):
+        return int(self.value / 12) - 1
+
+    @property
+    def __name__(self):
+        pitch_step = self.get_pitch_name()[1]
+
+        if not pitch_step:
+            accidental = ''
+        elif pitch_step == -1.5:
+            accidental = 'b-'
+        elif pitch_step == -1:
+            accidental = 'b'
+        elif pitch_step == -0.5:
+            accidental = '-'
+        elif pitch_step == 0.5:
+            accidental = '+'
+        elif pitch_step == 1:
+            accidental = '#'
+        elif pitch_step == 1.5:
+            accidental = '#+'
+        else:
+            accidental = str(pitch_step)
+
+        return "{}{}{}".format(self.get_pitch_name()[0], accidental, self.octave)
 
     def __deepcopy__(self, memodict={}, **kwargs):
         output = self.__class__(value=self.value, accidental_mode=self.accidental_mode, note_head=self.notehead,
@@ -278,19 +302,7 @@ class MidiNote(Midi):
         return output
 
     def __repr__(self):
-        pitch_step = self.get_pitch_name()[1]
-
-        if not pitch_step:
-            accidental = ''
-        elif pitch_step == 1:
-            accidental = '#'
-        elif pitch_step == -1:
-            accidental = 'b'
-        else:
-            accidental = str(pitch_step)
-
-        return "{}{}{} at {}".format(self.get_pitch_name()[0], self.octave,
-                                     accidental, id(self))
+        return "{} at {}".format(self.__name__, id(self))
 
 
 class C(MidiNote):

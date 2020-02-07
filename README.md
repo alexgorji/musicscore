@@ -36,6 +36,8 @@ TreeChord().FingerTremolo(): removed
 TreePart().chords_to_notes(): optimised to set clef to TreeInstrument().standard_clef
 TreeMeasure().previous: added: if not self.up: return None
 
+v. 1.2.2
+musictree.Midi().\__name__ added
 
 todo:
 update documentation
