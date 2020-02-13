@@ -20,7 +20,7 @@ class TreeChordFlag(object):
         except KeyError:
             return [chord]
 
-    def implement(self):
+    def implement(self, chord, beat):
         raise NotImplementedError('TreeChordFlag.implement() must be overwritten')
 
         # if beat.duration == 1:
@@ -38,12 +38,13 @@ class TreeChordFlag(object):
         elif chord.position_in_beat == 0 and chord.is_rest is False:
             output = self._get_split(beat, chord, minimum_duration)
             try:
-                output[1].remove_flag(self)
                 output[1].to_rest()
             except IndexError:
                 pass
         else:
             output = [chord]
+        for chord in output:
+            chord.remove_flag(self)
         return output
 
     def __deepcopy__(self, memodict={}):

@@ -1,11 +1,11 @@
 import math
 import warnings
 
-from musicscore.musictree.treechordflags import TreeChordFlag
 from quicktions import Fraction
 
 from musicscore.basic_functions import flatten
 from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treechordflags import TreeChordFlag, FingerTremoloFlag
 from musicscore.musicxml.elements.note import TimeModification
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
@@ -310,7 +310,7 @@ class TreeBeat(object):
                 if chord.position_in_beat == 0:
                     split = chord.split(2, 3)
                 elif chord.position_in_beat == 0.5:
-                    split = chord.split(3, 2)
+                    split = chord.split(1, 4)
 
             if chord.quarter_duration == Fraction(7, 2):
                 if chord.position_in_beat == 0:
@@ -567,7 +567,8 @@ class TreeBeat(object):
                     if len(new_chords) == 1:
                         output.extend(new_chords)
                     else:
-                        if diff > 0:
+                        if diff > 0 and (isinstance(chord_flag, FingerTremoloFlag) or
+                                         chord.position_in_beat + new_chords[0].quarter_duration >= self.duration):
                             next_beat = self.next
 
                             if not next_beat.chords:
@@ -578,6 +579,7 @@ class TreeBeat(object):
                             output.extend(new_chords[:-1])
                         else:
                             output.extend(new_chords)
+
                 except IndexError:
                     output.append(chord)
 
