@@ -39,12 +39,12 @@ TreeMeasure().previous: added: if not self.up: return None
 v. 1.2.2:  
 musictree.Midi().\__name__: added
 
-v. 1.2.4:   
+v. 1.2.3:   
 TreeChordFlag.implement(): added
 TreeBeat.implement_flags(): bug fix (more tests are necessary)
 TreeBeat.split_not_notatable(): 5/2 position 0.5 changed to (1,4)
 
-v. 1.2.5:  
+v. 1.2.4:  
 TreeBeat.split_not_notatable(): bug fixes
 
 
