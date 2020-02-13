@@ -253,4 +253,12 @@ class Test(TestCase):
         self.score.write(xml_path)
         TestScore().assert_template(xml_path)
 
+    def test_21(self):
+        xml_path = path + "_test_21.xml"
+        sf = SimpleFormat(durations=[2, 2])
+        sf.chords[0].add_flag(PercussionFlag(minimum_duration=0.5))
+        sf.to_stream_voice().add_to_score(self.score)
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
 

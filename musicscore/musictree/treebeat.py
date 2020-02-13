@@ -256,9 +256,6 @@ class TreeBeat(object):
             elif chord.quarter_duration == Fraction(11, 1):
                 if chord.position_in_beat == 0:
                     split = chord.split(4, 7)
-            # elif chord.quarter_duration == Fraction(12, 1):
-            #     if chord.position_in_beat == 0:
-            #         split = chord.split(8, )
             elif chord.quarter_duration == Fraction(13, 1):
                 if chord.position_in_beat == 0:
                     split = chord.split(8, 5)
@@ -289,34 +286,33 @@ class TreeBeat(object):
             elif chord.quarter_duration == Fraction(22, 1):
                 if chord.position_in_beat == 0:
                     split = chord.split(8, 14)
-
             elif chord.quarter_duration == Fraction(23, 1):
                 if chord.position_in_beat == 0:
                     split = chord.split(8, 15)
-
             elif chord.quarter_duration == Fraction(24, 1):
                 if chord.position_in_beat == 0:
                     split = chord.split(8, 16)
-
             elif chord.quarter_duration == Fraction(25, 1):
                 if chord.position_in_beat == 0:
                     split = chord.split(8, 17)
-
-            if chord.quarter_duration == Fraction(9, 2):
-                if chord.position_in_beat == 0:
-                    split = chord.split(8, 1)
-
-            if chord.quarter_duration == Fraction(5, 2):
+            elif chord.quarter_duration == Fraction(3, 2):
+                if chord.position_in_beat == 0.5:
+                    split = chord.split(1, 2)
+            elif chord.quarter_duration == Fraction(5, 2):
                 if chord.position_in_beat == 0:
                     split = chord.split(2, 3)
                 elif chord.position_in_beat == 0.5:
                     split = chord.split(1, 4)
-
-            if chord.quarter_duration == Fraction(7, 2):
+            elif chord.quarter_duration == Fraction(7, 2):
                 if chord.position_in_beat == 0:
                     split = chord.split(4, 3)
+                elif chord.position_in_beat == 0.5:
+                    split = chord.split(1, 6)
+            elif chord.quarter_duration == Fraction(9, 2):
+                if chord.position_in_beat == 0:
+                    split = chord.split(8, 1)
 
-            if chord.quarter_duration == Fraction(1, 4):
+            elif chord.quarter_duration == Fraction(1, 4):
                 if chord.position_in_beat == Fraction(3, 8):
                     split = chord.split(1, 1)
             elif chord.quarter_duration == Fraction(3, 8):

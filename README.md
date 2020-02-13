@@ -29,20 +29,23 @@ It is now possible to use goto_next_dtd_choice() to go to second Choice()
 see: test_part_list.py
 
 
-v. 1.2.1:  
+v. 1.2.1:   
 TreeInstrument().standard_clef: attribute added  
 TreePart().chord_to_notes(): renamed to: chords_to_notes  
 TreeChord().FingerTremolo(): removed  
 TreePart().chords_to_notes(): optimised to set clef to TreeInstrument().standard_clef
 TreeMeasure().previous: added: if not self.up: return None
 
-v. 1.2.2:
+v. 1.2.2:  
 musictree.Midi().\__name__: added
 
-v. 1.2.3:
+v. 1.2.4:   
 TreeChordFlag.implement(): added
 TreeBeat.implement_flags(): bug fix (more tests are necessary)
 TreeBeat.split_not_notatable(): 5/2 position 0.5 changed to (1,4)
+
+v. 1.2.5:  
+TreeBeat.split_not_notatable(): bug fixes
 
 
 todo:

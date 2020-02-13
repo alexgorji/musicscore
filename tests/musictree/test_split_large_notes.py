@@ -6,7 +6,7 @@ from musicscore.musictree.treechordflags import BeatwiseFlag
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
 class Test(TestCase):
@@ -41,3 +41,35 @@ class Test(TestCase):
 
         self.score.write(xml_path)
         # TestScore().assert_template(xml_path)
+
+    def test_3(self):
+        xml_path = path + '_test_3.xml'
+        durations = [0.5, 1.5]
+        self.score.set_time_signatures(durations=2)
+        sf = SimpleFormat(durations=durations)
+        sf.to_stream_voice().add_to_score(self.score)
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_4(self):
+        xml_path = path + '_test_4.xml'
+        durations = [0.5, 1.5]
+        self.score.set_time_signatures(durations=2)
+        sf = SimpleFormat(durations=durations, midis=[60, 0])
+        sf.to_stream_voice().add_to_score(self.score)
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_5(self):
+        xml_path = path + '_test_5.xml'
+        durations = [0.5, 3.5]
+        sf = SimpleFormat(durations=durations, midis=[60, 0])
+        sf.to_stream_voice().add_to_score(self.score)
+        self.score.write(xml_path)
+
+    def test_6(self):
+        xml_path = path + '_test_6.xml'
+        durations = [0.5, 1.5, 2]
+        sf = SimpleFormat(durations=durations, midis=[60, 0, 60])
+        sf.to_stream_voice().add_to_score(self.score)
+        self.score.write(xml_path)
