@@ -20,6 +20,9 @@ class TreeChordFlag(object):
         except KeyError:
             return [chord]
 
+    def implement(self):
+        raise NotImplementedError('TreeChordFlag.implement() must be overwritten')
+
         # if beat.duration == 1:
         #     try:
         #         return chord.split(*spl[chord.quarter_duration])

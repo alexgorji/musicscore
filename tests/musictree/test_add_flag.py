@@ -8,7 +8,7 @@ from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from quicktions import Fraction
 from tests.score_templates.xml_test_score import TestScore
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
 class Test(TestCase):
@@ -242,5 +242,14 @@ class Test(TestCase):
 
         self.score.write(xml_path)
         # TestScore().assert_template(xml_path)
+
+    def test_20(self):
+        xml_path = path + "_test_20.xml"
+        sf = SimpleFormat(durations=[3])
+        self.score.set_time_signatures(durations=[3])
+        for ch in sf.chords:
+            ch.add_flag(PercussionFlag(minimum_duration=0.5))
+        sf.to_stream_voice().add_to_score(self.score)
+        self.score.write(xml_path)
 
 
