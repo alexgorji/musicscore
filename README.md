@@ -47,6 +47,8 @@ TreeBeat.split_not_notatable(): 5/2 position 0.5 changed to (1,4)
 v. 1.2.4:  
 TreeBeat.split_not_notatable(): bug fixes
 
+v. 1.2.5:  
+quantization problem bug #3 solved: Beat._correct_deviations() was added.
 
 todo:
 update documentation
