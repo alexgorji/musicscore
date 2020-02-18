@@ -431,6 +431,7 @@ class TreePartVoice(object):
                     split[1].parent_beat = beat
                     split[0]._head = True
                     split[1]._tail = True
+                    # print([chord.quarter_duration for chord in split])
 
         for beat in self.beats:
             if beat.chords and len([chord for chord in beat.chords if chord.quarter_duration != 0]) != 1:
@@ -445,6 +446,22 @@ class TreePartVoice(object):
                     split[1].parent_beat = beat.next
                     split[0]._head = True
                     split[1]._tail = True
+
+    def _correct_deviations(self):
+
+        def _get_expected_durations():
+            output = [self.beats[0].duration]
+            for beat in self.beats[1:]:
+                if beat.chords == []:
+                    output[-1] += beat.duration
+                else:
+                    output.append(beat.duration)
+            return output
+
+        expected_durations = _get_expected_durations()
+        for index, beat in enumerate([beat for beat in self.beats if beat.chords]):
+            delta = expected_durations[index] - sum([chord.quarter_duration for chord in beat.chords])
+            beat.chords[-1].quarter_duration += delta
 
     def fill_with_rest(self):
         if not self._filled_with_rest:
@@ -516,6 +533,7 @@ class TreePartVoice(object):
             self.set_beats(list_of_beats)
             self._add_chords_to_beats()
             self._split_chords_beatwise()
+            self._correct_deviations()
             self._beats_added = True
         # else:
         #     warnings.warn('beats already added to {}. No action took place.'.format(self))

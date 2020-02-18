@@ -166,15 +166,6 @@ class TreeScoreTimewise(timewise.Score):
 
     def add_score_part(self, score_part):
         score_part.parent_score = self
-        instrument = score_part.instrument
-        # if instrument is not None:
-        #     part_name = score_part.add_child(instrument._part_name)
-        #     part_name.print_object = 'yes'
-        #     score_part.add_child(instrument._part_abbreviation)
-        # else:
-        #     part_name = score_part.add_child(PartName(name='none'))
-        #     part_name.print_object = 'no'
-
         return self._part_list.add_child(score_part)
 
     @property
@@ -193,11 +184,6 @@ class TreeScoreTimewise(timewise.Score):
                 bl = part.add_child(Barline())
                 bl.add_child(BarStyle(measure.barline_style))
 
-    #
-    # def insert_part(self, number, name='none', print_object='no'):
-    #     def rearange_parts():
-    #         print()
-
     def add_measure(self, measure=None):
         new_measure = self._set_new_measure(measure)
 
@@ -205,27 +191,6 @@ class TreeScoreTimewise(timewise.Score):
             p = score_part.add_part()
             new_measure.add_child(p)
         return self.add_child(new_measure)
-
-    # def add_ruler(self, unit=1):
-    #     if not self._finished:
-    #         raise Exception('ruler can only be added to finished scores')
-    #
-    #     ruler_part = self.insert_part('ruler', part_number=1)
-    #     remaining_time = self.duration
-    #     while remaining_time > 0.01:
-    #         ruler_chord = ruler_part.add_chord(TreeChord(quarter_duration=unit, midis=[76]))
-    #         ruler_chord.head = 'none'
-    #         ruler_chord.stem = Stem(default_y=11, direction='down')
-    #         remaining_time -= ruler_chord.duration
-    #
-    #     # measure_1.staff_style = StaffStyle(number_of_lines=1)
-    #     # measure_1.time_signature.hide = True
-    #     # print measure_1.staff_style.number_of_lines
-    #     # part_node.children[0].content.staff_style = StaffStyle(number_of_lines = 1, staff_distance = 70)
-    #     # for measure_node in part_node.children:
-    #     #     measure_node.content.staff_style = StaffStyle(staff_distance=70)
-    #
-    #     # measure_1.notes[0].clef = Clef(sign='none')
 
     def _set_new_measure(self, measure):
         if measure is None:
@@ -244,69 +209,7 @@ class TreeScoreTimewise(timewise.Score):
         encoding = identification.add_child(Encoding())
         encoding.add_child(Supports(attribute='new-page', element='print', type_='yes', value_='yes'))
         encoding.add_child(Supports(attribute='new-system', element='print', type_='yes', value_='yes'))
-        # encoding.add_child(Supports(element='accidental', type_='yes'))
-        # encoding.add_child(Supports(element='beam', type_='yes'))
-        # encoding.add_child(Supports(element='stem', type_='yes'))
         self._identifications_added = True
-
-    # def set_time_signatures(self, duration=None, times=None):
-    #     if self.get_children_by_type(TreeMeasure):
-    #         raise Exception('for setting time signatures score should be empty')
-    #
-    #     def make_measure(duration=None):
-    #         def get_time():
-    #             if duration % 1 == 0:
-    #                 time = (int(duration), 4)
-    #                 return time
-    #             elif (duration * 2) % 1 == 0:
-    #                 time = (int(duration * 2), 8)
-    #                 return time
-    #             else:
-    #                 raise ValueError('duration {} is not dividable'.format(duration))
-    #
-    #         if not duration:
-    #             time = (4, 4)
-    #         else:
-    #             time = get_time()
-    #
-    #         return TreeMeasure(time)
-    #
-    #     if not times:
-    #         times = {}
-    #
-    #     if duration:
-    #         duration = float(duration)
-    #         current_measure_number = 1
-    #         remaining_duration = duration
-    #
-    #         while True:
-    #             if current_measure_number in times.keys():
-    #                 measure = TreeMeasure(time=times[current_measure_number])
-    #             else:
-    #                 measure = TreeMeasure(time=(4, 4))
-    #             measure_duration = measure.quarter_duration
-    #             if measure_duration > remaining_duration:
-    #                 measure = make_measure(duration=remaining_duration)
-    #                 self.add_measure(measure)
-    #                 break
-    #             else:
-    #                 self.add_measure(measure)
-    #                 remaining_duration -= measure.quarter_duration
-    #                 if remaining_duration < 1:
-    #                     break
-    #                 current_measure_number += 1
-    #     else:
-    #         try:
-    #             number_of_measures = list(times.keys())[-1]
-    #             current_time = (4, 4)
-    #             for measure_number in range(1, number_of_measures + 1):
-    #                 try:
-    #                     current_time = times[measure_number]
-    #                 except KeyError:
-    #                     pass
-    #                 self.add_measure(TreeMeasure(time=current_time))
-    #         except IndexError:
-    #             pass
 
     def set_time_signatures(self, durations=None, times=None, barline_style=None):
         global current_time
@@ -557,11 +460,6 @@ class TreeScoreTimewise(timewise.Score):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 part.quantize()
-
-    # def adjoin_rests_in_beat(self):
-    #     for measure in self.get_children_by_type(TreeMeasure):
-    #         for part in measure.get_children_by_type(TreePart):
-    #             part.adjoin_rests_in_beat()
 
     def split_not_notatable(self):
         for measure in self.get_children_by_type(TreeMeasure):
