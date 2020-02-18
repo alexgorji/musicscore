@@ -4,7 +4,7 @@ from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 import os
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
 class Test(TestCase):
