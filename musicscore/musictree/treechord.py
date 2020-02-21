@@ -88,12 +88,7 @@ class TreeChord(XMLTree):
         self.relative_x = None
         self.tie_orientation = None
 
-    @property
-    def is_head(self):
-        return self._head
-
-    def is_tail(self):
-        return self._tail
+    # \\\properties
 
     @property
     def __name__(self):
@@ -103,9 +98,6 @@ class TreeChord(XMLTree):
     @property
     def quarter_duration(self):
         return self._quarter_duration
-
-    def set_voice_number(self, voice_number):
-        self.manual_voice_number = voice_number
 
     @quarter_duration.setter
     def quarter_duration(self, value):
@@ -119,6 +111,14 @@ class TreeChord(XMLTree):
             self._quarter_duration = Fraction(value).limit_denominator(1000)
         else:
             self._quarter_duration = value
+
+    @property
+    def is_head(self):
+        return self._head
+
+    @property
+    def is_tail(self):
+        return self._tail
 
     @property
     def zero_mode(self):
@@ -157,21 +157,6 @@ class TreeChord(XMLTree):
 
         self._midis = output
 
-    def add_midi(self, val):
-        if val == 0:
-            raise ValueError('midi with value 0 can not be added.')
-
-        if not isinstance(val, Midi):
-            val = Midi(val)
-
-        self._midis.append(val)
-
-    def add_harmonic(self, interval):
-        if len(self.midis) != 1:
-            raise Exception('harmonic can only be added to chords with one midi')
-        self.add_midi(self.midis[0].value + interval)
-        self.midis[-1].add_notehead('diamond', filled='no')
-
     @property
     def is_adjoinable(self):
         return self._is_adjoinable
@@ -206,21 +191,6 @@ class TreeChord(XMLTree):
         if self.midis[0].value == 0:
             return True
         return False
-
-    def set_tie_orientation(self, orientation):
-        if self.is_tied_to_next:
-            tied = [t for t in self.get_children_by_type(Notations)[0].get_children_by_type(Tied) if t.type == 'start']
-            for t in tied:
-                t.orientation = orientation
-
-    def to_rest(self):
-        self.midis = [0]
-        self.remove_tie('stop')
-        self.remove_tie('start')
-        for notation in self.get_children_by_type(Notations):
-            articulations = notation.get_children_by_type(Articulations)
-            for articulation in articulations:
-                notation.remove_child(articulation)
 
     @property
     def position_in_beat(self):
@@ -289,74 +259,61 @@ class TreeChord(XMLTree):
         except IndexError:
             return []
 
-    def add_flag(self, flag):
-        if not isinstance(flag, TreeChordFlag) and not isinstance(flag, TreeChordFlag2) \
-                and not isinstance(flag, TreeChordFlag3):
-            raise TypeError(
-                'flag must be of type TreeChordFlag, TreeChordFlag2 or TreeChordFlag3 not {}'.format(flag.__class__))
-        if self._flags is None:
-            self._flags = set()
-        self._flags.add(flag)
+    @property
+    def _notes(self):
+        output = []
+        if self.zero_mode == 'remove' and self.quarter_duration == 0:
+            return output
 
-    def remove_flag(self, flag):
-        if flag in self._flags:
-            self._flags.remove(flag)
+        for index, midi in enumerate(self.midis):
+            note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration, parent_chord=self)
+            note.is_finger_tremolo = self.is_finger_tremolo
+            if self.relative_x is not None:
+                note.relative_x = self.relative_x
+            if midi.notehead:
+                note.add_child(midi.notehead)
 
-    def add_slur_object(self, slur):
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-        except IndexError:
-            notations = self.add_child(Notations())
+            for child in self.get_children():
+                if isinstance(child, Lyric) and index != 0:
+                    pass
 
-        notations.add_child(slur)
-        return slur
+                elif isinstance(child, Notations) and index != 0:
+                    grandchildren = child.get_children()
+                    for grandchild in grandchildren:
+                        if type(grandchild) not in (Ornaments, Technical, Articulations, Dynamics):
+                            note._add_notations(grandchild)
+                elif isinstance(child, Direction):
+                    pass
+                elif isinstance(child, Attributes):
+                    pass
+                else:
+                    note.add_child(child)
+            if index > 0:
+                note.add_child(Chord())
+            output.append(note)
+        return output
 
-    def add_slur(self, type, **kwargs):
-        slur = Slur(type, **kwargs)
-        return self.add_slur_object(slur)
+    def add_midi(self, val):
+        if val == 0:
+            raise ValueError('midi with value 0 can not be added.')
 
-    def remove_slur(self, type):
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-            slurs = [s for s in notations.get_children_by_type(Slur) if s.type == type]
-            for slur in slurs:
-                notations.remove_child(slur)
-            if not notations.get_children():
-                self.remove_child(notations)
-        except IndexError:
-            pass
+        if not isinstance(val, Midi):
+            val = Midi(val)
 
-    def add_notations_object(self, object):
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-        except IndexError:
-            notations = self.add_child(Notations())
+        self._midis.append(val)
 
-        notations.add_child(object)
-        return object
+    def add_harmonic(self, interval):
+        if len(self.midis) != 1:
+            raise Exception('harmonic can only be added to chords with one midi')
+        self.add_midi(self.midis[0].value + interval)
+        self.midis[-1].add_notehead('diamond', filled='no')
 
-    def remove_notations(self):
-        notations = self.get_children_by_type(Notations)
-        for notation in notations:
-            self.remove_child(notation)
+    def set_voice_number(self, voice_number):
+        self.manual_voice_number = voice_number
 
-    def add_slide(self, type, **kwargs):
-        object = Slide(type, **kwargs)
-        return self.add_notations_object(object)
-
-    def add_tremolo(self, number=3, **kwargs):
-
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-        except IndexError:
-            notations = self.add_child(Notations())
-
-        try:
-            ornaments = notations.get_children_by_type(Ornaments)[0]
-        except IndexError:
-            ornaments = notations.add_child(Ornaments())
-
-        ornaments.add_child(Tremolo(number, **kwargs))
+    def remove_voice(self):
+        for voice in self.get_children_by_type(Voice):
+            self.remove_child(voice)
 
     def split_copy(self, quarter_duration):
         new_chord = TreeChord(quarter_duration=quarter_duration)
@@ -422,183 +379,18 @@ class TreeChord(XMLTree):
 
         return new_chords
 
-    @property
-    def _notes(self):
-        output = []
-        if self.zero_mode == 'remove' and self.quarter_duration == 0:
-            return output
+    def add_flag(self, flag):
+        if not isinstance(flag, TreeChordFlag) and not isinstance(flag, TreeChordFlag2) \
+                and not isinstance(flag, TreeChordFlag3):
+            raise TypeError(
+                'flag must be of type TreeChordFlag, TreeChordFlag2 or TreeChordFlag3 not {}'.format(flag.__class__))
+        if self._flags is None:
+            self._flags = set()
+        self._flags.add(flag)
 
-        for index, midi in enumerate(self.midis):
-            note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration, parent_chord=self)
-            note.is_finger_tremolo = self.is_finger_tremolo
-            if self.relative_x is not None:
-                note.relative_x = self.relative_x
-            if midi.notehead:
-                note.add_child(midi.notehead)
-
-            for child in self.get_children():
-                if isinstance(child, Lyric) and index != 0:
-                    pass
-
-                elif isinstance(child, Notations) and index != 0:
-                    grandchildren = child.get_children()
-                    for grandchild in grandchildren:
-                        if type(grandchild) not in (Ornaments, Technical, Articulations, Dynamics):
-                            note._add_notations(grandchild)
-                elif isinstance(child, Direction):
-                    pass
-                elif isinstance(child, Attributes):
-                    pass
-                else:
-                    note.add_child(child)
-            if index > 0:
-                note.add_child(Chord())
-            output.append(note)
-        return output
-
-    def add_tie(self, value):
-        if value not in ('stop', 'start'):
-            raise NotImplementedError('value {} cannot be a tie value'.format(value))
-
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-        except IndexError:
-            notations = self.add_child(Notations())
-
-        if value == 'start' and 'start' not in self.tie_types:
-            self.add_child(Tie('start'))
-            notations.add_child(Tied('start', orientation=self.tie_orientation))
-
-        elif value == 'stop' and 'stop' not in self.tie_types:
-            self.add_child(Tie('stop'))
-            notations.add_child(Tied('stop'))
-
-    def remove_tie(self, type):
-        if type in self.tie_types:
-            notations = self.get_children_by_type(Notations)[0]
-            tie = [t for t in self.get_children_by_type(Tie) if t.type == type][0]
-            self.remove_child(tie)
-
-            tied = [t for t in notations.get_children_by_type(Tied) if t.type == type][0]
-            notations.remove_child(tied)
-            if not notations.get_children():
-                self.remove_child(notations)
-
-    def remove_previous_tie(self):
-        if 'stop' in self.tie_types:
-            self.remove_tie('stop')
-            try:
-                self.previous_in_score_part.remove_tie('start')
-            except AttributeError:
-                pass
-
-    def untie(self):
-        if 'start' in self.tie_types:
-            self.remove_tie('start')
-            try:
-                self.next.remove_tie('stop')
-            except AttributeError:
-                pass
-
-    def remove_voice(self):
-        for voice in self.get_children_by_type(Voice):
-            self.remove_child(voice)
-
-    def add_tuplet(self, type, number=1):
-        normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
-        types = {8: '32nd', 4: '16th', 2: 'eighth'}
-        actual_notes = self.parent_beat.best_div
-        normal_notes = normals[actual_notes]
-        normal_type = types[normal_notes / self.parent_beat.duration]
-        if type != 'continue':
-            try:
-                notations = self.notations
-            except AttributeError:
-                notations = self.add_child(Notations())
-
-            v = self.get_children_by_type(Voice)[0]
-            if int(v.value) % 2 == 0:
-                placement = 'below'
-            else:
-                placement = 'above'
-
-            notations.add_child(Tuplet(type=type, number=number, bracket='yes', placement=placement))
-
-        tm = self.add_child(TimeModification())
-        tm.add_child(ActualNotes(actual_notes))
-        tm.add_child(NormalNotes(normal_notes))
-        tm.add_child(NormalType(normal_type))
-
-    def add_technical_object(self, technical_object):
-
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-        except IndexError:
-            notations = self.add_child(Notations())
-
-        try:
-            technical = notations.get_children_by_type(Technical)[0]
-        except IndexError:
-            technical = notations.add_child(Technical())
-
-        technical.add_child(technical_object)
-
-    def add_articulation_object(self, articulation_object):
-
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-        except IndexError:
-            notations = self.add_child(Notations())
-
-        try:
-            articulations = notations.get_children_by_type(Articulations)[0]
-        except IndexError:
-            articulations = notations.add_child(Articulations())
-
-        articulations.add_child(articulation_object)
-
-    def add_articulation(self, articulation, **kwargs):
-
-        def add_type(dict):
-            new_dict = dict.copy()
-            if 'type' not in new_dict:
-                new_dict['type'] = 'up'
-            return new_dict
-
-        def add_breath_mark_value(dict):
-            new_dict = dict.copy()
-            if 'value' not in new_dict:
-                new_dict['value'] = 'comma'
-            return new_dict
-
-        articulations = {'accent': Accent(**kwargs),
-                         'strong-accent': StrongAccent(**add_type(kwargs)),
-                         'staccato': Staccato(**kwargs),
-                         'tenuto': Tenuto(**kwargs),
-                         'detached-legato': DetachedLegato(**kwargs),
-                         'staccatissimo': Staccatissimo(**kwargs),
-                         'spiccato': Spiccato(**kwargs),
-                         'scoop': Scoop(**kwargs),
-                         'plop': Plop(**kwargs),
-                         'doit': Doit(**kwargs),
-                         'falloff': Falloff(**kwargs),
-                         'breath-mark': BreathMark(**add_breath_mark_value(kwargs)),
-                         'caesura': Caesura(**kwargs),
-                         'stress': Stress(**kwargs),
-                         'unstress': Unstress(**kwargs)}
-
-        if articulation not in articulations:
-            raise ValueError('articulation {}  must be in {}'.format(articulation, list(articulations.keys())))
-
-        return self.add_articulation_object(articulations[articulation])
-
-    def get_articulations(self):
-        output = []
-        for notations in self.get_children_by_type(Notations):
-            articulations = notations.get_children_by_type(Articulations)
-            for articulation in articulations:
-                output.extend(articulation.get_children())
-        return output
+    def remove_flag(self, flag):
+        if flag in self._flags:
+            self._flags.remove(flag)
 
     def set_manual_type(self, val, **kwargs):
         try:
@@ -730,6 +522,260 @@ class TreeChord(XMLTree):
         lyric.add_child(Text(str(text)))
         return lyric
 
+    # //// Clef
+    def add_clef(self, clef):
+        try:
+            attributes = self.get_children_by_type(Attributes)[0]
+        except IndexError:
+            attributes = self.add_child(Attributes())
+
+        attributes.add_child(clef)
+
+    def get_clef(self):
+        try:
+            attributes = self.get_children_by_type(Attributes)[0]
+            return attributes.get_children_by_type(TreeClef)
+        except IndexError:
+            return None
+
+    # Notations
+    def add_notations_object(self, object):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(object)
+        return object
+
+    def remove_notations(self):
+        notations = self.get_children_by_type(Notations)
+        for notation in notations:
+            self.remove_child(notation)
+
+    def add_slide(self, type, **kwargs):
+        object = Slide(type, **kwargs)
+        return self.add_notations_object(object)
+
+    def add_slur_object(self, slur):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(slur)
+        return slur
+
+    def add_slur(self, type, **kwargs):
+        slur = Slur(type, **kwargs)
+        return self.add_slur_object(slur)
+
+    def remove_slur(self, type):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+            slurs = [s for s in notations.get_children_by_type(Slur) if s.type == type]
+            for slur in slurs:
+                notations.remove_child(slur)
+            if not notations.get_children():
+                self.remove_child(notations)
+        except IndexError:
+            pass
+
+    def add_tremolo(self, number=3, **kwargs):
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            ornaments = notations.get_children_by_type(Ornaments)[0]
+        except IndexError:
+            ornaments = notations.add_child(Ornaments())
+
+        ornaments.add_child(Tremolo(number, **kwargs))
+
+    def add_tie(self, value):
+        if value not in ('stop', 'start'):
+            raise NotImplementedError('value {} cannot be a tie value'.format(value))
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        if value == 'start' and 'start' not in self.tie_types:
+            self.add_child(Tie('start'))
+            notations.add_child(Tied('start', orientation=self.tie_orientation))
+
+        elif value == 'stop' and 'stop' not in self.tie_types:
+            self.add_child(Tie('stop'))
+            notations.add_child(Tied('stop'))
+
+    def remove_tie(self, type):
+        if type in self.tie_types:
+            notations = self.get_children_by_type(Notations)[0]
+            tie = [t for t in self.get_children_by_type(Tie) if t.type == type][0]
+            self.remove_child(tie)
+
+            tied = [t for t in notations.get_children_by_type(Tied) if t.type == type][0]
+            notations.remove_child(tied)
+            if not notations.get_children():
+                self.remove_child(notations)
+
+    def remove_previous_tie(self):
+        if 'stop' in self.tie_types:
+            self.remove_tie('stop')
+            try:
+                self.previous_in_score_part.remove_tie('start')
+            except AttributeError:
+                pass
+
+    def untie(self):
+        if 'start' in self.tie_types:
+            self.remove_tie('start')
+            try:
+                self.next.remove_tie('stop')
+            except AttributeError:
+                pass
+
+    def set_tie_orientation(self, orientation):
+        if self.is_tied_to_next:
+            tied = [t for t in self.get_children_by_type(Notations)[0].get_children_by_type(Tied) if t.type == 'start']
+            for t in tied:
+                t.orientation = orientation
+
+    def add_tuplet(self, type, number=1):
+        normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
+        types = {8: '32nd', 4: '16th', 2: 'eighth'}
+        actual_notes = self.parent_beat.best_div
+        normal_notes = normals[actual_notes]
+        normal_type = types[normal_notes / self.parent_beat.duration]
+        if type != 'continue':
+            try:
+                notations = self.notations
+            except AttributeError:
+                notations = self.add_child(Notations())
+
+            v = self.get_children_by_type(Voice)[0]
+            if int(v.value) % 2 == 0:
+                placement = 'below'
+            else:
+                placement = 'above'
+
+            notations.add_child(Tuplet(type=type, number=number, bracket='yes', placement=placement))
+
+        tm = self.add_child(TimeModification())
+        tm.add_child(ActualNotes(actual_notes))
+        tm.add_child(NormalNotes(normal_notes))
+        tm.add_child(NormalType(normal_type))
+
+    def add_technical_object(self, technical_object):
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            technical = notations.get_children_by_type(Technical)[0]
+        except IndexError:
+            technical = notations.add_child(Technical())
+
+        technical.add_child(technical_object)
+
+    def add_articulation_object(self, articulation_object):
+
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        try:
+            articulations = notations.get_children_by_type(Articulations)[0]
+        except IndexError:
+            articulations = notations.add_child(Articulations())
+
+        articulations.add_child(articulation_object)
+
+    def add_articulation(self, articulation, **kwargs):
+
+        def add_type(dict):
+            new_dict = dict.copy()
+            if 'type' not in new_dict:
+                new_dict['type'] = 'up'
+            return new_dict
+
+        def add_breath_mark_value(dict):
+            new_dict = dict.copy()
+            if 'value' not in new_dict:
+                new_dict['value'] = 'comma'
+            return new_dict
+
+        articulations = {'accent': Accent(**kwargs),
+                         'strong-accent': StrongAccent(**add_type(kwargs)),
+                         'staccato': Staccato(**kwargs),
+                         'tenuto': Tenuto(**kwargs),
+                         'detached-legato': DetachedLegato(**kwargs),
+                         'staccatissimo': Staccatissimo(**kwargs),
+                         'spiccato': Spiccato(**kwargs),
+                         'scoop': Scoop(**kwargs),
+                         'plop': Plop(**kwargs),
+                         'doit': Doit(**kwargs),
+                         'falloff': Falloff(**kwargs),
+                         'breath-mark': BreathMark(**add_breath_mark_value(kwargs)),
+                         'caesura': Caesura(**kwargs),
+                         'stress': Stress(**kwargs),
+                         'unstress': Unstress(**kwargs)}
+
+        if articulation not in articulations:
+            raise ValueError('articulation {}  must be in {}'.format(articulation, list(articulations.keys())))
+
+        return self.add_articulation_object(articulations[articulation])
+
+    def get_articulations(self):
+        output = []
+        for notations in self.get_children_by_type(Notations):
+            articulations = notations.get_children_by_type(Articulations)
+            for articulation in articulations:
+                output.extend(articulation.get_children())
+        return output
+
+    def to_rest(self):
+        self.midis = [0]
+        self.remove_tie('stop')
+        self.remove_tie('start')
+        for notation in self.get_children_by_type(Notations):
+            articulations = notation.get_children_by_type(Articulations)
+            for articulation in articulations:
+                notation.remove_child(articulation)
+
+    def add_fermata(self, value='normal', **kwargs):
+        fermata = Fermata(value, **kwargs)
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(fermata)
+
+    # /// directions
+    def _get_direction_types(self):
+        output = []
+        for direction in self.get_children_by_type(Direction):
+            for dt in direction.get_children_by_type(DirectionType):
+                output.append(dt)
+        return output
+
+    def _remove_direction(self, direction):
+        self.remove_child(direction)
+
+    def _remove_direction_type(self, direction_type):
+        parent = direction_type.up
+        parent.remove_child(direction_type)
+        if not parent.get_children():
+            self._remove_direction(parent)
+
     def add_dynamics(self, value, placement='below', **kwargs):
         dynamic_classes = [P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, FFFFFF, MP, MF, SF, SFP, SFPP, FP,
                            RF, RFZ, SFZ, SFFZ, FZ, N, PF, SFZP]
@@ -748,8 +794,15 @@ class TreeChord(XMLTree):
 
         return dynamics
 
-    @property
-    def dynamics(self):
+    def remove_dynamics(self):
+        for direction_type in self._get_direction_types():
+            for child in direction_type.get_children():
+                if isinstance(child, Dynamics):
+                    direction_type.remove_child(child)
+            if not direction_type.get_children():
+                self._remove_direction_type(direction_type)
+
+    def get_dynamics(self):
         directions = self.get_children_by_type(Direction)
         for direction in directions:
             direction_types = direction.get_children_by_type(DirectionType)
@@ -758,29 +811,6 @@ class TreeChord(XMLTree):
                     if isinstance(child, Dynamics):
                         return child.get_children()[0].to_string()[1:-3]
         return None
-
-    def get_dynamics(self):
-        return self.dynamics
-
-    def add_wedge(self, value, placement='below', **kwargs):
-        wedge_object = Wedge(value, **kwargs)
-
-        direction = self.add_child(Direction(placement=placement))
-        direction_type = direction.add_child(DirectionType())
-        wedge = direction_type.add_child(wedge_object)
-        #
-        # dynamics.add_child(dynamic_classes[index]())
-
-        return wedge
-
-    def add_fermata(self, value='normal', **kwargs):
-        fermata = Fermata(value, **kwargs)
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-        except IndexError:
-            notations = self.add_child(Notations())
-
-        notations.add_child(fermata)
 
     def add_action_dynamics(self, value, **kwargs):
         dynamics = self.add_dynamics(value, **kwargs)
@@ -797,6 +827,17 @@ class TreeChord(XMLTree):
         direction_type = direction.add_child(DirectionType())
         direction_type.add_child(Words(value=' "', font_size=20))
 
+    def add_wedge(self, value, placement='below', **kwargs):
+        wedge_object = Wedge(value, **kwargs)
+
+        direction = self.add_child(Direction(placement=placement))
+        direction_type = direction.add_child(DirectionType())
+        wedge = direction_type.add_child(wedge_object)
+        #
+        # dynamics.add_child(dynamic_classes[index]())
+
+        return wedge
+
     def add_bracket(self, type, line_end, placement='above', **kwargs):
         d = self.add_child(Direction(placement=placement))
         dt = d.add_child(DirectionType())
@@ -812,35 +853,13 @@ class TreeChord(XMLTree):
         else:
             dt.add_child(Words(value=str(words), **kwargs))
 
-    def get_direction_types(self):
-        output = []
-        for direction in self.get_children_by_type(Direction):
-            for dt in direction.get_children_by_type(DirectionType):
-                output.append(dt)
-        return output
-
     def get_words(self):
         output = []
-        for dt in self.get_direction_types():
+        for dt in self._get_direction_types():
             for child in dt.get_children():
                 if isinstance(child, Words):
                     output.append(child)
         return output
-
-    def add_clef(self, clef):
-        try:
-            attributes = self.get_children_by_type(Attributes)[0]
-        except IndexError:
-            attributes = self.add_child(Attributes())
-
-        attributes.add_child(clef)
-
-    def get_clef(self):
-        try:
-            attributes = self.get_children_by_type(Attributes)[0]
-            return attributes.get_children_by_type(TreeClef)
-        except IndexError:
-            return None
 
     def __deepcopy__(self, memodict={}):
         new_chord = TreeChord(quarter_duration=self.quarter_duration, zero_mode=self.zero_mode)

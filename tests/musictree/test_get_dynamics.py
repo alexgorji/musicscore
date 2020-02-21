@@ -19,6 +19,6 @@ class Test(TestCase):
     def test_1(self):
         chord = TreeChord()
         chord.add_dynamics('ff')
-        self.assertEqual(chord.dynamics, 'ff')
+        self.assertEqual(chord.get_dynamics(), 'ff')
 
 

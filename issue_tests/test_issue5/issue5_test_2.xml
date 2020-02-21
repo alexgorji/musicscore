@@ -21,12 +21,6 @@
     <score-part id="p1">
       <part-name print-object="no">none</part-name>
     </score-part>
-    <score-part id="p2">
-      <part-name print-object="no">none</part-name>
-    </score-part>
-    <score-part id="p3">
-      <part-name print-object="no">none</part-name>
-    </score-part>
   </part-list>
   <measure number="1">
     <part id="p1">
@@ -37,60 +31,15 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <direction placement="below">
+      <direction placement="above">
         <direction-type>
-          <dynamics placement="below">
-            <ff/>
-          </dynamics>
+          <words>word</words>
         </direction-type>
       </direction>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </part>
-    <part id="p2">
-      <attributes>
-        <divisions>1</divisions>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
       <direction placement="below">
         <direction-type>
           <dynamics placement="below">
-            <ff/>
-          </dynamics>
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </part>
-    <part id="p3">
-      <attributes>
-        <divisions>1</divisions>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
-      <direction placement="below">
-        <direction-type>
-          <dynamics placement="below">
-            <ff/>
+            <p/>
           </dynamics>
         </direction-type>
       </direction>
