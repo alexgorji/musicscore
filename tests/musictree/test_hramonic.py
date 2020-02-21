@@ -9,7 +9,7 @@ from musicscore.musicxml.types.complextypes.harmonic import Artificial, BasePitc
 from musicscore.musicxml.types.complextypes.notations import Technical
 from musicscore.musicxml.types.complextypes.technical import Harmonic
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
 class Test(TestCase):

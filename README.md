@@ -50,5 +50,9 @@ TreeBeat.split_not_notatable(): bug fixes
 v. 1.2.5:  
 quantization problem bug #3 solved: Beat._correct_deviations() was added.
 
+v. 1.2.6:
+add_words(): accept text and words
+wordsymbols: SALTANDO added
+
 todo:
 update documentation

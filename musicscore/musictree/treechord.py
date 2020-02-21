@@ -802,10 +802,15 @@ class TreeChord(XMLTree):
         dt = d.add_child(DirectionType())
         dt.add_child(Bracket(type=type, line_end=line_end, **kwargs))
 
-    def add_words(self, text, placement='above', **kwargs):
+    def add_words(self, words, placement='above', **kwargs):
         d = self.add_child(Direction(placement=placement))
         dt = d.add_child(DirectionType())
-        dt.add_child(Words(value=str(text), **kwargs))
+        if isinstance(words, Words):
+            if kwargs:
+                raise ValueError('no keywords possible if add_words gets a Words()')
+            dt.add_child(words)
+        else:
+            dt.add_child(Words(value=str(words), **kwargs))
 
     def get_direction_types(self):
         output = []
