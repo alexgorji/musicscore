@@ -1,12 +1,11 @@
-from unittest import TestCase
 import os
+from unittest import TestCase
 
 from musicscore.musicstream.streamvoice import SimpleFormat
-from musicscore.musictree.midi import C, D, E, F, G, A, B
+from musicscore.musictree.midi import C, D, E, F, B
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
-from tests.score_templates.xml_test_score import TestScore
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
 class Test(TestCase):
