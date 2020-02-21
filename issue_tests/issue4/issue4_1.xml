@@ -159,6 +159,12 @@
           <tied number="1" type="stop"/>
         </notations>
       </note>
+      <attributes>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
       <note>
         <pitch>
           <step>B</step>

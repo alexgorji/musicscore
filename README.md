@@ -60,5 +60,11 @@ Midi(): comparison methods for <, =<, > and >= added
 TreeClef().optimal_range: attribute added
 SimpleFormat().auto_clef(): argument added: clefs
 
+
+v. 1.2.8:
+issue #4 bug fixed: vanishing clef in score
+issue #5
+add method: TreeChord().remove_dynamic() 
+
 todo:
 update documentation

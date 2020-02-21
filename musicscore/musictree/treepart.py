@@ -1275,8 +1275,6 @@ class TreePart(timewise.Part):
 
             self.quantize()
 
-            # self.adjoin_rests_in_beat()
-
             self.split_not_notatable()
 
             self.implement_flags()

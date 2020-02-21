@@ -534,7 +534,7 @@ class TreeChord(XMLTree):
     def get_clef(self):
         try:
             attributes = self.get_children_by_type(Attributes)[0]
-            return attributes.get_children_by_type(TreeClef)
+            return attributes.get_children_by_type(TreeClef)[0]
         except IndexError:
             return None
 
@@ -917,6 +917,9 @@ class TreeChord(XMLTree):
                 next_chord.add_child(n)
             for d in self.get_children_by_type(Direction):
                 next_chord.add_child(d)
+            clef = self.get_clef()
+            if clef:
+                next_chord.add_clef(clef)
 
         self.parent_beat.chords.remove(self)
         self.parent_voice.chords.remove(self)
