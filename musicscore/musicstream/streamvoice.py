@@ -1,6 +1,6 @@
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechord import TreeChord
-from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, HIGH_TREBLE_CLEF, LOW_BASS_CLEF
+from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, LOW_BASS_CLEF, HIGH_TREBLE_CLEF
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.groups.common import Voice
@@ -208,45 +208,46 @@ class SimpleFormat(object):
             output.add_chord(chord.deepcopy_for_SimpleFormat())
         return output
 
-    def auto_clef(self):
-        clefs = []
+    def auto_clef(self, clefs=None):
+        if not clefs:
+            clefs = [TREBLE_CLEF, BASS_CLEF, HIGH_TREBLE_CLEF, LOW_BASS_CLEF]
+        current_clefs = []
         chords = self.chords
 
-        # ranges
-        high_treble = (87, 120)
-        treble = (67, 86.5)
-        treble_bass = (56, 66.5)
-        bass = (36, 55.5)
-        low_bass = (20, 35.5)
+        def _get_possible_clefs(midi):
+            output = []
+            for clef in clefs:
+                clef_in_range = False
+                if None not in clef.optimal_range:
+                    if clef.optimal_range[0] <= midi <= clef.optimal_range[1]:
+                        clef_in_range = True
+                elif clef.optimal_range[0] and clef.optimal_range[0] <= midi:
+                    clef_in_range = True
+                elif clef.optimal_range[1] and midi <= clef.optimal_range[1]:
+                    clef_in_range = True
+                if clef_in_range:
+                    output.append(clef)
+            return output
 
         for chord in [chord for chord in chords if not chord.is_rest]:
             try:
-                last_clef = clefs[-1]
+                last_clef = current_clefs[-1]
             except IndexError:
                 last_clef = None
-
-            if high_treble[0] <= chord.midis[0].value <= high_treble[1]:
-                clef = HIGH_TREBLE_CLEF
-            elif treble[0] <= chord.midis[0].value <= treble[1]:
-                clef = TREBLE_CLEF
-            elif treble_bass[0] <= chord.midis[0].value <= treble_bass[1]:
-                if last_clef == LOW_BASS_CLEF:
-                    clef = BASS_CLEF
-                elif not last_clef or last_clef == HIGH_TREBLE_CLEF:
-                    clef = TREBLE_CLEF
-                else:
-                    clef = None
-
-            elif bass[0] <= chord.midis[0].value <= bass[1]:
-                clef = BASS_CLEF
-            elif low_bass[0] <= chord.midis[0].value <= low_bass[1]:
-                clef = LOW_BASS_CLEF
+            midi = chord.midis[0]
+            possible_clefs = _get_possible_clefs(midi)
+            if not possible_clefs:
+                raise ValueError(
+                    'no possible clef war found for midi {} with value {}. Change clefs or optimal_range '
+                    'of clefs.'.format(midi, midi.value))
+            if not last_clef or last_clef not in possible_clefs:
+                clef = possible_clefs[0]
             else:
-                raise ValueError('midi {} not in clef ranges'.format(chord.midis[0].value))
+                clef = None
 
             if clef and clef != last_clef:
                 chord.add_clef(clef)
-                clefs.append(clef)
+                current_clefs.append(clef)
 
     def change_chord(self, *chord_formulas):
         for formula in chord_formulas:

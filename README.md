@@ -54,5 +54,11 @@ v. 1.2.6:
 add_words(): accept text and words
 wordsymbols: SALTANDO added
 
+
+v. 1.2.7:
+Midi(): comparison methods for <, =<, > and >= added
+TreeClef().optimal_range: attribute added
+SimpleFormat().auto_clef(): argument added: clefs
+
 todo:
 update documentation

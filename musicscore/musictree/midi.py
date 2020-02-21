@@ -224,6 +224,24 @@ class Midi(object):
     def octave(self):
         return int(self.value / 12) - 1
 
+    def __lt__(self, other):  # For x < y
+        return self.value < other.value
+
+    def __le__(self, other):  # For x <= y
+        return self.value <= other.value
+    #
+    # def __eq__(self, other):  # For x == y
+    #     return self.value == other.value
+    #
+    # def __ne__(self, other):  # For x != y OR x <> y
+    #     return self.value != other.value
+
+    def __gt__(self, other):  # For x > y
+        return self.value > other.value
+
+    def __ge__(self, other):  # For x >= y
+        return self.value >= other.value
+
     @property
     def __name__(self):
         pitch_step = self.get_pitch_name()[1]
