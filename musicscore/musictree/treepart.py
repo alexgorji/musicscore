@@ -196,6 +196,17 @@ class TreePartVoice(object):
             return None
 
     def add_chord(self, chord):
+        def _append_chord(chord):
+            all_chords = chord.get_pre_grace_chords() + [chord] + chord.get_post_grace_chords()
+            print(all_chords)
+            for ch in all_chords:
+                self.chords.append(ch)
+                ch.parent_voice = self
+                if ch.manual_voice_number:
+                    ch.add_child(Voice(str(ch.manual_voice_number)))
+                else:
+                    ch.add_child(Voice(str(self.number)))
+
         # print('treepart add_chord, chord.tie_orientation', chord.tie_orientation)
         remain = chord.quarter_duration - self.remaining_duration
         if self.remaining_duration == 0:
@@ -204,22 +215,24 @@ class TreePartVoice(object):
         elif remain > 0:
             split = chord.split([chord.quarter_duration - remain, remain])
             first_chord = split[0]
-            self.chords.append(first_chord)
-            first_chord.parent_voice = self
-            if first_chord.manual_voice_number:
-                first_chord.add_child(Voice(str(first_chord.manual_voice_number)))
-            else:
-                first_chord.add_child(Voice(str(self.number)))
+            _append_chord(first_chord)
+            # self.chords.append(first_chord)
+            # first_chord.parent_voice = self
+            # if first_chord.manual_voice_number:
+            #     first_chord.add_child(Voice(str(first_chord.manual_voice_number)))
+            # else:
+            #     first_chord.add_child(Voice(str(self.number)))
             first_chord._head = True
             split[1]._tail = True
             return split[1]
         else:
-            self.chords.append(chord)
-            chord.parent_voice = self
-            if chord.manual_voice_number:
-                chord.add_child(Voice(str(chord.manual_voice_number)))
-            else:
-                chord.add_child(Voice(str(self.number)))
+            _append_chord(chord)
+            # self.chords.append(chord)
+            # chord.parent_voice = self
+            # if chord.manual_voice_number:
+            #     chord.add_child(Voice(str(chord.manual_voice_number)))
+            # else:
+            #     chord.add_child(Voice(str(self.number)))
 
     def remove_chords(self):
         self._chords = []

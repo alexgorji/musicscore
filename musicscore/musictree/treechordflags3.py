@@ -1,4 +1,4 @@
-from musicscore.musicxml.elements.note import Notehead, Type, Stem, Beam
+from musicscore.musicxml.elements.note import Notehead, Stem, Beam
 
 
 class TreeChordFlag3(object):
@@ -46,3 +46,4 @@ class CheckPreviousFlag(TreeChordFlag3):
         # print('CheckPrevious:')
         # print(chord.previous_in_score_part)
         return [chord]
+

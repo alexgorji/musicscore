@@ -66,5 +66,9 @@ issue #4 bug fixed: vanishing clef in score
 issue #5
 add method: TreeChord().remove_dynamic() 
 
+v. 1.2.9
+TreeChord().set_manual_dots: method added
+TreeChord().add_grace_chords()
+
 todo:
 update documentation

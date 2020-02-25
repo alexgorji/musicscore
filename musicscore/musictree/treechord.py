@@ -75,6 +75,8 @@ class TreeChord(XMLTree):
         self.zero_mode = zero_mode
         self.quarter_duration = quarter_duration
         self._midis = None
+        self._pre_grace_chords = []
+        self._post_grace_chords = []
 
         self.midis = midis
         self._tail = False
@@ -82,7 +84,8 @@ class TreeChord(XMLTree):
         self._is_adjoinable = True
         self._flags = None
 
-        self.manual_type = False
+        self._manual_type = False
+        self._manual_dots = False
         self.manual_voice_number = False
         self.is_finger_tremolo = False
         self.relative_x = None
@@ -399,7 +402,18 @@ class TreeChord(XMLTree):
         except IndexError:
             self.add_child(Type(value=val, **kwargs))
 
-        self.manual_type = True
+        self._manual_type = True
+
+    def set_manual_dots(self, val):
+        try:
+            for dot in self.get_children_by_type(Dot):
+                self.remove_child(dot)
+        except IndexError:
+            pass
+        for i in range(val):
+            self.add_child(Dot())
+
+        self._manual_dots = True
 
     def update_type(self):
         """get type of a Note() depending on its quantized duration and return it [whole, half, quarter, eighth, 16th,
@@ -447,7 +461,7 @@ class TreeChord(XMLTree):
                   (12, 1): 'breve'
                   }
 
-        if self.manual_type is False:
+        if self._manual_type is False:
             tremoli_types = [tremolo.type for tremolo in self.tremoli]
 
             if self.quarter_duration == 0:
@@ -471,29 +485,30 @@ class TreeChord(XMLTree):
                 self.add_child(Type(value))
 
     def update_dot(self):
-        _dot = 0
-
-        if self.quarter_duration.numerator % 3 == 0:
-            _dot = 1
-        elif self.quarter_duration == Fraction(1, 2) and self.parent_beat.best_div == 6:
-            _dot = 1
-        elif self.quarter_duration == Fraction(1, 4) and self.parent_beat.best_div == 6:
-            _dot = 1
-        elif (self.quarter_duration == Fraction(3, 9) or self.quarter_duration == Fraction(6,
-                                                                                           9)) and self.parent_beat.best_div == 9:
-            _dot = 1
-        elif self.quarter_duration == Fraction(7, 8):
-            _dot = 2
-        elif self.quarter_duration == Fraction(7, 4):
-            _dot = 2
-        else:
+        if self._manual_dots is False:
             _dot = 0
 
-        for dot in self.get_children_by_type(Dot):
-            self.remove_child(dot)
+            if self.quarter_duration.numerator % 3 == 0:
+                _dot = 1
+            elif self.quarter_duration == Fraction(1, 2) and self.parent_beat.best_div == 6:
+                _dot = 1
+            elif self.quarter_duration == Fraction(1, 4) and self.parent_beat.best_div == 6:
+                _dot = 1
+            elif (self.quarter_duration == Fraction(3, 9) or self.quarter_duration == Fraction(6,
+                                                                                               9)) and self.parent_beat.best_div == 9:
+                _dot = 1
+            elif self.quarter_duration == Fraction(7, 8):
+                _dot = 2
+            elif self.quarter_duration == Fraction(7, 4):
+                _dot = 2
+            else:
+                _dot = 0
 
-        for i in range(_dot):
-            self.add_child(Dot())
+            for dot in self.get_children_by_type(Dot):
+                self.remove_child(dot)
+
+            for i in range(_dot):
+                self.add_child(Dot())
 
     def tremolo_flag_copy(self):
         new_chord = TreeChord()
@@ -853,6 +868,32 @@ class TreeChord(XMLTree):
         else:
             dt.add_child(Words(value=str(words), **kwargs))
 
+    def add_grace_chords(self, chords, mode='pre'):
+        permitted = ['pre', 'post']
+        if mode not in permitted:
+            raise ValueError('mode must be in {}'.format(permitted))
+        try:
+            chords = list(chords)
+        except TypeError:
+            chords = [chords]
+
+        for chord in chords:
+            if not isinstance(chord, TreeChord):
+                raise TypeError('wrong type {}'.format(type(chord)))
+        for chord in chords:
+            chord.quarter_duration = 0
+            chord.zero_mode = 'grace'
+            if mode == 'pre':
+                self._pre_grace_chords.append(chord)
+            else:
+                self._post_grace_chords.append(chord)
+
+    def get_pre_grace_chords(self):
+        return self._pre_grace_chords
+
+    def get_post_grace_chords(self):
+        return self._post_grace_chords
+
     def get_words(self):
         output = []
         for dt in self._get_direction_types():
@@ -880,10 +921,15 @@ class TreeChord(XMLTree):
                 new_chord._flags.append(flag.__deepcopy__())
 
         new_chord._flags = self._flags
-        new_chord.manual_type = self.manual_type
+        new_chord._manual_type = self._manual_type
         new_chord.tie_orientation = self.tie_orientation
         # for attribute in self.__dir__():
         #     print(attribute)
+        for grace_chord in self.get_pre_grace_chords():
+            new_chord.add_grace_chords(grace_chord.__deepcopy__())
+
+        for grace_chord in self.get_post_grace_chords():
+            new_chord.add_grace_chords(grace_chord.__deepcopy__(), 'post')
         return new_chord
 
     def remove_from_score(self):
@@ -930,4 +976,8 @@ class TreeChord(XMLTree):
         for child in self.get_children():
             if not isinstance(child, Voice):
                 new_chord.add_child(child)
+        for grace_chord in self.get_pre_grace_chords():
+            new_chord.add_grace_chords(grace_chord.deepcopy_for_SimpleFormat())
+        for grace_chord in self.get_post_grace_chords():
+            new_chord.add_grace_chords(grace_chord.deepcopy_for_SimpleFormat().__deepcopy__(), 'post')
         return new_chord
