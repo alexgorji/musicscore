@@ -198,7 +198,6 @@ class TreePartVoice(object):
     def add_chord(self, chord):
         def _append_chord(chord):
             all_chords = chord.get_pre_grace_chords() + [chord] + chord.get_post_grace_chords()
-            print(all_chords)
             for ch in all_chords:
                 self.chords.append(ch)
                 ch.parent_voice = self

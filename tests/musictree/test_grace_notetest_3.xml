@@ -34,39 +34,33 @@
       <note>
         <grace/>
         <pitch>
-          <step>B</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
-        <dot/>
       </note>
       <note>
         <grace/>
         <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <voice>1</voice>
-        <type>16th</type>
-      </note>
-      <note>
-        <grace/>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <grace/>
-        <pitch>
-          <step>B</step>
+          <step>E</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
         <voice>1</voice>
         <type>eighth</type>
+        <accidental>flat</accidental>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
       </note>
       <note>
         <pitch>
@@ -76,6 +70,28 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
       </note>
     </part>
   </measure>
