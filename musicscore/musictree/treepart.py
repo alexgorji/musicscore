@@ -215,23 +215,13 @@ class TreePartVoice(object):
             split = chord.split([chord.quarter_duration - remain, remain])
             first_chord = split[0]
             _append_chord(first_chord)
-            # self.chords.append(first_chord)
-            # first_chord.parent_voice = self
-            # if first_chord.manual_voice_number:
-            #     first_chord.add_child(Voice(str(first_chord.manual_voice_number)))
-            # else:
-            #     first_chord.add_child(Voice(str(self.number)))
             first_chord._head = True
             split[1]._tail = True
+            split[1].zero_mode = 'remove'
             return split[1]
         else:
             _append_chord(chord)
-            # self.chords.append(chord)
-            # chord.parent_voice = self
-            # if chord.manual_voice_number:
-            #     chord.add_child(Voice(str(chord.manual_voice_number)))
-            # else:
-            #     chord.add_child(Voice(str(self.number)))
+            return None
 
     def remove_chords(self):
         self._chords = []

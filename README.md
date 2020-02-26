@@ -73,5 +73,8 @@ TreeChord().add_grace_chords()
 v. 1.2.10
 issue #7 bug fixed: fill_with_rest() rest zero_mode is now 'remove'
 
+v. 1.2.11
+issue #8 bug fixed: TreeChord().quarter_duration --> Fraction().limiter omitted
+
 todo:
 update documentation

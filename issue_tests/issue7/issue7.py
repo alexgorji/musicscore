@@ -2,7 +2,7 @@ import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
-path = str(os.path.abspth(__file__).split('.')[0])
+path = str(os.path.abspath(__file__).split('.')[0])
 xml_path = path + '.xml'
 score = TreeScoreTimewise()
 quarter_durations = [0.98213066379917, 1.0178571230952937]

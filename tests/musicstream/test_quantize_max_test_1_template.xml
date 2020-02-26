@@ -343,9 +343,13 @@
           <octave>4</octave>
         </pitch>
         <duration>35</duration>
+        <tie type="start"/>
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">end</beam>
+        <notations>
+          <tied number="1" type="start"/>
+        </notations>
         <lyric number="1">
           <text>6</text>
         </lyric>
@@ -355,17 +359,39 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>56</duration>
+        <duration>14</duration>
+        <tie type="stop"/>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+        <notations>
+          <tied number="1" type="stop"/>
+        </notations>
         <notations>
           <tuplet number="1" type="start" bracket="yes" placement="above"/>
         </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>42</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <dot/>
+        <time-modification>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <beam number="1">continue</beam>
         <lyric number="1">
           <text>7</text>
         </lyric>

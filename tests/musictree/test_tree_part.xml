@@ -179,10 +179,12 @@
           <octave>4</octave>
         </pitch>
         <duration>7</duration>
+        <tie type="start"/>
         <tie type="stop"/>
         <voice>1</voice>
         <type>quarter</type>
         <notations>
+          <tied number="1" type="start"/>
           <tied number="1" type="stop"/>
         </notations>
       </note>
