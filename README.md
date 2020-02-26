@@ -70,5 +70,8 @@ v. 1.2.9
 TreeChord().set_manual_dots: method added
 TreeChord().add_grace_chords()
 
+v. 1.2.10
+issue #7 bug fixed: fill_with_rest() rest zero_mode is now 'remove'
+
 todo:
 update documentation
