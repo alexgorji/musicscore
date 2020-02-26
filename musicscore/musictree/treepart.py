@@ -482,6 +482,7 @@ class TreePartVoice(object):
                     self.chords[-1].quarter_duration += Fraction(self.remaining_duration)
                 else:
                     rest = TreeChord(midis=0, quarter_duration=self.remaining_duration)
+                    rest.zero_mode = 'remove'
                     self.add_chord(rest)
             self._filled_with_rest = True
 
