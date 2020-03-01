@@ -27,7 +27,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_2(self):
-        simpleformat = SimpleFormat(midis=list(range(60, 68)), durations=[1.2] * 8)
+        simpleformat = SimpleFormat(midis=list(range(60, 68)), quarter_durations=[1.2] * 8)
         voice = simpleformat.to_stream_voice(1)
         self.score.add_part()
         self.score.add_measure()
@@ -37,7 +37,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_3(self):
-        sf = SimpleFormat(midis=[(60, 61, 67)], durations=7)
+        sf = SimpleFormat(midis=[(60, 61, 67)], quarter_durations=7)
         voice = sf.to_stream_voice(1)
         voice.add_to_score(self.score, 1)
         result_path = path + '_test_3'

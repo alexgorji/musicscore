@@ -16,7 +16,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[2, 2])
+        sf = SimpleFormat(quarter_durations=[2, 2])
         slur = sf.chords[0].add_slur('start')
         slur.line_type = 'dashed'
         sf.chords[1].add_slur('stop')
@@ -27,7 +27,7 @@ class Test(TestCase):
         TestScore().assert_template(xml_path)
 
     def test_2(self):
-        sf = SimpleFormat(durations=[2, 2], midis=[(60, 63), (72, 76)])
+        sf = SimpleFormat(quarter_durations=[2, 2], midis=[(60, 63), (72, 76)])
         slur = sf.chords[0].add_slur('start')
         slur.line_type = 'dashed'
         sf.chords[1].add_slur('stop')
@@ -38,7 +38,7 @@ class Test(TestCase):
         TestScore().assert_template(xml_path)
 
     def test_3(self):
-        sf = SimpleFormat(durations=[2, 2, 2, 2], midis=[60, 63, 66, 69])
+        sf = SimpleFormat(quarter_durations=[2, 2, 2, 2], midis=[60, 63, 66, 69])
         # slur_1_1 = Slur(type='start', number=1)
         # slur_1_2 = Slur(type='stop', number=1)
         sf.chords[0].add_slur(type='start', number=1)

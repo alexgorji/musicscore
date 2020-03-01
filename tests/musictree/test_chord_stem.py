@@ -15,7 +15,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[1])
+        sf = SimpleFormat(quarter_durations=[1])
         sf.chords[0].add_child(Stem('none'))
         sf.to_stream_voice().add_to_score(self.score)
         xml_path = path + '_test_1.xml'

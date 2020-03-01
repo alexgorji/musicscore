@@ -16,7 +16,7 @@ def get_chords():
     return score.get_measure(1).get_part(1).voices[1].chords
 
 
-sf = SimpleFormat(durations=durations)
+sf = SimpleFormat(quarter_durations=durations)
 score = TreeScoreTimewise()
 sf.to_stream_voice().add_to_score(score)
 print('after add_to_score')

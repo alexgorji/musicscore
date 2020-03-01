@@ -12,7 +12,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[1, 1, 1, 1, 1])
+        sf = SimpleFormat(quarter_durations=[1, 1, 1, 1, 1])
         sf.chords[0].add_wedge('crescendo')
         sf.chords[2].add_wedge('stop')
         sf.chords[2].add_wedge('diminuendo')

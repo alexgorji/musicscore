@@ -14,7 +14,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[1, 1, 1, 1])
+        sf = SimpleFormat(quarter_durations=[1, 1, 1, 1])
         for index, ch in enumerate(sf.chords):
             ch.add_words(str(index + 1))
 
@@ -40,7 +40,7 @@ class Test(TestCase):
         TestScore().assert_template(xml_path)
 
     def test_2(self):
-        sf = SimpleFormat(durations=[5], midis=[(60, 65, 69)])
+        sf = SimpleFormat(quarter_durations=[5], midis=[(60, 65, 69)])
         chords = sf.chords[0].split(1, 1, 1, 1, 1)
         for ch in chords:
             ch.is_adjoinable = False
@@ -56,7 +56,7 @@ class Test(TestCase):
         TestScore().assert_template(xml_path)
 
     def test_3(self):
-        sf = SimpleFormat(durations=[5], midis=[(60, 65, 69)])
+        sf = SimpleFormat(quarter_durations=[5], midis=[(60, 65, 69)])
         chords = sf.chords[0].split(1, 1, 1, 1, 1)
         for ch in chords:
             ch.is_adjoinable = False
@@ -74,7 +74,7 @@ class Test(TestCase):
         TestScore().assert_template(xml_path)
 
     def test_4(self):
-        sf = SimpleFormat(durations=[5], midis=[(60, 65, 69)])
+        sf = SimpleFormat(quarter_durations=[5], midis=[(60, 65, 69)])
         chords = sf.chords[0].split(1, 1, 1, 1, 1)
         sf._chords = []
 
@@ -91,7 +91,7 @@ class Test(TestCase):
         TestScore().assert_template(xml_path)
 
     def test_5(self):
-        sf = SimpleFormat(durations=[2])
+        sf = SimpleFormat(quarter_durations=[2])
         chords = sf.chords[0].split(1, 1)
         sf._chords = []
         for ch in chords:

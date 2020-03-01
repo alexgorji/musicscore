@@ -14,7 +14,7 @@ class Test(unittest.TestCase):
 
     def test_1(self):
         xml_path = path + '.xml'
-        sf = SimpleFormat(durations=[3, 1, 1])
+        sf = SimpleFormat(quarter_durations=[3, 1, 1])
         chord = sf.chords[2]
         chord.add_flag(CheckPreviousFlag())
         sf.to_stream_voice().add_to_score(self.score)

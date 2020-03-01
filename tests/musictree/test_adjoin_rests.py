@@ -13,7 +13,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def make_t(self, *args):
-        sf = SimpleFormat(durations=[1, 1, 1, 1], midis=[0, 0, 0, 0])
+        sf = SimpleFormat(quarter_durations=[1, 1, 1, 1], midis=[0, 0, 0, 0])
         for i in range(3):
             sf.chords[i].is_adjoinable = args[i]
         v = sf.to_stream_voice(1)
@@ -69,15 +69,15 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_9(self):
-        sf = SimpleFormat(durations=[0.2, 0.8, 1, 1], midis=[0, 0, 0, 60])
+        sf = SimpleFormat(quarter_durations=[0.2, 0.8, 1, 1], midis=[0, 0, 0, 60])
         sf.to_stream_voice().add_to_score(self.score)
         result_path = path + '_test_9'
         self.score.write(path=result_path)
         # TestScore().assert_template(result_path=result_path)
 
     def test_10(self):
-        sf = SimpleFormat(durations=[0.5, 2.5], midis=[60, 0])
-        self.score.set_time_signatures(durations=[3])
+        sf = SimpleFormat(quarter_durations=[0.5, 2.5], midis=[60, 0])
+        self.score.set_time_signatures(quarter_durations=[3])
         sf.to_stream_voice().add_to_score(self.score)
         result_path = path + '_test_10'
         self.score.write(path=result_path)

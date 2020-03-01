@@ -15,7 +15,7 @@ class Test(TestCase):
     def test_1(self):
         xml_path = path + '_test_1.xml'
 
-        sf = SimpleFormat(durations=5 * [2.25])
+        sf = SimpleFormat(quarter_durations=5 * [2.25])
         sf.chords[0].add_bracket(type='start', line_end='none', relative_x=50)
         sf.chords[1].add_bracket(type='continue', line_end='none')
         sf.chords[2].add_bracket(type='stop', line_end='arrow', relative_x=-30, relative_y=20)

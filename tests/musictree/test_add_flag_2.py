@@ -17,7 +17,7 @@ class Test(TestCase):
         xml_path = path + '_test_1.xml'
         durations = [2, 2, 2]
         midis = [60, 62, 63]
-        sf = SimpleFormat(durations=durations, midis=midis)
+        sf = SimpleFormat(quarter_durations=durations, midis=midis)
         for chord in sf.chords:
             chord.add_flag(FingerTremoloFlag2(tremolo_chord=TreeChord(midis=[67])))
 
@@ -29,7 +29,7 @@ class Test(TestCase):
         xml_path = path + '_test_2.xml'
         durations = [1.5, 1.5, 1.5]
         midis = [60, 62, 63]
-        sf = SimpleFormat(durations=durations, midis=midis)
+        sf = SimpleFormat(quarter_durations=durations, midis=midis)
         for chord in sf.chords:
             chord.add_flag(FingerTremoloFlag2(tremolo_chord=TreeChord(midis=[67])))
 
@@ -41,7 +41,7 @@ class Test(TestCase):
         xml_path = path + '_test_3.xml'
         durations = [0.25]
         midis = [60]
-        sf = SimpleFormat(durations=durations, midis=midis)
+        sf = SimpleFormat(quarter_durations=durations, midis=midis)
         for chord in sf.chords:
             chord.add_flag(FingerTremoloFlag2(tremolo_chord=TreeChord(midis=[67])))
 
@@ -53,7 +53,7 @@ class Test(TestCase):
         xml_path = path + '_test_4.xml'
         durations = [0.2, 0.8, 1]
         midis = [60, 62, 63]
-        sf = SimpleFormat(durations=durations, midis=midis)
+        sf = SimpleFormat(quarter_durations=durations, midis=midis)
         for chord in sf.chords:
             chord.add_flag(FingerTremoloFlag2(tremolo_chord=TreeChord(midis=[67])))
 

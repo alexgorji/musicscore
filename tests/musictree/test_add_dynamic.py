@@ -39,7 +39,7 @@ class Test(TestCase):
         self.assertEqual(note.to_string(), result)
 
     def test_2(self):
-        sf = SimpleFormat(durations=[1, 1])
+        sf = SimpleFormat(quarter_durations=[1, 1])
 
         sf.chords[0].add_dynamics('fff')
         sf.to_stream_voice().add_to_score(self.score)

@@ -83,18 +83,17 @@ class StreamChordFormula(object):
 
 
 class SimpleFormat(object):
-    def __init__(self, durations=None, midis=None, *args, **kwargs):
+    def __init__(self, quarter_durations=None, midis=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._durations = None
+        self._quarter_durations = None
         self._midis = None
-        self._set_durations(durations)
+        self._set_quarter_durations(quarter_durations)
         self._set_midis(midis)
         self._chords = None
 
     @property
-    def durations(self):
-        return [chord.quarter_duration for chord in self.chords]
-        # return self._durations
+    def quarter_duration(self):
+        return sum([chord.quarter_duration for chord in self.chords])
 
     @property
     def midis(self):
@@ -107,23 +106,23 @@ class SimpleFormat(object):
         return self._chords
 
     @staticmethod
-    def _check_duration(durations):
-        for duration in durations:
-            if duration < 0:
-                raise ValueError('SimpleFormat(): wrong duration {}'.format(duration))
+    def _check_quarter_duration(quarter_durations):
+        for quarter_duration in quarter_durations:
+            if quarter_duration < 0:
+                raise ValueError('SimpleFormat(): wrong duration {}'.format(quarter_duration))
 
-    def _set_durations(self, durations):
-        if durations is None:
-            durations = []
+    def _set_quarter_durations(self, quarter_durations):
+        if quarter_durations is None:
+            quarter_durations = []
         else:
             try:
-                durations = list(durations)
+                quarter_durations = list(quarter_durations)
             except TypeError:
-                durations = [durations]
+                quarter_durations = [quarter_durations]
 
-        self._check_duration(durations)
+        self._check_quarter_duration(quarter_durations)
 
-        self._durations = durations
+        self._quarter_durations = quarter_durations
 
     def _set_midis(self, midis):
         def _is_value(x):
@@ -167,24 +166,24 @@ class SimpleFormat(object):
             else:
                 raise TypeError
 
-    def get_durations(self):
-        return [chord.duration for chord in self.chords]
+    def get_quarter_durations(self):
+        return [chord.quarter_duration for chord in self.chords]
 
     def get_midis(self):
         return [chord.midis for chord in self.chords]
 
     def _generate_chords(self):
-        if self._durations == [] and self._midis == []:
+        if self._quarter_durations == [] and self._midis == []:
             pass
         else:
             self._chords = []
-            for i in range(len(self._durations) - len(self._midis)):
+            for i in range(len(self._quarter_durations) - len(self._midis)):
                 self._midis.append(71)
 
-            for i in range(len(self._midis) - len(self._durations)):
-                self._durations.append(1)
+            for i in range(len(self._midis) - len(self._quarter_durations)):
+                self._quarter_durations.append(1)
 
-            for d, m in zip(self._durations, self._midis):
+            for d, m in zip(self._quarter_durations, self._midis):
                 self._chords.append(TreeChord(m, d))
 
     def add_chord(self, chord):

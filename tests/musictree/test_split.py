@@ -16,7 +16,7 @@ class Test(TestCase):
     def test_1(self):
         xml_path = path + '_test_1.xml'
         durations = [2, 2]
-        sf = SimpleFormat(durations=durations)
+        sf = SimpleFormat(quarter_durations=durations)
         chords = sf.chords
         chords[0].add_tie('start')
         chords[1].add_tie('stop')
@@ -42,7 +42,7 @@ class Test(TestCase):
     def test_2(self):
         xml_path = path + '_test_2.xml'
         durations = [5]
-        sf = SimpleFormat(durations=durations)
+        sf = SimpleFormat(quarter_durations=durations)
 
         chords = sf.chords
         sf._chords = []

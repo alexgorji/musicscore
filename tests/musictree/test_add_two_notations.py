@@ -12,7 +12,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[1, 1, 1, 1, 1])
+        sf = SimpleFormat(quarter_durations=[1, 1, 1, 1, 1])
         for chord in sf.chords:
             chord.add_articulation('accent')
             chord.add_articulation('tenuto')

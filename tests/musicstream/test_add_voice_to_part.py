@@ -10,7 +10,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        simpleformat = SimpleFormat(durations=4)
+        simpleformat = SimpleFormat(quarter_durations=4)
         voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()
@@ -35,7 +35,7 @@ class Test(TestCase):
         self.assertEqual(remaining_chords, None)
 
     def test_2(self):
-        simpleformat = SimpleFormat(durations=7)
+        simpleformat = SimpleFormat(quarter_durations=7)
         voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()
@@ -66,7 +66,7 @@ class Test(TestCase):
         self.assertEqual(chord.get_children_by_type(Tie)[0].type, 'stop')
 
     def test_3(self):
-        simpleformat = SimpleFormat(durations=3)
+        simpleformat = SimpleFormat(quarter_durations=3)
         voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()
@@ -97,7 +97,7 @@ class Test(TestCase):
         self.assertEqual(p.to_string(), result)
 
     def test_4(self):
-        simpleformat = SimpleFormat(durations=7, midis=0)
+        simpleformat = SimpleFormat(quarter_durations=7, midis=0)
         voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()
@@ -120,7 +120,7 @@ class Test(TestCase):
         self.assertEqual(remaining_chords[0].get_children_by_type(Tie), [])
 
     def test_5(self):
-        simpleformat = SimpleFormat(durations=3, midis=0)
+        simpleformat = SimpleFormat(quarter_durations=3, midis=0)
         voice = simpleformat.to_stream_voice(2)
         self.score.add_part()
         self.score.add_measure()

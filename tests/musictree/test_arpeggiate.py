@@ -16,7 +16,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[1], midis=[(60, 64, 67, 70, 72)])
+        sf = SimpleFormat(quarter_durations=[1], midis=[(60, 64, 67, 70, 72)])
         n = sf.chords[0].add_child(Notations())
         n.add_child(Arpeggiate())
 

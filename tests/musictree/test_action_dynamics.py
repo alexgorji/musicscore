@@ -12,7 +12,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[2, 2])
+        sf = SimpleFormat(quarter_durations=[2, 2])
         sf.chords[0].add_action_dynamics('ff')
         sf.chords[1].add_dynamics('ff')
 

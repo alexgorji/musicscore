@@ -15,7 +15,7 @@ class Test(TestCase):
     def test_1(self):
         xml_path = path + '_test_1.xml'
         durations = [0.25, 0.75, 0.5, 0.5, 1, 1.25, 1.5, 2, 2.5, 3, 3.5, 4, 4.5]
-        sf = SimpleFormat(durations=durations)
+        sf = SimpleFormat(quarter_durations=durations)
         for chord in sf.chords:
             chord.add_flag(NoiseFlag3())
 

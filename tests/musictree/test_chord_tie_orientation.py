@@ -14,7 +14,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[2, 2], midis=[60, 60])
+        sf = SimpleFormat(quarter_durations=[2, 2], midis=[60, 60])
         sf.chords[0].tie_orientation = 'over'
         sf.chords[0].add_tie('start')
         sf.chords[0].is_adjoinable = False
@@ -26,7 +26,7 @@ class Test(TestCase):
         TestScore().assert_template(xml_path)
 
     def test_2(self):
-        sf = SimpleFormat(durations=[6], midis=[60])
+        sf = SimpleFormat(quarter_durations=[6], midis=[60])
         sf.chords[0].tie_orientation = 'over'
 
         sf.to_stream_voice().add_to_score(self.score)

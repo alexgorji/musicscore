@@ -18,13 +18,13 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
+        sf = SimpleFormat(quarter_durations=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
         for index, chord in enumerate(sf.chords):
             chord.add_lyric(index + 1)
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 2)
 
-        sf = SimpleFormat(durations=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
+        sf = SimpleFormat(quarter_durations=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
@@ -45,13 +45,13 @@ class Test(TestCase):
 
     def test_2(self):
         self.score.add_measure(TreeMeasure(time=(3, 4)))
-        sf = SimpleFormat(durations=[0.5, 0.6, 0.7, 0.8])
+        sf = SimpleFormat(quarter_durations=[0.5, 0.6, 0.7, 0.8])
         for index, chord in enumerate(sf.chords):
             chord.add_lyric(index + 1)
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
-        sf = SimpleFormat(durations=[0.5, 0.6, 0.7, 0.8])
+        sf = SimpleFormat(quarter_durations=[0.5, 0.6, 0.7, 0.8])
         for index, chord in enumerate(sf.chords):
             chord.add_lyric(index + 1)
         v = sf.to_stream_voice(1)
@@ -83,7 +83,7 @@ class Test(TestCase):
             durations.append(Fraction(duration).limit_denominator(100))
 
         def add_to_score(part=1):
-            sf = SimpleFormat(durations=durations)
+            sf = SimpleFormat(quarter_durations=durations)
             dynamics = itertools.cycle(['pppp', 'ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff'])
 
             for index, chord in enumerate(sf.chords):
@@ -118,8 +118,8 @@ class Test(TestCase):
 
     def test_4(self):
         sf = SimpleFormat(
-            durations=[Fraction(3, 10), Fraction(3, 10), Fraction(3, 10), Fraction(3, 10), Fraction(3, 10),
-                       Fraction(3, 2), Fraction(1, 2), Fraction(1, 3)])
+            quarter_durations=[Fraction(3, 10), Fraction(3, 10), Fraction(3, 10), Fraction(3, 10), Fraction(3, 10),
+                               Fraction(3, 2), Fraction(1, 2), Fraction(1, 3)])
         xml_path = path + '_test_4.xml'
         sf.to_stream_voice().add_to_score(self.score)
         self.score.write(xml_path)
@@ -128,7 +128,7 @@ class Test(TestCase):
     def test_5(self):
         self.score.set_time_signatures(
             [Fraction(3, 2)])
-        sf = SimpleFormat(durations=[0.666, 0.333, 0.5])
+        sf = SimpleFormat(quarter_durations=[0.666, 0.333, 0.5])
         xml_path = path + '_test_5.xml'
         sf.to_stream_voice().add_to_score(self.score)
         self.score.get_score_parts()[0].max_division = 1

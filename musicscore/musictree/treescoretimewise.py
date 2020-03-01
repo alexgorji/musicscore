@@ -211,7 +211,7 @@ class TreeScoreTimewise(timewise.Score):
         encoding.add_child(Supports(attribute='new-system', element='print', type_='yes', value_='yes'))
         self._identifications_added = True
 
-    def set_time_signatures(self, durations=None, times=None, barline_style=None):
+    def set_time_signatures(self, quarter_durations=None, times=None, barline_style=None):
         global current_time
         if self.get_children_by_type(TreeMeasure):
             raise Exception('for setting time signatures score should be empty')
@@ -265,16 +265,16 @@ class TreeScoreTimewise(timewise.Score):
                 self.get_children_by_type(TreeMeasure)[-1].set_barline_style(barline_style)
             return current_measure_number
 
-        if durations:
-            if not hasattr(durations, '__iter__'):
-                durations = [durations]
-            elif isinstance(durations, str):
+        if quarter_durations:
+            if not hasattr(quarter_durations, '__iter__'):
+                quarter_durations = [quarter_durations]
+            elif isinstance(quarter_durations, str):
                 raise TypeError()
             else:
-                durations = durations
+                quarter_durations = quarter_durations
 
             current_measure_number = 1
-            for duration in durations:
+            for duration in quarter_durations:
                 current_measure_number = set_times(current_measure_number, duration)
 
             if list(times.keys()) != [] and current_measure_number < list(times.keys())[-1]:

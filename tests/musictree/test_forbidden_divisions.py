@@ -13,7 +13,7 @@ class Test(TestCase):
     def setUp(self) -> None:
         random.seed(1)
         durations = [random.random() + random.random() for i in range(10)]
-        self.sf = SimpleFormat(durations=durations)
+        self.sf = SimpleFormat(quarter_durations=durations)
         self.score = TreeScoreTimewise()
 
     def test_1(self):

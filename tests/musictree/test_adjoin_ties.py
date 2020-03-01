@@ -13,7 +13,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def make_t(self, *args):
-        sf = SimpleFormat(durations=[1, 1, 1, 1])
+        sf = SimpleFormat(quarter_durations=[1, 1, 1, 1])
         for i in range(3):
             sf.chords[i].is_adjoinable = args[i]
         sf.chords[0].add_tie('start')

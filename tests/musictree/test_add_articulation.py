@@ -17,7 +17,7 @@ class Test(TestCase):
     def test_1(self):
         xml_path = path + '_test_1.xml'
         durations = [2, 1, 0.5, 0.25, 0.25, 4, 2, 3]
-        sf = SimpleFormat(durations=durations)
+        sf = SimpleFormat(quarter_durations=durations)
         for chord in sf.chords:
             articulation = Accent()
             chord.add_articulation_object(articulation)
@@ -31,7 +31,7 @@ class Test(TestCase):
         articulations = ['accent', 'strong-accent', 'staccato', 'tenuto', 'detached-legato', 'staccatissimo',
                          'spiccato', 'scoop', 'plop', 'doit', 'falloff', 'breath-mark', 'caesura', 'stress', 'unstress']
         durations = len(articulations) * [1.25]
-        sf = SimpleFormat(durations=durations)
+        sf = SimpleFormat(quarter_durations=durations)
         for index, chord in enumerate(sf.chords):
             chord.add_articulation(articulations[index])
 

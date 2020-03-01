@@ -13,7 +13,7 @@ class Test(TestCase):
     def test_1(self):
         score = TreeScoreTimewise()
 
-        sf = SimpleFormat(midis=[(60, 64, 68, 73)], durations=[4])
+        sf = SimpleFormat(midis=[(60, 64, 68, 73)], quarter_durations=[4])
         sf.to_stream_voice().add_to_score(score=score)
 
         sf.chords[0].inverse()

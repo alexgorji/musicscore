@@ -15,7 +15,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[7])
+        sf = SimpleFormat(quarter_durations=[7])
 
         sf.chords[0].add_tremolo()
 
@@ -25,7 +25,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_2(self):
-        sf = SimpleFormat(durations=[2, 2])
+        sf = SimpleFormat(quarter_durations=[2, 2])
 
         sf.chords[0].add_tremolo(type='start')
         sf.chords[1].add_tremolo(type='stop')
@@ -35,7 +35,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_3(self):
-        sf = SimpleFormat(durations=[1.5, 1.5])
+        sf = SimpleFormat(quarter_durations=[1.5, 1.5])
 
         sf.chords[0].add_tremolo(type='start')
         sf.chords[1].add_tremolo(type='stop')
@@ -45,7 +45,7 @@ class Test(TestCase):
         # TestScore().assert_template(result_path=result_path)
 
     def test_4(self):
-        sf = SimpleFormat(durations=[0.5, 0.5], midis=[60, 63])
+        sf = SimpleFormat(quarter_durations=[0.5, 0.5], midis=[60, 63])
 
         sf.chords[0].add_tremolo(type='start')
         sf.chords[1].add_tremolo(type='stop')

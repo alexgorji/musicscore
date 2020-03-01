@@ -15,7 +15,7 @@ def get_chords():
     return score.get_measure(1).get_part(1).voices[1].chords
 
 
-sf = SimpleFormat(durations=durations)
+sf = SimpleFormat(quarter_durations=durations)
 for chord, clef in zip(sf.chords, clefs):
     if clef:
         chord.add_clef(clef)

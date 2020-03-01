@@ -16,7 +16,7 @@ class Test(TestCase):
     def test_1(self):
         xml_path = path + '_test_1.xml'
         durations = [2, 1, 0.5, 0.25, 0.25, 4, 2, 3]
-        sf = SimpleFormat(durations=durations)
+        sf = SimpleFormat(quarter_durations=durations)
         for chord in sf.chords:
             technical = UpBow()
             chord.add_technical_object(technical)

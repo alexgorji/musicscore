@@ -15,7 +15,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+        sf = SimpleFormat(quarter_durations=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
         sf.chords[0].add_clef(BASS_CLEF)
         sf.chords[1].add_clef(TREBLE_CLEF)
         sf.chords[2].add_clef(PERCUSSION_CLEF)

@@ -19,7 +19,7 @@ class Test(TestCase):
     def test_1(self):
         self.score.add_measure(TreeMeasure(time=(5, 8)))
         # sf = SimpleFormat(durations=[1.8, 0.2, 0.5])
-        sf = SimpleFormat(durations=[2.5])
+        sf = SimpleFormat(quarter_durations=[2.5])
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
@@ -31,8 +31,9 @@ class Test(TestCase):
     def test_2(self):
         self.score.add_measure(TreeMeasure(time=(5, 8)))
         # sf = SimpleFormat(durations=[1.8, 0.2, 0.5])
-        sf = SimpleFormat(durations=[Fraction(1, 7), Fraction(6, 7), Fraction(1, 14), Fraction(3, 14), Fraction(10, 14),
-                                     Fraction(1, 2)])
+        sf = SimpleFormat(
+            quarter_durations=[Fraction(1, 7), Fraction(6, 7), Fraction(1, 14), Fraction(3, 14), Fraction(10, 14),
+                               Fraction(1, 2)])
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
         v = sf.to_stream_voice(1)

@@ -14,13 +14,13 @@ class Test(TestCase):
 
     def test_1(self):
         section_score_1 = TreeScoreTimewise()
-        sf = SimpleFormat(durations=[1, 3, 2])
-        section_score_1.set_time_signatures(durations=sum(sf.durations), barline_style='light-light')
+        sf = SimpleFormat(quarter_durations=[1, 3, 2])
+        section_score_1.set_time_signatures(quarter_durations=sf.quarter_duration, barline_style='light-light')
         sf.to_stream_voice().add_to_score(section_score_1)
 
         section_score_2 = TreeScoreTimewise()
-        sf = SimpleFormat(durations=[2, 1, 3])
-        section_score_2.set_time_signatures(durations=sum(sf.durations), barline_style='heavy')
+        sf = SimpleFormat(quarter_durations=[2, 1, 3])
+        section_score_2.set_time_signatures(quarter_durations=sf.quarter_duration, barline_style='heavy')
         sf.to_stream_voice().add_to_score(section_score_2)
 
         self.main_score.extend(section_score_1)
@@ -33,8 +33,8 @@ class Test(TestCase):
     def test_2(self):
         # needed because of wrong system breaks
         section_score = TreeScoreTimewise()
-        sf = SimpleFormat(durations=2 * [5, 4, 3, 2, 1])
-        section_score.set_time_signatures(durations=sum(sf.durations), barline_style='light-light')
+        sf = SimpleFormat(quarter_durations=2 * [5, 4, 3, 2, 1])
+        section_score.set_time_signatures(quarter_durations=sf.quarter_duration, barline_style='light-light')
         sf.to_stream_voice().add_to_score(section_score)
         # section_xml_path = path + '_test_2_section.xml'
         # section_score.write(path=section_xml_path)

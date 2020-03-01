@@ -11,7 +11,7 @@ path = os.path.abspath(__file__).split('.')[0]
 class Test(TestCase):
     def setUp(self) -> None:
         self.score = TreeScoreTimewise()
-        sf = SimpleFormat(durations=[4])
+        sf = SimpleFormat(quarter_durations=[4])
         sf.to_stream_voice().add_to_score(self.score)
 
     def test_1(self):

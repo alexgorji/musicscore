@@ -37,7 +37,7 @@ class TestTreeTimewise(TestCase):
 
     def test_4(self):
         self.score.tuplet_line_width = 2.4
-        sf = SimpleFormat(durations=[0.2, 0.8])
+        sf = SimpleFormat(quarter_durations=[0.2, 0.8])
         sf.to_stream_voice().add_to_score(self.score)
         xml_path = path + '_test_4.xml'
         self.score.write(xml_path)

@@ -9,7 +9,7 @@ path = str(os.path.abspath(__file__).split('.')[0])
 
 class Test(TestCase):
     def setUp(self) -> None:
-        self.simple_format = SimpleFormat(durations=[4])
+        self.simple_format = SimpleFormat(quarter_durations=[4])
         self.score = TreeScoreTimewise()
 
     def test_1(self):

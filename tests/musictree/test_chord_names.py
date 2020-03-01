@@ -7,15 +7,15 @@ from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 class Test(TestCase):
     def setUp(self) -> None:
         self.score = TreeScoreTimewise()
-        sf = SimpleFormat(durations=[1, 1])
+        sf = SimpleFormat(quarter_durations=[1, 1])
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 
-        sf = SimpleFormat(durations=[1, 1])
+        sf = SimpleFormat(quarter_durations=[1, 1])
         v = sf.to_stream_voice(2)
         v.add_to_score(self.score, 1, 1)
 
-        sf = SimpleFormat(durations=[1, 1])
+        sf = SimpleFormat(quarter_durations=[1, 1])
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 2, 2)
 

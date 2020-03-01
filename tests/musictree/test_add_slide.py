@@ -13,7 +13,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[4, 4, 4], midis=[64, 74, 63])
+        sf = SimpleFormat(quarter_durations=[4, 4, 4], midis=[64, 74, 63])
         sf.chords[0].add_slide('start')
         sf.chords[1].add_slide('stop')
         sf.chords[1].add_slide('start')

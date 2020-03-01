@@ -17,7 +17,7 @@ class Test(TestCase):
 
     def test_1(self):
         xml_path = path + "_test_1.xml"
-        sf = SimpleFormat(midis=[60, 63], durations=[0.5, 0.5, 3, 4, 4, 4])
+        sf = SimpleFormat(midis=[60, 63], quarter_durations=[0.5, 0.5, 3, 4, 4, 4])
 
         sf.chords[0].set_manual_type('quarter')
         sf.chords[1].set_manual_type('quarter')

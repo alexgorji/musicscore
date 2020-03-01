@@ -14,7 +14,7 @@ class Test(TestCase):
     def test_1(self):
         instrument = TreeInstrument(name='banjo', abbreviation='bjo', number=2)
         instrument.standard_clef = ALTO_CLEF
-        sf = SimpleFormat(durations=[1, 2, 3, 1, 2, 3, 1, 2, 3])
+        sf = SimpleFormat(quarter_durations=[1, 2, 3, 1, 2, 3, 1, 2, 3])
         score = TreeScoreTimewise()
         sf.to_stream_voice(2).add_to_score(score)
         sf.transpose(5)
@@ -26,7 +26,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=xml_path)
 
     def test_2(self):
-        sf = SimpleFormat(durations=[1, 2, 3, 1, 2, 3, 1, 2, 3], midis=9 * [60 - 5])
+        sf = SimpleFormat(quarter_durations=[1, 2, 3, 1, 2, 3, 1, 2, 3], midis=9 * [60 - 5])
         score = TreeScoreTimewise()
         for part_number in range(1, 5):
             sf.to_stream_voice().add_to_score(score, part_number=part_number)

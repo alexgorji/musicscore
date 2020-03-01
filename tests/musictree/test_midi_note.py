@@ -28,7 +28,7 @@ class Test(TestCase):
 
         durations = [2, 3, 1, 2, 3, 1, 4, 2, 4, 2, 2, 3, 1, 2, 2, 2, 2, 3, 1, 1, 4]
         durations = [d / 2 for d in durations]
-        sf = SimpleFormat(midis=midis, durations=durations)
+        sf = SimpleFormat(midis=midis, quarter_durations=durations)
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
 

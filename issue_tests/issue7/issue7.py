@@ -6,7 +6,7 @@ path = str(os.path.abspath(__file__).split('.')[0])
 xml_path = path + '.xml'
 score = TreeScoreTimewise()
 quarter_durations = [0.98213066379917, 1.0178571230952937]
-sf = SimpleFormat(durations=quarter_durations)
+sf = SimpleFormat(quarter_durations=quarter_durations)
 score.set_time_signatures(round(sum(quarter_durations)))
 sf.to_stream_voice().add_to_score(score)
 

@@ -17,7 +17,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[1, 1])
+        sf = SimpleFormat(quarter_durations=[1, 1])
 
         sf.chords[0].add_words('first word')
         sf.chords[1].add_words('second word', font_family='DejaVu Sans', font_size=14, font_weight='bold',
@@ -30,7 +30,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_2(self):
-        sf = SimpleFormat(durations=[1, 1])
+        sf = SimpleFormat(quarter_durations=[1, 1])
 
         sf.chords[0].add_words('a')
         sf.chords[1].add_words('b')
@@ -44,7 +44,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_3(self):
-        sf = SimpleFormat(durations=[1.95, 2.05])
+        sf = SimpleFormat(quarter_durations=[1.95, 2.05])
 
         sf.chords[0].add_words('a')
         sf.chords[1].add_words('b')
@@ -58,7 +58,7 @@ class Test(TestCase):
         # TestScore().assert_template(result_path=result_path)
 
     def test_4(self):
-        sf = SimpleFormat(durations=[2])
+        sf = SimpleFormat(quarter_durations=[2])
 
         chord = sf.chords[0]
         d = chord.add_child(Direction(placement='above'))
@@ -73,7 +73,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_5(self):
-        sf = SimpleFormat(durations=[2])
+        sf = SimpleFormat(quarter_durations=[2])
         sf.chords[0].add_words(SALTANDO)
 
         sf.to_stream_voice().add_to_score(self.score)

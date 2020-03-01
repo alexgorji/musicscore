@@ -15,7 +15,7 @@ class Test(TestCase):
         self.score.add_measure(TreeMeasure(time=(1, 4)))
 
     def test_1(self):
-        sf = SimpleFormat(durations=[1, 0, 1])
+        sf = SimpleFormat(quarter_durations=[1, 0, 1])
         sf.chords[0].add_tie('start')
         sf.chords[1].add_tie('stop')
         v = sf.to_stream_voice(1)

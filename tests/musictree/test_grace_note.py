@@ -23,7 +23,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_2(self):
-        sf = SimpleFormat(durations=[0.75, 0.25, 1, 0.5, 4])
+        sf = SimpleFormat(quarter_durations=[0.75, 0.25, 1, 0.5, 4])
         sf.chords[1].set_manual_type('16th')
         sf.chords[1].quarter_duration = 0
         sf.chords[0].set_manual_type('eighth')
@@ -40,7 +40,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=xml_path)
 
     def test_3(self):
-        sf = SimpleFormat(durations=[4])
+        sf = SimpleFormat(quarter_durations=[4])
         sf.chords[0].add_grace_chords([TreeChord(60), TreeChord(63), TreeChord(68)])
         sf.chords[0].add_grace_chords([TreeChord(61), TreeChord(66)], mode='post')
         print(sf.chords[0].get_pre_grace_chords())

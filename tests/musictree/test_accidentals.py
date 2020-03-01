@@ -73,7 +73,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_5(self):
-        simpleformat = SimpleFormat(midis=[71.5, 71.5, 72, 72, 71.5, 71.5], durations=6 * [0.5])
+        simpleformat = SimpleFormat(midis=[71.5, 71.5, 72, 72, 71.5, 71.5], quarter_durations=6 * [0.5])
         voice = simpleformat.to_stream_voice(1)
         voice.add_to_score(self.score, 1, 1)
         result_path = path + '_test_5'
@@ -86,7 +86,7 @@ class Test(TestCase):
         durations = [Fraction(255, 56), Fraction(6525, 3136), Fraction(6075, 3136), Fraction(2475, 3136),
                      Fraction(2145, 3136), Fraction(2805, 3136), Fraction(1815, 3136), Fraction(65, 56),
                      Fraction(2015, 1568), Fraction(1625, 1568)]
-        simpleformat = SimpleFormat(midis=midis, durations=durations)
+        simpleformat = SimpleFormat(midis=midis, quarter_durations=durations)
         simpleformat.auto_clef()
         voice = simpleformat.to_stream_voice(1)
         voice.add_to_score(self.score, 1, 1)
@@ -111,7 +111,7 @@ class Test(TestCase):
                 return split
 
         xml_path = path + '_test_7.xml'
-        sf = SimpleFormat(midis=[61], durations=[4])
+        sf = SimpleFormat(midis=[61], quarter_durations=[4])
         sf.to_stream_voice().add_to_score(self.score, part_number=1)
         chord = sf.chords[0]
         chord.add_flag(TestFlag3())

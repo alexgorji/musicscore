@@ -13,8 +13,8 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
-        self.score.set_time_signatures(durations=sum(sf.durations))
+        sf = SimpleFormat(quarter_durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
+        self.score.set_time_signatures(quarter_durations=sf.quarter_duration)
 
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
@@ -24,7 +24,7 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_2(self):
-        sf = SimpleFormat(durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
+        sf = SimpleFormat(quarter_durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
         self.score.set_time_signatures(times={1: (3, 4), 5: (2, 4)})
 
         v = sf.to_stream_voice(1)
@@ -35,8 +35,8 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_3(self):
-        sf = SimpleFormat(durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
-        self.score.set_time_signatures(durations=[8, 3, 5, 4, 11, 3])
+        sf = SimpleFormat(quarter_durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
+        self.score.set_time_signatures(quarter_durations=[8, 3, 5, 4, 11, 3])
 
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)
@@ -46,8 +46,8 @@ class Test(TestCase):
         TestScore().assert_template(result_path=result_path)
 
     def test_4(self):
-        sf = SimpleFormat(durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
-        self.score.set_time_signatures(durations=[8, 3, 5, 4, 11, 3], times={1: (3, 4)})
+        sf = SimpleFormat(quarter_durations=[4, 4, 3, 2, 3, 4, 5, 6, 1, 2])
+        self.score.set_time_signatures(quarter_durations=[8, 3, 5, 4, 11, 3], times={1: (3, 4)})
 
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score, 1, 1)

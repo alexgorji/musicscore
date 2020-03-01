@@ -19,7 +19,7 @@ class Test(TestCase):
 
     def test_1(self):
         # sf = SimpleFormat(durations=[4, 4, 2, 1, 1.5, 1.8, 0.2, 0.4, 0.5, 1])
-        sf = SimpleFormat(durations=[4, 4])
+        sf = SimpleFormat(quarter_durations=[4, 4])
 
         for chord in sf.chords:
             # chord.add_flag(PizzFlag())

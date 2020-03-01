@@ -22,7 +22,7 @@ quarter_durations = [0.99999479229065, 1.0031880977683316, 1.5503791982665223, 1
                      1.691326530612245, 0.28188775510204084]
 # quarter_durations = [4, 0]
 # sf = SimpleFormat(durations=quarter_durations, midis=[60, 0])
-sf = SimpleFormat(durations=quarter_durations)
+sf = SimpleFormat(quarter_durations=quarter_durations)
 score.set_time_signatures(round(sum(quarter_durations)))
 # print([float(chord.quarter_duration) for chord in sf.chords])
 sf.to_stream_voice().add_to_score(score)
