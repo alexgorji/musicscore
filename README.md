@@ -76,5 +76,10 @@ issue #7 bug fixed: fill_with_rest() rest zero_mode is now 'remove'
 v. 1.2.11
 issue #8 bug fixed: TreeChord().quarter_duration --> Fraction().limiter omitted
 
+v. 1.2.12
+SimpleFormat().quarter_duration added
+SimpleFormat().quarter_durations omitted
+SimpleFormat(): minor changes
+
 todo:
 update documentation
