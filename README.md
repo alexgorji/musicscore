@@ -81,5 +81,9 @@ SimpleFormat().quarter_duration added
 SimpleFormat().quarter_durations omitted
 SimpleFormat(): minor changes
 
+
+v. 1.2.13  
+build conflicts resolved
+
 todo:
 update documentation
