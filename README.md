@@ -85,5 +85,8 @@ SimpleFormat(): minor changes
 v. 1.2.13  
 build conflicts resolved
 
+v. 1.2.14
+issue#2 PageStyle(): by changing page_width and page_height: CreditWords default_x and default_y will be changed accordingly.
+
 todo:
 update documentation

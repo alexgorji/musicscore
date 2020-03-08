@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="musicscore",
-    version="1.2.13",
+    version="1.2.14",
     author="Alex Gorji",
     author_email="aligorji@hotmail.com",
     description="generating musicxml",
