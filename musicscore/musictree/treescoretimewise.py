@@ -572,10 +572,6 @@ class TreeScoreTimewise(timewise.Score):
             self.update_accidentals(mode=self.accidental_mode)
             self.update_durations()
             self.close_dtd()
-            # for measure in self.get_children_by_type(TreeMeasure):
-            #     for part in measure.get_children_by_type(TreePart):
-            #         part.finish()
-            # self.close_dtd()
             self._finished = True
 
     def to_string(self):

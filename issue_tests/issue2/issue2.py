@@ -6,6 +6,7 @@ from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 path = str(os.path.abspath(__file__).split('.')[0])
 
 score = TreeScoreTimewise()
+score.page_style.scale = 0.75
 score.page_style.orientation = 'landscape'
 score.add_title('BIG IMPORTANT TITLE')
 score.add_subtitle('unimportant subtitle')

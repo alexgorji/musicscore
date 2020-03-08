@@ -24,6 +24,7 @@ class TreePageStyle(object):
         self._orientation = 'portrait'
 
         self._defaults = None
+        self._scale = None
         self._scaling = None
 
         self._page_layout = None
@@ -66,34 +67,51 @@ class TreePageStyle(object):
         return round(m / self.millimeters * self.tenth)
 
     @property
+    def scale(self):
+        return self._scale
+
+    @scale.setter
+    def scale(self, val):
+        if not 0 < val <= 1:
+            raise ValueError('scale value must be 0 < val <= 1 not {}'.format(val))
+        self._scale = val
+        self._refresh_milimeters()
+
+    @property
     def millimeters(self):
         return self.scale * 7.2319
 
     def _add_defaults(self):
         self._defaults = self.score.add_child(Defaults())
 
-    def _add_scaling(self):
-        if not self._defaults:
+    def _set_scaling(self):
+        if self._defaults is None:
             self._add_defaults()
-        self._scaling = self._defaults.add_child(Scaling())
+        if self._scaling is None:
+            self._scaling = self._defaults.add_child(Scaling())
         self._scaling.add_child(Millimeters(self.millimeters))
         self._scaling.add_child(Tenths(self.tenth))
 
+    def _refresh_milimeters(self):
+        if self._scaling is not None:
+            milimeters = self._scaling.get_children_by_type(Millimeters)[0]
+            milimeters.value = self.millimeters
+
     def _add_page_layout(self):
         if not self._scaling:
-            self._add_scaling()
+            self._set_scaling()
 
         self._page_layout = self._defaults.add_child(PageLayout())
 
     def _add_staff_layout(self):
         if not self._scaling:
-            self._add_scaling()
+            self._set_scaling()
 
         self._staff_layout = self._defaults.add_child(StaffLayout())
 
     def _add_system_layout(self):
         if not self._scaling:
-            self._add_scaling()
+            self._set_scaling()
 
         self._system_layout = self._defaults.add_child(SystemLayout())
         self._system_distance = self._system_layout.add_child(SystemDistance(100))

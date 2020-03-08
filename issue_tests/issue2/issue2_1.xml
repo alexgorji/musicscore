@@ -7,8 +7,8 @@
       <tenths>40</tenths>
     </scaling>
     <page-layout>
-      <page-height>1643</page-height>
-      <page-width>1162</page-width>
+      <page-height>2190</page-height>
+      <page-width>1549</page-width>
       <page-margins type="both">
         <left-margin>111</left-margin>
         <right-margin>55</right-margin>
@@ -19,18 +19,18 @@
   </defaults>
   <credit page="1">
     <credit-type>title</credit-type>
-    <credit-words justify="center" default-x="580.646378575776" default-y="1582.2005163511187" font-size="24" valign="top">BIG IMPORTANT TITLE</credit-words>
+    <credit-words justify="center" default-x="774.5" default-y="2129.205939315688" font-size="24" valign="top">BIG IMPORTANT TITLE</credit-words>
   </credit>
   <credit page="1">
     <credit-type>subtitle</credit-type>
-    <credit-words justify="center" default-x="580.646378575776" default-y="1511.5034423407917" font-size="18" valign="top">unimportant subtitle</credit-words>
+    <credit-words justify="center" default-x="774.5" default-y="2058.515171078115" font-size="18" valign="top">unimportant subtitle</credit-words>
   </credit>
   <credit page="1">
     <credit-type>composer</credit-type>
-    <credit-words justify="right" default-x="1126.6378575776018" default-y="1440.8063683304647" font-size="12" valign="top">me</credit-words>
+    <credit-words justify="right" default-x="1513.6347031963471" default-y="1987.8244028405425" font-size="12" valign="top">me</credit-words>
   </credit>
   <credit page="1">
-    <credit-words justify="left" default-x="35.36214242239805" default-y="1440.8063683304647" font-size="12" valign="top">some text</credit-words>
+    <credit-words justify="left" default-x="35.36529680365297" default-y="1987.8244028405425" font-size="12" valign="top">some text</credit-words>
   </credit>
   <part-list>
     <score-part id="p1">
