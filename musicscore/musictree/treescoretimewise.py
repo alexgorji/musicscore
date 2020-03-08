@@ -7,6 +7,7 @@ from musicscore.musictree.treepagestyle import TreePageStyle
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescorepart import TreeScorePart
 from musicscore.musicxml.elements import partwise
+from musicscore.musicxml.elements.barline import Barline, BarStyle
 from musicscore.musicxml.elements.scoreheader import PartList, Credit, Defaults
 from musicscore.musicxml.types.complextypes.appearance import LineWidth
 from musicscore.musicxml.types.complextypes.credit import CreditType, CreditWords
@@ -14,7 +15,6 @@ from musicscore.musicxml.types.complextypes.defaults import Appearance, WordFont
 from musicscore.musicxml.types.complextypes.encoding import Supports
 from musicscore.musicxml.types.complextypes.identification import Encoding
 from musicscore.musicxml.types.complextypes.scorepart import Identification
-from musicscore.musicxml.elements.barline import Barline, BarStyle
 
 
 class TreeScoreTimewise(timewise.Score):
@@ -149,6 +149,18 @@ class TreeScoreTimewise(timewise.Score):
     @property
     def page_style(self):
         return self._page_style
+
+    def recalculate_x(self):
+        for credit in self.get_children_by_type(Credit):
+            for credit_words in credit.get_children_by_type(CreditWords):
+                x_factor = self.page_style.page_width.value / self.page_style.previous_page_width_value
+                credit_words.default_x *= x_factor
+
+    def recalculate_y(self):
+        for credit in self.get_children_by_type(Credit):
+            for credit_words in credit.get_children_by_type(CreditWords):
+                y_factor = self.page_style.page_height.value / self.page_style.previous_page_height_value
+                credit_words.default_y *= y_factor
 
     def _generate_score_part(self):
         id_ = 'p' + str(self._auto_part_number)

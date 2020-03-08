@@ -2,11 +2,8 @@ from musicscore.musicxml.elements.scoreheader import Defaults
 from musicscore.musicxml.groups.layout import PageLayout, StaffLayout, SystemLayout
 from musicscore.musicxml.groups.margins import LeftMargin, RightMargin, TopMargin, BottomMargin
 from musicscore.musicxml.types.complextypes.defaults import Scaling
-from musicscore.musicxml.types.complextypes.encoding import Supports
-from musicscore.musicxml.types.complextypes.identification import Encoding
 from musicscore.musicxml.types.complextypes.pagelayout import PageMargins, PageHeight, PageWidth
 from musicscore.musicxml.types.complextypes.scaling import Millimeters, Tenths
-from musicscore.musicxml.types.complextypes.scorepart import Identification
 from musicscore.musicxml.types.complextypes.stafflayout import StaffDistance
 from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance, SystemMargins, TopSystemDistance
 
@@ -14,7 +11,8 @@ from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance, 
 class TreePageStyle(object):
     sizes = {'A4': (210, 297), 'A3': (297, 420)}
 
-    def __init__(self, score, scale=1, size='A4', orientation='portrait', left_margin=111, right_margin=55, top_margin=83,
+    def __init__(self, score, scale=1, size='A4', orientation='portrait', left_margin=111, right_margin=55,
+                 top_margin=83,
                  bottom_margin=83, system_distance=None, system_left_margin=None, system_right_margin=None,
                  top_system_distance=None, staff_distance=None):
 
@@ -32,6 +30,8 @@ class TreePageStyle(object):
         self._page_height = None
         self._page_width = None
         self._page_margins = None
+        self.previous_page_width_value = None
+        self.previous_page_height_value = None
 
         self._left_margin = None
         self._right_margin = None
@@ -132,7 +132,10 @@ class TreePageStyle(object):
     def page_height(self, value):
         value = self.millimeters_to_tenth(value)
         if self.page_height:
-            self.page_height.value = value
+            if self.page_height.value != value:
+                self.previous_page_height_value = self.page_height.value
+                self.page_height.value = value
+                self.score.recalculate_y()
         else:
             if not self._page_layout:
                 self._add_page_layout()
@@ -146,7 +149,10 @@ class TreePageStyle(object):
     def page_width(self, value):
         value = self.millimeters_to_tenth(value)
         if self.page_width:
-            self.page_width.value = value
+            if self.page_width.value != value:
+                self.previous_page_width_value = self.page_width.value
+                self.page_width.value = value
+                self.score.recalculate_x()
         else:
             if not self._page_layout:
                 self._add_page_layout()
