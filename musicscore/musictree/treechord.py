@@ -332,6 +332,8 @@ class TreeChord(XMLTree):
 
         new_chord._offset = None
         new_chord.is_finger_tremolo = self.is_finger_tremolo
+        for grace_chord in self.get_post_grace_chords():
+            new_chord.add_grace_chords(grace_chord.__deepcopy__(), mode='post')
 
         try:
             voice = self.get_children_by_type(Voice)[0]

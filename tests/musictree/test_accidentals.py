@@ -122,7 +122,7 @@ class Test(TestCase):
         midis = [60 + factor * 0.5 for factor in range(0, 25)]
         simple_format = SimpleFormat(midis=midis + midis[-1::-1][1:])
         for index, chord in enumerate(simple_format.chords):
-            if index <= len(midis) -1:
+            if index <= len(midis) - 1:
                 chord.midis[0].accidental_mode = 'sharp'
             else:
                 chord.midis[0].accidental_mode = 'flat'
