@@ -229,12 +229,6 @@ class Midi(object):
 
     def __le__(self, other):  # For x <= y
         return self.value <= other.value
-    #
-    # def __eq__(self, other):  # For x == y
-    #     return self.value == other.value
-    #
-    # def __ne__(self, other):  # For x != y OR x <> y
-    #     return self.value != other.value
 
     def __gt__(self, other):  # For x > y
         return self.value > other.value

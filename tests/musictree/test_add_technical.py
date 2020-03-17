@@ -6,7 +6,7 @@ from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicscore.musicxml.types.complextypes.hole import HoleClosed
 from musicscore.musicxml.types.complextypes.technical import Hole, UpBow
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
 class Test(TestCase):

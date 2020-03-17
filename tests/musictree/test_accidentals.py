@@ -9,7 +9,7 @@ from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
 class Test(TestCase):
@@ -117,3 +117,5 @@ class Test(TestCase):
         chord.add_flag(TestFlag3())
         sf.to_stream_voice().add_to_score(self.score, part_number=2)
         self.score.write(xml_path)
+
+

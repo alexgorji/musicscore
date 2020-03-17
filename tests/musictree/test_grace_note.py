@@ -43,10 +43,8 @@ class Test(TestCase):
         sf = SimpleFormat(quarter_durations=[4])
         sf.chords[0].add_grace_chords([TreeChord(60), TreeChord(63), TreeChord(68)])
         sf.chords[0].add_grace_chords([TreeChord(61), TreeChord(66)], mode='post')
-        print(sf.chords[0].get_pre_grace_chords())
-        print(sf.chords[0].get_post_grace_chords())
 
         sf.to_stream_voice().add_to_score(self.score)
         xml_path = path + 'test_3.xml'
         self.score.write(xml_path)
-        # TestScore().assert_template(result_path=xml_path)
+        TestScore().assert_template(result_path=xml_path)

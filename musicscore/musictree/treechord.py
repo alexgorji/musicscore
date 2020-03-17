@@ -112,7 +112,6 @@ class TreeChord(XMLTree):
 
         if not isinstance(self.quarter_duration, Fraction):
             self._quarter_duration = Fraction(value)
-            # self._quarter_duration = Fraction(value).limit_denominator(1000)
         else:
             self._quarter_duration = value
 
