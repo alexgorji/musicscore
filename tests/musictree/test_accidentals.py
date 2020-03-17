@@ -1,11 +1,11 @@
 import os
 from unittest import TestCase
 
-from musicscore.musictree.treechordflags3 import TreeChordFlag3
 from quicktions import Fraction
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treechordflags3 import TreeChordFlag3
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 
@@ -118,4 +118,14 @@ class Test(TestCase):
         sf.to_stream_voice().add_to_score(self.score, part_number=2)
         self.score.write(xml_path)
 
-
+    def test_8(self):
+        midis = [60 + factor * 0.5 for factor in range(0, 25)]
+        simple_format = SimpleFormat(midis=midis + midis[-1::-1][1:])
+        for index, chord in enumerate(simple_format.chords):
+            if index <= len(midis) -1:
+                chord.midis[0].accidental_mode = 'sharp'
+            else:
+                chord.midis[0].accidental_mode = 'flat'
+        simple_format.to_stream_voice().add_to_score(self.score)
+        xml_path = path + '_test_8.xml'
+        self.score.write(xml_path)
