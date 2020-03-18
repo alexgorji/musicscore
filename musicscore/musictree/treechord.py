@@ -6,7 +6,6 @@ from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechordflags1 import TreeChordFlag1
 from musicscore.musictree.treechordflags2 import TreeChordFlag2
 from musicscore.musictree.treechordflags3 import TreeChordFlag3
-from musicscore.musictree.treechordflags4 import TreeChordFlag4
 from musicscore.musictree.treeclef import TreeClef
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
@@ -26,13 +25,6 @@ from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornam
     Articulations, Slur, Fermata, Slide
 from musicscore.musicxml.types.complextypes.ornaments import Tremolo
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
-
-
-# class FingerTremolo(object):
-#     def __init__(self, chord, number=3, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.chord = chord
-#         self.number = number
 
 
 class TreeChord(XMLTree):
@@ -271,6 +263,8 @@ class TreeChord(XMLTree):
 
         for index, midi in enumerate(self.midis):
             note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration, parent_chord=self)
+            note.accidental.set_force_show(midi.accidental.force_show)
+            note.accidental.set_force_hide(midi.accidental.force_hide)
             note.is_finger_tremolo = self.is_finger_tremolo
             if self.relative_x is not None:
                 note.relative_x = self.relative_x
@@ -389,7 +383,8 @@ class TreeChord(XMLTree):
         if not isinstance(flag, TreeChordFlag1) and not isinstance(flag, TreeChordFlag2) \
                 and not isinstance(flag, TreeChordFlag3) and not isinstance(flag, TreeChordFlag4):
             raise TypeError(
-                'flag must be of type TreeChordFlag, TreeChordFlag2 or TreeChordFlag3 or TreeChordFlag4 not {}'.format(flag.__class__))
+                'flag must be of type TreeChordFlag, TreeChordFlag2 or TreeChordFlag3 or TreeChordFlag4 not {}'.format(
+                    flag.__class__))
         if self._flags is None:
             self._flags = set()
         self._flags.add(flag)
@@ -926,8 +921,7 @@ class TreeChord(XMLTree):
         new_chord._flags = self._flags
         new_chord._manual_type = self._manual_type
         new_chord.tie_orientation = self.tie_orientation
-        # for attribute in self.__dir__():
-        #     print(attribute)
+
         for grace_chord in self.get_pre_grace_chords():
             new_chord.add_grace_chords(grace_chord.__deepcopy__())
 

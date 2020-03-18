@@ -4,6 +4,57 @@ from musicscore.musicxml.elements.fullnote import Pitch, Rest
 from musicscore.musicxml.elements.note import Notehead
 
 
+class Accidental(object):
+    def __init__(self, mode='standard', force_show=False, force_hide=False, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._mode = None
+        self._force_show = None
+        self._force_hide = None
+
+        self.mode = mode
+        self.force_show = force_show
+        self.force_hide = force_hide
+
+    @property
+    def mode(self):
+        return self._mode
+
+    @mode.setter
+    def mode(self, value):
+        permitted = ('standard', 'flat', 'sharp', 'enharmonic_1', 'enharmonic_2')
+        if value not in permitted:
+            raise TypeError('accidental_mode.value {} must be in {}'.format(value, permitted))
+        self._mode = value
+
+    @property
+    def force_show(self):
+        return self._force_show
+
+    @force_show.setter
+    def force_show(self, val):
+        if not isinstance(val, bool):
+            raise TypeError('force_show.value must be of type bool not{}'.format(type(val)))
+        if self.force_hide is True and val is True:
+            self.force_hide = False
+        self._force_show = val
+
+    @property
+    def force_hide(self):
+        return self._force_hide
+
+    @force_hide.setter
+    def force_hide(self, val):
+        if not isinstance(val, bool):
+            raise TypeError('force_show.value must be of type bool not{}'.format(type(val)))
+        if self.force_show is True and val is True:
+            self.force_show = False
+        self._force_hide = val
+
+    def __deepcopy__(self, memodict={}, **kwargs):
+        output = self.__class__(mode=self.mode, force_show=self.force_show, force_hide=self.force_hide, **kwargs)
+        return output
+
+
 class Midi(object):
     """"""
     # (stem, alter, octaveAdd)
@@ -129,13 +180,13 @@ class Midi(object):
         11: ('A', 2, 0)
     }
 
-    def __init__(self, value=None, accidental_mode='standard', note_head=None, *args, **kwargs):
+    def __init__(self, value=None, accidental=None, note_head=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._value = None
-        self._accidental_mode = None
+        self._accidental = None
         self._note_head = None
         self.value = value
-        self.accidental_mode = accidental_mode
+        self.accidental = accidental
         self.notehead = note_head
 
     @property
@@ -152,15 +203,16 @@ class Midi(object):
         self._value = v
 
     @property
-    def accidental_mode(self):
-        return self._accidental_mode
+    def accidental(self):
+        return self._accidental
 
-    @accidental_mode.setter
-    def accidental_mode(self, value):
-        permitted = ('standard', 'flat', 'sharp', 'enharmonic_1', 'enharmonic_2')
-        if value not in permitted:
-            raise TypeError('accidental_mode.value {} must be in {}'.format(value, permitted))
-        self._accidental_mode = value
+    @accidental.setter
+    def accidental(self, value):
+        if not value:
+            value = Accidental()
+        if isinstance(value, Accidental.__class__):
+            raise TypeError('accidental.value must be of type Accidental not{}'.format(type(value)))
+        self._accidental = value
 
     @property
     def notehead(self):
@@ -181,19 +233,19 @@ class Midi(object):
         self.add_notehead_object(Notehead(val, **kwargs))
 
     def get_pitch_name(self):
-        if self.accidental_mode == 'standard':
+        if self.accidental.mode == 'standard':
             output = self.standard[self.value % 12]
 
-        elif self.accidental_mode == 'enharmonic_1':
+        elif self.accidental.mode == 'enharmonic_1':
             output = self.enharmonic_1[self.value % 12]
 
-        elif self.accidental_mode == 'enharmonic_2':
+        elif self.accidental.mode == 'enharmonic_2':
             output = self.enharmonic_2[self.value % 12]
 
-        elif self.accidental_mode == 'flat':
+        elif self.accidental.mode == 'flat':
             output = self.flat[self.value % 12]
 
-        elif self.accidental_mode == 'sharp':
+        elif self.accidental.mode == 'sharp':
             output = self.sharp[self.value % 12]
 
         output = list(output)
@@ -210,10 +262,10 @@ class Midi(object):
             return Pitch(*self.get_pitch_name())
 
     def get_flat(self):
-        return Midi(value=self.value - 1, accidental_mode='flat')
+        return Midi(value=self.value - 1, accidental=Accidental(mode='flat'))
 
     def get_sharp(self):
-        return Midi(value=self.value + 1, accidental_mode='sharp')
+        return Midi(value=self.value + 1, accidental=Accidental(mode='sharp'))
 
     def transpose(self, val):
         self.value += val
@@ -260,7 +312,7 @@ class Midi(object):
         return "{}{}{}".format(self.get_pitch_name()[0], accidental, self.octave)
 
     def __deepcopy__(self, memodict={}, **kwargs):
-        output = self.__class__(value=self.value, accidental_mode=self.accidental_mode, note_head=self.notehead,
+        output = self.__class__(value=self.value, accidental=self.accidental.__deepcopy__(), note_head=self.notehead,
                                 **kwargs)
         return output
 
@@ -268,27 +320,27 @@ class Midi(object):
 class MidiNote(Midi):
     _VALUE = 60
 
-    def __init__(self, octave, accidental=None, *args, **kwargs):
+    def __init__(self, octave, accidental_sign=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._accidental = None
+        self._accidental_sign = None
         self._octave = None
 
         self.octave = octave
-        self.accidental = accidental
+        self.accidental_sign = accidental_sign
 
     def _set_new_value(self):
         if self._get_accidental_value() == -1:
-            self.accidental_mode = 'flat'
+            self.accidental.mode = 'flat'
         if self._get_accidental_value() == 1:
-            self.accidental_mode = 'sharp'
+            self.accidental.mode = 'sharp'
         self.value = (self._VALUE + self._get_accidental_value()) - (4 - self.octave) * 12
 
     def _get_accidental_value(self):
-        if self.accidental is None:
+        if self.accidental_sign is None:
             return 0
-        if self.accidental in ('flat', 'f', 'b'):
+        if self.accidental_sign in ('flat', 'f', 'b'):
             return -1
-        if self.accidental in ('sharp', 's', '#'):
+        if self.accidental_sign in ('sharp', 's', '#'):
             return 1
 
     @property
@@ -301,16 +353,16 @@ class MidiNote(Midi):
         self._set_new_value()
 
     @property
-    def accidental(self):
-        return self._accidental
+    def accidental_sign(self):
+        return self._accidental_sign
 
-    @accidental.setter
-    def accidental(self, val):
-        self._accidental = val
+    @accidental_sign.setter
+    def accidental_sign(self, val):
+        self._accidental_sign = val
         self._set_new_value()
 
     def __deepcopy__(self, memodict={}, **kwargs):
-        output = super().__deepcopy__(octave=self.octave, accidental=self.accidental, **kwargs)
+        output = super().__deepcopy__(octave=self.octave, accidental_sign=self.accidental_sign, **kwargs)
         return output
 
     def __repr__(self):

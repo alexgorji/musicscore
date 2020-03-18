@@ -35,6 +35,9 @@ class TreeAccidental(Accidental):
         super().__init__(value=value, *args, **kwargs)
         self._note = None
         self._show = None
+        self._force_show = None
+        self._force_hide = None
+
         self.show = show
 
     @property
@@ -48,6 +51,12 @@ class TreeAccidental(Accidental):
         self._show = value
         if self._note:
             self._note.update_accidental()
+
+    def set_force_show(self, value):
+        self._force_show = value
+
+    def set_force_hide(self, value):
+        self._force_hide = value
 
 
 class TreeNote(Note):
@@ -70,7 +79,6 @@ class TreeNote(Note):
         self._is_tied = False
         self.is_tied = is_tied
         self.is_finger_tremolo = False
-
 
     @property
     def quarter_duration(self):
@@ -150,13 +158,6 @@ class TreeNote(Note):
             pass
         self._event = self.add_child(value)
         self.update_accidental()
-
-    # @property
-    # def is_finger_tremolo(self):
-    #     try:
-    #         return self.parent_chord.is_finger_tremolo
-    #     except AttributeError:
-    #         return False
 
     def update_accidental(self):
         _accidentals = {-1.5: 'three-quarters-flat',

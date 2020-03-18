@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from quicktions import Fraction
 
-from musicscore.musictree.midi import Midi
+from musicscore.musictree.midi import Midi, Accidental
 from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treemeasure import TreeMeasure
@@ -34,7 +34,7 @@ class TestTreeChord(TestCase):
         self.assertEqual(tree_note.to_string(), result)
 
     def test_chord_midi(self):
-        chord = TreeChord(Midi(63, accidental_mode='sharp'), quarter_duration=2)
+        chord = TreeChord(Midi(63, accidental = Accidental(mode='sharp')), quarter_duration=2)
         tree_note = chord._notes[0]
         tree_note.update_duration(divisions=1)
 

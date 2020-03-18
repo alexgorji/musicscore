@@ -894,41 +894,6 @@ class TreePartVoice(object):
 
         self._flags_3_implemented = True
 
-    def implement_flags_4(self):
-        def check_implement_output(chords):
-            if not isinstance(chords, list):
-                raise Exception('output of implement can only be a list of chords')
-            for ch in chords:
-                if not isinstance(ch, TreeChord):
-                    raise Exception('output of implement can only be a list of chords not {}'.format(type(ch)))
-
-        if not self._flags_4_implemented:
-            flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
-                              isinstance(flag, TreeChordFlag4)])
-
-            while flag_types:
-                flag_type = flag_types.pop()
-                output = []
-                for chord in self.chords:
-                    try:
-                        chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
-                        new_chords = chord_flag.implement(chord)
-                        check_implement_output(new_chords)
-                        output.extend(new_chords)
-
-                    except IndexError:
-                        output.append(chord)
-
-                self.remove_chords()
-                for chord in output:
-                    try:
-                        v = chord.get_children_by_type(Voice)[0]
-                        chord.remove_child(v)
-                    except IndexError:
-                        pass
-
-        self._flags_4_implemented = True
-
 
 class TreePart(timewise.Part):
 
@@ -1147,6 +1112,14 @@ class TreePart(timewise.Part):
             if previous and xml_chord.has_same_pitches(xml_chord.previous):
                 return True
 
+        def force_hide_accidentals():
+            notes = self.get_children_by_type(TreeNote)
+            for note in notes:
+                if note.accidental._force_show:
+                    note.accidental.show = True
+                elif note.accidental._force_hide:
+                    note.accidental.show = False
+
         if mode == 'normal':
             _hide_accidental = []
             _set_natural = set()
@@ -1161,8 +1134,7 @@ class TreePart(timewise.Part):
                         note.accidental.show = True
                         _hide_accidental.append(get_accidental_info(note))
                     _set_natural.add(note.pitch.step.value)
-                elif (
-                        not note.pitch.alter or note.pitch.alter.value == 0):
+                elif not note.pitch.alter or note.pitch.alter.value == 0:
                     if note.pitch.step.value in _set_natural:
                         for item in _hide_accidental:
                             if item[0] == note.pitch.step.value:
@@ -1187,9 +1159,8 @@ class TreePart(timewise.Part):
                             break
                         # natural
                         elif not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
-                            if note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type for t in
-                                                                                                note.get_children_by_type(
-                                                                                                    Tie)]:
+                            if note.pitch.step.value in _first_chord_natural and 'stop' not in \
+                                    [t.type for t in note.get_children_by_type(Tie)]:
                                 note.accidental.show = True
                         # non natural
                         else:
@@ -1220,6 +1191,8 @@ class TreePart(timewise.Part):
                             _set_natural.add(note.pitch.step.value)
         else:
             raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
+
+        force_hide_accidentals()
 
     def fill_with_rest(self):
         if self.voices == {}:
@@ -1302,10 +1275,6 @@ class TreePart(timewise.Part):
     def add_voice(self, voice):
         self.voices[voice.number] = voice
 
-    def implement_flags_4(self):
-        for voice in self.voices.values():
-            voice.implement_flags_4()
-
     def finish(self):
         if not self._finished:
             self.fill_with_rest()
@@ -1345,8 +1314,6 @@ class TreePart(timewise.Part):
             self.update_accidentals(mode=self.accidental_mode)
 
             self.update_durations()
-
-            self.implement_flags_4()
 
             self.close_dtd()
 

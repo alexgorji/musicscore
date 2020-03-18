@@ -123,9 +123,24 @@ class Test(TestCase):
         simple_format = SimpleFormat(midis=midis + midis[-1::-1][1:])
         for index, chord in enumerate(simple_format.chords):
             if index <= len(midis) - 1:
-                chord.midis[0].accidental_mode = 'sharp'
+                chord.midis[0].accidental.mode = 'sharp'
             else:
-                chord.midis[0].accidental_mode = 'flat'
+                chord.midis[0].accidental.mode = 'flat'
         simple_format.to_stream_voice().add_to_score(self.score)
         xml_path = path + '_test_8.xml'
         self.score.write(xml_path)
+        TestScore().assert_template(xml_path)
+
+    def test_9(self):
+        midis = [60, 61, 62, 63, 64, 61, 62, 61]
+        simple_format = SimpleFormat(midis=midis)
+        simple_format.to_stream_voice().add_to_score(self.score, part_number=1)
+        for chord in simple_format.chords:
+            chord.midis[0].accidental.force_show = True
+        simple_format.to_stream_voice().add_to_score(self.score, part_number=2)
+        for chord in simple_format.chords:
+            chord.midis[0].accidental.force_hide = True
+        simple_format.to_stream_voice().add_to_score(self.score, part_number=3)
+        xml_path = path + '_test_9.xml'
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)

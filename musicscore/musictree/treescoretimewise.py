@@ -571,7 +571,6 @@ class TreeScoreTimewise(timewise.Score):
             self.update_divisions()
             self.update_accidentals(mode=self.accidental_mode)
             self.update_durations()
-            # self.implement_flags_4()
             self.close_dtd()
             self._finished = True
 

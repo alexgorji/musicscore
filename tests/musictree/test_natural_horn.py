@@ -6,7 +6,7 @@ from musicscore.musictree.treeinstruments import NaturalHorn
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
 class Test(TestCase):
@@ -20,11 +20,11 @@ class Test(TestCase):
         for i in range(1, 17):
             partial_midi = Midi(round(self.horn.get_partial_midi_value(i) * 2) / 2)
             if i % 7 == 0:
-                partial_midi.accidental_mode = 'flat'
+                partial_midi.accidental.mode = 'flat'
             if i % 11 == 0:
-                partial_midi.accidental_mode = 'sharp'
+                partial_midi.accidental.mode = 'sharp'
             if i % 13 == 0:
-                partial_midi.accidental_mode = 'flat'
+                partial_midi.accidental.mode = 'flat'
             chord = TreeChord(midis=partial_midi)
 
             chord.add_words(i)
