@@ -89,10 +89,14 @@ v. 1.2.14
 issue#2 PageStyle(): by changing page_width and page_height: CreditWords default_x and default_y will be changed accordingly.
 
 v. 1.2.15  
-issue#11 bug fix: post grace chord
+issue#11 bug fix: post grace chord  
+issue#12 changes: Midi.accidental_mode flat and sharp: in this modes don't use b-sharp, e-sharp, f-flat and c-flat  
+
+v. 1.2.16  
+TreeChordFlags: TreeChordFlag3 deleted, some renaming took place
+
 Midi.accidental: class Accidental() instead of accidental_mode. 
 MidiNote().accidental renamed to accidental_sign
-issue#12 changes: Midi.accidental.mode flat and sharp: in this modes don't use b-sharp, e-sharp, f-flat and c-flat  
 Midi.accidental.force_show: new feature
 Midi.accidental.force_hide: new feature
 
