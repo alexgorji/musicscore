@@ -3,7 +3,7 @@ from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes
 
 
-class TreeChordFlag(object):
+class TreeChordFlag1(object):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -51,7 +51,7 @@ class TreeChordFlag(object):
         return self.__class__()
 
 
-class PizzFlag(TreeChordFlag):
+class PizzFlag1(TreeChordFlag1):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -63,7 +63,7 @@ class PizzFlag(TreeChordFlag):
         return output
 
 
-class PercussionFlag(TreeChordFlag):
+class PercussionFlag1(TreeChordFlag1):
     def __init__(self, minimum_duration=1, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.minimum_duration = minimum_duration
@@ -76,7 +76,7 @@ class PercussionFlag(TreeChordFlag):
         return self.__class__(minimum_duration=self.minimum_duration)
 
 
-class BeatwiseFlag(TreeChordFlag):
+class BeatwiseFlag1(TreeChordFlag1):
     def __init__(self, slur='dashed', *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.slur = slur
@@ -127,7 +127,7 @@ class BeatwiseFlag(TreeChordFlag):
         return output
 
 
-class XFlag(BeatwiseFlag):
+class XFlag1(BeatwiseFlag1):
     def __init__(self, slur='dashed', *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.slur = slur
@@ -141,7 +141,7 @@ class XFlag(BeatwiseFlag):
         return output
 
 
-class FingerTremoloFlag(BeatwiseFlag):
+class FingerTremoloFlag1(BeatwiseFlag1):
     def __init__(self, tremolo_chord, number=3, mode='conventional', *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._mode = None
@@ -229,7 +229,7 @@ class FingerTremoloFlag(BeatwiseFlag):
             return self._implement_conventional(chord, beat)
 
 
-class GlissFlag(BeatwiseFlag):
+class GlissFlag1(BeatwiseFlag1):
     def __init__(self, mode=1, clef='bass', *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._head = True

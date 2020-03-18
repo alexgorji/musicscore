@@ -5,7 +5,7 @@ from quicktions import Fraction
 
 from musicscore.basic_functions import flatten
 from musicscore.musictree.treechord import TreeChord
-from musicscore.musictree.treechordflags import TreeChordFlag, FingerTremoloFlag
+from musicscore.musictree.treechordflags1 import TreeChordFlag1, FingerTremoloFlag1
 from musicscore.musicxml.elements.note import TimeModification
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
@@ -532,7 +532,7 @@ class TreeBeat(object):
                 next_beat.add_chord(ch)
         # self._chords = output
 
-    def implement_flags(self):
+    def implement_flags_1(self):
         # print('implement flags for', self.offset)
         # print('chords', self.chords)
         # print([ch.quarter_duration for ch in self.chords])
@@ -549,7 +549,7 @@ class TreeBeat(object):
                     raise Exception('output of implement can only be a list of chords')
 
         flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
-                          isinstance(flag, TreeChordFlag)])
+                          isinstance(flag, TreeChordFlag1)])
 
         while flag_types:
             flag_type = flag_types.pop()
@@ -563,7 +563,7 @@ class TreeBeat(object):
                     if len(new_chords) == 1:
                         output.extend(new_chords)
                     else:
-                        if diff > 0 and (isinstance(chord_flag, FingerTremoloFlag) or
+                        if diff > 0 and (isinstance(chord_flag, FingerTremoloFlag1) or
                                          chord.position_in_beat + new_chords[0].quarter_duration >= self.duration):
                             next_beat = self.next
 

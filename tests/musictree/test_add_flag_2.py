@@ -2,11 +2,11 @@ import os
 from unittest import TestCase
 
 from musicscore.musicstream.streamvoice import SimpleFormat, TreeChord
-from musicscore.musictree.treechordflags2 import FingerTremoloFlag2
+from musicscore.musictree.treechordflags2 import FingerTremoloFlag2, NoiseFlag2
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
 class Test(TestCase):
@@ -47,7 +47,7 @@ class Test(TestCase):
 
         sf.to_stream_voice().add_to_score(self.score)
         self.score.write(xml_path)
-        # TestScore().assert_template(xml_path)
+        TestScore().assert_template(xml_path)
 
     def test_4(self):
         xml_path = path + '_test_4.xml'
@@ -59,5 +59,15 @@ class Test(TestCase):
 
         sf.to_stream_voice().add_to_score(self.score)
         self.score.write(xml_path)
-        # TestScore().assert_template(xml_path)
+        TestScore().assert_template(xml_path)
 
+    def test_5(self):
+        xml_path = path + '_test_5.xml'
+        durations = [0.25, 0.75, 0.5, 0.5, 1, 1.25, 1.5, 2, 2.5, 3, 3.5, 4, 4.5]
+        sf = SimpleFormat(quarter_durations=durations)
+        for chord in sf.chords:
+            chord.add_flag(NoiseFlag2())
+
+        sf.to_stream_voice().add_to_score(self.score)
+        self.score.write(xml_path)
+        TestScore().assert_template(xml_path)

@@ -2,7 +2,7 @@ from unittest import TestCase
 import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat
-from musicscore.musictree.treechordflags import BeatwiseFlag
+from musicscore.musictree.treechordflags1 import BeatwiseFlag1
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 
@@ -20,7 +20,7 @@ class Test(TestCase):
         sf = SimpleFormat(quarter_durations=durations)
 
         sf.to_stream_voice().add_to_score(self.score, part_number=1)
-        sf.chords[0].add_flag(BeatwiseFlag())
+        sf.chords[0].add_flag(BeatwiseFlag1())
         sf.to_stream_voice().add_to_score(self.score, part_number=2)
 
         self.score.write(xml_path)
@@ -36,7 +36,7 @@ class Test(TestCase):
 
         sf.to_stream_voice().add_to_score(self.score, part_number=1)
         for chord in sf.chords:
-            chord.add_flag(BeatwiseFlag())
+            chord.add_flag(BeatwiseFlag1())
         sf.to_stream_voice().add_to_score(self.score, part_number=2)
 
         self.score.write(xml_path)

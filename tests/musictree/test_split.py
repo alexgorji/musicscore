@@ -2,7 +2,7 @@ from unittest import TestCase
 import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat
-from musicscore.musictree.treechordflags import PercussionFlag, XFlag
+from musicscore.musictree.treechordflags1 import PercussionFlag1, XFlag1
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 

@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from musicscore.musicstream.streamvoice import SimpleFormat, TreeChord
-from musicscore.musictree.treechordflags import FingerTremoloFlag, PercussionFlag
+from musicscore.musictree.treechordflags1 import FingerTremoloFlag1, PercussionFlag1
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 import os
 

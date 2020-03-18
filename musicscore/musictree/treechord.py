@@ -3,9 +3,10 @@ from quicktions import Fraction
 from musicscore.basic_functions import Scale, dToX, xToD
 from musicscore.dtd.dtd import Sequence, Choice, Element, GroupReference
 from musicscore.musictree.midi import Midi
-from musicscore.musictree.treechordflags import TreeChordFlag
+from musicscore.musictree.treechordflags1 import TreeChordFlag1
 from musicscore.musictree.treechordflags2 import TreeChordFlag2
 from musicscore.musictree.treechordflags3 import TreeChordFlag3
+from musicscore.musictree.treechordflags4 import TreeChordFlag4
 from musicscore.musictree.treeclef import TreeClef
 from musicscore.musictree.treenote import TreeNote
 from musicscore.musicxml.elements.fullnote import Chord, FullNote
@@ -385,10 +386,10 @@ class TreeChord(XMLTree):
         return new_chords
 
     def add_flag(self, flag):
-        if not isinstance(flag, TreeChordFlag) and not isinstance(flag, TreeChordFlag2) \
-                and not isinstance(flag, TreeChordFlag3):
+        if not isinstance(flag, TreeChordFlag1) and not isinstance(flag, TreeChordFlag2) \
+                and not isinstance(flag, TreeChordFlag3) and not isinstance(flag, TreeChordFlag4):
             raise TypeError(
-                'flag must be of type TreeChordFlag, TreeChordFlag2 or TreeChordFlag3 not {}'.format(flag.__class__))
+                'flag must be of type TreeChordFlag, TreeChordFlag2 or TreeChordFlag3 or TreeChordFlag4 not {}'.format(flag.__class__))
         if self._flags is None:
             self._flags = set()
         self._flags.add(flag)

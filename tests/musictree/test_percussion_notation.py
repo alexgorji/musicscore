@@ -3,7 +3,7 @@ import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treebeat import TreeBeat
-from musicscore.musictree.treechordflags import PizzFlag, PercussionFlag
+from musicscore.musictree.treechordflags1 import PizzFlag1, PercussionFlag1
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
@@ -23,7 +23,7 @@ class Test(TestCase):
 
         for chord in sf.chords:
             # chord.add_flag(PizzFlag())
-            chord.add_flag(PercussionFlag())
+            chord.add_flag(PercussionFlag1())
         v = sf.to_stream_voice()
         self.score.set_time_signatures([4, 3, 1])
         v.add_to_score(self.score, 1, 1)

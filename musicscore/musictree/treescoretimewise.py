@@ -478,10 +478,10 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.split_not_notatable()
 
-    def implement_flags(self):
+    def implement_flags_1(self):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
-                part.implement_flags()
+                part.implement_flags_1()
 
     def adjoin_ties(self):
         for measure in self.get_children_by_type(TreeMeasure):
@@ -503,6 +503,11 @@ class TreeScoreTimewise(timewise.Score):
             for part in measure.get_children_by_type(TreePart):
                 part.substitute_sextoles()
 
+    def implement_flags_2(self):
+        for measure in self.get_children_by_type(TreeMeasure):
+            for part in measure.get_children_by_type(TreePart):
+                part.implement_flags_2()
+
     def update_types(self):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
@@ -517,11 +522,6 @@ class TreeScoreTimewise(timewise.Score):
         for measure in self.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 part.group_beams()
-
-    def implement_flags_2(self):
-        for measure in self.get_children_by_type(TreeMeasure):
-            for part in measure.get_children_by_type(TreePart):
-                part.implement_flags_2()
 
     def implement_flags_3(self):
         for measure in self.get_children_by_type(TreeMeasure):
@@ -557,7 +557,7 @@ class TreeScoreTimewise(timewise.Score):
             self.quantize()
             # self.adjoin_rests_in_beat()
             self.split_not_notatable()
-            self.implement_flags()
+            self.implement_flags_1()
             self.adjoin_ties()
             self.adjoin_rests()
             self.update_tuplets()
@@ -571,11 +571,8 @@ class TreeScoreTimewise(timewise.Score):
             self.update_divisions()
             self.update_accidentals(mode=self.accidental_mode)
             self.update_durations()
+            # self.implement_flags_4()
             self.close_dtd()
-            # for measure in self.get_children_by_type(TreeMeasure):
-            #     for part in measure.get_children_by_type(TreePart):
-            #         part.finish()
-            # self.close_dtd()
             self._finished = True
 
     def to_string(self):

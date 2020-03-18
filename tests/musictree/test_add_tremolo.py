@@ -3,7 +3,7 @@ import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treechord import TreeChord
-from musicscore.musictree.treechordflags import FingerTremoloFlag
+from musicscore.musictree.treechordflags1 import FingerTremoloFlag1
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 

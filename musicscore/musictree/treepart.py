@@ -107,7 +107,7 @@ class TreePartVoice(object):
         self._preliminary_rests_adjoined = False
         self._beats_added = False
         self._quantized = False
-        self._flags_implemented = False
+
         self._not_notatable_split = False
         self._ties_adjoined = False
         self._rests_adjoined = False
@@ -115,8 +115,10 @@ class TreePartVoice(object):
         self._sextoles_substituted = False
         self._types_updated = False
         self._dots_updated = False
-        self._flags2_implemented = False
-        self._flags3_implemented = False
+        self._flags_1_implemented = False
+        self._flags_2_implemented = False
+        self._flags_3_implemented = False
+        self._flags_4_implemented = False
         self.parent_part = None
         self._xml_chords = None
 
@@ -574,18 +576,18 @@ class TreePartVoice(object):
         # else:
         #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
-    def implement_flags(self):
+    def implement_flags_1(self):
         if not self._not_notatable_split:
             raise Exception('split_not_notatable() first')
-        if not self._flags_implemented:
+        if not self._flags_1_implemented:
             self.remove_chords()
             for beat in self.beats:
-                beat.implement_flags()
+                beat.implement_flags_1()
                 self._chords.extend(beat.chords)
-            self._flags_implemented = True
+            self._flags_1_implemented = True
 
     def adjoin_ties(self):
-        if not self._flags_implemented:
+        if not self._flags_1_implemented:
             raise Exception('implement_flags() first')
 
         if not self._ties_adjoined:
@@ -788,42 +790,16 @@ class TreePartVoice(object):
         # else:
         #     warnings.warn('all sextoles in  {} already checked. No action took place.'.format(self))
 
-    def update_types(self):
-        if not self._sextoles_substituted:
-            raise Exception('substitute_sextoles() first')
-
-        if not self._types_updated:
-            for chord in self.chords:
-                chord.update_type()
-            self._types_updated = True
-        # else:
-        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
-
-    def update_dots(self):
-        if not self._types_updated:
-            raise Exception('update_types() first')
-
-        if not self._dots_updated:
-            for chord in self.chords:
-                if chord.quarter_duration != 0:
-                    chord.update_dot()
-            self._dots_updated = True
-        # else:
-        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
-
     def implement_flags_2(self):
         def check_implement_output(chords):
             if not isinstance(chords, list):
                 raise Exception('output of implement can only be a list of chords')
 
-            # if len(chords) not in [1, 2]:
-            #     raise Exception('output of implement can have 1 or 2 chords')
-
             for ch in chords:
                 if not isinstance(ch, TreeChord):
                     raise Exception('output of implement can only be a list of chords')
 
-        if not self._flags2_implemented:
+        if not self._flags_2_implemented:
             flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
                               isinstance(flag, TreeChordFlag2)])
 
@@ -850,7 +826,30 @@ class TreePartVoice(object):
                         pass
                     if self.add_chord(chord) is not None:
                         raise Exception()
-        self._flags2_implemented = True
+        self._flags_2_implemented = True
+
+    def update_types(self):
+        if not self._sextoles_substituted:
+            raise Exception('substitute_sextoles() first')
+
+        if not self._types_updated:
+            for chord in self.chords:
+                chord.update_type()
+            self._types_updated = True
+        # else:
+        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
+
+    def update_dots(self):
+        if not self._types_updated:
+            raise Exception('update_types() first')
+
+        if not self._dots_updated:
+            for chord in self.chords:
+                if chord.quarter_duration != 0:
+                    chord.update_dot()
+            self._dots_updated = True
+        # else:
+        #     warnings.warn('types of chords in {} already updated. No action took place.'.format(self))
 
     def implement_flags_3(self):
         def check_implement_output(chords):
@@ -864,7 +863,7 @@ class TreePartVoice(object):
                 if not isinstance(ch, TreeChord):
                     raise Exception('output of implement can only be a list of chords not {}'.format(type(ch)))
 
-        if not self._flags3_implemented:
+        if not self._flags_3_implemented:
             flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
                               isinstance(flag, TreeChordFlag3)])
 
@@ -893,7 +892,42 @@ class TreePartVoice(object):
                     #     print(tmp.quarter_duration)
                     #     raise Exception()
 
-        self._flags3_implemented = True
+        self._flags_3_implemented = True
+
+    def implement_flags_4(self):
+        def check_implement_output(chords):
+            if not isinstance(chords, list):
+                raise Exception('output of implement can only be a list of chords')
+            for ch in chords:
+                if not isinstance(ch, TreeChord):
+                    raise Exception('output of implement can only be a list of chords not {}'.format(type(ch)))
+
+        if not self._flags_4_implemented:
+            flag_types = set([flag.__class__ for flag in flatten([chord.flags for chord in self.chords]) if
+                              isinstance(flag, TreeChordFlag4)])
+
+            while flag_types:
+                flag_type = flag_types.pop()
+                output = []
+                for chord in self.chords:
+                    try:
+                        chord_flag = [flag for flag in chord.flags if isinstance(flag, flag_type)][0]
+                        new_chords = chord_flag.implement(chord)
+                        check_implement_output(new_chords)
+                        output.extend(new_chords)
+
+                    except IndexError:
+                        output.append(chord)
+
+                self.remove_chords()
+                for chord in output:
+                    try:
+                        v = chord.get_children_by_type(Voice)[0]
+                        chord.remove_child(v)
+                    except IndexError:
+                        pass
+
+        self._flags_4_implemented = True
 
 
 class TreePart(timewise.Part):
@@ -1214,9 +1248,9 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.split_not_notatable()
 
-    def implement_flags(self):
+    def implement_flags_1(self):
         for voice in self.voices.values():
-            voice.implement_flags()
+            voice.implement_flags_1()
 
     def adjoin_ties(self):
         for voice in self.voices.values():
@@ -1234,6 +1268,10 @@ class TreePart(timewise.Part):
         for voice in self.voices.values():
             voice.substitute_sextoles()
 
+    def implement_flags_2(self):
+        for voice in self.voices.values():
+            voice.implement_flags_2()
+
     def update_types(self):
         for voice in self.voices.values():
             voice.update_types()
@@ -1241,10 +1279,6 @@ class TreePart(timewise.Part):
     def update_dots(self):
         for voice in self.voices.values():
             voice.update_dots()
-
-    def implement_flags_2(self):
-        for voice in self.voices.values():
-            voice.implement_flags_2()
 
     def implement_flags_3(self):
         for voice in self.voices.values():
@@ -1268,6 +1302,10 @@ class TreePart(timewise.Part):
     def add_voice(self, voice):
         self.voices[voice.number] = voice
 
+    def implement_flags_4(self):
+        for voice in self.voices.values():
+            voice.implement_flags_4()
+
     def finish(self):
         if not self._finished:
             self.fill_with_rest()
@@ -1280,7 +1318,7 @@ class TreePart(timewise.Part):
 
             self.split_not_notatable()
 
-            self.implement_flags()
+            self.implement_flags_1()
 
             self.adjoin_ties()
 
@@ -1307,6 +1345,8 @@ class TreePart(timewise.Part):
             self.update_accidentals(mode=self.accidental_mode)
 
             self.update_durations()
+
+            self.implement_flags_4()
 
             self.close_dtd()
 

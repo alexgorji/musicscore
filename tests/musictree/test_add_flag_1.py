@@ -3,7 +3,7 @@ from unittest import TestCase
 import os
 
 from musicscore.musicstream.streamvoice import SimpleFormat, TreeChord
-from musicscore.musictree.treechordflags import PercussionFlag, XFlag, BeatwiseFlag, FingerTremoloFlag, GlissFlag
+from musicscore.musictree.treechordflags1 import PercussionFlag1, XFlag1, BeatwiseFlag1, FingerTremoloFlag1, GlissFlag1
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from quicktions import Fraction
 from tests.score_templates.xml_test_score import TestScore
@@ -20,7 +20,7 @@ class Test(TestCase):
         durations = [2, 1, 0.5, 0.25, 0.25, 4, 2, 3]
         sf = SimpleFormat(quarter_durations=durations)
         for chord in sf.chords:
-            chord.add_flag(PercussionFlag())
+            chord.add_flag(PercussionFlag1())
 
         sf.to_stream_voice().add_to_score(self.score)
         self.score.write(xml_path)
@@ -32,7 +32,7 @@ class Test(TestCase):
         sf = SimpleFormat(quarter_durations=durations)
 
         for chord in sf.chords:
-            chord.add_flag(XFlag())
+            chord.add_flag(XFlag1())
 
         sf.to_stream_voice().add_to_score(self.score, part_number=1)
 
@@ -45,7 +45,7 @@ class Test(TestCase):
         sf = SimpleFormat(quarter_durations=durations)
 
         for chord in sf.chords:
-            chord.add_flag(XFlag())
+            chord.add_flag(XFlag1())
 
         sf.to_stream_voice().add_to_score(self.score, part_number=1)
 
@@ -59,7 +59,7 @@ class Test(TestCase):
         sf.to_stream_voice().add_to_score(self.score, part_number=1)
 
         for chord in sf.chords:
-            chord.add_flag(XFlag())
+            chord.add_flag(XFlag1())
 
         sf.to_stream_voice().add_to_score(self.score, part_number=2)
 
@@ -75,7 +75,7 @@ class Test(TestCase):
         sf.to_stream_voice().add_to_score(self.score, part_number=1)
 
         for chord in sf.chords:
-            chord.add_flag(XFlag())
+            chord.add_flag(XFlag1())
 
         sf.to_stream_voice().add_to_score(self.score, part_number=2)
 
@@ -92,7 +92,7 @@ class Test(TestCase):
         slur_type = cycle([None, 'tie', 'dashed'])
         for chord in sf.chords:
             type = slur_type.__next__()
-            chord.add_flag(XFlag(slur=type))
+            chord.add_flag(XFlag1(slur=type))
             chord.add_words(str(type))
 
         sf.to_stream_voice().add_to_score(self.score, part_number=2)
@@ -103,7 +103,7 @@ class Test(TestCase):
     def test_7(self):
         xml_path = path + "_test_7.xml"
         sf = SimpleFormat(midis=[60, 63], quarter_durations=[2, 5.33, 2.666])
-        sf.chords[1].add_flag(BeatwiseFlag())
+        sf.chords[1].add_flag(BeatwiseFlag1())
         # sf.chords[1].add_flag(TreeFingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
         # sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
         sf.to_stream_voice().add_to_score(self.score)
@@ -114,7 +114,7 @@ class Test(TestCase):
     def test_8(self):
         xml_path = path + "_test_8.xml"
         sf = SimpleFormat(midis=[60, 63], quarter_durations=[2, 5.33, 2.666])
-        sf.chords[1].add_flag(XFlag(slur='dashed'))
+        sf.chords[1].add_flag(XFlag1(slur='dashed'))
         # sf.chords[1].add_flag(TreeFingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
         # sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=57)))
         sf.to_stream_voice().add_to_score(self.score)
@@ -125,7 +125,7 @@ class Test(TestCase):
     def test_9(self):
         xml_path = path + "_test_9.xml"
         sf = SimpleFormat(midis=[60, 63], quarter_durations=[2, 5.33, 2.666])
-        sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=57), mode='modern'))
+        sf.chords[1].add_flag(FingerTremoloFlag1(tremolo_chord=TreeChord(midis=57), mode='modern'))
         sf.to_stream_voice().add_to_score(self.score)
 
         self.score.write(xml_path)
@@ -137,7 +137,7 @@ class Test(TestCase):
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
 
         sf = SimpleFormat(midis=[60, 63], quarter_durations=[2, 5.33, 2.666])
-        sf.chords[1].add_flag(FingerTremoloFlag(tremolo_chord=TreeChord(midis=68), mode='modern'))
+        sf.chords[1].add_flag(FingerTremoloFlag1(tremolo_chord=TreeChord(midis=68), mode='modern'))
         sf.to_stream_voice(2).add_to_score(self.score, first_measure=1)
 
         self.score.write(xml_path)
@@ -149,7 +149,7 @@ class Test(TestCase):
                           quarter_durations=[Fraction(3, 2), Fraction(3, 2), Fraction(1, 2), Fraction(1, 2), 1, Fraction(1, 2),
                                              Fraction(3, 2)])
         for ch in sf.chords:
-            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='modern'))
+            ch.add_flag(FingerTremoloFlag1(TreeChord(midis=[63]), mode='modern'))
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
 
         self.score.write(xml_path)
@@ -160,7 +160,7 @@ class Test(TestCase):
         sf = SimpleFormat(midis=[60, 60, 60, 60],
                           quarter_durations=[1, 1, 1, 1])
         for ch in sf.chords:
-            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='modern'))
+            ch.add_flag(FingerTremoloFlag1(TreeChord(midis=[63]), mode='modern'))
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
         self.score.accidental_mode = 'modern'
         self.score.write(xml_path)
@@ -171,7 +171,7 @@ class Test(TestCase):
         sf = SimpleFormat(midis=[60, 60, 60, 60],
                           quarter_durations=[1, 1, 1, 1])
         for ch in sf.chords:
-            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='conventional'))
+            ch.add_flag(FingerTremoloFlag1(TreeChord(midis=[63]), mode='conventional'))
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
         self.score.accidental_mode = 'modern'
         self.score.write(xml_path)
@@ -182,7 +182,7 @@ class Test(TestCase):
         sf = SimpleFormat(midis=[60, 60, 60, 60],
                           quarter_durations=[2, 2, 2, 2])
         for ch in sf.chords:
-            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='conventional'))
+            ch.add_flag(FingerTremoloFlag1(TreeChord(midis=[63]), mode='conventional'))
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
         self.score.accidental_mode = 'modern'
         self.score.write(xml_path)
@@ -193,7 +193,7 @@ class Test(TestCase):
         sf = SimpleFormat(midis=[60],
                           quarter_durations=[0.5])
         for ch in sf.chords:
-            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='conventional'))
+            ch.add_flag(FingerTremoloFlag1(TreeChord(midis=[63]), mode='conventional'))
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
         self.score.accidental_mode = 'modern'
         self.score.write(xml_path)
@@ -204,7 +204,7 @@ class Test(TestCase):
         sf = SimpleFormat(midis=[60],
                           quarter_durations=[1.5])
         for ch in sf.chords:
-            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[63]), mode='conventional'))
+            ch.add_flag(FingerTremoloFlag1(TreeChord(midis=[63]), mode='conventional'))
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
         self.score.accidental_mode = 'modern'
         self.score.write(xml_path)
@@ -215,7 +215,7 @@ class Test(TestCase):
         sf = SimpleFormat(midis=[60, 61, 62, 63, 64],
                           quarter_durations=[1.5, 1, 2, 2.5, 1])
         for ch in sf.chords:
-            ch.add_flag(FingerTremoloFlag(TreeChord(midis=[67]), mode='conventional'))
+            ch.add_flag(FingerTremoloFlag1(TreeChord(midis=[67]), mode='conventional'))
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
         self.score.accidental_mode = 'modern'
         self.score.write(xml_path)
@@ -226,7 +226,7 @@ class Test(TestCase):
         sf = SimpleFormat(midis=[60, 61, 62],
                           quarter_durations=[5, 5.5, 2.5])
         for ch in sf.chords:
-            ch.add_flag(GlissFlag())
+            ch.add_flag(GlissFlag1())
         sf.to_stream_voice(1).add_to_score(self.score, first_measure=1)
         self.score.accidental_mode = 'modern'
         self.score.write(xml_path)
@@ -237,7 +237,7 @@ class Test(TestCase):
         sf = SimpleFormat(quarter_durations=[1.5])
         self.score.set_time_signatures(quarter_durations=[1.5])
         for ch in sf.chords:
-            ch.add_flag(BeatwiseFlag(slur='tie'))
+            ch.add_flag(BeatwiseFlag1(slur='tie'))
         sf.to_stream_voice().add_to_score(self.score)
 
         self.score.write(xml_path)
@@ -248,7 +248,7 @@ class Test(TestCase):
         sf = SimpleFormat(quarter_durations=[3])
         self.score.set_time_signatures(quarter_durations=[3])
         for ch in sf.chords:
-            ch.add_flag(PercussionFlag(minimum_duration=0.5))
+            ch.add_flag(PercussionFlag1(minimum_duration=0.5))
         sf.to_stream_voice().add_to_score(self.score)
         self.score.write(xml_path)
         TestScore().assert_template(xml_path)
@@ -256,7 +256,7 @@ class Test(TestCase):
     def test_21(self):
         xml_path = path + "_test_21.xml"
         sf = SimpleFormat(quarter_durations=[2, 2])
-        sf.chords[0].add_flag(PercussionFlag(minimum_duration=0.5))
+        sf.chords[0].add_flag(PercussionFlag1(minimum_duration=0.5))
         sf.to_stream_voice().add_to_score(self.score)
         self.score.write(xml_path)
         TestScore().assert_template(xml_path)
