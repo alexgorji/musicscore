@@ -77,14 +77,15 @@ EditorialVoiceDirection = Sequence(
 '''
 
 
-class StaffElement(PositiveInteger):
+class StaffElement(XMLElement, PositiveInteger):
     """
-    Staff assignment is only needed for music notated on multiple staves. Used by both notes and directions. Staff
-    valuesare numbers, with 1 referring to the top-most staff in a part.
+    Staff assignment is only needed for music notated on multiple staves. Used by both notes and directions.
+    Staff valuesare numbers, with 1 referring to the top-most staff in a part.
     """
+    _TAG = 'staff'
 
     def __init__(self, value=None, *args, **kwargs):
-        super().__init__(value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 Staff = Sequence(

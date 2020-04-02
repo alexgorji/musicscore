@@ -99,9 +99,10 @@ class Dot(EmptyPlacement):
     One dot element is used for each dot of prolongation. The placement element is used to specify whether the dot
     should appear above or below the staff line. It is ignored for notes that appear on a staff space.
     """
+    _TAG = 'dot'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='dot', *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Accidental(ComplexType, TypeAccidentalValue, Cautionary, Editorial, LevelDisplay, PrintStyle, Smulf):
@@ -110,9 +111,10 @@ class Accidental(ComplexType, TypeAccidentalValue, Cautionary, Editorial, LevelD
     attributes. Values for these attributes are "no" if not present. Specific graphic display such as parentheses, 
     brackets, and size are controlled by the level-display attribute group
     """
+    _TAG = 'accidental'
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='accidental', value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class TimeModification(ComplexTypeTimeModification):

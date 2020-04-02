@@ -12,7 +12,7 @@ from musicscore.musicxml.elements.fullnote import Chord, FullNote
 from musicscore.musicxml.elements.note import Cue, Tie, Instrument, Play, Lyric, Notations, Stem, TimeModification, \
     Type, Dot, Notehead, NoteheadText, Beam, Duration
 from musicscore.musicxml.elements.xml_element import XMLTree
-from musicscore.musicxml.groups.common import EditorialVoice, Staff, Voice
+from musicscore.musicxml.groups.common import EditorialVoice, Staff, Voice, StaffElement
 from musicscore.musicxml.groups.musicdata import Direction, Attributes
 from musicscore.musicxml.types.complextypes.articulations import Accent, StrongAccent, DetachedLegato, Tenuto, Spiccato, \
     Staccato, Staccatissimo, BreathMark, Caesura, Stress, Unstress, Plop, Scoop, Doit, Falloff
@@ -25,6 +25,7 @@ from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornam
     Articulations, Slur, Fermata, Slide
 from musicscore.musicxml.types.complextypes.ornaments import Tremolo
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
+from musicscore.musicxml.types.simple_type import PositiveInteger
 
 
 class TreeChord(XMLTree):
@@ -90,6 +91,30 @@ class TreeChord(XMLTree):
     def __name__(self):
         # return self.parent_voice.__name__ + ' ' + 'ch:' + str(self.parent_voice.chords.index(self) + 1)
         return self.parent_voice.__name__ + '.' + str(self.parent_voice.chords.index(self) + 1)
+
+    def _get_staff_object(self):
+        try:
+            return self.get_children_by_type(StaffElement)[0]
+        except IndexError:
+            return None
+
+    @property
+    def staff_number(self):
+        staff = self._get_staff_object()
+        if staff:
+            return staff.value
+        else:
+            return None
+
+    @staff_number.setter
+    def staff_number(self, val):
+        if not isinstance(val, int):
+            raise TypeError('staff_number.value must be of type int not{}'.format(type(val)))
+        staff = self._get_staff_object()
+        if staff is None:
+            self.add_child(StaffElement(val))
+        else:
+            staff.value = val
 
     @property
     def quarter_duration(self):
