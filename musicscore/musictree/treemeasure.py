@@ -6,6 +6,7 @@ from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.barline import Barline, BarStyle
 from musicscore.musicxml.groups.layout import SystemLayout
 from musicscore.musicxml.groups.musicdata import Print, Attributes
+from musicscore.musicxml.types.complextypes.attributes import Staves
 from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance
 
 
@@ -19,6 +20,8 @@ class TreeMeasure(timewise.Measure):
         self._beats = None
         self._offset = None
         self._barline_style = None
+
+    # properties
 
     @property
     def __name__(self):
@@ -55,6 +58,48 @@ class TreeMeasure(timewise.Measure):
     def barline_style(self):
         return self._barline_style
 
+    @property
+    def previous(self):
+        if not self.up:
+            return None
+        index = self.up.get_children_by_type(TreeMeasure).index(self)
+        if index == 0:
+            return None
+        return self.up.get_children_by_type(TreeMeasure)[index - 1]
+
+    @property
+    def offset(self):
+        if self._offset is None:
+            self.update_offset()
+        return self._offset
+
+    # // private methods
+
+    def _add_page_one(self):
+        score = self.up
+
+        first_part = score.get_measure(1).get_part(1)
+
+        first_part.get_children_by_type(TreePart)
+        try:
+            print_ = first_part.get_children_by_type(Print)[0]
+        except IndexError:
+            print_ = first_part.add_child(Print())
+        print_.page_number = '1'
+
+    # // public methods
+    # gets
+
+    def get_part(self, number):
+        return self.get_children_by_type(TreePart)[number - 1]
+
+    def get_beats(self):
+        output = []
+        for part in self.get_children_by_type(TreePart):
+            output.extend(part.get_beats())
+        return output
+
+    # sets
     def set_barline_style(self, value):
         if value:
             for part in self.get_children_by_type(TreePart):
@@ -71,51 +116,7 @@ class TreeMeasure(timewise.Measure):
 
         self._barline_style = value
 
-    def show_time_signature(self):
-        for part in self.get_children_by_type(TreePart):
-            part.get_children_by_type(Attributes)[0].add_child(self.time)
-
-    def hide_time_signature(self):
-        part = self.get_children_by_type(TreePart)[0]
-        if self.time in part.get_children_by_type(Attributes)[0].get_children():
-            part.get_children_by_type(Attributes)[0].remove_child(self.time)
-
-    def get_part(self, number):
-        return self.get_children_by_type(TreePart)[number - 1]
-
-    def get_beats(self):
-        output = []
-        for part in self.get_children_by_type(TreePart):
-            output.extend(part.get_beats())
-        return output
-
-    @property
-    def previous(self):
-        if not self.up:
-            return None
-        index = self.up.get_children_by_type(TreeMeasure).index(self)
-        if index == 0:
-            return None
-        return self.up.get_children_by_type(TreeMeasure)[index - 1]
-
-    def update_offset(self):
-        if self.previous:
-            output = self.previous.offset + self.previous.quarter_duration
-            self._offset = output
-        else:
-            self._offset = 0
-
-    def _add_page_one(self):
-        score = self.up
-
-        first_part = score.get_measure(1).get_part(1)
-
-        first_part.get_children_by_type(TreePart)
-        try:
-            print_ = first_part.get_children_by_type(Print)[0]
-        except IndexError:
-            print_ = first_part.add_child(Print())
-        print_.page_number = '1'
+    # adds
 
     def add_page_break(self):
 
@@ -164,12 +165,24 @@ class TreeMeasure(timewise.Measure):
 
             sd.value = value
 
-    @property
-    def offset(self):
-        if self._offset is None:
-            self.update_offset()
-        return self._offset
+    # others
+    def show_time_signature(self):
+        for part in self.get_children_by_type(TreePart):
+            part.get_children_by_type(Attributes)[0].add_child(self.time)
 
+    def hide_time_signature(self):
+        part = self.get_children_by_type(TreePart)[0]
+        if self.time in part.get_children_by_type(Attributes)[0].get_children():
+            part.get_children_by_type(Attributes)[0].remove_child(self.time)
+
+    def update_offset(self):
+        if self.previous:
+            output = self.previous.offset + self.previous.quarter_duration
+            self._offset = output
+        else:
+            self._offset = 0
+
+    # // copy
     def __copy__(self):
         time = self.time.__copy__()
         new_measure = TreeMeasure(time)

@@ -102,7 +102,7 @@ class Dot(EmptyPlacement):
     _TAG = 'dot'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Accidental(ComplexType, TypeAccidentalValue, Cautionary, Editorial, LevelDisplay, PrintStyle, Smulf):

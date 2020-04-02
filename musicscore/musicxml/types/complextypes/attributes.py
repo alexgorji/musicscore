@@ -6,7 +6,7 @@ from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.types.complextypes.clef import ComplexTypeClef
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.key import TypeKey
-from musicscore.musicxml.types.simple_type import TypePositiveDivisions, PositiveInteger
+from musicscore.musicxml.types.simple_type import TypePositiveDivisions, PositiveInteger, NonNegativeInteger
 
 
 class Divisions(XMLElement, TypePositiveDivisions):
@@ -14,14 +14,16 @@ class Divisions(XMLElement, TypePositiveDivisions):
     Musical notation duration is commonly represented as fractions.
     The divisions element indicates how many divisions per quarter note are used to indicate a note's duration.
     For example, if duration = 1 and divisions = 2, this is an eighth note duration.
-    Duration and divisions are used directly for generating sound output, so they must be chosen to take tuplets into
-    account. Using a divisions element lets us use just one number to represent a duration for each note in the score,
-    while retaining the full power of a fractional representation.
-    If maximum compatibility with Standard MIDI 1.0 files is important, do not have the divisions value exceed 16383.
+    Duration and divisions are used directly for generating sound output, so they must be chosen to take
+    tuplets into account. Using a divisions element lets us use just one number to represent a duration for
+    each note in the score, while retaining the full power of a fractional representation.
+    If maximum compatibility with Standard MIDI 1.0 files is important, do not have the divisions value exceed
+    16383.
     """
+    _TAG = 'divisions'
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='divisions', value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Key(TypeKey):
@@ -30,18 +32,20 @@ class Key(TypeKey):
     The optional number attribute refers to staff numbers. If absent, the key signature applies to all staves in the
     part.
     """
+    _TAG = 'key'
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='key', value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Beats(XMLElement, PositiveInteger):
     """
     The beats element indicates the number of beats, as found in the numerator of a time signature.
     """
+    _TAG = 'beats'
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='beats', value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
     def __copy__(self):
         new_beats = Beats(self.value)
@@ -52,9 +56,10 @@ class BeatType(XMLElement, PositiveInteger):
     """
     The beat-type element indicates the beat unit, as found in the denominator of a time signature.
     """
+    _TAG = 'beat-type'
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='beat-type', value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
     def __copy__(self):
         new_beat_type = BeatType(self.value)
@@ -112,30 +117,26 @@ class Time(XMLElement, PrintObject, OptionalUniqueId):
         super().__init__(tag='time', *args, **kwargs)
 
 
-class Staves(XMLElement):
+class Staves(XMLElement, NonNegativeInteger):
     """
-    The staves element is used if there is more than one staff represented in the given part (e.g., 2 staves for typical
-    piano parts). If absent, a value of 1 is assumed. Staves are ordered from top to bottom in a part in numerical
-    order, with staff 1 above staff 2
-
-        </xs:element>
-    <xs:element name="staves" type="xs:nonNegativeInteger" minOccurs="0">
-    </xs:element>
-
+    The staves element is used if there is more than one staff represented in the given part (e.g., 2 staves
+    for typical piano parts). If absent, a value of 1 is assumed. Staves are ordered from top to bottom in a
+    part in numerical order, with staff 1 above staff 2
     """
+    _TAG = 'staves'
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='staves', value=value, *args, **kwargs)
-        raise NotImplementedError()
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class PartSymbol(XMLElement):
     """
     The part-symbol element indicates how a symbol for a multi-staff part is indicated in the score.
     """
+    _TAG = 'part-symbols'
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='part-symbols', value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
         raise NotImplementedError()
 
 
@@ -220,9 +221,9 @@ class MeasureStyle(XMLElement):
 
 class ComplexTypeAttributes(ComplexType):
     """
-    The attributes element contains musical information that typically changes on measure boundaries. This includes key
-    and time signatures, clefs, transpositions, and staving. When attributes are changed mid-measure, it affects the
-    music in score order, not in MusicXML document order
+    The attributes element contains musical information that typically changes on measure boundaries. This
+    includes key and time signatures, clefs, transpositions, and staving. When attributes are changed
+    mid-measure, it affects the music in score order, not in MusicXML document order
     """
     _DTD = Sequence(
         GroupReference(Editorial),
