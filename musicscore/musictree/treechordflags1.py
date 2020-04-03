@@ -152,7 +152,7 @@ class FingerTremoloFlag1(BeatwiseFlag1):
         self.slur = None
 
     def __deepcopy__(self, memodict={}):
-        return self.__class__(tremolo_chord=self.tremolo_chord.tremolo_flag_copy(), number=self.number, mode=self.mode)
+        return self.__class__(tremolo_chord=self.tremolo_chord.copy_tremolo_flag(), number=self.number, mode=self.mode)
 
     @property
     def mode(self):

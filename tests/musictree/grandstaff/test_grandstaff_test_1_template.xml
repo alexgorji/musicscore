@@ -30,6 +30,7 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
+        <staves>2</staves>
       </attributes>
       <note>
         <pitch>
