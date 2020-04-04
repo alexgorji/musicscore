@@ -26,7 +26,7 @@ class Test(TestCase):
         p = TreePart(id='one')
         m.add_child(p)
 
-        tree_part_voice = p.get_voice(1)
+        tree_part_voice = p.get_staff(1).get_voice(1)
         tree_part_voice.set_beats([TreeBeat(duration=2), TreeBeat(duration=0.5), TreeBeat(duration=0.5)])
         result = [0, 2, 2.5]
         self.assertEqual([beat.offset for beat in tree_part_voice.beats], result)

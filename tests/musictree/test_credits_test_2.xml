@@ -43,12 +43,6 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <note>
-        <rest/>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
     </part>
   </measure>
 </score-timewise>

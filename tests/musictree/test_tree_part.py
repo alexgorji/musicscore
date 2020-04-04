@@ -101,7 +101,7 @@ class Test(TestCase):
         m = TreeMeasure(time=(3, 8, 2, 4))
         p = TreePart(id='one')
         m.add_child(p)
-        tree_part_voice = p.get_voice(1)
+        tree_part_voice = p.get_staff(1).get_voice(1)
         tree_part_voice.set_beats()
         result = [0.5, 0.5, 0.5, 1.0, 1.0]
         self.assertEqual([beat.duration for beat in tree_part_voice.beats], result)

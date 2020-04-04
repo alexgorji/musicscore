@@ -1,5 +1,4 @@
 import os
-from unittest import TestCase
 
 from quicktions import Fraction
 
@@ -39,7 +38,8 @@ class Test(XMLTestCase):
             chord = TreeChord(midi, quarter_duration=0.5)
             chord.add_lyric(midi)
             self.score.add_chord(measure_number, 1, chord)
-            remaining_duration = self.score.get_measure(measure_number).get_part(1).get_voice(1).remaining_duration
+            remaining_duration = self.score.get_measure(measure_number).get_part(1).get_staff(1).get_voice(
+                1).remaining_duration
             if remaining_duration == 0:
                 self.score.add_measure()
                 measure_number += 1
@@ -55,7 +55,8 @@ class Test(XMLTestCase):
             chord = TreeChord(midi, quarter_duration=0.5)
             chord.add_lyric([m.value for m in chord.midis])
             self.score.add_chord(measure_number, 1, chord)
-            remaining_duration = self.score.get_measure(measure_number).get_part(1).get_voice(1).remaining_duration
+            remaining_duration = self.score.get_measure(measure_number).get_part(1).get_staff(1).get_voice(
+                1).remaining_duration
             if remaining_duration == 0:
                 self.score.add_measure()
                 measure_number += 1

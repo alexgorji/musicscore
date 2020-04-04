@@ -42,14 +42,9 @@
         <type>whole</type>
         <staff>1</staff>
       </note>
-    </part>
-  </measure>
-  <measure number="2">
-    <part id="p1">
-      <attributes>
-        <divisions>1</divisions>
-        <staves>2</staves>
-      </attributes>
+      <backup>
+        <duration>4</duration>
+      </backup>
       <note>
         <pitch>
           <step>B</step>

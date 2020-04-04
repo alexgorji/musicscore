@@ -26,7 +26,7 @@ class XMLChord(object):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._notes = []
-        self._parent_voice = None
+        self._parent_tree_part_voice = None
 
     def add_note(self, note):
         if self.notes:
@@ -44,14 +44,14 @@ class XMLChord(object):
         return self._notes
 
     @property
-    def parent_voice(self):
-        return self._parent_voice
+    def parent_tree_part_voice(self):
+        return self._parent_tree_part_voice
 
-    @parent_voice.setter
-    def parent_voice(self, value):
+    @parent_tree_part_voice.setter
+    def parent_tree_part_voice(self, value):
         if not isinstance(value, TreePartVoice):
             raise TypeError()
-        self._parent_voice = value
+        self._parent_tree_part_voice = value
 
     @property
     def offset(self):
@@ -67,10 +67,10 @@ class XMLChord(object):
 
     @property
     def previous(self):
-        index = self.parent_voice.xml_chords.index(self)
+        index = self.parent_tree_part_voice.xml_chords.index(self)
         if index == 0:
             return None
-        return self.parent_voice.xml_chords[index - 1]
+        return self.parent_tree_part_voice.xml_chords[index - 1]
 
     @property
     def is_tied_to_previous(self):
@@ -94,38 +94,8 @@ class XMLChord(object):
         return False
 
 
-class TreePartStaff(object):
-    def __init__(self, number=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._number = None
-        self._parent_part = None
-
-        self.number = number
-
-    # //public properties
-    @property
-    def number(self):
-        return self._number
-
-    @number.setter
-    def number(self, val):
-        if not isinstance(val, int):
-            raise TypeError('number.value must be of type int not{}'.format(type(val)))
-        self._number = val
-
-    @property
-    def parent_part(self):
-        return self._parent_part
-
-    @parent_part.setter
-    def parent_part(self, val):
-        if not isinstance(val, TreePart):
-            raise TypeError('parent_part.value must be of type TreePart not{}'.format(type(val)))
-        self._parent_part = val
-
-
 class TreePartVoice(object):
-    def __init__(self, number=1, *args, **kwargs):
+    def __init__(self, number, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._number = None
         self.number = number
@@ -139,6 +109,7 @@ class TreePartVoice(object):
         self._quantized = False
 
         self._not_notatable_split = False
+        self._parent_tree_staff = None
         self._ties_adjoined = False
         self._rests_adjoined = False
         self._tuplets_updated = False
@@ -149,7 +120,6 @@ class TreePartVoice(object):
         self._flags_2_implemented = False
         self._flags_3_implemented = False
         self._flags_4_implemented = False
-        self.parent_part = None
         self._xml_chords = None
 
     # // private methods
@@ -310,6 +280,10 @@ class TreePartVoice(object):
         self._number = value
 
     @property
+    def parent_part(self):
+        return self.parent_tree_staff.parent_part
+
+    @property
     def previous(self):
         parts = self.parent_part.parent_score_part.get_parts()
         index = parts.index(self.parent_part)
@@ -330,6 +304,16 @@ class TreePartVoice(object):
         return measure.quarter_duration
 
     @property
+    def parent_tree_staff(self):
+        return self._parent_tree_staff
+
+    @parent_tree_staff.setter
+    def parent_tree_staff(self, val):
+        if not isinstance(val, TreePartStaff):
+            raise TypeError('parent_tree_staff.value must be of type TreePartStaff not{}'.format(type(val)))
+        self._parent_tree_staff = val
+
+    @property
     def xml_chords(self):
         if not self._xml_chords:
             xml_chords = []
@@ -342,7 +326,7 @@ class TreePartVoice(object):
                     xml_chord.add_note(note)
                 else:
                     xml_chord = XMLChord()
-                    xml_chord.parent_voice = self
+                    xml_chord.parent_tree_part_voice = self
                     xml_chord.add_note(note)
                     xml_chords.append(xml_chord)
             self._xml_chords = xml_chords
@@ -931,6 +915,78 @@ class TreePartVoice(object):
         #     warnings.warn('{} already quantized. No action took place.'.format(self))
 
 
+class TreePartStaff(object):
+    def __init__(self, number, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._number = None
+        self._parent_part = None
+        self._tree_part_voices = {}
+        self.number = number
+
+    # //public properties
+    @property
+    def number(self):
+        return self._number
+
+    @number.setter
+    def number(self, val):
+        if not isinstance(val, int):
+            raise TypeError('number.value must be of type int not{}'.format(type(val)))
+        self._number = val
+
+    @property
+    def parent_part(self):
+        return self._parent_part
+
+    @parent_part.setter
+    def parent_part(self, val):
+        if not isinstance(val, TreePart):
+            raise TypeError('parent_part.value must be of type TreePart not{}'.format(type(val)))
+        self._parent_part = val
+
+    @property
+    def tree_part_voices(self):
+        return self._tree_part_voices
+
+    # //public methods
+    # add
+    def add_tree_part_voice(self, tree_part_voice):
+        if not isinstance(tree_part_voice, TreePartVoice):
+            raise TypeError()
+        if tree_part_voice.number in self.tree_part_voices.keys():
+            raise AttributeError()
+        tree_part_voice.parent_tree_staff = self
+        self._tree_part_voices[tree_part_voice.number] = tree_part_voice
+        return tree_part_voice
+
+    # get
+    def get_tree_part_voice(self, voice_number):
+        try:
+            return self.tree_part_voices[voice_number]
+        except KeyError:
+            return self.set_tree_part_voice(voice_number)
+    get_voice = get_tree_part_voice
+    # set
+    def set_tree_part_voice(self, voice_number):
+        tree_part_voice = TreePartVoice(voice_number)
+        return self.add_tree_part_voice(tree_part_voice)
+
+    # others
+    def fill_with_rest(self):
+        def _fill_voices():
+            highest_voice_number = max(self.tree_part_voices.keys())
+            for key in range(1, highest_voice_number + 1):
+                if key not in self.tree_part_voices.keys():
+                    self.set_tree_part_voice(key)
+
+        if self.tree_part_voices == {}:
+            self.set_tree_part_voice(1)
+        _fill_voices()
+
+        for voice in self.tree_part_voices.values():
+            voice.fill_with_rest()
+
+
 class TreePart(timewise.Part):
 
     def __init__(self, *args, **kwargs):
@@ -939,11 +995,10 @@ class TreePart(timewise.Part):
         attributes.add_child(Divisions(1))
         self._max_division = None
         self._forbidden_divisions = None
-        self._voices = {}
+        self._tree_part_staves = {}
         self._chords_notated = False
         self._divisions_updated = False
         self._finished = False
-        self.parent_score_part = None
         self._accidental_mode = 'normal'
 
     # // private methods
@@ -962,33 +1017,19 @@ class TreePart(timewise.Part):
 
     # properties
     @property
-    def __name__(self):
-        index = self.up.get_children_by_type(self.__class__).index(self)
-        return self.up.__name__ + '.' + str(index + 1)
+    def accidental_mode(self):
+        return self._accidental_mode
+
+    @accidental_mode.setter
+    def accidental_mode(self, value):
+        self._accidental_mode = value
 
     @property
     def chords(self):
         output = []
-        for voice in self.voices.values():
-            output.extend(voice.chords)
+        for tree_part_voice in self.tree_part_voices:
+            output.extend(tree_part_voice.chords)
         return output
-
-    @property
-    def voices(self):
-        return self._voices
-
-    @property
-    def max_division(self):
-        if self._max_division is None:
-            self._max_division = self.parent_score_part.max_division
-        return self._max_division
-
-    @max_division.setter
-    def max_division(self, value):
-        if value is not None and not isinstance(value, int):
-            raise TypeError('max_division.value must be None or of type int not {}'.format(type(value)))
-
-        self._max_division = value
 
     @property
     def forbidden_divisions(self):
@@ -1007,19 +1048,17 @@ class TreePart(timewise.Part):
         self._forbidden_divisions = value
 
     @property
-    def accidental_mode(self):
-        return self._accidental_mode
+    def max_division(self):
+        if self._max_division is None:
+            self._max_division = self.parent_score_part.max_division
+        return self._max_division
 
-    @accidental_mode.setter
-    def accidental_mode(self, value):
-        self._accidental_mode = value
+    @max_division.setter
+    def max_division(self, value):
+        if value is not None and not isinstance(value, int):
+            raise TypeError('max_division.value must be None or of type int not {}'.format(type(value)))
 
-    @property
-    def xml_chords(self):
-        output = []
-        for voice in self.voices.values():
-            output.extend(voice.xml_chords)
-        return output
+        self._max_division = value
 
     @property
     def notes(self):
@@ -1046,13 +1085,34 @@ class TreePart(timewise.Part):
         else:
             staff.value = val
 
+    @property
+    def tree_part_staves(self):
+        return self._tree_part_staves
+
+    @property
+    def tree_part_voices(self):
+        return [tree_part_voice for tree_part_staff in self.tree_part_staves.values() for tree_part_voice in
+                tree_part_staff.tree_part_voices.values()]
+
+    @property
+    def xml_chords(self):
+        output = []
+        for tree_part_voice in self.tree_part_voices:
+            output.extend(tree_part_voice.xml_chords)
+        return output
+
+    @property
+    def __name__(self):
+        index = self.up.get_children_by_type(self.__class__).index(self)
+        return self.up.__name__ + '.' + str(index + 1)
+
     # add
     def add_beats(self, list_of_beats=None):
-        for voice in self.voices.values():
-            voice.add_beats(list_of_beats)
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.add_beats(list_of_beats)
 
     def add_chord(self, chord, voice_number=1, staff_number=None):
-        def _set_staff_number():
+        def _set_staves():
             chord.staff_number = staff_number
             if self.staves is None or self.staves < staff_number:
                 self.staves = staff_number
@@ -1063,12 +1123,12 @@ class TreePart(timewise.Part):
 
         if not isinstance(chord, TreeChord):
             raise TypeError()
-
-        voice = self.get_voice(voice_number)
+        tree_part_staff = self.get_tree_part_staff(staff_number)
+        tree_part_voice = tree_part_staff.get_tree_part_voice(voice_number)
         if staff_number is not None:
-            _set_staff_number()
+            _set_staves()
 
-        return voice.add_chord(chord)
+        return tree_part_voice.add_chord(chord)
 
     def add_clef(self, clef):
         self._get_attributes().add_child(clef)
@@ -1081,16 +1141,25 @@ class TreePart(timewise.Part):
         m.add_child(PerMinute(str(per_minute)))
         d.add_child(Sound(tempo=per_minute))
 
-    def add_voice(self, voice):
-        self.voices[voice.number] = voice
+    def add_tree_part_staff(self, tree_part_staff):
+        if not isinstance(tree_part_staff, TreePartStaff):
+            raise TypeError()
+        if tree_part_staff.number in self.tree_part_staves.keys():
+            raise AttributeError()
+        self.tree_part_staves[tree_part_staff.number] = tree_part_staff
+        tree_part_staff.parent_part = self
+        return tree_part_staff
+
+    # def add_voice(self, voice):
+    #     self.voices[voice.number] = voice
 
     # // public methods
 
     # get
     def get_beats(self):
         output = []
-        for voice in self.voices.values():
-            output.extend(voice.get_beats())
+        for tree_part_voice in self.tree_part_voices:
+            output.extend(tree_part_voice.get_beats())
         return output
 
     def get_divisions(self):
@@ -1112,22 +1181,24 @@ class TreePart(timewise.Part):
             previous_measure = None
         if previous_measure:
             part = [p for p in previous_measure.get_children_by_type(TreePart) if p.id == self.id][0]
-            voices = part.voices.values()
             previous_measure_last_chords = []
-            for voice in voices:
-                previous_measure_last_chords.append(voice.chords[-1])
+            for tree_part_voice in part.tree_part_voices:
+                previous_measure_last_chords.append(tree_part_voice.chords[-1])
 
             previous_measure_last_notes = []
             for chord in previous_measure_last_chords:
                 previous_measure_last_notes.extend(chord._notes)
         return previous_measure_last_notes
 
-    def get_voice(self, voice_number):
+    def get_tree_part_staff(self, staff_number):
+        if staff_number is None:
+            staff_number = 1
         try:
-            return self.voices[voice_number]
+            return self.tree_part_staves[staff_number]
         except KeyError:
-            return self.set_voice(voice_number)
+            return self.set_tree_part_staff(staff_number)
 
+    get_staff = get_tree_part_staff
     # remove
     def remove_chord(self, chord):
         if not isinstance(chord, TreeChord):
@@ -1139,10 +1210,9 @@ class TreePart(timewise.Part):
         tree_voice.chords.remove(chord)
 
     # set
-    def set_voice(self, voice_number):
-        self.voices[voice_number] = TreePartVoice(voice_number)
-        self.voices[voice_number].parent_part = self
-        return self.voices[voice_number]
+    def set_tree_part_staff(self, staff_number):
+        tree_part_staff = TreePartStaff(staff_number)
+        return self.add_tree_part_staff(tree_part_staff)
 
     # update
     def update_accidentals(self, mode):
@@ -1268,8 +1338,8 @@ class TreePart(timewise.Part):
             warnings.warn('divisions in {} are already updated. No action took place.'.format(self))
 
     def update_dots(self):
-        for voice in self.voices.values():
-            voice.update_dots()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.update_dots()
 
     def update_durations(self):
         for note in self.get_children_by_type(TreeNote):
@@ -1279,99 +1349,95 @@ class TreePart(timewise.Part):
             backup.update_duration(self.get_divisions())
 
     def update_tuplets(self):
-        for voice in self.voices.values():
-            voice.update_tuplets()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.update_tuplets()
 
     def update_types(self):
-        for voice in self.voices.values():
-            voice.update_types()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.update_types()
 
     # others
     def adjoin_ties(self):
-        for voice in self.voices.values():
-            voice.adjoin_ties()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.adjoin_ties()
 
     def adjoin_rests(self):
-        for voice in self.voices.values():
-            voice.adjoin_rests()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.adjoin_rests()
 
     # def adjoin_rests_in_beat(self):
-    #     for voice in self.voices.values():
+    #     for voice in self.voices:
     #         voice.adjoin_rests_in_beat()
     def implement_flags_1(self):
-        for voice in self.voices.values():
-            voice.implement_flags_1()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.implement_flags_1()
 
     def implement_flags_2(self):
-        for voice in self.voices.values():
-            voice.implement_flags_2()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.implement_flags_2()
 
     def implement_flags_3(self):
-        for voice in self.voices.values():
-            voice.implement_flags_3()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.implement_flags_3()
 
     def group_beams(self):
-        for voice in self.voices.values():
-            voice.group_beams()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.group_beams()
 
     def chords_to_notes(self):
-        for voice in self.voices.values():
-            if not voice._dots_updated:
+        def _add_backup():
+            self.add_child(TreeBackup(quarter_duration=tree_part_staff.parent_part.up.quarter_duration))
+
+        for tree_part_voice in self.tree_part_voices:
+            if not tree_part_voice._dots_updated:
                 raise Exception('update_dots() first')
 
         if not self.up.previous and self.parent_score_part and self.parent_score_part.instrument:
             clef = self.parent_score_part.instrument.standard_clef
             if clef:
-                first_chords = [voice.chords[0] for voice in self.voices.values()]
+                first_chords = [tree_part_voice.chords[0] for tree_part_voice in self.tree_part_voices]
                 first_clefs = [chord.get_clef() for chord in first_chords if chord.get_clef()]
                 if not first_clefs:
                     first_chords[0].add_clef(clef)
 
         if not self._chords_notated:
-            for index, voice in enumerate(self.voices.values()):
-                if index != 0:
-                    self.add_child(TreeBackup(quarter_duration=voice.parent_part.up.quarter_duration))
-                for chord in voice.chords:
-                    for direction in chord.get_children_by_type(Direction):
-                        self.add_child(direction)
-                    for attributes in chord.get_children_by_type(Attributes):
-                        self.add_child(attributes)
-                    for note in chord._notes:
-                        self.add_child(note)
+            for staff_index, tree_part_staff in enumerate(self.tree_part_staves.values()):
+                if staff_index != 0:
+                    _add_backup()
+                for voice_index, tree_part_voice in enumerate(tree_part_staff.tree_part_voices.values()):
+                    if voice_index != 0:
+                        _add_backup()
+                    for chord in tree_part_voice.chords:
+                        for direction in chord.get_children_by_type(Direction):
+                            self.add_child(direction)
+                        for attributes in chord.get_children_by_type(Attributes):
+                            self.add_child(attributes)
+                        for note in chord._notes:
+                            self.add_child(note)
             self._chords_notated = True
         else:
             warnings.warn('chord in {} are already notated. No action took place.'.format(self))
 
     def fill_with_rest(self):
-        def _fill_voices():
-            highest_voice_number = max(self.voices.keys())
-            for key in range(1, highest_voice_number + 1):
-                if key not in self.voices.keys():
-                    self.set_voice(key)
-
-        if self.voices == {}:
-            self.set_voice(1)
-        _fill_voices()
-
-        for voice in self.voices.values():
-            voice.fill_with_rest()
+        for tree_part_staff in self.tree_part_staves.values():
+            tree_part_staff.fill_with_rest()
 
     def preliminary_adjoin_rests(self):
-        for voice in self.voices.values():
-            voice.preliminary_adjoin_rests()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.preliminary_adjoin_rests()
 
     def quantize(self):
-        for voice in self.voices.values():
-            voice.quantize()
-            voice.clear_zero_heads_tails()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.quantize()
+            tree_part_voice.clear_zero_heads_tails()
 
     def split_not_notatable(self):
-        for voice in self.voices.values():
-            voice.split_not_notatable()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.split_not_notatable()
 
     def substitute_sextoles(self):
-        for voice in self.voices.values():
-            voice.substitute_sextoles()
+        for tree_part_voice in self.tree_part_voices:
+            tree_part_voice.substitute_sextoles()
 
     def finish(self):
         if not self._finished:
