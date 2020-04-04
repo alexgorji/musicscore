@@ -16,14 +16,14 @@ class Test(TestCase):
     def test_1(self):
         sf = SimpleFormat(quarter_durations=[7])
         v = sf.to_stream_voice()
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         result_path = path + '_test_1'
         self.score.write(path=result_path)
 
     def test_2(self):
         sf = SimpleFormat(quarter_durations=[12.5])
         v = sf.to_stream_voice()
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         result_path = path + '_test_2'
         self.score.write(path=result_path)
 
@@ -32,7 +32,7 @@ class Test(TestCase):
         sf = SimpleFormat(quarter_durations=[Fraction(4, 1) + Fraction(5, 7), Fraction(5, 7)])
         # sf = SimpleFormat(durations=[Fraction(4, 1) + Fraction(5, 7), Fraction(2, 7)])
         v = sf.to_stream_voice()
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
 
         self.score.finish()
         # print([chord.quarter_duration for chord in self.score.get_measure(2).get_part(1).chords])

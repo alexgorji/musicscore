@@ -19,7 +19,7 @@ class Test(TestCase):
         sf.chords[0].add_tie('start')
         sf.chords[1].add_tie('stop')
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         self.score.fill_with_rest()
         self.score.preliminary_adjoin_rests()
         self.score.add_beats()

@@ -1,6 +1,7 @@
-from musicscore.musicxml.types.simple_type import TypeBarStyle
-from musicscore.musicxml.elements.xml_element import XMLElement
 from unittest import TestCase
+
+from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.types.simple_type import TypeBarStyle
 
 
 class Bared(XMLElement, TypeBarStyle):
@@ -15,6 +16,7 @@ class TestBarstyleType(TestCase):
         with self.assertRaises(ValueError):
             bst = TypeBarStyle('bla')
 
+
 class TestBaredXML(TestCase):
     def test_barstyled_xml(self):
         bared = Bared('light-light')
@@ -24,5 +26,3 @@ class TestBaredXML(TestCase):
         result = '''<test_bar>light-light</test_bar>
 '''
         self.assertEqual(bared.to_string(), result)
-
-

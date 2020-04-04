@@ -34,11 +34,13 @@
       <note>
         <pitch>
           <step>C</step>
+          <alter>0</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>2</voice>
         <type>quarter</type>
+        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
@@ -71,6 +73,15 @@
         <type>quarter</type>
         <accidental>flat</accidental>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
     </part>
   </measure>
   <measure number="2">
@@ -92,11 +103,13 @@
       <note>
         <pitch>
           <step>F</step>
+          <alter>0</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>2</voice>
         <type>quarter</type>
+        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
@@ -117,6 +130,15 @@
         <duration>1</duration>
         <voice>2</voice>
         <type>quarter</type>
+      </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
       </note>
     </part>
   </measure>

@@ -22,11 +22,11 @@ class Test(TestCase):
         for index, chord in enumerate(sf.chords):
             chord.add_lyric(index + 1)
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 2)
+        v.add_to_score(self.score, part_number=2)
 
         sf = SimpleFormat(quarter_durations=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
 
         self.score.fill_with_rest()
         self.score.preliminary_adjoin_rests()
@@ -49,13 +49,13 @@ class Test(TestCase):
         for index, chord in enumerate(sf.chords):
             chord.add_lyric(index + 1)
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
 
         sf = SimpleFormat(quarter_durations=[0.5, 0.6, 0.7, 0.8])
         for index, chord in enumerate(sf.chords):
             chord.add_lyric(index + 1)
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 2)
+        v.add_to_score(self.score, part_number=2)
 
         self.score.fill_with_rest()
         self.score.preliminary_adjoin_rests()
@@ -92,7 +92,7 @@ class Test(TestCase):
                 d.relative_y = -20
                 d.halign = 'center'
             v = sf.to_stream_voice(1)
-            v.add_to_score(self.score, 1, part)
+            v.add_to_score(self.score, part)
 
         add_to_score(1)
         add_to_score(2)

@@ -17,7 +17,7 @@ class Test(TestCase):
         for i in range(3):
             sf.chords[i].is_adjoinable = args[i]
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         self.score.add_subtitle(str([chord.is_adjoinable for chord in sf.chords]))
 
     def test_1(self):

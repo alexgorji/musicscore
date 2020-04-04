@@ -17,28 +17,7 @@ class TreeClef(Clef):
         self.octave_change = octave_change
         self.optimal_range = optimal_range
 
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.sign == other.sign and self.line == other.line and self.octave_change == other.octave_change
-        else:
-            return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    @property
-    def sign(self):
-        return self._sign
-
-    @sign.setter
-    def sign(self, value):
-        if not self._sign:
-            self._sign = self.add_child(Sign(value))
-        else:
-            self._sign.value = value
-
-        self._sign = value
-
+    # //public properties
     @property
     def line(self):
         return self._line
@@ -88,11 +67,41 @@ class TreeClef(Clef):
 
         self._optimal_range = val
 
+    @property
+    def sign(self):
+        return self._sign
+
+    @sign.setter
+    def sign(self, value):
+        if not self._sign:
+            self._sign = self.add_child(Sign(value))
+        else:
+            self._sign.value = value
+
+        self._sign = value
+
+    # //public methods
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.sign == other.sign and self.line == other.line and self.octave_change == other.octave_change
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __deepcopy__(self, memodict={}):
+        copy = self.__class__(sign=self.sign, line=self.line, octave_change=self.octave_change,
+                              optimal_range=self.optimal_range)
+        copy.number = self.number
+        return copy
+
 
 SUPER_HIGH_TREBLE_CLEF = TreeClef(sign='G', line=2, octave_change=2, optimal_range=[C(7), None])
 HIGH_TREBLE_CLEF = TreeClef(sign='G', line=2, octave_change=1, optimal_range=[C(6), None])
 TREBLE_CLEF = TreeClef(sign='G', line=2, optimal_range=[G(3), E(6)])
 LOW_TREBLE_CLEF = TreeClef(sign='G', line=2, octave_change=-1, optimal_range=[G(2), E(5)])
+
 BASS_CLEF = TreeClef(sign='F', line=4, optimal_range=[B(1), G(4)])
 LOW_BASS_CLEF = TreeClef(sign='F', line=4, octave_change=-1, optimal_range=[None, B(1)])
 SUPER_LOW_BASS_CLEF = TreeClef(sign='F', line=4, octave_change=-2, optimal_range=[None, G(1)])

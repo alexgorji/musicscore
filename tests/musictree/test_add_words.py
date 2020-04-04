@@ -24,7 +24,7 @@ class Test(TestCase):
                                font_style='italic')
 
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         result_path = path + '_test_1'
         self.score.write(path=result_path)
         TestScore().assert_template(result_path=result_path)
@@ -37,7 +37,7 @@ class Test(TestCase):
         sf.chords[0].add_words('aa', relative_y=-15)
 
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
 
         result_path = path + '_test_2'
         self.score.write(path=result_path)
@@ -51,7 +51,7 @@ class Test(TestCase):
         sf.chords[0].add_words('aa', relative_y=-15)
 
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
 
         result_path = path + '_test_3'
         self.score.write(path=result_path)

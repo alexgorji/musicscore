@@ -19,7 +19,7 @@ class Test(TestCase):
         self.score.add_measure(TreeMeasure(time=(1, 4)))
         sf = SimpleFormat(quarter_durations=[Fraction(4, 6), Fraction(1, 6), Fraction(1, 6)])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         result_path = path + '_test_1'
         self.score.write(path=result_path)
         TestScore().assert_template(result_path=result_path)

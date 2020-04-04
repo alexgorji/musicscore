@@ -7,12 +7,13 @@ from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treechordflags3 import TreeChordFlag3
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
+from musicxmlunittest import XMLTestCase
 from tests.score_templates.xml_test_score import TestScore
 
 path = str(os.path.abspath(__file__).split('.')[0])
 
 
-class Test(TestCase):
+class Test(XMLTestCase):
     def setUp(self):
         self.score = TreeScoreTimewise()
         self.score.add_measure()
@@ -66,16 +67,16 @@ class Test(TestCase):
     def test_4(self):
         simpleformat = SimpleFormat(midis=list(range(60, 68)))
         voice = simpleformat.to_stream_voice(2)
-        voice.add_to_score(self.score, 1, 1)
-        result_path = path + '_test_4'
+        voice.add_to_score(self.score)
+        xml_path = path + '_test_4.xml'
         self.score.accidental_mode = 'modern'
-        self.score.write(result_path)
-        TestScore().assert_template(result_path=result_path)
+        self.score.write(xml_path)
+        self.assertCompareFiles(xml_path)
 
     def test_5(self):
         simpleformat = SimpleFormat(midis=[71.5, 71.5, 72, 72, 71.5, 71.5], quarter_durations=6 * [0.5])
         voice = simpleformat.to_stream_voice(1)
-        voice.add_to_score(self.score, 1, 1)
+        voice.add_to_score(self.score)
         result_path = path + '_test_5'
         self.score.accidental_mode = 'normal'
         self.score.write(result_path)
@@ -89,7 +90,7 @@ class Test(TestCase):
         simpleformat = SimpleFormat(midis=midis, quarter_durations=durations)
         simpleformat.auto_clef()
         voice = simpleformat.to_stream_voice(1)
-        voice.add_to_score(self.score, 1, 1)
+        voice.add_to_score(self.score)
         result_path = path + '_test_6'
         self.score.max_division = 7
         self.score.accidental_mode = 'modern'

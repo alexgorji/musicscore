@@ -21,9 +21,6 @@
     <score-part id="p1">
       <part-name print-object="no">none</part-name>
     </score-part>
-    <score-part id="p2">
-      <part-name print-object="no">none</part-name>
-    </score-part>
   </part-list>
   <measure number="1">
     <part id="p1">
@@ -33,6 +30,7 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
+        <staves>2</staves>
       </attributes>
       <note>
         <pitch>
@@ -53,21 +51,6 @@
         <type>quarter</type>
       </note>
       <note>
-        <rest/>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>half</type>
-      </note>
-    </part>
-    <part id="p2">
-      <attributes>
-        <divisions>1</divisions>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
-      <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -75,6 +58,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <staff>2</staff>
       </note>
       <note>
         <pitch>
@@ -84,12 +68,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-      </note>
-      <note>
-        <rest/>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>half</type>
+        <staff>2</staff>
       </note>
     </part>
   </measure>

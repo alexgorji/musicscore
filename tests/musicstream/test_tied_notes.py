@@ -16,7 +16,7 @@ class Test(TestCase):
         sf.chords[0].add_tie('start')
         v = sf.to_stream_voice(1)
         # print(v.chords[0].tie_types)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         ch = self.score.get_measure(1).get_part(1).chords[0]
         result_path = path + '_test_1'
         self.score.write(path=result_path)

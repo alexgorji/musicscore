@@ -11,6 +11,6 @@ class Test(TestCase):
     def test(self):
         simpleformat = SimpleFormat(quarter_durations=4)
         voice = simpleformat.to_stream_voice(1)
-        voice.add_to_score(self.score, 1, 1)
+        voice.add_to_score(self.score)
         # print(voice.chords)
         # print(self.score.to_string())

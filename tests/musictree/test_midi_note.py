@@ -16,7 +16,7 @@ class Test(TestCase):
         midis = [C(4, 'flat'), C(4), C(4, 'sharp')]
         sf = SimpleFormat(midis=midis)
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
 
         result_path = path + '_test_1'
         self.score.write(path=result_path)
@@ -30,7 +30,7 @@ class Test(TestCase):
         durations = [d / 2 for d in durations]
         sf = SimpleFormat(midis=midis, quarter_durations=durations)
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
 
         result_path = path + '_test_2'
         self.score.write(path=result_path)

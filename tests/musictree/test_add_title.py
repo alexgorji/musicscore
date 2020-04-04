@@ -13,7 +13,7 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
         sf = SimpleFormat(quarter_durations=[1, 1])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
 
     def test_1(self):
         self.score.add_title('test title', font_family='DejaVu Sans')

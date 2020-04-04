@@ -26,7 +26,7 @@ class Test(TestCase):
             chord.add_flag(PercussionFlag1())
         v = sf.to_stream_voice()
         self.score.set_time_signatures([4, 3, 1])
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         result_path = path + '_test_1'
 
         # self.score.fill_with_rest()

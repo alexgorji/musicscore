@@ -100,6 +100,16 @@ MidiNote().accidental renamed to accidental_sign
 Midi.accidental.force_show: new feature
 Midi.accidental.force_hide: new feature
 
+v. 1.2.17  
+musicxml.groups.musicdata.Attributes.staves: updated  
+TreeChord().staff_number: property added   
+TreeScorePart().number_of_staves: property added  
+musicxml.types.complextypes.clef: missing attributes added  
+tests: musicxml.types.complextype.clef: added  
+TreePart().add_clef(): method added
+StreamVoice().add_to_score(score, part_number=1, staff_number=None, first_measure=1): attribute staff_number added and order of attributes changed
+TreePart().fill_with_rest(): _fill_with_voices() added
+TreePart().add_chord(): attribute staff_number added
 
 todo:
 update documentation

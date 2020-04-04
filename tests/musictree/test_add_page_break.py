@@ -1,11 +1,11 @@
-from unittest import TestCase
 import os
+from unittest import TestCase
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from tests.score_templates.xml_test_score import TestScore
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
 class Test(TestCase):
@@ -15,7 +15,7 @@ class Test(TestCase):
     def test_1(self):
         sf = SimpleFormat(quarter_durations=[4, 4, 4, 4, 4])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         self.score.get_measure(3).add_page_break()
 
         result_path = path + '_test_1'
@@ -25,10 +25,10 @@ class Test(TestCase):
     def test_2(self):
         sf = SimpleFormat(quarter_durations=[4, 4, 4, 4, 4])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score, 1)
         sf = SimpleFormat(quarter_durations=[4, 4, 4, 4, 4])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 2)
+        v.add_to_score(self.score, 2)
         self.score.get_measure(3).add_page_break()
 
         result_path = path + '_test_2'

@@ -12,26 +12,32 @@ class TreeScorePart(ScorePart):
     def __init__(self, id, instrument=None, *args, **kwargs):
         super().__init__(id=id, *args, **kwargs)
         self.add_child(PartName(name='none', print_object='no'))
-        self._instrument = None
-        self.instrument = instrument
-        self._max_division = None
+
         self._forbidden_divisions = None
+        self._instrument = None
+        self._max_division = None
+        self._number_of_staves = None
         self._parts = []
+
+        self.instrument = instrument
         self.parent_score = None
 
+    # // properties
     @property
-    def part_name(self):
-        try:
-            return self.get_children_by_type(PartName)[0]
-        except IndexError:
-            return None
+    def forbidden_divisions(self):
+        if self._forbidden_divisions is None:
+            self._forbidden_divisions = self.parent_score.forbidden_divisions
 
-    @property
-    def part_abbreviation(self):
-        try:
-            return self.get_children_by_type(PartAbbreviation)[0]
-        except IndexError:
-            return None
+        return self._forbidden_divisions
+
+    @forbidden_divisions.setter
+    def forbidden_divisions(self, value):
+        if value is not None:
+            for x in value:
+                if not isinstance(x, int):
+                    raise TypeError('forbidden_division must be of type int not{}'.format(type(value)))
+
+        self._forbidden_divisions = value
 
     @property
     def instrument(self):
@@ -66,24 +72,33 @@ class TreeScorePart(ScorePart):
         self._max_division = value
 
     @property
-    def forbidden_divisions(self):
-        if self._forbidden_divisions is None:
-            self._forbidden_divisions = self.parent_score.forbidden_divisions
+    def number_of_staves(self):
+        return self._number_of_staves
 
-        return self._forbidden_divisions
+    @number_of_staves.setter
+    def number_of_staves(self, val):
+        if not isinstance(val, int):
+            raise TypeError('number_of_staves.value must be of type int not{}'.format(type(val)))
+        self._number_of_staves = val
+        for part in self._parts:
+            part.staves = val
 
-    @forbidden_divisions.setter
-    def forbidden_divisions(self, value):
-        if value is not None:
-            for x in value:
-                if not isinstance(x, int):
-                    raise TypeError('forbidden_division must be of type int not{}'.format(type(value)))
+    @property
+    def part_abbreviation(self):
+        try:
+            return self.get_children_by_type(PartAbbreviation)[0]
+        except IndexError:
+            return None
 
-        self._forbidden_divisions = value
+    @property
+    def part_name(self):
+        try:
+            return self.get_children_by_type(PartName)[0]
+        except IndexError:
+            return None
 
-    def get_parts(self):
-        return self._parts
-
+    # //public methods
+    # add
     def add_part(self, part=None):
         if not part:
             part = TreePart(id=self.id)
@@ -91,6 +106,8 @@ class TreeScorePart(ScorePart):
             if part.id != self.id:
                 raise ValueError('Part must have the same id as TreeScorePart')
         part.parent_score_part = self
+        if self.number_of_staves is not None:
+            part.staves = self.number_of_staves
         self._parts.append(part)
         return part
 
@@ -109,3 +126,7 @@ class TreeScorePart(ScorePart):
             self.up.current_children.insert(self_index, pg)
         else:
             self.up.current_children.insert(self_index + 1, pg)
+
+    # get
+    def get_parts(self):
+        return self._parts

@@ -15,42 +15,42 @@ class Test(TestCase):
     def test_1(self):
         sf = SimpleFormat(quarter_durations=[0, 4])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         result_path = path + '_test_1'
         self.score.write(path=result_path)
 
     def test_2(self):
         sf = SimpleFormat(quarter_durations=[1, 0, 3])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         result_path = path + '_test_2'
         self.score.write(path=result_path)
 
     def test_3(self):
         sf = SimpleFormat(quarter_durations=[4, 0])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         result_path = path + '_test_3'
         self.score.write(path=result_path)
 
     def test_4(self):
         sf = SimpleFormat(quarter_durations=[1.5, 0, 2.5])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         result_path = path + '_test_4'
         self.score.write(path=result_path)
 
     def test_5(self):
         sf = SimpleFormat(quarter_durations=[1.75, 0, 2.25])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         result_path = path + '_test_5'
         self.score.write(path=result_path)
 
     def test_6(self):
         sf = SimpleFormat(quarter_durations=[1.75, 0, 2, 0, 4.25])
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         result_path = path + '_test_6'
         self.score.write(path=result_path)
 
@@ -59,7 +59,7 @@ class Test(TestCase):
         for index, chord in enumerate(sf.chords):
             chord.add_lyric(index + 1)
         v = sf.to_stream_voice(1)
-        v.add_to_score(self.score, 1, 1)
+        v.add_to_score(self.score)
         # self.score.fill_with_rest()
         # self.score.add_beats()
         # self.score.quantize()

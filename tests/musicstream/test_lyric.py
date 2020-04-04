@@ -18,7 +18,7 @@ class Test(TestCase):
         voice = sf.to_stream_voice(1)
         l = voice.chords[0].add_lyric('bla')
 
-        voice.add_to_score(self.score, 1, 1)
+        voice.add_to_score(self.score)
         result_path = path + '_test_1'
         self.score.write(result_path)
         TestScore().assert_template(result_path=result_path)
@@ -30,7 +30,7 @@ class Test(TestCase):
         voice.chords[0].add_lyric('bla')
         voice.chords[0].add_lyric('bb', number=2)
 
-        voice.add_to_score(self.score, 1, 1)
+        voice.add_to_score(self.score)
         result_path = path + '_test_2'
         self.score.write(result_path)
         TestScore().assert_template(result_path=result_path)
@@ -41,14 +41,14 @@ class Test(TestCase):
         voice1 = sf.to_stream_voice(2)
         voice1.chords[0].add_lyric('bla')
         voice1.chords[0].add_lyric('bb', number=2)
-        voice1.add_to_score(self.score, 1, 1)
+        voice1.add_to_score(self.score)
 
         midis = [90, (91, 92)]
         sf = SimpleFormat(midis=midis)
         voice2 = sf.to_stream_voice(1)
         voice2.chords[1].add_lyric('sh')
         voice2.chords[1].add_lyric('th', number=2)
-        voice2.add_to_score(self.score, 1, 1)
+        voice2.add_to_score(self.score)
 
         result_path = path + '_test_3'
         self.score.write(result_path)

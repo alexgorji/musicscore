@@ -29,6 +29,15 @@ class Test(TestCase):
     <voice>2</voice>
     <type>whole</type>
   </note>
+  <backup>
+    <duration>4</duration>
+  </backup>
+  <note>
+    <rest/>
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
+  </note>
 </part>
 '''
         self.assertEqual(p.to_string(), result)
@@ -57,6 +66,15 @@ class Test(TestCase):
     <notations>
       <tied number="1" type="start"/>
     </notations>
+  </note>
+  <backup>
+    <duration>4</duration>
+  </backup>
+  <note>
+    <rest/>
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
   </note>
 </part>
 '''
@@ -92,6 +110,15 @@ class Test(TestCase):
     <voice>2</voice>
     <type>quarter</type>
   </note>
+  <backup>
+    <duration>4</duration>
+  </backup>
+  <note>
+    <rest/>
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
+  </note>
 </part>
 '''
         self.assertEqual(p.to_string(), result)
@@ -111,6 +138,15 @@ class Test(TestCase):
     <rest/>
     <duration>4</duration>
     <voice>2</voice>
+    <type>whole</type>
+  </note>
+  <backup>
+    <duration>4</duration>
+  </backup>
+  <note>
+    <rest/>
+    <duration>4</duration>
+    <voice>1</voice>
     <type>whole</type>
   </note>
 </part>
@@ -134,6 +170,15 @@ class Test(TestCase):
     <rest/>
     <duration>4</duration>
     <voice>2</voice>
+    <type>whole</type>
+  </note>
+  <backup>
+    <duration>4</duration>
+  </backup>
+  <note>
+    <rest/>
+    <duration>4</duration>
+    <voice>1</voice>
     <type>whole</type>
   </note>
 </part>

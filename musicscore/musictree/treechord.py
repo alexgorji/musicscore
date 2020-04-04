@@ -968,6 +968,12 @@ class TreeChord(XMLTree):
             pass
 
         try:
+            staff = self.get_children_by_type(StaffElement)[0]
+            new_chord.add_child(staff)
+        except IndexError:
+            pass
+
+        try:
             notehead = self.get_children_by_type(Notehead)[0]
             new_chord.add_child(notehead)
         except IndexError:

@@ -2,6 +2,7 @@ from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, LOW_BASS_CLEF, HIGH_TREBLE_CLEF
 from musicscore.musictree.treemeasure import TreeMeasure
+from musicscore.musictree.treenote import TreeBackup
 from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.types.simple_type import PositiveInteger
@@ -15,6 +16,9 @@ class StreamVoice(object):
         self._voice = None
         self.voice_number = voice_number
 
+    # //private methods
+
+    # //public properties
     @property
     def chords(self):
         return self._chords
@@ -28,22 +32,25 @@ class StreamVoice(object):
         PositiveInteger(value)
         self._voice = value
 
+    # //public methods
+    # add
     def add_chord(self, chord):
         chord.voice_number = self.voice_number
         self._chords.append(chord)
 
-    def add_to_part(self, part, chords=None):
+    def add_to_part(self, part, chords=None, staff_number=None):
         if chords is None:
             chords = self.chords
 
         for i in range(len(chords)):
             chord = chords[i]
-            remain = part.add_chord(chord, self.voice_number)
+            remain = part.add_chord(chord, self.voice_number, staff_number)
             if remain:
                 remaining_chords = [remain] + chords[i + 1:]
                 return remaining_chords
 
-    def add_to_score(self, score, first_measure=1, part_number=1):
+    def add_to_score(self, score, part_number=1, staff_number=None, first_measure=1):
+
         measure_number = first_measure
 
         def _get_measure():
@@ -60,7 +67,7 @@ class StreamVoice(object):
 
         def _add_to_part(chords=None):
             part = measure.get_children_by_type(TreePart)[part_number - 1]
-            remain = self.add_to_part(part, chords)
+            remain = self.add_to_part(part, chords, staff_number)
             return remain
 
         remain = _add_to_part()

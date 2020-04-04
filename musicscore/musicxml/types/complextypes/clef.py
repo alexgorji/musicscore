@@ -5,7 +5,7 @@ from musicscore.musicxml.attributes.printobject import PrintObject
 from musicscore.musicxml.attributes.printstyle import PrintStyle
 from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
-from musicscore.musicxml.types.simple_type import TypeClefSign, Integer
+from musicscore.musicxml.types.simple_type import TypeClefSign, Integer, TypeStaffNumber, TypeYesNo, TypeSymbolSize
 
 
 class Sign(XMLElement, TypeClefSign):
@@ -51,8 +51,24 @@ class AfterBarline(AttributeAbstract):
         super().__init__(*args, **kwargs)
         self.generate_attribute('after-barline', after_barline, "TypeYesNo")
 
+class Additional(AttributeAbstract):
+    """"""
 
-class ComplexTypeClef(ComplexType, PrintStyle, PrintObject, OptionalUniqueId, AfterBarline):
+    def __init__(self, additional=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute('additional', additional, "TypeYesNo")
+        TypeYesNo
+
+class Size(AttributeAbstract):
+    """"""
+
+    def __init__(self, size=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.generate_attribute('size', size, 'TypeSymbolSize')
+        TypeSymbolSize
+
+
+class ComplexTypeClef(ComplexType, PrintStyle, PrintObject, OptionalUniqueId, Additional, Size, AfterBarline):
     """
     Clefs are represented by a combination of sign, line, and clef-octave-change elements. The optional number attribute
     refers to staff numbers within the part. A value of 1 is assumed if not present. Sometimes clefs are added to the
@@ -69,8 +85,36 @@ class ComplexTypeClef(ComplexType, PrintStyle, PrintObject, OptionalUniqueId, Af
     attribute has been set to "yes".
     """
 
+    '''
+            <xs:attribute name="number" type="staff-number"/>
+        <xs:attribute name="additional" type="yes-no"/>
+        <xs:attribute name="size" type="symbol-size"/>
+        <xs:attribute name="after-barline" type="yes-no"/>
+        <xs:attributeGroup ref="print-style"/>
+        <xs:attributeGroup ref="print-object"/>
+        <xs:attributeGroup ref="optional-unique-id"/>'''
     _DTD = Sequence(
         Element(Sign),
         Element(Line, min_occurrence=0),
         Element(ClefOctaveChange, min_occurrence=0)
     )
+
+    def __init__(self, tag, number=None, *args, **kwargs):
+        super().__init__(tag=tag, *args, ** kwargs)
+        self.number = number
+
+    @property
+    def number(self):
+        try:
+            return self.get_attribute('number')
+        except KeyError:
+            return None
+
+    @number.setter
+    def number(self, value):
+        if value is None:
+            self.remove_attribute('number')
+        else:
+            TypeStaffNumber(value)
+            self._ATTRIBUTES.insert(0, 'number')
+            self.set_attribute('number', value)
