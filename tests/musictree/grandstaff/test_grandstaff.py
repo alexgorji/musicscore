@@ -76,9 +76,8 @@ class Test(XMLTestCase):
         self.assertCompareFiles(xml_path)
 
     def test_6(self):
-        r_sf = SimpleFormat(
-            quarter_durations=[4])
-        l_sf = SimpleFormat(quarter_durations=[4])
+        r_sf = SimpleFormat(quarter_durations=[4])
+        l_sf = SimpleFormat(quarter_durations=[4], midis=[60])
         r_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=1)
         l_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=2)
         xml_path = path + '_test_6.xml'
@@ -88,7 +87,7 @@ class Test(XMLTestCase):
     def test_7(self):
         r_sf = SimpleFormat(
             quarter_durations=[0.25, 2.25, 0.5, 1, 2, Fraction(1, 3), Fraction(4, 3), Fraction(1, 3), 1])
-        l_sf = SimpleFormat(quarter_durations=[4, 5])
+        l_sf = SimpleFormat(quarter_durations=[4, 5], midis=[72, 75])
         r_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=1)
         l_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=2)
         xml_path = path + '_test_7.xml'
@@ -98,8 +97,78 @@ class Test(XMLTestCase):
     def test_8(self):
         r_sf = SimpleFormat(
             quarter_durations=[0.25, 2.25, 0.5, 1, 2, Fraction(1, 3), Fraction(4, 3), Fraction(1, 3), 1])
-        l_sf = SimpleFormat(quarter_durations=[4, 5])
-        r_sf.chords[1].set_staff(2)
+        l_sf = SimpleFormat(quarter_durations=[4, 5], midis=[50, 55])
+        r_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=1)
+        l_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=2)
+        clef = BASS_CLEF.__deepcopy__()
+        clef.number = 2
+        self.score.get_measure(1).get_part(1).add_clef(clef)
         xml_path = path + '_test_8.xml'
+        self.score.write(xml_path)
+        self.assertCompareFiles(xml_path)
+
+    def test_9(self):
+        r_sf = SimpleFormat(
+            quarter_durations=[0.25, 2.25, 0.5, 1, 2, Fraction(1, 3), Fraction(4, 3), Fraction(1, 3), 1],
+            midis=[60, 61, 62, 63])
+        l_sf = SimpleFormat(quarter_durations=[4, 5], midis=[50, 55])
+        r_sf.chords[1].manual_staff_number = 2
+        r_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=1)
+        l_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=2)
+        clef = BASS_CLEF.__deepcopy__()
+        clef.number = 2
+        self.score.get_measure(1).get_part(1).add_clef(clef)
+        xml_path = path + '_test_9.xml'
+        self.score.write(xml_path)
+        self.assertCompareFiles(xml_path)
+
+    def test_10(self):
+        # chord clef
+        r_sf = SimpleFormat(
+            quarter_durations=[4, 4],
+            midis=[60, 61])
+        l_sf = SimpleFormat(quarter_durations=[4, 4], midis=[50, 55])
+        l_sf.chords[0].add_clef(BASS_CLEF)
+        r_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=1)
+        l_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=2)
+        xml_path = path + '_test_10.xml'
+        self.score.write(xml_path)
+        self.assertCompareFiles(xml_path)
+
+    def test_11(self):
+        r_sf = SimpleFormat(
+            quarter_durations=[0.25, 2.25, 0.5, 1, 2, Fraction(1, 3), Fraction(4, 3), Fraction(1, 3), 1],
+            midis=[60, 61, 54, 63])
+        l_sf = SimpleFormat(quarter_durations=[4, 5], midis=[72, 53])
+        r_sf.chords[1].manual_staff_number = 2
+        r_sf.auto_clef()
+        l_sf.auto_clef()
+        r_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=1)
+        l_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=2)
+
+        xml_path = path + '_test_11.xml'
+        self.score.write(xml_path)
+        self.assertCompareFiles(xml_path)
+
+    def test_12(self):
+        r_sf_2 = SimpleFormat(
+            quarter_durations=[0.25, 2.25, 0.5, 1, 2, Fraction(1, 3), Fraction(4, 3), Fraction(1, 3), 1],
+            midis=[60, 61, 54, 63])
+        r_sf_1 = SimpleFormat(
+            quarter_durations=[0.25, 2.25, 0.5, 1, 2, Fraction(1, 3), Fraction(4, 3), Fraction(1, 3), 1],
+            midis=[70, 71, 64, 73])
+        l_sf_1 = SimpleFormat(quarter_durations=[4, 5], midis=[50, 35])
+        l_sf_2 = SimpleFormat(quarter_durations=[5, 4], midis=[44, 60])
+        r_sf_2.auto_clef()
+        r_sf_1.auto_clef()
+        l_sf_1.auto_clef()
+        l_sf_2.auto_clef()
+        r_sf_1.to_stream_voice(2).add_to_score(self.score, part_number=1, staff_number=1)
+        r_sf_2.to_stream_voice(1).add_to_score(self.score, part_number=1, staff_number=1)
+        l_sf_1.to_stream_voice(2).add_to_score(self.score, part_number=1, staff_number=2)
+        l_sf_2.to_stream_voice(1).add_to_score(self.score, part_number=1, staff_number=2)
+
+
+        xml_path = path + '_test_12.xml'
         self.score.write(xml_path)
         self.assertCompareFiles(xml_path)

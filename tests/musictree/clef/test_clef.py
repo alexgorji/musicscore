@@ -16,9 +16,8 @@ class Test(XMLTestCase):
 
     def test_1(self):
         clef = TreeClef(number=2)
-        copy = clef.__deepcopy__()
         sf = SimpleFormat(quarter_durations=[1, 1])
-        sf.chords[0].add_clef(copy)
+        sf.chords[0].add_clef(clef)
         sf.to_stream_voice().add_to_score(self.score)
 
         xml_path = path + '_test_1.xml'
@@ -26,9 +25,8 @@ class Test(XMLTestCase):
         self.assertCompareFiles(xml_path)
 
     def test_2(self):
-        copy = BASS_CLEF.__deepcopy__()
         sf = SimpleFormat(quarter_durations=[1, 1])
-        sf.chords[0].add_clef(copy)
+        sf.chords[0].add_clef(BASS_CLEF)
         sf.to_stream_voice().add_to_score(self.score)
 
         xml_path = path + '_test_2.xml'

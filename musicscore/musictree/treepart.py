@@ -9,6 +9,7 @@ from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treechordflags2 import TreeChordFlag2
 from musicscore.musictree.treechordflags3 import TreeChordFlag3
+from musicscore.musictree.treeclef import TreeClef
 from musicscore.musictree.treenote import TreeNote, TreeBackup
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.fullnote import Pitch, Rest
@@ -1124,6 +1125,9 @@ class TreePart(timewise.Part):
     def add_chord(self, chord, voice_number=1, staff_number=None):
         def _set_staves():
             chord.staff_number = staff_number
+            clef = chord.get_clef()
+            if clef and clef.number is None:
+                clef.number = staff_number
             if self.staves is None or self.staves < staff_number:
                 self.staves = staff_number
 

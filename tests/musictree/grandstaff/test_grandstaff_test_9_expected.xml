@@ -31,10 +31,14 @@
           <beat-type>4</beat-type>
         </time>
         <staves>2</staves>
+        <clef number="2">
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
       </attributes>
       <note>
         <pitch>
-          <step>B</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
@@ -46,7 +50,8 @@
       </note>
       <note>
         <pitch>
-          <step>B</step>
+          <step>C</step>
+          <alter>1</alter>
           <octave>4</octave>
         </pitch>
         <duration>3</duration>
@@ -54,7 +59,8 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot/>
-        <staff>1</staff>
+        <accidental>sharp</accidental>
+        <staff>2</staff>
         <beam number="1">end</beam>
         <notations>
           <tied number="1" type="start"/>
@@ -62,7 +68,8 @@
       </note>
       <note>
         <pitch>
-          <step>B</step>
+          <step>C</step>
+          <alter>1</alter>
           <octave>4</octave>
         </pitch>
         <duration>6</duration>
@@ -70,14 +77,14 @@
         <voice>1</voice>
         <type>quarter</type>
         <dot/>
-        <staff>1</staff>
+        <staff>2</staff>
         <notations>
           <tied number="1" type="stop"/>
         </notations>
       </note>
       <note>
         <pitch>
-          <step>B</step>
+          <step>D</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
@@ -88,12 +95,14 @@
       </note>
       <note>
         <pitch>
-          <step>B</step>
+          <step>E</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <accidental>flat</accidental>
         <staff>1</staff>
       </note>
       <backup>
@@ -101,8 +110,8 @@
       </backup>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
+          <step>D</step>
+          <octave>3</octave>
         </pitch>
         <duration>16</duration>
         <voice>1</voice>
@@ -214,15 +223,13 @@
       </backup>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>5</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
         <duration>12</duration>
         <tie type="start"/>
         <voice>1</voice>
         <type>whole</type>
-        <accidental>flat</accidental>
         <staff>2</staff>
         <notations>
           <tied number="1" type="start"/>
@@ -258,9 +265,8 @@
       </backup>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>5</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
         <duration>1</duration>
         <tie type="stop"/>

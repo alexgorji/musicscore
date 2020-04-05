@@ -79,7 +79,8 @@ class TreeChord(XMLTree):
 
         self._manual_type = False
         self._manual_dots = False
-        self.manual_voice_number = False
+        self._manual_staff_number = None
+        self.manual_voice_number = None
         self.is_finger_tremolo = False
         self.relative_x = None
         self.tie_orientation = None
@@ -144,6 +145,14 @@ class TreeChord(XMLTree):
         if not parent.get_children():
             self._remove_direction(parent)
 
+    def _set_staff_number(self, val):
+        if not isinstance(val, int):
+            raise TypeError('staff_number.value must be of type int not{}'.format(type(val)))
+        staff = self._get_staff_object()
+        if staff is None:
+            self.add_child(StaffElement(val))
+        else:
+            staff.value = val
     # //public properties
     @property
     def end_position(self):
@@ -191,6 +200,17 @@ class TreeChord(XMLTree):
         if 'stop' in self.tie_types:
             return True
         return False
+
+    @property
+    def manual_staff_number(self):
+        return self._manual_staff_number
+
+    @manual_staff_number.setter
+    def manual_staff_number(self, val):
+        if not isinstance(val, int):
+            raise TypeError('manual_staff_number.value must be of type int not{}'.format(type(val)))
+        self._manual_staff_number = val
+        self._set_staff_number(val)
 
     @property
     def midis(self):
@@ -273,8 +293,8 @@ class TreeChord(XMLTree):
             if previous_measure:
                 previous_part = previous_measure.get_part_with_id(id=current_part.id)
                 previous_chord = \
-                previous_part.get_staff(self.parent_tree_part_voice.parent_tree_part_staff.number).get_voice(
-                    self.parent_tree_part_voice.number).chords[-1]
+                    previous_part.get_staff(self.parent_tree_part_voice.parent_tree_part_staff.number).get_voice(
+                        self.parent_tree_part_voice.number).chords[-1]
                 return previous_chord
             else:
                 return None
@@ -319,13 +339,8 @@ class TreeChord(XMLTree):
 
     @staff_number.setter
     def staff_number(self, val):
-        if not isinstance(val, int):
-            raise TypeError('staff_number.value must be of type int not{}'.format(type(val)))
-        staff = self._get_staff_object()
-        if staff is None:
-            self.add_child(StaffElement(val))
-        else:
-            staff.value = val
+        if self.manual_staff_number is None:
+            self._set_staff_number(val)
 
     @property
     def tie_types(self):
@@ -439,8 +454,8 @@ class TreeChord(XMLTree):
             attributes = self.get_children_by_type(Attributes)[0]
         except IndexError:
             attributes = self.add_child(Attributes())
-
-        attributes.add_child(clef)
+        clef_copy = clef.__deepcopy__()
+        attributes.add_child(clef_copy)
 
     def add_dynamics(self, value, placement='below', **kwargs):
         dynamic_classes = [P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, FFFFFF, MP, MF, SF, SFP, SFPP, FP,
@@ -778,6 +793,9 @@ class TreeChord(XMLTree):
 
         self._manual_dots = True
 
+    def set_staff_number(self, staff_number):
+        self.manual_staff_number = staff_number
+
     def set_tie_orientation(self, orientation):
         if self.is_tied_to_next:
             tied = [t for t in self.get_children_by_type(Notations)[0].get_children_by_type(Tied) if t.type == 'start']
@@ -1034,6 +1052,7 @@ class TreeChord(XMLTree):
 
         new_chord._flags = self._flags
         new_chord._manual_type = self._manual_type
+        new_chord._manual_staff_number = self._manual_staff_number
         new_chord.tie_orientation = self.tie_orientation
 
         for grace_chord in self.get_pre_grace_chords():

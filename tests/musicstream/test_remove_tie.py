@@ -25,7 +25,7 @@ class Test(TestCase):
         self.score.add_beats()
         self.score.quantize()
 
-        chord = self.score.get_measure(2).get_part(1).get_voice(1).chords[0]
+        chord = self.score.get_measure(2).get_part(1).get_staff(1).get_voice(1).chords[0]
         chord.remove_from_score()
 
         result_path = path + '_test_1'

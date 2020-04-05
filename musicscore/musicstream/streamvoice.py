@@ -1,10 +1,11 @@
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechord import TreeChord
-from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, LOW_BASS_CLEF, HIGH_TREBLE_CLEF
+from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, LOW_BASS_CLEF, HIGH_TREBLE_CLEF, TreeClef
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treenote import TreeBackup
 from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.groups.common import Voice
+from musicscore.musicxml.types.complextypes.attributes import Clef
 from musicscore.musicxml.types.simple_type import PositiveInteger
 
 
@@ -41,7 +42,6 @@ class StreamVoice(object):
     def add_to_part(self, part, chords=None, staff_number=None):
         if chords is None:
             chords = self.chords
-
         for i in range(len(chords)):
             chord = chords[i]
             remain = part.add_chord(chord, self.voice_number, staff_number)

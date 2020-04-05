@@ -34,6 +34,12 @@
           <beat-type>4</beat-type>
         </time>
       </attributes>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
     </part>
     <part id="p2">
       <attributes>
@@ -73,6 +79,12 @@
       <attributes>
         <divisions>1</divisions>
       </attributes>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
     </part>
     <part id="p2">
       <attributes>
