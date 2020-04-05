@@ -1050,7 +1050,6 @@ class TreePartStaff(object):
         if mode == 'normal':
             _hide_accidental = []
             _set_natural = set()
-            # pitched_notes = [note for note in self.get_children_by_type(TreeNote) if isinstance(note.event, Pitch)]
             pitched_notes = [note for xml_chord in self.xml_chords for note in xml_chord.notes if
                              isinstance(note.event, Pitch)]
             _first_chord_natural = [note.pitch.step.value for note in

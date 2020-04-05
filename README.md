@@ -111,5 +111,10 @@ StreamVoice().add_to_score(score, part_number=1, staff_number=None, first_measur
 TreePart().fill_with_rest(): _fill_with_voices() added
 TreePart().add_chord(): attribute staff_number added
 
+v. 1.3
+Minor and major changes
+Tree structure was changed: TreePart ==> TreePartStaff ==> TreePartVoice
+parts with more than one staves are now possible.
+
 todo:
 update documentation
