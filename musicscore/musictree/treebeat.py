@@ -52,7 +52,7 @@ class TreeBeat(object):
         self._best_div = None
         self._permitted_durations = (4, 2, 1, 0.5)
         self._chords = []
-        self.parent_voice = None
+        self.parent_tree_part_voice = None
 
         self.duration = duration
         self.max_division = max_division
@@ -75,7 +75,7 @@ class TreeBeat(object):
     @property
     def max_division(self):
         if self._max_division is None:
-            parent_max_division = self.parent_voice.max_division
+            parent_max_division = self.parent_tree_part_voice.max_division
             if parent_max_division:
                 self._max_division = math.floor(parent_max_division * self.duration)
                 if self._max_division == 0:
@@ -98,7 +98,7 @@ class TreeBeat(object):
     @property
     def forbidden_divisions(self):
         if self._forbidden_divisions is None:
-            self._forbidden_divisions = self.parent_voice.forbidden_divisions
+            self._forbidden_divisions = self.parent_tree_part_voice.forbidden_divisions
 
         if self._forbidden_divisions is None:
             self._forbidden_divisions = []
@@ -126,7 +126,7 @@ class TreeBeat(object):
 
     @property
     def tree_part_voice(self):
-        return self.parent_voice
+        return self.parent_tree_part_voice
 
     @property
     def previous(self):
@@ -595,7 +595,7 @@ class TreeBeat(object):
     #             first_chord = self.chords[0]
     #             first_chord.quarter_duration = self.duration
     #             for chord in self.chords[1:]:
-    #                 chord.parent_voice.chords.remove(chord)
+    #                 chord.parent_tree_part_voice.chords.remove(chord)
     #
     #             self.remove_chords()
     #             self.add_chord(first_chord)
@@ -659,7 +659,7 @@ class TreeBeat(object):
     # for chord in self.chords:
     #     try:
     #         if chord.marked:
-    #             # chord.parent_voice.chords.remove(chord)
+    #             # chord.parent_tree_part_voice.chords.remove(chord)
     #             pass
     #         else:
     #             beat_new_chords.append(chord)

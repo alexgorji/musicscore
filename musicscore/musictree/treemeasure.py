@@ -6,7 +6,6 @@ from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.barline import Barline, BarStyle
 from musicscore.musicxml.groups.layout import SystemLayout
 from musicscore.musicxml.groups.musicdata import Print, Attributes
-from musicscore.musicxml.types.complextypes.attributes import Staves
 from musicscore.musicxml.types.complextypes.systemlayout import SystemDistance
 
 
@@ -24,9 +23,35 @@ class TreeMeasure(timewise.Measure):
     # properties
 
     @property
-    def __name__(self):
-        index = self.up.get_children_by_type(self.__class__).index(self)
-        return str(index + 1)
+    def barline_style(self):
+        return self._barline_style
+
+    @property
+    def next(self):
+        return self.next_sibling
+
+    @property
+    def offset(self):
+        if self._offset is None:
+            self.update_offset()
+        return self._offset
+
+    @property
+    def previous(self):
+        if not self.up:
+            return None
+        index = self.up.get_children_by_type(TreeMeasure).index(self)
+        if index == 0:
+            return None
+        return self.up.get_children_by_type(TreeMeasure)[index - 1]
+
+    @property
+    def quarter_duration(self):
+        output = 0
+        for time_signature in self.time.get_time_signatures():
+            (beats, beat_type) = time_signature
+            output += beats.value / beat_type.value * 4
+        return Fraction(output).limit_denominator(10000)
 
     @property
     def time(self):
@@ -47,31 +72,9 @@ class TreeMeasure(timewise.Measure):
             self._time = None
 
     @property
-    def quarter_duration(self):
-        output = 0
-        for time_signature in self.time.get_time_signatures():
-            (beats, beat_type) = time_signature
-            output += beats.value / beat_type.value * 4
-        return Fraction(output).limit_denominator(10000)
-
-    @property
-    def barline_style(self):
-        return self._barline_style
-
-    @property
-    def previous(self):
-        if not self.up:
-            return None
-        index = self.up.get_children_by_type(TreeMeasure).index(self)
-        if index == 0:
-            return None
-        return self.up.get_children_by_type(TreeMeasure)[index - 1]
-
-    @property
-    def offset(self):
-        if self._offset is None:
-            self.update_offset()
-        return self._offset
+    def __name__(self):
+        index = self.up.get_children_by_type(self.__class__).index(self)
+        return str(index + 1)
 
     # // private methods
 
@@ -92,6 +95,12 @@ class TreeMeasure(timewise.Measure):
 
     def get_part(self, number):
         return self.get_children_by_type(TreePart)[number - 1]
+
+    def get_part_with_id(self, id):
+        try:
+            return [part for part in self.get_children_by_type(TreePart) if part.id == id][0]
+        except IndexError:
+            raise AttributeError('measure {} has no part with id {}'.format(self, id))
 
     def get_beats(self):
         output = []

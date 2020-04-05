@@ -256,18 +256,18 @@ class TreePartVoice(object):
 
         self._max_division = value
 
-    @property
-    def next(self):
-        parts = self.parent_part.parent_score_part.get_parts()
-        index = parts.index(self.parent_part)
-        if index < len(parts):
-            next_part = parts[index + 1]
-        else:
-            return None
-        try:
-            return next_part.get_voice(self.number)
-        except KeyError:
-            return None
+    # @property
+    # def next(self):
+    #     parts = self.parent_part.parent_score_part.get_parts()
+    #     index = parts.index(self.parent_part)
+    #     if index < len(parts):
+    #         next_part = parts[index + 1]
+    #     else:
+    #         return None
+    #     try:
+    #         return next_part.get_voice(self.number)
+    #     except KeyError:
+    #         return None
 
     @property
     def number(self):
@@ -281,7 +281,7 @@ class TreePartVoice(object):
 
     @property
     def parent_part(self):
-        return self.parent_tree_staff.parent_part
+        return self.parent_tree_part_staff.parent_part
 
     @property
     def previous(self):
@@ -304,11 +304,11 @@ class TreePartVoice(object):
         return measure.quarter_duration
 
     @property
-    def parent_tree_staff(self):
+    def parent_tree_part_staff(self):
         return self._parent_tree_staff
 
-    @parent_tree_staff.setter
-    def parent_tree_staff(self, val):
+    @parent_tree_part_staff.setter
+    def parent_tree_part_staff(self, val):
         if not isinstance(val, TreePartStaff):
             raise TypeError('parent_tree_staff.value must be of type TreePartStaff not{}'.format(type(val)))
         self._parent_tree_staff = val
@@ -357,7 +357,7 @@ class TreePartVoice(object):
             all_chords = chord.get_pre_grace_chords() + [chord] + chord.get_post_grace_chords()
             for ch in all_chords:
                 self.chords.append(ch)
-                ch.parent_voice = self
+                ch.parent_tree_part_voice = self
                 if ch.manual_voice_number:
                     ch.add_child(Voice(str(ch.manual_voice_number)))
                 else:
@@ -400,11 +400,11 @@ class TreePartVoice(object):
                 for b in range(beats.value):
                     tree_beat = TreeBeat(duration=4. / beat_type.value)
                     list_of_beats.append(tree_beat)
-                    tree_beat.parent_voice = self
+                    tree_beat.parent_tree_part_voice = self
         else:
             duration = 0
             for beat in list_of_beats:
-                beat.parent_voice = self
+                beat.parent_tree_part_voice = self
                 duration += beat.duration
             if self.parent_part.up.quarter_duration != duration:
                 raise ValueError('sum of beat durations must be equal to measure duration')
@@ -955,8 +955,8 @@ class TreePartStaff(object):
             raise TypeError()
         if tree_part_voice.number in self.tree_part_voices.keys():
             raise AttributeError()
-        tree_part_voice.parent_tree_staff = self
-        self._tree_part_voices[tree_part_voice.number] = tree_part_voice
+        tree_part_voice.parent_tree_part_staff = self
+        self.tree_part_voices[tree_part_voice.number] = tree_part_voice
         return tree_part_voice
 
     # get
@@ -965,7 +965,9 @@ class TreePartStaff(object):
             return self.tree_part_voices[voice_number]
         except KeyError:
             return self.set_tree_part_voice(voice_number)
+
     get_voice = get_tree_part_voice
+
     # set
     def set_tree_part_voice(self, voice_number):
         tree_part_voice = TreePartVoice(voice_number)
@@ -979,10 +981,9 @@ class TreePartStaff(object):
                 if key not in self.tree_part_voices.keys():
                     self.set_tree_part_voice(key)
 
-        if self.tree_part_voices == {}:
+        if not self.tree_part_voices:
             self.set_tree_part_voice(1)
         _fill_voices()
-
         for voice in self.tree_part_voices.values():
             voice.fill_with_rest()
 
@@ -1000,6 +1001,7 @@ class TreePart(timewise.Part):
         self._divisions_updated = False
         self._finished = False
         self._accidental_mode = 'normal'
+        self._parent_score_part = None
 
     # // private methods
     def _get_attributes(self):
@@ -1063,6 +1065,14 @@ class TreePart(timewise.Part):
     @property
     def notes(self):
         return self.get_children_by_type(TreeNote)
+
+    @property
+    def parent_score_part(self):
+        return self._parent_score_part
+
+    @parent_score_part.setter
+    def parent_score_part(self, val):
+        self._parent_score_part = val
 
     @property
     def staves(self):
@@ -1199,12 +1209,13 @@ class TreePart(timewise.Part):
             return self.set_tree_part_staff(staff_number)
 
     get_staff = get_tree_part_staff
+
     # remove
     def remove_chord(self, chord):
         if not isinstance(chord, TreeChord):
             raise TypeError()
 
-        tree_voice = self.get_voice(chord.parent_voice.number)
+        tree_voice = self.get_voice(chord.parent_tree_part_voice.number)
         xml_voice = chord.get_children_by_type(Voice)[0]
         chord.remove_child(xml_voice)
         tree_voice.chords.remove(chord)
@@ -1419,6 +1430,8 @@ class TreePart(timewise.Part):
             warnings.warn('chord in {} are already notated. No action took place.'.format(self))
 
     def fill_with_rest(self):
+        if not self.tree_part_staves:
+            self.set_tree_part_staff(1)
         for tree_part_staff in self.tree_part_staves.values():
             tree_part_staff.fill_with_rest()
 

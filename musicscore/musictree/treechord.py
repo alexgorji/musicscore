@@ -60,7 +60,7 @@ class TreeChord(XMLTree):
 
     def __init__(self, midis=71, quarter_duration=1, zero_mode='grace', **kwargs):
         super().__init__(**kwargs)
-        self.parent_voice = None
+        self.parent_tree_part_voice = None
         self.parent_beat = None
         self._offset = None
         self._quarter_duration = None
@@ -218,12 +218,28 @@ class TreeChord(XMLTree):
 
         self._midis = output
 
+    # @property
+    # def next(self):
+    #     index = self.parent_tree_part_voice.chords.index(self)
+    #     if index == len(self.parent_tree_part_voice.chords) - 1:
+    #         return None
+    #     return self.parent_tree_part_voice.chords[index + 1]
+
     @property
-    def next(self):
-        index = self.parent_voice.chords.index(self)
-        if index == len(self.parent_voice.chords) - 1:
-            return None
-        return self.parent_voice.chords[index + 1]
+    def next_in_score(self):
+        index = self.parent_tree_part_voice.chords.index(self)
+        if index == len(self.parent_tree_part_voice.chords) - 1:
+            current_part = self.parent_tree_part_voice.parent_tree_part_staff.parent_part
+            next_measure = current_part.up.next
+            if next_measure:
+                next_part = next_measure.get_part_with_id(id=current_part.id)
+                next_chord = next_part.get_staff(self.parent_tree_part_voice.parent_tree_part_staff.number).get_voice(
+                    self.parent_tree_part_voice.number).chords[0]
+                return next_chord
+            else:
+                return None
+        else:
+            return self.parent_tree_part_voice.chords[index + 1]
 
     @property
     def offset(self):
@@ -242,16 +258,33 @@ class TreeChord(XMLTree):
 
     @property
     def previous(self):
-        index = self.parent_voice.chords.index(self)
+        index = self.parent_tree_part_voice.chords.index(self)
         if index == 0:
             return None
 
-        return self.parent_voice.chords[index - 1]
+        return self.parent_tree_part_voice.chords[index - 1]
+
+    @property
+    def previous_in_score(self):
+        index = self.parent_tree_part_voice.chords.index(self)
+        if index == 0:
+            current_part = self.parent_tree_part_voice.parent_tree_part_staff.parent_part
+            previous_measure = current_part.up.previous
+            if previous_measure:
+                previous_part = previous_measure.get_part_with_id(id=current_part.id)
+                previous_chord = \
+                previous_part.get_staff(self.parent_tree_part_voice.parent_tree_part_staff.number).get_voice(
+                    self.parent_tree_part_voice.number).chords[-1]
+                return previous_chord
+            else:
+                return None
+        else:
+            return self.parent_tree_part_voice.chords[index - 1]
 
     @property
     def previous_in_score_part(self):
         if self.previous is None:
-            previous_voice = self.parent_voice.previous
+            previous_voice = self.parent_tree_part_voice.previous
             if previous_voice:
                 return previous_voice.chords[-1]
             else:
@@ -326,8 +359,8 @@ class TreeChord(XMLTree):
 
     @property
     def __name__(self):
-        # return self.parent_voice.__name__ + ' ' + 'ch:' + str(self.parent_voice.chords.index(self) + 1)
-        return self.parent_voice.__name__ + '.' + str(self.parent_voice.chords.index(self) + 1)
+        # return self.parent_tree_part_voice.__name__ + ' ' + 'ch:' + str(self.parent_tree_part_voice.chords.index(self) + 1)
+        return self.parent_tree_part_voice.__name__ + '.' + str(self.parent_tree_part_voice.chords.index(self) + 1)
 
     # //public methods
     # add
@@ -661,40 +694,28 @@ class TreeChord(XMLTree):
     def remove_from_score(self):
         if 'stop' in self.tie_types and 'start' not in self.tie_types:
             self.remove_tie('stop')
-            previous_chord = self.previous
-            if not previous_chord:
-                previous_beat = self.parent_beat.previous
-                if previous_beat:
-                    previous_chord = previous_beat.chords[-1]
-                else:
-                    previous_voice = self.parent_voice.previous
-                    previous_chord = previous_voice.chords[-1]
-            previous_chord.remove_tie('start')
+            previous_chord = self.previous_in_score
+            if previous_chord:
+                previous_chord.remove_tie('start')
 
         elif 'start' in self.tie_types and 'stop' not in self.tie_types:
             self.remove_tie('start')
-            next_chord = self.next
-            if not next_chord:
-                next_beat = self.parent_beat.next
-                if next_beat:
-                    next_chord = self.parent_beat.next.chords[0]
-                else:
-                    next_voice = self.parent_voice.next
-                    next_chord = next_voice.chords[0]
-            next_chord.remove_tie('stop')
+            next_chord = self.next_in_score
+            if next_chord:
+                next_chord.remove_tie('stop')
 
-            for l in self.get_children_by_type(Lyric):
-                next_chord.add_child(l)
-            for n in self.get_children_by_type(Notations):
-                next_chord.add_child(n)
-            for d in self.get_children_by_type(Direction):
-                next_chord.add_child(d)
-            clef = self.get_clef()
-            if clef:
-                next_chord.add_clef(clef)
+                for l in self.get_children_by_type(Lyric):
+                    next_chord.add_child(l)
+                for n in self.get_children_by_type(Notations):
+                    next_chord.add_child(n)
+                for d in self.get_children_by_type(Direction):
+                    next_chord.add_child(d)
+                clef = self.get_clef()
+                if clef:
+                    next_chord.add_clef(clef)
 
         self.parent_beat.chords.remove(self)
-        self.parent_voice.chords.remove(self)
+        self.parent_tree_part_voice.chords.remove(self)
 
     def remove_notations(self):
         notations = self.get_children_by_type(Notations)
@@ -948,7 +969,7 @@ class TreeChord(XMLTree):
         new_chord = TreeChord(quarter_duration=quarter_duration)
 
         new_chord.midis = self.midis
-        new_chord.parent_voice = self.parent_voice
+        new_chord.parent_tree_part_voice = self.parent_tree_part_voice
         new_chord.parent_beat = self.parent_beat
 
         if self._flags is not None:

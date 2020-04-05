@@ -51,6 +51,15 @@
         <type>quarter</type>
       </note>
       <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
+      <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -69,6 +78,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <staff>2</staff>
+      </note>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
       </note>
     </part>
   </measure>

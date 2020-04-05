@@ -1,15 +1,15 @@
 import os
-from unittest import TestCase
 
 from musicscore.musicstream.streamvoice import SimpleFormat
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
+from musicxmlunittest import XMLTestCase
 from tests.score_templates.xml_test_score import TestScore
 
 path = str(os.path.abspath(__file__).split('.')[0])
 
 
-class Test(TestCase):
+class Test(XMLTestCase):
     def setUp(self) -> None:
         self.score = TreeScoreTimewise()
 
@@ -25,13 +25,9 @@ class Test(TestCase):
         self.score.add_beats()
         chord.remove_from_score()
 
-        result_path = path + '_test_1'
-
-        # with self.assertWarns(UserWarning):
-        #     self.score.write(path=result_path)
-        self.score.write(path=result_path)
-
-        TestScore().assert_template(result_path=result_path)
+        xml_path = path + '_test_1.xml'
+        self.score.write(path=xml_path)
+        self.assertCompareFiles(xml_path)
 
     def test_2(self):
         sf = SimpleFormat()
@@ -48,11 +44,6 @@ class Test(TestCase):
         self.score.add_beats()
         chord.remove_from_score()
 
-        result_path = path + '_test_2'
-
-        # with self.assertWarns(UserWarning):
-        #     self.score.write(path=result_path)
-        self.score.write(path=result_path)
-
-        TestScore().assert_template(result_path=result_path)
-
+        xml_path = path + '_test_2.xml'
+        self.score.write(path=xml_path)
+        self.assertCompareFiles(xml_path)

@@ -196,7 +196,7 @@ class FingerTremoloFlag1(BeatwiseFlag1):
             self.tremolo_chord.add_tremolo(type='stop')
 
         self.tremolo_chord.quarter_duration = chord.quarter_duration
-        self.tremolo_chord.parent_voice = chord.parent_voice
+        self.tremolo_chord.parent_tree_part_voice = chord.parent_tree_part_voice
         self.tremolo_chord.parent_beat = chord.parent_beat
         v = chord.get_children_by_type(Voice)[0]
 
@@ -214,7 +214,7 @@ class FingerTremoloFlag1(BeatwiseFlag1):
         else:
             chord.add_words('\uF417', font_family='bravura', font_size=16, relative_x=30, relative_y=-50)
             chord.set_tie_orientation('under')
-        self.tremolo_chord.parent_voice = chord.parent_voice
+        self.tremolo_chord.parent_tree_part_voice = chord.parent_tree_part_voice
         self.tremolo_chord.parent_beat = chord.parent_beat
         v = chord.get_children_by_type(Voice)[0]
         if not self.tremolo_chord.get_children_by_type(Voice):

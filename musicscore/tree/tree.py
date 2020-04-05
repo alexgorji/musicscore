@@ -18,7 +18,29 @@ class Tree(object):
     @property
     def up(self):
         return self._up
+    @property
+    def previous_sibling(self):
+        try:
+            siblings = self.up.get_children()
+            index = siblings.index(self)
+            if index != 0:
+                return siblings[index - 1]
+            else:
+                return None
+        except (IndexError, AttributeError):
+            return None
 
+    @property
+    def next_sibling(self):
+        try:
+            siblings = self.up.get_children()
+            index = siblings.index(self)
+            if index != len(siblings) - 1:
+                return siblings[index + 1]
+            else:
+                return None
+        except (IndexError, AttributeError):
+            return None
     @property
     def is_root(self):
         if self._up is None:

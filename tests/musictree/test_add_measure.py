@@ -4,10 +4,10 @@ import os
 
 from tests.score_templates.xml_test_score import TestScore
 
-path = os.path.abspath(__file__).split('.')[0]
+path = str(os.path.abspath(__file__).split('.')[0])
 
 
-class TestAddMeasure(TestCase):
+class Test(TestCase):
     def setUp(self):
         self.score = TreeScoreTimewise()
         self.score.add_part()
