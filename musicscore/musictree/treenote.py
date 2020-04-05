@@ -125,6 +125,8 @@ class TreeNote(Note):
                 output = self.previous.offset
             else:
                 output = self.previous.offset + self.previous.quarter_duration
+            if self.parent_chord.staff_number:
+                output -= (self.parent_chord.staff_number - 1) * self.up.up.quarter_duration
             self._offset = output
         else:
             self._offset = 0

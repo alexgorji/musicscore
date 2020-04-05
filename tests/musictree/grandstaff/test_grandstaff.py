@@ -168,7 +168,17 @@ class Test(XMLTestCase):
         l_sf_1.to_stream_voice(2).add_to_score(self.score, part_number=1, staff_number=2)
         l_sf_2.to_stream_voice(1).add_to_score(self.score, part_number=1, staff_number=2)
 
-
         xml_path = path + '_test_12.xml'
+        self.score.write(xml_path)
+        self.assertCompareFiles(xml_path)
+
+    def test_13(self):
+        # accidental
+        r_sf = SimpleFormat(quarter_durations=[4, 4, 4, 4], midis=[61, 63, 64, 67])
+        l_sf = SimpleFormat(quarter_durations=[4, 4, 4, 4], midis=[60, 64, 63, 64])
+        r_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=1)
+        l_sf.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=2)
+
+        xml_path = path + '_test_13.xml'
         self.score.write(xml_path)
         self.assertCompareFiles(xml_path)
