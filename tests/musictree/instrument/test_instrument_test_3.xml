@@ -22,22 +22,13 @@
       <part-name>Violin 1</part-name>
       <part-abbreviation>vln. 1</part-abbreviation>
     </score-part>
-    <part-group number="1" type="start">
-      <group-symbol>bracket</group-symbol>
-      <group-barline>yes</group-barline>
-    </part-group>
     <score-part id="p2">
       <part-name>Violin 2</part-name>
       <part-abbreviation>vln. 2</part-abbreviation>
     </score-part>
     <score-part id="p3">
-      <part-name>Viola</part-name>
-      <part-abbreviation>vla.</part-abbreviation>
-    </score-part>
-    <part-group number="1" type="stop"/>
-    <score-part id="p4">
-      <part-name>Cello</part-name>
-      <part-abbreviation>vc.</part-abbreviation>
+      <part-name>Piano</part-name>
+      <part-abbreviation>pno.</part-abbreviation>
     </score-part>
   </part-list>
   <measure number="1">
@@ -48,18 +39,13 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
-      </attributes>
-      <attributes>
         <clef>
           <sign>G</sign>
           <line>2</line>
         </clef>
       </attributes>
       <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
+        <rest/>
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
@@ -72,18 +58,13 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
-      </attributes>
-      <attributes>
         <clef>
           <sign>G</sign>
           <line>2</line>
         </clef>
       </attributes>
       <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
+        <rest/>
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
@@ -96,42 +77,18 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
-      </attributes>
-      <attributes>
-        <clef>
-          <sign>C</sign>
-          <line>3</line>
+        <staves>2</staves>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
         </clef>
-      </attributes>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </part>
-    <part id="p4">
-      <attributes>
-        <divisions>1</divisions>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
-      <attributes>
-        <clef>
+        <clef number="2">
           <sign>F</sign>
           <line>4</line>
         </clef>
       </attributes>
       <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
+        <rest/>
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
