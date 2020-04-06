@@ -153,6 +153,7 @@ class TreeChord(XMLTree):
             self.add_child(StaffElement(val))
         else:
             staff.value = val
+
     # //public properties
     @property
     def end_position(self):
