@@ -278,3 +278,9 @@ class Cymbal(TreeInstrument):
 
         self.midi = self.midis[self.number]
         self.midi.notehead = 'x'
+
+
+# voice
+class Voice(TreeInstrument):
+    def __init__(self, *args, **kwargs):
+        super().__init__(name='voice', abbreviation='v.', *args, **kwargs)
