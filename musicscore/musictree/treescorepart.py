@@ -22,7 +22,7 @@ class TreeScorePart(ScorePart):
         self.instrument = instrument
         self.parent_score = None
 
-    # // properties
+    # // public properties
     @property
     def forbidden_divisions(self):
         if self._forbidden_divisions is None:
@@ -49,6 +49,8 @@ class TreeScorePart(ScorePart):
             raise TypeError('instrument.value must be of type TreeInstrument not{}'.format(type(val)))
         self._instrument = val
         if val is not None:
+            if self.number_of_staves is None and val.number_of_staves is not None:
+                self.number_of_staves = val.number_of_staves
             val.id = self.id
             if self.part_name is not None:
                 self.remove_child(self.part_name)
@@ -98,6 +100,7 @@ class TreeScorePart(ScorePart):
             return None
 
     # //public methods
+
     # add
     def add_part(self, part=None):
         if not part:

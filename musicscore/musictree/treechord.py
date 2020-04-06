@@ -425,13 +425,6 @@ class TreeChord(XMLTree):
             self._notes = self._generate_notes()
         return self._notes
 
-    # @property
-    # def next(self):
-    #     index = self.parent_tree_part_voice.chords.index(self)
-    #     if index == len(self.parent_tree_part_voice.chords) - 1:
-    #         return None
-    #     return self.parent_tree_part_voice.chords[index + 1]
-
     @property
     def next_in_score(self):
         index = self.parent_tree_part_voice.chords.index(self)

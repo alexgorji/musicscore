@@ -233,7 +233,7 @@ class ComplexTypeAttributes(ComplexType):
         Element(Staves, min_occurrence=0),
         Element(PartSymbol, min_occurrence=0),
         Element(Instruments, min_occurrence=0),
-        Element(Clef, min_occurrence=0),
+        Element(Clef, min_occurrence=0, max_occurrence=None),
         Element(StaffDetails, min_occurrence=0, max_occurrence=None),
         Element(Transpose, min_occurrence=0, max_occurrence=None),
         Element(Directive, min_occurrence=0, max_occurrence=None),
