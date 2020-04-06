@@ -147,12 +147,16 @@ class Test(XMLTestCase):
         self.score.write(xml_path)
         TestScore().assert_template(xml_path)
 
-    # def test_10(self):
-    #     v1 = SimpleFormat(quarter_durations=[2, 2], midis=[72, 73])
-    #     v2 = SimpleFormat(quarter_durations=[2, 2], midis=[60, 61])
-    #     v1.to_stream_voice(1).add_to_score(self.score)
-    #     v2.to_stream_voice(2).add_to_score(self.score)
-    #
-    #     xml_path = path + '_test_10.xml'
-    #     self.score.write(xml_path)
-    #     self.assertCompareFiles(xml_path)
+    def test_10(self):
+        v1 = SimpleFormat(quarter_durations=[2, 2], midis=[72, 73])
+        v2 = SimpleFormat(quarter_durations=[2, 2], midis=[60, 61])
+        v1.to_stream_voice(1).add_to_score(self.score)
+        v2.to_stream_voice(2).add_to_score(self.score)
+
+        xml_path = path + '_test_10.xml'
+        self.score.write(xml_path)
+
+        voice_1 = self.score.get_measure(1).get_part(1).get_staff(1).get_voice(1)
+        voice_2 = self.score.get_measure(1).get_part(1).get_staff(1).get_voice(2)
+
+        self.assertCompareFiles(xml_path)

@@ -277,6 +277,25 @@ class TreePartVoice(object):
     def get_beats(self):
         return self.beats
 
+    def get_previous_measure_last_notes(self):
+        previous_measure_last_notes = []
+        try:
+            previous_measure = self.parent_part.up.previous
+        except AttributeError:
+            previous_measure = None
+        if previous_measure:
+            previous_part = [p for p in previous_measure.get_children_by_type(TreePart) if p.id == self.parent_part.id][
+                0]
+            previous_staff = previous_part.get_tree_part_staff(staff_number=self.number)
+            previous_measure_last_chords = []
+            for tree_part_voice in previous_staff.tree_part_voices.values():
+                previous_measure_last_chords.append(tree_part_voice.chords[-1])
+
+            previous_measure_last_notes = []
+            for chord in previous_measure_last_chords:
+                previous_measure_last_notes.extend(chord.get_notes())
+        return previous_measure_last_notes
+
     # remove
     def remove_chords(self):
         self._chords = []
@@ -305,6 +324,114 @@ class TreePartVoice(object):
         self._beats = list_of_beats
 
     # update
+    def update_accidentals(self, mode):
+
+        def _get_previous_measure_last_signed_notes():
+            previous_measure_last_notes = self.get_previous_measure_last_notes()
+            return [n for n in previous_measure_last_notes if
+                    isinstance(n.event, Pitch) and n.pitch.alter and n.pitch.alter.value != 0]
+
+        def get_accidental_info(note):
+            try:
+                return note.pitch.step.value, note.pitch.alter.value
+            except AttributeError:
+                return note.pitch.step.value, 0
+
+        def is_in_repetition(chord):
+            if chord.is_tied_to_previous:
+                return False
+
+            previous = chord.previous_in_part_voice
+            while previous:
+                if previous.is_tied_to_previous:
+                    previous = previous.previous_in_part_voice
+                else:
+                    break
+
+            if previous and chord.has_same_pitches(chord.previous_in_part_voice):
+                return True
+
+        def force_hide_accidentals():
+            notes = [note for chord in self.chords for note in chord.get_notes()]
+            for note in notes:
+                if note.accidental._force_show:
+                    note.accidental.show = True
+                elif note.accidental._force_hide:
+                    note.accidental.show = False
+
+        if mode == 'normal':
+            _hide_accidental = []
+            _set_natural = set()
+            pitched_notes = [note for chord in self.chords for note in chord.get_notes() if
+                             isinstance(note.event, Pitch)]
+            _first_chord_natural = [note.pitch.step.value for note in
+                                    _get_previous_measure_last_signed_notes()]
+            for note in pitched_notes:
+                if note.pitch.alter and note.pitch.alter.value != 0 and (
+                        note.pitch.step.value, note.pitch.alter.value) not in _hide_accidental:
+                    if 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
+                        note.accidental.show = True
+                        _hide_accidental.append(get_accidental_info(note))
+                    _set_natural.add(note.pitch.step.value)
+                elif not note.pitch.alter or note.pitch.alter.value == 0:
+                    if note.pitch.step.value in _set_natural:
+                        for item in _hide_accidental:
+                            if item[0] == note.pitch.step.value:
+                                _hide_accidental.remove(item)
+
+                        _set_natural.remove(note.pitch.step.value)
+                        note.accidental.show = True
+                    elif note.offset == 0:
+                        if note.pitch.step.value in _first_chord_natural and 'stop' not in [t.type for t in
+                                                                                            note.get_children_by_type(
+                                                                                                Tie)]:
+                            note.accidental.show = True
+        elif mode == 'modern':
+            _first_chord_natural = [note.pitch.step.value for note in _get_previous_measure_last_signed_notes()]
+            _set_natural = set()
+            for index, chord in enumerate(self.chords):
+                # first chord
+                if index == 0:
+                    for note in chord.notes:
+                        if isinstance(note.event, Rest):
+                            break
+                        # natural
+                        elif not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
+                            if note.pitch.step.value in _first_chord_natural and 'stop' not in \
+                                    [t.type for t in note.get_children_by_type(Tie)]:
+                                note.accidental.show = True
+                        # non natural
+                        else:
+                            _set_natural.add(note.pitch.step.value)
+                            if 'stop' not in [t.type for t in note.get_children_by_type(Tie)]:
+                                note.accidental.show = True
+
+                else:
+                    # other chords
+                    for note in chord.notes:
+                        if isinstance(note.event, Rest):
+                            break
+                        # natural
+                        if not note.pitch.alter or (note.pitch.alter and note.pitch.alter.value == 0):
+                            if note.pitch.step.value in _set_natural:
+                                note.accidental.show = True
+                                _set_natural.remove(note.pitch.step.value)
+                        # non natural
+                        else:
+                            if note.is_finger_tremolo:
+                                note.accidental.show = True
+                            elif is_in_repetition(chord):
+                                break
+                            elif 'stop' not in [t.type for t in
+                                                note.get_children_by_type(Tie)]:
+                                note.accidental.show = True
+
+                            _set_natural.add(note.pitch.step.value)
+        else:
+            raise MusicTreeError('mode {} is not known to update accidentals'.format(mode))
+
+        force_hide_accidentals()
+
     def update_tuplets(self):
         if not self._rests_adjoined:
             raise Exception('adjoin_rests() first')
@@ -894,7 +1021,8 @@ class TreePartStaff(object):
 
     # update
     def update_accidentals(self, mode):
-        notes = [note for chord in self.chords for note in chord.get_notes()]
+        # for tree_part_voice in self.tree_part_voices.values():
+        #     tree_part_voice.update_accidentals(mode=mode)
 
         def _get_previous_measure_last_signed_notes():
             previous_measure_last_notes = self.get_previous_measure_last_notes()
