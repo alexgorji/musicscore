@@ -6,10 +6,9 @@ from quicktions import Fraction
 from musicscore.basic_functions import lcm, substitute, flatten
 from musicscore.musictree.exceptions import MusicTreeError
 from musicscore.musictree.treebeat import TreeBeat
-from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treechord import TreeChord, TreeBackup, TreeNote
 from musicscore.musictree.treechordflags2 import TreeChordFlag2
 from musicscore.musictree.treechordflags3 import TreeChordFlag3
-from musicscore.musictree.treenote import TreeNote, TreeBackup
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.fullnote import Pitch, Rest
 from musicscore.musicxml.elements.note import Beam, Type, Tie, Notations

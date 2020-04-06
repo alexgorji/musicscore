@@ -1,9 +1,8 @@
 from unittest import TestCase
 
 from musicscore.musictree.midi import Midi
-from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treechord import TreeChord, TreeNote
 from musicscore.musictree.treemeasure import TreeMeasure
-from musicscore.musictree.treenote import TreeNote
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 import os
 

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from musicscore.musictree.treenote import TreeNote
+from musicscore.musictree.treechord import TreeNote
 from musicscore.musicxml.elements.fullnote import Pitch
 from musicscore.musicxml.elements.note import Duration
 
