@@ -1,8 +1,7 @@
 from musicscore.musictree.midi import Midi
-from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treechord import TreeChord, TreeBackup
 from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, LOW_BASS_CLEF, HIGH_TREBLE_CLEF, TreeClef
 from musicscore.musictree.treemeasure import TreeMeasure
-from musicscore.musictree.treenote import TreeBackup
 from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.groups.common import Voice
 from musicscore.musicxml.types.complextypes.attributes import Clef

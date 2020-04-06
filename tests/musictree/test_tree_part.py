@@ -41,9 +41,9 @@ class Test(TestCase):
         p.add_chord(TreeChord(62, quarter_duration=2))
         p.add_chord(TreeChord(0, quarter_duration=1))
 
-        self.assertEqual(p.chords[0].previous, None)
-        self.assertEqual(id(p.chords[1].previous), id(p.chords[0]))
-        self.assertEqual(id(p.chords[2].previous), id(p.chords[1]))
+        self.assertEqual(p.chords[0].previous_in_part_voice, None)
+        self.assertEqual(id(p.chords[1].previous_in_part_voice), id(p.chords[0]))
+        self.assertEqual(id(p.chords[2].previous_in_part_voice), id(p.chords[1]))
 
     def test_offset(self):
         p = self.part
