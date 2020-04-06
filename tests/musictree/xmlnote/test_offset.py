@@ -20,14 +20,14 @@ class Test(XMLTestCase):
         sf.to_stream_voice(1).add_to_score(self.score)
         xml_path = path + '_test_1.xml'
         self.score.write(xml_path)
-        xml_notes = []
+        xml_chords = []
         for measure in self.score.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 for staff in part.tree_part_staves.values():
-                    xml_notes.extend(staff.xml_notes)
+                    xml_chords.extend(staff.xml_chords)
         expected = [0, Fraction(1, 1), Fraction(5, 4), Fraction(2, 1), Fraction(7, 2), 0, Fraction(1, 1),
                     Fraction(3, 1)]
-        actual = [xml_note.offset for xml_note in xml_notes]
+        actual = [xml_chord.offset for xml_chord in xml_chords]
         self.assertEqual(expected, actual)
 
     def test_2(self):
@@ -39,17 +39,17 @@ class Test(XMLTestCase):
         sf_3.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=3)
         xml_path = path + '_test_2.xml'
         self.score.write(xml_path)
-        xml_note_offsets = {}
+        xml_chord_offsets = {}
         for measure in self.score.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 for key in part.tree_part_staves.keys():
                     staff = part.tree_part_staves[key]
-                    xml_note_offsets[key] = [xml_note.offset for xml_note in staff.xml_notes]
-        # print(xml_note_offsets)
+                    xml_chord_offsets[key] = [xml_chord.offset for xml_chord in staff.xml_chords]
+        # print(xml_chord_offsets)
         expected = {1: [Fraction(0, 1), Fraction(1, 1), Fraction(5, 4), Fraction(2, 1), Fraction(7, 2)],
                     2: [Fraction(0, 1), Fraction(1, 1), Fraction(5, 4), Fraction(2, 1), Fraction(7, 2)],
                     3: [Fraction(0, 1), Fraction(1, 1), Fraction(5, 4), Fraction(2, 1), Fraction(7, 2)]}
-        actual = xml_note_offsets
+        actual = xml_chord_offsets
         self.assertEqual(actual, expected)
 
     def test_3(self):
@@ -59,18 +59,18 @@ class Test(XMLTestCase):
         sf_2.to_stream_voice(2).add_to_score(self.score, part_number=1, staff_number=1)
         xml_path = path + '_test_3.xml'
         self.score.write(xml_path)
-        xml_note_offsets = {}
+        xml_chord_offsets = {}
         for measure in self.score.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 for staff in part.tree_part_staves.values():
                     for key in staff.tree_part_voices.keys():
                         voice = staff.tree_part_voices[key]
-                        xml_note_offsets[key] = [xml_note.offset for xml_note in voice.xml_notes]
-        print(xml_note_offsets)
+                        xml_chord_offsets[key] = [xml_chord.offset for xml_chord in voice.xml_chords]
+        print(xml_chord_offsets)
         expected = {1: [0, Fraction(1, 1), Fraction(5, 4), Fraction(2, 1), Fraction(7, 2)],
                     2: [Fraction(0, 1), Fraction(1, 4), Fraction(1, 1), Fraction(5, 2), Fraction(7, 2)]}
 
-        actual = xml_note_offsets
+        actual = xml_chord_offsets
         self.assertEqual(actual, expected)
     # def test_3(self):
     #     r_sf_2 = SimpleFormat(

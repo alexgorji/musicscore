@@ -13,5 +13,5 @@ class Test(XMLTestCase):
         sf_1.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=1)
         # sf_2.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=2)
         self.score.finish()
-        xml_notes = self.score.get_measure(1).get_part(1).get_staff(1).xml_notes
-        print([xml_note.notes[0].quarter_duration for xml_note in xml_notes])
+        xml_chords = self.score.get_measure(1).get_part(1).get_staff(1).xml_chords
+        print([xml_chord.notes[0].quarter_duration for xml_chord in xml_chords])
