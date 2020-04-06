@@ -26,6 +26,187 @@ from musicscore.musicxml.types.complextypes.ornaments import Tremolo
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
 
+class TreeBackup(Backup):
+    def __init__(self, quarter_duration, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._quarter_duration = None
+        self.quarter_duration = quarter_duration
+
+    @property
+    def quarter_duration(self):
+        return self._quarter_duration
+
+    @quarter_duration.setter
+    def quarter_duration(self, value):
+        self._quarter_duration = value
+
+    def update_duration(self, divisions):
+        try:
+            self.get_children_by_type(Duration)[0].value = int(self.quarter_duration * divisions)
+        except IndexError:
+            self.add_child(Duration())
+            self.duration.value = int(self.quarter_duration * divisions)
+
+
+class TreeAccidental(Accidental):
+    """"""
+
+    def __init__(self, value='natural', show=False, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+        self._note = None
+        self._show = None
+        self._force_show = None
+        self._force_hide = None
+
+        self.show = show
+
+    @property
+    def show(self):
+        return self._show
+
+    @show.setter
+    def show(self, value):
+        if not isinstance(value, bool):
+            raise TypeError('show.value must be of type bool not{}'.format(type(value)))
+        self._show = value
+        if self._note:
+            self._note.update_accidental()
+
+    def set_force_show(self, value):
+        self._force_show = value
+
+    def set_force_hide(self, value):
+        self._force_hide = value
+
+
+class TreeNote(Note):
+    # todo: Inheritance Chain must be Midi, MidiNote, TreeMidiNote (or TreeNote)
+    """
+    quarter_duration = 0 means grace note
+    """
+
+    def __init__(self, parent_chord, event=Rest(), is_tied=False, *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
+        self._parent_chord = None
+        self._accidental = TreeAccidental(show=False, value='natural')
+        self._accidental._note = self
+        self._event = None
+        self.event = event
+        self._offset = None
+        self._is_tied = False
+
+        self.parent_chord = parent_chord
+        self.is_tied = is_tied
+        self.is_finger_tremolo = False
+
+    # // private methods
+    def _add_notations(self, notation):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+
+        notations.add_child(notation)
+
+    # //public properties
+    @property
+    def accidental(self):
+        return self._accidental
+
+    @property
+    def end_position(self):
+        return self.parent_chord.end_postion
+
+    @property
+    def event(self):
+        return self._event
+
+    @event.setter
+    def event(self, value):
+        if not isinstance(value, Event):
+            raise TypeError('event.value must be of type  not{}'.format(type(value)))
+        try:
+            self.remove_child(self._event)
+        except ValueError as err:
+            print(err)
+            pass
+        self._event = self.add_child(value)
+        self.update_accidental()
+
+    @property
+    def offset(self):
+        return self.parent_chord.offset
+
+    @property
+    def parent_chord(self):
+        return self._parent_chord
+
+    @parent_chord.setter
+    def parent_chord(self, val):
+        if not isinstance(val, TreeChord):
+            raise TypeError('parent_chord.value must be of type TreeChord not{}'.format(type(val)))
+        self._parent_chord = val
+
+    @property
+    def quarter_duration(self):
+        return self.parent_chord.quarter_duration
+
+    # // public methods
+    # add
+    def add_lyric(self, text, number=1, **kwargs):
+        lyric = self.add_child(Lyric(number=str(number), **kwargs))
+        lyric.add_child(Text(str(text)))
+        return lyric
+
+    # update
+    def update_accidental(self):
+        _accidentals = {-1.5: 'three-quarters-flat',
+                        -1: 'flat',
+                        -0.5: 'quarter-flat',
+                        0: 'natural',
+                        0.5: 'quarter-sharp',
+                        1: 'sharp',
+                        1.5: 'three-quarters-sharp',
+                        2: 'double-sharp'
+                        }
+        accidental = self.get_children_by_type(type_=TreeAccidental)
+        if self._accidental.show:
+            if isinstance(self.event, Pitch):
+                alter = self.event.get_children_by_type(type_=Alter)
+                if not alter:
+                    self.event.add_child(Alter(0))
+
+                accidental_value = _accidentals[self.event.alter.value]
+                if accidental:
+                    accidental[0].value = accidental_value
+                else:
+                    self._accidental.value = accidental_value
+                    self.add_child(self._accidental)
+        else:
+            if accidental:
+                self.remove_child(accidental[0])
+
+    def update_duration(self, divisions):
+        try:
+            self.duration.value = int(self.quarter_duration * divisions)
+        except AttributeError:
+            self.add_child(Duration())
+            self.duration.value = int(self.quarter_duration * divisions)
+
+    def update_grace(self):
+        if self.quarter_duration == 0:
+            if not self.get_children_by_type(Grace):
+                children = self.get_children()[:]
+                self.reset_dtd()
+                for child in children:
+                    if not isinstance(child, Duration):
+                        self.add_child(child)
+                    else:
+                        del child
+                self.add_child(Grace())
+
+
 class TreeChord(XMLTree):
     _DTD = Sequence(
         Choice(
@@ -61,6 +242,7 @@ class TreeChord(XMLTree):
         super().__init__(**kwargs)
         self.parent_tree_part_voice = None
         self.parent_beat = None
+        self._notes = None
         self._offset = None
         self._quarter_duration = None
         self._zero_mode = None
@@ -84,16 +266,15 @@ class TreeChord(XMLTree):
         self.relative_x = None
         self.tie_orientation = None
 
-    # //private properties
-    @property
-    def _notes(self):
+    # //private methods
+    def _generate_notes(self):
         output = []
         if self.zero_mode == 'remove' and self.quarter_duration == 0:
             return output
 
         for index, midi in enumerate(self.midis):
-            note = TreeNote(event=midi.get_pitch_rest(), quarter_duration=self.quarter_duration, parent_chord=self)
-            note.parent_chord = self
+            note = TreeNote(parent_chord=self, event=midi.get_pitch_rest())
+            note.update_grace()
             note.accidental.set_force_show(midi.accidental.force_show)
             note.accidental.set_force_hide(midi.accidental.force_hide)
             note.is_finger_tremolo = self.is_finger_tremolo
@@ -122,7 +303,6 @@ class TreeChord(XMLTree):
             output.append(note)
         return output
 
-    # //private methods
     def _get_staff_object(self):
         try:
             return self.get_children_by_type(StaffElement)[0]
@@ -239,6 +419,12 @@ class TreeChord(XMLTree):
 
         self._midis = output
 
+    @property
+    def notes(self):
+        if self._notes is None:
+            self._notes = self._generate_notes()
+        return self._notes
+
     # @property
     # def next(self):
     #     index = self.parent_tree_part_voice.chords.index(self)
@@ -278,17 +464,15 @@ class TreeChord(XMLTree):
         return previous_in_beat.position_in_beat + previous_in_beat.quarter_duration
 
     @property
-    def previous(self):
+    def previous_in_part_voice(self):
         index = self.parent_tree_part_voice.chords.index(self)
         if index == 0:
             return None
-
         return self.parent_tree_part_voice.chords[index - 1]
 
     @property
-    def previous_in_score(self):
-        index = self.parent_tree_part_voice.chords.index(self)
-        if index == 0:
+    def previous_in_score_voice(self):
+        if self.previous_in_part_voice is None:
             current_part = self.parent_tree_part_voice.parent_tree_part_staff.parent_part
             previous_measure = current_part.up.previous
             if previous_measure:
@@ -300,18 +484,7 @@ class TreeChord(XMLTree):
             else:
                 return None
         else:
-            return self.parent_tree_part_voice.chords[index - 1]
-
-    @property
-    def previous_in_score_part(self):
-        if self.previous is None:
-            previous_voice = self.parent_tree_part_voice.previous
-            if previous_voice:
-                return previous_voice.chords[-1]
-            else:
-                return None
-        else:
-            return self.previous
+            return self.previous_in_part_voice
 
     @property
     def quarter_duration(self):
@@ -356,8 +529,8 @@ class TreeChord(XMLTree):
             return []
 
     def update_offset(self):
-        if self.previous:
-            output = self.previous.offset + self.previous.quarter_duration
+        if self.previous_in_part_voice:
+            output = self.previous_in_part_voice.offset + self.previous_in_part_voice.quarter_duration
             self._offset = output
         else:
             self._offset = 0
@@ -679,6 +852,9 @@ class TreeChord(XMLTree):
                         return child.get_children()[0].to_string()[1:-3]
         return None
 
+    def get_notes(self):
+        return self.notes
+
     def get_pre_grace_chords(self):
         return self._pre_grace_chords
 
@@ -710,7 +886,7 @@ class TreeChord(XMLTree):
     def remove_from_score(self):
         if 'stop' in self.tie_types and 'start' not in self.tie_types:
             self.remove_tie('stop')
-            previous_chord = self.previous_in_score
+            previous_chord = self.previous_in_score_voice
             if previous_chord:
                 previous_chord.remove_tie('start')
 
@@ -915,6 +1091,20 @@ class TreeChord(XMLTree):
     def force_tie(self):
         self.is_adjoinable = False
 
+    def has_same_pitches(self, other_chord):
+        if len(self.notes) == len(other_chord.notes):
+            for note_1, note_2 in zip(self.notes, other_chord.notes):
+                if isinstance(note_1.event, Rest) or isinstance(note_2.event, Rest):
+                    return False
+                pitch_1 = note_1.pitch.dump()
+                pitch_2 = note_2.pitch.dump()
+                if len(pitch_1) == len(pitch_2):
+                    for i in range(1, len(pitch_1)):
+                        if pitch_1[i].value != pitch_2[i].value:
+                            return False
+                    return True
+        return False
+
     def inverse(self):
         intervals = xToD([midi.value for midi in self.midis])
         intervals = [-interval for interval in intervals]
@@ -1062,202 +1252,3 @@ class TreeChord(XMLTree):
         for grace_chord in self.get_post_grace_chords():
             new_chord.add_grace_chords(grace_chord.__deepcopy__(), 'post')
         return new_chord
-
-
-class TreeBackup(Backup):
-    def __init__(self, quarter_duration, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._quarter_duration = None
-        self.quarter_duration = quarter_duration
-
-    @property
-    def quarter_duration(self):
-        return self._quarter_duration
-
-    @quarter_duration.setter
-    def quarter_duration(self, value):
-        self._quarter_duration = value
-
-    def update_duration(self, divisions):
-        try:
-            self.get_children_by_type(Duration)[0].value = int(self.quarter_duration * divisions)
-        except IndexError:
-            self.add_child(Duration())
-            self.duration.value = int(self.quarter_duration * divisions)
-
-
-class TreeAccidental(Accidental):
-    """"""
-
-    def __init__(self, value='natural', show=False, *args, **kwargs):
-        super().__init__(value=value, *args, **kwargs)
-        self._note = None
-        self._show = None
-        self._force_show = None
-        self._force_hide = None
-
-        self.show = show
-
-    @property
-    def show(self):
-        return self._show
-
-    @show.setter
-    def show(self, value):
-        if not isinstance(value, bool):
-            raise TypeError('show.value must be of type bool not{}'.format(type(value)))
-        self._show = value
-        if self._note:
-            self._note.update_accidental()
-
-    def set_force_show(self, value):
-        self._force_show = value
-
-    def set_force_hide(self, value):
-        self._force_hide = value
-
-
-class TreeNote(Note):
-    # todo: Inheritance Chain must be Midi, MidiNote, TreeMidiNote (or TreeNote)
-    """
-    quarter_duration = 0 means grace note
-    """
-
-    def __init__(self, event=Rest(), quarter_duration=1, is_tied=False, parent_chord=None, *args,
-                 **kwargs):
-        super().__init__(*args, **kwargs)
-        self.parent_chord = parent_chord
-        self._accidental = TreeAccidental(show=False, value='natural')
-        self._accidental._note = self
-        self._quarter_duration = None
-        self.quarter_duration = quarter_duration
-        self._event = None
-        self.event = event
-        self._offset = None
-        self._is_tied = False
-        self.is_tied = is_tied
-        self.is_finger_tremolo = False
-
-    @property
-    def quarter_duration(self):
-        return self._quarter_duration
-
-    @quarter_duration.setter
-    def quarter_duration(self, value):
-        if not isinstance(value, int) and not isinstance(value, float) and not isinstance(value, Fraction):
-            raise TypeError('quarter_duration must be of type int, float or Fraction not {}'.format(type(value)))
-
-        if value < 0:
-            raise ValueError('quarter_duration {} must be zero or positive'.format(value))
-
-        if not isinstance(self.quarter_duration, Fraction):
-            self._quarter_duration = Fraction(value).limit_denominator(10000)
-        else:
-            self._quarter_duration = value
-
-        if value == 0:
-            if not self.get_children_by_type(Grace):
-                children = self.get_children()[:]
-                self.reset_dtd()
-                for child in children:
-                    if not isinstance(child, Duration):
-                        self.add_child(child)
-                    else:
-                        del child
-                self.add_child(Grace())
-
-    @property
-    def previous(self):
-        index = self.up.notes.index(self)
-        if index == 0:
-            return None
-        return self.up.notes[index - 1]
-
-    def update_offset(self):
-        if self.previous:
-            if self.get_children_by_type(Chord):
-                output = self.previous.offset
-            else:
-                output = self.previous.offset + self.previous.quarter_duration
-            if self.parent_chord.staff_number:
-                output -= (self.parent_chord.staff_number - 1) * self.up.up.quarter_duration
-            self._offset = output
-        else:
-            self._offset = 0
-
-    @property
-    def offset(self):
-        if self._offset is None:
-            self.update_offset()
-        return self._offset
-
-    @property
-    def end_position(self):
-        return self.offset + self.quarter_duration
-
-    @property
-    def accidental(self):
-        return self._accidental
-
-    @property
-    def event(self):
-        return self._event
-
-    @event.setter
-    def event(self, value):
-        if not isinstance(value, Event):
-            raise TypeError('event.value must be of type  not{}'.format(type(value)))
-        try:
-            self.remove_child(self._event)
-        except ValueError as err:
-            print(err)
-            pass
-        self._event = self.add_child(value)
-        self.update_accidental()
-
-    def update_accidental(self):
-        _accidentals = {-1.5: 'three-quarters-flat',
-                        -1: 'flat',
-                        -0.5: 'quarter-flat',
-                        0: 'natural',
-                        0.5: 'quarter-sharp',
-                        1: 'sharp',
-                        1.5: 'three-quarters-sharp',
-                        2: 'double-sharp'
-                        }
-        accidental = self.get_children_by_type(type_=TreeAccidental)
-        if self._accidental.show:
-            if isinstance(self.event, Pitch):
-                alter = self.event.get_children_by_type(type_=Alter)
-                if not alter:
-                    self.event.add_child(Alter(0))
-
-                accidental_value = _accidentals[self.event.alter.value]
-                if accidental:
-                    accidental[0].value = accidental_value
-                else:
-                    self._accidental.value = accidental_value
-                    self.add_child(self._accidental)
-        else:
-            if accidental:
-                self.remove_child(accidental[0])
-
-    def _add_notations(self, notation):
-        try:
-            notations = self.get_children_by_type(Notations)[0]
-        except IndexError:
-            notations = self.add_child(Notations())
-
-        notations.add_child(notation)
-
-    def update_duration(self, divisions):
-        try:
-            self.duration.value = int(self.quarter_duration * divisions)
-        except AttributeError:
-            self.add_child(Duration())
-            self.duration.value = int(self.quarter_duration * divisions)
-
-    def add_lyric(self, text, number=1, **kwargs):
-        lyric = self.add_child(Lyric(number=str(number), **kwargs))
-        lyric.add_child(Text(str(text)))
-        return lyric

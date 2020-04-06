@@ -127,13 +127,11 @@
       <note>
         <pitch>
           <step>C</step>
-          <alter>0</alter>
           <octave>5</octave>
         </pitch>
         <duration>16</duration>
         <voice>1</voice>
         <type>whole</type>
-        <accidental>natural</accidental>
         <staff>2</staff>
       </note>
     </part>

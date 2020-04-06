@@ -20,14 +20,14 @@ class Test(XMLTestCase):
         sf.to_stream_voice(1).add_to_score(self.score)
         xml_path = path + '_test_1.xml'
         self.score.write(xml_path)
-        xml_chords = []
+        chords = []
         for measure in self.score.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 for staff in part.tree_part_staves.values():
-                    xml_chords.extend(staff.xml_chords)
+                    chords.extend(staff.chords)
         expected = [0, Fraction(1, 1), Fraction(5, 4), Fraction(2, 1), Fraction(7, 2), 0, Fraction(1, 1),
                     Fraction(3, 1)]
-        actual = [xml_chord.offset for xml_chord in xml_chords]
+        actual = [tree_chord.offset for tree_chord in chords]
         self.assertEqual(expected, actual)
 
     def test_2(self):
@@ -39,18 +39,17 @@ class Test(XMLTestCase):
         sf_3.to_stream_voice().add_to_score(self.score, part_number=1, staff_number=3)
         xml_path = path + '_test_2.xml'
         self.score.write(xml_path)
-        xml_chord_offsets = {}
+        chord_offsets = {}
         for measure in self.score.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 for key in part.tree_part_staves.keys():
                     staff = part.tree_part_staves[key]
-                    xml_chord_offsets[key] = [xml_chord.offset for xml_chord in staff.xml_chords]
-        # print(xml_chord_offsets)
-        expected = {1: [Fraction(0, 1), Fraction(1, 1), Fraction(5, 4), Fraction(2, 1), Fraction(7, 2)],
-                    2: [Fraction(0, 1), Fraction(1, 1), Fraction(5, 4), Fraction(2, 1), Fraction(7, 2)],
-                    3: [Fraction(0, 1), Fraction(1, 1), Fraction(5, 4), Fraction(2, 1), Fraction(7, 2)]}
-        actual = xml_chord_offsets
-        self.assertEqual(actual, expected)
+                    chord_offsets[key] = [tree_chord.offset for tree_chord in staff.chords]
+        expected = {1: [0, Fraction(1, 1), Fraction(5, 4), Fraction(2, 1), Fraction(7, 2)],
+                    2: [0, Fraction(1, 4), Fraction(1, 1), Fraction(5, 2), Fraction(7, 2)],
+                    3: [0, Fraction(2, 1), Fraction(9, 4), Fraction(3, 1), Fraction(13, 4), Fraction(7, 2)]}
+        actual = chord_offsets
+        self.assertEqual(expected, actual)
 
     def test_3(self):
         sf_1 = SimpleFormat(quarter_durations=[1, 0.25, 2.25])
@@ -59,37 +58,15 @@ class Test(XMLTestCase):
         sf_2.to_stream_voice(2).add_to_score(self.score, part_number=1, staff_number=1)
         xml_path = path + '_test_3.xml'
         self.score.write(xml_path)
-        xml_chord_offsets = {}
+        chord_offsets = {}
         for measure in self.score.get_children_by_type(TreeMeasure):
             for part in measure.get_children_by_type(TreePart):
                 for staff in part.tree_part_staves.values():
                     for key in staff.tree_part_voices.keys():
                         voice = staff.tree_part_voices[key]
-                        xml_chord_offsets[key] = [xml_chord.offset for xml_chord in voice.xml_chords]
-        print(xml_chord_offsets)
+                        chord_offsets[key] = [tree_chord.offset for tree_chord in voice.chords]
         expected = {1: [0, Fraction(1, 1), Fraction(5, 4), Fraction(2, 1), Fraction(7, 2)],
                     2: [Fraction(0, 1), Fraction(1, 4), Fraction(1, 1), Fraction(5, 2), Fraction(7, 2)]}
 
-        actual = xml_chord_offsets
+        actual = chord_offsets
         self.assertEqual(actual, expected)
-    # def test_3(self):
-    #     r_sf_2 = SimpleFormat(
-    #         quarter_durations=[1, 0.25, 2.25, 0.5, 1, 2, Fraction(1, 3), Fraction(4, 3), Fraction(1, 3), 1],
-    #         midis=[60, 61, 54, 63, 65, 65, 64, 60])
-    #     r_sf_1 = SimpleFormat(
-    #         quarter_durations=[0.25, 2.25, 0.5, 1, 2, Fraction(1, 3), Fraction(4, 3), Fraction(1, 3), 2],
-    #         midis=[70, 71, 64, 73, 72, 71, 65])
-    #     l_sf_1 = SimpleFormat(quarter_durations=[4, 5], midis=[50, 35])
-    #     l_sf_2 = SimpleFormat(quarter_durations=[5, 4], midis=[44, 60])
-    #     r_sf_2.auto_clef()
-    #     r_sf_1.auto_clef()
-    #     l_sf_1.auto_clef()
-    #     l_sf_2.auto_clef()
-    #     r_sf_1.to_stream_voice(2).add_to_score(self.score, part_number=1, staff_number=1)
-    #     r_sf_2.to_stream_voice(1).add_to_score(self.score, part_number=1, staff_number=1)
-    #     l_sf_1.to_stream_voice(2).add_to_score(self.score, part_number=1, staff_number=2)
-    #     l_sf_2.to_stream_voice(1).add_to_score(self.score, part_number=1, staff_number=2)
-    #
-    #     xml_path = path + '_test_3.xml'
-    #     self.score.write(xml_path)
-    #     self.assertCompareFiles(xml_path)

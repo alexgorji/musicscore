@@ -21,7 +21,7 @@ class Test(TestCase):
         notations = chord.add_child(Notations())
         dynamics = notations.add_child(Dynamics())
         dynamics.add_child(FF())
-        note = chord._notes[0]
+        note = chord.notes[0]
         note.add_child(Duration(1))
         result = '''<note>
   <pitch>
