@@ -117,7 +117,7 @@ Tree structure was changed: TreePart ==> TreePartStaff ==> TreePartVoice
 parts with more than one staves are now possible.
 
 v. 1.3.1  
-XMLChord was omited  
+XMLChord was deleted  
 TreeChord has all necessary methods for updating accidentals  
 TreeNote's parent_chord is non optional  
 TreeNote properties like quarter_duration, offset etc. calls parent_chord properties  
@@ -128,6 +128,9 @@ TreeScoreTimewise: add_instrument() added
 TreeInstrument: standard_clef changed to standard_clefs  
 New TreeInstruments Piano and Voice added  
 etc.  
+
+v. 1.3.2
+issue#19: bug fix staff 2: add_words(), add_dynamics() etc.
 
 todo:
 update documentation
