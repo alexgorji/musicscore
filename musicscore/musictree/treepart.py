@@ -13,7 +13,7 @@ from musicscore.musictree.treeclef import TreeClef
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.fullnote import Pitch, Rest
 from musicscore.musicxml.elements.note import Beam, Type, Tie, Notations
-from musicscore.musicxml.groups.common import Voice
+from musicscore.musicxml.groups.common import Voice, StaffElement
 from musicscore.musicxml.groups.musicdata import Direction, Attributes
 from musicscore.musicxml.types.complextypes.attributes import Divisions, Staves
 from musicscore.musicxml.types.complextypes.direction import DirectionType, Sound
@@ -1344,8 +1344,6 @@ class TreePart(timewise.Part):
                     for clef in clefs:
                         if clef not in self.get_clefs():
                             self.add_clef(clef)
-                    # for clef in clefs:
-                    #     self.add_clef(clef)
 
         if not self._chords_notated:
             for staff_index, tree_part_staff in enumerate(self.tree_part_staves.values()):
@@ -1357,6 +1355,8 @@ class TreePart(timewise.Part):
                     for chord in tree_part_voice.chords:
                         for direction in chord.get_children_by_type(Direction):
                             self.add_child(direction)
+                            if chord.staff_number is not None:
+                                direction.add_child(StaffElement(chord.staff_number))
                         for attributes in chord.get_children_by_type(Attributes):
                             self.add_child(attributes)
                         for note in chord.notes:
