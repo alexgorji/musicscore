@@ -1356,7 +1356,11 @@ class TreePart(timewise.Part):
                         for direction in chord.get_children_by_type(Direction):
                             self.add_child(direction)
                             if chord.staff_number is not None:
-                                direction.add_child(StaffElement(chord.staff_number))
+                                current_staff_objects = direction.get_children_by_type(StaffElement)
+                                if current_staff_objects:
+                                    current_staff_objects[0].value = chord.staff_number
+                                else:
+                                    direction.add_child(StaffElement(chord.staff_number))
                         for attributes in chord.get_children_by_type(Attributes):
                             self.add_child(attributes)
                         for note in chord.notes:
