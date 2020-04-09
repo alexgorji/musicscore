@@ -1162,9 +1162,11 @@ class TreeChord(XMLTree):
 
     # //copy
 
-    def copy_tremolo_flag(self):
-        new_chord = TreeChord()
-        new_chord.midis = self.midis
+    def tremolo_chord_copy(self):
+        new_chord = self.split_copy(quarter_duration=0)
+        # new_chord = TreeChord()
+        # new_chord.midis = self.midis
+        # new_chord.manual_staff_number = self.manual_staff_number
         return new_chord
 
     def split_copy(self, quarter_duration):
