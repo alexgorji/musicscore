@@ -778,7 +778,7 @@ class TreeChord(XMLTree):
         except IndexError:
             ornaments = notations.add_child(Ornaments())
 
-        ornaments.add_child(Tremolo(number, **kwargs))
+        ornaments.add_child(Tremolo(value=number, **kwargs))
 
     def add_tie(self, value):
         if value not in ('stop', 'start'):

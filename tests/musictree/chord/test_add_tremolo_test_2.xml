@@ -25,7 +25,7 @@
   <measure number="1">
     <part id="p1">
       <attributes>
-        <divisions>2</divisions>
+        <divisions>1</divisions>
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
@@ -33,48 +33,49 @@
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
+        <tie type="start"/>
         <voice>1</voice>
-        <type>quarter</type>
-        <time-modification>
-          <actual-notes>2</actual-notes>
-          <normal-notes>1</normal-notes>
-        </time-modification>
+        <type>whole</type>
         <notations>
           <ornaments>
-            <tremolo type="start">3</tremolo>
+            <tremolo type="single">4</tremolo>
           </ornaments>
+          <tied number="1" type="start"/>
         </notations>
       </note>
+    </part>
+  </measure>
+  <measure number="2">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>3</duration>
+        <tie type="stop"/>
         <voice>1</voice>
-        <type>quarter</type>
-        <accidental>flat</accidental>
-        <time-modification>
-          <actual-notes>2</actual-notes>
-          <normal-notes>1</normal-notes>
-        </time-modification>
+        <type>half</type>
+        <dot/>
         <notations>
           <ornaments>
-            <tremolo type="stop">3</tremolo>
+            <tremolo type="single">4</tremolo>
           </ornaments>
+          <tied number="1" type="stop"/>
         </notations>
       </note>
       <note>
         <rest/>
-        <duration>6</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>half</type>
-        <dot/>
+        <type>quarter</type>
       </note>
     </part>
   </measure>
