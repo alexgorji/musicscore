@@ -51,6 +51,26 @@ class Decimal(SimpleType):
 TypeDecimal = Decimal
 
 
+class NonNegativeDecimal(SimpleType):
+    """
+    The non-negative-decimal type specifies a non-negative decimal value.
+    """
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+    @SimpleType.value.setter
+    def value(self, v):
+        Decimal(v)
+        if v < 0:
+            raise ValueError('value {} must a be non negative.'.format(v))
+
+        self._value = v
+
+
+TypeNonNegativeDecimal = NonNegativeDecimal
+
+
 class Integer(SimpleType):
     def __init__(self, value, *args, **kwargs):
         super().__init__(value=value, *args, **kwargs)
@@ -1122,30 +1142,40 @@ class TypeStaffNumber(PositiveInteger):
         super().__init__(value=value, *args, **kwargs)
 
 
+class TypeShowFrets(SimpleType):
+    """
+    The show-frets type indicates whether to show tablature frets as numbers (0, 1, 2) or letters (a, b, c). The default
+    choice is numbers.
+    """
+    _PERMITTED = ['numbers', 'letters']
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class TypeStaffType(SimpleType):
+    """
+    The staff-type value can be ossia, cue, editorial, regular, or alternate. An alternate staff indicates one that
+    shares the same musical data as the prior staff, but displayed differently (e.g., treble and bass clef, standard
+    notation and tab).
+    """
+    _PERMITTED = ['ossia', 'cue', 'editorial', 'regular', 'alternate']
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 '''
 ```DTD
 	<!-- Simple types derived from attributes.mod entities and elements -->
 
 	<xs:simpleType name="show-frets">
 		<xs:annotation>
-			<xs:documentation>The show-frets type indicates whether to show tablature frets as numbers (0, 1, 2) or letters (a, b, c). The default choice is numbers.</xs:documentation>
+			<xs:documentation></xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:token">
 			<xs:enumeration value="numbers"/>
 			<xs:enumeration value="letters"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="staff-type">
-		<xs:annotation>
-			<xs:documentation>The staff-type value can be ossia, cue, editorial, regular, or alternate. An alternate staff indicates one that shares the same musical data as the prior staff, but displayed differently (e.g., treble and bass clef, standard notation and tab).</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="ossia"/>
-			<xs:enumeration value="cue"/>
-			<xs:enumeration value="editorial"/>
-			<xs:enumeration value="regular"/>
-			<xs:enumeration value="alternate"/>
 		</xs:restriction>
 	</xs:simpleType>
 
