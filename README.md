@@ -132,5 +132,10 @@ etc.
 v. 1.3.2
 issue#19: bug fix staff 2: add_words(), add_dynamics() etc.
 
+v. 1.3.3
+some minor bug fixes
+musicxml.types.complextypes.staffdetails: added.
+
+
 todo:
 update documentation
