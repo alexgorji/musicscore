@@ -40,3 +40,20 @@ class Test(XMLTestCase):
         xml_path = path + '_test_2.xml'
         self.score.write(xml_path)
         self.assertCompareFiles(xml_path)
+
+    def test_3(self):
+        sf_1 = SimpleFormat(quarter_durations=[2, 2], midis=[0, 71])
+        sf_1.to_stream_voice().add_to_score(self.score, staff_number=1)
+
+        sf_2 = SimpleFormat(quarter_durations=[2, 2], midis=[71, 0])
+        sf_2.to_stream_voice().add_to_score(self.score, staff_number=2)
+
+        first_staff = self.score.get_measure(1).get_part(1)
+        staff_details = first_staff.attributes.add_child(StaffDetails(number=1))
+        staff_details.add_child(StaffLines(1))
+        staff_details = first_staff.attributes.add_child(StaffDetails(number=1))
+        staff_details.add_child(StaffSize(65))
+
+        xml_path = path + '_test_3.xml'
+        self.score.write(xml_path)
+        self.assertCompareFiles(xml_path)
