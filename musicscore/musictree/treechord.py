@@ -1199,6 +1199,12 @@ class TreeChord(XMLTree):
             pass
 
         try:
+            stem = self.get_children_by_type(Stem)[0]
+            new_chord.add_child(stem)
+        except IndexError:
+            pass
+
+        try:
             notehead = self.get_children_by_type(Notehead)[0]
             new_chord.add_child(notehead)
         except IndexError:
