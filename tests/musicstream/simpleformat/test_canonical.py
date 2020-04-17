@@ -4,7 +4,7 @@ from quicktions import Fraction
 
 from musicscore.basic_functions import dToX
 from musicscore.musicstream.streamvoice import SimpleFormat
-from musicscore.musictree.midi import E
+from musicscore.musictree.midi import E, Midi
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicxmlunittest import XMLTestCase
 

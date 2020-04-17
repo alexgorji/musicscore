@@ -264,6 +264,10 @@ class SimpleFormat(object):
         for chord in simple_format.chords:
             self.add_chord(chord)
 
+    def mirror(self, pivot=None):
+        if pivot is None:
+            pivot = self.chords[0].midis[0]
+
     def retrograde(self):
         self._chords = list(reversed(self._chords))
 
