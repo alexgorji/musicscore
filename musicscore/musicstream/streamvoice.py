@@ -1,3 +1,4 @@
+from musicscore.basic_functions import dToX, xToD
 from musicscore.musictree.midi import Midi
 from musicscore.musictree.treechord import TreeChord
 from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, LOW_BASS_CLEF, HIGH_TREBLE_CLEF
@@ -188,11 +189,23 @@ class SimpleFormat(object):
         return chord
 
     # get
+    def get_chord_dict(self, attribute):
+        output = {}
+        for chord in self.chords:
+            try:
+                output[chord] = getattr(chord, attribute)
+            except AttributeError:
+                output[chord] = None
+        return output
+
     def get_midis(self):
         return [chord.midis for chord in self.chords]
 
     def get_quarter_durations(self):
         return [chord.quarter_duration for chord in self.chords]
+
+    def get_quarter_positions(self):
+        return dToX(self.get_quarter_durations())
 
     # //other
 
@@ -261,6 +274,47 @@ class SimpleFormat(object):
     def multiply_quarter_durations(self, factor):
         for chord in self.chords:
             chord.quarter_duration *= factor
+
+    def plus(self, other, no_doubles=False):
+        def _copied_position_dict(sf):
+            output = {}
+            for chord, position in zip(sf.chords, sf.get_quarter_positions()):
+                output[position] = chord.__deepcopy__()
+            return output
+
+        def _key_sorted_dict(dict):
+            output = {}
+            for key in sorted(dict.keys()):
+                output[key] = dict[key]
+            return output
+
+        def _trim_quarter_durations():
+            quarter_durations = xToD(list(all_positioned_chords.keys()))
+            chords = all_positioned_chords.values()
+            for quarter_duration, chord in zip(quarter_durations, chords):
+                chord.quarter_duration = quarter_duration
+
+        all_positioned_chords = _copied_position_dict(self)
+        other_positioned_chords = _copied_position_dict(other)
+        for other_position, other_chord in other_positioned_chords.items():
+            if other_position in all_positioned_chords.keys():
+                chord = all_positioned_chords[other_position]
+                if chord.is_rest:
+                    all_positioned_chords[other_position] = chord
+                elif not other_chord.is_rest:
+                    for midi in other_chord.midis:
+                        if not no_doubles or midi.value not in [m.value for m in chord.midis]:
+                            chord.add_midi(midi)
+                else:
+                    pass
+            else:
+                all_positioned_chords[other_position] = other_chord
+        all_positioned_chords = _key_sorted_dict(all_positioned_chords)
+        _trim_quarter_durations()
+        output = SimpleFormat()
+        for chord in all_positioned_chords.values():
+            output.add_chord(chord)
+        return output
 
     def retrograde(self):
         self._chords = list(reversed(self.chords))
