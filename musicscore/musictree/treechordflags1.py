@@ -151,7 +151,7 @@ class FingerTremoloFlag1(BeatwiseFlag1):
         self.number = number
         self.slur = None
 
-    def __deepcopy__(self, memodict={}):
+    def __deepcopy__(self, memodict=None):
         return self.__class__(tremolo_chord=self.tremolo_chord.tremolo_chord_copy(), number=self.number, mode=self.mode)
 
     @property
@@ -173,7 +173,10 @@ class FingerTremoloFlag1(BeatwiseFlag1):
     def tremolo_chord(self, val):
         if val is not None and self.mode == 'modern':
             val.is_finger_tremolo = True
-            val.add_child(Stem('none'))
+            try:
+                val.get_children_by_type(Stem)[0].value = 'none'
+            except IndexError:
+                val.add_child(Stem('none'))
             val.set_manual_type('quarter', size='full')
             tm = TimeModification()
             tm.add_child(ActualNotes(0))

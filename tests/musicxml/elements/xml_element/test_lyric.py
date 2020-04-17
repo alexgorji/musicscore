@@ -6,7 +6,7 @@ from musicscore.musicxml.types.complextypes.lyric import ComplexTypeLyric, Exten
 
 class Test(TestCase):
     def setUp(self):
-        self.lyric = ComplexTypeLyric()
+        self.lyric = ComplexTypeLyric(tag='lyric')
         self.lyric.add_child(Extend())
         self.lyric.add_child(Syllabic('begin'))
         self.lyric.add_child(Text('bla'))

@@ -4,7 +4,7 @@ from quicktions import Fraction
 
 from musicscore.basic_functions import dToX
 from musicscore.musicstream.streamvoice import SimpleFormat
-from musicscore.musictree.midi import E, Midi
+from musicscore.musictree.midi import E
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 from musicxmlunittest import XMLTestCase
 
@@ -56,17 +56,35 @@ class Test(XMLTestCase):
         self.assertCompareFiles(xml_path)
 
     def test_5(self):
-        xml_path = path + '_test_4.xml'
+        xml_path = path + '_test_5.xml'
         self.sf.to_stream_voice().add_to_score(self.score)
-        self.sf.mirror(pivot=49)
+        self.sf.mirror(pivot=58)
+        self.sf.auto_clef()
         self.sf.to_stream_voice().add_to_score(self.score, staff_number=2)
         self.score.write(xml_path)
         self.assertCompareFiles(xml_path)
 
     def test_6(self):
-        xml_path = path + '_test_4.xml'
+        xml_path = path + '_test_6.xml'
         self.sf.to_stream_voice().add_to_score(self.score)
         self.sf.mirror(pivot=E(5))
+        self.sf.to_stream_voice().add_to_score(self.score, staff_number=2)
+        self.score.write(xml_path)
+        self.assertCompareFiles(xml_path)
+
+    def test_7(self):
+        xml_path = path + '_test_7.xml'
+        self.sf.retrograde()
+        self.sf.to_stream_voice().add_to_score(self.score)
+        self.sf.mirror(pivot=E(5))
+        self.sf.to_stream_voice().add_to_score(self.score, staff_number=2)
+        self.score.write(xml_path)
+        self.assertCompareFiles(xml_path)
+
+    def test_8(self):
+        xml_path = path + '_test_8.xml'
+        self.sf.to_stream_voice().add_to_score(self.score)
+        self.sf.multiply_quarter_durations(factor=2)
         self.sf.to_stream_voice().add_to_score(self.score, staff_number=2)
         self.score.write(xml_path)
         self.assertCompareFiles(xml_path)

@@ -76,17 +76,6 @@ class StreamVoice(object):
             remain = _add_to_part(remain)
 
 
-class StreamChordFormula(object):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def condition(self, chord):
-        pass
-
-    def change_chord(self, chord):
-        pass
-
-
 class SimpleFormat(object):
     def __init__(self, quarter_durations=None, midis=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -248,16 +237,9 @@ class SimpleFormat(object):
                 chord.add_clef(clef)
                 current_clefs.append(clef)
 
-    def change_chord(self, *chord_formulas):
-        for formula in chord_formulas:
-            if not isinstance(formula, StreamChordFormula):
-                raise TypeError
-
+    def change_chords(self, function):
         for chord in self.chords:
-            for formula in chord_formulas:
-                if formula.condition(chord):
-                    formula.change_chord(chord)
-                    break
+            function(chord)
 
     def extend(self, simple_format):
         # self.chords
@@ -267,9 +249,21 @@ class SimpleFormat(object):
     def mirror(self, pivot=None):
         if pivot is None:
             pivot = self.chords[0].midis[0]
+        elif not isinstance(pivot, Midi):
+            pivot = Midi(pivot)
+        else:
+            pass
+
+        for midi in [m for ch in self.chords for m in ch.midis]:
+            transposition_interval = (pivot.value - midi.value) * 2
+            midi.transpose(transposition_interval)
+
+    def multiply_quarter_durations(self, factor):
+        for chord in self.chords:
+            chord.quarter_duration *= factor
 
     def retrograde(self):
-        self._chords = list(reversed(self._chords))
+        self._chords = list(reversed(self.chords))
 
     def to_stream_voice(self, voice_number=1):
         output = StreamVoice(voice_number)
@@ -277,7 +271,11 @@ class SimpleFormat(object):
             output.add_chord(chord.__deepcopy__())
         return output
 
-    def transpose(self, interval):
+    def transpose(self, interval_midi):
+        if isinstance(interval_midi, Midi):
+            interval = interval_midi.value - self.chords[0].midis[0].value
+        else:
+            interval = interval_midi
         for ch in self.chords:
             ch.transpose(interval)
 
