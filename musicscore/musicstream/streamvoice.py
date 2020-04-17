@@ -1,10 +1,9 @@
 from musicscore.musictree.midi import Midi
-from musicscore.musictree.treechord import TreeChord, TreeBackup
-from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, LOW_BASS_CLEF, HIGH_TREBLE_CLEF, TreeClef
+from musicscore.musictree.treechord import TreeChord
+from musicscore.musictree.treeclef import TREBLE_CLEF, BASS_CLEF, LOW_BASS_CLEF, HIGH_TREBLE_CLEF
 from musicscore.musictree.treemeasure import TreeMeasure
 from musicscore.musictree.treepart import TreePart
 from musicscore.musicxml.groups.common import Voice
-from musicscore.musicxml.types.complextypes.attributes import Clef
 from musicscore.musicxml.types.simple_type import PositiveInteger
 
 
@@ -97,38 +96,26 @@ class SimpleFormat(object):
         self._set_midis(midis)
         self._chords = None
 
-    @property
-    def quarter_duration(self):
-        return sum([chord.quarter_duration for chord in self.chords])
-
-    @property
-    def midis(self):
-        return [chord.midis for chord in self.chords]
-
-    @property
-    def chords(self):
-        if self._chords is None:
-            self._generate_chords()
-        return self._chords
-
+    # //private methods
     @staticmethod
     def _check_quarter_duration(quarter_durations):
         for quarter_duration in quarter_durations:
             if quarter_duration < 0:
                 raise ValueError('SimpleFormat(): wrong duration {}'.format(quarter_duration))
 
-    def _set_quarter_durations(self, quarter_durations):
-        if quarter_durations is None:
-            quarter_durations = []
+    def _generate_chords(self):
+        if self._quarter_durations == [] and self._midis == []:
+            pass
         else:
-            try:
-                quarter_durations = list(quarter_durations)
-            except TypeError:
-                quarter_durations = [quarter_durations]
+            self._chords = []
+            for i in range(len(self._quarter_durations) - len(self._midis)):
+                self._midis.append(71)
 
-        self._check_quarter_duration(quarter_durations)
+            for i in range(len(self._midis) - len(self._quarter_durations)):
+                self._quarter_durations.append(1)
 
-        self._quarter_durations = quarter_durations
+            for d, m in zip(self._quarter_durations, self._midis):
+                self._chords.append(TreeChord(m, d))
 
     def _set_midis(self, midis):
         def _is_value(x):
@@ -172,26 +159,37 @@ class SimpleFormat(object):
             else:
                 raise TypeError
 
-    def get_quarter_durations(self):
-        return [chord.quarter_duration for chord in self.chords]
+    def _set_quarter_durations(self, quarter_durations):
+        if quarter_durations is None:
+            quarter_durations = []
+        else:
+            try:
+                quarter_durations = list(quarter_durations)
+            except TypeError:
+                quarter_durations = [quarter_durations]
 
-    def get_midis(self):
+        self._check_quarter_duration(quarter_durations)
+
+        self._quarter_durations = quarter_durations
+
+    # //public properties
+    @property
+    def chords(self):
+        if self._chords is None:
+            self._generate_chords()
+        return self._chords
+
+    @property
+    def quarter_duration(self):
+        return sum([chord.quarter_duration for chord in self.chords])
+
+    @property
+    def midis(self):
         return [chord.midis for chord in self.chords]
 
-    def _generate_chords(self):
-        if self._quarter_durations == [] and self._midis == []:
-            pass
-        else:
-            self._chords = []
-            for i in range(len(self._quarter_durations) - len(self._midis)):
-                self._midis.append(71)
+    # //public methods
 
-            for i in range(len(self._midis) - len(self._quarter_durations)):
-                self._quarter_durations.append(1)
-
-            for d, m in zip(self._quarter_durations, self._midis):
-                self._chords.append(TreeChord(m, d))
-
+    # add
     def add_chord(self, chord):
         if self._chords is None:
             self._chords = []
@@ -200,17 +198,14 @@ class SimpleFormat(object):
         self._chords.append(chord)
         return chord
 
-    def to_stream_voice(self, voice_number=1):
-        output = StreamVoice(voice_number)
-        for chord in self.chords:
-            output.add_chord(chord.__deepcopy__())
-        return output
+    # get
+    def get_midis(self):
+        return [chord.midis for chord in self.chords]
 
-    def __deepcopy__(self, memodict={}):
-        output = SimpleFormat()
-        for chord in self.chords:
-            output.add_chord(chord.deepcopy_for_SimpleFormat())
-        return output
+    def get_quarter_durations(self):
+        return [chord.quarter_duration for chord in self.chords]
+
+    # //other
 
     def auto_clef(self, clefs=None):
         if not clefs:
@@ -269,6 +264,23 @@ class SimpleFormat(object):
         for chord in simple_format.chords:
             self.add_chord(chord)
 
+    def retrograde(self):
+        self._chords = list(reversed(self._chords))
+
+    def to_stream_voice(self, voice_number=1):
+        output = StreamVoice(voice_number)
+        for chord in self.chords:
+            output.add_chord(chord.__deepcopy__())
+        return output
+
     def transpose(self, interval):
         for ch in self.chords:
             ch.transpose(interval)
+
+    # //copy
+
+    def __deepcopy__(self, memodict=None):
+        output = SimpleFormat()
+        for chord in self.chords:
+            output.add_chord(chord.deepcopy_for_SimpleFormat())
+        return output
