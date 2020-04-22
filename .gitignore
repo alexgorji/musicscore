@@ -4,4 +4,4 @@ venv
 build
 dist
 musicscore.egg-info
-
+.vscode/
