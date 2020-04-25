@@ -116,5 +116,26 @@ Minor and major changes
 Tree structure was changed: TreePart ==> TreePartStaff ==> TreePartVoice
 parts with more than one staves are now possible.
 
+v. 1.3.1  
+XMLChord was deleted  
+TreeChord has all necessary methods for updating accidentals  
+TreeNote's parent_chord is non optional  
+TreeNote properties like quarter_duration, offset etc. calls parent_chord properties  
+treenote deleted TreeNote etc. moved to treechord  
+
+TreeInstrumnent: number_of_staves added  
+TreeScoreTimewise: add_instrument() added  
+TreeInstrument: standard_clef changed to standard_clefs  
+New TreeInstruments Piano and Voice added  
+etc.  
+
+v. 1.3.2
+issue#19: bug fix staff 2: add_words(), add_dynamics() etc.
+
+v. 1.3.3
+some minor bug fixes
+musicxml.types.complextypes.staffdetails: added.
+
+
 todo:
 update documentation

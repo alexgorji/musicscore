@@ -7,14 +7,12 @@ from musicscore.musicxml.attributes.placement import Placement
 from musicscore.musicxml.attributes.position import Position
 from musicscore.musicxml.attributes.printobject import PrintObject
 from musicscore.musicxml.attributes.timeonly import TimeOnly
-from musicscore.musicxml.groups.common import Editorial, FootNote
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, Empty
 from musicscore.musicxml.types.complextypes.elision import ComplexTypeElision
 from musicscore.musicxml.types.complextypes.extend import ComplexTypeExtend
 from musicscore.musicxml.types.complextypes.textelementdata import ComplexTypeTextElementData
-from unittest import TestCase
-
 from musicscore.musicxml.types.simple_type import Token
 
 
@@ -117,8 +115,8 @@ class ComplexTypeLyric(ComplexType, Justify, Position, Placement, Color, PrintOb
         GroupReference(Editorial)
     )
 
-    def __init__(self, number='1', *args, **kwargs):
-        super().__init__(tag='lyric', *args, **kwargs)
+    def __init__(self, tag, number='1', *args, **kwargs):
+        super().__init__(tag=tag, *args, **kwargs)
         self.number = number
 
     @property

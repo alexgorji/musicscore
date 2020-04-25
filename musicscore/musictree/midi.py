@@ -189,19 +189,7 @@ class Midi(object):
         self.accidental = accidental
         self.notehead = note_head
 
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, v):
-        if v is not None:
-            if not isinstance(v, float) and not isinstance(v, int):
-                raise TypeError('midi.value must be of type float or int not{}'.format(type(v)))
-            if v < 16 and v != 0:
-                raise ValueError('midi.value {} must be greater than 16'.format(v))
-        self._value = v
-
+    # //public properties
     @property
     def accidental(self):
         return self._accidental
@@ -224,13 +212,61 @@ class Midi(object):
             val = Notehead(val)
         self._note_head = val
 
+    @property
+    def octave(self):
+        return int(self.value / 12) - 1
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, v):
+        if v is not None:
+            if not isinstance(v, float) and not isinstance(v, int):
+                raise TypeError('midi.value must be of type float or int not{}'.format(type(v)))
+            if v < 16 and v != 0:
+                raise ValueError('midi.value {} must be greater than 16'.format(v))
+        self._value = v
+
+    @property
+    def __name__(self):
+        pitch_step = self.get_pitch_name()[1]
+
+        if not pitch_step:
+            accidental = ''
+        elif pitch_step == -1.5:
+            accidental = 'b-'
+        elif pitch_step == -1:
+            accidental = 'b'
+        elif pitch_step == -0.5:
+            accidental = '-'
+        elif pitch_step == 0.5:
+            accidental = '+'
+        elif pitch_step == 1:
+            accidental = '#'
+        elif pitch_step == 1.5:
+            accidental = '#+'
+        else:
+            accidental = str(pitch_step)
+
+        return "{}{}{}".format(self.get_pitch_name()[0], accidental, self.octave)
+
+    # //public methods
+
+    # add
+
+    def add_notehead(self, val, **kwargs):
+        self.add_notehead_object(Notehead(val, **kwargs))
+
     def add_notehead_object(self, val):
         if not isinstance(val, Notehead):
             raise TypeError()
         self.notehead = val
 
-    def add_notehead(self, val, **kwargs):
-        self.add_notehead_object(Notehead(val, **kwargs))
+    # get
+    def get_flat(self):
+        return Midi(value=self.value - 1, accidental=Accidental(mode='flat'))
 
     def get_pitch_name(self):
         if self.accidental.mode == 'standard':
@@ -261,21 +297,17 @@ class Midi(object):
         else:
             return Pitch(*self.get_pitch_name())
 
-    def get_flat(self):
-        return Midi(value=self.value - 1, accidental=Accidental(mode='flat'))
-
     def get_sharp(self):
         return Midi(value=self.value + 1, accidental=Accidental(mode='sharp'))
+
+    # other
 
     def transpose(self, val):
         self.value += val
         return self
         # return Midi(value=self.value + val, accidental_mode=self.accidental_mode)
 
-    @property
-    def octave(self):
-        return int(self.value / 12) - 1
-
+    # //operators
     def __lt__(self, other):  # For x < y
         return self.value < other.value
 
@@ -288,30 +320,8 @@ class Midi(object):
     def __ge__(self, other):  # For x >= y
         return self.value >= other.value
 
-    @property
-    def __name__(self):
-        pitch_step = self.get_pitch_name()[1]
-
-        if not pitch_step:
-            accidental = ''
-        elif pitch_step == -1.5:
-            accidental = 'b-'
-        elif pitch_step == -1:
-            accidental = 'b'
-        elif pitch_step == -0.5:
-            accidental = '-'
-        elif pitch_step == 0.5:
-            accidental = '+'
-        elif pitch_step == 1:
-            accidental = '#'
-        elif pitch_step == 1.5:
-            accidental = '#+'
-        else:
-            accidental = str(pitch_step)
-
-        return "{}{}{}".format(self.get_pitch_name()[0], accidental, self.octave)
-
-    def __deepcopy__(self, memodict={}, **kwargs):
+    # //copy
+    def __deepcopy__(self, memodict=None, **kwargs):
         output = self.__class__(value=self.value, accidental=self.accidental.__deepcopy__(), note_head=self.notehead,
                                 **kwargs)
         return output

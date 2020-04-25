@@ -1,7 +1,6 @@
-venv
 *.pyc
+venv
 .idea
 build
 dist
 musicscore.egg-info
-

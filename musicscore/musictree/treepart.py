@@ -9,10 +9,11 @@ from musicscore.musictree.treebeat import TreeBeat
 from musicscore.musictree.treechord import TreeChord, TreeBackup, TreeNote
 from musicscore.musictree.treechordflags2 import TreeChordFlag2
 from musicscore.musictree.treechordflags3 import TreeChordFlag3
+from musicscore.musictree.treeclef import TreeClef
 from musicscore.musicxml.elements import timewise as timewise
 from musicscore.musicxml.elements.fullnote import Pitch, Rest
 from musicscore.musicxml.elements.note import Beam, Type, Tie, Notations
-from musicscore.musicxml.groups.common import Voice
+from musicscore.musicxml.groups.common import Voice, StaffElement
 from musicscore.musicxml.groups.musicdata import Direction, Attributes
 from musicscore.musicxml.types.complextypes.attributes import Divisions, Staves
 from musicscore.musicxml.types.complextypes.direction import DirectionType, Sound
@@ -1332,6 +1333,9 @@ class TreePart(timewise.Part):
             output.extend(tree_part_voice.get_beats())
         return output
 
+    def get_clefs(self):
+        return self._get_attributes().get_children_by_type(TreeClef)
+
     def get_divisions(self):
         duration_denominators = [chord.quarter_duration.denominator for chord in
                                  self.chords]
@@ -1460,12 +1464,14 @@ class TreePart(timewise.Part):
                 raise Exception('update_dots() first')
 
         if not self.up.previous and self.parent_score_part and self.parent_score_part.instrument:
-            clef = self.parent_score_part.instrument.standard_clef
-            if clef:
+            clefs = self.parent_score_part.instrument.standard_clefs
+            if clefs:
                 first_chords = [tree_part_voice.chords[0] for tree_part_voice in self.tree_part_voices]
                 first_clefs = [chord.get_clef() for chord in first_chords if chord.get_clef()]
                 if not first_clefs:
-                    first_chords[0].add_clef(clef)
+                    for clef in clefs:
+                        if clef not in self.get_clefs():
+                            self.add_clef(clef)
 
         if not self._chords_notated:
             for staff_index, tree_part_staff in enumerate(self.tree_part_staves.values()):
@@ -1477,6 +1483,12 @@ class TreePart(timewise.Part):
                     for chord in tree_part_voice.chords:
                         for direction in chord.get_children_by_type(Direction):
                             self.add_child(direction)
+                            if chord.staff_number is not None:
+                                current_staff_objects = direction.get_children_by_type(StaffElement)
+                                if current_staff_objects:
+                                    current_staff_objects[0].value = chord.staff_number
+                                else:
+                                    direction.add_child(StaffElement(chord.staff_number))
                         for attributes in chord.get_children_by_type(Attributes):
                             self.add_child(attributes)
                         for note in chord.notes:

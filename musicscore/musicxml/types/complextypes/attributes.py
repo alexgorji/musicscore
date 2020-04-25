@@ -6,6 +6,7 @@ from musicscore.musicxml.groups.common import Editorial
 from musicscore.musicxml.types.complextypes.clef import ComplexTypeClef
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
 from musicscore.musicxml.types.complextypes.key import TypeKey
+from musicscore.musicxml.types.complextypes.staffdetails import ComplexTypeStaffDetails
 from musicscore.musicxml.types.simple_type import TypePositiveDivisions, PositiveInteger, NonNegativeInteger
 
 
@@ -178,18 +179,14 @@ class Clef(ComplexTypeClef):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class StaffDetails(XMLElement):
+class StaffDetails(ComplexTypeStaffDetails):
     """
-    <xs:element name="staff-details" type="staff-details" minOccurs="0" maxOccurs="unbounded">
-      <xs:annotation>
-        <xs:documentation>The staff-details element is used to indicate different types of staves.</xs:documentation>
-      </xs:annotation>
-    </xs:element>
+    The staff-details element is used to indicate different types of staves.
     """
+    _TAG = 'staff-details'
 
-    def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='staff-details', value=value, *args, **kwargs)
-        raise NotImplementedError()
+    def __init__(self, *args, **kwargs):
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Transpose(XMLElement):
@@ -233,7 +230,7 @@ class ComplexTypeAttributes(ComplexType):
         Element(Staves, min_occurrence=0),
         Element(PartSymbol, min_occurrence=0),
         Element(Instruments, min_occurrence=0),
-        Element(Clef, min_occurrence=0),
+        Element(Clef, min_occurrence=0, max_occurrence=None),
         Element(StaffDetails, min_occurrence=0, max_occurrence=None),
         Element(Transpose, min_occurrence=0, max_occurrence=None),
         Element(Directive, min_occurrence=0, max_occurrence=None),

@@ -161,8 +161,10 @@ class Notations(ComplexTypeNotations):
 
 
 class Lyric(ComplexTypeLyric):
+    _TAG = 'lyric'
+
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Play(XMLElement):

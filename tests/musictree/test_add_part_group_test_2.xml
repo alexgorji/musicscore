@@ -48,8 +48,6 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
-      </attributes>
-      <attributes>
         <clef>
           <sign>G</sign>
           <line>2</line>
@@ -72,8 +70,6 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
-      </attributes>
-      <attributes>
         <clef>
           <sign>G</sign>
           <line>2</line>
@@ -96,8 +92,6 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
-      </attributes>
-      <attributes>
         <clef>
           <sign>C</sign>
           <line>3</line>
@@ -120,8 +114,6 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
-      </attributes>
-      <attributes>
         <clef>
           <sign>F</sign>
           <line>4</line>

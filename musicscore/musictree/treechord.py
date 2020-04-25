@@ -425,13 +425,6 @@ class TreeChord(XMLTree):
             self._notes = self._generate_notes()
         return self._notes
 
-    # @property
-    # def next(self):
-    #     index = self.parent_tree_part_voice.chords.index(self)
-    #     if index == len(self.parent_tree_part_voice.chords) - 1:
-    #         return None
-    #     return self.parent_tree_part_voice.chords[index + 1]
-
     @property
     def next_in_score(self):
         index = self.parent_tree_part_voice.chords.index(self)
@@ -785,7 +778,7 @@ class TreeChord(XMLTree):
         except IndexError:
             ornaments = notations.add_child(Ornaments())
 
-        ornaments.add_child(Tremolo(number, **kwargs))
+        ornaments.add_child(Tremolo(value=number, **kwargs))
 
     def add_tie(self, value):
         if value not in ('stop', 'start'):
@@ -1169,9 +1162,11 @@ class TreeChord(XMLTree):
 
     # //copy
 
-    def copy_tremolo_flag(self):
-        new_chord = TreeChord()
-        new_chord.midis = self.midis
+    def tremolo_chord_copy(self):
+        new_chord = self.split_copy(quarter_duration=0)
+        # new_chord = TreeChord()
+        # new_chord.midis = self.midis
+        # new_chord.manual_staff_number = self.manual_staff_number
         return new_chord
 
     def split_copy(self, quarter_duration):
@@ -1200,6 +1195,12 @@ class TreeChord(XMLTree):
         try:
             staff = self.get_children_by_type(StaffElement)[0]
             new_chord.add_child(staff)
+        except IndexError:
+            pass
+
+        try:
+            stem = self.get_children_by_type(Stem)[0]
+            new_chord.add_child(stem)
         except IndexError:
             pass
 
