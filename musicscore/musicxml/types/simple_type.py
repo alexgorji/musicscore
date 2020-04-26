@@ -522,7 +522,7 @@ class TypeNumberOrNormal(SimpleType):
 
     @SimpleType.value.setter
     def value(self, v):
-        if v is not 'normal':
+        if v != 'normal':
             try:
                 Decimal(v)
             except TypeError:
