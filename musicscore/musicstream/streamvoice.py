@@ -275,7 +275,8 @@ class SimpleFormat(object):
         for chord in self.chords:
             chord.quarter_duration *= factor
 
-    def plus(self, other, no_doubles=False):
+    @staticmethod
+    def sum(*simple_formats, no_doubles=False):
         def _copied_position_dict(sf):
             output = {}
             for chord, position in zip(sf.chords, sf.get_quarter_positions()):
@@ -294,21 +295,22 @@ class SimpleFormat(object):
             for quarter_duration, chord in zip(quarter_durations, chords):
                 chord.quarter_duration = quarter_duration
 
-        all_positioned_chords = _copied_position_dict(self)
-        other_positioned_chords = _copied_position_dict(other)
-        for other_position, other_chord in other_positioned_chords.items():
-            if other_position in all_positioned_chords.keys():
-                chord = all_positioned_chords[other_position]
-                if chord.is_rest:
-                    all_positioned_chords[other_position] = chord
-                elif not other_chord.is_rest:
-                    for midi in other_chord.midis:
-                        if not no_doubles or midi.value not in [m.value for m in chord.midis]:
-                            chord.add_midi(midi)
+        all_positioned_chords = _copied_position_dict(simple_formats[0])
+        for sf in simple_formats[1:]:
+            other_positioned_chords = _copied_position_dict(sf)
+            for other_position, other_chord in other_positioned_chords.items():
+                if other_position in all_positioned_chords.keys():
+                    chord = all_positioned_chords[other_position]
+                    if chord.is_rest:
+                        all_positioned_chords[other_position] = chord
+                    elif not other_chord.is_rest:
+                        for midi in other_chord.midis:
+                            if not no_doubles or midi.value not in [m.value for m in chord.midis]:
+                                chord.add_midi(midi)
+                    else:
+                        pass
                 else:
-                    pass
-            else:
-                all_positioned_chords[other_position] = other_chord
+                    all_positioned_chords[other_position] = other_chord
         all_positioned_chords = _key_sorted_dict(all_positioned_chords)
         _trim_quarter_durations()
         output = SimpleFormat()
