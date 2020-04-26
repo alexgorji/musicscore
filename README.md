@@ -134,6 +134,16 @@ issue#19: bug fix staff 2: add_words(), add_dynamics() etc.
 some minor bug fixes
 musicxml.types.complextypes.staffdetails: added.
 
+### v1.3.4:  
+issue#20 bug fix:
+* TreeChord().split_copy() => child of type Stem() will be copied
+    
+issu#22: SimpleFormat() canonical utility methods added:
+* retrograde(), mirror(), multiply_quarter_durations() \[transpose() already existed]
+
+SimpleFormat() change_chords(function) replaced change_chord_formula()
+
+issue#24: simple_format.sum (static) added
 
 todo:
 update documentation
