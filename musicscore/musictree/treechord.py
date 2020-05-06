@@ -19,7 +19,7 @@ from musicscore.musicxml.types.complextypes.direction import DirectionType
 from musicscore.musicxml.types.complextypes.directiontype import Words, Bracket, Wedge
 from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, \
     FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N, Dynamics
-from musicscore.musicxml.types.complextypes.lyric import Text
+from musicscore.musicxml.types.complextypes.lyric import Text, Syllabic, Extend
 from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Technical, \
     Articulations, Slur, Fermata, Slide
 from musicscore.musicxml.types.complextypes.ornaments import Tremolo
@@ -154,9 +154,14 @@ class TreeNote(Note):
 
     # // public methods
     # add
-    def add_lyric(self, text, number=1, **kwargs):
+    def add_lyric(self, text=None, number=1, syllabic=None, extend=None, **kwargs):
         lyric = self.add_child(Lyric(number=str(number), **kwargs))
-        lyric.add_child(Text(str(text)))
+        if syllabic is not None:
+            lyric.add_child(Syllabic(syllabic))
+        if extend is not None:
+            lyric.add_child(Extend(extend))
+        if text is not None:
+            lyric.add_child(Text(str(text)))
         return lyric
 
     # update
@@ -687,9 +692,14 @@ class TreeChord(XMLTree):
         self.add_midi(self.midis[0].value + interval)
         self.midis[-1].add_notehead('diamond', filled='no')
 
-    def add_lyric(self, text, number=1, **kwargs):
+    def add_lyric(self, text=None, number=1, syllabic=None, extend=None, **kwargs):
         lyric = self.add_child(Lyric(number=str(number), **kwargs))
-        lyric.add_child(Text(str(text)))
+        if syllabic is not None:
+            lyric.add_child(Syllabic(syllabic))
+        if extend is not None:
+            lyric.add_child(Extend(extend))
+        if text is not None:
+            lyric.add_child(Text(str(text)))
         return lyric
 
     def add_midi(self, val):

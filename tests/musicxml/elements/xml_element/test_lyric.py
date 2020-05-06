@@ -7,7 +7,6 @@ from musicscore.musicxml.types.complextypes.lyric import ComplexTypeLyric, Exten
 class Test(TestCase):
     def setUp(self):
         self.lyric = ComplexTypeLyric(tag='lyric')
-        self.lyric.add_child(Extend())
         self.lyric.add_child(Syllabic('begin'))
         self.lyric.add_child(Text('bla'))
         # self.lyric.add_child(Elision('00A0'))
@@ -20,7 +19,6 @@ class Test(TestCase):
         expected = '''<lyric number="1">
   <syllabic>begin</syllabic>
   <text>bla</text>
-  <extend/>
   <end-line/>
   <footnote>foot</footnote>
 </lyric>

@@ -145,5 +145,9 @@ SimpleFormat() change_chords(function) replaced change_chord_formula()
 
 issue#24: simple_format.sum (static) added
 
+### v1.3.5:  
+TreeChord or TreeNote.add_lyric(): arguments syllabic and extend added
+Extend() bug fix
+
 todo:
 update documentation

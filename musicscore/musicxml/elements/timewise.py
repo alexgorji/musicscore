@@ -2,9 +2,9 @@ from musicscore.dtd.dtd import Sequence, GroupReference, Element
 from musicscore.musicxml.attributes.document_attributes import DocumentAttributes
 from musicscore.musicxml.attributes.measure_attributes import MeasureAttributes
 from musicscore.musicxml.attributes.part_attributes import PartAttributes
-from musicscore.musicxml.groups.musicdata import MusicData
 from musicscore.musicxml.elements.scoreheader import ScoreHeader
 from musicscore.musicxml.elements.xml_element import XMLElement
+from musicscore.musicxml.groups.musicdata import MusicData
 
 
 class Part(XMLElement, PartAttributes):
@@ -44,8 +44,11 @@ class Score(XMLElement, DocumentAttributes):
         doctype = '<!DOCTYPE score-timewise PUBLIC "-//Recordare//DTD MusicXML {} Timewise//EN" "http://www.musicxml.org/dtds/timewise.dtd">\n'.format(
             self.version)
 
-        if path[-4:] != '.xml':
-            path += '.xml'
+        try:
+            if path[-4:] != '.xml':
+                path += '.xml'
+        except TypeError:
+            pass
         output_file = open(path, 'w')
         output_file.write(xmlversion)
         output_file.write(doctype)

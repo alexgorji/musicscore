@@ -1,4 +1,4 @@
-from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract
+from musicscore.musicxml.attributes.attribute_abstract import AttributeAbstract, TypeStartStopContinue
 from musicscore.musicxml.attributes.color import Color
 from musicscore.musicxml.attributes.position import Position
 from musicscore.musicxml.types.complextypes.complextype import ComplexType
@@ -16,5 +16,5 @@ class ComplexTypeExtend(ComplexType, Type, Position, Color):
     type and position attributes are added in Version 3.0 to provide better formatting control.
     """
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(type=value, *args, **kwargs)

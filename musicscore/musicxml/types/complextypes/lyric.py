@@ -18,58 +18,66 @@ from musicscore.musicxml.types.simple_type import Token
 
 class Syllabic(XMLElement, TypeSyllabic):
     """"""
+    _TAG = 'syllabic'
 
     def __init__(self, value, *args, **kwargs):
-        super().__init__(tag='syllabic', value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Text(ComplexTypeTextElementData):
     """"""
+    _TAG = 'text'
 
     def __init__(self, value=None, *args, **kwargs):
-        super().__init__(tag='text', value=value, *args, **kwargs)
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Elision(ComplexTypeElision):
     """"""
+    _TAG = 'elision'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='elision', *args, **kwargs)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Extend(ComplexTypeExtend):
     """"""
+    _TAG = 'extend'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(tag='extend', *args, **kwargs)
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(tag=self._TAG, value=value, *args, **kwargs)
 
 
 class Laughing(Empty):
     """"""
+    _TAG = 'laughing'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='laughing', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Humming(Empty):
     """"""
+    _TAG = 'humming'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='humming', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class EndParagraph(Empty):
     """"""
+    _TAG = 'end-paragraph'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='end-paragraph', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class EndLine(Empty):
     """"""
+    _TAG = 'end-line'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='end-line', *args, **kwargs)
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class ComplexTypeLyric(ComplexType, Justify, Position, Placement, Color, PrintObject, TimeOnly,
