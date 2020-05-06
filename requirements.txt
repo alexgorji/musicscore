@@ -1,4 +1,2 @@
 lxml
 quicktions
-nose
-twine
