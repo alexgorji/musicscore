@@ -53,3 +53,16 @@ class Test(XMLTestCase):
         partwise = self.score.to_partwise()
         partwise.write(xml_path)
         self.assertCompareFiles(xml_path)
+
+    def test_simple(self):
+        xml_path = path.parent.joinpath(path.stem + '_simple.xml')
+        sf = SimpleFormat(quarter_durations=[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1])
+        sf.chords[0].add_lyric(1)
+        sf.chords[3].add_lyric(2)
+        sf.chords[-1].add_lyric(3)
+        sf.to_stream_voice().add_to_score(self.score)
+        self.score.finish()
+        partwise = self.score.to_partwise()
+        partwise.write(xml_path)
+        self.assertCompareFiles(xml_path)
+

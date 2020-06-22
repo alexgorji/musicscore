@@ -149,5 +149,9 @@ issue#24: simple_format.sum (static) added
 TreeChord or TreeNote.add_lyric(): arguments syllabic and extend added
 Extend() bug fix
 
+### v1.3.6:
+TreeChord().add_trill_mark(): function added
+TreeChord().add_wavy_line(): function added
+
 todo:
 update documentation

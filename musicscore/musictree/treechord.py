@@ -22,7 +22,7 @@ from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PP
 from musicscore.musicxml.types.complextypes.lyric import Text, Syllabic, Extend
 from musicscore.musicxml.types.complextypes.notations import Tied, Tuplet, Ornaments, Technical, \
     Articulations, Slur, Fermata, Slide
-from musicscore.musicxml.types.complextypes.ornaments import Tremolo
+from musicscore.musicxml.types.complextypes.ornaments import Tremolo, TrillMark, WavyLine
 from musicscore.musicxml.types.complextypes.timemodification import ActualNotes, NormalNotes, NormalType
 
 
@@ -210,6 +210,10 @@ class TreeNote(Note):
                     else:
                         del child
                 self.add_child(Grace())
+
+
+class WaveLine(object):
+    pass
 
 
 class TreeChord(XMLTree):
@@ -789,6 +793,29 @@ class TreeChord(XMLTree):
             ornaments = notations.add_child(Ornaments())
 
         ornaments.add_child(Tremolo(value=number, **kwargs))
+
+    def get_notations(self):
+        try:
+            notations = self.get_children_by_type(Notations)[0]
+        except IndexError:
+            notations = self.add_child(Notations())
+        return notations
+
+    def get_ornaments(self):
+        notations = self.get_notations()
+        try:
+            ornaments = notations.get_children_by_type(Ornaments)[0]
+        except IndexError:
+            ornaments = notations.add_child(Ornaments())
+        return ornaments
+
+    def add_trill_mark(self, **kwargs):
+        ornaments = self.get_ornaments()
+        return ornaments.add_child(TrillMark(**kwargs))
+
+    def add_wavy_line(self, **kwargs):
+        ornaments = self.get_ornaments()
+        return ornaments.add_child(WavyLine(**kwargs))
 
     def add_tie(self, value):
         if value not in ('stop', 'start'):
