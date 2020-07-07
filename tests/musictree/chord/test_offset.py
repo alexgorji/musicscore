@@ -11,7 +11,7 @@ from musicxmlunittest import XMLTestCase
 path = str(os.path.abspath(__file__).split('.')[0])
 
 
-class Test(XMLTestCase):
+class TestOffset(XMLTestCase):
     def setUp(self) -> None:
         self.score = TreeScoreTimewise()
 

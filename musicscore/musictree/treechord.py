@@ -16,7 +16,7 @@ from musicscore.musicxml.groups.musicdata import Direction, Attributes, Backup
 from musicscore.musicxml.types.complextypes.articulations import Accent, StrongAccent, DetachedLegato, Tenuto, Spiccato, \
     Staccato, Staccatissimo, BreathMark, Caesura, Stress, Unstress, Plop, Scoop, Doit, Falloff
 from musicscore.musicxml.types.complextypes.direction import DirectionType
-from musicscore.musicxml.types.complextypes.directiontype import Words, Bracket, Wedge
+from musicscore.musicxml.types.complextypes.directiontype import Words, Bracket, Wedge, Pedal
 from musicscore.musicxml.types.complextypes.dynamics import P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, \
     FFFFFF, MP, MF, SF, SFP, SFPP, FP, RF, SFZP, PF, FZ, SFFZ, SFZ, RFZ, N, Dynamics
 from musicscore.musicxml.types.complextypes.lyric import Text, Syllabic, Extend
@@ -664,7 +664,7 @@ class TreeChord(XMLTree):
         if not isinstance(flag, TreeChordFlag1) and not isinstance(flag, TreeChordFlag2) \
                 and not isinstance(flag, TreeChordFlag3):
             raise TypeError(
-                'flag must be of type TreeChordFlag, TreeChordFlag2 or TreeChordFlag3 or TreeChordFlag4 not {}'.format(
+                'flag must be of type TreeChordFlag1, TreeChordFlag2 or TreeChordFlag3 not {}'.format(
                     flag.__class__))
         if self._flags is None:
             self._flags = set()
@@ -705,6 +705,11 @@ class TreeChord(XMLTree):
         if text is not None:
             lyric.add_child(Text(str(text)))
         return lyric
+
+    def add_pedal(self, type, placement='below', **kwargs):
+        d = self.add_child(Direction(placement=placement))
+        dt = d.add_child(DirectionType())
+        dt.add_child(Pedal(type=type, **kwargs))
 
     def add_midi(self, val):
         if val == 0:

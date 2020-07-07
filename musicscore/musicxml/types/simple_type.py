@@ -1271,6 +1271,19 @@ class TypeLineWidthType(Token):
         super().__init__(*args, **kwargs)
 
 
+class TypePedalType(Token):
+    """
+    The pedal-type simple type is used to distinguish types of pedal directions. The start value indicates the start of
+    a damper pedal, while the sostenuto value indicates the start of a sostenuto pedal. The change, continue, and stop
+    values can be used with either the damper or sostenuto pedal. The soft pedal is not included here because there is
+    no special symbol or graphic used for it beyond what can be specified with words and bracket elements.
+    """
+    _PERMITTED = ('start', 'stop', 'sostenuto', 'change', 'continue')
+
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
 '''
 <!-- Simple types derived from direction.mod elements -->
 
@@ -1551,19 +1564,6 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 		<xs:restriction base="xs:token">
 			<xs:enumeration value="on"/>
 			<xs:enumeration value="off"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="pedal-type">
-		<xs:annotation>
-			<xs:documentation>The pedal-type simple type is used to distinguish types of pedal directions. The start value indicates the start of a damper pedal, while the sostenuto value indicates the start of a sostenuto pedal. The change, continue, and stop values can be used with either the damper or sostenuto pedal. The soft pedal is not included here because there is no special symbol or graphic used for it beyond what can be specified with words and bracket elements.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="start"/>
-			<xs:enumeration value="stop"/>
-			<xs:enumeration value="sostenuto"/>
-			<xs:enumeration value="change"/>
-			<xs:enumeration value="continue"/>
 		</xs:restriction>
 	</xs:simpleType>
 	

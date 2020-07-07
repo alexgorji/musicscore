@@ -4,10 +4,11 @@ from musicscore.musicxml.elements.xml_element import XMLElement
 from musicscore.musicxml.types.complextypes.bracket import ComplexTypeBracket
 from musicscore.musicxml.types.complextypes.coda import ComplexTypeCoda
 from musicscore.musicxml.types.complextypes.complextype import ComplexType, EmptyPrintStyleAlignId
-from musicscore.musicxml.types.complextypes.dynamics import ComplexTypeDynamics, Dynamics
+from musicscore.musicxml.types.complextypes.dynamics import Dynamics
 from musicscore.musicxml.types.complextypes.formattedsymbolid import ComplexTypeFormattedSymbolId
 from musicscore.musicxml.types.complextypes.formattedtextid import ComplexTypeFormattedTextId
 from musicscore.musicxml.types.complextypes.metronome import ComplexTypeMetronome
+from musicscore.musicxml.types.complextypes.pedal import ComplexTypePedal
 from musicscore.musicxml.types.complextypes.segno import ComplexTypeSegno
 from musicscore.musicxml.types.complextypes.wedge import ComplexTypeWedge
 
@@ -81,12 +82,11 @@ class Bracket(ComplexTypeBracket):
         super().__init__(tag=self._TAG, *args, **kwargs)
 
 
-class Pedal(XMLElement):
-    """<xs:element name="pedal" type="pedal"/>"""
+class Pedal(ComplexTypePedal):
+    _TAG = 'pedal'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(tag='pedal', *args, **kwargs)
-        NotImplementedError()
+        super().__init__(tag=self._TAG, *args, **kwargs)
 
 
 class Metronome(ComplexTypeMetronome):
