@@ -153,5 +153,8 @@ Extend() bug fix
 TreeChord().add_trill_mark(): function added
 TreeChord().add_wavy_line(): function added
 
+### v1.3.7
+TreeChord().add_pedal(): function added
+
 todo:
 update documentation
