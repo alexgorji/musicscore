@@ -159,5 +159,8 @@ TreeChord().add_pedal(): function added
 ### v1.3.8
 LyricFont() added 
 
+### v1.3.9
+TreeScoreTimewise().add_page_number(): function added 
+
 todo:
 update documentation
