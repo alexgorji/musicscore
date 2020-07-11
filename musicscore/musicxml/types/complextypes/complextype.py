@@ -71,7 +71,7 @@ class EmptyPlacementSmulf(Empty, Placement, Smulf):
 
 class EmptyFont(Empty, Font):
     """
-    >The empty-font type represents an empty element with font attributes.
+    The empty-font type represents an empty element with font attributes.
     """
 
     def __init__(self, tag, *args, **kwargs):

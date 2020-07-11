@@ -16,7 +16,7 @@ class Test(TestCase):
         v = sf.to_stream_voice(1)
         v.add_to_score(self.score)
 
-    def test_1(self):
+    def test_orientation(self):
         self.score.page_style.orientation = 'landscape'
         result_path = path + '_test_1'
         self.score.write(path=result_path)

@@ -33,7 +33,7 @@
       </attributes>
       <direction placement="above">
         <direction-type>
-          <bracket number="1" type="start" line-end="none" relative-x="50"/>
+          <bracket number="1" type="start" line-end="none" line-type="dashed" relative-x="50"/>
         </direction-type>
       </direction>
       <note>
@@ -66,7 +66,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <bracket number="1" type="continue" line-end="none"/>
+          <bracket number="1" type="continue" line-end="none" line-type="dashed"/>
         </direction-type>
       </direction>
       <note>
@@ -122,7 +122,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <bracket number="1" type="stop" line-end="arrow" relative-x="-30" relative-y="20"/>
+          <bracket number="1" type="stop" line-end="arrow" line-type="dashed" relative-x="-30" relative-y="20"/>
         </direction-type>
       </direction>
       <note>
