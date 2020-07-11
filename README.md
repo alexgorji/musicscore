@@ -156,5 +156,8 @@ TreeChord().add_wavy_line(): function added
 ### v1.3.7
 TreeChord().add_pedal(): function added
 
+### v1.3.8
+LyricFont() added 
+
 todo:
 update documentation
