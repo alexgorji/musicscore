@@ -19,19 +19,15 @@
   </defaults>
   <credit page="1">
     <credit-type>title</credit-type>
-    <credit-words justify="center" default-x="598" default-y="1600" font-size="24" valign="top">TEST</credit-words>
-  </credit>
-  <credit page="1">
-    <credit-type>composer</credit-type>
-    <credit-words justify="right" default-x="1089" default-y="1550" font-size="12" valign="top">me</credit-words>
-  </credit>
-  <credit page="1">
-    <credit-type>arranger</credit-type>
-    <credit-words justify="right" default-x="1089" default-y="1500" font-size="12" valign="top">TEST</credit-words>
+    <credit-words justify="center" default-x="581" default-y="1600" font-size="24" valign="top">TITLE</credit-words>
   </credit>
   <credit page="1">
     <credit-type>subtitle</credit-type>
-    <credit-words justify="center" default-x="598" default-y="1550" font-size="18" valign="top">BLA</credit-words>
+    <credit-words justify="center" default-x="581" default-y="1550" font-size="18" valign="top">SUBTITLE</credit-words>
+  </credit>
+  <credit page="1">
+    <credit-type>composer</credit-type>
+    <credit-words justify="right" default-x="1112" default-y="1500" font-size="12" valign="top">blablabla 2019</credit-words>
   </credit>
   <part-list>
     <score-part id="p1">

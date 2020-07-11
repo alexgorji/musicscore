@@ -39,6 +39,7 @@ class TreeScoreTimewise(timewise.Score):
         self._title = None
         self._subtitle = None
         self._composer = None
+        self._page_number = None
 
         self._identifications_added = False
 
@@ -225,6 +226,28 @@ class TreeScoreTimewise(timewise.Score):
             if measure.barline_style:
                 bl = part.add_child(Barline())
                 bl.add_child(BarStyle(measure.barline_style))
+
+    def add_page_number(self, page=1, font_size=12, default_x=None, default_y=None, valign='top',
+                        halign=None, **kwargs):
+        w = self.page_style.page_width.value
+        h = self.page_style.page_height.value
+        if not default_x:
+            if page % 2 == 0:
+                default_x = int(w / 20)
+            else:
+                default_x = w - int(w / 20)
+        if not default_y:
+            default_y = h - int(h/30)
+        if not halign:
+            if page % 2 == 0:
+                halign = 'left'
+            else:
+                halign = 'right'
+        c = self.add_child(Credit(page=page))
+        c.add_child(CreditType('page number'))
+        self._page_number = c.add_child(
+            CreditWords(str(page), default_x=default_x, default_y=default_y, font_size=font_size,
+                        valign=valign, halign=halign, **kwargs))
 
     def add_text(self, text, page=None, font_size=None, default_x=None, default_y=None, justify=None, valign=None,
                  **kwargs):
