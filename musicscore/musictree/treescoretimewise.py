@@ -266,7 +266,7 @@ class TreeScoreTimewise(timewise.Score):
             valign = 'top'
 
         c = self.add_child(Credit(page=page))
-        self._title = c.add_child(
+        c.add_child(
             CreditWords(text, default_x=default_x, default_y=default_y, font_size=font_size, justify=justify,
                         valign=valign, **kwargs))
 

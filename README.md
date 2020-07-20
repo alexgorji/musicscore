@@ -162,5 +162,8 @@ LyricFont() added
 ### v1.3.9
 TreeScoreTimewise().add_page_number(): function added 
 
+### v1.3.10
+TreeScoreTimewise().add_text(): self._text omitted: bugfix
+
 todo:
 update documentation
