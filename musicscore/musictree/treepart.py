@@ -576,52 +576,34 @@ class TreePartVoice(object):
             for chord_group in grouped_chords:
                 begin_beam = True
                 continue_end_beam = False
-
-                for i in range(len(chord_group)):
-                    chord = chord_group[i]
-                    type = chord.get_children_by_type(Type)[0].value
-                    numbers = {'eighth': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
-                    if type in numbers and chord.quarter_duration != 0:
-                        for index in range(numbers[type]):
-                            add_beam(chord, chord_group, i, number=index + 1)
-                        if begin_beam:
-                            begin_beam = False
-                            continue_end_beam = True
-                        elif continue_end_beam and i == len(chord_group) - 1:
-                            begin_beam = True
-                            continue_end_beam = False
-                        # beam = chord.add_child(Beam(None))
-                        # if i != len(group) - 1:
-                        #     if begin_beam:
-                        #         beam.value = 'begin'
-                        #         begin_beam = False
-                        #         continue_end_beam = True
-                        #
-                        #     elif continue_end_beam:
-                        #         if i == len(group) - 1:
-                        #             beam.value = 'end'
-                        #             begin_beam = True
-                        #             continue_end_beam = False
-                        #         else:
-                        #             beam.value = 'continue'
-                        # elif len(group) > 1 and group[i - 1] != []:
-                        #     beam.value = 'end'
-
-                    elif i != 0:
-                        # print('treepart group_beams, elif')
-                        try:
-                            beam = chord_group[i - 1].beam
-
-                            if beam.value == 'begin':
-                                chord_group[i - 1].remove_child(beam)
+                if len(chord_group) > 1:
+                    for i in range(len(chord_group)):
+                        chord = chord_group[i]
+                        type = chord.get_children_by_type(Type)[0].value
+                        numbers = {'eighth': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
+                        if type in numbers and chord.quarter_duration != 0:
+                            for index in range(numbers[type]):
+                                add_beam(chord, chord_group, i, number=index + 1)
+                            if begin_beam:
+                                begin_beam = False
+                                continue_end_beam = True
+                            elif continue_end_beam and i == len(chord_group) - 1:
                                 begin_beam = True
                                 continue_end_beam = False
-                            elif beam.value == 'continue':
-                                chord_group[i - 1].beam.value = 'end'
-                                begin_beam = True
-                                continue_end_beam = False
-                        except AttributeError:
-                            pass
+
+                        elif i != 0:
+                            try:
+                                beam = chord_group[i - 1].beam
+                                if beam.value == 'begin':
+                                    chord_group[i - 1].remove_child(beam)
+                                    begin_beam = True
+                                    continue_end_beam = False
+                                elif beam.value == 'continue':
+                                    chord_group[i - 1].beam.value = 'end'
+                                    begin_beam = True
+                                    continue_end_beam = False
+                            except AttributeError:
+                                pass
 
         if grouping_list is None:
             grouping_list = _generate_grouping_list()

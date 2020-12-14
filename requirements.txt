@@ -1,2 +1,7 @@
-lxml
-quicktions
+lxml==4.5.0
+quicktions==1.11
+
+setuptools==51.0.0
+wheel==0.36.2
+twine==3.2.0
+

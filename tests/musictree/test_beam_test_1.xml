@@ -49,7 +49,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <beam number="1"/>
       </note>
       <note>
         <pitch>

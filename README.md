@@ -162,5 +162,8 @@ LyricFont() added
 ### v1.3.9
 TreeScoreTimewise().add_page_number(): function added 
 
+### v1.3.10
+Bug fixed: group beams: ignoring group of chords with only one chord 
+
 todo:
 update documentation
