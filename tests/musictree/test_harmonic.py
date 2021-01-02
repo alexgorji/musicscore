@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from musicscore.musicstream.streamvoice import SimpleFormat
+from musicscore.musictree.midi import Midi, Accidental
 from musicscore.musictree.treescoretimewise import TreeScoreTimewise
 import os
 
@@ -28,7 +29,7 @@ class Test(TestCase):
         sf.to_stream_voice().add_to_score(self.score)
 
         xml_path = path + '_test_1.xml'
-        # self.score.write(xml_path)
+        self.score.write(xml_path)
 
     def test_2(self):
         sf = SimpleFormat(quarter_durations=[1.5, 2, 3, 2.33, 3.66], midis=5 * [60])
@@ -37,4 +38,18 @@ class Test(TestCase):
         sf.to_stream_voice().add_to_score(self.score)
 
         xml_path = path + '_test_2.xml'
+        self.score.write(xml_path)
+
+    def test_3(self):
+        midis = {
+            'flat': [Midi(value, accidental=Accidental('flat', force_show=True)) for value in range(60, 72)],
+            'sharp': [Midi(value, accidental=Accidental('sharp', force_show=True)) for value in range(60, 72)]
+        }
+        sf = SimpleFormat(midis=midis['flat'] + midis['sharp'])
+        for chord in sf.chords:
+            chord.add_harmonic(5)
+        self.score.set_time_signatures(times={1: [12, 4]})
+        sf.to_stream_voice().add_to_score(self.score)
+
+        xml_path = path + '_test_3.xml'
         self.score.write(xml_path)

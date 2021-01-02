@@ -43,7 +43,7 @@
           <technical>
             <harmonic>
               <natural/>
-              <base-pitch/>
+              <touching-pitch/>
             </harmonic>
           </technical>
         </notations>
@@ -57,14 +57,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
-        <notations>
-          <technical>
-            <harmonic>
-              <natural/>
-              <touching-pitch/>
-            </harmonic>
-          </technical>
-        </notations>
       </note>
     </part>
   </measure>

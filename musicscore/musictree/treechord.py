@@ -693,7 +693,18 @@ class TreeChord(XMLTree):
     def add_harmonic(self, interval):
         if len(self.midis) != 1:
             raise Exception('harmonic can only be added to chords with one midi')
-        self.add_midi(self.midis[0].value + interval)
+        new_midi = self.add_midi(self.midis[0].value + interval)
+
+        alter = self.midis[0].get_pitch_name()[1]
+
+        if alter:
+            if alter > 0:
+                new_midi.accidental.mode = 'sharp'
+            else:
+                new_midi.accidental.mode = 'flat'
+        else:
+            new_midi.accidental.mode = 'flat'
+
         self.midis[-1].add_notehead('diamond', filled='no')
 
     def add_lyric(self, text=None, number=1, syllabic=None, extend=None, **kwargs):
@@ -719,6 +730,7 @@ class TreeChord(XMLTree):
             val = Midi(val)
 
         self._midis.append(val)
+        return val
 
     def add_notations_object(self, object):
         try:
