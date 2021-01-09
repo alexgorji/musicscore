@@ -30,7 +30,7 @@ class TreePartVoice(object):
         self._max_division = None
         self._forbidden_divisions = None
         self._chords = []
-        self._beats = None
+        self._beats = []
         self._filled_with_rest = False
         self._preliminary_rests_adjoined = False
         self._beats_added = False

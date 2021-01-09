@@ -71,3 +71,4 @@ class Test(TestCase):
         sf.to_stream_voice().add_to_score(self.score)
         self.score.write(xml_path)
         TestScore().assert_template(xml_path)
+

@@ -237,7 +237,7 @@ class TreeScoreTimewise(timewise.Score):
             else:
                 default_x = w - int(w / 20)
         if not default_y:
-            default_y = h - int(h/30)
+            default_y = h - int(h / 30)
         if not halign:
             if page % 2 == 0:
                 halign = 'left'
@@ -557,29 +557,38 @@ class TreeScoreTimewise(timewise.Score):
 
     def finish(self):
         if not self._finished:
-            self.update_measures()
-            self.fill_with_rest()
-            self.preliminary_adjoin_rests()
-            self.add_beats()
-            self.quantize()
-            # self.adjoin_rests_in_beat()
-            self.split_not_notatable()
-            self.implement_flags_1()
-            self.adjoin_ties()
-            self.adjoin_rests()
-            self.update_tuplets()
-            self.substitute_sextoles()
-            self.implement_flags_2()
-            self.update_types()
-            self.update_dots()
-            self.group_beams()
-            self.implement_flags_3()
+            self.finish_til_flag_1()
+            self.finish_from_flag_1_to_2()
+            self.finish_from_flag_2_to_3()
             self.chord_to_notes()
             self.update_divisions()
             self.update_accidentals(mode=self.accidental_mode)
             self.update_durations()
             self.close_dtd()
             self._finished = True
+
+    def finish_from_flag_2_to_3(self):
+        self.update_types()
+        self.update_dots()
+        self.group_beams()
+        self.implement_flags_3()
+
+    def finish_from_flag_1_to_2(self):
+        self.adjoin_ties()
+        self.adjoin_rests()
+        self.update_tuplets()
+        self.substitute_sextoles()
+        self.implement_flags_2()
+
+    def finish_til_flag_1(self):
+        self.update_measures()
+        self.fill_with_rest()
+        self.preliminary_adjoin_rests()
+        self.add_beats()
+        self.quantize()
+        # self.adjoin_rests_in_beat()
+        self.split_not_notatable()
+        self.implement_flags_1()
 
     def group_beams(self):
         for measure in self.get_children_by_type(TreeMeasure):
