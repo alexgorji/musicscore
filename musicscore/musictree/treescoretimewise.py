@@ -237,7 +237,7 @@ class TreeScoreTimewise(timewise.Score):
             else:
                 default_x = w - int(w / 20)
         if not default_y:
-            default_y = h - int(h/30)
+            default_y = h - int(h / 30)
         if not halign:
             if page % 2 == 0:
                 halign = 'left'
@@ -382,8 +382,11 @@ class TreeScoreTimewise(timewise.Score):
                 elif (duration * 2) % 1 == 0:
                     time = (int(duration * 2), 8)
                     return time
+                elif (duration * 4) % 1 == 0:
+                    time = (int(duration * 4), 16)
+                    return time
                 else:
-                    raise ValueError('duration {} is not dividable'.format(duration))
+                    raise ValueError(f'duration {duration} is not dividable by 4, 8 or 16')
 
             if not duration:
                 time = (4, 4)

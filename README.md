@@ -165,5 +165,9 @@ TreeScoreTimewise().add_page_number(): function added
 ### v1.3.10
 Bug fixed: group beams: ignoring group of chords with only one chord 
 
+### v1.3.11
+Bug fixed: add_harmonics(): second pitch as flat if first pitches alter < 0 and sharp otherwise
+
+
 todo:
 update documentation

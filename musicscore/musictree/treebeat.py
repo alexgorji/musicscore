@@ -50,7 +50,7 @@ class TreeBeat(object):
         self._max_division = None
         self._forbidden_divisions = None
         self._best_div = None
-        self._permitted_durations = (4, 2, 1, 0.5)
+        self._permitted_durations = (4, 2, 1, 0.5, 0.25)
         self._chords = []
         self.parent_tree_part_voice = None
 
@@ -66,7 +66,7 @@ class TreeBeat(object):
     def duration(self, value):
         if self._duration is None:
             if value not in self._permitted_durations:
-                raise ValueError('beat_duration can only be in {}'.format(self._permitted_durations))
+                raise ValueError(f'beat_duration {value} can only be in {self._permitted_durations}')
         else:
             raise Exception('duration can be set by initialization')
 
@@ -82,7 +82,9 @@ class TreeBeat(object):
                     self._max_division = 1
 
         if self._max_division is None:
-            if self.duration == 0.5:
+            if self.duration == 0.25:
+                self._max_division = 2
+            elif self.duration == 0.5:
                 self._max_division = 4
             else:
                 self._max_division = 8
