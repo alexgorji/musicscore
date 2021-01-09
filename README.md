@@ -165,7 +165,7 @@ TreeScoreTimewise().add_page_number(): function added
 ### v1.3.10
 Bug fixed: group beams: ignoring group of chords with only one chord 
 
-### v1.3.11
+### v1.3.12
 Bug fixed: TreePartVoice._beats = [] instead fo None
 TreeScoreTimewise().finish_til_flat_1 ...
 
