@@ -169,5 +169,8 @@ Bug fixed: group beams: ignoring group of chords with only one chord
 Bug fixed: TreePartVoice._beats = [] instead fo None
 TreeScoreTimewise().finish_til_flat_1 ...
 
+### v1.3.13
+Enhancement: TreeChord.add_dynamics accepts list of values
+
 todo:
 update documentation

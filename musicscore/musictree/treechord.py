@@ -633,23 +633,27 @@ class TreeChord(XMLTree):
         clef_copy = clef.__deepcopy__()
         attributes.add_child(clef_copy)
 
-    def add_dynamics(self, value, placement='below', **kwargs):
+    def add_dynamics(self, values, placement='below', **kwargs):
         dynamic_classes = [P, PP, PPP, PPPP, PPPPP, PPPPPP, F, FF, FFF, FFFF, FFFFF, FFFFFF, MP, MF, SF, SFP, SFPP, FP,
                            RF, RFZ, SFZ, SFFZ, FZ, N, PF, SFZP]
-
         tags = [d._TAG for d in dynamic_classes]
-        try:
-            index = tags.index(value)
-        except ValueError:
-            raise ValueError('wrong dynamics value')
+
+        if not hasattr(values, '__iter__'):
+            values = list(values)
 
         direction = self.add_child(Direction(placement=placement))
         direction_type = direction.add_child(DirectionType())
-        dynamics = direction_type.add_child(Dynamics(**kwargs))
+        output = []
+        for value in values:
+            try:
+                index = tags.index(value)
+            except ValueError:
+                raise ValueError('wrong dynamics value')
+            dynamics = direction_type.add_child(Dynamics(**kwargs))
+            dynamics.add_child(dynamic_classes[index]())
+            output.append(dynamics)
 
-        dynamics.add_child(dynamic_classes[index]())
-
-        return dynamics
+        return output
 
     def add_fermata(self, value='normal', **kwargs):
         fermata = Fermata(value, **kwargs)
