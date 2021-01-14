@@ -638,8 +638,8 @@ class TreeChord(XMLTree):
                            RF, RFZ, SFZ, SFFZ, FZ, N, PF, SFZP]
         tags = [d._TAG for d in dynamic_classes]
 
-        if not hasattr(values, '__iter__'):
-            values = list(values)
+        if isinstance(values, str) or not hasattr(values, '__iter__'):
+            values = [values]
 
         direction = self.add_child(Direction(placement=placement))
         direction_type = direction.add_child(DirectionType())

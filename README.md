@@ -172,5 +172,7 @@ TreeScoreTimewise().finish_til_flat_1 ...
 ### v1.3.13
 Enhancement: TreeChord.add_dynamics accepts list of values
 
+### v1.3.14
+Bug fixed: TreeChord.add_dynamics with mp
 todo:
 update documentation
