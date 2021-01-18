@@ -12,9 +12,10 @@ class Test(TestCase):
         self.score = TreeScoreTimewise()
 
     def test_1(self):
-        sf = SimpleFormat(quarter_durations=[2, 2])
-        sf.chords[0].add_action_dynamics('ff')
-        sf.chords[1].add_dynamics('ff')
+        dynamics_list = ['ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff']
+        sf = SimpleFormat(quarter_durations=8 * [2])
+        for chord, dynamics in zip(sf.chords, dynamics_list):
+            chord.add_action_dynamics(dynamics)
 
         sf.to_stream_voice().add_to_score(self.score)
         xml_path = path + '_test_1.xml'

@@ -557,11 +557,11 @@ class TreeChord(XMLTree):
     # add
 
     def add_action_dynamics(self, value, **kwargs):
-        dynamics = self.add_dynamics(value, **kwargs)
+        dynamics = self.add_dynamics(value, **kwargs)[0]
         direction = dynamics.up.up
         direction_type = direction.add_child(DirectionType())
 
-        direction_type.add_child(Words(value='"', font_size=20))
+        direction_type.add_child(Words(value='»'))
         for child in direction.get_children():
             if child.get_children_by_type(Dynamics):
                 direction.remove_child(child)
@@ -569,7 +569,7 @@ class TreeChord(XMLTree):
         direction_type = direction.add_child(DirectionType())
         direction_type.add_child(dynamics)
         direction_type = direction.add_child(DirectionType())
-        direction_type.add_child(Words(value=' "', font_size=20))
+        direction_type.add_child(Words(value='«', font_size=10))
 
     def add_articulation(self, articulation, **kwargs):
 

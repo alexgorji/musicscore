@@ -33,15 +33,15 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <words font-size="20">"</words>
+          <words>»</words>
         </direction-type>
         <direction-type>
           <dynamics placement="below">
-            <ff/>
+            <ppp/>
           </dynamics>
         </direction-type>
         <direction-type>
-          <words font-size="20"> "</words>
+          <words font-size="10">«</words>
         </direction-type>
       </direction>
       <note>
@@ -55,9 +55,168 @@
       </note>
       <direction placement="below">
         <direction-type>
+          <words>»</words>
+        </direction-type>
+        <direction-type>
+          <dynamics placement="below">
+            <pp/>
+          </dynamics>
+        </direction-type>
+        <direction-type>
+          <words font-size="10">«</words>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+    </part>
+  </measure>
+  <measure number="2">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <direction placement="below">
+        <direction-type>
+          <words>»</words>
+        </direction-type>
+        <direction-type>
+          <dynamics placement="below">
+            <p/>
+          </dynamics>
+        </direction-type>
+        <direction-type>
+          <words font-size="10">«</words>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+      <direction placement="below">
+        <direction-type>
+          <words>»</words>
+        </direction-type>
+        <direction-type>
+          <dynamics placement="below">
+            <mp/>
+          </dynamics>
+        </direction-type>
+        <direction-type>
+          <words font-size="10">«</words>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+    </part>
+  </measure>
+  <measure number="3">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <direction placement="below">
+        <direction-type>
+          <words>»</words>
+        </direction-type>
+        <direction-type>
+          <dynamics placement="below">
+            <mf/>
+          </dynamics>
+        </direction-type>
+        <direction-type>
+          <words font-size="10">«</words>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+      <direction placement="below">
+        <direction-type>
+          <words>»</words>
+        </direction-type>
+        <direction-type>
+          <dynamics placement="below">
+            <f/>
+          </dynamics>
+        </direction-type>
+        <direction-type>
+          <words font-size="10">«</words>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+    </part>
+  </measure>
+  <measure number="4">
+    <part id="p1">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <direction placement="below">
+        <direction-type>
+          <words>»</words>
+        </direction-type>
+        <direction-type>
           <dynamics placement="below">
             <ff/>
           </dynamics>
+        </direction-type>
+        <direction-type>
+          <words font-size="10">«</words>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+      <direction placement="below">
+        <direction-type>
+          <words>»</words>
+        </direction-type>
+        <direction-type>
+          <dynamics placement="below">
+            <fff/>
+          </dynamics>
+        </direction-type>
+        <direction-type>
+          <words font-size="10">«</words>
         </direction-type>
       </direction>
       <note>
