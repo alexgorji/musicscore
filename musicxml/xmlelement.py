@@ -4,10 +4,17 @@ import xml.etree.ElementTree as ET
 from abc import ABC
 from contextlib import redirect_stdout
 from pathlib import Path
-
 from tree.tree import TreePresentation
 
 xsd_path = Path(__file__).parent / 'musicxml_4_0.xsd'
+with open(xsd_path) as file:
+    xsd_tree = ET.parse(file)
+ns = '{http://www.w3.org/2001/XMLSchema}'
+root = xsd_tree.getroot()
+
+
+def find_all_xsd_children(tag):
+    return root.findall(f"{ns}{tag}")
 
 
 class MusicXMLElement(ABC):
@@ -18,12 +25,6 @@ class MusicXMLElement(ABC):
     @classmethod
     def get_xsd(cls):
         return cls.XML_ET_ELEMENT.get_xsd()
-
-
-class XMLSimpleType(MusicXMLElement):
-    """
-    Parent Class for all SimpleType classes
-    """
 
 
 class XMLElementTreeElement(TreePresentation):
@@ -144,23 +145,3 @@ class XMLElementTreeElement(TreePresentation):
 
     def __str__(self):
         return f"{self.__class__.__name__} {self.compact_repr}"
-
-
-with open(xsd_path) as file:
-    xmltree = ET.parse(file)
-
-root = xmltree.getroot()
-
-ns = '{http://www.w3.org/2001/XMLSchema}'
-
-simple_type_elements = root.findall(f"{ns}simpleType")
-
-for simple_type in simple_type_elements:
-    xml_element_tree_element = XMLElementTreeElement(simple_type)
-    attributes = "{'__doc__': xml_element_tree_element.get_doc(), 'XML_ET_ELEMENT':xml_element_tree_element}"
-    if xml_element_tree_element.tag == 'simpleType':
-        parent_class = 'XMLSimpleType'
-    else:
-        raise NotImplemented()
-    class_name = xml_element_tree_element.class_name
-    exec(f"{class_name} = type('{class_name}', ({parent_class},), {attributes})")

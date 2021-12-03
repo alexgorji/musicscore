@@ -1,4 +1,4 @@
-All tags: {'schema', 'complexType', 'element', 'sequence', 'pattern', 'restriction', 'annotation', 'complexContent', 'minInclusive', 'documentation', 'import', 'simpleContent', 'simpleType', 'minExclusive', 'minLength', 'attributeGroup', 'attribute', 'maxInclusive', 'group', 'enumeration', 'union', 'choice', 'extension'}
+All tags: ['schema', 'annotation', 'documentation', 'import', 'simpleType', 'restriction', 'enumeration', 'minInclusive', 'maxInclusive', 'pattern', 'union', 'minExclusive', 'minLength', 'attributeGroup', 'attribute', 'complexType', 'simpleContent', 'extension', 'choice', 'element', 'sequence', 'group', 'complexContent']
 ============
 ['annotation', 'documentation']
 ============

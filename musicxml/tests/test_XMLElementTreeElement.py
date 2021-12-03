@@ -18,10 +18,17 @@ class TestXMLElementTreeElement(TestCase):
         self.complex_type_element = self.root.find(f"{ns}complexType[@name='fingering']")
 
     def test_write_all_tags(self):
+        def get_all_tags():
+            output = []
+            for node in tree.traverse():
+                if node.tag not in output:
+                    output.append(node.tag)
+            return output
+
         with open(Path(__file__).parent / 'musicxml_4_0_summary.txt', 'w+') as f:
             tree = XMLElementTreeElement(self.root)
             with redirect_stdout(f):
-                print('All tags: ' + str({node.tag for node in tree.traverse()}))
+                print('All tags: ' + str(get_all_tags()))
                 for child in tree.get_children():
                     print('============')
                     print([node.compact_repr for node in child.traverse()])
@@ -50,9 +57,6 @@ class TestXMLElementTreeElement(TestCase):
     def test_xml_element_class_name(self):
         xml_element = XMLElementTreeElement(self.simple_type_element)
         assert xml_element.class_name == 'XMLSimpleTypeAboveBelow'
-
-    def test_xml_element_class(self):
-        from musicxml.xmlelement import XMLSimpleTypeAboveBelow
 
     def test_get_doc(self):
         xml_element = XMLElementTreeElement(self.simple_type_element)
@@ -155,6 +159,3 @@ class TestXMLElementTreeElement(TestCase):
 """
         assert XMLElementTreeElement(self.simple_type_element).get_xsd() == expected_1
         assert XMLElementTreeElement(self.complex_type_element).get_xsd() == expected_2
-
-    def test_restriction(self):
-        pass

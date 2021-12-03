@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from unittest import TestCase
 
-from musicxml.xmlelement import XMLSimpleType
+from musicxml.types.simpletype import XMLSimpleType, XMLSimpleTypeAboveBelow
 
 xsd_path = Path(__file__).parent.parent / 'musicxml_4_0.xsd'
 
@@ -20,7 +20,6 @@ class TestGenerateSimpleType(TestCase):
         Test that the instance of with XMLElementGenerator generated class can show corresponding xsd snippet and
         show its version
         """
-        from musicxml.xmlelement import XMLSimpleTypeAboveBelow
         expected = """<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="above-below">
 		<xs:annotation>
 			<xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
@@ -38,7 +37,6 @@ class TestGenerateSimpleType(TestCase):
         Test that the instance of with with XMLElementGenerator generated class has a documentation string
         matching its xsd annotation
         """
-        from musicxml.xmlelement import XMLSimpleTypeAboveBelow
         assert isinstance(XMLSimpleTypeAboveBelow, type(XMLSimpleType))
         assert XMLSimpleTypeAboveBelow.__doc__ == 'The above-below type is used to indicate whether one element appears ' \
                                                   'above or below another element.'
@@ -48,4 +46,11 @@ class TestGenerateSimpleType(TestCase):
         Test that the instance of with XMLElementGenerator generated class has a validator corresponding to its xsd
         restriction
         """
-        self.fail('Incomplete')
+        XMLSimpleTypeAboveBelow('above')
+        XMLSimpleTypeAboveBelow('below')
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeAboveBelow('side')
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeAboveBelow(None)
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeAboveBelow(1)
