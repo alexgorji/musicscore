@@ -4,24 +4,12 @@ import xml.etree.ElementTree as ET
 from abc import ABC
 from contextlib import redirect_stdout
 from pathlib import Path
+
+from musicxml.util.helperfunctions import cap_first
 from tree.tree import TreePresentation
 
-xsd_path = Path(__file__).parent / 'musicxml_4_0.xsd'
-with open(xsd_path) as file:
-    xsd_tree = ET.parse(file)
-ns = '{http://www.w3.org/2001/XMLSchema}'
-root = xsd_tree.getroot()
 
-
-def cap_first(s):
-    return s[0].upper() + s[1:]
-
-
-def find_all_xsd_children(tag):
-    return root.findall(f"{ns}{tag}")
-
-
-class MusicXMLElement(ABC):
+class MusicXMLElement:
     """
     Abstract class as root of all generated XML Classes
     """
@@ -146,8 +134,6 @@ class XMLElementTreeElement(TreePresentation):
         for node in self.traverse():
             if node.tag == 'documentation':
                 return node.text
-        # to_be_found = f"./{self.namespace}annotation/{self.namespace}documentation"
-        # return self.xml_element_tree_element.find(to_be_found).text
 
     def get_restriction(self):
         for node in self.traverse():

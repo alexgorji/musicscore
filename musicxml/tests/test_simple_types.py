@@ -1,22 +1,10 @@
 import importlib
-import xml.etree.ElementTree as ET
-from pathlib import Path
-from unittest import TestCase
 
 from musicxml.types.simpletype import XMLSimpleType, XMLSimpleTypeAboveBelow
-from musicxml.xmlelement import XMLElementTreeElement
-
-xsd_path = Path(__file__).parent.parent / 'musicxml_4_0.xsd'
+from musicxml.util.helperclasses import MusicXmlTestCase
 
 
-class TestSimpleTypes(TestCase):
-    def setUp(self) -> None:
-        with open(xsd_path) as file:
-            xmltree = ET.parse(file)
-        self.root = xmltree.getroot()
-        ns = '{http://www.w3.org/2001/XMLSchema}'
-        self.all_simple_type_elements = [XMLElementTreeElement(simpletype) for simpletype in
-                                         self.root.findall(f"{ns}simpleType")]
+class TestSimpleTypes(MusicXmlTestCase):
 
     def test_simple_type_XMLElement_generator_xsd_snippet(self):
         """
@@ -47,34 +35,29 @@ class TestSimpleTypes(TestCase):
     def test_simple_type_xsd_is_converted_to_classes(self):
         for simple_type in self.all_simple_type_elements:
             module = importlib.import_module('musicxml.types.simpletype')
-            my_class = getattr(module, simple_type.class_name)
-            assert simple_type.class_name == my_class.__name__
+            simple_type_class = getattr(module, simple_type.class_name)
+            assert simple_type.class_name == simple_type_class.__name__
 
-    def test_simple_type_all_bases(self):
-        """
-        Test that simple types base attribute in restriction are converted to parent classes
-        """
-        all_restriction_bases = []
-        for simpletype in self.all_simple_type_elements:
-            if simpletype.base_class_names not in all_restriction_bases:
-                all_restriction_bases.append(simpletype.base_class_names)
-        print(all_restriction_bases)
-
-        # for simple_type in self.all_simple_type_elements:
-        #     module = importlib.import_module('musicxml.types.simpletype')
-        #     my_class = getattr(module, simple_type.class_name)
-        #     assert isinstance(my_class, simple_type.base_classes)
+    def test_base_classes_are_implemented(self):
+        for simple_type in self.all_simple_type_elements:
+            module = importlib.import_module('musicxml.types.simpletype')
+            simpletype_class = getattr(module, simple_type.class_name)
+            mro = simpletype_class.__mro__
+            for base_class_name in simple_type.base_class_names:
+                base_class = getattr(module, base_class_name)
+                assert base_class in mro
 
     def test_simple_type_validator_from_restriction(self):
         """
         Test that the instance of with XMLElementGenerator generated class has a validator corresponding to its xsd
         restriction
         """
-        XMLSimpleTypeAboveBelow('above')
-        XMLSimpleTypeAboveBelow('below')
-        with self.assertRaises(TypeError):
-            XMLSimpleTypeAboveBelow('side')
         with self.assertRaises(TypeError):
             XMLSimpleTypeAboveBelow(None)
         with self.assertRaises(TypeError):
             XMLSimpleTypeAboveBelow(1)
+
+        XMLSimpleTypeAboveBelow('above')
+        XMLSimpleTypeAboveBelow('below')
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeAboveBelow('side')

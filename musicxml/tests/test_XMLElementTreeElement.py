@@ -3,22 +3,21 @@ from pathlib import Path
 from unittest import TestCase
 import xml.etree.ElementTree as ET
 
+from musicxml.util.helperclasses import MusicXmlTestCase
 from musicxml.xmlelement import XMLElementTreeElement
 
-xsd_path = Path(__file__).parent.parent / 'musicxml_4_0.xsd'
 
-
-class TestXMLElementTreeElement(TestCase):
-    def setUp(self) -> None:
-        with open(xsd_path) as file:
-            xmltree = ET.parse(file)
-        self.root = xmltree.getroot()
-        ns = '{http://www.w3.org/2001/XMLSchema}'
-        self.above_below_simple_type_element = self.root.find(f"{ns}simpleType[@name='above-below']")
-        self.yes_no_number_simple_type_element = self.root.find(f"{ns}simpleType[@name='yes-no-number']")
-        self.complex_type_element = self.root.find(f"{ns}complexType[@name='fingering']")
-        self.all_simple_type_elements = [XMLElementTreeElement(simpletype) for simpletype in
-                                         self.root.findall(f"{ns}simpleType")]
+class TestXMLElementTreeElement(MusicXmlTestCase):
+    # def setUp(self) -> None:
+    #     with open(xsd_path) as file:
+    #         xmltree = ET.parse(file)
+    #     self.root = xmltree.getroot()
+    #     ns = '{http://www.w3.org/2001/XMLSchema}'
+    #     self.above_below_simple_type_element = self.root.find(f"{ns}simpleType[@name='above-below']")
+    #     self.yes_no_number_simple_type_element = self.root.find(f"{ns}simpleType[@name='yes-no-number']")
+    #     self.complex_type_element = self.root.find(f"{ns}complexType[@name='fingering']")
+    #     self.all_simple_type_elements = [XMLElementTreeElement(simpletype) for simpletype in
+    #                                      self.root.findall(f"{ns}simpleType")]
 
     def test_write_all_tags(self):
         def get_all_tags():
@@ -36,10 +35,6 @@ class TestXMLElementTreeElement(TestCase):
                     print('============')
                     print(child.tree_repr())
 
-    def test_self_simple_type_element(self):
-        assert self.above_below_simple_type_element.tag == '{http://www.w3.org/2001/XMLSchema}simpleType'
-        assert self.above_below_simple_type_element.attrib['name'] == 'above-below'
-
     def test_xml_property(self):
         """
         Test that a XMLElementGenerator must get an xml element
@@ -50,29 +45,24 @@ class TestXMLElementTreeElement(TestCase):
         with self.assertRaises(TypeError):
             XMLElementTreeElement('Naja')
 
-        xml_element = XMLElementTreeElement(self.above_below_simple_type_element)
-        assert isinstance(xml_element.xml_element_tree_element, ET.Element)
+        assert isinstance(self.above_below_simple_type_element.xml_element_tree_element, ET.Element)
 
     def test_xml_element_tag(self):
-        xml_element = XMLElementTreeElement(self.above_below_simple_type_element)
-        assert xml_element.tag == 'simpleType'
+        assert self.above_below_simple_type_element.tag == 'simpleType'
 
     def test_xml_element_class_name(self):
-        xml_element = XMLElementTreeElement(self.above_below_simple_type_element)
-        assert xml_element.class_name == 'XMLSimpleTypeAboveBelow'
+        assert self.above_below_simple_type_element.class_name == 'XMLSimpleTypeAboveBelow'
 
     def test_get_doc(self):
-        xml_element = XMLElementTreeElement(self.above_below_simple_type_element)
-        assert xml_element.get_doc() == 'The above-below type is used to indicate whether one element appears above or below another element.'
+        assert self.above_below_simple_type_element.get_doc() == 'The above-below type is used to indicate whether one element appears above or below another element.'
 
     def test_name(self):
-        xml_element = XMLElementTreeElement(self.above_below_simple_type_element)
-        assert xml_element.name == 'above-below'
+        assert self.above_below_simple_type_element.name == 'above-below'
 
     def test_traverse(self):
         expected = ['complexType', 'annotation', 'documentation', 'simpleContent', 'extension', 'attribute',
                     'attribute', 'attributeGroup', 'attributeGroup']
-        assert [node.tag for node in XMLElementTreeElement(self.complex_type_element).traverse()] == expected
+        assert [node.tag for node in self.complex_type_element.traverse()] == expected
 
     def test_get_children(self):
         xml = """<xs:extension xmlns:xs="http://www.w3.org/2001/XMLSchema" 
@@ -87,45 +77,44 @@ class TestXMLElementTreeElement(TestCase):
                                                               'attributeGroup']
 
     def test_iterate_leaves(self):
-        el = XMLElementTreeElement(self.complex_type_element)
-        assert [child.tag for child in el.iterate_leaves()] == ['documentation', 'attribute', 'attribute',
-                                                                'attributeGroup',
-                                                                'attributeGroup']
+        assert [child.tag for child in self.complex_type_element.iterate_leaves()] == ['documentation', 'attribute',
+                                                                                       'attribute',
+                                                                                       'attributeGroup',
+                                                                                       'attributeGroup']
 
     def test_compact_repr(self):
-        el = XMLElementTreeElement(self.complex_type_element)
-
-        assert [node.compact_repr for node in el.traverse()] == ['complexType@name=fingering', 'annotation',
-                                                                 'documentation', 'simpleContent',
-                                                                 'extension@base=xs:string',
-                                                                 'attribute@name=substitution@type=yes-no',
-                                                                 'attribute@name=alternate@type=yes-no',
-                                                                 'attributeGroup@ref=print-style',
-                                                                 'attributeGroup@ref=placement']
+        assert [node.compact_repr for node in self.complex_type_element.traverse()] == ['complexType@name=fingering',
+                                                                                        'annotation',
+                                                                                        'documentation',
+                                                                                        'simpleContent',
+                                                                                        'extension@base=xs:string',
+                                                                                        'attribute@name=substitution@type=yes-no',
+                                                                                        'attribute@name=alternate@type=yes-no',
+                                                                                        'attributeGroup@ref=print-style',
+                                                                                        'attributeGroup@ref=placement']
 
     def test_str(self):
-        el = XMLElementTreeElement(self.complex_type_element)
-        assert str(el) == "XMLElementTreeElement complexType@name=fingering"
+        assert str(self.complex_type_element) == "XMLElementTreeElement complexType@name=fingering"
 
     def test_repr(self):
-        el = XMLElementTreeElement(self.complex_type_element)
-        assert [repr(node) for node in el.traverse()] == ['XMLElementTreeElement(tag=complexType, name=fingering)',
-                                                          'XMLElementTreeElement(tag=annotation)',
-                                                          'XMLElementTreeElement(tag=documentation)',
-                                                          'XMLElementTreeElement(tag=simpleContent)',
-                                                          'XMLElementTreeElement(tag=extension, base=xs:string)',
-                                                          'XMLElementTreeElement(tag=attribute, name=substitution type=yes-no)',
-                                                          'XMLElementTreeElement(tag=attribute, name=alternate type=yes-no)',
-                                                          'XMLElementTreeElement(tag=attributeGroup, ref=print-style)',
-                                                          'XMLElementTreeElement(tag=attributeGroup, ref=placement)']
+        assert [repr(node) for node in self.complex_type_element.traverse()] == [
+            'XMLElementTreeElement(tag=complexType, name=fingering)',
+            'XMLElementTreeElement(tag=annotation)',
+            'XMLElementTreeElement(tag=documentation)',
+            'XMLElementTreeElement(tag=simpleContent)',
+            'XMLElementTreeElement(tag=extension, base=xs:string)',
+            'XMLElementTreeElement(tag=attribute, name=substitution type=yes-no)',
+            'XMLElementTreeElement(tag=attribute, name=alternate type=yes-no)',
+            'XMLElementTreeElement(tag=attributeGroup, ref=print-style)',
+            'XMLElementTreeElement(tag=attributeGroup, ref=placement)']
 
     def test_get_attributes(self):
-        el = XMLElementTreeElement(self.complex_type_element)
         assert [{}, {'name': 'substitution', 'type': 'yes-no'}, {'name': 'alternate', 'type': 'yes-no'},
-                {'ref': 'print-style'}, {'ref': 'placement'}] == [leaf.get_attributes() for leaf in el.iterate_leaves()]
+                {'ref': 'print-style'}, {'ref': 'placement'}] == [leaf.get_attributes() for leaf in
+                                                                  self.complex_type_element.iterate_leaves()]
 
     def test_get_parent(self):
-        grandparent = XMLElementTreeElement(self.complex_type_element)
+        grandparent = self.complex_type_element
         parent = grandparent.get_children()[1]
         child = parent.get_children()[0]
         grandchild = child.get_children()[0]
@@ -160,17 +149,17 @@ class TestXMLElementTreeElement(TestCase):
 		</xs:simpleContent>
 	</xs:complexType>
 """
-        assert XMLElementTreeElement(self.above_below_simple_type_element).get_xsd() == expected_1
-        assert XMLElementTreeElement(self.complex_type_element).get_xsd() == expected_2
+        assert self.above_below_simple_type_element.get_xsd() == expected_1
+        assert self.complex_type_element.get_xsd() == expected_2
 
     def test_get_restriction(self):
-        assert XMLElementTreeElement(self.above_below_simple_type_element).get_restriction().tag == 'restriction'
-        assert XMLElementTreeElement(self.complex_type_element).get_restriction() is None
+        assert self.above_below_simple_type_element.get_restriction().tag == 'restriction'
+        assert self.complex_type_element.get_restriction() is None
 
     def test_get_union(self):
-        assert XMLElementTreeElement(self.above_below_simple_type_element).get_union_member_types() is None
-        assert XMLElementTreeElement(self.yes_no_number_simple_type_element).get_union_member_types() == ['yes-no',
-                                                                                                          'xs:decimal']
+        assert self.above_below_simple_type_element.get_union_member_types() is None
+        assert self.yes_no_number_simple_type_element.get_union_member_types() == ['yes-no',
+                                                                                   'xs:decimal']
 
     def test_base_class_names(self):
         all_restriction_bases = []
