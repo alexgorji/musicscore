@@ -1,5 +1,3 @@
-from abc import abstractmethod
-
 from musicxml.xmlelement import MusicXMLElement, XMLElementTreeElement, find_all_xsd_children
 
 
@@ -13,9 +11,8 @@ class XMLSimpleType(MusicXMLElement):
         self._validate(value)
         self._value = value
 
-    @abstractmethod
     def _validate(self, value):
-        pass
+        return True
 
     @property
     def value(self):
@@ -33,7 +30,6 @@ for simple_type in find_all_xsd_children(tag='simpleType'):
     attributes = """
     {
     '__doc__': xml_element_tree_element.get_doc(), 
-    '_validate': lambda self, x: True,
     'XML_ET_ELEMENT':xml_element_tree_element
     }
     """

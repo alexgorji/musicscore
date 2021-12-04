@@ -45,7 +45,7 @@ class TreePresentation(ABC):
     def get_parent(self):
         pass
 
-    def print_tree(self, attr):
+    def tree_repr(self, attr='compact_repr'):
         def _indentation(x):
             indentation = ''
             for i in range(x.get_layer_number()):

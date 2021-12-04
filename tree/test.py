@@ -53,7 +53,7 @@ class TestTree(TestCase):
     def test_get_layer_number(self):
         assert [node.get_layer_number() for node in self.root.traverse()] == [0, 1, 1, 2, 2, 3, 1, 1, 2]
 
-    def test_print_tree(self):
+    def test_tree_repr(self):
         expected = """root
     child1
     child2
@@ -64,4 +64,4 @@ class TestTree(TestCase):
     child4
         grandchild3
 """
-        assert self.root.print_tree('name') == expected
+        assert self.root.tree_repr('name') == expected

@@ -13,6 +13,10 @@ ns = '{http://www.w3.org/2001/XMLSchema}'
 root = xsd_tree.getroot()
 
 
+def cap_first(s):
+    return s[0].upper() + s[1:]
+
+
 def find_all_xsd_children(tag):
     return root.findall(f"{ns}{tag}")
 
@@ -50,11 +54,10 @@ class XMLElementTreeElement(TreePresentation):
     # private methods
 
     def _get_element_class_name(self):
-        tag = self.tag[:]
-        tag = tag[0].upper() + tag[1:]
+        tag = cap_first(self.tag)
 
         name = 'XML' + f'{tag}'
-        name += ''.join([partial.capitalize() for partial in self.name.split('-')])
+        name += ''.join([cap_first(partial) for partial in self.name.split('-')])
         return name
 
     def _populate_children(self):
@@ -63,6 +66,25 @@ class XMLElementTreeElement(TreePresentation):
 
     # ------------------
     # public properties
+    @property
+    def base_class_names(self):
+        def convert_name(name):
+            name = cap_first(name)
+            name = ''.join([cap_first(partial) for partial in name.split(':')])
+            name = ''.join([cap_first(partial) for partial in name.split('-')])
+            if name.startswith('Xs'):
+                pass
+            else:
+                name = 'XMLSimpleType'+name
+            return name
+
+        if self.get_restriction():
+            base = self.get_restriction().get_attributes()['base']
+            return [convert_name(base)]
+        elif self.get_union_member_types():
+            return [convert_name(type_) for type_ in self.get_union_member_types()]
+        else:
+            raise AttributeError(f"{self} has no restriction with base attribute or union with memberTypes.")
 
     @property
     def class_name(self):
@@ -95,6 +117,10 @@ class XMLElementTreeElement(TreePresentation):
         return self._tag
 
     @property
+    def text(self):
+        return self.xml_element_tree_element.text
+
+    @property
     def xml_element_tree_element(self):
         return self._xml_element_tree_element
 
@@ -117,11 +143,24 @@ class XMLElementTreeElement(TreePresentation):
         return self._children
 
     def get_doc(self):
-        to_be_found = f"./{self.namespace}annotation/{self.namespace}documentation"
-        return self.xml_element_tree_element.find(to_be_found).text
+        for node in self.traverse():
+            if node.tag == 'documentation':
+                return node.text
+        # to_be_found = f"./{self.namespace}annotation/{self.namespace}documentation"
+        # return self.xml_element_tree_element.find(to_be_found).text
+
+    def get_restriction(self):
+        for node in self.traverse():
+            if node.tag == 'restriction':
+                return node
 
     def get_parent(self):
         return self._parent
+
+    def get_union_member_types(self):
+        for node in self.traverse():
+            if node.tag == 'union':
+                return node.get_attributes()['memberTypes'].split(' ')
 
     def get_xsd(self):
         with io.StringIO() as buf, redirect_stdout(buf):

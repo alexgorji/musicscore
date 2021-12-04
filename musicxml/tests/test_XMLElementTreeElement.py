@@ -14,8 +14,11 @@ class TestXMLElementTreeElement(TestCase):
             xmltree = ET.parse(file)
         self.root = xmltree.getroot()
         ns = '{http://www.w3.org/2001/XMLSchema}'
-        self.simple_type_element = self.root.find(f"{ns}simpleType[@name='above-below']")
+        self.above_below_simple_type_element = self.root.find(f"{ns}simpleType[@name='above-below']")
+        self.yes_no_number_simple_type_element = self.root.find(f"{ns}simpleType[@name='yes-no-number']")
         self.complex_type_element = self.root.find(f"{ns}complexType[@name='fingering']")
+        self.all_simple_type_elements = [XMLElementTreeElement(simpletype) for simpletype in
+                                         self.root.findall(f"{ns}simpleType")]
 
     def test_write_all_tags(self):
         def get_all_tags():
@@ -31,11 +34,11 @@ class TestXMLElementTreeElement(TestCase):
                 print('All tags: ' + str(get_all_tags()))
                 for child in tree.get_children():
                     print('============')
-                    print([node.compact_repr for node in child.traverse()])
+                    print(child.tree_repr())
 
     def test_self_simple_type_element(self):
-        assert self.simple_type_element.tag == '{http://www.w3.org/2001/XMLSchema}simpleType'
-        assert self.simple_type_element.attrib['name'] == 'above-below'
+        assert self.above_below_simple_type_element.tag == '{http://www.w3.org/2001/XMLSchema}simpleType'
+        assert self.above_below_simple_type_element.attrib['name'] == 'above-below'
 
     def test_xml_property(self):
         """
@@ -47,23 +50,23 @@ class TestXMLElementTreeElement(TestCase):
         with self.assertRaises(TypeError):
             XMLElementTreeElement('Naja')
 
-        xml_element = XMLElementTreeElement(self.simple_type_element)
+        xml_element = XMLElementTreeElement(self.above_below_simple_type_element)
         assert isinstance(xml_element.xml_element_tree_element, ET.Element)
 
     def test_xml_element_tag(self):
-        xml_element = XMLElementTreeElement(self.simple_type_element)
+        xml_element = XMLElementTreeElement(self.above_below_simple_type_element)
         assert xml_element.tag == 'simpleType'
 
     def test_xml_element_class_name(self):
-        xml_element = XMLElementTreeElement(self.simple_type_element)
+        xml_element = XMLElementTreeElement(self.above_below_simple_type_element)
         assert xml_element.class_name == 'XMLSimpleTypeAboveBelow'
 
     def test_get_doc(self):
-        xml_element = XMLElementTreeElement(self.simple_type_element)
+        xml_element = XMLElementTreeElement(self.above_below_simple_type_element)
         assert xml_element.get_doc() == 'The above-below type is used to indicate whether one element appears above or below another element.'
 
     def test_name(self):
-        xml_element = XMLElementTreeElement(self.simple_type_element)
+        xml_element = XMLElementTreeElement(self.above_below_simple_type_element)
         assert xml_element.name == 'above-below'
 
     def test_traverse(self):
@@ -157,5 +160,27 @@ class TestXMLElementTreeElement(TestCase):
 		</xs:simpleContent>
 	</xs:complexType>
 """
-        assert XMLElementTreeElement(self.simple_type_element).get_xsd() == expected_1
+        assert XMLElementTreeElement(self.above_below_simple_type_element).get_xsd() == expected_1
         assert XMLElementTreeElement(self.complex_type_element).get_xsd() == expected_2
+
+    def test_get_restriction(self):
+        assert XMLElementTreeElement(self.above_below_simple_type_element).get_restriction().tag == 'restriction'
+        assert XMLElementTreeElement(self.complex_type_element).get_restriction() is None
+
+    def test_get_union(self):
+        assert XMLElementTreeElement(self.above_below_simple_type_element).get_union_member_types() is None
+        assert XMLElementTreeElement(self.yes_no_number_simple_type_element).get_union_member_types() == ['yes-no',
+                                                                                                          'xs:decimal']
+
+    def test_base_class_names(self):
+        all_restriction_bases = []
+        for simpletype in self.all_simple_type_elements:
+            if simpletype.base_class_names not in all_restriction_bases:
+                all_restriction_bases.append(simpletype.base_class_names)
+
+        assert all_restriction_bases == [['XsToken'], ['XsPositiveInteger'], ['XsDecimal'], ['XsString'],
+                                         ['XMLSimpleTypeCommaSeparatedText'], ['XsDecimal', 'XMLSimpleTypeCssFontSize'],
+                                         ['XsNonNegativeInteger'], ['XMLSimpleTypeDivisions'], ['XsNMTOKEN'],
+                                         ['XMLSimpleTypeSmuflGlyphName'], ['XMLSimpleTypeYesNo', 'XsDecimal'],
+                                         ['XsDate'], ['XsInteger'],
+                                         ['XMLSimpleTypeSystemRelationNumber'], ['XMLSimpleTypeNoteTypeValue']]
