@@ -146,6 +146,10 @@ class TestXMLElementTreeElement(MusicXmlTestCase):
         assert self.complex_type_element.get_restriction() is None
 
     def test_get_union(self):
+        assert self.above_below_simple_type_element.get_union() is None
+        assert self.yes_no_number_simple_type_element.get_union().tag == 'union'
+
+    def test_get_union_member_types(self):
         assert self.above_below_simple_type_element.get_union_member_types() is None
         assert self.yes_no_number_simple_type_element.get_union_member_types() == ['yes-no',
                                                                                    'xs:decimal']

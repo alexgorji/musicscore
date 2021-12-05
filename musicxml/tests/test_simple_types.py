@@ -3,7 +3,8 @@ import importlib
 from musicxml.types.simpletype import XMLSimpleType, XMLSimpleTypeAboveBelow, XMLSimpleTypeNumberOrNormal, \
     XMLSimpleTypePositiveIntegerOrEmpty, XMLSimpleTypeNonNegativeDecimal, XMLSimpleTypeDecimal, XMLSimpleTypeInteger, \
     XMLSimpleTypeNonNegativeInteger, XMLSimpleTypePositiveInteger, XMLSimpleTypeString, XMLSimpleTypeToken, \
-    XMLSimpleTypeNMTOKEN, XMLSimpleTypeDate
+    XMLSimpleTypeNMTOKEN, XMLSimpleTypeDate, XMLSimpleTypeMeasureText, XMLSimpleTypePositiveDecimal, \
+    XMLSimpleTypeBeamLevel
 from musicxml.util.helperclasses import MusicXmlTestCase
 
 
@@ -91,18 +92,6 @@ class TestSimpleTypes(MusicXmlTestCase):
         XMLSimpleTypeDecimal(0)
         XMLSimpleTypeDecimal(-4)
 
-    def test_non_negative_decimal(self):
-        with self.assertRaises(TypeError):
-            XMLSimpleTypeNonNegativeDecimal(None)
-        with self.assertRaises(TypeError):
-            XMLSimpleTypeNonNegativeDecimal('string')
-        XMLSimpleTypeNonNegativeDecimal(1.4)
-        XMLSimpleTypeNonNegativeDecimal(0)
-        with self.assertRaises(ValueError):
-            XMLSimpleTypeNonNegativeDecimal(-4)
-        with self.assertRaises(ValueError):
-            XMLSimpleTypeNonNegativeDecimal(-1.4)
-
     def test_xs_string(self):
         with self.assertRaises(TypeError):
             XMLSimpleTypeString(None)
@@ -187,7 +176,61 @@ class TestSimpleTypes(MusicXmlTestCase):
         with self.assertRaises(ValueError):
             XMLSimpleTypePositiveIntegerOrEmpty(0)
         XMLSimpleTypePositiveIntegerOrEmpty(1)
-        XMLSimpleTypeNumberOrNormal('')
+        XMLSimpleTypePositiveIntegerOrEmpty('')
+
+    def test_simple_type_measure_text_min_length(self):
+        """
+        Test minLength
+        """
+        XMLSimpleTypeMeasureText('some text')
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeMeasureText(1)
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeMeasureText('')
+
+    def test_simple_type_positive_decimal(self):
+        """
+        Test minExclusive
+        """
+        XMLSimpleTypePositiveDecimal(10)
+        with self.assertRaises(ValueError):
+            XMLSimpleTypePositiveDecimal(0)
+        with self.assertRaises(ValueError):
+            XMLSimpleTypePositiveDecimal(-10)
+
+    def test_non_negative_decimal(self):
+        """
+        Test minInclusive
+        """
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeNonNegativeDecimal(None)
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeNonNegativeDecimal('string')
+        XMLSimpleTypeNonNegativeDecimal(1.4)
+        XMLSimpleTypeNonNegativeDecimal(0)
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeNonNegativeDecimal(-4)
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeNonNegativeDecimal(-1.4)
+
+    def test_beam_level(self):
+        """
+        Test minInclusive and maxInclusive
+        """
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeBeamLevel(None)
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeBeamLevel('string')
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeBeamLevel(1.4)
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeBeamLevel(-4)
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeBeamLevel(0)
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeBeamLevel(9)
+        for x in range(1, 9):
+            XMLSimpleTypeBeamLevel(x)
 
     def test_simple_type_validator_from_restriction(self):
         """
@@ -200,6 +243,28 @@ class TestSimpleTypes(MusicXmlTestCase):
             XMLSimpleTypeAboveBelow(1)
 
         XMLSimpleTypeAboveBelow('above')
-        XMLSimpleTypeAboveBelow('below')
+        x = XMLSimpleTypeAboveBelow('below')
         with self.assertRaises(ValueError):
             XMLSimpleTypeAboveBelow('side')
+
+    # patterns
+    def test_simple_type_color(self):
+        self.fail()
+
+    def test_comma_separated_text(self):
+        self.fail()
+
+    def test_smufl_accidental_glyph_name(self):
+        self.fail()
+
+    def test_smufl_coda_glyph_name(self):
+        self.fail()
+
+    def test_smufl_lyrics_glyph_name(self):
+        self.fail()
+
+    def test_smufl_wavy_line_glyph_name(self):
+        self.fail()
+
+    def test_yyyy_mm_dd(self):
+        self.fail()

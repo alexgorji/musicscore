@@ -133,18 +133,22 @@ class XMLElementTreeElement(TreePresentation):
             if node.tag == 'documentation':
                 return node.text
 
+    def get_parent(self):
+        return self._parent
+
     def get_restriction(self):
         for node in self.get_children():
             if node.tag == 'restriction':
                 return node
 
-    def get_parent(self):
-        return self._parent
-
-    def get_union_member_types(self):
+    def get_union(self):
         for node in self.get_children():
             if node.tag == 'union':
-                return node.get_attributes()['memberTypes'].split(' ')
+                return node
+
+    def get_union_member_types(self):
+        if self.get_union():
+            return self.get_union().get_attributes()['memberTypes'].split(' ')
 
     def get_xsd(self):
         with io.StringIO() as buf, redirect_stdout(buf):
