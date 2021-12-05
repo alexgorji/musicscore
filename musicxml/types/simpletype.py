@@ -17,8 +17,11 @@ class XMLSimpleType(MusicXMLElement):
 
     def __init__(self, value, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._populate_permitted()
-        self._populate_forced_permitted()
+        if not self._PERMITTED:
+            self._populate_permitted()
+        if not self._FORCED_PERMITTED:
+            self._populate_forced_permitted()
+        self._populate_pattern()
         self._value = None
         self.value = value
 
@@ -40,6 +43,14 @@ class XMLSimpleType(MusicXMLElement):
             if v not in self._PERMITTED:
                 raise ValueError(f'{self.__class__.__name__}.value {v} must in {self.__class__._PERMITTED}')
         elif self._PATTERN:
+            restriction = self.XML_ET_ELEMENT.get_restriction()
+            if restriction:
+                if restriction.get_attributes()['base'] == 'xs:date':
+                    XMLSimpleTypeDate(v)
+                elif restriction.get_attributes()['base'] == 'xs:token':
+                    v = XMLSimpleTypeToken(v).value
+                elif restriction.get_attributes()['base'] == 'xs:smufl-glyph-name':
+                    XMLSimpleTypeSmuflGlypyName(v)
             if re.compile(self._PATTERN).fullmatch(v) is None:
                 raise ValueError(
                     f'{self.__class__.__name__}.value {v} must match the following pattern: {self._PATTERN}')
@@ -92,6 +103,13 @@ class XMLSimpleType(MusicXMLElement):
             enumerations = [child for child in intern_simple_type.get_restriction().get_children() if child.tag
                             == 'enumeration']
             self._FORCED_PERMITTED = [enumeration.get_attributes()['value'] for enumeration in enumerations]
+
+    def _populate_pattern(self):
+        restriction = self.XML_ET_ELEMENT.get_restriction()
+        if restriction and restriction.get_children and restriction.get_children()[0].tag == 'pattern':
+            pattern = rf"{restriction.get_children()[0].get_attributes()['value']}"
+            pattern = pattern.replace('\c', name_character)
+            self._PATTERN = pattern
 
     def __repr__(self):
         return str(self.value)

@@ -1,11 +1,12 @@
 import importlib
-
+from musicxml.util.helperclasses import MusicXmlTestCase
 from musicxml.types.simpletype import XMLSimpleType, XMLSimpleTypeAboveBelow, XMLSimpleTypeNumberOrNormal, \
     XMLSimpleTypePositiveIntegerOrEmpty, XMLSimpleTypeNonNegativeDecimal, XMLSimpleTypeDecimal, XMLSimpleTypeInteger, \
     XMLSimpleTypeNonNegativeInteger, XMLSimpleTypePositiveInteger, XMLSimpleTypeString, XMLSimpleTypeToken, \
     XMLSimpleTypeNMTOKEN, XMLSimpleTypeDate, XMLSimpleTypeMeasureText, XMLSimpleTypePositiveDecimal, \
-    XMLSimpleTypeBeamLevel
-from musicxml.util.helperclasses import MusicXmlTestCase
+    XMLSimpleTypeBeamLevel, XMLSimpleTypeColor, XMLSimpleTypeCommaSeparatedText, XMLSimpleTypeSmuflAccidentalGlyphName, \
+    XMLSimpleTypeSmuflCodaGlyphName, XMLSimpleTypeSmuflLyricsGlyphName, XMLSimpleTypeSmuflWavyLineGlyphName, \
+    XMLSimpleTypeYyyyMmDd
 
 
 class TestSimpleTypes(MusicXmlTestCase):
@@ -52,55 +53,62 @@ class TestSimpleTypes(MusicXmlTestCase):
                 assert base_class in mro
 
     def test_xs_integer(self):
+        XMLSimpleTypeInteger(0)
+        XMLSimpleTypeInteger(-4)
+        XMLSimpleTypeInteger(3)
+
         with self.assertRaises(TypeError):
             XMLSimpleTypeInteger(None)
         with self.assertRaises(TypeError):
             XMLSimpleTypeInteger('string')
         with self.assertRaises(TypeError):
             XMLSimpleTypeInteger(1.4)
-        XMLSimpleTypeInteger(0)
-        XMLSimpleTypeInteger(-4)
-        XMLSimpleTypeInteger(3)
 
-    def test_xs_none_negative_integer(self):
+    def test_xs_non_negative_integer(self):
+        XMLSimpleTypeNonNegativeInteger(0)
+        XMLSimpleTypeNonNegativeInteger(3)
+
         with self.assertRaises(TypeError):
             XMLSimpleTypeNonNegativeInteger(1.4)
         with self.assertRaises(TypeError):
             XMLSimpleTypeNonNegativeInteger(-1.4)
+
         with self.assertRaises(ValueError):
             XMLSimpleTypeNonNegativeInteger(-4)
-        XMLSimpleTypeNonNegativeInteger(0)
-        XMLSimpleTypeNonNegativeInteger(3)
 
     def test_xs_positive_integer(self):
+        XMLSimpleTypePositiveInteger(3)
+
         with self.assertRaises(TypeError):
             XMLSimpleTypePositiveInteger(1.4)
         with self.assertRaises(TypeError):
             XMLSimpleTypePositiveInteger(-1.4)
+
         with self.assertRaises(ValueError):
             XMLSimpleTypePositiveInteger(-4)
         with self.assertRaises(ValueError):
             XMLSimpleTypePositiveInteger(0)
-        XMLSimpleTypePositiveInteger(3)
 
     def test_xs_decimal(self):
-        with self.assertRaises(TypeError):
-            XMLSimpleTypeDecimal(None)
-        with self.assertRaises(TypeError):
-            XMLSimpleTypeDecimal('string')
         XMLSimpleTypeDecimal(1.4)
         XMLSimpleTypeDecimal(0)
         XMLSimpleTypeDecimal(-4)
 
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeDecimal(None)
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeDecimal('string')
+
     def test_xs_string(self):
+        XMLSimpleTypeString("")
+        XMLSimpleTypeString("hello")
+
         with self.assertRaises(TypeError):
             XMLSimpleTypeString(None)
         with self.assertRaises(TypeError):
             XMLSimpleTypeString(1)
         with self.assertRaises(TypeError):
             XMLSimpleTypeString(1.5)
-        XMLSimpleTypeString("")
-        XMLSimpleTypeString("hello")
 
     def test_xs_token(self):
         with self.assertRaises(TypeError):
@@ -113,8 +121,14 @@ class TestSimpleTypes(MusicXmlTestCase):
         assert XMLSimpleTypeToken("Hello\n  Alfons").value == "Hello Alfons"
 
     def test_xs_NMTOKEN(self):
+        XMLSimpleTypeNMTOKEN("Hello_Alfons")
+        XMLSimpleTypeNMTOKEN("HeL1.o")
+        XMLSimpleTypeNMTOKEN("HeL1:._-o")
+        XMLSimpleTypeNMTOKEN("ÖÜöüäÄ:._-o")
+
         with self.assertRaises(TypeError):
             XMLSimpleTypeNMTOKEN(1)
+
         with self.assertRaises(ValueError):
             XMLSimpleTypeNMTOKEN("Hello Alfons")
         with self.assertRaises(ValueError):
@@ -133,27 +147,23 @@ class TestSimpleTypes(MusicXmlTestCase):
             XMLSimpleTypeNMTOKEN("Hello?Alfons")
         with self.assertRaises(ValueError):
             XMLSimpleTypeNMTOKEN("HelloAlfons!")
-        XMLSimpleTypeNMTOKEN("Hello_Alfons")
-        XMLSimpleTypeNMTOKEN("HeL1.o")
-        XMLSimpleTypeNMTOKEN("HeL1:._-o")
-        XMLSimpleTypeNMTOKEN("ÖÜöüäÄ:._-o")
 
     def test_xs_date(self):
         XMLSimpleTypeDate('1982-11-23+07:00')
         XMLSimpleTypeDate('1982-11-23')
+
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeDate(19821223)
+
         with self.assertRaises(ValueError):
             XMLSimpleTypeDate('1982-21-23')
         with self.assertRaises(ValueError):
             XMLSimpleTypeDate('19822123')
-        with self.assertRaises(TypeError):
-            XMLSimpleTypeDate(19821223)
 
     def test_simple_type_number_or_normal(self):
         """
         Test if the intern simple format of restriction is applied
         """
-        with self.assertRaises(TypeError):
-            XMLSimpleTypeNumberOrNormal('something')
         XMLSimpleTypeNumberOrNormal(1)
         XMLSimpleTypeNumberOrNormal(1.5)
         XMLSimpleTypeNumberOrNormal(-1)
@@ -161,30 +171,37 @@ class TestSimpleTypes(MusicXmlTestCase):
         XMLSimpleTypeNumberOrNormal(0)
         XMLSimpleTypeNumberOrNormal('normal')
 
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeNumberOrNormal('something')
+
     def test_simple_type_positive_integer_or_empty(self):
         """
         Test if the intern simple format of restriction is applied
         """
+        XMLSimpleTypePositiveIntegerOrEmpty(1)
+        XMLSimpleTypePositiveIntegerOrEmpty('')
+
         with self.assertRaises(TypeError):
             XMLSimpleTypePositiveIntegerOrEmpty('something')
         with self.assertRaises(TypeError):
             XMLSimpleTypePositiveIntegerOrEmpty(-1.5)
         with self.assertRaises(TypeError):
             XMLSimpleTypePositiveIntegerOrEmpty(1.5)
+
         with self.assertRaises(ValueError):
             XMLSimpleTypePositiveIntegerOrEmpty(-1)
         with self.assertRaises(ValueError):
             XMLSimpleTypePositiveIntegerOrEmpty(0)
-        XMLSimpleTypePositiveIntegerOrEmpty(1)
-        XMLSimpleTypePositiveIntegerOrEmpty('')
 
     def test_simple_type_measure_text_min_length(self):
         """
         Test minLength
         """
         XMLSimpleTypeMeasureText('some text')
+
         with self.assertRaises(TypeError):
             XMLSimpleTypeMeasureText(1)
+
         with self.assertRaises(ValueError):
             XMLSimpleTypeMeasureText('')
 
@@ -193,6 +210,10 @@ class TestSimpleTypes(MusicXmlTestCase):
         Test minExclusive
         """
         XMLSimpleTypePositiveDecimal(10)
+
+        with self.assertRaises(TypeError):
+            XMLSimpleTypePositiveDecimal('hello')
+
         with self.assertRaises(ValueError):
             XMLSimpleTypePositiveDecimal(0)
         with self.assertRaises(ValueError):
@@ -202,12 +223,14 @@ class TestSimpleTypes(MusicXmlTestCase):
         """
         Test minInclusive
         """
+        XMLSimpleTypeNonNegativeDecimal(1.4)
+        XMLSimpleTypeNonNegativeDecimal(0)
+
         with self.assertRaises(TypeError):
             XMLSimpleTypeNonNegativeDecimal(None)
         with self.assertRaises(TypeError):
             XMLSimpleTypeNonNegativeDecimal('string')
-        XMLSimpleTypeNonNegativeDecimal(1.4)
-        XMLSimpleTypeNonNegativeDecimal(0)
+
         with self.assertRaises(ValueError):
             XMLSimpleTypeNonNegativeDecimal(-4)
         with self.assertRaises(ValueError):
@@ -217,54 +240,145 @@ class TestSimpleTypes(MusicXmlTestCase):
         """
         Test minInclusive and maxInclusive
         """
+        for x in range(1, 9):
+            XMLSimpleTypeBeamLevel(x)
+
         with self.assertRaises(TypeError):
             XMLSimpleTypeBeamLevel(None)
         with self.assertRaises(TypeError):
             XMLSimpleTypeBeamLevel('string')
         with self.assertRaises(TypeError):
             XMLSimpleTypeBeamLevel(1.4)
+
         with self.assertRaises(ValueError):
             XMLSimpleTypeBeamLevel(-4)
         with self.assertRaises(ValueError):
             XMLSimpleTypeBeamLevel(0)
         with self.assertRaises(ValueError):
             XMLSimpleTypeBeamLevel(9)
-        for x in range(1, 9):
-            XMLSimpleTypeBeamLevel(x)
 
     def test_simple_type_validator_from_restriction(self):
         """
         Test that the instance of with XMLElementGenerator generated class has a validator corresponding to its xsd
         restriction
         """
+        XMLSimpleTypeAboveBelow('above')
+        XMLSimpleTypeAboveBelow('below')
+
         with self.assertRaises(TypeError):
             XMLSimpleTypeAboveBelow(None)
         with self.assertRaises(TypeError):
             XMLSimpleTypeAboveBelow(1)
 
-        XMLSimpleTypeAboveBelow('above')
-        x = XMLSimpleTypeAboveBelow('below')
         with self.assertRaises(ValueError):
             XMLSimpleTypeAboveBelow('side')
 
     # patterns
     def test_simple_type_color(self):
-        self.fail()
+        XMLSimpleTypeColor('#40800080')
+
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeColor(None)
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeColor(1)
+
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeColor('40800080')
 
     def test_comma_separated_text(self):
-        self.fail()
+        XMLSimpleTypeCommaSeparatedText('arial,times')
+
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeCommaSeparatedText(None)
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeCommaSeparatedText(1)
+
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeCommaSeparatedText('arial,,times')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeCommaSeparatedText(',arial,times')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeCommaSeparatedText('arial,times,')
 
     def test_smufl_accidental_glyph_name(self):
-        self.fail()
+        XMLSimpleTypeSmuflAccidentalGlyphName('accSomething')
+        XMLSimpleTypeSmuflAccidentalGlyphName('kievanAccidentalSomething')
+
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeSmuflAccidentalGlyphName(None)
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeSmuflAccidentalGlyphName(1)
+
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflAccidentalGlyphName('something')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflAccidentalGlyphName('kievanAccidental')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflAccidentalGlyphName('kievanAccidental Something')
 
     def test_smufl_coda_glyph_name(self):
-        self.fail()
+        XMLSimpleTypeSmuflCodaGlyphName('codaSomething')
+        XMLSimpleTypeSmuflCodaGlyphName('coda')
+
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeSmuflCodaGlyphName(None)
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeSmuflCodaGlyphName(1)
+
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflAccidentalGlyphName('something')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflAccidentalGlyphName('codaSomething Something')
 
     def test_smufl_lyrics_glyph_name(self):
-        self.fail()
+        XMLSimpleTypeSmuflLyricsGlyphName('lyricsSomething')
+
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeSmuflLyricsGlyphName(None)
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeSmuflLyricsGlyphName(1)
+
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflLyricsGlyphName('something')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflLyricsGlyphName('lyrics')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflLyricsGlyphName('lyrics Something')
 
     def test_smufl_wavy_line_glyph_name(self):
-        self.fail()
+        XMLSimpleTypeSmuflWavyLineGlyphName('wiggleSomething')
+        XMLSimpleTypeSmuflWavyLineGlyphName('guitarSomethingVibratoStroke')
+        XMLSimpleTypeSmuflWavyLineGlyphName('guitarVibratoStroke')
+
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeSmuflWavyLineGlyphName(None)
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeSmuflWavyLineGlyphName(1)
+
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflWavyLineGlyphName('something')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflWavyLineGlyphName('wiggle')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflWavyLineGlyphName('wiggle Something')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflWavyLineGlyphName('somethingVibratoStroke')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflWavyLineGlyphName('guitarSomething')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflWavyLineGlyphName('guitar')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeSmuflWavyLineGlyphName('VibratoStroke')
 
     def test_yyyy_mm_dd(self):
-        self.fail()
+        a = XMLSimpleTypeYyyyMmDd('1982-11-23')
+        print(a.__class__.__mro__)
+        with self.assertRaises(TypeError):
+            XMLSimpleTypeYyyyMmDd(19821223)
+
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeYyyyMmDd('1982-21-23')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeYyyyMmDd('19822123')
+        with self.assertRaises(ValueError):
+            XMLSimpleTypeYyyyMmDd('1982-11-23+07:00')
