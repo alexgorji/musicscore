@@ -1,9 +1,7 @@
 import io
 import re
 import xml.etree.ElementTree as ET
-from abc import ABC
 from contextlib import redirect_stdout
-from pathlib import Path
 
 from musicxml.util.helperfunctions import cap_first
 from tree.tree import TreePresentation
@@ -57,13 +55,13 @@ class XMLElementTreeElement(TreePresentation):
     @property
     def base_class_names(self):
         def convert_name(name):
-            name = cap_first(name)
-            name = ''.join([cap_first(partial) for partial in name.split(':')])
-            name = ''.join([cap_first(partial) for partial in name.split('-')])
-            if name.startswith('Xs'):
+            try:
+                name = name.split(':')[1]
+            except IndexError:
                 pass
-            else:
-                name = 'XMLSimpleType'+name
+            name = cap_first(name)
+            name = ''.join([cap_first(partial) for partial in name.split('-')])
+            name = 'XMLSimpleType' + name
             return name
 
         if self.get_restriction():
@@ -136,7 +134,7 @@ class XMLElementTreeElement(TreePresentation):
                 return node.text
 
     def get_restriction(self):
-        for node in self.traverse():
+        for node in self.get_children():
             if node.tag == 'restriction':
                 return node
 
@@ -144,7 +142,7 @@ class XMLElementTreeElement(TreePresentation):
         return self._parent
 
     def get_union_member_types(self):
-        for node in self.traverse():
+        for node in self.get_children():
             if node.tag == 'union':
                 return node.get_attributes()['memberTypes'].split(' ')
 

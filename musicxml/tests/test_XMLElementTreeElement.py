@@ -1,23 +1,12 @@
+import xml.etree.ElementTree as ET
 from contextlib import redirect_stdout
 from pathlib import Path
-from unittest import TestCase
-import xml.etree.ElementTree as ET
 
 from musicxml.util.helperclasses import MusicXmlTestCase
 from musicxml.xmlelement import XMLElementTreeElement
 
 
 class TestXMLElementTreeElement(MusicXmlTestCase):
-    # def setUp(self) -> None:
-    #     with open(xsd_path) as file:
-    #         xmltree = ET.parse(file)
-    #     self.root = xmltree.getroot()
-    #     ns = '{http://www.w3.org/2001/XMLSchema}'
-    #     self.above_below_simple_type_element = self.root.find(f"{ns}simpleType[@name='above-below']")
-    #     self.yes_no_number_simple_type_element = self.root.find(f"{ns}simpleType[@name='yes-no-number']")
-    #     self.complex_type_element = self.root.find(f"{ns}complexType[@name='fingering']")
-    #     self.all_simple_type_elements = [XMLElementTreeElement(simpletype) for simpletype in
-    #                                      self.root.findall(f"{ns}simpleType")]
 
     def test_write_all_tags(self):
         def get_all_tags():
@@ -166,10 +155,12 @@ class TestXMLElementTreeElement(MusicXmlTestCase):
         for simpletype in self.all_simple_type_elements:
             if simpletype.base_class_names not in all_restriction_bases:
                 all_restriction_bases.append(simpletype.base_class_names)
-
-        assert all_restriction_bases == [['XsToken'], ['XsPositiveInteger'], ['XsDecimal'], ['XsString'],
-                                         ['XMLSimpleTypeCommaSeparatedText'], ['XsDecimal', 'XMLSimpleTypeCssFontSize'],
-                                         ['XsNonNegativeInteger'], ['XMLSimpleTypeDivisions'], ['XsNMTOKEN'],
-                                         ['XMLSimpleTypeSmuflGlyphName'], ['XMLSimpleTypeYesNo', 'XsDecimal'],
-                                         ['XsDate'], ['XsInteger'],
-                                         ['XMLSimpleTypeSystemRelationNumber'], ['XMLSimpleTypeNoteTypeValue']]
+        assert all_restriction_bases == [['XMLSimpleTypeToken'], ['XMLSimpleTypePositiveInteger'],
+                                         ['XMLSimpleTypeDecimal'], ['XMLSimpleTypeString'],
+                                         ['XMLSimpleTypeCommaSeparatedText'],
+                                         ['XMLSimpleTypeDecimal', 'XMLSimpleTypeCssFontSize'],
+                                         ['XMLSimpleTypeNonNegativeInteger'], ['XMLSimpleTypeDivisions'],
+                                         ['XMLSimpleTypeNMTOKEN'], ['XMLSimpleTypeSmuflGlyphName'],
+                                         ['XMLSimpleTypeYesNo', 'XMLSimpleTypeDecimal'], ['XMLSimpleTypeDate'],
+                                         ['XMLSimpleTypeInteger'], ['XMLSimpleTypeSystemRelationNumber'],
+                                         ['XMLSimpleTypeNoteTypeValue']]
