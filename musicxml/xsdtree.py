@@ -7,17 +7,6 @@ from musicxml.util.helperfunctions import cap_first
 from tree.tree import TreePresentation
 
 
-class MusicXMLElement:
-    """
-    Abstract class as root of all generated XML Classes
-    """
-    XSD_TREE = None
-
-    @classmethod
-    def get_xsd(cls):
-        return cls.XSD_TREE.get_xsd()
-
-
 class XSDTree(TreePresentation):
     """
     XSDTree gets an xml.etree.ElementTree.Element by initiation as its xml_element_tree_element property and
