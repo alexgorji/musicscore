@@ -6,7 +6,7 @@ from musicxml.util.helperclasses import MusicXmlTestCase
 from musicxml.xsdtree import XSDTree
 
 
-class TestXMLElementTreeElement(MusicXmlTestCase):
+class TestXSDTree(MusicXmlTestCase):
 
     def test_write_all_tags(self):
         def get_all_tags():
@@ -26,7 +26,7 @@ class TestXMLElementTreeElement(MusicXmlTestCase):
 
     def test_xml_property(self):
         """
-        Test that a XMLElementGenerator must get an xml element
+        Test that a XSDTree must get an xml element
         :return: 
         """""
         with self.assertRaises(TypeError):
@@ -39,8 +39,8 @@ class TestXMLElementTreeElement(MusicXmlTestCase):
     def test_xml_element_tag(self):
         assert self.above_below_simple_type_element.tag == 'simpleType'
 
-    def test_xml_element_class_name(self):
-        assert self.above_below_simple_type_element.class_name == 'XMLSimpleTypeAboveBelow'
+    def test_music_xml_class_name(self):
+        assert self.above_below_simple_type_element.music_xml_class_name == 'XMLSimpleTypeAboveBelow'
 
     def test_get_doc(self):
         assert self.above_below_simple_type_element.get_doc() == 'The above-below type is used to indicate whether one element appears above or below another element.'
@@ -157,8 +157,8 @@ class TestXMLElementTreeElement(MusicXmlTestCase):
     def test_base_class_names(self):
         all_restriction_bases = []
         for simpletype in self.all_simple_type_elements:
-            if simpletype.base_class_names not in all_restriction_bases:
-                all_restriction_bases.append(simpletype.base_class_names)
+            if simpletype.music_xml_base_class_names not in all_restriction_bases:
+                all_restriction_bases.append(simpletype.music_xml_base_class_names)
         assert all_restriction_bases == [['XMLSimpleTypeToken'], ['XMLSimpleTypePositiveInteger'],
                                          ['XMLSimpleTypeDecimal'], ['XMLSimpleTypeString'],
                                          ['XMLSimpleTypeCommaSeparatedText'],

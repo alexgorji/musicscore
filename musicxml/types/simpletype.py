@@ -1,6 +1,6 @@
 import re
 
-from musicxml.util.helperfunctions import get_simple_format_all_base_classes, find_all_xsd_children, get_cleaned_token
+from musicxml.util.helperfunctions import get_simple_type_all_base_classes, find_all_xsd_children, get_cleaned_token
 from musicxml.util.helprervariables import name_character
 from musicxml.xsdtree import XSDTree
 from musicxml.musicxml import MusicXMLElement
@@ -292,8 +292,8 @@ class XMLSimpleTypeDate(XMLSimpleTypeString):
 
 for simple_type in find_all_xsd_children(tag='simpleType'):
     xml_element_tree_element = XSDTree(simple_type)
-    class_name = xml_element_tree_element.class_name
-    base_classes = f"({', '.join(get_simple_format_all_base_classes(xml_element_tree_element))}, )"
+    class_name = xml_element_tree_element.music_xml_class_name
+    base_classes = f"({', '.join(get_simple_type_all_base_classes(xml_element_tree_element))}, )"
     attributes = """
     {
     '__doc__': xml_element_tree_element.get_doc(), 

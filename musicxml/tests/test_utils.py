@@ -2,15 +2,15 @@ import re
 from unittest import TestCase
 
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.util.helperfunctions import get_simple_format_all_base_classes, get_cleaned_token
+from musicxml.util.helperfunctions import get_simple_type_all_base_classes, get_cleaned_token
 from musicxml.util.helprervariables import name_character
 
 
 class TestHelperFunctions(MusicXmlTestCase):
-    def test_get_simple_format_base_classes(self):
-        assert get_simple_format_all_base_classes(self.yes_no_number_simple_type_element) == ['XMLSimpleTypeYesNo',
+    def test_get_simple_type_base_classes(self):
+        assert get_simple_type_all_base_classes(self.yes_no_number_simple_type_element) == ['XMLSimpleTypeYesNo',
                                                                                               'XMLSimpleTypeDecimal']
-        assert get_simple_format_all_base_classes(self.above_below_simple_type_element) == ['XMLSimpleTypeToken']
+        assert get_simple_type_all_base_classes(self.above_below_simple_type_element) == ['XMLSimpleTypeToken']
 
     def test_get_cleaned_token(self):
         expected = 'Hello Alfons'

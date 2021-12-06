@@ -9,8 +9,8 @@ ns = '{http://www.w3.org/2001/XMLSchema}'
 root = xsd_tree.getroot()
 
 
-def get_simple_format_all_base_classes(xml_element_tree_element):
-    base_class_names = xml_element_tree_element.base_class_names
+def get_simple_type_all_base_classes(xml_element_tree_element):
+    base_class_names = xml_element_tree_element.music_xml_base_class_names
     if [name for name in base_class_names if name.startswith('XMLSimpleType')]:
         pass
     else:

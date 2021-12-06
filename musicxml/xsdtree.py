@@ -18,7 +18,7 @@ class XSDTree(TreePresentation):
         self._namespace = None
         self._tag = None
         self._xml_element_tree_element = None
-        self._xml_element_class_name = None
+        self._music_xml_class_name = None
         self._parent = parent
 
         self.xml_element_tree_element = xml_element_tree_element
@@ -29,7 +29,7 @@ class XSDTree(TreePresentation):
     # ------------------
     # private methods
 
-    def _get_element_class_name(self):
+    def _get_music_xml_class_name(self):
         tag = cap_first(self.tag)
 
         name = 'XML' + f'{tag}'
@@ -43,7 +43,7 @@ class XSDTree(TreePresentation):
     # ------------------
     # public properties
     @property
-    def base_class_names(self):
+    def music_xml_base_class_names(self):
         def convert_name(name):
             try:
                 name = name.split(':')[1]
@@ -63,10 +63,10 @@ class XSDTree(TreePresentation):
             raise AttributeError(f"{self} has no restriction with base attribute or union with memberTypes.")
 
     @property
-    def class_name(self):
-        if self._xml_element_class_name is None:
-            self._xml_element_class_name = self._get_element_class_name()
-        return self._xml_element_class_name
+    def music_xml_class_name(self):
+        if self._music_xml_class_name is None:
+            self._music_xml_class_name = self._get_music_xml_class_name()
+        return self._music_xml_class_name
 
     @property
     def compact_repr(self):

@@ -40,15 +40,15 @@ class TestSimpleTypes(MusicXmlTestCase):
     def test_simple_type_xsd_is_converted_to_classes(self):
         for simple_type in self.all_simple_type_elements:
             module = importlib.import_module('musicxml.types.simpletype')
-            simple_type_class = getattr(module, simple_type.class_name)
-            assert simple_type.class_name == simple_type_class.__name__
+            simple_type_class = getattr(module, simple_type.music_xml_class_name)
+            assert simple_type.music_xml_class_name == simple_type_class.__name__
 
     def test_base_classes_are_implemented(self):
         for simple_type in self.all_simple_type_elements:
             module = importlib.import_module('musicxml.types.simpletype')
-            simpletype_class = getattr(module, simple_type.class_name)
+            simpletype_class = getattr(module, simple_type.music_xml_class_name)
             mro = simpletype_class.__mro__
-            for base_class_name in simple_type.base_class_names:
+            for base_class_name in simple_type.music_xml_base_class_names:
                 base_class = getattr(module, base_class_name)
                 assert base_class in mro
 
