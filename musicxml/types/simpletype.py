@@ -2,7 +2,7 @@ import re
 
 from musicxml.util.helperfunctions import get_simple_format_all_base_classes, find_all_xsd_children, get_cleaned_token
 from musicxml.util.helprervariables import name_character
-from musicxml.xmlelement import MusicXMLElement, XMLElementTreeElement
+from musicxml.xmlelement import MusicXMLElement, XSDTree
 import xml.etree.ElementTree as ET
 
 
@@ -117,7 +117,7 @@ class XMLSimpleType(MusicXMLElement):
 
 class XMLSimpleTypeInteger(XMLSimpleType):
     _TYPES = [int]
-    XML_ET_ELEMENT = XMLElementTreeElement(ET.fromstring(
+    XML_ET_ELEMENT = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="integer" id="integer">
             <xs:restriction base="xs:decimal">
@@ -138,7 +138,7 @@ class XMLSimpleTypeInteger(XMLSimpleType):
 
 
 class XMLSimpleTypeNonNegativeInteger(XMLSimpleTypeInteger):
-    XML_ET_ELEMENT = XMLElementTreeElement(ET.fromstring(
+    XML_ET_ELEMENT = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="nonNegativeInteger" id="nonNegativeInteger">
             <xs:restriction base="xs:integer">
@@ -161,7 +161,7 @@ class XMLSimpleTypeNonNegativeInteger(XMLSimpleTypeInteger):
 
 class XMLSimpleTypePositiveInteger(XMLSimpleTypeInteger):
     _TYPES = [int]
-    XML_ET_ELEMENT = XMLElementTreeElement(ET.fromstring(
+    XML_ET_ELEMENT = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="positiveInteger" id="positiveInteger">
             <xs:restriction base="xs:nonNegativeInteger">
@@ -188,7 +188,7 @@ class XMLSimpleTypePositiveInteger(XMLSimpleTypeInteger):
 
 class XMLSimpleTypeDecimal(XMLSimpleType):
     _TYPES = [float, int]
-    XML_ET_ELEMENT = XMLElementTreeElement(ET.fromstring(
+    XML_ET_ELEMENT = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="decimal" id="decimal">
             <xs:restriction base="xs:anySimpleType">
@@ -210,7 +210,7 @@ class XMLSimpleTypeDecimal(XMLSimpleType):
 
 class XMLSimpleTypeString(XMLSimpleType):
     _TYPES = [str]
-    XML_ET_ELEMENT = XMLElementTreeElement(ET.fromstring(
+    XML_ET_ELEMENT = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="string" id="string">
             <xs:restriction base="xs:anySimpleType">
@@ -231,7 +231,7 @@ class XMLSimpleTypeString(XMLSimpleType):
 
 
 class XMLSimpleTypeToken(XMLSimpleTypeString):
-    XML_ET_ELEMENT = XMLElementTreeElement(ET.fromstring(
+    XML_ET_ELEMENT = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="token" id="token">
             <xs:restriction base="xs:normalizedString">
@@ -259,7 +259,7 @@ class XMLSimpleTypeNMTOKEN(XMLSimpleTypeToken):
     [0-9]
     '.' | '-' | '_' | ':'
     """
-    XML_ET_ELEMENT = XMLElementTreeElement(ET.fromstring(
+    XML_ET_ELEMENT = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="NMTOKEN" id="NMTOKEN">
             <xs:restriction base="xs:token">
@@ -276,7 +276,7 @@ class XMLSimpleTypeDate(XMLSimpleTypeString):
     # [-]CCYY-MM-DD[Z|(+|-)hh:mm]
     # https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s07.html
 
-    XML_ET_ELEMENT = XMLElementTreeElement(ET.fromstring(
+    XML_ET_ELEMENT = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="date" id="date">
             <xs:restriction base="xs:anySimpleType">
@@ -290,7 +290,7 @@ class XMLSimpleTypeDate(XMLSimpleTypeString):
 
 
 for simple_type in find_all_xsd_children(tag='simpleType'):
-    xml_element_tree_element = XMLElementTreeElement(simple_type)
+    xml_element_tree_element = XSDTree(simple_type)
     class_name = xml_element_tree_element.class_name
     base_classes = f"({', '.join(get_simple_format_all_base_classes(xml_element_tree_element))}, )"
     attributes = """

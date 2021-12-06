@@ -3,7 +3,7 @@ from contextlib import redirect_stdout
 from pathlib import Path
 
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.xmlelement import XMLElementTreeElement
+from musicxml.xmlelement import XSDTree
 
 
 class TestXMLElementTreeElement(MusicXmlTestCase):
@@ -17,7 +17,7 @@ class TestXMLElementTreeElement(MusicXmlTestCase):
             return output
 
         with open(Path(__file__).parent / 'musicxml_4_0_summary.txt', 'w+') as f:
-            tree = XMLElementTreeElement(self.root)
+            tree = XSDTree(self.root)
             with redirect_stdout(f):
                 print('All tags: ' + str(get_all_tags()))
                 for child in tree.get_children():
@@ -30,9 +30,9 @@ class TestXMLElementTreeElement(MusicXmlTestCase):
         :return: 
         """""
         with self.assertRaises(TypeError):
-            XMLElementTreeElement()
+            XSDTree()
         with self.assertRaises(TypeError):
-            XMLElementTreeElement('Naja')
+            XSDTree('Naja')
 
         assert isinstance(self.above_below_simple_type_element.xml_element_tree_element, ET.Element)
 
@@ -61,7 +61,7 @@ class TestXMLElementTreeElement(MusicXmlTestCase):
         				<xs:attributeGroup ref="print-style"/>
         				<xs:attributeGroup ref="placement"/>
         		</xs:extension>"""
-        el = XMLElementTreeElement(ET.fromstring(xml))
+        el = XSDTree(ET.fromstring(xml))
         assert [child.tag for child in el.get_children()] == ['attribute', 'attribute', 'attributeGroup',
                                                               'attributeGroup']
 
@@ -83,19 +83,19 @@ class TestXMLElementTreeElement(MusicXmlTestCase):
                                                                                         'attributeGroup@ref=placement']
 
     def test_str(self):
-        assert str(self.complex_type_element) == "XMLElementTreeElement complexType@name=fingering"
+        assert str(self.complex_type_element) == "XSDTree complexType@name=fingering"
 
     def test_repr(self):
         assert [repr(node) for node in self.complex_type_element.traverse()] == [
-            'XMLElementTreeElement(tag=complexType, name=fingering)',
-            'XMLElementTreeElement(tag=annotation)',
-            'XMLElementTreeElement(tag=documentation)',
-            'XMLElementTreeElement(tag=simpleContent)',
-            'XMLElementTreeElement(tag=extension, base=xs:string)',
-            'XMLElementTreeElement(tag=attribute, name=substitution type=yes-no)',
-            'XMLElementTreeElement(tag=attribute, name=alternate type=yes-no)',
-            'XMLElementTreeElement(tag=attributeGroup, ref=print-style)',
-            'XMLElementTreeElement(tag=attributeGroup, ref=placement)']
+            'XSDTree(tag=complexType, name=fingering)',
+            'XSDTree(tag=annotation)',
+            'XSDTree(tag=documentation)',
+            'XSDTree(tag=simpleContent)',
+            'XSDTree(tag=extension, base=xs:string)',
+            'XSDTree(tag=attribute, name=substitution type=yes-no)',
+            'XSDTree(tag=attribute, name=alternate type=yes-no)',
+            'XSDTree(tag=attributeGroup, ref=print-style)',
+            'XSDTree(tag=attributeGroup, ref=placement)']
 
     def test_get_attributes(self):
         assert [{}, {'name': 'substitution', 'type': 'yes-no'}, {'name': 'alternate', 'type': 'yes-no'},

@@ -2,7 +2,7 @@ from pathlib import Path
 from unittest import TestCase
 import xml.etree.ElementTree as ET
 
-from musicxml.xmlelement import XMLElementTreeElement
+from musicxml.xmlelement import XSDTree
 
 xsd_path = Path(__file__).parent.parent / 'musicxml_4_0.xsd'
 
@@ -13,11 +13,11 @@ class MusicXmlTestCase(TestCase):
             xmltree = ET.parse(file)
         self.root = xmltree.getroot()
         ns = '{http://www.w3.org/2001/XMLSchema}'
-        self.all_simple_type_elements = [XMLElementTreeElement(simpletype) for simpletype in
+        self.all_simple_type_elements = [XSDTree(simpletype) for simpletype in
                                          self.root.findall(f"{ns}simpleType")]
-        self.above_below_simple_type_element = XMLElementTreeElement(self.root.find(f"{ns}simpleType["
+        self.above_below_simple_type_element = XSDTree(self.root.find(f"{ns}simpleType["
                                                                                     f"@name='above-below']"))
-        self.yes_no_number_simple_type_element = XMLElementTreeElement(self.root.find(f"{ns}simpleType["
+        self.yes_no_number_simple_type_element = XSDTree(self.root.find(f"{ns}simpleType["
         f"@name='yes-no-number']"))
-        self.complex_type_element = XMLElementTreeElement(self.root.find(f"{ns}complexType[@name='fingering']"))
+        self.complex_type_element = XSDTree(self.root.find(f"{ns}complexType[@name='fingering']"))
         super().setUp()

@@ -17,9 +17,9 @@ class MusicXMLElement:
         return cls.XML_ET_ELEMENT.get_xsd()
 
 
-class XMLElementTreeElement(TreePresentation):
+class XSDTree(TreePresentation):
     """
-    XMLElementTreeElement gets an xml.etree.ElementTree.Element by initiation as its xml_element_tree_element property and
+    XSDTree gets an xml.etree.ElementTree.Element by initiation as its xml_element_tree_element property and
     prepares all needed information for generating an MusicXMLElement class
     """
 
@@ -47,7 +47,7 @@ class XMLElementTreeElement(TreePresentation):
         return name
 
     def _populate_children(self):
-        self._children = [XMLElementTreeElement(node, parent=self) for node in
+        self._children = [XSDTree(node, parent=self) for node in
                           self.xml_element_tree_element.findall('./')]
 
     # ------------------
@@ -114,7 +114,7 @@ class XMLElementTreeElement(TreePresentation):
     def xml_element_tree_element(self, value):
         if not isinstance(value, ET.Element):
             raise TypeError(
-                f"XMLElementTreeElement must be initiated with an xml_element_tree_element of type xml.etree.ElementTree.Element not "
+                f"XSDTree must be initiated with an xml_element_tree_element of type xml.etree.ElementTree.Element not "
                 f"{type(value)}")
         self._xml_element_tree_element = value
 
