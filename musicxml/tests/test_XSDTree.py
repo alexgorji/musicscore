@@ -3,7 +3,7 @@ from contextlib import redirect_stdout
 from pathlib import Path
 
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.xmlelement import XSDTree
+from musicxml.xsdtree import XSDTree
 
 
 class TestXMLElementTreeElement(MusicXmlTestCase):

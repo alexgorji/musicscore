@@ -11,10 +11,11 @@ class MusicXMLElement:
     """
     Abstract class as root of all generated XML Classes
     """
+    XSD_TREE = None
 
     @classmethod
     def get_xsd(cls):
-        return cls.XML_ET_ELEMENT.get_xsd()
+        return cls.XSD_TREE.get_xsd()
 
 
 class XSDTree(TreePresentation):

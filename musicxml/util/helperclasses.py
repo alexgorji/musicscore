@@ -2,7 +2,7 @@ from pathlib import Path
 from unittest import TestCase
 import xml.etree.ElementTree as ET
 
-from musicxml.xmlelement import XSDTree
+from musicxml.xsdtree import XSDTree
 
 xsd_path = Path(__file__).parent.parent / 'musicxml_4_0.xsd'
 

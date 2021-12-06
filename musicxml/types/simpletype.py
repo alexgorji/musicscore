@@ -2,7 +2,7 @@ import re
 
 from musicxml.util.helperfunctions import get_simple_format_all_base_classes, find_all_xsd_children, get_cleaned_token
 from musicxml.util.helprervariables import name_character
-from musicxml.xmlelement import MusicXMLElement, XSDTree
+from musicxml.xsdtree import MusicXMLElement, XSDTree
 import xml.etree.ElementTree as ET
 
 
@@ -43,7 +43,7 @@ class XMLSimpleType(MusicXMLElement):
             if v not in self._PERMITTED:
                 raise ValueError(f'{self.__class__.__name__}.value {v} must in {self.__class__._PERMITTED}')
         elif self._PATTERN:
-            restriction = self.XML_ET_ELEMENT.get_restriction()
+            restriction = self.XSD_TREE.get_restriction()
             if restriction:
                 if restriction.get_attributes()['base'] == 'xs:date':
                     XMLSimpleTypeDate(v)
@@ -55,7 +55,7 @@ class XMLSimpleType(MusicXMLElement):
                 raise ValueError(
                     f'{self.__class__.__name__}.value {v} must match the following pattern: {self._PATTERN}')
         else:
-            restriction = self.XML_ET_ELEMENT.get_restriction()
+            restriction = self.XSD_TREE.get_restriction()
             if restriction:
                 restriction_children = restriction.get_children()
                 for child in restriction_children:
@@ -90,14 +90,14 @@ class XMLSimpleType(MusicXMLElement):
                             f"not {type(value).__name__}.")
 
     def _populate_permitted(self):
-        restriction = self.XML_ET_ELEMENT.get_restriction()
+        restriction = self.XSD_TREE.get_restriction()
         if restriction:
             enumerations = [child for child in restriction.get_children() if
                             child.tag == 'enumeration']
             self._PERMITTED = [enumeration.get_attributes()['value'] for enumeration in enumerations]
 
     def _populate_forced_permitted(self):
-        union = self.XML_ET_ELEMENT.get_union()
+        union = self.XSD_TREE.get_union()
         if union and union.get_children and union.get_children()[0].tag == 'simpleType':
             intern_simple_type = union.get_children()[0]
             enumerations = [child for child in intern_simple_type.get_restriction().get_children() if child.tag
@@ -105,7 +105,7 @@ class XMLSimpleType(MusicXMLElement):
             self._FORCED_PERMITTED = [enumeration.get_attributes()['value'] for enumeration in enumerations]
 
     def _populate_pattern(self):
-        restriction = self.XML_ET_ELEMENT.get_restriction()
+        restriction = self.XSD_TREE.get_restriction()
         if restriction and restriction.get_children and restriction.get_children()[0].tag == 'pattern':
             pattern = rf"{restriction.get_children()[0].get_attributes()['value']}"
             pattern = pattern.replace('\c', name_character)
@@ -117,7 +117,7 @@ class XMLSimpleType(MusicXMLElement):
 
 class XMLSimpleTypeInteger(XMLSimpleType):
     _TYPES = [int]
-    XML_ET_ELEMENT = XSDTree(ET.fromstring(
+    XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="integer" id="integer">
             <xs:restriction base="xs:decimal">
@@ -138,7 +138,7 @@ class XMLSimpleTypeInteger(XMLSimpleType):
 
 
 class XMLSimpleTypeNonNegativeInteger(XMLSimpleTypeInteger):
-    XML_ET_ELEMENT = XSDTree(ET.fromstring(
+    XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="nonNegativeInteger" id="nonNegativeInteger">
             <xs:restriction base="xs:integer">
@@ -161,7 +161,7 @@ class XMLSimpleTypeNonNegativeInteger(XMLSimpleTypeInteger):
 
 class XMLSimpleTypePositiveInteger(XMLSimpleTypeInteger):
     _TYPES = [int]
-    XML_ET_ELEMENT = XSDTree(ET.fromstring(
+    XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="positiveInteger" id="positiveInteger">
             <xs:restriction base="xs:nonNegativeInteger">
@@ -188,7 +188,7 @@ class XMLSimpleTypePositiveInteger(XMLSimpleTypeInteger):
 
 class XMLSimpleTypeDecimal(XMLSimpleType):
     _TYPES = [float, int]
-    XML_ET_ELEMENT = XSDTree(ET.fromstring(
+    XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="decimal" id="decimal">
             <xs:restriction base="xs:anySimpleType">
@@ -210,7 +210,7 @@ class XMLSimpleTypeDecimal(XMLSimpleType):
 
 class XMLSimpleTypeString(XMLSimpleType):
     _TYPES = [str]
-    XML_ET_ELEMENT = XSDTree(ET.fromstring(
+    XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="string" id="string">
             <xs:restriction base="xs:anySimpleType">
@@ -231,7 +231,7 @@ class XMLSimpleTypeString(XMLSimpleType):
 
 
 class XMLSimpleTypeToken(XMLSimpleTypeString):
-    XML_ET_ELEMENT = XSDTree(ET.fromstring(
+    XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="token" id="token">
             <xs:restriction base="xs:normalizedString">
@@ -259,7 +259,7 @@ class XMLSimpleTypeNMTOKEN(XMLSimpleTypeToken):
     [0-9]
     '.' | '-' | '_' | ':'
     """
-    XML_ET_ELEMENT = XSDTree(ET.fromstring(
+    XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="NMTOKEN" id="NMTOKEN">
             <xs:restriction base="xs:token">
@@ -276,7 +276,7 @@ class XMLSimpleTypeDate(XMLSimpleTypeString):
     # [-]CCYY-MM-DD[Z|(+|-)hh:mm]
     # https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s07.html
 
-    XML_ET_ELEMENT = XSDTree(ET.fromstring(
+    XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="date" id="date">
             <xs:restriction base="xs:anySimpleType">
@@ -296,7 +296,7 @@ for simple_type in find_all_xsd_children(tag='simpleType'):
     attributes = """
     {
     '__doc__': xml_element_tree_element.get_doc(), 
-    'XML_ET_ELEMENT':xml_element_tree_element
+    'XSD_TREE':xml_element_tree_element
     }
     """
     exec(f"{class_name} = type('{class_name}', {base_classes}, {attributes})")
