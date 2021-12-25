@@ -290,6 +290,9 @@ class XMLSimpleTypeDate(XMLSimpleTypeString):
                r'0-5][0-9])?$'
 
 
+"""
+Creating all XMLSimpleType classes
+"""
 for simple_type in find_all_xsd_children(tag='simpleType'):
     xml_element_tree_element = XSDTree(simple_type)
     class_name = xml_element_tree_element.music_xml_class_name

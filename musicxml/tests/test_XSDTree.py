@@ -7,8 +7,14 @@ from musicxml.xsdtree import XSDTree
 
 
 class TestXSDTree(MusicXmlTestCase):
+    """
+    XSDTree is a representation of all needed information for creating an XML Class.
+    """
 
     def test_write_all_tags(self):
+        """
+        Write the summary of all music xml nodes in a files (musicxml_4_0_summary.txt)
+        """
         def get_all_tags():
             output = []
             for node in tree.traverse():
@@ -26,8 +32,13 @@ class TestXSDTree(MusicXmlTestCase):
 
     def test_xml_property(self):
         """
-        Test that a XSDTree must get an xml element
-        :return: 
+        Test that an XSDTree element must get an xml tree element while initiating.
+        Example:
+        with open(xsd_path) as file:
+            xmltree = ET.parse(file)
+        root = xmltree.getroot()
+        ns = '{http://www.w3.org/2001/XMLSchema}'
+        XSDTree(root.find(f"{ns}simpleType["f"@name='above-below']"))
         """""
         with self.assertRaises(TypeError):
             XSDTree()
@@ -37,18 +48,59 @@ class TestXSDTree(MusicXmlTestCase):
         assert isinstance(self.above_below_simple_type_element.xml_element_tree_element, ET.Element)
 
     def test_xml_element_tag(self):
+        """
+        Test that the tag attribute of an XSDTree element represents th tag name in musicxml xsd structure.
+        """
         assert self.above_below_simple_type_element.tag == 'simpleType'
 
     def test_music_xml_class_name(self):
+        """
+        Test that an XSDTree element has a music_xml_class_name attribute. This class name is generated automatically and is used as the
+        name of the MusicXMLElement to be created.
+        """
         assert self.above_below_simple_type_element.music_xml_class_name == 'XMLSimpleTypeAboveBelow'
 
     def test_get_doc(self):
+        """
+        Test get_doc methode which returns the doc string to be added to the XML class.
+        """
         assert self.above_below_simple_type_element.get_doc() == 'The above-below type is used to indicate whether one element appears above or below another element.'
 
     def test_name(self):
+        """
+        Test that an XSDTree element has a name attribute representing the corresponding name attribute in musicxml xsd structure.
+        Example:
+        <xs:simpleType name="above-below">
+    <xs:annotation>
+    	<xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+    	<xs:enumeration value="above"/>
+    	<xs:enumeration value="below"/>
+    </xs:restriction>
+	    </xs:simpleType>
+        """
         assert self.above_below_simple_type_element.name == 'above-below'
 
     def test_traverse(self):
+        """
+        Test the traverse method of an XSDTree element traverses over all existing nodes.
+        """
+        """
+        <xs:complexType name="fingering">
+	    	<xs:annotation>
+	    		<xs:documentation>Fingering is typically indicated 1,2,3,4,5. Multiple fingerings may be given, typically to substitute fingerings in the middle of a note. The substitution and alternate values are "no" if the attribute is not present. For guitar and other fretted instruments, the fingering element represents the fretting finger; the pluck element represents the plucking finger.</xs:documentation>
+	    	</xs:annotation>
+	    	<xs:simpleContent>
+	    		<xs:extension base="xs:string">
+	    			<xs:attribute name="substitution" type="yes-no"/>
+	    			<xs:attribute name="alternate" type="yes-no"/>
+	    			<xs:attributeGroup ref="print-style"/>
+	    			<xs:attributeGroup ref="placement"/>
+	    		</xs:extension>
+	    	</xs:simpleContent>
+	    </xs:complexType>
+        """
         expected = ['complexType', 'annotation', 'documentation', 'simpleContent', 'extension', 'attribute',
                     'attribute', 'attributeGroup', 'attributeGroup']
         assert [node.tag for node in self.complex_type_element.traverse()] == expected
@@ -72,6 +124,9 @@ class TestXSDTree(MusicXmlTestCase):
                                                                                        'attributeGroup']
 
     def test_compact_repr(self):
+        """
+        Test the compact representation of an XSDTree Element. It consists of node name and its attribute if exists.
+        """
         assert [node.compact_repr for node in self.complex_type_element.traverse()] == ['complexType@name=fingering',
                                                                                         'annotation',
                                                                                         'documentation',
@@ -83,9 +138,15 @@ class TestXSDTree(MusicXmlTestCase):
                                                                                         'attributeGroup@ref=placement']
 
     def test_str(self):
+        """
+        Test __str__ magic method. It returns class name + compact representation
+        """
         assert str(self.complex_type_element) == "XSDTree complexType@name=fingering"
 
     def test_repr(self):
+        """
+        Test __repr__ magic method. It returns a comprehensive representation of the XSDTree element.
+        """
         assert [repr(node) for node in self.complex_type_element.traverse()] == [
             'XSDTree(tag=complexType, name=fingering)',
             'XSDTree(tag=annotation)',
@@ -98,6 +159,9 @@ class TestXSDTree(MusicXmlTestCase):
             'XSDTree(tag=attributeGroup, ref=placement)']
 
     def test_get_attributes(self):
+        """
+        Test get_attribute method: returns a dictionary consisting of all attributes, incl. name.
+        """
         assert [{}, {'name': 'substitution', 'type': 'yes-no'}, {'name': 'alternate', 'type': 'yes-no'},
                 {'ref': 'print-style'}, {'ref': 'placement'}] == [leaf.get_attributes() for leaf in
                                                                   self.complex_type_element.iterate_leaves()]
@@ -114,6 +178,10 @@ class TestXSDTree(MusicXmlTestCase):
         assert grandparent.get_parent() is None
 
     def test_get_xsd(self):
+        """
+        Test that each XSDTree Element has a get_xsd method which returns the xsd representation as it is given in the musicxml.xsd file.
+        :return:
+        """
         expected_1 = """<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="above-below">
 		<xs:annotation>
 			<xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
@@ -146,6 +214,14 @@ class TestXSDTree(MusicXmlTestCase):
         assert self.complex_type_element.get_restriction() is None
 
     def test_get_union(self):
+        """
+        <xs:simpleType name="yes-no-number">
+	    	<xs:annotation>
+	    		<xs:documentation>The yes-no-number type is used for attributes that can be either boolean or numeric values.</xs:documentation>
+	    	</xs:annotation>
+	    	<xs:union memberTypes="yes-no xs:decimal"/>
+	    </xs:simpleType>
+        """
         assert self.above_below_simple_type_element.get_union() is None
         assert self.yes_no_number_simple_type_element.get_union().tag == 'union'
 
@@ -154,7 +230,11 @@ class TestXSDTree(MusicXmlTestCase):
         assert self.yes_no_number_simple_type_element.get_union_member_types() == ['yes-no',
                                                                                    'xs:decimal']
 
-    def test_base_class_names(self):
+    def test_restriction_base_class_names(self):
+        """
+        Test that the music_xml_base_class_names method of XSDTree Element returns MLSimpleType classes which correspond to value of base
+        attribute of restriction node in musicxml xsd structure.
+        """
         all_restriction_bases = []
         for simpletype in self.all_simple_type_elements:
             if simpletype.music_xml_base_class_names not in all_restriction_bases:

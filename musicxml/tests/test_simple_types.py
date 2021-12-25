@@ -11,9 +11,9 @@ from musicxml.types.simpletype import XMLSimpleType, XMLSimpleTypeAboveBelow, XM
 
 class TestSimpleTypes(MusicXmlTestCase):
 
-    def test_simple_type_XMLElement_generator_xsd_snippet(self):
+    def test_generated_simple_type_xsd_snippet(self):
         """
-        Test that the instance of with XMLElementGenerator generated class can show corresponding xsd snippet and
+        Test that the instance of an in module musicxml.types.simpletype generated class can show corresponding xsd
         show its version
         """
         expected = """<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="above-below">
@@ -28,9 +28,9 @@ class TestSimpleTypes(MusicXmlTestCase):
 """
         assert XMLSimpleTypeAboveBelow.get_xsd() == expected
 
-    def test_simple_type_XMLElement_generator_doc_string_from_annotation(self):
+    def test_generated_simple_type_doc_string_from_annotation(self):
         """
-        Test that the instance of with with XMLElementGenerator generated class has a documentation string
+        Test that the instance of an in module musicxml.types.simpletype generated class has a documentation string
         matching its xsd annotation
         """
         assert isinstance(XMLSimpleTypeAboveBelow, type(XMLSimpleType))
@@ -38,12 +38,18 @@ class TestSimpleTypes(MusicXmlTestCase):
                                                   'above or below another element.'
 
     def test_simple_type_xsd_is_converted_to_classes(self):
+        """
+        Test that all XMLSimpleType classes are generated
+        """
         for simple_type in self.all_simple_type_elements:
             module = importlib.import_module('musicxml.types.simpletype')
             simple_type_class = getattr(module, simple_type.music_xml_class_name)
             assert simple_type.music_xml_class_name == simple_type_class.__name__
 
     def test_base_classes_are_implemented(self):
+        """
+        Test that all needed base classes are actually inherited by all XMLSimpleType classes
+        """
         for simple_type in self.all_simple_type_elements:
             module = importlib.import_module('musicxml.types.simpletype')
             simpletype_class = getattr(module, simple_type.music_xml_class_name)
@@ -51,6 +57,8 @@ class TestSimpleTypes(MusicXmlTestCase):
             for base_class_name in simple_type.music_xml_base_class_names:
                 base_class = getattr(module, base_class_name)
                 assert base_class in mro
+
+    # Test Basic XMLSimpleType classes which are created manually
 
     def test_xs_integer(self):
         XMLSimpleTypeInteger(0)
@@ -160,9 +168,24 @@ class TestSimpleTypes(MusicXmlTestCase):
         with self.assertRaises(ValueError):
             XMLSimpleTypeDate('19822123')
 
+    # Test XMLSimpleType classes with union restrictions
     def test_simple_type_number_or_normal(self):
         """
         Test if the intern simple format of restriction is applied
+        """
+        """
+        <xs:simpleType name="number-or-normal">
+            <xs:annotation>
+                <xs:documentation>The number-or-normal values can be either a decimal number or the string "normal". This is used by the line-height and letter-spacing attributes.</xs:documentation>
+            </xs:annotation>
+            <xs:union memberTypes="xs:decimal">
+                <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                        <xs:enumeration value="normal"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:union>
+        </xs:simpleType>
         """
         XMLSimpleTypeNumberOrNormal(1)
         XMLSimpleTypeNumberOrNormal(1.5)
@@ -177,6 +200,20 @@ class TestSimpleTypes(MusicXmlTestCase):
     def test_simple_type_positive_integer_or_empty(self):
         """
         Test if the intern simple format of restriction is applied
+        """
+        """
+        <xs:simpleType name="positive-integer-or-empty">
+            <xs:annotation>
+                <xs:documentation>The positive-integer-or-empty values can be either a positive integer or an empty string.</xs:documentation>
+            </xs:annotation>
+            <xs:union memberTypes="xs:positiveInteger">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value=""/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:union>
+        </xs:simpleType>
         """
         XMLSimpleTypePositiveIntegerOrEmpty(1)
         XMLSimpleTypePositiveIntegerOrEmpty('')
@@ -259,7 +296,7 @@ class TestSimpleTypes(MusicXmlTestCase):
 
     def test_simple_type_validator_from_restriction(self):
         """
-        Test that the instance of with XMLElementGenerator generated class has a validator corresponding to its xsd
+        Test that the instance of an in module musicxml.types.simpletype generated class has a validator corresponding to its xsd
         restriction
         """
         XMLSimpleTypeAboveBelow('above')
@@ -273,8 +310,22 @@ class TestSimpleTypes(MusicXmlTestCase):
         with self.assertRaises(ValueError):
             XMLSimpleTypeAboveBelow('side')
 
-    # patterns
+    # Test XMLSimpleType classes with pattern restrictions
     def test_simple_type_color(self):
+        """
+        <xs:simpleType name="color">
+            <xs:annotation>
+                <xs:documentation>The color type indicates the color of an element. Color may be represented as hexadecimal RGB triples, as
+                in HTML, or as hexadecimal ARGB tuples, with the A indicating alpha of transparency. An alpha value of 00 is totally
+                transparent; FF is totally opaque. If RGB is used, the A value is assumed to be FF.
+                For instance, the RGB value "#800080" represents purple. An ARGB value of "#40800080" would be a transparent purple.
+                As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).</xs:documentation>
+            </xs:annotation>
+            <xs:restriction base="xs:token">
+                <xs:pattern value="#[\dA-F]{6}([\dA-F][\dA-F])?"/>
+            </xs:restriction>
+        </xs:simpleType>
+        """
         XMLSimpleTypeColor('#40800080')
 
         with self.assertRaises(TypeError):
@@ -286,6 +337,18 @@ class TestSimpleTypes(MusicXmlTestCase):
             XMLSimpleTypeColor('40800080')
 
     def test_comma_separated_text(self):
+        """
+        <xs:simpleType name="comma-separated-text">
+            <xs:annotation>
+                <xs:documentation>The comma-separated-text type is used to specify a comma-separated list of text elements, as is used by
+                    the font-family attribute.
+                </xs:documentation>
+            </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[^,]+(, ?[^,]+)*"/>
+            </xs:restriction>
+        </xs:simpleType>
+        """
         XMLSimpleTypeCommaSeparatedText('arial,times')
 
         with self.assertRaises(TypeError):
@@ -301,6 +364,16 @@ class TestSimpleTypes(MusicXmlTestCase):
             XMLSimpleTypeCommaSeparatedText('arial,times,')
 
     def test_smufl_accidental_glyph_name(self):
+        """
+        <xs:simpleType name="smufl-accidental-glyph-name">
+            <xs:annotation>
+                <xs:documentation>The smufl-accidental-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) accidental character. The value is a SMuFL canonical glyph name that starts with one of the strings used at the start of glyph names for SMuFL accidentals.</xs:documentation>
+            </xs:annotation>
+            <xs:restriction base="smufl-glyph-name">
+                <xs:pattern value="(acc|medRenFla|medRenNatura|medRenShar|kievanAccidental)(\c+)"/>
+            </xs:restriction>
+        </xs:simpleType>
+        """
         XMLSimpleTypeSmuflAccidentalGlyphName('accSomething')
         XMLSimpleTypeSmuflAccidentalGlyphName('kievanAccidentalSomething')
 
@@ -317,6 +390,16 @@ class TestSimpleTypes(MusicXmlTestCase):
             XMLSimpleTypeSmuflAccidentalGlyphName('kievanAccidental Something')
 
     def test_smufl_coda_glyph_name(self):
+        """
+        <xs:simpleType name="smufl-coda-glyph-name">
+            <xs:annotation>
+                <xs:documentation>The smufl-coda-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) coda character. The value is a SMuFL canonical glyph name that starts with coda.</xs:documentation>
+            </xs:annotation>
+            <xs:restriction base="smufl-glyph-name">
+                <xs:pattern value="coda\c*"/>
+            </xs:restriction>
+        </xs:simpleType>
+        """
         XMLSimpleTypeSmuflCodaGlyphName('codaSomething')
         XMLSimpleTypeSmuflCodaGlyphName('coda')
 
@@ -331,6 +414,16 @@ class TestSimpleTypes(MusicXmlTestCase):
             XMLSimpleTypeSmuflAccidentalGlyphName('codaSomething Something')
 
     def test_smufl_lyrics_glyph_name(self):
+        """
+        <xs:simpleType name="smufl-lyrics-glyph-name">
+            <xs:annotation>
+                <xs:documentation>The smufl-lyrics-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) lyrics elision character. The value is a SMuFL canonical glyph name that starts with lyrics.</xs:documentation>
+            </xs:annotation>
+            <xs:restriction base="smufl-glyph-name">
+                <xs:pattern value="lyrics\c+"/>
+            </xs:restriction>
+        </xs:simpleType>
+        """
         XMLSimpleTypeSmuflLyricsGlyphName('lyricsSomething')
 
         with self.assertRaises(TypeError):
@@ -346,6 +439,16 @@ class TestSimpleTypes(MusicXmlTestCase):
             XMLSimpleTypeSmuflLyricsGlyphName('lyrics Something')
 
     def test_smufl_wavy_line_glyph_name(self):
+        """
+        <xs:simpleType name="smufl-wavy-line-glyph-name">
+            <xs:annotation>
+                <xs:documentation>The smufl-wavy-line-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) wavy line character. The value is a SMuFL canonical glyph name that either starts with wiggle, or begins with guitar and ends with VibratoStroke. This includes all the glyphs in the Multi-segment lines range, excluding the beam glyphs.</xs:documentation>
+            </xs:annotation>
+            <xs:restriction base="smufl-glyph-name">
+                <xs:pattern value="(wiggle\c+)|(guitar\c*VibratoStroke)"/>
+            </xs:restriction>
+        </xs:simpleType>
+        """
         XMLSimpleTypeSmuflWavyLineGlyphName('wiggleSomething')
         XMLSimpleTypeSmuflWavyLineGlyphName('guitarSomethingVibratoStroke')
         XMLSimpleTypeSmuflWavyLineGlyphName('guitarVibratoStroke')
@@ -371,8 +474,20 @@ class TestSimpleTypes(MusicXmlTestCase):
             XMLSimpleTypeSmuflWavyLineGlyphName('VibratoStroke')
 
     def test_yyyy_mm_dd(self):
+        """
+        <xs:simpleType name="yyyy-mm-dd">
+            <xs:annotation>
+                <xs:documentation>Calendar dates are represented yyyy-mm-dd format, following ISO 8601. This is a W3C XML Schema date type,
+                but without the optional timezone data.
+            </xs:documentation>
+            </xs:annotation>
+            <xs:restriction base="xs:date">
+                <xs:pattern value="[^:Z]*"/>
+            </xs:restriction>
+        </xs:simpleType>
+        """
         a = XMLSimpleTypeYyyyMmDd('1982-11-23')
-        print(a.__class__.__mro__)
+        # print(a.__class__.__mro__)
         with self.assertRaises(TypeError):
             XMLSimpleTypeYyyyMmDd(19821223)
 
