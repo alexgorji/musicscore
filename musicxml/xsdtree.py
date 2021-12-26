@@ -6,11 +6,16 @@ from contextlib import redirect_stdout
 from musicxml.util.helperfunctions import cap_first
 from tree.tree import TreePresentation
 
+"""
+XSD = XML Schema Definition
+"""
+
 
 class XSDTree(TreePresentation):
     """
-    XSDTree gets an xml.etree.ElementTree.Element by initiation as its xml_element_tree_element property and
-    prepares all needed information for generating an MusicXMLElement class
+    XSDTree gets a xml.etree.ElementTree.Element by initiation as its xml_element_tree_element property and
+    prepares all needed information for generating a XMLTree class (XMLTree can be XMLSimpleType, XMLComplexType, XMLGroup,
+    XMLAttribute and XMLAttributeGroup)
     """
 
     def __init__(self, xml_element_tree_element, parent=None):
@@ -18,7 +23,7 @@ class XSDTree(TreePresentation):
         self._namespace = None
         self._tag = None
         self._xml_element_tree_element = None
-        self._music_xml_class_name = None
+        self._xml_tree_class_name = None
         self._parent = parent
 
         self.xml_element_tree_element = xml_element_tree_element
@@ -29,7 +34,7 @@ class XSDTree(TreePresentation):
     # ------------------
     # private methods
 
-    def _get_music_xml_class_name(self):
+    def _get_xml_tree_class_name(self):
         tag = cap_first(self.tag)
 
         name = 'XML' + f'{tag}'
@@ -43,35 +48,59 @@ class XSDTree(TreePresentation):
     # ------------------
     # public properties
     @property
-    def music_xml_base_class_names(self):
-        def convert_name(name):
+    def xml_tree_base_class_names(self):
+
+        def convert_name(name, type_='simple_type'):
             try:
                 name = name.split(':')[1]
             except IndexError:
                 pass
             name = cap_first(name)
             name = ''.join([cap_first(partial) for partial in name.split('-')])
-            name = 'XMLSimpleType' + name
+            if type_ == 'simple_type':
+                name = 'XMLSimpleType' + name
+            elif type_ == 'complex_type':
+                name = 'XMLComplexType' + name
+            else:
+                raise ValueError
             return name
 
-        if self.get_restriction():
-            base = self.get_restriction().get_attributes()['base']
-            return [convert_name(base)]
-        elif self.get_union_member_types():
-            return [convert_name(type_) for type_ in self.get_union_member_types()]
+        if self.is_simple_type:
+            # simple type
+            if self.get_restriction():
+                base = self.get_restriction().get_attributes()['base']
+                return [convert_name(base)]
+            elif self.get_union_member_types():
+                return [convert_name(type_) for type_ in self.get_union_member_types()]
+            else:
+                raise AttributeError(f"Simple type {self} has no restriction with base attribute or union with memberTypes.")
+        elif self.is_complex_type:
+            # complex type
+            if self.get_simple_content_extension():
+                base = self.get_simple_content_extension().get_attributes()['base']
+                return [convert_name(base, type_='simple_type')]
+            else:
+                return []
+                # raise AttributeError(f"Complex type {self} has no simple content extension with base attribute.")
         else:
-            raise AttributeError(f"{self} has no restriction with base attribute or union with memberTypes.")
-
-    @property
-    def music_xml_class_name(self):
-        if self._music_xml_class_name is None:
-            self._music_xml_class_name = self._get_music_xml_class_name()
-        return self._music_xml_class_name
+            raise NotImplementedError
 
     @property
     def compact_repr(self):
         attrs = self.get_attributes()
         return f"{self.tag}{''.join([f'@{attribute}={attrs[attribute]}' for attribute in attrs])}"
+
+    @property
+    def is_simple_type(self):
+        if self.tag == 'simpleType':
+            return True
+        return False
+
+    @property
+    def is_complex_type(self):
+        if self.tag == 'complexType':
+            return True
+        return False
 
     @property
     def name(self):
@@ -108,6 +137,12 @@ class XSDTree(TreePresentation):
                 f"{type(value)}")
         self._xml_element_tree_element = value
 
+    @property
+    def xml_tree_class_name(self):
+        if self._xml_tree_class_name is None:
+            self._xml_tree_class_name = self._get_xml_tree_class_name()
+        return self._xml_tree_class_name
+
     # ------------------
     # public methods
     def get_attributes(self):
@@ -130,6 +165,12 @@ class XSDTree(TreePresentation):
         for node in self.get_children():
             if node.tag == 'restriction':
                 return node
+
+    def get_simple_content_extension(self):
+        for node in self.get_children():
+            if node.tag == 'simpleContent':
+                if node.get_children()[0].tag == 'extension':
+                    return node.get_children()[0]
 
     def get_union(self):
         for node in self.get_children():

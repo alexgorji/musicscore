@@ -1,4 +1,4 @@
-class MusicXMLElement:
+class XMLTree:
     """
     Abstract class as root of all generated XML Classes
     """

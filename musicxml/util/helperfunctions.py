@@ -10,11 +10,20 @@ root = xsd_tree.getroot()
 
 
 def get_simple_type_all_base_classes(xml_element_tree_element):
-    base_class_names = xml_element_tree_element.music_xml_base_class_names
+    base_class_names = xml_element_tree_element.xml_tree_base_class_names
     if [name for name in base_class_names if name.startswith('XMLSimpleType')]:
         pass
     else:
         base_class_names.insert(0, 'XMLSimpleType')
+    return base_class_names
+
+
+def get_complex_type_all_base_classes(xml_element_tree_element):
+    base_class_names = xml_element_tree_element.xml_tree_base_class_names
+    if [name for name in base_class_names if name.startswith('XMLComplexType')]:
+        pass
+    else:
+        base_class_names.insert(0, 'XMLComplexType')
     return base_class_names
 
 
@@ -24,7 +33,6 @@ def cap_first(s):
 
 def find_all_xsd_children(tag):
     return root.findall(f"{ns}{tag}")
-
 
 
 def get_cleaned_token(string_value):

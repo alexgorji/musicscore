@@ -7,9 +7,80 @@ from musicxml.types.simpletype import XMLSimpleType, XMLSimpleTypeAboveBelow, XM
     XMLSimpleTypeBeamLevel, XMLSimpleTypeColor, XMLSimpleTypeCommaSeparatedText, XMLSimpleTypeSmuflAccidentalGlyphName, \
     XMLSimpleTypeSmuflCodaGlyphName, XMLSimpleTypeSmuflLyricsGlyphName, XMLSimpleTypeSmuflWavyLineGlyphName, \
     XMLSimpleTypeYyyyMmDd
+from musicxml.types.simpletype import xml_simple_type_class_names
 
 
 class TestSimpleTypes(MusicXmlTestCase):
+    def test_simple_types_list(self):
+        """
+        Test if SIMPLE_TYPES in module musicxml.types.simpletype return all simple types
+        """
+        assert xml_simple_type_class_names == ['XMLSimpleTypeInteger', 'XMLSimpleTypeNonNegativeInteger',
+                                               'XMLSimpleTypePositiveInteger', 'XMLSimpleTypeDecimal',
+                                               'XMLSimpleTypeString', 'XMLSimpleTypeString', 'XMLSimpleTypeToken',
+                                               'XMLSimpleTypeNMTOKEN', 'XMLSimpleTypeDate', 'XMLSimpleTypeAboveBelow',
+                                               'XMLSimpleTypeBeamLevel', 'XMLSimpleTypeColor', 'XMLSimpleTypeCommaSeparatedText',
+                                               'XMLSimpleTypeCssFontSize', 'XMLSimpleTypeDivisions',
+                                               'XMLSimpleTypeEnclosureShape', 'XMLSimpleTypeFermataShape',
+                                               'XMLSimpleTypeFontFamily', 'XMLSimpleTypeFontSize', 'XMLSimpleTypeFontStyle',
+                                               'XMLSimpleTypeFontWeight', 'XMLSimpleTypeLeftCenterRight',
+                                               'XMLSimpleTypeLeftRight', 'XMLSimpleTypeLineLength', 'XMLSimpleTypeLineShape',
+                                               'XMLSimpleTypeLineType', 'XMLSimpleTypeMidi16', 'XMLSimpleTypeMidi128',
+                                               'XMLSimpleTypeMidi16384', 'XMLSimpleTypeMute', 'XMLSimpleTypeNonNegativeDecimal',
+                                               'XMLSimpleTypeNumberLevel', 'XMLSimpleTypeNumberOfLines',
+                                               'XMLSimpleTypeNumberOrNormal', 'XMLSimpleTypeNumeralValue',
+                                               'XMLSimpleTypeOverUnder', 'XMLSimpleTypePercent', 'XMLSimpleTypePositiveDecimal',
+                                               'XMLSimpleTypePositiveDivisions', 'XMLSimpleTypePositiveIntegerOrEmpty',
+                                               'XMLSimpleTypeRotationDegrees', 'XMLSimpleTypeSemiPitched',
+                                               'XMLSimpleTypeSmuflGlyphName', 'XMLSimpleTypeSmuflAccidentalGlyphName',
+                                               'XMLSimpleTypeSmuflCodaGlyphName', 'XMLSimpleTypeSmuflLyricsGlyphName',
+                                               'XMLSimpleTypeSmuflPictogramGlyphName', 'XMLSimpleTypeSmuflSegnoGlyphName',
+                                               'XMLSimpleTypeSmuflWavyLineGlyphName', 'XMLSimpleTypeStartNote',
+                                               'XMLSimpleTypeStartStop', 'XMLSimpleTypeStartStopContinue',
+                                               'XMLSimpleTypeStartStopSingle', 'XMLSimpleTypeStringNumber',
+                                               'XMLSimpleTypeSymbolSize', 'XMLSimpleTypeTenths', 'XMLSimpleTypeTextDirection',
+                                               'XMLSimpleTypeTiedType', 'XMLSimpleTypeTimeOnly', 'XMLSimpleTypeTopBottom',
+                                               'XMLSimpleTypeTremoloType', 'XMLSimpleTypeTrillBeats', 'XMLSimpleTypeTrillStep',
+                                               'XMLSimpleTypeTwoNoteTurn', 'XMLSimpleTypeUpDown', 'XMLSimpleTypeUprightInverted',
+                                               'XMLSimpleTypeValign', 'XMLSimpleTypeValignImage', 'XMLSimpleTypeYesNo',
+                                               'XMLSimpleTypeYesNoNumber', 'XMLSimpleTypeYyyyMmDd',
+                                               'XMLSimpleTypeCancelLocation', 'XMLSimpleTypeClefSign', 'XMLSimpleTypeFifths',
+                                               'XMLSimpleTypeMode', 'XMLSimpleTypeShowFrets', 'XMLSimpleTypeStaffLine',
+                                               'XMLSimpleTypeStaffLinePosition', 'XMLSimpleTypeStaffNumber',
+                                               'XMLSimpleTypeStaffType', 'XMLSimpleTypeTimeRelation',
+                                               'XMLSimpleTypeTimeSeparator', 'XMLSimpleTypeTimeSymbol',
+                                               'XMLSimpleTypeBackwardForward', 'XMLSimpleTypeBarStyle',
+                                               'XMLSimpleTypeEndingNumber', 'XMLSimpleTypeRightLeftMiddle',
+                                               'XMLSimpleTypeStartStopDiscontinue', 'XMLSimpleTypeWinged',
+                                               'XMLSimpleTypeAccordionMiddle', 'XMLSimpleTypeBeaterValue',
+                                               'XMLSimpleTypeDegreeSymbolValue', 'XMLSimpleTypeDegreeTypeValue',
+                                               'XMLSimpleTypeEffectValue', 'XMLSimpleTypeGlassValue',
+                                               'XMLSimpleTypeHarmonyArrangement', 'XMLSimpleTypeHarmonyType',
+                                               'XMLSimpleTypeKindValue', 'XMLSimpleTypeLineEnd',
+                                               'XMLSimpleTypeMeasureNumberingValue', 'XMLSimpleTypeMembraneValue',
+                                               'XMLSimpleTypeMetalValue', 'XMLSimpleTypeMilliseconds',
+                                               'XMLSimpleTypeNumeralMode', 'XMLSimpleTypeOnOff', 'XMLSimpleTypePedalType',
+                                               'XMLSimpleTypePitchedValue', 'XMLSimpleTypePrincipalVoiceSymbol',
+                                               'XMLSimpleTypeStaffDivideSymbol', 'XMLSimpleTypeStartStopChangeContinue',
+                                               'XMLSimpleTypeSyncType', 'XMLSimpleTypeSystemRelationNumber',
+                                               'XMLSimpleTypeSystemRelation', 'XMLSimpleTypeTipDirection',
+                                               'XMLSimpleTypeStickLocation', 'XMLSimpleTypeStickMaterial',
+                                               'XMLSimpleTypeStickType', 'XMLSimpleTypeUpDownStopContinue',
+                                               'XMLSimpleTypeWedgeType', 'XMLSimpleTypeWoodValue', 'XMLSimpleTypeDistanceType',
+                                               'XMLSimpleTypeGlyphType', 'XMLSimpleTypeLineWidthType', 'XMLSimpleTypeMarginType',
+                                               'XMLSimpleTypeMillimeters', 'XMLSimpleTypeNoteSizeType',
+                                               'XMLSimpleTypeAccidentalValue', 'XMLSimpleTypeArrowDirection',
+                                               'XMLSimpleTypeArrowStyle', 'XMLSimpleTypeBeamValue', 'XMLSimpleTypeBendShape',
+                                               'XMLSimpleTypeBreathMarkValue', 'XMLSimpleTypeCaesuraValue',
+                                               'XMLSimpleTypeCircularArrow', 'XMLSimpleTypeFan', 'XMLSimpleTypeHandbellValue',
+                                               'XMLSimpleTypeHarmonClosedLocation', 'XMLSimpleTypeHarmonClosedValue',
+                                               'XMLSimpleTypeHoleClosedLocation', 'XMLSimpleTypeHoleClosedValue',
+                                               'XMLSimpleTypeNoteTypeValue', 'XMLSimpleTypeNoteheadValue', 'XMLSimpleTypeOctave',
+                                               'XMLSimpleTypeSemitones', 'XMLSimpleTypeShowTuplet', 'XMLSimpleTypeStemValue',
+                                               'XMLSimpleTypeStep', 'XMLSimpleTypeSyllabic', 'XMLSimpleTypeTapHand',
+                                               'XMLSimpleTypeTremoloMarks', 'XMLSimpleTypeGroupBarlineValue',
+                                               'XMLSimpleTypeGroupSymbolValue', 'XMLSimpleTypeMeasureText',
+                                               'XMLSimpleTypeSwingTypeValue']
 
     def test_generated_simple_type_xsd_snippet(self):
         """
@@ -41,20 +112,20 @@ class TestSimpleTypes(MusicXmlTestCase):
         """
         Test that all XMLSimpleType classes are generated
         """
-        for simple_type in self.all_simple_type_elements:
+        for simple_type in self.all_simple_type_xsd_elements:
             module = importlib.import_module('musicxml.types.simpletype')
-            simple_type_class = getattr(module, simple_type.music_xml_class_name)
-            assert simple_type.music_xml_class_name == simple_type_class.__name__
+            simple_type_class = getattr(module, simple_type.xml_tree_class_name)
+            assert simple_type.xml_tree_class_name == simple_type_class.__name__
 
     def test_base_classes_are_implemented(self):
         """
         Test that all needed base classes are actually inherited by all XMLSimpleType classes
         """
-        for simple_type in self.all_simple_type_elements:
+        for simple_type in self.all_simple_type_xsd_elements:
             module = importlib.import_module('musicxml.types.simpletype')
-            simpletype_class = getattr(module, simple_type.music_xml_class_name)
+            simpletype_class = getattr(module, simple_type.xml_tree_class_name)
             mro = simpletype_class.__mro__
-            for base_class_name in simple_type.music_xml_base_class_names:
+            for base_class_name in simple_type.xml_tree_base_class_names:
                 base_class = getattr(module, base_class_name)
                 assert base_class in mro
 
