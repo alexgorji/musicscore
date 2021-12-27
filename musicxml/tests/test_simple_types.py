@@ -1,12 +1,12 @@
 import importlib
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.types.simpletype import XMLSimpleType, XMLSimpleTypeAboveBelow, XMLSimpleTypeNumberOrNormal, \
-    XMLSimpleTypePositiveIntegerOrEmpty, XMLSimpleTypeNonNegativeDecimal, XMLSimpleTypeDecimal, XMLSimpleTypeInteger, \
-    XMLSimpleTypeNonNegativeInteger, XMLSimpleTypePositiveInteger, XMLSimpleTypeString, XMLSimpleTypeToken, \
-    XMLSimpleTypeNMTOKEN, XMLSimpleTypeDate, XMLSimpleTypeMeasureText, XMLSimpleTypePositiveDecimal, \
-    XMLSimpleTypeBeamLevel, XMLSimpleTypeColor, XMLSimpleTypeCommaSeparatedText, XMLSimpleTypeSmuflAccidentalGlyphName, \
-    XMLSimpleTypeSmuflCodaGlyphName, XMLSimpleTypeSmuflLyricsGlyphName, XMLSimpleTypeSmuflWavyLineGlyphName, \
-    XMLSimpleTypeYyyyMmDd
+from musicxml.types.simpletype import XSDSimpleType, XSDSimpleTypeAboveBelow, XSDSimpleTypeNumberOrNormal, \
+    XSDSimpleTypePositiveIntegerOrEmpty, XSDSimpleTypeNonNegativeDecimal, XSDSimpleTypeDecimal, XSDSimpleTypeInteger, \
+    XSDSimpleTypeNonNegativeInteger, XSDSimpleTypePositiveInteger, XSDSimpleTypeString, XSDSimpleTypeToken, \
+    XSDSimpleTypeNMTOKEN, XSDSimpleTypeDate, XSDSimpleTypeMeasureText, XSDSimpleTypePositiveDecimal, \
+    XSDSimpleTypeBeamLevel, XSDSimpleTypeColor, XSDSimpleTypeCommaSeparatedText, XSDSimpleTypeSmuflAccidentalGlyphName, \
+    XSDSimpleTypeSmuflCodaGlyphName, XSDSimpleTypeSmuflLyricsGlyphName, XSDSimpleTypeSmuflWavyLineGlyphName, \
+    XSDSimpleTypeYyyyMmDd
 from musicxml.types.simpletype import xml_simple_type_class_names
 
 
@@ -15,72 +15,72 @@ class TestSimpleTypes(MusicXmlTestCase):
         """
         Test if SIMPLE_TYPES in module musicxml.types.simpletype return all simple types
         """
-        assert xml_simple_type_class_names == ['XMLSimpleTypeInteger', 'XMLSimpleTypeNonNegativeInteger',
-                                               'XMLSimpleTypePositiveInteger', 'XMLSimpleTypeDecimal',
-                                               'XMLSimpleTypeString', 'XMLSimpleTypeString', 'XMLSimpleTypeToken',
-                                               'XMLSimpleTypeNMTOKEN', 'XMLSimpleTypeDate', 'XMLSimpleTypeAboveBelow',
-                                               'XMLSimpleTypeBeamLevel', 'XMLSimpleTypeColor', 'XMLSimpleTypeCommaSeparatedText',
-                                               'XMLSimpleTypeCssFontSize', 'XMLSimpleTypeDivisions',
-                                               'XMLSimpleTypeEnclosureShape', 'XMLSimpleTypeFermataShape',
-                                               'XMLSimpleTypeFontFamily', 'XMLSimpleTypeFontSize', 'XMLSimpleTypeFontStyle',
-                                               'XMLSimpleTypeFontWeight', 'XMLSimpleTypeLeftCenterRight',
-                                               'XMLSimpleTypeLeftRight', 'XMLSimpleTypeLineLength', 'XMLSimpleTypeLineShape',
-                                               'XMLSimpleTypeLineType', 'XMLSimpleTypeMidi16', 'XMLSimpleTypeMidi128',
-                                               'XMLSimpleTypeMidi16384', 'XMLSimpleTypeMute', 'XMLSimpleTypeNonNegativeDecimal',
-                                               'XMLSimpleTypeNumberLevel', 'XMLSimpleTypeNumberOfLines',
-                                               'XMLSimpleTypeNumberOrNormal', 'XMLSimpleTypeNumeralValue',
-                                               'XMLSimpleTypeOverUnder', 'XMLSimpleTypePercent', 'XMLSimpleTypePositiveDecimal',
-                                               'XMLSimpleTypePositiveDivisions', 'XMLSimpleTypePositiveIntegerOrEmpty',
-                                               'XMLSimpleTypeRotationDegrees', 'XMLSimpleTypeSemiPitched',
-                                               'XMLSimpleTypeSmuflGlyphName', 'XMLSimpleTypeSmuflAccidentalGlyphName',
-                                               'XMLSimpleTypeSmuflCodaGlyphName', 'XMLSimpleTypeSmuflLyricsGlyphName',
-                                               'XMLSimpleTypeSmuflPictogramGlyphName', 'XMLSimpleTypeSmuflSegnoGlyphName',
-                                               'XMLSimpleTypeSmuflWavyLineGlyphName', 'XMLSimpleTypeStartNote',
-                                               'XMLSimpleTypeStartStop', 'XMLSimpleTypeStartStopContinue',
-                                               'XMLSimpleTypeStartStopSingle', 'XMLSimpleTypeStringNumber',
-                                               'XMLSimpleTypeSymbolSize', 'XMLSimpleTypeTenths', 'XMLSimpleTypeTextDirection',
-                                               'XMLSimpleTypeTiedType', 'XMLSimpleTypeTimeOnly', 'XMLSimpleTypeTopBottom',
-                                               'XMLSimpleTypeTremoloType', 'XMLSimpleTypeTrillBeats', 'XMLSimpleTypeTrillStep',
-                                               'XMLSimpleTypeTwoNoteTurn', 'XMLSimpleTypeUpDown', 'XMLSimpleTypeUprightInverted',
-                                               'XMLSimpleTypeValign', 'XMLSimpleTypeValignImage', 'XMLSimpleTypeYesNo',
-                                               'XMLSimpleTypeYesNoNumber', 'XMLSimpleTypeYyyyMmDd',
-                                               'XMLSimpleTypeCancelLocation', 'XMLSimpleTypeClefSign', 'XMLSimpleTypeFifths',
-                                               'XMLSimpleTypeMode', 'XMLSimpleTypeShowFrets', 'XMLSimpleTypeStaffLine',
-                                               'XMLSimpleTypeStaffLinePosition', 'XMLSimpleTypeStaffNumber',
-                                               'XMLSimpleTypeStaffType', 'XMLSimpleTypeTimeRelation',
-                                               'XMLSimpleTypeTimeSeparator', 'XMLSimpleTypeTimeSymbol',
-                                               'XMLSimpleTypeBackwardForward', 'XMLSimpleTypeBarStyle',
-                                               'XMLSimpleTypeEndingNumber', 'XMLSimpleTypeRightLeftMiddle',
-                                               'XMLSimpleTypeStartStopDiscontinue', 'XMLSimpleTypeWinged',
-                                               'XMLSimpleTypeAccordionMiddle', 'XMLSimpleTypeBeaterValue',
-                                               'XMLSimpleTypeDegreeSymbolValue', 'XMLSimpleTypeDegreeTypeValue',
-                                               'XMLSimpleTypeEffectValue', 'XMLSimpleTypeGlassValue',
-                                               'XMLSimpleTypeHarmonyArrangement', 'XMLSimpleTypeHarmonyType',
-                                               'XMLSimpleTypeKindValue', 'XMLSimpleTypeLineEnd',
-                                               'XMLSimpleTypeMeasureNumberingValue', 'XMLSimpleTypeMembraneValue',
-                                               'XMLSimpleTypeMetalValue', 'XMLSimpleTypeMilliseconds',
-                                               'XMLSimpleTypeNumeralMode', 'XMLSimpleTypeOnOff', 'XMLSimpleTypePedalType',
-                                               'XMLSimpleTypePitchedValue', 'XMLSimpleTypePrincipalVoiceSymbol',
-                                               'XMLSimpleTypeStaffDivideSymbol', 'XMLSimpleTypeStartStopChangeContinue',
-                                               'XMLSimpleTypeSyncType', 'XMLSimpleTypeSystemRelationNumber',
-                                               'XMLSimpleTypeSystemRelation', 'XMLSimpleTypeTipDirection',
-                                               'XMLSimpleTypeStickLocation', 'XMLSimpleTypeStickMaterial',
-                                               'XMLSimpleTypeStickType', 'XMLSimpleTypeUpDownStopContinue',
-                                               'XMLSimpleTypeWedgeType', 'XMLSimpleTypeWoodValue', 'XMLSimpleTypeDistanceType',
-                                               'XMLSimpleTypeGlyphType', 'XMLSimpleTypeLineWidthType', 'XMLSimpleTypeMarginType',
-                                               'XMLSimpleTypeMillimeters', 'XMLSimpleTypeNoteSizeType',
-                                               'XMLSimpleTypeAccidentalValue', 'XMLSimpleTypeArrowDirection',
-                                               'XMLSimpleTypeArrowStyle', 'XMLSimpleTypeBeamValue', 'XMLSimpleTypeBendShape',
-                                               'XMLSimpleTypeBreathMarkValue', 'XMLSimpleTypeCaesuraValue',
-                                               'XMLSimpleTypeCircularArrow', 'XMLSimpleTypeFan', 'XMLSimpleTypeHandbellValue',
-                                               'XMLSimpleTypeHarmonClosedLocation', 'XMLSimpleTypeHarmonClosedValue',
-                                               'XMLSimpleTypeHoleClosedLocation', 'XMLSimpleTypeHoleClosedValue',
-                                               'XMLSimpleTypeNoteTypeValue', 'XMLSimpleTypeNoteheadValue', 'XMLSimpleTypeOctave',
-                                               'XMLSimpleTypeSemitones', 'XMLSimpleTypeShowTuplet', 'XMLSimpleTypeStemValue',
-                                               'XMLSimpleTypeStep', 'XMLSimpleTypeSyllabic', 'XMLSimpleTypeTapHand',
-                                               'XMLSimpleTypeTremoloMarks', 'XMLSimpleTypeGroupBarlineValue',
-                                               'XMLSimpleTypeGroupSymbolValue', 'XMLSimpleTypeMeasureText',
-                                               'XMLSimpleTypeSwingTypeValue']
+        assert xml_simple_type_class_names == ['XSDSimpleTypeInteger', 'XSDSimpleTypeNonNegativeInteger',
+                                               'XSDSimpleTypePositiveInteger', 'XSDSimpleTypeDecimal',
+                                               'XSDSimpleTypeString', 'XSDSimpleTypeString', 'XSDSimpleTypeToken',
+                                               'XSDSimpleTypeNMTOKEN', 'XSDSimpleTypeDate', 'XSDSimpleTypeAboveBelow',
+                                               'XSDSimpleTypeBeamLevel', 'XSDSimpleTypeColor', 'XSDSimpleTypeCommaSeparatedText',
+                                               'XSDSimpleTypeCssFontSize', 'XSDSimpleTypeDivisions',
+                                               'XSDSimpleTypeEnclosureShape', 'XSDSimpleTypeFermataShape',
+                                               'XSDSimpleTypeFontFamily', 'XSDSimpleTypeFontSize', 'XSDSimpleTypeFontStyle',
+                                               'XSDSimpleTypeFontWeight', 'XSDSimpleTypeLeftCenterRight',
+                                               'XSDSimpleTypeLeftRight', 'XSDSimpleTypeLineLength', 'XSDSimpleTypeLineShape',
+                                               'XSDSimpleTypeLineType', 'XSDSimpleTypeMidi16', 'XSDSimpleTypeMidi128',
+                                               'XSDSimpleTypeMidi16384', 'XSDSimpleTypeMute', 'XSDSimpleTypeNonNegativeDecimal',
+                                               'XSDSimpleTypeNumberLevel', 'XSDSimpleTypeNumberOfLines',
+                                               'XSDSimpleTypeNumberOrNormal', 'XSDSimpleTypeNumeralValue',
+                                               'XSDSimpleTypeOverUnder', 'XSDSimpleTypePercent', 'XSDSimpleTypePositiveDecimal',
+                                               'XSDSimpleTypePositiveDivisions', 'XSDSimpleTypePositiveIntegerOrEmpty',
+                                               'XSDSimpleTypeRotationDegrees', 'XSDSimpleTypeSemiPitched',
+                                               'XSDSimpleTypeSmuflGlyphName', 'XSDSimpleTypeSmuflAccidentalGlyphName',
+                                               'XSDSimpleTypeSmuflCodaGlyphName', 'XSDSimpleTypeSmuflLyricsGlyphName',
+                                               'XSDSimpleTypeSmuflPictogramGlyphName', 'XSDSimpleTypeSmuflSegnoGlyphName',
+                                               'XSDSimpleTypeSmuflWavyLineGlyphName', 'XSDSimpleTypeStartNote',
+                                               'XSDSimpleTypeStartStop', 'XSDSimpleTypeStartStopContinue',
+                                               'XSDSimpleTypeStartStopSingle', 'XSDSimpleTypeStringNumber',
+                                               'XSDSimpleTypeSymbolSize', 'XSDSimpleTypeTenths', 'XSDSimpleTypeTextDirection',
+                                               'XSDSimpleTypeTiedType', 'XSDSimpleTypeTimeOnly', 'XSDSimpleTypeTopBottom',
+                                               'XSDSimpleTypeTremoloType', 'XSDSimpleTypeTrillBeats', 'XSDSimpleTypeTrillStep',
+                                               'XSDSimpleTypeTwoNoteTurn', 'XSDSimpleTypeUpDown', 'XSDSimpleTypeUprightInverted',
+                                               'XSDSimpleTypeValign', 'XSDSimpleTypeValignImage', 'XSDSimpleTypeYesNo',
+                                               'XSDSimpleTypeYesNoNumber', 'XSDSimpleTypeYyyyMmDd',
+                                               'XSDSimpleTypeCancelLocation', 'XSDSimpleTypeClefSign', 'XSDSimpleTypeFifths',
+                                               'XSDSimpleTypeMode', 'XSDSimpleTypeShowFrets', 'XSDSimpleTypeStaffLine',
+                                               'XSDSimpleTypeStaffLinePosition', 'XSDSimpleTypeStaffNumber',
+                                               'XSDSimpleTypeStaffType', 'XSDSimpleTypeTimeRelation',
+                                               'XSDSimpleTypeTimeSeparator', 'XSDSimpleTypeTimeSymbol',
+                                               'XSDSimpleTypeBackwardForward', 'XSDSimpleTypeBarStyle',
+                                               'XSDSimpleTypeEndingNumber', 'XSDSimpleTypeRightLeftMiddle',
+                                               'XSDSimpleTypeStartStopDiscontinue', 'XSDSimpleTypeWinged',
+                                               'XSDSimpleTypeAccordionMiddle', 'XSDSimpleTypeBeaterValue',
+                                               'XSDSimpleTypeDegreeSymbolValue', 'XSDSimpleTypeDegreeTypeValue',
+                                               'XSDSimpleTypeEffectValue', 'XSDSimpleTypeGlassValue',
+                                               'XSDSimpleTypeHarmonyArrangement', 'XSDSimpleTypeHarmonyType',
+                                               'XSDSimpleTypeKindValue', 'XSDSimpleTypeLineEnd',
+                                               'XSDSimpleTypeMeasureNumberingValue', 'XSDSimpleTypeMembraneValue',
+                                               'XSDSimpleTypeMetalValue', 'XSDSimpleTypeMilliseconds',
+                                               'XSDSimpleTypeNumeralMode', 'XSDSimpleTypeOnOff', 'XSDSimpleTypePedalType',
+                                               'XSDSimpleTypePitchedValue', 'XSDSimpleTypePrincipalVoiceSymbol',
+                                               'XSDSimpleTypeStaffDivideSymbol', 'XSDSimpleTypeStartStopChangeContinue',
+                                               'XSDSimpleTypeSyncType', 'XSDSimpleTypeSystemRelationNumber',
+                                               'XSDSimpleTypeSystemRelation', 'XSDSimpleTypeTipDirection',
+                                               'XSDSimpleTypeStickLocation', 'XSDSimpleTypeStickMaterial',
+                                               'XSDSimpleTypeStickType', 'XSDSimpleTypeUpDownStopContinue',
+                                               'XSDSimpleTypeWedgeType', 'XSDSimpleTypeWoodValue', 'XSDSimpleTypeDistanceType',
+                                               'XSDSimpleTypeGlyphType', 'XSDSimpleTypeLineWidthType', 'XSDSimpleTypeMarginType',
+                                               'XSDSimpleTypeMillimeters', 'XSDSimpleTypeNoteSizeType',
+                                               'XSDSimpleTypeAccidentalValue', 'XSDSimpleTypeArrowDirection',
+                                               'XSDSimpleTypeArrowStyle', 'XSDSimpleTypeBeamValue', 'XSDSimpleTypeBendShape',
+                                               'XSDSimpleTypeBreathMarkValue', 'XSDSimpleTypeCaesuraValue',
+                                               'XSDSimpleTypeCircularArrow', 'XSDSimpleTypeFan', 'XSDSimpleTypeHandbellValue',
+                                               'XSDSimpleTypeHarmonClosedLocation', 'XSDSimpleTypeHarmonClosedValue',
+                                               'XSDSimpleTypeHoleClosedLocation', 'XSDSimpleTypeHoleClosedValue',
+                                               'XSDSimpleTypeNoteTypeValue', 'XSDSimpleTypeNoteheadValue', 'XSDSimpleTypeOctave',
+                                               'XSDSimpleTypeSemitones', 'XSDSimpleTypeShowTuplet', 'XSDSimpleTypeStemValue',
+                                               'XSDSimpleTypeStep', 'XSDSimpleTypeSyllabic', 'XSDSimpleTypeTapHand',
+                                               'XSDSimpleTypeTremoloMarks', 'XSDSimpleTypeGroupBarlineValue',
+                                               'XSDSimpleTypeGroupSymbolValue', 'XSDSimpleTypeMeasureText',
+                                               'XSDSimpleTypeSwingTypeValue']
 
     def test_generated_simple_type_xsd_snippet(self):
         """
@@ -97,149 +97,149 @@ class TestSimpleTypes(MusicXmlTestCase):
 		</xs:restriction>
 	</xs:simpleType>
 """
-        assert XMLSimpleTypeAboveBelow.get_xsd() == expected
+        assert XSDSimpleTypeAboveBelow.get_xsd() == expected
 
     def test_generated_simple_type_doc_string_from_annotation(self):
         """
         Test that the instance of an in module musicxml.types.simpletype generated class has a documentation string
         matching its xsd annotation
         """
-        assert isinstance(XMLSimpleTypeAboveBelow, type(XMLSimpleType))
-        assert XMLSimpleTypeAboveBelow.__doc__ == 'The above-below type is used to indicate whether one element appears ' \
+        assert isinstance(XSDSimpleTypeAboveBelow, type(XSDSimpleType))
+        assert XSDSimpleTypeAboveBelow.__doc__ == 'The above-below type is used to indicate whether one element appears ' \
                                                   'above or below another element.'
 
     def test_simple_type_xsd_is_converted_to_classes(self):
         """
-        Test that all XMLSimpleType classes are generated
+        Test that all XSDSimpleType classes are generated
         """
         for simple_type in self.all_simple_type_xsd_elements:
             module = importlib.import_module('musicxml.types.simpletype')
-            simple_type_class = getattr(module, simple_type.xml_tree_class_name)
-            assert simple_type.xml_tree_class_name == simple_type_class.__name__
+            simple_type_class = getattr(module, simple_type.xsd_tree_class_name)
+            assert simple_type.xsd_tree_class_name == simple_type_class.__name__
 
     def test_base_classes_are_implemented(self):
         """
-        Test that all needed base classes are actually inherited by all XMLSimpleType classes
+        Test that all needed base classes are actually inherited by all XSDSimpleType classes
         """
         for simple_type in self.all_simple_type_xsd_elements:
             module = importlib.import_module('musicxml.types.simpletype')
-            simpletype_class = getattr(module, simple_type.xml_tree_class_name)
+            simpletype_class = getattr(module, simple_type.xsd_tree_class_name)
             mro = simpletype_class.__mro__
-            for base_class_name in simple_type.xml_tree_base_class_names:
+            for base_class_name in simple_type.xsd_tree_base_class_names:
                 base_class = getattr(module, base_class_name)
                 assert base_class in mro
 
-    # Test Basic XMLSimpleType classes which are created manually
+    # Test Basic XSDSimpleType classes which are created manually
 
     def test_xs_integer(self):
-        XMLSimpleTypeInteger(0)
-        XMLSimpleTypeInteger(-4)
-        XMLSimpleTypeInteger(3)
+        XSDSimpleTypeInteger(0)
+        XSDSimpleTypeInteger(-4)
+        XSDSimpleTypeInteger(3)
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeInteger(None)
+            XSDSimpleTypeInteger(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeInteger('string')
+            XSDSimpleTypeInteger('string')
         with self.assertRaises(TypeError):
-            XMLSimpleTypeInteger(1.4)
+            XSDSimpleTypeInteger(1.4)
 
     def test_xs_non_negative_integer(self):
-        XMLSimpleTypeNonNegativeInteger(0)
-        XMLSimpleTypeNonNegativeInteger(3)
+        XSDSimpleTypeNonNegativeInteger(0)
+        XSDSimpleTypeNonNegativeInteger(3)
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeNonNegativeInteger(1.4)
+            XSDSimpleTypeNonNegativeInteger(1.4)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeNonNegativeInteger(-1.4)
+            XSDSimpleTypeNonNegativeInteger(-1.4)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNonNegativeInteger(-4)
+            XSDSimpleTypeNonNegativeInteger(-4)
 
     def test_xs_positive_integer(self):
-        XMLSimpleTypePositiveInteger(3)
+        XSDSimpleTypePositiveInteger(3)
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypePositiveInteger(1.4)
+            XSDSimpleTypePositiveInteger(1.4)
         with self.assertRaises(TypeError):
-            XMLSimpleTypePositiveInteger(-1.4)
+            XSDSimpleTypePositiveInteger(-1.4)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypePositiveInteger(-4)
+            XSDSimpleTypePositiveInteger(-4)
         with self.assertRaises(ValueError):
-            XMLSimpleTypePositiveInteger(0)
+            XSDSimpleTypePositiveInteger(0)
 
     def test_xs_decimal(self):
-        XMLSimpleTypeDecimal(1.4)
-        XMLSimpleTypeDecimal(0)
-        XMLSimpleTypeDecimal(-4)
+        XSDSimpleTypeDecimal(1.4)
+        XSDSimpleTypeDecimal(0)
+        XSDSimpleTypeDecimal(-4)
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeDecimal(None)
+            XSDSimpleTypeDecimal(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeDecimal('string')
+            XSDSimpleTypeDecimal('string')
 
     def test_xs_string(self):
-        XMLSimpleTypeString("")
-        XMLSimpleTypeString("hello")
+        XSDSimpleTypeString("")
+        XSDSimpleTypeString("hello")
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeString(None)
+            XSDSimpleTypeString(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeString(1)
+            XSDSimpleTypeString(1)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeString(1.5)
+            XSDSimpleTypeString(1.5)
 
     def test_xs_token(self):
         with self.assertRaises(TypeError):
-            XMLSimpleTypeToken(1)
-        XMLSimpleTypeString("Hello Alfons")
-        assert XMLSimpleTypeToken("Hello\tAlfons").value == "Hello Alfons"
-        assert XMLSimpleTypeToken("Hello\rAlfons").value == "Hello Alfons"
-        assert XMLSimpleTypeToken("Hello\nAlfons").value == "Hello Alfons"
-        assert XMLSimpleTypeToken("Hello    Alfons").value == "Hello Alfons"
-        assert XMLSimpleTypeToken("Hello\n  Alfons").value == "Hello Alfons"
+            XSDSimpleTypeToken(1)
+        XSDSimpleTypeString("Hello Alfons")
+        assert XSDSimpleTypeToken("Hello\tAlfons").value == "Hello Alfons"
+        assert XSDSimpleTypeToken("Hello\rAlfons").value == "Hello Alfons"
+        assert XSDSimpleTypeToken("Hello\nAlfons").value == "Hello Alfons"
+        assert XSDSimpleTypeToken("Hello    Alfons").value == "Hello Alfons"
+        assert XSDSimpleTypeToken("Hello\n  Alfons").value == "Hello Alfons"
 
     def test_xs_NMTOKEN(self):
-        XMLSimpleTypeNMTOKEN("Hello_Alfons")
-        XMLSimpleTypeNMTOKEN("HeL1.o")
-        XMLSimpleTypeNMTOKEN("HeL1:._-o")
-        XMLSimpleTypeNMTOKEN("ÖÜöüäÄ:._-o")
+        XSDSimpleTypeNMTOKEN("Hello_Alfons")
+        XSDSimpleTypeNMTOKEN("HeL1.o")
+        XSDSimpleTypeNMTOKEN("HeL1:._-o")
+        XSDSimpleTypeNMTOKEN("ÖÜöüäÄ:._-o")
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeNMTOKEN(1)
+            XSDSimpleTypeNMTOKEN(1)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNMTOKEN("Hello Alfons")
+            XSDSimpleTypeNMTOKEN("Hello Alfons")
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNMTOKEN("Hello\tAlfons")
+            XSDSimpleTypeNMTOKEN("Hello\tAlfons")
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNMTOKEN("Hello,Alfons")
+            XSDSimpleTypeNMTOKEN("Hello,Alfons")
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNMTOKEN("Hello;Alfons")
+            XSDSimpleTypeNMTOKEN("Hello;Alfons")
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNMTOKEN("Hello%Alfons")
+            XSDSimpleTypeNMTOKEN("Hello%Alfons")
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNMTOKEN("Hello|Alfons")
+            XSDSimpleTypeNMTOKEN("Hello|Alfons")
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNMTOKEN("Hello'Alfons")
+            XSDSimpleTypeNMTOKEN("Hello'Alfons")
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNMTOKEN("Hello?Alfons")
+            XSDSimpleTypeNMTOKEN("Hello?Alfons")
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNMTOKEN("HelloAlfons!")
+            XSDSimpleTypeNMTOKEN("HelloAlfons!")
 
     def test_xs_date(self):
-        XMLSimpleTypeDate('1982-11-23+07:00')
-        XMLSimpleTypeDate('1982-11-23')
+        XSDSimpleTypeDate('1982-11-23+07:00')
+        XSDSimpleTypeDate('1982-11-23')
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeDate(19821223)
+            XSDSimpleTypeDate(19821223)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeDate('1982-21-23')
+            XSDSimpleTypeDate('1982-21-23')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeDate('19822123')
+            XSDSimpleTypeDate('19822123')
 
-    # Test XMLSimpleType classes with union restrictions
+    # Test XSDSimpleType classes with union restrictions
     def test_simple_type_number_or_normal(self):
         """
         Test if the intern simple format of restriction is applied
@@ -258,15 +258,15 @@ class TestSimpleTypes(MusicXmlTestCase):
             </xs:union>
         </xs:simpleType>
         """
-        XMLSimpleTypeNumberOrNormal(1)
-        XMLSimpleTypeNumberOrNormal(1.5)
-        XMLSimpleTypeNumberOrNormal(-1)
-        XMLSimpleTypeNumberOrNormal(-1.5)
-        XMLSimpleTypeNumberOrNormal(0)
-        XMLSimpleTypeNumberOrNormal('normal')
+        XSDSimpleTypeNumberOrNormal(1)
+        XSDSimpleTypeNumberOrNormal(1.5)
+        XSDSimpleTypeNumberOrNormal(-1)
+        XSDSimpleTypeNumberOrNormal(-1.5)
+        XSDSimpleTypeNumberOrNormal(0)
+        XSDSimpleTypeNumberOrNormal('normal')
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeNumberOrNormal('something')
+            XSDSimpleTypeNumberOrNormal('something')
 
     def test_simple_type_positive_integer_or_empty(self):
         """
@@ -286,102 +286,102 @@ class TestSimpleTypes(MusicXmlTestCase):
             </xs:union>
         </xs:simpleType>
         """
-        XMLSimpleTypePositiveIntegerOrEmpty(1)
-        XMLSimpleTypePositiveIntegerOrEmpty('')
+        XSDSimpleTypePositiveIntegerOrEmpty(1)
+        XSDSimpleTypePositiveIntegerOrEmpty('')
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypePositiveIntegerOrEmpty('something')
+            XSDSimpleTypePositiveIntegerOrEmpty('something')
         with self.assertRaises(TypeError):
-            XMLSimpleTypePositiveIntegerOrEmpty(-1.5)
+            XSDSimpleTypePositiveIntegerOrEmpty(-1.5)
         with self.assertRaises(TypeError):
-            XMLSimpleTypePositiveIntegerOrEmpty(1.5)
+            XSDSimpleTypePositiveIntegerOrEmpty(1.5)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypePositiveIntegerOrEmpty(-1)
+            XSDSimpleTypePositiveIntegerOrEmpty(-1)
         with self.assertRaises(ValueError):
-            XMLSimpleTypePositiveIntegerOrEmpty(0)
+            XSDSimpleTypePositiveIntegerOrEmpty(0)
 
     def test_simple_type_measure_text_min_length(self):
         """
         Test minLength
         """
-        XMLSimpleTypeMeasureText('some text')
+        XSDSimpleTypeMeasureText('some text')
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeMeasureText(1)
+            XSDSimpleTypeMeasureText(1)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeMeasureText('')
+            XSDSimpleTypeMeasureText('')
 
     def test_simple_type_positive_decimal(self):
         """
         Test minExclusive
         """
-        XMLSimpleTypePositiveDecimal(10)
+        XSDSimpleTypePositiveDecimal(10)
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypePositiveDecimal('hello')
+            XSDSimpleTypePositiveDecimal('hello')
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypePositiveDecimal(0)
+            XSDSimpleTypePositiveDecimal(0)
         with self.assertRaises(ValueError):
-            XMLSimpleTypePositiveDecimal(-10)
+            XSDSimpleTypePositiveDecimal(-10)
 
     def test_non_negative_decimal(self):
         """
         Test minInclusive
         """
-        XMLSimpleTypeNonNegativeDecimal(1.4)
-        XMLSimpleTypeNonNegativeDecimal(0)
+        XSDSimpleTypeNonNegativeDecimal(1.4)
+        XSDSimpleTypeNonNegativeDecimal(0)
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeNonNegativeDecimal(None)
+            XSDSimpleTypeNonNegativeDecimal(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeNonNegativeDecimal('string')
+            XSDSimpleTypeNonNegativeDecimal('string')
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNonNegativeDecimal(-4)
+            XSDSimpleTypeNonNegativeDecimal(-4)
         with self.assertRaises(ValueError):
-            XMLSimpleTypeNonNegativeDecimal(-1.4)
+            XSDSimpleTypeNonNegativeDecimal(-1.4)
 
     def test_beam_level(self):
         """
         Test minInclusive and maxInclusive
         """
         for x in range(1, 9):
-            XMLSimpleTypeBeamLevel(x)
+            XSDSimpleTypeBeamLevel(x)
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeBeamLevel(None)
+            XSDSimpleTypeBeamLevel(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeBeamLevel('string')
+            XSDSimpleTypeBeamLevel('string')
         with self.assertRaises(TypeError):
-            XMLSimpleTypeBeamLevel(1.4)
+            XSDSimpleTypeBeamLevel(1.4)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeBeamLevel(-4)
+            XSDSimpleTypeBeamLevel(-4)
         with self.assertRaises(ValueError):
-            XMLSimpleTypeBeamLevel(0)
+            XSDSimpleTypeBeamLevel(0)
         with self.assertRaises(ValueError):
-            XMLSimpleTypeBeamLevel(9)
+            XSDSimpleTypeBeamLevel(9)
 
     def test_simple_type_validator_from_restriction(self):
         """
         Test that the instance of an in module musicxml.types.simpletype generated class has a validator corresponding to its xsd
         restriction
         """
-        XMLSimpleTypeAboveBelow('above')
-        XMLSimpleTypeAboveBelow('below')
+        XSDSimpleTypeAboveBelow('above')
+        XSDSimpleTypeAboveBelow('below')
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeAboveBelow(None)
+            XSDSimpleTypeAboveBelow(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeAboveBelow(1)
+            XSDSimpleTypeAboveBelow(1)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeAboveBelow('side')
+            XSDSimpleTypeAboveBelow('side')
 
-    # Test XMLSimpleType classes with pattern restrictions
+    # Test XSDSimpleType classes with pattern restrictions
     def test_simple_type_color(self):
         """
         <xs:simpleType name="color">
@@ -397,15 +397,15 @@ class TestSimpleTypes(MusicXmlTestCase):
             </xs:restriction>
         </xs:simpleType>
         """
-        XMLSimpleTypeColor('#40800080')
+        XSDSimpleTypeColor('#40800080')
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeColor(None)
+            XSDSimpleTypeColor(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeColor(1)
+            XSDSimpleTypeColor(1)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeColor('40800080')
+            XSDSimpleTypeColor('40800080')
 
     def test_comma_separated_text(self):
         """
@@ -420,19 +420,19 @@ class TestSimpleTypes(MusicXmlTestCase):
             </xs:restriction>
         </xs:simpleType>
         """
-        XMLSimpleTypeCommaSeparatedText('arial,times')
+        XSDSimpleTypeCommaSeparatedText('arial,times')
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeCommaSeparatedText(None)
+            XSDSimpleTypeCommaSeparatedText(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeCommaSeparatedText(1)
+            XSDSimpleTypeCommaSeparatedText(1)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeCommaSeparatedText('arial,,times')
+            XSDSimpleTypeCommaSeparatedText('arial,,times')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeCommaSeparatedText(',arial,times')
+            XSDSimpleTypeCommaSeparatedText(',arial,times')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeCommaSeparatedText('arial,times,')
+            XSDSimpleTypeCommaSeparatedText('arial,times,')
 
     def test_smufl_accidental_glyph_name(self):
         """
@@ -445,20 +445,20 @@ class TestSimpleTypes(MusicXmlTestCase):
             </xs:restriction>
         </xs:simpleType>
         """
-        XMLSimpleTypeSmuflAccidentalGlyphName('accSomething')
-        XMLSimpleTypeSmuflAccidentalGlyphName('kievanAccidentalSomething')
+        XSDSimpleTypeSmuflAccidentalGlyphName('accSomething')
+        XSDSimpleTypeSmuflAccidentalGlyphName('kievanAccidentalSomething')
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeSmuflAccidentalGlyphName(None)
+            XSDSimpleTypeSmuflAccidentalGlyphName(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeSmuflAccidentalGlyphName(1)
+            XSDSimpleTypeSmuflAccidentalGlyphName(1)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflAccidentalGlyphName('something')
+            XSDSimpleTypeSmuflAccidentalGlyphName('something')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflAccidentalGlyphName('kievanAccidental')
+            XSDSimpleTypeSmuflAccidentalGlyphName('kievanAccidental')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflAccidentalGlyphName('kievanAccidental Something')
+            XSDSimpleTypeSmuflAccidentalGlyphName('kievanAccidental Something')
 
     def test_smufl_coda_glyph_name(self):
         """
@@ -471,18 +471,18 @@ class TestSimpleTypes(MusicXmlTestCase):
             </xs:restriction>
         </xs:simpleType>
         """
-        XMLSimpleTypeSmuflCodaGlyphName('codaSomething')
-        XMLSimpleTypeSmuflCodaGlyphName('coda')
+        XSDSimpleTypeSmuflCodaGlyphName('codaSomething')
+        XSDSimpleTypeSmuflCodaGlyphName('coda')
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeSmuflCodaGlyphName(None)
+            XSDSimpleTypeSmuflCodaGlyphName(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeSmuflCodaGlyphName(1)
+            XSDSimpleTypeSmuflCodaGlyphName(1)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflAccidentalGlyphName('something')
+            XSDSimpleTypeSmuflAccidentalGlyphName('something')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflAccidentalGlyphName('codaSomething Something')
+            XSDSimpleTypeSmuflAccidentalGlyphName('codaSomething Something')
 
     def test_smufl_lyrics_glyph_name(self):
         """
@@ -495,19 +495,19 @@ class TestSimpleTypes(MusicXmlTestCase):
             </xs:restriction>
         </xs:simpleType>
         """
-        XMLSimpleTypeSmuflLyricsGlyphName('lyricsSomething')
+        XSDSimpleTypeSmuflLyricsGlyphName('lyricsSomething')
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeSmuflLyricsGlyphName(None)
+            XSDSimpleTypeSmuflLyricsGlyphName(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeSmuflLyricsGlyphName(1)
+            XSDSimpleTypeSmuflLyricsGlyphName(1)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflLyricsGlyphName('something')
+            XSDSimpleTypeSmuflLyricsGlyphName('something')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflLyricsGlyphName('lyrics')
+            XSDSimpleTypeSmuflLyricsGlyphName('lyrics')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflLyricsGlyphName('lyrics Something')
+            XSDSimpleTypeSmuflLyricsGlyphName('lyrics Something')
 
     def test_smufl_wavy_line_glyph_name(self):
         """
@@ -520,29 +520,29 @@ class TestSimpleTypes(MusicXmlTestCase):
             </xs:restriction>
         </xs:simpleType>
         """
-        XMLSimpleTypeSmuflWavyLineGlyphName('wiggleSomething')
-        XMLSimpleTypeSmuflWavyLineGlyphName('guitarSomethingVibratoStroke')
-        XMLSimpleTypeSmuflWavyLineGlyphName('guitarVibratoStroke')
+        XSDSimpleTypeSmuflWavyLineGlyphName('wiggleSomething')
+        XSDSimpleTypeSmuflWavyLineGlyphName('guitarSomethingVibratoStroke')
+        XSDSimpleTypeSmuflWavyLineGlyphName('guitarVibratoStroke')
 
         with self.assertRaises(TypeError):
-            XMLSimpleTypeSmuflWavyLineGlyphName(None)
+            XSDSimpleTypeSmuflWavyLineGlyphName(None)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeSmuflWavyLineGlyphName(1)
+            XSDSimpleTypeSmuflWavyLineGlyphName(1)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflWavyLineGlyphName('something')
+            XSDSimpleTypeSmuflWavyLineGlyphName('something')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflWavyLineGlyphName('wiggle')
+            XSDSimpleTypeSmuflWavyLineGlyphName('wiggle')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflWavyLineGlyphName('wiggle Something')
+            XSDSimpleTypeSmuflWavyLineGlyphName('wiggle Something')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflWavyLineGlyphName('somethingVibratoStroke')
+            XSDSimpleTypeSmuflWavyLineGlyphName('somethingVibratoStroke')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflWavyLineGlyphName('guitarSomething')
+            XSDSimpleTypeSmuflWavyLineGlyphName('guitarSomething')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflWavyLineGlyphName('guitar')
+            XSDSimpleTypeSmuflWavyLineGlyphName('guitar')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeSmuflWavyLineGlyphName('VibratoStroke')
+            XSDSimpleTypeSmuflWavyLineGlyphName('VibratoStroke')
 
     def test_yyyy_mm_dd(self):
         """
@@ -557,14 +557,14 @@ class TestSimpleTypes(MusicXmlTestCase):
             </xs:restriction>
         </xs:simpleType>
         """
-        a = XMLSimpleTypeYyyyMmDd('1982-11-23')
+        a = XSDSimpleTypeYyyyMmDd('1982-11-23')
         # print(a.__class__.__mro__)
         with self.assertRaises(TypeError):
-            XMLSimpleTypeYyyyMmDd(19821223)
+            XSDSimpleTypeYyyyMmDd(19821223)
 
         with self.assertRaises(ValueError):
-            XMLSimpleTypeYyyyMmDd('1982-21-23')
+            XSDSimpleTypeYyyyMmDd('1982-21-23')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeYyyyMmDd('19822123')
+            XSDSimpleTypeYyyyMmDd('19822123')
         with self.assertRaises(ValueError):
-            XMLSimpleTypeYyyyMmDd('1982-11-23+07:00')
+            XSDSimpleTypeYyyyMmDd('1982-11-23+07:00')

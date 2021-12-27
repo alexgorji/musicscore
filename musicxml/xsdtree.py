@@ -13,20 +13,20 @@ XSD = XML Schema Definition
 
 class XSDTree(TreePresentation):
     """
-    XSDTree gets a xml.etree.ElementTree.Element by initiation as its xml_element_tree_element property and
-    prepares all needed information for generating a XMLTree class (XMLTree can be XMLSimpleType, XMLComplexType, XMLGroup,
+    XSDTree gets a xml.etree.ElementTree.Element by initiation as its xsd_element_tree_element property and
+    prepares all needed information for generating a XSDElement class (XSDElement can be XSDSimpleType, XSDComplexType, XMLGroup,
     XMLAttribute and XMLAttributeGroup)
     """
 
-    def __init__(self, xml_element_tree_element, parent=None):
+    def __init__(self, xsd_element_tree_element, parent=None):
         self._children = []
         self._namespace = None
         self._tag = None
-        self._xml_element_tree_element = None
+        self._xsd_element_tree_element = None
         self._xml_tree_class_name = None
         self._parent = parent
 
-        self.xml_element_tree_element = xml_element_tree_element
+        self.xsd_element_tree_element = xsd_element_tree_element
 
     # ------------------
     # private properties
@@ -34,21 +34,21 @@ class XSDTree(TreePresentation):
     # ------------------
     # private methods
 
-    def _get_xml_tree_class_name(self):
+    def _get_xsd_tree_class_name(self):
         tag = cap_first(self.tag)
 
-        name = 'XML' + f'{tag}'
+        name = 'XSD' + f'{tag}'
         name += ''.join([cap_first(partial) for partial in self.name.split('-')])
         return name
 
     def _populate_children(self):
         self._children = [XSDTree(node, parent=self) for node in
-                          self.xml_element_tree_element.findall('./')]
+                          self.xsd_element_tree_element.findall('./')]
 
     # ------------------
     # public properties
     @property
-    def xml_tree_base_class_names(self):
+    def xsd_tree_base_class_names(self):
 
         def convert_name(name, type_='simple_type'):
             try:
@@ -58,9 +58,9 @@ class XSDTree(TreePresentation):
             name = cap_first(name)
             name = ''.join([cap_first(partial) for partial in name.split('-')])
             if type_ == 'simple_type':
-                name = 'XMLSimpleType' + name
+                name = 'XSDSimpleType' + name
             elif type_ == 'complex_type':
-                name = 'XMLComplexType' + name
+                name = 'XSDComplexType' + name
             else:
                 raise ValueError
             return name
@@ -105,48 +105,48 @@ class XSDTree(TreePresentation):
     @property
     def name(self):
         try:
-            return self.xml_element_tree_element.attrib['name']
+            return self.xsd_element_tree_element.attrib['name']
         except KeyError:
             return
 
     @property
     def namespace(self):
         if not self._namespace:
-            self._namespace = re.match(r'({.*})(.*)', self.xml_element_tree_element.tag).group(1)
+            self._namespace = re.match(r'({.*})(.*)', self.xsd_element_tree_element.tag).group(1)
         return self._namespace
 
     @property
     def tag(self):
         if not self._tag:
-            self._tag = re.match(r'({.*})(.*)', self.xml_element_tree_element.tag).group(2)
+            self._tag = re.match(r'({.*})(.*)', self.xsd_element_tree_element.tag).group(2)
         return self._tag
 
     @property
     def text(self):
-        return self.xml_element_tree_element.text
+        return self.xsd_element_tree_element.text
 
     @property
-    def xml_element_tree_element(self):
-        return self._xml_element_tree_element
+    def xsd_element_tree_element(self):
+        return self._xsd_element_tree_element
 
-    @xml_element_tree_element.setter
-    def xml_element_tree_element(self, value):
+    @xsd_element_tree_element.setter
+    def xsd_element_tree_element(self, value):
         if not isinstance(value, ET.Element):
             raise TypeError(
-                f"XSDTree must be initiated with an xml_element_tree_element of type xml.etree.ElementTree.Element not "
+                f"XSDTree must be initiated with an xsd_element_tree_element of type xml.etree.ElementTree.Element not "
                 f"{type(value)}")
-        self._xml_element_tree_element = value
+        self._xsd_element_tree_element = value
 
     @property
-    def xml_tree_class_name(self):
+    def xsd_tree_class_name(self):
         if self._xml_tree_class_name is None:
-            self._xml_tree_class_name = self._get_xml_tree_class_name()
+            self._xml_tree_class_name = self._get_xsd_tree_class_name()
         return self._xml_tree_class_name
 
     # ------------------
     # public methods
     def get_attributes(self):
-        return self.xml_element_tree_element.attrib
+        return self.xsd_element_tree_element.attrib
 
     def get_children(self):
         if not self._children:
@@ -183,7 +183,7 @@ class XSDTree(TreePresentation):
 
     def get_xsd(self):
         with io.StringIO() as buf, redirect_stdout(buf):
-            ET.dump(self.xml_element_tree_element)
+            ET.dump(self.xsd_element_tree_element)
             output = buf.getvalue()
         output = output.strip()
         output += '\n'
@@ -203,3 +203,14 @@ class XSDTree(TreePresentation):
 
     def __str__(self):
         return f"{self.__class__.__name__} {self.compact_repr}"
+
+
+class XSDElement:
+    """
+    Abstract class of all generated XSD Classes
+    """
+    XSD_TREE = None
+
+    @classmethod
+    def get_xsd(cls):
+        return cls.XSD_TREE.get_xsd()

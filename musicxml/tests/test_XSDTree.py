@@ -8,7 +8,7 @@ from musicxml.xsdtree import XSDTree
 
 class TestXSDTree(MusicXmlTestCase):
     """
-    XSDTree is a representation of all needed information for creating an XML Class.
+    XSDTree is a representation of all needed information for creating an XSD Class.
     """
 
     def test_write_all_tags(self):
@@ -31,13 +31,13 @@ class TestXSDTree(MusicXmlTestCase):
                     print('============')
                     print(child.tree_repr())
 
-    def test_xml_property(self):
+    def test_xsd_property(self):
         """
-        Test that an XSDTree element must get an xml tree element while initiating.
+        Test that an XSDTree element must get an xsd tree element while initiating.
         Example:
         with open(xsd_path) as file:
-            xmltree = ET.parse(file)
-        root = xmltree.getroot()
+            xsdtree = ET.parse(file)
+        root = xsdtree.getroot()
         ns = '{http://www.w3.org/2001/XMLSchema}'
         XSDTree(root.find(f"{ns}simpleType["f"@name='above-below']"))
         """""
@@ -46,24 +46,24 @@ class TestXSDTree(MusicXmlTestCase):
         with self.assertRaises(TypeError):
             XSDTree('Naja')
 
-        assert isinstance(self.above_below_simple_type_xsd_element.xml_element_tree_element, ET.Element)
+        assert isinstance(self.above_below_simple_type_xsd_element.xsd_element_tree_element, ET.Element)
 
-    def test_xml_element_tag(self):
+    def test_xsd_element_tag(self):
         """
         Test that the tag attribute of an XSDTree element represents th tag name in musicxml xsd structure.
         """
         assert self.above_below_simple_type_xsd_element.tag == 'simpleType'
 
-    def test_music_xml_class_name(self):
+    def test_music_xsd_class_name(self):
         """
-        Test that an XSDTree element has a xml_tree_class_name attribute. This class name is generated automatically and is used as the
-        name of the XMLTree to be created.
+        Test that an XSDTree element has a xsd_tree_class_name attribute. This class name is generated automatically and is used as the
+        name of the XSDElement to be created.
         """
-        assert self.above_below_simple_type_xsd_element.xml_tree_class_name == 'XMLSimpleTypeAboveBelow'
+        assert self.above_below_simple_type_xsd_element.xsd_tree_class_name == 'XSDSimpleTypeAboveBelow'
 
     def test_get_doc(self):
         """
-        Test get_doc methode which returns the doc string to be added to the XML class.
+        Test get_doc methode which returns the doc string to be added to the XSD class.
         """
         assert self.above_below_simple_type_xsd_element.get_doc() == 'The above-below type is used to indicate whether one element appears above or below another element.'
 
@@ -233,22 +233,22 @@ class TestXSDTree(MusicXmlTestCase):
 
     def test_restriction_base_class_names(self):
         """
-        Test that the xml_tree_base_class_names method of XSDTree Element returns MLSimpleType classes which correspond to value of base
+        Test that the xsd_tree_base_class_names method of XSDTree Element returns MLSimpleType classes which correspond to value of base
         attribute of restriction node in musicxml xsd structure.
         """
         all_restriction_bases = []
         for simpletype in self.all_simple_type_xsd_elements:
-            if simpletype.xml_tree_base_class_names not in all_restriction_bases:
-                all_restriction_bases.append(simpletype.xml_tree_base_class_names)
-        assert all_restriction_bases == [['XMLSimpleTypeToken'], ['XMLSimpleTypePositiveInteger'],
-                                         ['XMLSimpleTypeDecimal'], ['XMLSimpleTypeString'],
-                                         ['XMLSimpleTypeCommaSeparatedText'],
-                                         ['XMLSimpleTypeDecimal', 'XMLSimpleTypeCssFontSize'],
-                                         ['XMLSimpleTypeNonNegativeInteger'], ['XMLSimpleTypeDivisions'],
-                                         ['XMLSimpleTypeNMTOKEN'], ['XMLSimpleTypeSmuflGlyphName'],
-                                         ['XMLSimpleTypeYesNo', 'XMLSimpleTypeDecimal'], ['XMLSimpleTypeDate'],
-                                         ['XMLSimpleTypeInteger'], ['XMLSimpleTypeSystemRelationNumber'],
-                                         ['XMLSimpleTypeNoteTypeValue']]
+            if simpletype.xsd_tree_base_class_names not in all_restriction_bases:
+                all_restriction_bases.append(simpletype.xsd_tree_base_class_names)
+        assert all_restriction_bases == [['XSDSimpleTypeToken'], ['XSDSimpleTypePositiveInteger'],
+                                         ['XSDSimpleTypeDecimal'], ['XSDSimpleTypeString'],
+                                         ['XSDSimpleTypeCommaSeparatedText'],
+                                         ['XSDSimpleTypeDecimal', 'XSDSimpleTypeCssFontSize'],
+                                         ['XSDSimpleTypeNonNegativeInteger'], ['XSDSimpleTypeDivisions'],
+                                         ['XSDSimpleTypeNMTOKEN'], ['XSDSimpleTypeSmuflGlyphName'],
+                                         ['XSDSimpleTypeYesNo', 'XSDSimpleTypeDecimal'], ['XSDSimpleTypeDate'],
+                                         ['XSDSimpleTypeInteger'], ['XSDSimpleTypeSystemRelationNumber'],
+                                         ['XSDSimpleTypeNoteTypeValue']]
 
     def test_is_simple_type_property(self):
         """

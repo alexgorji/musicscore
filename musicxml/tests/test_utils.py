@@ -8,9 +8,9 @@ from musicxml.util.helprervariables import name_character
 
 class TestHelperFunctions(MusicXmlTestCase):
     def test_get_simple_type_base_classes(self):
-        assert get_simple_type_all_base_classes(self.yes_no_number_simple_type_xsd_element) == ['XMLSimpleTypeYesNo',
-                                                                                              'XMLSimpleTypeDecimal']
-        assert get_simple_type_all_base_classes(self.above_below_simple_type_xsd_element) == ['XMLSimpleTypeToken']
+        assert get_simple_type_all_base_classes(self.yes_no_number_simple_type_xsd_element) == ['XSDSimpleTypeYesNo',
+                                                                                              'XSDSimpleTypeDecimal']
+        assert get_simple_type_all_base_classes(self.above_below_simple_type_xsd_element) == ['XSDSimpleTypeToken']
 
     def test_get_cleaned_token(self):
         expected = 'Hello Alfons'

@@ -10,20 +10,20 @@ root = xsd_tree.getroot()
 
 
 def get_simple_type_all_base_classes(xml_element_tree_element):
-    base_class_names = xml_element_tree_element.xml_tree_base_class_names
-    if [name for name in base_class_names if name.startswith('XMLSimpleType')]:
+    base_class_names = xml_element_tree_element.xsd_tree_base_class_names
+    if [name for name in base_class_names if name.startswith('XSDSimpleType')]:
         pass
     else:
-        base_class_names.insert(0, 'XMLSimpleType')
+        base_class_names.insert(0, 'XSDSimpleType')
     return base_class_names
 
 
-def get_complex_type_all_base_classes(xml_element_tree_element):
-    base_class_names = xml_element_tree_element.xml_tree_base_class_names
-    if [name for name in base_class_names if name.startswith('XMLComplexType')]:
+def get_complex_type_all_base_classes(xsd_element_tree_element):
+    base_class_names = xsd_element_tree_element.xsd_tree_base_class_names
+    if [name for name in base_class_names if name.startswith('XSDComplexType')]:
         pass
     else:
-        base_class_names.insert(0, 'XMLComplexType')
+        base_class_names.insert(0, 'XSDComplexType')
     return base_class_names
 
 

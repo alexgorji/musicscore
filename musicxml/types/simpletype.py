@@ -2,12 +2,11 @@ import re
 
 from musicxml.util.helperfunctions import get_simple_type_all_base_classes, find_all_xsd_children, get_cleaned_token
 from musicxml.util.helprervariables import name_character
-from musicxml.xsdtree import XSDTree
-from musicxml.xmltree import XMLTree
+from musicxml.xsdtree import XSDTree, XSDElement
 import xml.etree.ElementTree as ET
 
 
-class XMLSimpleType(XMLTree):
+class XSDSimpleType(XSDElement):
     """
     Parent Class for all SimpleType classes
     """
@@ -47,11 +46,11 @@ class XMLSimpleType(XMLTree):
             restriction = self.XSD_TREE.get_restriction()
             if restriction:
                 if restriction.get_attributes()['base'] == 'xs:date':
-                    XMLSimpleTypeDate(v)
+                    XSDSimpleTypeDate(v)
                 elif restriction.get_attributes()['base'] == 'xs:token':
-                    v = XMLSimpleTypeToken(v).value
+                    v = XSDSimpleTypeToken(v).value
                 elif restriction.get_attributes()['base'] == 'xs:smufl-glyph-name':
-                    XMLSimpleTypeSmuflGlypyName(v)
+                    XSDSimpleTypeSmuflGlypyName(v)
             if re.compile(self._PATTERN).fullmatch(v) is None:
                 raise ValueError(
                     f'{self.__class__.__name__}.value {v} must match the following pattern: {self._PATTERN}')
@@ -116,7 +115,7 @@ class XMLSimpleType(XMLTree):
         return str(self.value)
 
 
-class XMLSimpleTypeInteger(XMLSimpleType):
+class XSDSimpleTypeInteger(XSDSimpleType):
     _TYPES = [int]
     XSD_TREE = XSDTree(ET.fromstring(
         """
@@ -135,10 +134,10 @@ class XMLSimpleTypeInteger(XMLSimpleType):
     @value.setter
     def value(self, v):
         self._check_value_type(v)
-        super(XMLSimpleTypeInteger, type(self)).value.fset(self, v)
+        super(XSDSimpleTypeInteger, type(self)).value.fset(self, v)
 
 
-class XMLSimpleTypeNonNegativeInteger(XMLSimpleTypeInteger):
+class XSDSimpleTypeNonNegativeInteger(XSDSimpleTypeInteger):
     XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="nonNegativeInteger" id="nonNegativeInteger">
@@ -155,12 +154,12 @@ class XMLSimpleTypeNonNegativeInteger(XMLSimpleTypeInteger):
 
     @value.setter
     def value(self, v):
-        super(XMLSimpleTypeNonNegativeInteger, type(self)).value.fset(self, v)
+        super(XSDSimpleTypeNonNegativeInteger, type(self)).value.fset(self, v)
         if v < 0:
             raise ValueError(f'value {v} must be non negative.')
 
 
-class XMLSimpleTypePositiveInteger(XMLSimpleTypeInteger):
+class XSDSimpleTypePositiveInteger(XSDSimpleTypeInteger):
     _TYPES = [int]
     XSD_TREE = XSDTree(ET.fromstring(
         """
@@ -178,16 +177,16 @@ class XMLSimpleTypePositiveInteger(XMLSimpleTypeInteger):
 
     @value.setter
     def value(self, v):
-        super(XMLSimpleTypePositiveInteger, type(self)).value.fset(self, v)
+        super(XSDSimpleTypePositiveInteger, type(self)).value.fset(self, v)
         try:
             if v <= 0:
                 raise ValueError(f'value {v} must be greater than 0.')
         except TypeError:
-            # Important because of XMLSimpleTypePositiveIntegerOrEmpty
+            # Important because of XSDSimpleTypePositiveIntegerOrEmpty
             pass
 
 
-class XMLSimpleTypeDecimal(XMLSimpleType):
+class XSDSimpleTypeDecimal(XSDSimpleType):
     _TYPES = [float, int]
     XSD_TREE = XSDTree(ET.fromstring(
         """
@@ -206,10 +205,10 @@ class XMLSimpleTypeDecimal(XMLSimpleType):
     @value.setter
     def value(self, v):
         self._check_value_type(v)
-        super(XMLSimpleTypeDecimal, type(self)).value.fset(self, v)
+        super(XSDSimpleTypeDecimal, type(self)).value.fset(self, v)
 
 
-class XMLSimpleTypeString(XMLSimpleType):
+class XSDSimpleTypeString(XSDSimpleType):
     _TYPES = [str]
     XSD_TREE = XSDTree(ET.fromstring(
         """
@@ -228,10 +227,10 @@ class XMLSimpleTypeString(XMLSimpleType):
     @value.setter
     def value(self, v):
         self._check_value_type(v)
-        super(XMLSimpleTypeString, type(self)).value.fset(self, v)
+        super(XSDSimpleTypeString, type(self)).value.fset(self, v)
 
 
-class XMLSimpleTypeToken(XMLSimpleTypeString):
+class XSDSimpleTypeToken(XSDSimpleTypeString):
     XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="token" id="token">
@@ -248,12 +247,12 @@ class XMLSimpleTypeToken(XMLSimpleTypeString):
 
     @value.setter
     def value(self, v):
-        super(XMLSimpleTypeToken, type(self)).value.fset(self, v)
+        super(XSDSimpleTypeToken, type(self)).value.fset(self, v)
         v = get_cleaned_token(v)
         self._value = v
 
 
-class XMLSimpleTypeNMTOKEN(XMLSimpleTypeToken):
+class XSDSimpleTypeNMTOKEN(XSDSimpleTypeToken):
     """
     Name Token supports at the moment only:
     [A-Z] | [a-z] | [À-Ö] | [Ø-ö] | [ø-ÿ]
@@ -273,7 +272,7 @@ class XMLSimpleTypeNMTOKEN(XMLSimpleTypeToken):
     _PATTERN = rf"({name_character})+"
 
 
-class XMLSimpleTypeDate(XMLSimpleTypeString):
+class XSDSimpleTypeDate(XSDSimpleTypeString):
     # [-]CCYY-MM-DD[Z|(+|-)hh:mm]
     # https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s07.html
 
@@ -290,21 +289,21 @@ class XMLSimpleTypeDate(XMLSimpleTypeString):
                r'0-5][0-9])?$'
 
 
-xml_simple_type_class_names = ['XMLSimpleTypeInteger', 'XMLSimpleTypeNonNegativeInteger', 'XMLSimpleTypePositiveInteger',
-                               'XMLSimpleTypeDecimal',
-                               'XMLSimpleTypeString', 'XMLSimpleTypeString', 'XMLSimpleTypeToken', 'XMLSimpleTypeNMTOKEN',
-                               'XMLSimpleTypeDate', ]
+xml_simple_type_class_names = ['XSDSimpleTypeInteger', 'XSDSimpleTypeNonNegativeInteger', 'XSDSimpleTypePositiveInteger',
+                               'XSDSimpleTypeDecimal',
+                               'XSDSimpleTypeString', 'XSDSimpleTypeString', 'XSDSimpleTypeToken', 'XSDSimpleTypeNMTOKEN',
+                               'XSDSimpleTypeDate', ]
 """
-Creating all XMLSimpleType classes
+Creating all XSDSimpleType classes
 """
 for simple_type in find_all_xsd_children(tag='simpleType'):
-    xml_element_tree_element = XSDTree(simple_type)
-    class_name = xml_element_tree_element.xml_tree_class_name
-    base_classes = f"({', '.join(get_simple_type_all_base_classes(xml_element_tree_element))}, )"
+    xsd_element_tree_element = XSDTree(simple_type)
+    class_name = xsd_element_tree_element.xsd_tree_class_name
+    base_classes = f"({', '.join(get_simple_type_all_base_classes(xsd_element_tree_element))}, )"
     attributes = """
     {
-    '__doc__': xml_element_tree_element.get_doc(), 
-    'XSD_TREE': xml_element_tree_element
+    '__doc__': xsd_element_tree_element.get_doc(), 
+    'XSD_TREE': xsd_element_tree_element
     }
     """
     exec(f"{class_name} = type('{class_name}', {base_classes}, {attributes})")
