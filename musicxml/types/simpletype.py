@@ -41,7 +41,7 @@ class XSDSimpleType(XSDElement):
             return
         if self._PERMITTED:
             if v not in self._PERMITTED:
-                raise ValueError(f'{self.__class__.__name__}.value {v} must in {self.__class__._PERMITTED}')
+                raise ValueError(f'{self.__class__.__name__}.value {v} must in {self._PERMITTED}')
         elif self._PATTERN:
             restriction = self.XSD_TREE.get_restriction()
             if restriction:

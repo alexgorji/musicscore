@@ -18,3 +18,18 @@ class TestXMLElements(TestCase):
         """
         el = XMLElement(type_=XSDComplexTypeOffset, value=-2, attributes={'sound': 'yes'})
         assert el.to_string() == '<offset sound="yes">-2</offset>'
+        with self.assertRaises(TypeError):
+            XMLElement(type_=XSDComplexTypeOffset, value='wrong', attributes={'sound': 'yes'})
+
+        with self.assertRaises(TypeError):
+            XMLElement(type_=XSDComplexTypeOffset, value=-2, attributes={'sound': 3})
+
+        with self.assertRaises(ValueError):
+            XMLElement(type_=XSDComplexTypeOffset, value=-2, attributes={'sound': 'maybe'})
+
+    def test_element_empty(self):
+        """
+        Test that empty complex type is created properly
+        """
+        el = XMLElement(type_=XSDComplexTypeEmpty)
+        assert el.to_string() == '<empty />'

@@ -3,9 +3,8 @@ import importlib
 from musicxml.util.helperclasses import MusicXmlTestCase
 
 from musicxml.types.simpletype import *
-from musicxml.types.complextype import xsd_complex_type_class_names, XSDComplexType, XSDComplexTypeFingering, \
-    XSDComplexTypeTypedText, XSDComplexTypeCancel, \
-    XSDComplexTypeBeatRepeat, XSDComplexTypePartSymbol, XSDComplexTypeTranspose, XSDComplexTypeOffset
+from musicxml.types.complextype import xsd_complex_type_class_names, XSDComplexType
+from musicxml.types.complextype import *
 from musicxml.xsdattribute import XSDAttribute
 
 
@@ -124,9 +123,9 @@ class TestComplexTypes(MusicXmlTestCase):
         """
         """
         complexType@name=typed-text
-        simpleContent
-            extension@base=xs:string
-                attribute@name=type@type=xs:token
+            simpleContent
+                extension@base=xs:string
+                    attribute@name=type@type=xs:token
         """
         ct = XSDComplexTypeTypedText
         attribute = ct.get_xsd_attributes()[0]
@@ -140,11 +139,9 @@ class TestComplexTypes(MusicXmlTestCase):
         assert not attribute.is_required
         """
         complexType@name=cancel
-        annotation
-            documentation
-        simpleContent
-            extension@base=fifths
-                attribute@name=location@type=cancel-location
+            simpleContent
+                extension@base=fifths
+                    attribute@name=location@type=cancel-location
         """
         ct = XSDComplexTypeCancel
         attribute = ct.get_xsd_attributes()[0]
@@ -162,14 +159,12 @@ class TestComplexTypes(MusicXmlTestCase):
     def test_complex_type_get_attributes_simple_content_attribute_group(self):
         """
         complexType@name=part-symbol
-        annotation
-            documentation
-        simpleContent
-            extension@base=group-symbol-value
-                attribute@name=top-staff@type=staff-number
-                attribute@name=bottom-staff@type=staff-number
-                attributeGroup@ref=position
-                attributeGroup@ref=color
+            simpleContent
+                extension@base=group-symbol-value
+                    attribute@name=top-staff@type=staff-number
+                    attribute@name=bottom-staff@type=staff-number
+                    attributeGroup@ref=position
+                    attributeGroup@ref=color
         """
         ct = XSDComplexTypePartSymbol
         attribute_1 = ct.get_xsd_attributes()[0]
@@ -202,12 +197,12 @@ class TestComplexTypes(MusicXmlTestCase):
 
         """
         complexType@name=beat-repeat
-        annotation
-            documentation
-        group@ref=slash@minOccurs=0
-        attribute@name=type@type=start-stop@use=required
-        attribute@name=slashes@type=xs:positiveInteger
-        attribute@name=use-dots@type=yes-no
+            annotation
+                documentation
+            group@ref=slash@minOccurs=0
+            attribute@name=type@type=start-stop@use=required
+            attribute@name=slashes@type=xs:positiveInteger
+            attribute@name=use-dots@type=yes-no
         """
         ct = XSDComplexTypeBeatRepeat
         attribute_1 = ct.get_xsd_attributes()[0]
@@ -230,11 +225,11 @@ class TestComplexTypes(MusicXmlTestCase):
         """
         """
         complexType@name=transpose
-        annotation
-            documentation
-        group@ref=transpose
-        attribute@name=number@type=staff-number
-        attributeGroup@ref=optional-unique-id
+            annotation
+                documentation
+            group@ref=transpose
+            attribute@name=number@type=staff-number
+            attributeGroup@ref=optional-unique-id
         """
         ct = XSDComplexTypeTranspose
         attribute_1 = ct.get_xsd_attributes()[0]
@@ -243,3 +238,58 @@ class TestComplexTypes(MusicXmlTestCase):
         assert attribute_2.type_ == XSDSimpleTypeID
         assert str(attribute_1) == 'XSDAttribute@name=number@type=staff-number'
         assert str(attribute_2) == 'XSDAttribute@name=id@type=xs:ID'
+
+    def test_complex_type_get_attributes_complexContent(self):
+        """
+        Test that complex type's get_attributes method returns XSDAttribute classes according to:
+        complexContent
+        """
+        """
+        complexType@name=heel-toe
+            complexContent
+                extension@base=empty-placement
+                    attribute@name=substitution@type=yes-no
+                    
+        complexType@name=empty-placement
+            attributeGroup@ref=print-style
+            attributeGroup@ref=placement
+        
+                
+        attributeGroup@name=print-style
+            attributeGroup@ref=position
+            attributeGroup@ref=font
+            attributeGroup@ref=color
+            
+        attributeGroup@name=position
+            attribute@name=default-x@type=tenths
+            attribute@name=default-y@type=tenths
+            attribute@name=relative-x@type=tenths
+            attribute@name=relative-y@type=tenths
+            
+        attributeGroup@name=font
+            attribute@name=font-family@type=font-family
+            attribute@name=font-style@type=font-style
+            attribute@name=font-size@type=font-size
+            attribute@name=font-weight@type=font-weight
+            
+        attributeGroup@name=color
+            attribute@name=color@type=color
+        """
+        ct = XSDComplexTypeMetronomeTuplet
+        """
+            attribute@name=default-x@type=tenths
+            attribute@name=default-y@type=tenths
+            attribute@name=relative-x@type=tenths
+            attribute@name=relative-y@type=tenths
+        """
+        [attribute_1, attribute_2, attribute_3, attribute_4, attribute_5, attribute_6, attribute_7, attribute_8, attribute_9] = \
+            ct.get_xsd_attributes()
+        assert str(attribute_1) == 'XSDAttribute@name=default-x@type=tenths'
+        assert str(attribute_2) == 'XSDAttribute@name=default-y@type=tenths'
+        assert str(attribute_3) == 'XSDAttribute@name=relative-x@type=tenths'
+        assert str(attribute_4) == 'XSDAttribute@name=relative-y@type=tenths'
+        assert str(attribute_5) == 'XSDAttribute@name=font-family@type=font-family'
+        assert str(attribute_6) == 'XSDAttribute@name=font-style@type=font-style'
+        assert str(attribute_7) == 'XSDAttribute@name=font-size@type=font-size'
+        assert str(attribute_8) == 'XSDAttribute@name=font-weight@type=font-weight'
+        assert str(attribute_9) == 'XSDAttribute@name=substitution@type=yes-no'

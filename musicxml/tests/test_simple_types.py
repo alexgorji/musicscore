@@ -573,6 +573,12 @@ class TestSimpleTypes(MusicXmlTestCase):
         with self.assertRaises(TypeError):
             XSDSimpleTypeTenths('10')
 
+    def test_yes_no(self):
+        XSDSimpleTypeYesNo('yes')
+        XSDSimpleTypeYesNo('no')
+        with self.assertRaises(ValueError):
+            XSDSimpleTypeYesNo('maybe')
+
     def test_name(self):
         """
         <xs:simpleType name="Name" id="Name">

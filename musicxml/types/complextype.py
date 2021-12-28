@@ -10,18 +10,19 @@ class XSDComplexType(XSDElement):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    #     self._attributes = self.XSD_TREE.get_attributes()
-    #
-    # def _check_attributes(self, val_dict):
-    #     required_attributes = [attribute for attribute in self.get_xsd_attributes() if attribute.is_required]
-    #     for required_attribute in required_attributes:
-    #         if required_attribute.name not in val_dict:
-    #             raise XSDAttributeRequiredException
-    #
-    #     for key in val_dict:
-    #         if key not in [attribute.name for attribute in self.get_xsd_attributes()]:
-    #             raise XSDWrongAttribute
-    #
+    @classmethod
+    def check_attributes(cls, val_dict):
+        required_attributes = [attribute for attribute in cls.get_xsd_attributes() if attribute.is_required]
+        for required_attribute in required_attributes:
+            if required_attribute.name not in val_dict:
+                raise XSDAttributeRequiredException
+
+        for key in val_dict:
+            if key not in [attribute.name for attribute in cls.get_xsd_attributes()]:
+                raise XSDWrongAttribute
+            attribute = [attribute for attribute in cls.get_xsd_attributes() if attribute.name == key][0]
+            attribute(val_dict[key])
+
     @classmethod
     def get_xsd_attributes(cls):
         output = []
