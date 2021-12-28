@@ -1,19 +1,14 @@
 import importlib
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.types.simpletype import XSDSimpleType, XSDSimpleTypeAboveBelow, XSDSimpleTypeNumberOrNormal, \
-    XSDSimpleTypePositiveIntegerOrEmpty, XSDSimpleTypeNonNegativeDecimal, XSDSimpleTypeDecimal, XSDSimpleTypeInteger, \
-    XSDSimpleTypeNonNegativeInteger, XSDSimpleTypePositiveInteger, XSDSimpleTypeString, XSDSimpleTypeToken, \
-    XSDSimpleTypeNMTOKEN, XSDSimpleTypeDate, XSDSimpleTypeMeasureText, XSDSimpleTypePositiveDecimal, \
-    XSDSimpleTypeBeamLevel, XSDSimpleTypeColor, XSDSimpleTypeCommaSeparatedText, XSDSimpleTypeSmuflAccidentalGlyphName, \
-    XSDSimpleTypeSmuflCodaGlyphName, XSDSimpleTypeSmuflLyricsGlyphName, XSDSimpleTypeSmuflWavyLineGlyphName, \
-    XSDSimpleTypeYyyyMmDd
-from musicxml.types.simpletype import xml_simple_type_class_names
+from musicxml.types.simpletype import XSDSimpleType, xml_simple_type_class_names
+
+from musicxml.types.simpletype import *
 
 
 class TestSimpleTypes(MusicXmlTestCase):
     def test_simple_types_list(self):
         """
-        Test if SIMPLE_TYPES in module musicxml.types.simpletype return all simple types
+        Test if xml_simple_type_class_names in module musicxml.types.simpletype return all simple types
         """
         assert xml_simple_type_class_names == ['XSDSimpleTypeInteger', 'XSDSimpleTypeNonNegativeInteger',
                                                'XSDSimpleTypePositiveInteger', 'XSDSimpleTypeDecimal',
@@ -80,7 +75,7 @@ class TestSimpleTypes(MusicXmlTestCase):
                                                'XSDSimpleTypeStep', 'XSDSimpleTypeSyllabic', 'XSDSimpleTypeTapHand',
                                                'XSDSimpleTypeTremoloMarks', 'XSDSimpleTypeGroupBarlineValue',
                                                'XSDSimpleTypeGroupSymbolValue', 'XSDSimpleTypeMeasureText',
-                                               'XSDSimpleTypeSwingTypeValue']
+                                               'XSDSimpleTypeSwingTypeValue', 'XSDSimpleTypeName', 'XSDSimpleTypeNCName', 'XSDSimpleTypeID']
 
     def test_generated_simple_type_xsd_snippet(self):
         """
@@ -99,12 +94,15 @@ class TestSimpleTypes(MusicXmlTestCase):
 """
         assert XSDSimpleTypeAboveBelow.get_xsd() == expected
 
+    def test_generate_simple_type_is_descendent_of_simple_type(self):
+        assert isinstance(XSDSimpleTypeAboveBelow('above'), XSDSimpleType)
+
     def test_generated_simple_type_doc_string_from_annotation(self):
         """
         Test that the instance of an in module musicxml.types.simpletype generated class has a documentation string
         matching its xsd annotation
         """
-        assert isinstance(XSDSimpleTypeAboveBelow, type(XSDSimpleType))
+
         assert XSDSimpleTypeAboveBelow.__doc__ == 'The above-below type is used to indicate whether one element appears ' \
                                                   'above or below another element.'
 
@@ -114,8 +112,8 @@ class TestSimpleTypes(MusicXmlTestCase):
         """
         for simple_type in self.all_simple_type_xsd_elements:
             module = importlib.import_module('musicxml.types.simpletype')
-            simple_type_class = getattr(module, simple_type.xsd_tree_class_name)
-            assert simple_type.xsd_tree_class_name == simple_type_class.__name__
+            simple_type_class = getattr(module, simple_type.xsd_element_class_name)
+            assert simple_type.xsd_element_class_name == simple_type_class.__name__
 
     def test_base_classes_are_implemented(self):
         """
@@ -123,7 +121,7 @@ class TestSimpleTypes(MusicXmlTestCase):
         """
         for simple_type in self.all_simple_type_xsd_elements:
             module = importlib.import_module('musicxml.types.simpletype')
-            simpletype_class = getattr(module, simple_type.xsd_tree_class_name)
+            simpletype_class = getattr(module, simple_type.xsd_element_class_name)
             mro = simpletype_class.__mro__
             for base_class_name in simple_type.xsd_tree_base_class_names:
                 base_class = getattr(module, base_class_name)
@@ -568,3 +566,39 @@ class TestSimpleTypes(MusicXmlTestCase):
             XSDSimpleTypeYyyyMmDd('19822123')
         with self.assertRaises(ValueError):
             XSDSimpleTypeYyyyMmDd('1982-11-23+07:00')
+
+    def test_tenths(self):
+        XSDSimpleTypeDecimal(10)
+        XSDSimpleTypeTenths(10)
+        with self.assertRaises(TypeError):
+            XSDSimpleTypeTenths('10')
+
+    def test_name(self):
+        """
+        <xs:simpleType name="Name" id="Name">
+            <xs:restriction base="xs:token">
+                <xs:pattern value="\i\c*"/>
+            </xs:restriction>
+        </xs:simpleType>
+        """
+        XSDSimpleTypeName('_1950-10-04_10-00')
+
+    def test_nc_name(self):
+        """
+        <xs:simpleType name="NCName" id="NCName">
+            <xs:restriction base="xs:Name">
+                <xs:pattern value="[\i-[:]][\c-[:]]*"/>
+            </xs:restriction>
+<       /xs:simpleType>
+        """
+        XSDSimpleTypeNCName('_1950-10-04_10-00')
+
+    def test_id(self):
+        """
+        <xs:simpleType name="ID" id="ID">
+            <xs:restriction base="xs:NCName"/>
+        </xs:simpleType>
+        """
+        XSDSimpleTypeID('_1950-10-04_10-00')
+        with self.assertRaises(ValueError):
+            XSDSimpleTypeID('_1950-10:04_10-00')

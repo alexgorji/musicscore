@@ -1,6 +1,6 @@
 import re
 
-from musicxml.util.helperfunctions import get_simple_type_all_base_classes, find_all_xsd_children, get_cleaned_token
+from musicxml.util.core import get_simple_type_all_base_classes, find_all_xsd_children, get_cleaned_token
 from musicxml.util.helprervariables import name_character
 from musicxml.xsdtree import XSDTree, XSDElement
 import xml.etree.ElementTree as ET
@@ -98,7 +98,7 @@ class XSDSimpleType(XSDElement):
 
     def _populate_forced_permitted(self):
         union = self.XSD_TREE.get_union()
-        if union and union.get_children and union.get_children()[0].tag == 'simpleType':
+        if union and union.get_children() and union.get_children()[0].tag == 'simpleType':
             intern_simple_type = union.get_children()[0]
             enumerations = [child for child in intern_simple_type.get_restriction().get_children() if child.tag
                             == 'enumeration']
@@ -106,7 +106,7 @@ class XSDSimpleType(XSDElement):
 
     def _populate_pattern(self):
         restriction = self.XSD_TREE.get_restriction()
-        if restriction and restriction.get_children and restriction.get_children()[0].tag == 'pattern':
+        if restriction and restriction.get_children() and restriction.get_children()[0].tag == 'pattern':
             pattern = rf"{restriction.get_children()[0].get_attributes()['value']}"
             pattern = pattern.replace('\c', name_character)
             self._PATTERN = pattern
@@ -296,14 +296,27 @@ xml_simple_type_class_names = ['XSDSimpleTypeInteger', 'XSDSimpleTypeNonNegative
 """
 Creating all XSDSimpleType classes
 """
-for simple_type in find_all_xsd_children(tag='simpleType'):
-    xsd_element_tree_element = XSDTree(simple_type)
-    class_name = xsd_element_tree_element.xsd_tree_class_name
-    base_classes = f"({', '.join(get_simple_type_all_base_classes(xsd_element_tree_element))}, )"
+for simple_type in find_all_xsd_children(tag='simpleType', root='1'):
+    xsd_tree = XSDTree(simple_type)
+    class_name = xsd_tree.xsd_element_class_name
+    base_classes = f"({', '.join(get_simple_type_all_base_classes(xsd_tree))}, )"
     attributes = """
     {
-    '__doc__': xsd_element_tree_element.get_doc(), 
-    'XSD_TREE': xsd_element_tree_element
+    '__doc__': xsd_tree.get_doc(), 
+    'XSD_TREE': xsd_tree
+    }
+    """
+    exec(f"{class_name} = type('{class_name}', {base_classes}, {attributes})")
+    xml_simple_type_class_names.append(class_name)
+
+for simple_type in find_all_xsd_children(tag='simpleType', root='2'):
+    xsd_tree = XSDTree(simple_type)
+    class_name = xsd_tree.xsd_element_class_name
+    base_classes = f"({', '.join(get_simple_type_all_base_classes(xsd_tree))}, )"
+    attributes = """
+    {
+    '__doc__': xsd_tree.get_doc(),
+    'XSD_TREE': xsd_tree
     }
     """
     exec(f"{class_name} = type('{class_name}', {base_classes}, {attributes})")

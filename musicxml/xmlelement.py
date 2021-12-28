@@ -22,9 +22,6 @@ class XMLElement:
 
         self._create_xml_element()
 
-    def _check_attributes(self, val):
-        return True
-
     def _create_xml_element(self):
         self._xml_element = ET.Element(self.type_.XSD_TREE.name, self.attributes)
         if self.value:
@@ -36,7 +33,7 @@ class XMLElement:
         elif not isinstance(val, dict):
             raise TypeError
         else:
-            self._check_attributes(val)
+            self.type_.check_attributes(val)
             self._attributes = val
 
     def _set_type(self, val):

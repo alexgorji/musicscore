@@ -48,22 +48,22 @@ class TestXSDTree(MusicXmlTestCase):
 
         assert isinstance(self.above_below_simple_type_xsd_element.xsd_element_tree_element, ET.Element)
 
-    def test_xsd_element_tag(self):
+    def test_xml_element_tag(self):
         """
         Test that the tag attribute of an XSDTree element represents th tag name in musicxml xsd structure.
         """
         assert self.above_below_simple_type_xsd_element.tag == 'simpleType'
 
-    def test_music_xsd_class_name(self):
+    def test_music_xml_class_name(self):
         """
-        Test that an XSDTree element has a xsd_tree_class_name attribute. This class name is generated automatically and is used as the
+        Test that an XSDTree element has a xsd_element_class_name attribute. This class name is generated automatically and is used as the
         name of the XSDElement to be created.
         """
-        assert self.above_below_simple_type_xsd_element.xsd_tree_class_name == 'XSDSimpleTypeAboveBelow'
+        assert self.above_below_simple_type_xsd_element.xsd_element_class_name == 'XSDSimpleTypeAboveBelow'
 
     def test_get_doc(self):
         """
-        Test get_doc methode which returns the doc string to be added to the XSD class.
+        Test get_doc methode which returns the doc string to be added to the XML class.
         """
         assert self.above_below_simple_type_xsd_element.get_doc() == 'The above-below type is used to indicate whether one element appears above or below another element.'
 
@@ -265,3 +265,9 @@ class TestXSDTree(MusicXmlTestCase):
         assert self.yes_no_number_simple_type_xsd_element.is_complex_type is False
         assert self.above_below_simple_type_xsd_element.is_complex_type is False
         assert self.complex_type_xsd_element.is_complex_type is True
+
+    def test_attribute_group_ref(self):
+        """
+        Test if an attributeGroup ref will be treated as a name
+        """
+        pass

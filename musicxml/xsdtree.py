@@ -3,7 +3,7 @@ import re
 import xml.etree.ElementTree as ET
 from contextlib import redirect_stdout
 
-from musicxml.util.helperfunctions import cap_first
+from musicxml.util.core import cap_first, convert_to_xsd_class_name
 from tree.tree import TreePresentation
 
 """
@@ -38,7 +38,12 @@ class XSDTree(TreePresentation):
         tag = cap_first(self.tag)
 
         name = 'XSD' + f'{tag}'
-        name += ''.join([cap_first(partial) for partial in self.name.split('-')])
+        if self.name:
+            name += ''.join([cap_first(partial) for partial in self.name.split('-')])
+        elif self.get_attributes().get('ref'):
+            name += ''.join([cap_first(partial) for partial in self.get_attributes().get('ref').split('-')])
+        else:
+            raise AttributeError
         return name
 
     def _populate_children(self):
@@ -50,35 +55,20 @@ class XSDTree(TreePresentation):
     @property
     def xsd_tree_base_class_names(self):
 
-        def convert_name(name, type_='simple_type'):
-            try:
-                name = name.split(':')[1]
-            except IndexError:
-                pass
-            name = cap_first(name)
-            name = ''.join([cap_first(partial) for partial in name.split('-')])
-            if type_ == 'simple_type':
-                name = 'XSDSimpleType' + name
-            elif type_ == 'complex_type':
-                name = 'XSDComplexType' + name
-            else:
-                raise ValueError
-            return name
-
         if self.is_simple_type:
             # simple type
             if self.get_restriction():
                 base = self.get_restriction().get_attributes()['base']
-                return [convert_name(base)]
+                return [convert_to_xsd_class_name(base)]
             elif self.get_union_member_types():
-                return [convert_name(type_) for type_ in self.get_union_member_types()]
+                return [convert_to_xsd_class_name(type_) for type_ in self.get_union_member_types()]
             else:
                 raise AttributeError(f"Simple type {self} has no restriction with base attribute or union with memberTypes.")
         elif self.is_complex_type:
             # complex type
             if self.get_simple_content_extension():
                 base = self.get_simple_content_extension().get_attributes()['base']
-                return [convert_name(base, type_='simple_type')]
+                return [convert_to_xsd_class_name(base, type_='simple_type')]
             else:
                 return []
                 # raise AttributeError(f"Complex type {self} has no simple content extension with base attribute.")
@@ -138,7 +128,7 @@ class XSDTree(TreePresentation):
         self._xsd_element_tree_element = value
 
     @property
-    def xsd_tree_class_name(self):
+    def xsd_element_class_name(self):
         if self._xml_tree_class_name is None:
             self._xml_tree_class_name = self._get_xsd_tree_class_name()
         return self._xml_tree_class_name
@@ -152,6 +142,11 @@ class XSDTree(TreePresentation):
         if not self._children:
             self._populate_children()
         return self._children
+
+    def get_complex_content(self):
+        for node in self.get_children():
+            if node.tag == 'complexContent':
+                return node
 
     def get_doc(self):
         for node in self.traverse():

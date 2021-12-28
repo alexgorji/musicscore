@@ -22,4 +22,5 @@ class MusicXmlTestCase(TestCase):
         self.yes_no_number_simple_type_xsd_element = XSDTree(self.root.find(f"{ns}simpleType["
                                                                             f"@name='yes-no-number']"))
         self.complex_type_xsd_element = XSDTree(self.root.find(f"{ns}complexType[@name='fingering']"))
+        self.attribute_group_position = XSDTree(self.root.find(f"{ns}attributeGroup[@name='position']"))
         super().setUp()

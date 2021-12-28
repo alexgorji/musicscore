@@ -2,7 +2,7 @@ import re
 from unittest import TestCase
 
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.util.helperfunctions import get_simple_type_all_base_classes, get_cleaned_token
+from musicxml.util.core import get_simple_type_all_base_classes, get_cleaned_token
 from musicxml.util.helprervariables import name_character
 
 

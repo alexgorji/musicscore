@@ -1,9 +1,12 @@
 import importlib
 
-from musicxml.types.complextype import xsd_complex_type_class_names
 from musicxml.util.helperclasses import MusicXmlTestCase
 
-from musicxml.types.complextype import XSDComplexType, XSDComplexTypeFingering
+from musicxml.types.simpletype import *
+from musicxml.types.complextype import xsd_complex_type_class_names, XSDComplexType, XSDComplexTypeFingering, \
+    XSDComplexTypeTypedText, XSDComplexTypeCancel, \
+    XSDComplexTypeBeatRepeat, XSDComplexTypePartSymbol, XSDComplexTypeTranspose, XSDComplexTypeOffset
+from musicxml.xsdattribute import XSDAttribute
 
 
 class TestComplexTypes(MusicXmlTestCase):
@@ -92,16 +95,17 @@ class TestComplexTypes(MusicXmlTestCase):
         """
         Test that the instance of an in module musicxml.types.complextype generated class can show corresponding xsd
         """
-        print(XSDComplexTypeFingering.get_xsd())
         expected = """<xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fingering">\n\t\t<xs:annotation>\n\t\t\t<xs:documentation>Fingering is typically indicated 1,2,3,4,5. Multiple fingerings may be given, typically to substitute fingerings in the middle of a note. The substitution and alternate values are "no" if the attribute is not present. For guitar and other fretted instruments, the fingering element represents the fretting finger; the pluck element represents the plucking finger.</xs:documentation>\n\t\t</xs:annotation>\n\t\t<xs:simpleContent>\n\t\t\t<xs:extension base="xs:string">\n\t\t\t\t<xs:attribute name="substitution" type="yes-no" />\n\t\t\t\t<xs:attribute name="alternate" type="yes-no" />\n\t\t\t\t<xs:attributeGroup ref="print-style" />\n\t\t\t\t<xs:attributeGroup ref="placement" />\n\t\t\t</xs:extension>\n\t\t</xs:simpleContent>\n\t</xs:complexType>\n"""
         assert XSDComplexTypeFingering.get_xsd() == expected
 
-    def test_generated_simple_type_doc_string_from_annotation(self):
+    def test_generate_complex_type_is_descendent_of_complex_type(self):
+        assert isinstance(XSDComplexTypeFingering('2'), XSDComplexType)
+
+    def test_generated_complex_type_doc_string_from_annotation(self):
         """
         Test that the instance of an in module musicxml.types.complextype generated class has a documentation string
         matching its xsd annotation
         """
-        assert isinstance(XSDComplexTypeFingering, type(XSDComplexType))
         assert XSDComplexTypeFingering.__doc__ == 'Fingering is typically indicated 1,2,3,4,5. Multiple fingerings may be given, typically to substitute fingerings in the middle of a note. The substitution and alternate values are "no" if the attribute is not present. For guitar and other fretted instruments, the fingering element represents the fretting finger; the pluck element represents the plucking finger.'
 
     def test_complex_type_xsd_is_converted_to_classes(self):
@@ -110,5 +114,132 @@ class TestComplexTypes(MusicXmlTestCase):
         """
         for complex_type in self.all_complex_type_xsd_elements:
             module = importlib.import_module('musicxml.types.complextype')
-            complex_type_class = getattr(module, complex_type.xsd_tree_class_name)
-            assert complex_type.xsd_tree_class_name == complex_type_class.__name__
+            complex_type_class = getattr(module, complex_type.xsd_element_class_name)
+            assert complex_type.xsd_element_class_name == complex_type_class.__name__
+
+    def test_complex_type_get_attributes_simple_content(self):
+        """
+        Test that complex type's get_attributes method returns XSDAttribute classes according to:
+        simpleContext's extention
+        """
+        """
+        complexType@name=typed-text
+        simpleContent
+            extension@base=xs:string
+                attribute@name=type@type=xs:token
+        """
+        ct = XSDComplexTypeTypedText
+        attribute = ct.get_xsd_attributes()[0]
+        assert isinstance(attribute, XSDAttribute)
+        assert attribute.name == 'type'
+        assert attribute.type_ == XSDSimpleTypeToken
+        attribute('hello')
+        with self.assertRaises(TypeError):
+            attribute(2)
+        assert str(attribute) == 'XSDAttribute@name=type@type=xs:token'
+        assert not attribute.is_required
+        """
+        complexType@name=cancel
+        annotation
+            documentation
+        simpleContent
+            extension@base=fifths
+                attribute@name=location@type=cancel-location
+        """
+        ct = XSDComplexTypeCancel
+        attribute = ct.get_xsd_attributes()[0]
+        assert isinstance(attribute, XSDAttribute)
+        assert attribute.name == 'location'
+        assert attribute.type_ == XSDSimpleTypeCancelLocation
+        attribute('left')
+        with self.assertRaises(TypeError):
+            attribute(2)
+        with self.assertRaises(ValueError):
+            attribute('something')
+        assert not attribute.is_required
+        assert str(attribute) == 'XSDAttribute@name=location@type=cancel-location'
+
+    def test_complex_type_get_attributes_simple_content_attribute_group(self):
+        """
+        complexType@name=part-symbol
+        annotation
+            documentation
+        simpleContent
+            extension@base=group-symbol-value
+                attribute@name=top-staff@type=staff-number
+                attribute@name=bottom-staff@type=staff-number
+                attributeGroup@ref=position
+                attributeGroup@ref=color
+        """
+        ct = XSDComplexTypePartSymbol
+        attribute_1 = ct.get_xsd_attributes()[0]
+        attribute_2 = ct.get_xsd_attributes()[1]
+        attribute_3 = ct.get_xsd_attributes()[2]
+        attribute_4 = ct.get_xsd_attributes()[3]
+        attribute_5 = ct.get_xsd_attributes()[4]
+        attribute_6 = ct.get_xsd_attributes()[5]
+        attribute_7 = ct.get_xsd_attributes()[6]
+        assert attribute_1.type_ == XSDSimpleTypeStaffNumber
+        assert attribute_2.type_ == XSDSimpleTypeStaffNumber
+        assert attribute_3.type_ == XSDSimpleTypeTenths
+        assert attribute_4.type_ == XSDSimpleTypeTenths
+        assert attribute_5.type_ == XSDSimpleTypeTenths
+        assert attribute_6.type_ == XSDSimpleTypeTenths
+        assert attribute_7.type_ == XSDSimpleTypeColor
+        assert str(attribute_1) == 'XSDAttribute@name=top-staff@type=staff-number'
+        assert str(attribute_2) == 'XSDAttribute@name=bottom-staff@type=staff-number'
+        assert str(attribute_3) == 'XSDAttribute@name=default-x@type=tenths'
+        assert str(attribute_4) == 'XSDAttribute@name=default-y@type=tenths'
+        assert str(attribute_5) == 'XSDAttribute@name=relative-x@type=tenths'
+        assert str(attribute_6) == 'XSDAttribute@name=relative-y@type=tenths'
+        assert str(attribute_7) == 'XSDAttribute@name=color@type=color'
+
+    def test_complex_type_get_attributes_direct_children(self):
+        """
+        Test that complex type's get_attributes method returns XSDAttribute classes according to:
+        direct attributes
+        """
+
+        """
+        complexType@name=beat-repeat
+        annotation
+            documentation
+        group@ref=slash@minOccurs=0
+        attribute@name=type@type=start-stop@use=required
+        attribute@name=slashes@type=xs:positiveInteger
+        attribute@name=use-dots@type=yes-no
+        """
+        ct = XSDComplexTypeBeatRepeat
+        attribute_1 = ct.get_xsd_attributes()[0]
+        attribute_2 = ct.get_xsd_attributes()[1]
+        attribute_3 = ct.get_xsd_attributes()[2]
+        assert attribute_1.type_ == XSDSimpleTypeStartStop
+        assert attribute_2.type_ == XSDSimpleTypePositiveInteger
+        assert attribute_3.type_ == XSDSimpleTypeYesNo
+        assert attribute_1.is_required
+        assert not attribute_2.is_required
+        assert not attribute_3.is_required
+        assert str(attribute_1) == 'XSDAttribute@name=type@type=start-stop@use=required'
+        assert str(attribute_2) == 'XSDAttribute@name=slashes@type=xs:positiveInteger'
+        assert str(attribute_3) == 'XSDAttribute@name=use-dots@type=yes-no'
+
+    def test_complex_type_get_attributes_direct_children_attribute_groups(self):
+        """
+        Test that complex type's get_attributes method returns XSDAttribute classes according to:
+        direct attributes and attribute groups
+        """
+        """
+        complexType@name=transpose
+        annotation
+            documentation
+        group@ref=transpose
+        attribute@name=number@type=staff-number
+        attributeGroup@ref=optional-unique-id
+        """
+        ct = XSDComplexTypeTranspose
+        attribute_1 = ct.get_xsd_attributes()[0]
+        attribute_2 = ct.get_xsd_attributes()[1]
+        assert attribute_1.type_ == XSDSimpleTypeStaffNumber
+        assert attribute_2.type_ == XSDSimpleTypeID
+        assert str(attribute_1) == 'XSDAttribute@name=number@type=staff-number'
+        assert str(attribute_2) == 'XSDAttribute@name=id@type=xs:ID'
