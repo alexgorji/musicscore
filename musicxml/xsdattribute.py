@@ -51,12 +51,21 @@ class XSDAttribute:
         attrs = self.xsd_tree.get_attributes()
         return f"XSDAttribute{''.join([f'@{attribute}={self.xsd_tree.get_attributes()[attribute]}' for attribute in attrs])}"
 
+    def __repr__(self):
+        return self.__str__()
+
 
 class XSDAttributeGroup(XSDElement):
 
     @classmethod
-    def get_attributes(cls):
-        return [XSDAttribute(child) for child in cls.XSD_TREE.get_children() if child.tag == 'attribute']
+    def get_xsd_attributes(cls):
+        output = []
+        for child in cls.XSD_TREE.get_children():
+            if child.tag == 'attribute':
+                output.append(XSDAttribute(child))
+            if child.tag == 'attributeGroup':
+                output.extend(eval(child.xsd_element_class_name).get_xsd_attributes())
+        return output
 
 
 """

@@ -148,6 +148,10 @@ class XSDTree(TreePresentation):
             if node.tag == 'complexContent':
                 return node
 
+    def get_complex_content_extension(self):
+        if self.get_complex_content().get_children()[0].tag == 'extension':
+            return self.get_complex_content().get_children()[0]
+
     def get_doc(self):
         for node in self.traverse():
             if node.tag == 'documentation':

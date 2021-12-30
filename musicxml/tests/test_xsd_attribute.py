@@ -62,13 +62,46 @@ class TestXSDAttributeGroup(MusicXmlTestCase):
         attribute@name=relative-x@type=tenths
         attribute@name=relative-y@type=tenths
         """
-        [attribute_1, attribute_2, attribute_3, attribute_4] = XSDAttributeGroupPosition.get_attributes()
+        [attribute_1, attribute_2, attribute_3, attribute_4] = XSDAttributeGroupPosition.get_xsd_attributes()
         assert str(attribute_1) == 'XSDAttribute@name=default-x@type=tenths'
         assert str(attribute_2) == 'XSDAttribute@name=default-y@type=tenths'
         assert str(attribute_3) == 'XSDAttribute@name=relative-x@type=tenths'
         assert str(attribute_4) == 'XSDAttribute@name=relative-y@type=tenths'
 
-        for attribute in XSDAttributeGroupPosition.get_attributes():
+        for attribute in XSDAttributeGroupPosition.get_xsd_attributes():
             assert isinstance(attribute, XSDAttribute)
             assert isinstance(attribute(10), XSDSimpleTypeTenths)
 
+    def test_print_style_attribute_group(self):
+        """
+        attributeGroup@name=print-style
+            attributeGroup@ref=position
+            attributeGroup@ref=font
+            attributeGroup@ref=color
+
+        attributeGroup@name=position
+            attribute@name=default-x@type=tenths
+            attribute@name=default-y@type=tenths
+            attribute@name=relative-x@type=tenths
+            attribute@name=relative-y@type=tenths
+
+        attributeGroup@name=font
+            attribute@name=font-family@type=font-family
+            attribute@name=font-style@type=font-style
+            attribute@name=font-size@type=font-size
+            attribute@name=font-weight@type=font-weight
+
+        attributeGroup@name=color
+            attribute@name=color@type=color
+        """
+        [attribute_1, attribute_2, attribute_3, attribute_4, attribute_5, attribute_6, attribute_7, attribute_8, attribute_9] = \
+            XSDAttributeGroupPrintStyle.get_xsd_attributes()
+        assert str(attribute_1) == 'XSDAttribute@name=default-x@type=tenths'
+        assert str(attribute_2) == 'XSDAttribute@name=default-y@type=tenths'
+        assert str(attribute_3) == 'XSDAttribute@name=relative-x@type=tenths'
+        assert str(attribute_4) == 'XSDAttribute@name=relative-y@type=tenths'
+        assert str(attribute_5) == 'XSDAttribute@name=font-family@type=font-family'
+        assert str(attribute_6) == 'XSDAttribute@name=font-style@type=font-style'
+        assert str(attribute_7) == 'XSDAttribute@name=font-size@type=font-size'
+        assert str(attribute_8) == 'XSDAttribute@name=font-weight@type=font-weight'
+        assert str(attribute_9) == 'XSDAttribute@name=color@type=color'

@@ -1,4 +1,4 @@
-from musicxml.util.core import find_all_xsd_children, get_complex_type_all_base_classes
+from musicxml.util.core import find_all_xsd_children, get_complex_type_all_base_classes, convert_to_xsd_class_name
 from musicxml.xsdattribute import XSDAttribute
 from musicxml.xsdtree import XSDTree, XSDElement
 from musicxml.exceptions import XSDAttributeRequiredException, XSDWrongAttribute
@@ -31,15 +31,25 @@ class XSDComplexType(XSDElement):
                 if child.tag == 'attribute':
                     output.append(XSDAttribute(child))
                 elif child.tag == 'attributeGroup':
-                    output.extend(eval(child.xsd_element_class_name).get_attributes())
+                    output.extend(eval(child.xsd_element_class_name).get_xsd_attributes())
         elif cls.XSD_TREE.get_complex_content():
-            raise NotImplementedError
+            complex_content_extension = cls.XSD_TREE.get_complex_content_extension()
+            complex_type_extension_base_class_name = convert_to_xsd_class_name(complex_content_extension.get_attributes()['base'],
+                                                                               'complex_type')
+            extension_base = eval(complex_type_extension_base_class_name)
+            output.extend(extension_base.get_xsd_attributes())
+            for child in complex_content_extension.get_children():
+                if child.tag == 'attribute':
+                    output.append(XSDAttribute(child))
+                elif child.tag == 'attributeGroup':
+                    output.extend(eval(child.xsd_element_class_name).get_xsd_attributes())
+            return output
         else:
             for child in cls.XSD_TREE.get_children():
                 if child.tag == 'attribute':
                     output.append(XSDAttribute(child))
                 elif child.tag == 'attributeGroup':
-                    output.extend(eval(child.xsd_element_class_name).get_attributes())
+                    output.extend(eval(child.xsd_element_class_name).get_xsd_attributes())
         return output
 
 
