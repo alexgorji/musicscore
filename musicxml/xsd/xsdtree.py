@@ -4,14 +4,14 @@ import xml.etree.ElementTree as ET
 from contextlib import redirect_stdout
 
 from musicxml.util.core import cap_first, convert_to_xsd_class_name
-from tree.tree import TreePresentation
+from tree.tree import Tree
 
 """
 XSD = XML Schema Definition
 """
 
 
-class XSDTree(TreePresentation):
+class XSDTree(Tree):
     """
     XSDTree gets a xml.etree.ElementTree.Element by initiation as its xsd_element_tree_element property and
     prepares all needed information for generating a XSDElement class (XSDElement can be XSDSimpleType, XSDComplexType, XMLGroup,
@@ -25,8 +25,10 @@ class XSDTree(TreePresentation):
         self._xsd_element_tree_element = None
         self._xml_tree_class_name = None
         self._parent = parent
+        self._xsd_indicator = None
 
         self.xsd_element_tree_element = xsd_element_tree_element
+        self._set_xsd_indicator()
 
     # ------------------
     # private properties
@@ -49,6 +51,15 @@ class XSDTree(TreePresentation):
     def _populate_children(self):
         self._children = [XSDTree(node, parent=self) for node in
                           self.xsd_element_tree_element.findall('./')]
+
+    def _set_xsd_indicator(self):
+        for child in self.get_children():
+            if child.tag == 'sequence':
+                self._xsd_indicator = XSDSequence(child)
+                break
+            if child.tag == 'choice':
+                self._xsd_indicator = XSDChoice(child)
+                break
 
     # ------------------
     # public properties
@@ -188,6 +199,9 @@ class XSDTree(TreePresentation):
         output += '\n'
         return output
 
+    def get_xsd_indicator(self):
+        return self._xsd_indicator
+
     # ------------------
     # magic methods
 
@@ -202,6 +216,49 @@ class XSDTree(TreePresentation):
 
     def __str__(self):
         return f"{self.__class__.__name__} {self.compact_repr}"
+
+
+class XSDSequence:
+    def __init__(self, xsd_tree):
+        self._xsd_tree = None
+        self.xsd_tree = xsd_tree
+
+    @property
+    def _element_names_order(self):
+        return [element.name for element in self.xsd_tree.get_children()]
+
+    @property
+    def xsd_tree(self):
+        return self._xsd_tree
+
+    @xsd_tree.setter
+    def xsd_tree(self, value):
+        if not isinstance(value, XSDTree):
+            raise TypeError
+        if value.tag != 'sequence':
+            raise ValueError
+        self._xsd_tree = value
+
+    def order_elements(self, elements):
+        return elements
+
+
+class XSDChoice:
+    def __init__(self, xsd_tree):
+        self._xsd_tree = None
+        self.xsd_tree = xsd_tree
+
+    @property
+    def xsd_tree(self):
+        return self._xsd_tree
+
+    @xsd_tree.setter
+    def xsd_tree(self, value):
+        if not isinstance(value, XSDTree):
+            raise TypeError
+        if value.tag != 'choice':
+            raise ValueError
+        self._xsd_tree = value
 
 
 class XSDElement:

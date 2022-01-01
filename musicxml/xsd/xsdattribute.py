@@ -1,6 +1,6 @@
-from musicxml.types.simpletype import *
 from musicxml.util.core import convert_to_xsd_class_name, find_all_xsd_children
-from musicxml.xsdtree import XSDTree, XSDElement
+from musicxml.xsd.xsdtree import XSDTree, XSDElement
+from musicxml.xsd.xsdsimpletype import *
 
 
 class XSDAttribute:

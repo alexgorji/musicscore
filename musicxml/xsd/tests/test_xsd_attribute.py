@@ -1,13 +1,12 @@
 from unittest import TestCase
 
-from musicxml.types.simpletype import *
-from musicxml.xsdattribute import XSDAttribute
-from musicxml.xsdtree import XSDTree
+from musicxml.xsd.xsdsimpletype import *
+from musicxml.xsd.xsdattribute import XSDAttribute, xml_attribute_group_class_names
+from musicxml.xsd.xsdtree import XSDTree
 from xml.etree import ElementTree as ET
 
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.xsdattribute import xml_attribute_group_class_names
-from musicxml.xsdattribute import *
+from musicxml.xsd.xsdattribute import *
 
 
 class TestXSDAttribute(TestCase):

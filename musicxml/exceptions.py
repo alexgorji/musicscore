@@ -8,3 +8,19 @@ class XSDAttributeRequiredException(XSDException):
 
 class XSDWrongAttribute(XSDAttributeRequiredException):
     pass
+
+
+class XMLElementException(Exception):
+    pass
+
+
+class XMLElementWrongChildType(XMLElementException):
+    pass
+
+
+class XMLElementChildrenRequired(XMLElementException):
+    pass
+
+
+class XMLElementValueRequiredError(XMLElementException):
+    pass

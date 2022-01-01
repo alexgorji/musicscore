@@ -1,7 +1,7 @@
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 
 
-class TreePresentation(ABC):
+class Tree(ABC):
     @property
     def is_leaf(self):
         if not self.get_children():

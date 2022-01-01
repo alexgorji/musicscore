@@ -1,12 +1,13 @@
 from musicxml.util.core import find_all_xsd_children, get_complex_type_all_base_classes, convert_to_xsd_class_name
-from musicxml.xsdattribute import XSDAttribute
-from musicxml.xsdtree import XSDTree, XSDElement
+from musicxml.xsd.xsdattribute import XSDAttribute
+from musicxml.xsd.xsdtree import XSDTree, XSDElement
 from musicxml.exceptions import XSDAttributeRequiredException, XSDWrongAttribute
-from musicxml.types.simpletype import *
-from musicxml.xsdattribute import *
+from musicxml.xsd.xsdsimpletype import *
+from musicxml.xsd.xsdattribute import *
 
 
 class XSDComplexType(XSDElement):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -51,6 +52,10 @@ class XSDComplexType(XSDElement):
                 elif child.tag == 'attributeGroup':
                     output.extend(eval(child.xsd_element_class_name).get_xsd_attributes())
         return output
+
+    @classmethod
+    def get_xsd_indicator(cls):
+        return cls.XSD_TREE.get_xsd_indicator()
 
 
 xsd_complex_type_class_names = []

@@ -1,8 +1,8 @@
 import importlib
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.types.simpletype import XSDSimpleType, xml_simple_type_class_names
+from musicxml.xsd.xsdsimpletype import XSDSimpleType, xml_simple_type_class_names
 
-from musicxml.types.simpletype import *
+from musicxml.xsd.xsdsimpletype import *
 
 
 class TestSimpleTypes(MusicXmlTestCase):
@@ -111,7 +111,7 @@ class TestSimpleTypes(MusicXmlTestCase):
         Test that all XSDSimpleType classes are generated
         """
         for simple_type in self.all_simple_type_xsd_elements:
-            module = importlib.import_module('musicxml.types.simpletype')
+            module = importlib.import_module('musicxml.xsd.xsdsimpletype')
             simple_type_class = getattr(module, simple_type.xsd_element_class_name)
             assert simple_type.xsd_element_class_name == simple_type_class.__name__
 
@@ -120,7 +120,7 @@ class TestSimpleTypes(MusicXmlTestCase):
         Test that all needed base classes are actually inherited by all XSDSimpleType classes
         """
         for simple_type in self.all_simple_type_xsd_elements:
-            module = importlib.import_module('musicxml.types.simpletype')
+            module = importlib.import_module('musicxml.xsd.xsdsimpletype')
             simpletype_class = getattr(module, simple_type.xsd_element_class_name)
             mro = simpletype_class.__mro__
             for base_class_name in simple_type.xsd_tree_base_class_names:

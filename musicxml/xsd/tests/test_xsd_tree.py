@@ -2,8 +2,9 @@ import xml.etree.ElementTree as ET
 from contextlib import redirect_stdout
 from pathlib import Path
 
+from musicxml.util.core import ns
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.xsdtree import XSDTree
+from musicxml.xsd.xsdtree import XSDTree, XSDSequence, XSDChoice
 
 
 class TestXSDTree(MusicXmlTestCase):
@@ -266,8 +267,13 @@ class TestXSDTree(MusicXmlTestCase):
         assert self.above_below_simple_type_xsd_element.is_complex_type is False
         assert self.complex_type_xsd_element.is_complex_type is True
 
-    def test_attribute_group_ref(self):
+    def test_xsd_tree_get_indicator(self):
         """
-        Test if an attributeGroup ref will be treated as a name
+        Test if complex type's method get_xsd_indicator returns XSDSequence, XSDChoice or None
         """
-        pass
+        xsd_tree = XSDTree(self.root.find(f"{ns}complexType["f"@name='empty']"))
+        assert xsd_tree.get_xsd_indicator() is None
+        xsd_tree = XSDTree(self.root.find(f"{ns}complexType["f"@name='midi-instrument']"))
+        assert isinstance(xsd_tree.get_xsd_indicator(), XSDSequence)
+        xsd_tree = XSDTree(self.root.find(f"{ns}complexType["f"@name='dynamics']"))
+        assert isinstance(xsd_tree.get_xsd_indicator(), XSDChoice)

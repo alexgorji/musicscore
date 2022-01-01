@@ -2,17 +2,16 @@ from pathlib import Path
 
 import xml.etree.ElementTree as ET
 
-xsd_path = Path(__file__).parent.parent / 'musicxml_4_0.xsd'
-with open(xsd_path) as file:
+xsd_path_1 = Path(__file__).parent.parent / 'xsd' / 'musicxml_4_0.xsd'
+with open(xsd_path_1) as file:
     xsd_tree = ET.parse(file)
 
 ns = '{http://www.w3.org/2001/XMLSchema}'
 root1 = xsd_tree.getroot()
 
+xsd_path_2 = Path(__file__).parent.parent / 'xsd' / 'xml.xsd'
 
-
-xsd_path = Path(__file__).parent.parent / 'xml.xsd'
-with open(xsd_path) as file:
+with open(xsd_path_2) as file:
     xsd_tree = ET.parse(file)
 
 root2 = xsd_tree.getroot()

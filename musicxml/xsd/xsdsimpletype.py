@@ -2,7 +2,7 @@ import re
 
 from musicxml.util.core import get_simple_type_all_base_classes, find_all_xsd_children, get_cleaned_token
 from musicxml.util.helprervariables import name_character
-from musicxml.xsdtree import XSDTree, XSDElement
+from musicxml.xsd.xsdtree import XSDTree, XSDElement
 import xml.etree.ElementTree as ET
 
 

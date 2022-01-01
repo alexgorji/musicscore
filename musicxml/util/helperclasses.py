@@ -1,15 +1,13 @@
-from pathlib import Path
 from unittest import TestCase
 import xml.etree.ElementTree as ET
+from .core import xsd_path_1
 
-from musicxml.xsdtree import XSDTree
-
-xsd_path = Path(__file__).parent.parent / 'musicxml_4_0.xsd'
+from musicxml.xsd.xsdtree import XSDTree
 
 
 class MusicXmlTestCase(TestCase):
     def setUp(self) -> None:
-        with open(xsd_path) as file:
+        with open(xsd_path_1) as file:
             xmltree = ET.parse(file)
         self.root = xmltree.getroot()
         ns = '{http://www.w3.org/2001/XMLSchema}'

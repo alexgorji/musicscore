@@ -1,11 +1,13 @@
 import importlib
 
 from musicxml.util.helperclasses import MusicXmlTestCase
+from musicxml.xsd.xsdtree import XSDSequence, XSDChoice
 
-from musicxml.types.simpletype import *
-from musicxml.types.complextype import xsd_complex_type_class_names, XSDComplexType
-from musicxml.types.complextype import *
-from musicxml.xsdattribute import XSDAttribute
+from musicxml.xsd.xsdsimpletype import *
+from musicxml.xsd.xsdcomplextype import xsd_complex_type_class_names, XSDComplexType
+from musicxml.xsd.xsdcomplextype import *
+from musicxml.xsd.xsdattribute import XSDAttribute
+from musicxml.xsd.xsdattribute import *
 
 
 class TestComplexTypes(MusicXmlTestCase):
@@ -112,7 +114,7 @@ class TestComplexTypes(MusicXmlTestCase):
         Test that all XSDComplexType classes are generated
         """
         for complex_type in self.all_complex_type_xsd_elements:
-            module = importlib.import_module('musicxml.types.complextype')
+            module = importlib.import_module('musicxml.xsd.xsdcomplextype')
             complex_type_class = getattr(module, complex_type.xsd_element_class_name)
             assert complex_type.xsd_element_class_name == complex_type_class.__name__
 
@@ -323,3 +325,11 @@ class TestComplexTypes(MusicXmlTestCase):
         assert str(attribute_9) == 'XSDAttribute@name=color@type=color'
         assert str(attribute_10) == 'XSDAttribute@name=placement@type=above-below'
         assert str(attribute_11) == 'XSDAttribute@name=substitution@type=yes-no'
+
+    def test_get_xsd_indicator(self):
+        """
+        Test if complex type's method get_xsd_indicator return XSDSequence, XSDChoice or None
+        """
+        assert XSDComplexTypeEmpty.get_xsd_indicator() is None
+        assert isinstance(XSDComplexTypeMidiInstrument.get_xsd_indicator(), XSDSequence)
+        assert isinstance(XSDComplexTypeDynamics.get_xsd_indicator(), XSDChoice)

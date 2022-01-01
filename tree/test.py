@@ -1,9 +1,9 @@
 from unittest import TestCase
 
-from tree.tree import TreePresentation
+from tree.tree import Tree
 
 
-class A(TreePresentation):
+class A(Tree):
     def __init__(self, name, parent=None):
         self._children = []
         self._parent = parent
