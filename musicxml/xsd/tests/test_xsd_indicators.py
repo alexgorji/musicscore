@@ -1,9 +1,9 @@
 from unittest import TestCase
 import xml.etree.ElementTree as ET
 
-from musicxml.xmlelement.xmlelement import XMLElement
+from musicxml.xmlelement.xmlelement import *
+
 from musicxml.xsd.xsdtree import XSDTree, XSDSequence, XSDChoice
-from musicxml.xsd.xsdsimpletype import *
 
 
 class TestSequence(TestCase):
@@ -58,4 +58,8 @@ class TestSequence(TestCase):
         assert s._element_names_order == ['midi-channel', 'midi-name', 'midi-bank', 'midi-program', 'midi-unpitched', 'volume', 'pan',
                                           'elevation']
 
-        s.order_elements(elements=XMLElement(name='midi-channel', type_=XSDSimpleTypeMidi16))
+        midi_channel = XMLMidiChannel()
+        midi_elevation = XMLElevation()
+        midi_unpitched = XMLMidiUnpitched()
+        midi_bank = XMLMidiBank()
+        s.order_elements(elements=[midi_channel, midi_elevation, midi_unpitched, midi_bank])

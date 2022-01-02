@@ -333,3 +333,8 @@ class TestComplexTypes(MusicXmlTestCase):
         assert XSDComplexTypeEmpty.get_xsd_indicator() is None
         assert isinstance(XSDComplexTypeMidiInstrument.get_xsd_indicator(), XSDSequence)
         assert isinstance(XSDComplexTypeDynamics.get_xsd_indicator(), XSDChoice)
+
+    def test_value_is_required(self):
+        assert XSDComplexTypeOffset.value_is_required() is True
+        assert XSDComplexTypeHeelToe.value_is_required() is False
+        assert XSDComplexTypeNonArpeggiate.value_is_required() is False

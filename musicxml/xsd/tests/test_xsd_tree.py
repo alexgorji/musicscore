@@ -277,3 +277,4 @@ class TestXSDTree(MusicXmlTestCase):
         assert isinstance(xsd_tree.get_xsd_indicator(), XSDSequence)
         xsd_tree = XSDTree(self.root.find(f"{ns}complexType["f"@name='dynamics']"))
         assert isinstance(xsd_tree.get_xsd_indicator(), XSDChoice)
+

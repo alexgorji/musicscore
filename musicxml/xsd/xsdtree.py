@@ -176,6 +176,11 @@ class XSDTree(Tree):
             if node.tag == 'restriction':
                 return node
 
+    def get_simple_content(self):
+        for node in self.get_children():
+            if node.tag == 'simpleContent':
+                return node
+
     def get_simple_content_extension(self):
         for node in self.get_children():
             if node.tag == 'simpleContent':

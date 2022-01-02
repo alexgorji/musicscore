@@ -114,6 +114,10 @@ class XSDSimpleType(XSDElement):
     def __repr__(self):
         return str(self.value)
 
+    @classmethod
+    def value_is_required(cls):
+        return True
+
 
 class XSDSimpleTypeInteger(XSDSimpleType):
     _TYPES = [int]

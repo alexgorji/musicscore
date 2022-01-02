@@ -608,3 +608,6 @@ class TestSimpleTypes(MusicXmlTestCase):
         XSDSimpleTypeID('_1950-10-04_10-00')
         with self.assertRaises(ValueError):
             XSDSimpleTypeID('_1950-10:04_10-00')
+
+    def test_value_is_required(self):
+        assert XSDSimpleTypeString.value_is_required() is True

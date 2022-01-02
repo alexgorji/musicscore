@@ -57,6 +57,13 @@ class XSDComplexType(XSDElement):
     def get_xsd_indicator(cls):
         return cls.XSD_TREE.get_xsd_indicator()
 
+    @classmethod
+    def value_is_required(cls):
+        if cls.XSD_TREE.get_simple_content():
+            return True
+        else:
+            return False
+
 
 xsd_complex_type_class_names = []
 
