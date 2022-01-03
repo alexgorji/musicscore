@@ -1,134 +1,12 @@
+import copy
 from xml.etree import ElementTree as ET
 
-from musicxml.exceptions import XMLElementValueRequiredError
+from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired
 from musicxml.util.core import root1, ns, cap_first, convert_to_xsd_class_name
-from musicxml.xsd.xsdtree import XSDSequence, XSDTree
-from tree.tree import Tree
-from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdcomplextype import *
+from musicxml.xsd.xsdsimpletype import *
+from musicxml.xsd.xsdtree import XSDTree
 
-
-# class XMLElement(Tree):
-#
-#     def __init__(self, type_, name=None, value=None, attributes=None, doc=None):
-#         """
-#         :param type_: XSDComplexType or XSDSimpleType required
-#         :param value: None if empty, otherwise depends on type_.
-#         :param attributes: dict can only be set during initialization.
-#         """
-#         self._type = None
-#         self._name = None
-#         self._value = None
-#         self._attributes = None
-#         self._xml_element = None
-#         self._set_type(type_)
-#         self._set_name(name)
-#         self.value = value
-#         self._set_attributes(attributes)
-#         self.doc = doc
-#
-#         self._create_xml_element()
-#         self._children = []
-#         self._parent = None
-#
-#     def _create_xml_element(self):
-#         self._xml_element = ET.Element(self.type_.XSD_TREE.name, self.attributes)
-#         if self.value:
-#             self._xml_element.text = str(self.value)
-#
-#     def _order_children(self):
-#         if self.type_.XSD_TREE.is_complex_type:
-#             if isinstance(self.type_.get_xsd_indicator(), XSDSequence):
-#                 raise NotImplementedError
-#             else:
-#                 pass
-#         else:
-#             pass
-#
-#     def _set_attributes(self, val):
-#         if val is None:
-#             self._attributes = {}
-#         elif not isinstance(val, dict):
-#             raise TypeError
-#         else:
-#             self.type_.check_attributes(val)
-#             self._attributes = val
-#
-#     def _set_name(self, val):
-#         if self._type.XSD_TREE.is_complex_type:
-#             if val:
-#                 raise ValueError('name cannot be set for elements with complex type.')
-#             else:
-#                 self._name = self.type_.XSD_TREE.name
-#         elif self._type.XSD_TREE.is_simple_type:
-#             if not val:
-#                 raise ValueError('name must be set for elements with simple type while initializing.')
-#             else:
-#                 self._name = val
-#         else:
-#             raise TypeError
-#
-#     def _set_type(self, val):
-#         try:
-#             if val.XSD_TREE.is_complex_type or val.XSD_TREE.is_simple_type:
-#                 self._type = val
-#             else:
-#                 raise TypeError
-#         except AttributeError:
-#             raise TypeError
-#
-#     @property
-#     def attributes(self):
-#         return self._attributes
-#
-#     @property
-#     def name(self):
-#         return self._name
-#
-#     @property
-#     def type_(self):
-#         return self._type
-#
-#     @property
-#     def value(self):
-#         return self._value
-#
-#     @value.setter
-#     def value(self, val):
-#         if val is not None:
-#             self._value = self.type_(val)
-#             if self._xml_element is not None:
-#                 self._xml_element.text = str(self.value)
-#
-#     def check_children(self):
-#         self._order_children()
-#
-#     def to_string(self):
-#         if self.type_.XSD_TREE.is_simple_type and not self.value:
-#             raise XMLElementValueRequiredError
-#         self.check_children()
-#         return ET.tostring(self._xml_element, encoding='unicode')
-#
-#     def get_children(self):
-#         return self._children
-#
-#     def get_parent(self):
-#         return self._parent
-#
-#     @property
-#     def __doc__(self):
-#         if self.type_.XSD_TREE.is_simple_type:
-#             if not self.doc:
-#                 raise ValueError('attribute doc of an element with simple type must be set')
-#             else:
-#                 return self.doc
-#         elif self.type_.XSD_TREE.is_complex_type:
-#             if self.doc:
-#                 raise ValueError('attribute doc of an element with complext type cannot be set')
-#             else:
-#                 return self.type_.__doc__
-#         else:
-#             raise TypeError
 
 class XMLElement:
     XSD_TREE = None
@@ -137,13 +15,22 @@ class XMLElement:
         self._value = None
         self._attributes = None
         self._et_xml_element = None
+        self._type = None
         self.value = value
         self._set_attributes(kwargs)
         self._create_et_xml_element()
+        self._children = []
+
+    def _check_required_children(self):
+        if self.type_.XSD_TREE.is_complex_type:
+            if self.type_.get_xsd_indicator():
+                children_names = [child.get_class_name() for child in self.get_children()]
+                for element_class_name in self.type_.get_xsd_indicator().required_elements:
+                    if element_class_name not in children_names:
+                        raise XMLElementChildrenRequired(f"{element_class_name} is required for {self.get_class_name()}")
 
     def _create_et_xml_element(self):
-        self._et_xml_element = ET.Element(self.type_.XSD_TREE.name, self.attributes)
-        self._et_xml_element.tag = self.name
+        self._et_xml_element = ET.Element(self.name, self.attributes)
         if self.value:
             self._et_xml_element.text = str(self.value)
 
@@ -167,10 +54,12 @@ class XMLElement:
 
     @property
     def type_(self):
-        try:
-            return eval(convert_to_xsd_class_name(self.XSD_TREE.get_attributes()['type'], 'complex_type'))
-        except NameError:
-            return eval(convert_to_xsd_class_name(self.XSD_TREE.get_attributes()['type'], 'simple_type'))
+        if self._type is None:
+            try:
+                self._type = eval(convert_to_xsd_class_name(self.XSD_TREE.get_attributes()['type'], 'complex_type'))
+            except NameError:
+                self._type = eval(convert_to_xsd_class_name(self.XSD_TREE.get_attributes()['type'], 'simple_type'))
+        return self._type
 
     @property
     def value(self):
@@ -187,12 +76,75 @@ class XMLElement:
     def get_xsd(cls):
         return cls.XSD_TREE.get_xsd()
 
+    @classmethod
+    def get_class_name(cls):
+        return 'XML' + ''.join([cap_first(partial) for partial in cls.XSD_TREE.name.split('-')])
+
+    def add_child(self, element):
+        if not isinstance(element, XMLElement):
+            raise TypeError
+        self._children.append(element)
+
+    def get_children(self):
+        return self._children
+
     def to_string(self):
         if self.type_.value_is_required() and not self.value:
             raise XMLElementValueRequiredError
         if self.type_.XSD_TREE.is_complex_type:
             self.type_.check_attributes(self.attributes)
+        self._check_required_children()
         return ET.tostring(self._et_xml_element, encoding='unicode')
+
+
+xsd_tree_score_partwise_part = XSDTree(root1.find(f".//{ns}element[@name='score-partwise']"))
+
+
+class XMLScorePartwise(XMLElement):
+    XSD_TREE = XSDTree(root1.find(f".//{ns}element[@name='score-partwise']"))
+
+    def write(self, path):
+        with open(path, 'w') as file:
+            file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>')
+            file.write(self.to_string())
+
+    @property
+    def type_(self):
+        if self._type is None:
+            self._type = XSDComplexTypeScorePartwise
+        return self._type
+
+    @property
+    def __doc__(self):
+        return self.XSD_TREE.get_doc()
+
+
+class XMLPart(XMLElement):
+    XSD_TREE = XSDTree(root1.findall(f".//{ns}element[@name='score-partwise']//{ns}element")[0])
+
+    @property
+    def type_(self):
+        if self._type is None:
+            self._type = XSDComplexTypePart
+        return self._type
+
+    @property
+    def __doc__(self):
+        return self.XSD_TREE.get_doc()
+
+
+class XMLMeasure(XMLElement):
+    XSD_TREE = XSDTree(root1.findall(f".//{ns}element[@name='score-partwise']//{ns}element")[1])
+
+    @property
+    def type_(self):
+        if self._type is None:
+            self._type = XSDComplexTypeMeasure
+        return self._type
+
+    @property
+    def __doc__(self):
+        return self.XSD_TREE.get_doc()
 
 
 typed_elements = list(
@@ -214,14 +166,16 @@ def get_doc(self):
 
 __doc__ = property(get_doc)
 
-xml_element_class_names = []
+xml_element_class_names = ['XMLScorePartwise', 'XMLPart', 'XMLMeasure']
+
 for element in typed_elements:
     found_et_xml = root1.find(f".//{ns}element[@name='{element[0]}'][@type='{element[1]}']")
-    if found_et_xml.attrib.get('minOccurs'):
-        found_et_xml.attrib.pop('minOccurs')
-    if found_et_xml.attrib.get('maxOccurs'):
-        found_et_xml.attrib.pop('maxOccurs')
-    xsd_tree = XSDTree(found_et_xml)
+    copied_el = copy.deepcopy(found_et_xml)
+    if copied_el.attrib.get('minOccurs'):
+        copied_el.attrib.pop('minOccurs')
+    if copied_el.attrib.get('maxOccurs'):
+        copied_el.attrib.pop('maxOccurs')
+    xsd_tree = XSDTree(copied_el)
     class_name = 'XML' + ''.join([cap_first(partial) for partial in xsd_tree.name.split('-')])
     base_classes = "(XMLElement, )"
     attributes = """

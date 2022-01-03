@@ -1,7 +1,8 @@
-from musicxml.util.core import find_all_xsd_children, get_complex_type_all_base_classes, convert_to_xsd_class_name
+from musicxml.util.core import find_all_xsd_children, get_complex_type_all_base_classes, convert_to_xsd_class_name, root1
 from musicxml.xsd.xsdattribute import XSDAttribute
 from musicxml.xsd.xsdtree import XSDTree, XSDElement
 from musicxml.exceptions import XSDAttributeRequiredException, XSDWrongAttribute
+from musicxml.xsd.xsdindicators import XSDSequence, XSDChoice
 from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdattribute import *
 
@@ -10,6 +11,7 @@ class XSDComplexType(XSDElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._xsd_indicator = None
 
     @classmethod
     def check_attributes(cls, val_dict):
@@ -55,7 +57,11 @@ class XSDComplexType(XSDElement):
 
     @classmethod
     def get_xsd_indicator(cls):
-        return cls.XSD_TREE.get_xsd_indicator()
+        for child in cls.XSD_TREE.get_children():
+            if child.tag == 'sequence':
+                return XSDSequence(child)
+            if child.tag == 'choice':
+                return XSDChoice(child)
 
     @classmethod
     def value_is_required(cls):
@@ -82,5 +88,22 @@ for complex_type in find_all_xsd_children(tag='complexType'):
     """
     exec(f"{class_name} = type('{class_name}', {base_classes}, {attributes})")
     xsd_complex_type_class_names.append(class_name)
+
+xsd_tree_score_partwise = XSDTree(root1.find(".//{*}element[@name='score-partwise']"))
+
+
+class XSDComplexTypeScorePartwise(XSDComplexType):
+    XSD_TREE = XSDTree(root1.findall(".//{*}element[@name='score-partwise']//{*}complexType")[0])
+
+
+class XSDComplexTypePart(XSDComplexType):
+    XSD_TREE = XSDTree(root1.findall(".//{*}element[@name='score-partwise']//{*}complexType")[1])
+
+
+class XSDComplexTypeMeasure(XSDComplexType):
+    XSD_TREE = XSDTree(root1.findall(".//{*}element[@name='score-partwise']//{*}complexType")[2])
+
+
+xsd_complex_type_class_names.extend(['XSDComplexTypeScorePartwise', 'XSDComplexTypePart', 'XSDComplexTypeMeasure'])
 
 __all__ = xsd_complex_type_class_names

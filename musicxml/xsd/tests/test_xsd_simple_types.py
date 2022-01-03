@@ -83,14 +83,14 @@ class TestSimpleTypes(MusicXmlTestCase):
         show its version
         """
         expected = """<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="above-below">
-		<xs:annotation>
-			<xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="above" />
-			<xs:enumeration value="below" />
-		</xs:restriction>
-	</xs:simpleType>
+        <xs:annotation>
+            <xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="above" />
+            <xs:enumeration value="below" />
+        </xs:restriction>
+    </xs:simpleType>
 """
         assert XSDSimpleTypeAboveBelow.get_xsd() == expected
 

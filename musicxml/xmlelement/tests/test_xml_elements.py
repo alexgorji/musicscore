@@ -1,10 +1,11 @@
 from unittest import TestCase
 
 from musicxml.exceptions import XMLElementChildrenRequired, XMLElementValueRequiredError
-from .xmlelement import *
+from musicxml.xmlelement.xmlelement import *
 from musicxml.xsd.xsdcomplextype import *
+from musicxml.xsd.xsdindicators import XSDSequence, XSDChoice
 from musicxml.xsd.xsdsimpletype import *
-from .xmlelement import xml_element_class_names
+from musicxml.xmlelement.xmlelement import xml_element_class_names
 
 
 class TestXMLElements(TestCase):
@@ -46,41 +47,41 @@ class TestXMLElements(TestCase):
                                                    'XMLIpa', 'XMLKey', 'XMLKeyAccidental', 'XMLKeyAlter', 'XMLKeyOctave', 'XMLKeyStep',
                                                    'XMLKind', 'XMLLaughing', 'XMLLeftDivider', 'XMLLeftMargin', 'XMLLevel', 'XMLLine',
                                                    'XMLLineDetail', 'XMLLineWidth', 'XMLLink', 'XMLListen', 'XMLListening', 'XMLLyric',
-                                                   'XMLLyricFont', 'XMLLyricLanguage', 'XMLMeasureDistance', 'XMLMeasureLayout',
-                                                   'XMLMeasureNumbering', 'XMLMeasureRepeat', 'XMLMeasureStyle', 'XMLMembrane', 'XMLMetal',
-                                                   'XMLMetronome', 'XMLMetronomeArrows', 'XMLMetronomeBeam', 'XMLMetronomeDot',
-                                                   'XMLMetronomeNote', 'XMLMetronomeRelation', 'XMLMetronomeTied', 'XMLMetronomeTuplet',
-                                                   'XMLMetronomeType', 'XMLMf', 'XMLMidiBank', 'XMLMidiChannel', 'XMLMidiDevice',
-                                                   'XMLMidiInstrument', 'XMLMidiName', 'XMLMidiProgram', 'XMLMidiUnpitched',
-                                                   'XMLMillimeters', 'XMLMiscellaneous', 'XMLMiscellaneousField', 'XMLMode', 'XMLMordent',
-                                                   'XMLMovementNumber', 'XMLMovementTitle', 'XMLMp', 'XMLMultipleRest', 'XMLMusicFont',
-                                                   'XMLMute', 'XMLN', 'XMLNatural', 'XMLNonArpeggiate', 'XMLNormalDot', 'XMLNormalNotes',
-                                                   'XMLNormalType', 'XMLNotations', 'XMLNote', 'XMLNoteSize', 'XMLNotehead',
-                                                   'XMLNoteheadText', 'XMLNumeral', 'XMLNumeralAlter', 'XMLNumeralFifths', 'XMLNumeralKey',
-                                                   'XMLNumeralMode', 'XMLNumeralRoot', 'XMLOctave', 'XMLOctaveChange', 'XMLOctaveShift',
-                                                   'XMLOffset', 'XMLOpen', 'XMLOpenString', 'XMLOpus', 'XMLOrnaments', 'XMLOtherAppearance',
-                                                   'XMLOtherArticulation', 'XMLOtherDirection', 'XMLOtherDynamics', 'XMLOtherListen',
-                                                   'XMLOtherListening', 'XMLOtherNotation', 'XMLOtherOrnament', 'XMLOtherPercussion',
-                                                   'XMLOtherPlay', 'XMLOtherTechnical', 'XMLP', 'XMLPageHeight', 'XMLPageLayout',
-                                                   'XMLPageMargins', 'XMLPageWidth', 'XMLPan', 'XMLPartAbbreviation',
-                                                   'XMLPartAbbreviationDisplay', 'XMLPartClef', 'XMLPartGroup', 'XMLPartLink',
-                                                   'XMLPartList', 'XMLPartName', 'XMLPartNameDisplay', 'XMLPartSymbol', 'XMLPartTranspose',
-                                                   'XMLPedal', 'XMLPedalAlter', 'XMLPedalStep', 'XMLPedalTuning', 'XMLPerMinute',
-                                                   'XMLPercussion', 'XMLPf', 'XMLPitch', 'XMLPitched', 'XMLPlay', 'XMLPlayer',
-                                                   'XMLPlayerName', 'XMLPlop', 'XMLPluck', 'XMLPp', 'XMLPpp', 'XMLPppp', 'XMLPpppp',
-                                                   'XMLPppppp', 'XMLPreBend', 'XMLPrefix', 'XMLPrincipalVoice', 'XMLPrint', 'XMLPullOff',
-                                                   'XMLRehearsal', 'XMLRelation', 'XMLRelease', 'XMLRepeat', 'XMLRest', 'XMLRf', 'XMLRfz',
-                                                   'XMLRightDivider', 'XMLRightMargin', 'XMLRights', 'XMLRoot', 'XMLRootAlter',
-                                                   'XMLRootStep', 'XMLScaling', 'XMLSchleifer', 'XMLScoop', 'XMLScordatura',
-                                                   'XMLScoreInstrument', 'XMLScorePart', 'XMLSecond', 'XMLSegno', 'XMLSemiPitched',
-                                                   'XMLSenzaMisura', 'XMLSf', 'XMLSffz', 'XMLSfp', 'XMLSfpp', 'XMLSfz', 'XMLSfzp',
-                                                   'XMLShake', 'XMLSign', 'XMLSlash', 'XMLSlashDot', 'XMLSlashType', 'XMLSlide', 'XMLSlur',
-                                                   'XMLSmear', 'XMLSnapPizzicato', 'XMLSoftAccent', 'XMLSoftware', 'XMLSolo', 'XMLSound',
-                                                   'XMLSoundingPitch', 'XMLSource', 'XMLSpiccato', 'XMLStaccatissimo', 'XMLStaccato',
-                                                   'XMLStaff', 'XMLStaffDetails', 'XMLStaffDistance', 'XMLStaffDivide', 'XMLStaffLayout',
-                                                   'XMLStaffLines', 'XMLStaffSize', 'XMLStaffTuning', 'XMLStaffType', 'XMLStaves',
-                                                   'XMLStem', 'XMLStep', 'XMLStick', 'XMLStickLocation', 'XMLStickMaterial', 'XMLStickType',
-                                                   'XMLStopped', 'XMLStraight', 'XMLStress', 'XMLString', 'XMLStringMute',
+                                                   'XMLLyricFont', 'XMLLyricLanguage', 'XMLMeasure', 'XMLMeasureDistance',
+                                                   'XMLMeasureLayout', 'XMLMeasureNumbering', 'XMLMeasureRepeat', 'XMLMeasureStyle',
+                                                   'XMLMembrane', 'XMLMetal', 'XMLMetronome', 'XMLMetronomeArrows', 'XMLMetronomeBeam',
+                                                   'XMLMetronomeDot', 'XMLMetronomeNote', 'XMLMetronomeRelation', 'XMLMetronomeTied',
+                                                   'XMLMetronomeTuplet', 'XMLMetronomeType', 'XMLMf', 'XMLMidiBank', 'XMLMidiChannel',
+                                                   'XMLMidiDevice', 'XMLMidiInstrument', 'XMLMidiName', 'XMLMidiProgram',
+                                                   'XMLMidiUnpitched', 'XMLMillimeters', 'XMLMiscellaneous', 'XMLMiscellaneousField',
+                                                   'XMLMode', 'XMLMordent', 'XMLMovementNumber', 'XMLMovementTitle', 'XMLMp',
+                                                   'XMLMultipleRest', 'XMLMusicFont', 'XMLMute', 'XMLN', 'XMLNatural', 'XMLNonArpeggiate',
+                                                   'XMLNormalDot', 'XMLNormalNotes', 'XMLNormalType', 'XMLNotations', 'XMLNote',
+                                                   'XMLNoteSize', 'XMLNotehead', 'XMLNoteheadText', 'XMLNumeral', 'XMLNumeralAlter',
+                                                   'XMLNumeralFifths', 'XMLNumeralKey', 'XMLNumeralMode', 'XMLNumeralRoot', 'XMLOctave',
+                                                   'XMLOctaveChange', 'XMLOctaveShift', 'XMLOffset', 'XMLOpen', 'XMLOpenString', 'XMLOpus',
+                                                   'XMLOrnaments', 'XMLOtherAppearance', 'XMLOtherArticulation', 'XMLOtherDirection',
+                                                   'XMLOtherDynamics', 'XMLOtherListen', 'XMLOtherListening', 'XMLOtherNotation',
+                                                   'XMLOtherOrnament', 'XMLOtherPercussion', 'XMLOtherPlay', 'XMLOtherTechnical', 'XMLP',
+                                                   'XMLPageHeight', 'XMLPageLayout', 'XMLPageMargins', 'XMLPageWidth', 'XMLPan', 'XMLPart',
+                                                   'XMLPartAbbreviation', 'XMLPartAbbreviationDisplay', 'XMLPartClef', 'XMLPartGroup',
+                                                   'XMLPartLink', 'XMLPartList', 'XMLPartName', 'XMLPartNameDisplay', 'XMLPartSymbol',
+                                                   'XMLPartTranspose', 'XMLPedal', 'XMLPedalAlter', 'XMLPedalStep', 'XMLPedalTuning',
+                                                   'XMLPerMinute', 'XMLPercussion', 'XMLPf', 'XMLPitch', 'XMLPitched', 'XMLPlay',
+                                                   'XMLPlayer', 'XMLPlayerName', 'XMLPlop', 'XMLPluck', 'XMLPp', 'XMLPpp', 'XMLPppp',
+                                                   'XMLPpppp', 'XMLPppppp', 'XMLPreBend', 'XMLPrefix', 'XMLPrincipalVoice', 'XMLPrint',
+                                                   'XMLPullOff', 'XMLRehearsal', 'XMLRelation', 'XMLRelease', 'XMLRepeat', 'XMLRest',
+                                                   'XMLRf', 'XMLRfz', 'XMLRightDivider', 'XMLRightMargin', 'XMLRights', 'XMLRoot',
+                                                   'XMLRootAlter', 'XMLRootStep', 'XMLScaling', 'XMLSchleifer', 'XMLScoop', 'XMLScordatura',
+                                                   'XMLScoreInstrument', 'XMLScorePart', 'XMLScorePartwise', 'XMLSecond', 'XMLSegno',
+                                                   'XMLSemiPitched', 'XMLSenzaMisura', 'XMLSf', 'XMLSffz', 'XMLSfp', 'XMLSfpp', 'XMLSfz',
+                                                   'XMLSfzp', 'XMLShake', 'XMLSign', 'XMLSlash', 'XMLSlashDot', 'XMLSlashType', 'XMLSlide',
+                                                   'XMLSlur', 'XMLSmear', 'XMLSnapPizzicato', 'XMLSoftAccent', 'XMLSoftware', 'XMLSolo',
+                                                   'XMLSound', 'XMLSoundingPitch', 'XMLSource', 'XMLSpiccato', 'XMLStaccatissimo',
+                                                   'XMLStaccato', 'XMLStaff', 'XMLStaffDetails', 'XMLStaffDistance', 'XMLStaffDivide',
+                                                   'XMLStaffLayout', 'XMLStaffLines', 'XMLStaffSize', 'XMLStaffTuning', 'XMLStaffType',
+                                                   'XMLStaves', 'XMLStem', 'XMLStep', 'XMLStick', 'XMLStickLocation', 'XMLStickMaterial',
+                                                   'XMLStickType', 'XMLStopped', 'XMLStraight', 'XMLStress', 'XMLString', 'XMLStringMute',
                                                    'XMLStrongAccent', 'XMLSuffix', 'XMLSupports', 'XMLSwing', 'XMLSwingStyle',
                                                    'XMLSwingType', 'XMLSyllabic', 'XMLSymbol', 'XMLSync', 'XMLSystemDistance',
                                                    'XMLSystemDividers', 'XMLSystemLayout', 'XMLSystemMargins', 'XMLTap', 'XMLTechnical',
@@ -183,6 +184,10 @@ The offset affects the visual appearance of the direction. If the sound attribut
         for el in xml_element_class_names:
             element = eval(el)()
             assert element._et_xml_element.tag == element.name
+
+    def test_get_class_name(self):
+        assert XMLPitch.get_class_name() == 'XMLPitch'
+        assert XMLPitch().get_class_name() == 'XMLPitch'
 
     def test_sequence_indicator(self):
         """

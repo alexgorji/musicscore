@@ -4,7 +4,8 @@ from pathlib import Path
 
 from musicxml.util.core import ns
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.xsd.xsdtree import XSDTree, XSDSequence, XSDChoice
+from musicxml.xsd.xsdtree import XSDTree
+from musicxml.xsd.xsdindicators import XSDSequence, XSDChoice
 
 
 class TestXSDTree(MusicXmlTestCase):
@@ -74,13 +75,13 @@ class TestXSDTree(MusicXmlTestCase):
         Example:
         <xs:simpleType name="above-below">
     <xs:annotation>
-    	<xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
+        <xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:token">
-    	<xs:enumeration value="above"/>
-    	<xs:enumeration value="below"/>
+        <xs:enumeration value="above"/>
+        <xs:enumeration value="below"/>
     </xs:restriction>
-	    </xs:simpleType>
+        </xs:simpleType>
         """
         assert self.above_below_simple_type_xsd_element.name == 'above-below'
 
@@ -90,18 +91,18 @@ class TestXSDTree(MusicXmlTestCase):
         """
         """
         <xs:complexType name="fingering">
-	    	<xs:annotation>
-	    		<xs:documentation>Fingering is typically indicated 1,2,3,4,5. Multiple fingerings may be given, typically to substitute fingerings in the middle of a note. The substitution and alternate values are "no" if the attribute is not present. For guitar and other fretted instruments, the fingering element represents the fretting finger; the pluck element represents the plucking finger.</xs:documentation>
-	    	</xs:annotation>
-	    	<xs:simpleContent>
-	    		<xs:extension base="xs:string">
-	    			<xs:attribute name="substitution" type="yes-no"/>
-	    			<xs:attribute name="alternate" type="yes-no"/>
-	    			<xs:attributeGroup ref="print-style"/>
-	    			<xs:attributeGroup ref="placement"/>
-	    		</xs:extension>
-	    	</xs:simpleContent>
-	    </xs:complexType>
+            <xs:annotation>
+                <xs:documentation>Fingering is typically indicated 1,2,3,4,5. Multiple fingerings may be given, typically to substitute fingerings in the middle of a note. The substitution and alternate values are "no" if the attribute is not present. For guitar and other fretted instruments, the fingering element represents the fretting finger; the pluck element represents the plucking finger.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="substitution" type="yes-no"/>
+                    <xs:attribute name="alternate" type="yes-no"/>
+                    <xs:attributeGroup ref="print-style"/>
+                    <xs:attributeGroup ref="placement"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
         """
         expected = ['complexType', 'annotation', 'documentation', 'simpleContent', 'extension', 'attribute',
                     'attribute', 'attributeGroup', 'attributeGroup']
@@ -110,11 +111,11 @@ class TestXSDTree(MusicXmlTestCase):
     def test_get_children(self):
         xml = """<xs:extension xmlns:xs="http://www.w3.org/2001/XMLSchema" 
                     base="xs:string">
-        				<xs:attribute name="substitution" type="yes-no"/>
-        				<xs:attribute name="alternate" type="yes-no"/>
-        				<xs:attributeGroup ref="print-style"/>
-        				<xs:attributeGroup ref="placement"/>
-        		</xs:extension>"""
+                        <xs:attribute name="substitution" type="yes-no"/>
+                        <xs:attribute name="alternate" type="yes-no"/>
+                        <xs:attributeGroup ref="print-style"/>
+                        <xs:attributeGroup ref="placement"/>
+                </xs:extension>"""
         el = XSDTree(ET.fromstring(xml))
         assert [child.tag for child in el.get_children()] == ['attribute', 'attribute', 'attributeGroup',
                                                               'attributeGroup']
@@ -185,14 +186,14 @@ class TestXSDTree(MusicXmlTestCase):
         :return:
         """
         expected_1 = """<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="above-below">
-		<xs:annotation>
-			<xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="above" />
-			<xs:enumeration value="below" />
-		</xs:restriction>
-	</xs:simpleType>
+        <xs:annotation>
+            <xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="above" />
+            <xs:enumeration value="below" />
+        </xs:restriction>
+    </xs:simpleType>
 """
         expected_2 = """<xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fingering">
 		<xs:annotation>
@@ -218,11 +219,11 @@ class TestXSDTree(MusicXmlTestCase):
     def test_get_union(self):
         """
         <xs:simpleType name="yes-no-number">
-	    	<xs:annotation>
-	    		<xs:documentation>The yes-no-number type is used for attributes that can be either boolean or numeric values.</xs:documentation>
-	    	</xs:annotation>
-	    	<xs:union memberTypes="yes-no xs:decimal"/>
-	    </xs:simpleType>
+            <xs:annotation>
+                <xs:documentation>The yes-no-number type is used for attributes that can be either boolean or numeric values.</xs:documentation>
+            </xs:annotation>
+            <xs:union memberTypes="yes-no xs:decimal"/>
+        </xs:simpleType>
         """
         assert self.above_below_simple_type_xsd_element.get_union() is None
         assert self.yes_no_number_simple_type_xsd_element.get_union().tag == 'union'
@@ -266,15 +267,4 @@ class TestXSDTree(MusicXmlTestCase):
         assert self.yes_no_number_simple_type_xsd_element.is_complex_type is False
         assert self.above_below_simple_type_xsd_element.is_complex_type is False
         assert self.complex_type_xsd_element.is_complex_type is True
-
-    def test_xsd_tree_get_indicator(self):
-        """
-        Test if complex type's method get_xsd_indicator returns XSDSequence, XSDChoice or None
-        """
-        xsd_tree = XSDTree(self.root.find(f"{ns}complexType["f"@name='empty']"))
-        assert xsd_tree.get_xsd_indicator() is None
-        xsd_tree = XSDTree(self.root.find(f"{ns}complexType["f"@name='midi-instrument']"))
-        assert isinstance(xsd_tree.get_xsd_indicator(), XSDSequence)
-        xsd_tree = XSDTree(self.root.find(f"{ns}complexType["f"@name='dynamics']"))
-        assert isinstance(xsd_tree.get_xsd_indicator(), XSDChoice)
 
