@@ -8,6 +8,7 @@ from musicxml.xsd.xsdcomplextype import xsd_complex_type_class_names, XSDComplex
 from musicxml.xsd.xsdcomplextype import *
 from musicxml.xsd.xsdattribute import XSDAttribute
 from musicxml.xsd.xsdattribute import *
+from musicxml.xsd.xsdtree import XSDTree
 
 
 class TestComplexTypes(MusicXmlTestCase):

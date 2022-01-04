@@ -222,12 +222,3 @@ The offset affects the visual appearance of the direction. If the sound attribut
     <octave>4</octave>
 </pitch>"""
         assert el.to_string() == expected
-
-    def test_xml_lyric_add_child(self):
-        """
-        Test if a complex xsd structure like that of lyric works properly
-        """
-        lyric = XMLLyric()
-        with self.assertRaises(XMLElementChildrenRequired):
-            lyric.to_string()
-

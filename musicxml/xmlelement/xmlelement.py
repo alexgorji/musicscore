@@ -4,15 +4,99 @@ import xml.dom.minidom
 from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired
 from musicxml.util.core import root1, ns, cap_first, convert_to_xsd_class_name
 from musicxml.xsd.xsdcomplextype import *
+from musicxml.xsd.xsdcomplextype import XSDComplexType
+from musicxml.xsd.xsdelement import XSDElement
+from musicxml.xsd.xsdindicators import XSDGroup, XSDSequence, XSDChoice
 from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdtree import XSDTree
 from tree.tree import Tree
+
+
+class XMLChildContainer(Tree):
+    def __init__(self, content, min_occurrences=None, max_occurrences=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._content = None
+        if min_occurrences is None:
+            min_occurrences = 1
+        if max_occurrences is None:
+            max_occurrences = 1
+        self.min_occurrences = min_occurrences
+        self.max_occurrences = max_occurrences
+        self.content = content
+        self._populate_children()
+
+    def _populate_children(self):
+        for xsd_child in self.content.xsd_tree.get_children():
+            if xsd_child.tag == 'element':
+                min_occurrences = xsd_child.get_attributes().get('minOccurs')
+                max_occurrences = xsd_child.get_attributes().get('maxOccurs')
+                copied_xml_child = copy.deepcopy(xsd_child)
+                if min_occurrences is not None:
+                    copied_xml_child.get_attributes().pop('minOccurs')
+                if max_occurrences is not None:
+                    copied_xml_child.get_attributes().pop('maxOccurs')
+                container = XMLChildContainer(content=XSDElement(copied_xml_child), min_occurrences=min_occurrences,
+                                              max_occurrences=max_occurrences)
+                self.add_child(container)
+
+    @staticmethod
+    def _check_content_type(val):
+        types = [XSDSequence, XSDChoice, XSDElement, XSDGroup]
+        for type_ in types:
+            if isinstance(val, type_):
+                return
+        raise TypeError
+
+    def _check_child(self, child):
+        if not isinstance(child, XMLChildContainer):
+            return TypeError
+
+    @property
+    def content(self):
+        return self._content
+
+    @content.setter
+    def content(self, val):
+        self._check_content_type(val)
+        self._content = val
+
+    @property
+    def compact_repr(self):
+        type_ = None
+        if isinstance(self.content, XSDSequence):
+            type_ = 'Sequence'
+        elif isinstance(self.content, XSDChoice):
+            type_ = 'Choice'
+        elif isinstance(self.content, XSDGroup):
+            type_ = 'Group'
+        elif isinstance(self.content, XSDElement):
+            type_ = 'Element'
+        try:
+            return f"{type_}@name={self.content.name}@minOccurs={self.min_occurrences}@maxOccurs={self.max_occurrences}"
+        except AttributeError:
+            return f"{type_}@minOccurs={self.min_occurrences}@maxOccurs={self.max_occurrences}"
+
+
+class XMLChildContainerFactory:
+    def __init__(self, complex_type):
+        self._child_container = None
+        self._create_child_container(complex_type)
+
+    def _create_child_container(self, complex_type):
+        if XSDComplexType not in complex_type.__mro__:
+            raise TypeError
+        children_container = XMLChildContainer(complex_type.get_xsd_indicator())
+        self._child_container = children_container
+
+    def get_child_container(self):
+        return self._child_container
 
 
 class XMLElement(Tree):
     XSD_TREE = None
 
     def __init__(self, value=None, **kwargs):
+        super().__init__()
         self._value = None
         self._attributes = None
         self._et_xml_element = None
@@ -20,8 +104,10 @@ class XMLElement(Tree):
         self.value = value
         self._set_attributes(kwargs)
         self._create_et_xml_element()
-        self._children = []
-        self._parent = None
+
+    def _check_child(self, child):
+        if not isinstance(child, XMLElement):
+            raise TypeError
 
     def _check_required_children(self):
         if self.type_.XSD_TREE.is_complex_type:
@@ -82,18 +168,10 @@ class XMLElement(Tree):
     def get_class_name(cls):
         return 'XML' + ''.join([cap_first(partial) for partial in cls.XSD_TREE.name.split('-')])
 
-    def add_child(self, element):
-        if not isinstance(element, XMLElement):
-            raise TypeError
-        element._parent = self
-        self._et_xml_element.append(element._et_xml_element)
-        self._children.append(element)
-
-    def get_children(self):
-        return self._children
-
-    def get_parent(self):
-        return self._parent
+    def add_child(self, child):
+        child = super().add_child(child)
+        self._et_xml_element.append(child._et_xml_element)
+        return child
 
     def _final_checks(self):
         if self.type_.value_is_required() and not self.value:
@@ -112,6 +190,47 @@ class XMLElement(Tree):
         return ET.tostring(self._et_xml_element, encoding='unicode')
 
 
+typed_elements = list(
+    dict.fromkeys(
+        [
+            (node.attrib['name'], node.attrib['type']) for node in root1.iter() if node.tag == f'{ns}element' and node.attrib.get('type') is
+                                                                                   not None
+        ]
+    )
+)
+
+
+def get_doc(self):
+    if self.type_.XSD_TREE.is_complex_type:
+        return self.type_.__doc__
+    else:
+        return self.XSD_TREE.get_doc()
+
+
+__doc__ = property(get_doc)
+
+xml_element_class_names = []
+
+for element in typed_elements:
+    found_et_xml = root1.find(f".//{ns}element[@name='{element[0]}'][@type='{element[1]}']")
+    copied_el = copy.deepcopy(found_et_xml)
+    if copied_el.attrib.get('minOccurs'):
+        copied_el.attrib.pop('minOccurs')
+    if copied_el.attrib.get('maxOccurs'):
+        copied_el.attrib.pop('maxOccurs')
+    xsd_tree = XSDTree(copied_el)
+    class_name = 'XML' + ''.join([cap_first(partial) for partial in xsd_tree.name.split('-')])
+    base_classes = "(XMLElement, )"
+    attributes = """
+    {
+    'XSD_TREE': xsd_tree,
+    '__doc__': __doc__,
+    }
+    """
+    exec(f"{class_name} = type('{class_name}', {base_classes}, {attributes})")
+    xml_element_class_names.append(class_name)
+
+# xml score partwise
 xsd_tree_score_partwise_part = XSDTree(root1.find(f".//{ns}element[@name='score-partwise']"))
 
 
@@ -162,44 +281,5 @@ class XMLMeasure(XMLElement):
         return self.XSD_TREE.get_doc()
 
 
-typed_elements = list(
-    dict.fromkeys(
-        [
-            (node.attrib['name'], node.attrib['type']) for node in root1.iter() if node.tag == f'{ns}element' and node.attrib.get('type') is
-                                                                                   not None
-        ]
-    )
-)
-
-
-def get_doc(self):
-    if self.type_.XSD_TREE.is_complex_type:
-        return self.type_.__doc__
-    else:
-        return self.XSD_TREE.get_doc()
-
-
-__doc__ = property(get_doc)
-
-xml_element_class_names = ['XMLScorePartwise', 'XMLPart', 'XMLMeasure']
-
-for element in typed_elements:
-    found_et_xml = root1.find(f".//{ns}element[@name='{element[0]}'][@type='{element[1]}']")
-    copied_el = copy.deepcopy(found_et_xml)
-    if copied_el.attrib.get('minOccurs'):
-        copied_el.attrib.pop('minOccurs')
-    if copied_el.attrib.get('maxOccurs'):
-        copied_el.attrib.pop('maxOccurs')
-    xsd_tree = XSDTree(copied_el)
-    class_name = 'XML' + ''.join([cap_first(partial) for partial in xsd_tree.name.split('-')])
-    base_classes = "(XMLElement, )"
-    attributes = """
-    {
-    'XSD_TREE': xsd_tree,
-    '__doc__': __doc__,
-    }
-    """
-    exec(f"{class_name} = type('{class_name}', {base_classes}, {attributes})")
-    xml_element_class_names.append(class_name)
-
+xml_element_class_names.extend(['XMLScorePartwise', 'XMLPart', 'XMLMeasure'])
 __all__ = xml_element_class_names

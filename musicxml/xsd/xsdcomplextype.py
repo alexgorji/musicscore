@@ -1,13 +1,13 @@
 from musicxml.util.core import find_all_xsd_children, get_complex_type_all_base_classes, convert_to_xsd_class_name, root1
 from musicxml.xsd.xsdattribute import XSDAttribute
-from musicxml.xsd.xsdtree import XSDTree, XSDElement
+from musicxml.xsd.xsdtree import XSDTree, XSDTreeElement
 from musicxml.exceptions import XSDAttributeRequiredException, XSDWrongAttribute
 from musicxml.xsd.xsdindicators import XSDSequence, XSDChoice
 from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdattribute import *
 
 
-class XSDComplexType(XSDElement):
+class XSDComplexType(XSDTreeElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

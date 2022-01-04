@@ -1,5 +1,5 @@
 from musicxml.util.core import convert_to_xsd_class_name, find_all_xsd_children
-from musicxml.xsd.xsdtree import XSDTree, XSDElement
+from musicxml.xsd.xsdtree import XSDTree, XSDTreeElement
 from musicxml.xsd.xsdsimpletype import *
 
 
@@ -55,7 +55,7 @@ class XSDAttribute:
         return self.__str__()
 
 
-class XSDAttributeGroup(XSDElement):
+class XSDAttributeGroup(XSDTreeElement):
 
     @classmethod
     def get_xsd_attributes(cls):

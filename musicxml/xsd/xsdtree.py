@@ -14,17 +14,16 @@ XSD = XML Schema Definition
 class XSDTree(Tree):
     """
     XSDTree gets a xml.etree.ElementTree.Element by initiation as its xsd_element_tree_element property and
-    prepares all needed information for generating a XSDElement class (XSDElement can be XSDSimpleType, XSDComplexType, XSDGroup,
+    prepares all needed information for generating a XSDTreeElement class (XSDTreeElement can be XSDSimpleType, XSDComplexType, XSDGroup,
     XMLAttribute and XMLAttributeGroup)
     """
 
-    def __init__(self, xsd_element_tree_element, parent=None):
-        self._children = []
+    def __init__(self, xsd_element_tree_element, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._namespace = None
         self._tag = None
         self._xsd_element_tree_element = None
         self._xml_tree_class_name = None
-        self._parent = parent
         self._xsd_indicator = None
 
         self.xsd_element_tree_element = xsd_element_tree_element
@@ -48,8 +47,12 @@ class XSDTree(Tree):
         return name
 
     def _populate_children(self):
-        self._children = [XSDTree(node, parent=self) for node in
-                          self.xsd_element_tree_element.findall('./')]
+        for child in [XSDTree(node) for node in self.xsd_element_tree_element.findall('./')]:
+            self.add_child(child)
+
+    def _check_child(self, child):
+        if not isinstance(child, XSDTree):
+            raise TypeError
 
     # ------------------
     # public properties
@@ -158,9 +161,6 @@ class XSDTree(Tree):
             if node.tag == 'documentation':
                 return node.text
 
-    def get_parent(self):
-        return self._parent
-
     def get_restriction(self):
         for node in self.get_children():
             if node.tag == 'restriction':
@@ -213,7 +213,7 @@ class XSDTree(Tree):
         return f"{self.__class__.__name__} {self.compact_repr}"
 
 
-class XSDElement:
+class XSDTreeElement:
     """
     Abstract class of all generated XSD Classes
     """
@@ -222,3 +222,7 @@ class XSDElement:
     @classmethod
     def get_xsd(cls):
         return cls.XSD_TREE.get_xsd()
+
+    @property
+    def xsd_tree(self):
+        return self.XSD_TREE

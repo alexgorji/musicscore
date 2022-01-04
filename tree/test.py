@@ -4,21 +4,19 @@ from tree.tree import Tree
 
 
 class A(Tree):
-    def __init__(self, name, parent=None):
+    def __init__(self, name, parent=None, *args, **keyword):
+        super().__init__(*args, **keyword)
         self._children = []
         self._parent = parent
         self.name = name
 
+    def _check_child(self, child):
+        if not isinstance(child, self.__class__):
+            raise TypeError
+
     def add_child(self, name):
         child = type(self)(parent=self, name=name)
-        self._children.append(child)
-        return child
-
-    def get_children(self):
-        return self._children
-
-    def get_parent(self):
-        return self._parent
+        return super().add_child(child)
 
 
 class TestTree(TestCase):

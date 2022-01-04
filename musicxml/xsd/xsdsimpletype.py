@@ -2,11 +2,11 @@ import re
 
 from musicxml.util.core import get_simple_type_all_base_classes, find_all_xsd_children, get_cleaned_token
 from musicxml.util.helprervariables import name_character
-from musicxml.xsd.xsdtree import XSDTree, XSDElement
+from musicxml.xsd.xsdtree import XSDTree, XSDTreeElement
 import xml.etree.ElementTree as ET
 
 
-class XSDSimpleType(XSDElement):
+class XSDSimpleType(XSDTreeElement):
     """
     Parent Class for all SimpleType classes
     """
@@ -303,7 +303,9 @@ Creating all XSDSimpleType classes
 for simple_type in find_all_xsd_children(tag='simpleType', root='1'):
     xsd_tree = XSDTree(simple_type)
     class_name = xsd_tree.xsd_element_class_name
+    print('class_name', class_name)
     base_classes = f"({', '.join(get_simple_type_all_base_classes(xsd_tree))}, )"
+    print('base_classes', base_classes)
     attributes = """
     {
     '__doc__': xsd_tree.get_doc(), 

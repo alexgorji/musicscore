@@ -1,5 +1,6 @@
 from musicxml.util.core import cap_first, find_all_xsd_children
-from musicxml.xsd.xsdtree import XSDTree
+from musicxml.xsd.xsdelement import XSDElement
+from musicxml.xsd.xsdtree import XSDTree, XSDTreeElement
 
 
 class XSDSequence:
@@ -81,15 +82,15 @@ class XSDChoice:
         self._xsd_tree = value
 
 
-class XSDGroup:
-    XSD_TREE = None
+class XSDGroup(XSDTreeElement):
 
     def __init__(self):
         self._sequence = None
+        self._name = None
 
-    @classmethod
-    def get_xsd(cls):
-        return cls.XSD_TREE.get_xsd()
+    @property
+    def name(self):
+        return self.XSD_TREE.name
 
     @property
     def sequence(self):

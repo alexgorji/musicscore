@@ -59,7 +59,7 @@ class TestXSDTree(MusicXmlTestCase):
     def test_music_xml_class_name(self):
         """
         Test that an XSDTree element has a xsd_element_class_name attribute. This class name is generated automatically and is used as the
-        name of the XSDElement to be created.
+        name of the XSDTreeElement to be created.
         """
         assert self.above_below_simple_type_xsd_element.xsd_element_class_name == 'XSDSimpleTypeAboveBelow'
 

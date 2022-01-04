@@ -2,6 +2,11 @@ from abc import ABC, abstractmethod
 
 
 class Tree(ABC):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._parent = None
+        self._children = []
+
     @property
     def is_leaf(self):
         if not self.get_children():
@@ -9,21 +14,33 @@ class Tree(ABC):
         else:
             return False
 
-    def iterate_leaves(self):
-        for node in self.traverse():
-            if node.is_leaf:
-                yield node
-
     @abstractmethod
-    def get_children(self):
-        pass
+    def _check_child(self, child):
+        """
+        """
 
-    def traverse(self):
-        if self is not None:
-            yield self
-            for child in self.get_children():
-                for node in child.traverse():
-                    yield node
+    def add_child(self, child):
+        self._check_child(child)
+        child._parent = self
+        self._children.append(child)
+        return child
+
+    def get_children(self):
+        return self._children
+
+    def get_parent(self):
+        return self._parent
+
+    @property
+    def compact_repr(self):
+        return self.__str__()
+
+    @property
+    def level(self):
+        if self.get_parent() is None:
+            return 0
+        else:
+            return self.get_parent().level + 1
 
     def get_root(self):
         node = self
@@ -41,9 +58,17 @@ class Tree(ABC):
             node = node.get_parent()
         return output
 
-    @abstractmethod
-    def get_parent(self):
-        pass
+    def iterate_leaves(self):
+        for node in self.traverse():
+            if node.is_leaf:
+                yield node
+
+    def traverse(self):
+        if self is not None:
+            yield self
+            for child in self.get_children():
+                for node in child.traverse():
+                    yield node
 
     def tree_repr(self, attr='compact_repr'):
         def _indentation(x):
@@ -61,10 +86,3 @@ class Tree(ABC):
             output += '\n'
 
         return output
-
-    @property
-    def level(self):
-        if self.get_parent() is None:
-            return 0
-        else:
-            return self.get_parent().level + 1
