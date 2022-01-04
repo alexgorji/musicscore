@@ -5,6 +5,7 @@ class XSDElement:
     def __init__(self, xsd_tree):
         self._xsd_tree = None
         self.xsd_tree = xsd_tree
+        self._xml_elements = []
 
     @property
     def xsd_tree(self):
@@ -21,3 +22,12 @@ class XSDElement:
     @property
     def name(self):
         return self.xsd_tree.name
+
+    def add_xml_element(self, el):
+        if el.name != self.name:
+            raise TypeError
+        self._xml_elements.append(el)
+
+    @property
+    def xml_elements(self):
+        return self._xml_elements

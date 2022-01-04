@@ -1,13 +1,14 @@
 import copy
 from xml.etree import ElementTree as ET
-import xml.dom.minidom
 from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired
-from musicxml.util.core import root1, ns, cap_first, convert_to_xsd_class_name
+from musicxml.util.core import root1, ns, cap_first, convert_to_xsd_class_name, convert_to_xml_class_name
+from musicxml.xmlelement.exceptions import XMLChildContainerWrongElementError, XMLChildContainerMaxOccursError, \
+    XMLChildContainerChoiceHasOtherElement
 from musicxml.xsd.xsdcomplextype import *
+from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdcomplextype import XSDComplexType
 from musicxml.xsd.xsdelement import XSDElement
 from musicxml.xsd.xsdindicators import XSDGroup, XSDSequence, XSDChoice
-from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdtree import XSDTree
 from tree.tree import Tree
 
@@ -71,10 +72,56 @@ class XMLChildContainer(Tree):
             type_ = 'Group'
         elif isinstance(self.content, XSDElement):
             type_ = 'Element'
+            output = f"{type_}@name={self.content.name}@minOccurs={self.min_occurrences}@maxOccurs={self.max_occurrences}"
+            for xml_element in self.content.xml_elements:
+                output += '\n'
+                output += '        '
+                output += xml_element.get_class_name()
+            return output
         try:
             return f"{type_}@name={self.content.name}@minOccurs={self.min_occurrences}@maxOccurs={self.max_occurrences}"
         except AttributeError:
             return f"{type_}@minOccurs={self.min_occurrences}@maxOccurs={self.max_occurrences}"
+
+    def get_required_elements(self):
+        output = []
+        if isinstance(self.content, XSDSequence):
+            for child in self.get_children():
+                if isinstance(child.content, XSDElement):
+                    if child.min_occurrences != '0':
+                        output.append(convert_to_xml_class_name(name=child.content.name))
+                else:
+                    raise NotImplementedError
+        else:
+            raise NotImplementedError
+        return output
+
+    def add_element(self, xml_element):
+        if not isinstance(xml_element, XMLElement):
+            raise TypeError
+        _element_added = False
+        _element_max_occurrence_is_reached = False
+        _choice_has_already_an_element = False
+        for node in self.traverse():
+            if isinstance(node.content, XSDElement):
+                if node.content.name == xml_element.name:
+                    if node.max_occurrences != 'unbounded' and len(node.content.xml_elements) == node.max_occurrences:
+                        _element_max_occurrence_is_reached = True
+                        break
+                    if isinstance(node.get_parent().content, XSDChoice):
+                        for child in node.get_parent().get_children():
+                            if isinstance(child.content, XSDElement) and child.content.xml_elements:
+                                _choice_has_already_an_element = True
+                    _element_max_occurrence_is_reached = False
+                    node.content.add_xml_element(xml_element)
+                    _element_added = True
+                    break
+        if _element_max_occurrence_is_reached:
+            raise XMLChildContainerMaxOccursError()
+        if _choice_has_already_an_element:
+            raise XMLChildContainerChoiceHasOtherElement()
+        if not _element_added:
+            raise XMLChildContainerWrongElementError()
 
 
 class XMLChildContainerFactory:
@@ -166,7 +213,7 @@ class XMLElement(Tree):
 
     @classmethod
     def get_class_name(cls):
-        return 'XML' + ''.join([cap_first(partial) for partial in cls.XSD_TREE.name.split('-')])
+        return convert_to_xml_class_name(cls.XSD_TREE.name)
 
     def add_child(self, child):
         child = super().add_child(child)
@@ -219,7 +266,7 @@ for element in typed_elements:
     if copied_el.attrib.get('maxOccurs'):
         copied_el.attrib.pop('maxOccurs')
     xsd_tree = XSDTree(copied_el)
-    class_name = 'XML' + ''.join([cap_first(partial) for partial in xsd_tree.name.split('-')])
+    class_name = convert_to_xml_class_name(xsd_tree.name)
     base_classes = "(XMLElement, )"
     attributes = """
     {

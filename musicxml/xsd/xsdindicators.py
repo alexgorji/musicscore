@@ -1,5 +1,4 @@
-from musicxml.util.core import cap_first, find_all_xsd_children
-from musicxml.xsd.xsdelement import XSDElement
+from musicxml.util.core import cap_first, find_all_xsd_children, convert_to_xml_class_name
 from musicxml.xsd.xsdtree import XSDTree, XSDTreeElement
 
 
@@ -15,7 +14,7 @@ class XSDSequence:
             self._elements = []
             for child in self.xsd_tree.get_children():
                 if child.tag == 'element':
-                    element = ('XML' + ''.join([cap_first(partial) for partial in child.name.split('-')]))
+                    element = convert_to_xml_class_name(child.name)
                     min_occurrence = child.get_attributes().get('minOccurs')
                     if min_occurrence is None: min_occurrence = '1'
                     max_occurrence = child.get_attributes().get('maxOccurs')

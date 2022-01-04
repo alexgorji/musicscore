@@ -251,35 +251,6 @@ class TestComplexTypes(MusicXmlTestCase):
         assert str(attribute_1) == 'XSDAttribute@name=number@type=staff-number'
         assert str(attribute_2) == 'XSDAttribute@name=id@type=xs:ID'
 
-    def test_complex_type_empty_placement_get_attributes(self):
-        """
-
-        complexType@name=empty-placement
-            attributeGroup@ref=print-style
-            attributeGroup@ref=placement
-
-        attributeGroup@name=print-style
-            attributeGroup@ref=position
-            attributeGroup@ref=font
-            attributeGroup@ref=color
-
-        attributeGroup@name=position
-            attribute@name=default-x@type=tenths
-            attribute@name=default-y@type=tenths
-            attribute@name=relative-x@type=tenths
-            attribute@name=relative-y@type=tenths
-
-        attributeGroup@name=font
-            attribute@name=font-family@type=font-family
-            attribute@name=font-style@type=font-style
-            attribute@name=font-size@type=font-size
-            attribute@name=font-weight@type=font-weight
-
-        attributeGroup@name=color
-            attribute@name=color@type=color
-        """
-        self.fail('Incomplete')
-
     def test_complex_type_get_attributes_complexContent(self):
         """
         Test that complex type's get_attributes method returns XSDAttribute classes according to:

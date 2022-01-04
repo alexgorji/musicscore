@@ -72,3 +72,7 @@ def convert_to_xsd_class_name(name, type_='simple_type'):
     else:
         raise ValueError
     return name
+
+
+def convert_to_xml_class_name(name):
+    return 'XML' + ''.join([cap_first(partial) for partial in name.split('-')])
