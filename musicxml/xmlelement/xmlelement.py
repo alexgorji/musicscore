@@ -1,14 +1,15 @@
 import copy
 from xml.etree import ElementTree as ET
-
+import xml.dom.minidom
 from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired
 from musicxml.util.core import root1, ns, cap_first, convert_to_xsd_class_name
 from musicxml.xsd.xsdcomplextype import *
 from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdtree import XSDTree
+from tree.tree import Tree
 
 
-class XMLElement:
+class XMLElement(Tree):
     XSD_TREE = None
 
     def __init__(self, value=None, **kwargs):
@@ -20,6 +21,7 @@ class XMLElement:
         self._set_attributes(kwargs)
         self._create_et_xml_element()
         self._children = []
+        self._parent = None
 
     def _check_required_children(self):
         if self.type_.XSD_TREE.is_complex_type:
@@ -83,17 +85,30 @@ class XMLElement:
     def add_child(self, element):
         if not isinstance(element, XMLElement):
             raise TypeError
+        element._parent = self
+        self._et_xml_element.append(element._et_xml_element)
         self._children.append(element)
 
     def get_children(self):
         return self._children
 
-    def to_string(self):
+    def get_parent(self):
+        return self._parent
+
+    def _final_checks(self):
         if self.type_.value_is_required() and not self.value:
-            raise XMLElementValueRequiredError
+            raise XMLElementValueRequiredError(f"{self.get_class_name()} requires a value.")
+
         if self.type_.XSD_TREE.is_complex_type:
             self.type_.check_attributes(self.attributes)
+
         self._check_required_children()
+
+    def to_string(self):
+        self._final_checks()
+        for child in self.get_children():
+            child._final_checks()
+        ET.indent(self._et_xml_element, space="    ", level=self.level)
         return ET.tostring(self._et_xml_element, encoding='unicode')
 
 
@@ -105,7 +120,7 @@ class XMLScorePartwise(XMLElement):
 
     def write(self, path):
         with open(path, 'w') as file:
-            file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>')
+            file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
             file.write(self.to_string())
 
     @property

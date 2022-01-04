@@ -65,3 +65,9 @@ class TestTree(TestCase):
         grandchild3
 """
         assert self.root.tree_repr('name') == expected
+
+    def test_level(self):
+        assert self.greatgrandchild1.level == 3
+        assert self.grandchild2.level == 2
+        assert self.child4.level == 1
+        assert self.root.level == 0

@@ -189,7 +189,7 @@ The offset affects the visual appearance of the direction. If the sound attribut
         assert XMLPitch.get_class_name() == 'XMLPitch'
         assert XMLPitch().get_class_name() == 'XMLPitch'
 
-    def test_sequence_indicator(self):
+    def test_sequence_indicator_children_required(self):
         """
         Test that a sequence indicator with only elements as children can verify the behavior of its corresponding element
         """
@@ -209,3 +209,25 @@ The offset affects the visual appearance of the direction. If the sound attribut
         el = XMLPitch()
         with self.assertRaises(XMLElementChildrenRequired):
             el.to_string()
+
+    def test_sequence_add_children_to_string(self):
+        """
+        Test that to_string function of an element with complex type and sequence works properly
+        """
+        el = XMLPitch()
+        el.add_child(XMLStep('A'))
+        el.add_child(XMLOctave(4))
+        expected = """<pitch>
+    <step>A</step>
+    <octave>4</octave>
+</pitch>"""
+        assert el.to_string() == expected
+
+    def test_xml_lyric_add_child(self):
+        """
+        Test if a complex xsd structure like that of lyric works properly
+        """
+        lyric = XMLLyric()
+        with self.assertRaises(XMLElementChildrenRequired):
+            lyric.to_string()
+

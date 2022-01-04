@@ -61,3 +61,10 @@ class Tree(ABC):
             output += '\n'
 
         return output
+
+    @property
+    def level(self):
+        if self.get_parent() is None:
+            return 0
+        else:
+            return self.get_parent().level + 1

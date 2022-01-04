@@ -40,7 +40,7 @@ class XSDSequence:
                         elements[0] = tuple(list_el)
                     self._elements.extend(elements)
                 else:
-                    raise NotImplementedError
+                    raise NotImplementedError(child.tag)
         return self._elements
 
     @property
