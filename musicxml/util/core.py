@@ -69,10 +69,12 @@ def convert_to_xsd_class_name(name, type_='simple_type'):
         name = 'XSDSimpleType' + name
     elif type_ == 'complex_type':
         name = 'XSDComplexType' + name
+    elif type_ == 'group':
+        name = 'XSDGroup' + name
     else:
         raise ValueError
     return name
 
 
-def convert_to_xml_class_name(name):
+def convert_to_xml_class_name(name: str) -> str:
     return 'XML' + ''.join([cap_first(partial) for partial in name.split('-')])

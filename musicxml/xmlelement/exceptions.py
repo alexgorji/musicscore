@@ -1,14 +1,26 @@
-class XMLChildContaiterException(Exception):
+class XMLChildContainerException(Exception):
     pass
 
 
-class XMLChildContainerWrongElementError(XMLChildContaiterException):
+class XMLChildContainerWrongElementError(XMLChildContainerException):
     pass
 
 
-class XMLChildContainerMaxOccursError(XMLChildContaiterException):
+class XMLChildContainerMaxOccursError(XMLChildContainerException):
     pass
 
 
-class XMLChildContainerChoiceHasOtherElement(XMLChildContaiterException):
+class XMLChildContainerChoiceHasOtherElement(XMLChildContainerException):
+    pass
+
+
+class XMLChildContainerElementRequired(XMLChildContainerException):
+    pass
+
+
+class XMLChildContainerFactoryException(Exception):
+    pass
+
+
+class XMLChildContainerFactoryError(XMLChildContainerFactoryException):
     pass

@@ -31,7 +31,7 @@ class TestXSDTree(MusicXmlTestCase):
                 print('All tags: ' + str(get_all_tags()))
                 for child in tree.get_children():
                     print('============')
-                    print(child.tree_repr())
+                    print(child.tree_representation())
 
     def test_xsd_property(self):
         """

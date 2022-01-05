@@ -5,6 +5,7 @@ from musicxml.exceptions import XSDAttributeRequiredException, XSDWrongAttribute
 from musicxml.xsd.xsdindicators import XSDSequence, XSDChoice
 from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdattribute import *
+from musicxml.xsd.xsdindicators import *
 
 
 class XSDComplexType(XSDTreeElement):
@@ -62,6 +63,11 @@ class XSDComplexType(XSDTreeElement):
                 return XSDSequence(child)
             if child.tag == 'choice':
                 return XSDChoice(child)
+            if child.tag == 'group':
+                return eval(convert_to_xsd_class_name(child.get_attributes()['ref'], 'group'))()
+            if child.tag == 'complexContent':
+                return eval(convert_to_xsd_class_name(child.get_children()[0].get_attributes()['base'],
+                                                      'complex_type')).get_xsd_indicator()
 
     @classmethod
     def value_is_required(cls):
@@ -106,4 +112,89 @@ class XSDComplexTypeMeasure(XSDComplexType):
 
 xsd_complex_type_class_names.extend(['XSDComplexTypeScorePartwise', 'XSDComplexTypePart', 'XSDComplexTypeMeasure'])
 
-__all__ = xsd_complex_type_class_names
+# __all__ = xsd_complex_type_class_names
+__all__ = ['XSDComplexTypeAccidental', 'XSDComplexTypeAccidentalMark',
+           'XSDComplexTypeAccidentalText', 'XSDComplexTypeAccord',
+           'XSDComplexTypeAccordionRegistration', 'XSDComplexTypeAppearance',
+           'XSDComplexTypeArpeggiate', 'XSDComplexTypeArrow', 'XSDComplexTypeArticulations',
+           'XSDComplexTypeAssess', 'XSDComplexTypeAttributes', 'XSDComplexTypeBackup',
+           'XSDComplexTypeBarStyleColor', 'XSDComplexTypeBarline', 'XSDComplexTypeBarre',
+           'XSDComplexTypeBass', 'XSDComplexTypeBassStep', 'XSDComplexTypeBeam',
+           'XSDComplexTypeBeatRepeat', 'XSDComplexTypeBeatUnitTied', 'XSDComplexTypeBeater',
+           'XSDComplexTypeBend', 'XSDComplexTypeBookmark', 'XSDComplexTypeBracket',
+           'XSDComplexTypeBreathMark', 'XSDComplexTypeCaesura', 'XSDComplexTypeCancel',
+           'XSDComplexTypeClef', 'XSDComplexTypeCoda', 'XSDComplexTypeCredit',
+           'XSDComplexTypeDashes', 'XSDComplexTypeDefaults', 'XSDComplexTypeDegree',
+           'XSDComplexTypeDegreeAlter', 'XSDComplexTypeDegreeType',
+           'XSDComplexTypeDegreeValue', 'XSDComplexTypeDirection',
+           'XSDComplexTypeDirectionType', 'XSDComplexTypeDistance', 'XSDComplexTypeDouble',
+           'XSDComplexTypeDynamics', 'XSDComplexTypeEffect', 'XSDComplexTypeElision',
+           'XSDComplexTypeEmpty', 'XSDComplexTypeEmptyFont', 'XSDComplexTypeEmptyLine',
+           'XSDComplexTypeEmptyPlacement', 'XSDComplexTypeEmptyPlacementSmufl',
+           'XSDComplexTypeEmptyPrintObjectStyleAlign', 'XSDComplexTypeEmptyPrintStyle',
+           'XSDComplexTypeEmptyPrintStyleAlign', 'XSDComplexTypeEmptyPrintStyleAlignId',
+           'XSDComplexTypeEmptyTrillSound', 'XSDComplexTypeEncoding', 'XSDComplexTypeEnding',
+           'XSDComplexTypeExtend', 'XSDComplexTypeFeature', 'XSDComplexTypeFermata',
+           'XSDComplexTypeFigure', 'XSDComplexTypeFiguredBass', 'XSDComplexTypeFingering',
+           'XSDComplexTypeFirstFret', 'XSDComplexTypeForPart', 'XSDComplexTypeFormattedSymbol',
+           'XSDComplexTypeFormattedSymbolId', 'XSDComplexTypeFormattedText',
+           'XSDComplexTypeFormattedTextId', 'XSDComplexTypeForward', 'XSDComplexTypeFrame',
+           'XSDComplexTypeFrameNote', 'XSDComplexTypeFret', 'XSDComplexTypeGlass',
+           'XSDComplexTypeGlissando', 'XSDComplexTypeGlyph', 'XSDComplexTypeGrace',
+           'XSDComplexTypeGroupBarline', 'XSDComplexTypeGroupName',
+           'XSDComplexTypeGroupSymbol', 'XSDComplexTypeGrouping',
+           'XSDComplexTypeHammerOnPullOff', 'XSDComplexTypeHandbell',
+           'XSDComplexTypeHarmonClosed', 'XSDComplexTypeHarmonMute', 'XSDComplexTypeHarmonic',
+           'XSDComplexTypeHarmony', 'XSDComplexTypeHarmonyAlter', 'XSDComplexTypeHarpPedals',
+           'XSDComplexTypeHeelToe', 'XSDComplexTypeHole', 'XSDComplexTypeHoleClosed',
+           'XSDComplexTypeHorizontalTurn', 'XSDComplexTypeIdentification',
+           'XSDComplexTypeImage', 'XSDComplexTypeInstrument', 'XSDComplexTypeInstrumentChange',
+           'XSDComplexTypeInstrumentLink', 'XSDComplexTypeInterchangeable',
+           'XSDComplexTypeInversion', 'XSDComplexTypeKey', 'XSDComplexTypeKeyAccidental',
+           'XSDComplexTypeKeyOctave', 'XSDComplexTypeKind', 'XSDComplexTypeLevel',
+           'XSDComplexTypeLineDetail', 'XSDComplexTypeLineWidth', 'XSDComplexTypeLink',
+           'XSDComplexTypeListen', 'XSDComplexTypeListening', 'XSDComplexTypeLyric',
+           'XSDComplexTypeLyricFont', 'XSDComplexTypeLyricLanguage', 'XSDComplexTypeMeasure',
+           'XSDComplexTypeMeasureLayout', 'XSDComplexTypeMeasureNumbering',
+           'XSDComplexTypeMeasureRepeat', 'XSDComplexTypeMeasureStyle',
+           'XSDComplexTypeMembrane', 'XSDComplexTypeMetal', 'XSDComplexTypeMetronome',
+           'XSDComplexTypeMetronomeBeam', 'XSDComplexTypeMetronomeNote',
+           'XSDComplexTypeMetronomeTied', 'XSDComplexTypeMetronomeTuplet',
+           'XSDComplexTypeMidiDevice', 'XSDComplexTypeMidiInstrument',
+           'XSDComplexTypeMiscellaneous', 'XSDComplexTypeMiscellaneousField',
+           'XSDComplexTypeMordent', 'XSDComplexTypeMultipleRest', 'XSDComplexTypeNameDisplay',
+           'XSDComplexTypeNonArpeggiate', 'XSDComplexTypeNotations', 'XSDComplexTypeNote',
+           'XSDComplexTypeNoteSize', 'XSDComplexTypeNoteType', 'XSDComplexTypeNotehead',
+           'XSDComplexTypeNoteheadText', 'XSDComplexTypeNumeral', 'XSDComplexTypeNumeralKey',
+           'XSDComplexTypeNumeralRoot', 'XSDComplexTypeOctaveShift', 'XSDComplexTypeOffset',
+           'XSDComplexTypeOpus', 'XSDComplexTypeOrnaments', 'XSDComplexTypeOtherAppearance',
+           'XSDComplexTypeOtherDirection', 'XSDComplexTypeOtherListening',
+           'XSDComplexTypeOtherNotation', 'XSDComplexTypeOtherPlacementText',
+           'XSDComplexTypeOtherPlay', 'XSDComplexTypeOtherText', 'XSDComplexTypePageLayout',
+           'XSDComplexTypePageMargins', 'XSDComplexTypePart', 'XSDComplexTypePartClef',
+           'XSDComplexTypePartGroup', 'XSDComplexTypePartLink', 'XSDComplexTypePartList',
+           'XSDComplexTypePartName', 'XSDComplexTypePartSymbol', 'XSDComplexTypePartTranspose',
+           'XSDComplexTypePedal', 'XSDComplexTypePedalTuning', 'XSDComplexTypePerMinute',
+           'XSDComplexTypePercussion', 'XSDComplexTypePitch', 'XSDComplexTypePitched',
+           'XSDComplexTypePlacementText', 'XSDComplexTypePlay', 'XSDComplexTypePlayer',
+           'XSDComplexTypePrincipalVoice', 'XSDComplexTypePrint', 'XSDComplexTypeRelease',
+           'XSDComplexTypeRepeat', 'XSDComplexTypeRest', 'XSDComplexTypeRoot',
+           'XSDComplexTypeRootStep', 'XSDComplexTypeScaling', 'XSDComplexTypeScordatura',
+           'XSDComplexTypeScoreInstrument', 'XSDComplexTypeScorePart',
+           'XSDComplexTypeScorePartwise', 'XSDComplexTypeSegno', 'XSDComplexTypeSlash',
+           'XSDComplexTypeSlide', 'XSDComplexTypeSlur', 'XSDComplexTypeSound',
+           'XSDComplexTypeStaffDetails', 'XSDComplexTypeStaffDivide',
+           'XSDComplexTypeStaffLayout', 'XSDComplexTypeStaffSize', 'XSDComplexTypeStaffTuning',
+           'XSDComplexTypeStem', 'XSDComplexTypeStick', 'XSDComplexTypeString',
+           'XSDComplexTypeStringMute', 'XSDComplexTypeStrongAccent', 'XSDComplexTypeStyleText',
+           'XSDComplexTypeSupports', 'XSDComplexTypeSwing', 'XSDComplexTypeSync',
+           'XSDComplexTypeSystemDividers', 'XSDComplexTypeSystemLayout',
+           'XSDComplexTypeSystemMargins', 'XSDComplexTypeTap', 'XSDComplexTypeTechnical',
+           'XSDComplexTypeTextElementData', 'XSDComplexTypeTie', 'XSDComplexTypeTied',
+           'XSDComplexTypeTime', 'XSDComplexTypeTimeModification', 'XSDComplexTypeTimpani',
+           'XSDComplexTypeTranspose', 'XSDComplexTypeTremolo', 'XSDComplexTypeTuplet',
+           'XSDComplexTypeTupletDot', 'XSDComplexTypeTupletNumber',
+           'XSDComplexTypeTupletPortion', 'XSDComplexTypeTupletType',
+           'XSDComplexTypeTypedText', 'XSDComplexTypeUnpitched',
+           'XSDComplexTypeVirtualInstrument', 'XSDComplexTypeWait', 'XSDComplexTypeWavyLine',
+           'XSDComplexTypeWedge', 'XSDComplexTypeWood', 'XSDComplexTypeWork']

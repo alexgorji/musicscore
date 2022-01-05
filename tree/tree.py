@@ -63,6 +63,12 @@ class Tree(ABC):
             if node.is_leaf:
                 yield node
 
+    def reversed_path_to_root(self):
+        yield self
+        if self.get_parent():
+            for node in self.get_parent().reversed_path_to_root():
+                yield node
+
     def traverse(self):
         if self is not None:
             yield self
@@ -70,19 +76,20 @@ class Tree(ABC):
                 for node in child.traverse():
                     yield node
 
-    def tree_repr(self, attr='compact_repr'):
-        def _indentation(x):
-            indentation = ''
-            for i in range(x.get_layer_number()):
-                indentation += '    '
-            return indentation
+    def get_indentation(self):
+        indentation = ''
+        for i in range(self.get_layer_number()):
+            indentation += '    '
+        return indentation
+
+    def tree_representation(self, attr='compact_repr'):
 
         """
         A string representation of the tree structure
         """
         output = ''
         for node in self.traverse():
-            output += _indentation(node) + getattr(node, attr)
+            output += node.get_indentation() + getattr(node, attr)
             output += '\n'
 
         return output

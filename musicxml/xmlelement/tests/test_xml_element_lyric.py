@@ -24,7 +24,7 @@ class TestXMLLyric(TestCase):
             'Element@name=laughing'
             'Element@name=humming'
         """
-        assert lyric.children_container_tree.tree_repr == expected
+        assert lyric.child_container_tree.tree_representation == expected
 
     def test_xml_lyric_required_child(self):
         """

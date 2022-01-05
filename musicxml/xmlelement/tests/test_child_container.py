@@ -1,10 +1,14 @@
+from pathlib import Path
 from unittest import TestCase
 
+from musicxml.util.core import convert_to_xml_class_name
 from musicxml.xmlelement.exceptions import XMLChildContainerWrongElementError, XMLChildContainerMaxOccursError, \
-    XMLChildContainerChoiceHasOtherElement
-from musicxml.xmlelement.xmlelement import XMLChildContainerFactory, XMLChildContainer
+    XMLChildContainerChoiceHasOtherElement, XMLChildContainerFactoryError, XMLChildContainerElementRequired
+from musicxml.xmlelement.xmlelement import XMLChildContainerFactory, XMLChildContainer, _check_sequence_container, \
+    _get_container_required_element_names, _check_if_container_require_elements
 from musicxml.xmlelement.xmlelement import *
 from musicxml.xsd.xsdcomplextype import *
+from musicxml.xsd.xsdcomplextype import xsd_complex_type_class_names
 from musicxml.xsd.xsdelement import XSDElement
 from musicxml.xsd.xsdindicators import XSDSequence, XSDChoice
 from musicxml.xsd.xsdindicators import *
@@ -47,6 +51,178 @@ class TestChildContainer(TestCase):
         with self.assertRaises(TypeError):
             XMLChildContainer(3)
 
+    def test_min_max_occurrences(self):
+        container = XMLChildContainer(self.element)
+        assert container.min_occurrences == 1
+        assert container.max_occurrences == 1
+        container = XMLChildContainer(self.element, min_occurrences='0')
+        assert container.min_occurrences == 0
+        container = XMLChildContainer(self.element, max_occurrences='2')
+        assert container.max_occurrences == 2
+        container = XMLChildContainer(self.element, max_occurrences='unbounded')
+        assert container.max_occurrences == 'unbounded'
+
+    def test_that_all_complex_types_can_create_child_container(self):
+        complex_types_with_child_container = []
+        complex_types_without_child_container = []
+        for complex_type_name in xsd_complex_type_class_names:
+            complex_type = eval(complex_type_name)
+            try:
+                XMLChildContainerFactory(complex_type).get_child_container()
+                complex_types_with_child_container.append(complex_type_name)
+            except XMLChildContainerFactoryError:
+                complex_types_without_child_container.append(complex_type_name)
+                # print(complex_type.get_xsd())
+
+        assert complex_types_with_child_container == ['XSDComplexTypeDynamics', 'XSDComplexTypeMidiInstrument',
+                                                      'XSDComplexTypeNameDisplay', 'XSDComplexTypePlay', 'XSDComplexTypeAttributes',
+                                                      'XSDComplexTypeBeatRepeat', 'XSDComplexTypeClef', 'XSDComplexTypeForPart',
+                                                      'XSDComplexTypeInterchangeable', 'XSDComplexTypeKey', 'XSDComplexTypeMeasureStyle',
+                                                      'XSDComplexTypePartClef', 'XSDComplexTypePartTranspose', 'XSDComplexTypeSlash',
+                                                      'XSDComplexTypeStaffDetails', 'XSDComplexTypeStaffTuning', 'XSDComplexTypeTime',
+                                                      'XSDComplexTypeTranspose', 'XSDComplexTypeBarline', 'XSDComplexTypeAccord',
+                                                      'XSDComplexTypeAccordionRegistration', 'XSDComplexTypeBass',
+                                                      'XSDComplexTypeBeatUnitTied', 'XSDComplexTypeDegree', 'XSDComplexTypeDirection',
+                                                      'XSDComplexTypeDirectionType', 'XSDComplexTypeFrame', 'XSDComplexTypeFrameNote',
+                                                      'XSDComplexTypeGrouping', 'XSDComplexTypeHarmony', 'XSDComplexTypeHarpPedals',
+                                                      'XSDComplexTypeInstrumentChange', 'XSDComplexTypeListening',
+                                                      'XSDComplexTypeMetronome', 'XSDComplexTypeMetronomeNote',
+                                                      'XSDComplexTypeMetronomeTuplet', 'XSDComplexTypeNumeral',
+                                                      'XSDComplexTypeNumeralKey', 'XSDComplexTypePedalTuning', 'XSDComplexTypePercussion',
+                                                      'XSDComplexTypePrint', 'XSDComplexTypeRoot', 'XSDComplexTypeScordatura',
+                                                      'XSDComplexTypeSound', 'XSDComplexTypeStick', 'XSDComplexTypeSwing',
+                                                      'XSDComplexTypeEncoding', 'XSDComplexTypeIdentification',
+                                                      'XSDComplexTypeMiscellaneous', 'XSDComplexTypeAppearance',
+                                                      'XSDComplexTypeMeasureLayout', 'XSDComplexTypePageLayout',
+                                                      'XSDComplexTypePageMargins', 'XSDComplexTypeScaling', 'XSDComplexTypeStaffLayout',
+                                                      'XSDComplexTypeSystemDividers', 'XSDComplexTypeSystemLayout',
+                                                      'XSDComplexTypeSystemMargins', 'XSDComplexTypeArticulations', 'XSDComplexTypeArrow',
+                                                      'XSDComplexTypeBackup', 'XSDComplexTypeBend', 'XSDComplexTypeFigure',
+                                                      'XSDComplexTypeFiguredBass', 'XSDComplexTypeForward', 'XSDComplexTypeHarmonMute',
+                                                      'XSDComplexTypeHarmonic', 'XSDComplexTypeHole', 'XSDComplexTypeListen',
+                                                      'XSDComplexTypeLyric', 'XSDComplexTypeNotations', 'XSDComplexTypeNote',
+                                                      'XSDComplexTypeNoteheadText', 'XSDComplexTypeOrnaments', 'XSDComplexTypePitch',
+                                                      'XSDComplexTypeRest', 'XSDComplexTypeTechnical', 'XSDComplexTypeTimeModification',
+                                                      'XSDComplexTypeTuplet', 'XSDComplexTypeTupletPortion', 'XSDComplexTypeUnpitched',
+                                                      'XSDComplexTypeCredit', 'XSDComplexTypeDefaults', 'XSDComplexTypePartGroup',
+                                                      'XSDComplexTypePartLink', 'XSDComplexTypePartList', 'XSDComplexTypePlayer',
+                                                      'XSDComplexTypeScoreInstrument', 'XSDComplexTypeScorePart',
+                                                      'XSDComplexTypeVirtualInstrument', 'XSDComplexTypeWork',
+                                                      'XSDComplexTypeScorePartwise', 'XSDComplexTypePart', 'XSDComplexTypeMeasure']
+        assert complex_types_without_child_container == ['XSDComplexTypeAccidentalText', 'XSDComplexTypeCoda', 'XSDComplexTypeEmpty',
+                                                         'XSDComplexTypeEmptyPlacement',
+                                                         'XSDComplexTypeEmptyPlacementSmufl', 'XSDComplexTypeEmptyPrintStyle',
+                                                         'XSDComplexTypeEmptyPrintStyleAlign', 'XSDComplexTypeEmptyPrintStyleAlignId',
+                                                         'XSDComplexTypeEmptyPrintObjectStyleAlign', 'XSDComplexTypeEmptyTrillSound',
+                                                         'XSDComplexTypeHorizontalTurn', 'XSDComplexTypeFermata', 'XSDComplexTypeFingering',
+                                                         'XSDComplexTypeFormattedSymbol', 'XSDComplexTypeFormattedSymbolId',
+                                                         'XSDComplexTypeFormattedText', 'XSDComplexTypeFormattedTextId',
+                                                         'XSDComplexTypeFret', 'XSDComplexTypeLevel', 'XSDComplexTypeMidiDevice',
+                                                         'XSDComplexTypeOtherPlay', 'XSDComplexTypeSegno', 'XSDComplexTypeString',
+                                                         'XSDComplexTypeTypedText', 'XSDComplexTypeWavyLine', 'XSDComplexTypeCancel',
+                                                         'XSDComplexTypeDouble', 'XSDComplexTypeKeyAccidental', 'XSDComplexTypeKeyOctave',
+                                                         'XSDComplexTypeLineDetail', 'XSDComplexTypeMeasureRepeat',
+                                                         'XSDComplexTypeMultipleRest', 'XSDComplexTypePartSymbol',
+                                                         'XSDComplexTypeStaffSize',
+                                                         'XSDComplexTypeBarStyleColor', 'XSDComplexTypeEnding', 'XSDComplexTypeRepeat',
+                                                         'XSDComplexTypeBarre', 'XSDComplexTypeHarmonyAlter', 'XSDComplexTypeBassStep',
+                                                         'XSDComplexTypeBeater', 'XSDComplexTypeBracket', 'XSDComplexTypeDashes',
+                                                         'XSDComplexTypeDegreeAlter', 'XSDComplexTypeDegreeType',
+                                                         'XSDComplexTypeDegreeValue', 'XSDComplexTypeEffect', 'XSDComplexTypeFeature',
+                                                         'XSDComplexTypeFirstFret', 'XSDComplexTypeGlass', 'XSDComplexTypeImage',
+                                                         'XSDComplexTypeInversion', 'XSDComplexTypeKind', 'XSDComplexTypeMeasureNumbering',
+                                                         'XSDComplexTypeMembrane', 'XSDComplexTypeMetal', 'XSDComplexTypeMetronomeBeam',
+                                                         'XSDComplexTypeMetronomeTied', 'XSDComplexTypeNumeralRoot',
+                                                         'XSDComplexTypeOctaveShift', 'XSDComplexTypeOffset',
+                                                         'XSDComplexTypeOtherDirection',
+                                                         'XSDComplexTypeOtherListening', 'XSDComplexTypePedal', 'XSDComplexTypePerMinute',
+                                                         'XSDComplexTypePitched', 'XSDComplexTypePrincipalVoice', 'XSDComplexTypeRootStep',
+                                                         'XSDComplexTypeStaffDivide', 'XSDComplexTypeStringMute', 'XSDComplexTypeSync',
+                                                         'XSDComplexTypeTimpani', 'XSDComplexTypeWedge', 'XSDComplexTypeWood',
+                                                         'XSDComplexTypeMiscellaneousField', 'XSDComplexTypeSupports',
+                                                         'XSDComplexTypeDistance', 'XSDComplexTypeGlyph', 'XSDComplexTypeLineWidth',
+                                                         'XSDComplexTypeNoteSize', 'XSDComplexTypeOtherAppearance',
+                                                         'XSDComplexTypeBookmark',
+                                                         'XSDComplexTypeLink', 'XSDComplexTypeAccidental', 'XSDComplexTypeAccidentalMark',
+                                                         'XSDComplexTypeArpeggiate', 'XSDComplexTypeAssess', 'XSDComplexTypeBeam',
+                                                         'XSDComplexTypeBreathMark', 'XSDComplexTypeCaesura', 'XSDComplexTypeElision',
+                                                         'XSDComplexTypeEmptyLine', 'XSDComplexTypeExtend', 'XSDComplexTypeGlissando',
+                                                         'XSDComplexTypeGrace', 'XSDComplexTypeHammerOnPullOff', 'XSDComplexTypeHandbell',
+                                                         'XSDComplexTypeHarmonClosed', 'XSDComplexTypeHeelToe', 'XSDComplexTypeHoleClosed',
+                                                         'XSDComplexTypeInstrument', 'XSDComplexTypeMordent', 'XSDComplexTypeNonArpeggiate',
+                                                         'XSDComplexTypeNoteType', 'XSDComplexTypeNotehead', 'XSDComplexTypeOtherNotation',
+                                                         'XSDComplexTypeOtherPlacementText', 'XSDComplexTypeOtherText',
+                                                         'XSDComplexTypePlacementText', 'XSDComplexTypeRelease', 'XSDComplexTypeSlide',
+                                                         'XSDComplexTypeSlur', 'XSDComplexTypeStem', 'XSDComplexTypeStrongAccent',
+                                                         'XSDComplexTypeStyleText', 'XSDComplexTypeTap', 'XSDComplexTypeTextElementData',
+                                                         'XSDComplexTypeTie', 'XSDComplexTypeTied', 'XSDComplexTypeTremolo',
+                                                         'XSDComplexTypeTupletDot', 'XSDComplexTypeTupletNumber',
+                                                         'XSDComplexTypeTupletType',
+                                                         'XSDComplexTypeWait', 'XSDComplexTypeEmptyFont', 'XSDComplexTypeGroupBarline',
+                                                         'XSDComplexTypeGroupName', 'XSDComplexTypeGroupSymbol',
+                                                         'XSDComplexTypeInstrumentLink', 'XSDComplexTypeLyricFont',
+                                                         'XSDComplexTypeLyricLanguage', 'XSDComplexTypeOpus', 'XSDComplexTypePartName']
+
+    def test_complex_type_with_complex_content_child_container(self):
+        """
+        complexType@name=metronome-tuplet
+            complexContent
+                extension@base=time-modification
+                    attribute@name=type@type=start-stop@use=required
+                    attribute@name=bracket@type=yes-no
+                    attribute@name=show-number@type=show-tuplet
+        """
+        container = XMLChildContainerFactory(XSDComplexTypeMetronomeTuplet).get_child_container()
+        expected = """Sequence@minOccurs=1@maxOccurs=1
+    Element@name=actual-notes@minOccurs=1@maxOccurs=1
+    Element@name=normal-notes@minOccurs=1@maxOccurs=1
+    Sequence@minOccurs=0@maxOccurs=1
+        Element@name=normal-type@minOccurs=1@maxOccurs=1
+        Element@name=normal-dot@minOccurs=0@maxOccurs=unbounded
+"""
+        assert container.tree_representation() == expected
+
+    def test_complex_type_with_group_child_container(self):
+        """
+        complexType@name=system-margins
+            group@ref=left-right-margins
+        """
+        container = XMLChildContainerFactory(XSDComplexTypeSystemMargins).get_child_container()
+        expected = """Group@name=left-right-margins@minOccurs=1@maxOccurs=1
+    Sequence@minOccurs=1@maxOccurs=1
+        Element@name=left-margin@minOccurs=1@maxOccurs=1
+        Element@name=right-margin@minOccurs=1@maxOccurs=1
+"""
+        assert container.tree_representation() == expected
+
+    def test_complex_type_measure_child_container(self):
+        """
+        element@name=measure@maxOccurs=unbounded
+            complexType
+                group@ref=music-data
+                attributeGroup@ref=measure-attributes
+        """
+        container = XMLChildContainerFactory(XSDComplexTypeMeasure).get_child_container()
+        expected = """Group@name=music-data@minOccurs=1@maxOccurs=1
+    Sequence@minOccurs=1@maxOccurs=1
+        Choice@minOccurs=0@maxOccurs=unbounded
+            Element@name=note@minOccurs=1@maxOccurs=1
+            Element@name=backup@minOccurs=1@maxOccurs=1
+            Element@name=forward@minOccurs=1@maxOccurs=1
+            Element@name=direction@minOccurs=1@maxOccurs=1
+            Element@name=attributes@minOccurs=1@maxOccurs=1
+            Element@name=harmony@minOccurs=1@maxOccurs=1
+            Element@name=figured-bass@minOccurs=1@maxOccurs=1
+            Element@name=print@minOccurs=1@maxOccurs=1
+            Element@name=sound@minOccurs=1@maxOccurs=1
+            Element@name=listening@minOccurs=1@maxOccurs=1
+            Element@name=barline@minOccurs=1@maxOccurs=1
+            Element@name=grouping@minOccurs=1@maxOccurs=1
+            Element@name=link@minOccurs=1@maxOccurs=1
+            Element@name=bookmark@minOccurs=1@maxOccurs=1
+"""
+        assert container.tree_representation() == expected
+
     def test_children_container_compact_repr(self):
         """
         Test that children container has a compact_repr attribute
@@ -60,41 +236,18 @@ class TestChildContainer(TestCase):
         container = XMLChildContainer(XSDGroupEditorial(), min_occurrences=1, max_occurrences=2)
         assert container.compact_repr == 'Group@name=editorial@minOccurs=1@maxOccurs=2'
 
-    def test_child_container_factory_only_sequence(self):
+    def test_child_container_simple_sequence(self):
         """
         Test a complex type with a simple sequence of elements
         """
-        """
-        complexType@name=pitch
-            sequence
-                element@name=step@type=step
-                element@name=alter@type=semitones@minOccurs=0
-                element@name=octave@type=octave
-        """
-        factory = XMLChildContainerFactory(complex_type=XSDComplexTypePitch)
-        container = factory.get_child_container()
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypePitch).get_child_container()
         expected = """Sequence@minOccurs=1@maxOccurs=1
     Element@name=step@minOccurs=1@maxOccurs=1
     Element@name=alter@minOccurs=0@maxOccurs=1
     Element@name=octave@minOccurs=1@maxOccurs=1
 """
-        assert container.tree_repr() == expected
+        assert container.tree_representation() == expected
 
-    def test_child_container_adding_child_only_sequence(self):
-        """
-        Test a complex type with a simple sequence of elements can manage children.
-        """
-        """
-        complexType@name=pitch
-            sequence
-                element@name=step@type=step
-                element@name=alter@type=semitones@minOccurs=0
-                element@name=octave@type=octave
-        """
-        factory = XMLChildContainerFactory(complex_type=XSDComplexTypePitch)
-        container = factory.get_child_container()
-
-        assert container.get_required_elements() == ['XMLStep', 'XMLOctave']
         container.add_element(XMLStep('A'))
         container.add_element(XMLOctave(2))
 
@@ -105,48 +258,103 @@ class TestChildContainer(TestCase):
     Element@name=octave@minOccurs=1@maxOccurs=1
         XMLOctave
 """
-        assert container.tree_repr() == expected
+        assert container.tree_representation() == expected
         with self.assertRaises(XMLChildContainerWrongElementError):
             container.add_element(XMLAccent())
         with self.assertRaises(XMLChildContainerMaxOccursError):
             container.add_element(XMLStep('B'))
 
-    def test_child_container_factory_only_choice(self):
+    def test_child_container_sequence_with_sequence(self):
         """
-        Test a complex type with a simple choice of elements can manage children.
+        Test a complex type with a sequence which has elements and sequences
         """
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeStaffDetails).get_child_container()
+        expected = """Sequence@minOccurs=1@maxOccurs=1
+    Element@name=staff-type@minOccurs=0@maxOccurs=1
+    Sequence@minOccurs=0@maxOccurs=1
+        Element@name=staff-lines@minOccurs=1@maxOccurs=1
+        Element@name=line-detail@minOccurs=0@maxOccurs=unbounded
+    Element@name=staff-tuning@minOccurs=0@maxOccurs=unbounded
+    Element@name=capo@minOccurs=0@maxOccurs=1
+    Element@name=staff-size@minOccurs=0@maxOccurs=1
+"""
+        assert container.tree_representation() == expected
+
+    def test_child_container_sequence_with_group(self):
         """
-        complexType@name=measure-style
-            choice
-                element@name=multiple-rest@type=multiple-rest
-                element@name=measure-repeat@type=measure-repeat
-                element@name=beat-repeat@type=beat-repeat
-                element@name=slash@type=slash
+        Test a complex type with a sequence of groups an elements
         """
-        factory = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasureStyle)
-        container = factory.get_child_container()
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeInterchangeable).get_child_container()
+        expected = """Sequence@minOccurs=1@maxOccurs=1
+    Element@name=time-relation@minOccurs=0@maxOccurs=1
+    Group@name=time-signature@minOccurs=1@maxOccurs=unbounded
+        Sequence@minOccurs=1@maxOccurs=1
+            Element@name=beats@minOccurs=1@maxOccurs=1
+            Element@name=beat-type@minOccurs=1@maxOccurs=1
+"""
+        assert container.tree_representation() == expected
+
+    def test_child_container_sequence_with_choice(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeKey).get_child_container()
+        expected = """Sequence@minOccurs=1@maxOccurs=1
+    Choice@minOccurs=1@maxOccurs=1
+        Group@name=traditional-key@minOccurs=1@maxOccurs=1
+            Sequence@minOccurs=1@maxOccurs=1
+                Element@name=cancel@minOccurs=0@maxOccurs=1
+                Element@name=fifths@minOccurs=1@maxOccurs=1
+                Element@name=mode@minOccurs=0@maxOccurs=1
+        Group@name=non-traditional-key@minOccurs=0@maxOccurs=unbounded
+            Sequence@minOccurs=1@maxOccurs=1
+                Element@name=key-step@minOccurs=1@maxOccurs=1
+                Element@name=key-alter@minOccurs=1@maxOccurs=1
+                Element@name=key-accidental@minOccurs=0@maxOccurs=1
+    Element@name=key-octave@minOccurs=0@maxOccurs=unbounded
+"""
+        assert container.tree_representation() == expected
+
+    def test_child_container_complex_sequence_with_group_and_choice(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeAttributes).get_child_container()
+        expected = """Sequence@minOccurs=1@maxOccurs=1
+    Group@name=editorial@minOccurs=1@maxOccurs=1
+        Sequence@minOccurs=1@maxOccurs=1
+            Group@name=footnote@minOccurs=0@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=footnote@minOccurs=1@maxOccurs=1
+            Group@name=level@minOccurs=0@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=level@minOccurs=1@maxOccurs=1
+    Element@name=divisions@minOccurs=0@maxOccurs=1
+    Element@name=key@minOccurs=0@maxOccurs=unbounded
+    Element@name=time@minOccurs=0@maxOccurs=unbounded
+    Element@name=staves@minOccurs=0@maxOccurs=1
+    Element@name=part-symbol@minOccurs=0@maxOccurs=1
+    Element@name=instruments@minOccurs=0@maxOccurs=1
+    Element@name=clef@minOccurs=0@maxOccurs=unbounded
+    Element@name=staff-details@minOccurs=0@maxOccurs=unbounded
+    Choice@minOccurs=1@maxOccurs=1
+        Element@name=transpose@minOccurs=0@maxOccurs=unbounded
+        Element@name=for-part@minOccurs=0@maxOccurs=unbounded
+    Element@name=directive@minOccurs=0@maxOccurs=unbounded
+    Element@name=measure-style@minOccurs=0@maxOccurs=unbounded
+"""
+        assert container.tree_representation() == expected
+
+    def test_child_container_simple_choice(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasureStyle).get_child_container()
         expected = """Choice@minOccurs=1@maxOccurs=1
     Element@name=multiple-rest@minOccurs=1@maxOccurs=1
     Element@name=measure-repeat@minOccurs=1@maxOccurs=1
     Element@name=beat-repeat@minOccurs=1@maxOccurs=1
     Element@name=slash@minOccurs=1@maxOccurs=1
 """
-        assert container.tree_repr() == expected
+        assert container.tree_representation() == expected
 
-    def test_child_container_adding_child_only_choice(self):
+    def test_child_container_simple_choice_adding_child(self):
         """
         Test a complex type with a simple choice of elements can manage children.
         """
-        """
-        complexType@name=measure-style
-            choice
-                element@name=multiple-rest@type=multiple-rest
-                element@name=measure-repeat@type=measure-repeat
-                element@name=beat-repeat@type=beat-repeat
-                element@name=slash@type=slash
-        """
-        factory = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasureStyle)
-        container = factory.get_child_container()
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasureStyle).get_child_container()
         container.add_element(XMLMultipleRest())
 
         expected = """Choice@minOccurs=1@maxOccurs=1
@@ -156,8 +364,297 @@ class TestChildContainer(TestCase):
     Element@name=beat-repeat@minOccurs=1@maxOccurs=1
     Element@name=slash@minOccurs=1@maxOccurs=1
 """
-        assert container.tree_repr() == expected
+        assert container.tree_representation() == expected
         with self.assertRaises(XMLChildContainerWrongElementError):
             container.add_element(XMLAccent())
         with self.assertRaises(XMLChildContainerChoiceHasOtherElement):
             container.add_element(XMLBeatRepeat())
+
+    def test_score_partwise_child_container(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeScorePartwise).get_child_container()
+        expected = """Sequence@minOccurs=1@maxOccurs=1
+    Group@name=score-header@minOccurs=1@maxOccurs=1
+        Sequence@minOccurs=1@maxOccurs=1
+            Element@name=work@minOccurs=0@maxOccurs=1
+            Element@name=movement-number@minOccurs=0@maxOccurs=1
+            Element@name=movement-title@minOccurs=0@maxOccurs=1
+            Element@name=identification@minOccurs=0@maxOccurs=1
+            Element@name=defaults@minOccurs=0@maxOccurs=1
+            Element@name=credit@minOccurs=0@maxOccurs=unbounded
+            Element@name=part-list@minOccurs=1@maxOccurs=1
+    Element@name=part@minOccurs=1@maxOccurs=unbounded
+"""
+        assert container.tree_representation() == expected
+        container.add_element(XMLPartList())
+
+        with self.assertRaises(XMLChildContainerMaxOccursError):
+            container.add_element(XMLPartList())
+        p1 = container.add_element(XMLPart())
+        p2 = container.add_element(XMLPart())
+        m1 = p1.add_child(XMLMeasure())
+
+    def test_part_and_measure_child_container(self):
+        part_expected = """Sequence@minOccurs=1@maxOccurs=1
+    Element@name=measure@minOccurs=1@maxOccurs=unbounded
+"""
+        measure_expected = """Group@name=music-data@minOccurs=1@maxOccurs=1
+    Sequence@minOccurs=1@maxOccurs=1
+        Choice@minOccurs=0@maxOccurs=unbounded
+            Element@name=note@minOccurs=1@maxOccurs=1
+            Element@name=backup@minOccurs=1@maxOccurs=1
+            Element@name=forward@minOccurs=1@maxOccurs=1
+            Element@name=direction@minOccurs=1@maxOccurs=1
+            Element@name=attributes@minOccurs=1@maxOccurs=1
+            Element@name=harmony@minOccurs=1@maxOccurs=1
+            Element@name=figured-bass@minOccurs=1@maxOccurs=1
+            Element@name=print@minOccurs=1@maxOccurs=1
+            Element@name=sound@minOccurs=1@maxOccurs=1
+            Element@name=listening@minOccurs=1@maxOccurs=1
+            Element@name=barline@minOccurs=1@maxOccurs=1
+            Element@name=grouping@minOccurs=1@maxOccurs=1
+            Element@name=link@minOccurs=1@maxOccurs=1
+            Element@name=bookmark@minOccurs=1@maxOccurs=1
+"""
+        part_container = XMLChildContainerFactory(complex_type=XSDComplexTypePart).get_child_container()
+        measure_container = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasure).get_child_container()
+        assert part_container.tree_representation() == part_expected
+        assert measure_container.tree_representation() == measure_expected
+
+    def test_metronome_child_container(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeMetronome).get_child_container()
+        expected = """Choice@minOccurs=1@maxOccurs=1
+    Sequence@minOccurs=1@maxOccurs=1
+        Group@name=beat-unit@minOccurs=1@maxOccurs=1
+            Sequence@minOccurs=1@maxOccurs=1
+                Element@name=beat-unit@minOccurs=1@maxOccurs=1
+                Element@name=beat-unit-dot@minOccurs=0@maxOccurs=unbounded
+        Element@name=beat-unit-tied@minOccurs=0@maxOccurs=unbounded
+        Choice@minOccurs=1@maxOccurs=1
+            Element@name=per-minute@minOccurs=1@maxOccurs=1
+            Sequence@minOccurs=1@maxOccurs=1
+                Group@name=beat-unit@minOccurs=1@maxOccurs=1
+                    Sequence@minOccurs=1@maxOccurs=1
+                        Element@name=beat-unit@minOccurs=1@maxOccurs=1
+                        Element@name=beat-unit-dot@minOccurs=0@maxOccurs=unbounded
+                Element@name=beat-unit-tied@minOccurs=0@maxOccurs=unbounded
+    Sequence@minOccurs=1@maxOccurs=1
+        Element@name=metronome-arrows@minOccurs=0@maxOccurs=1
+        Element@name=metronome-note@minOccurs=1@maxOccurs=unbounded
+        Sequence@minOccurs=0@maxOccurs=1
+            Element@name=metronome-relation@minOccurs=1@maxOccurs=1
+            Element@name=metronome-note@minOccurs=1@maxOccurs=unbounded
+"""
+        assert container.tree_representation() == expected
+
+
+class TestChildContainerCheckRequired(TestCase):
+    def test_get_all_leaves(self):
+        func = lambda l: convert_to_xml_class_name(l.content.name)
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypePitch).get_child_container()
+        assert container.get_leaves(func) == ['XMLStep', 'XMLAlter', 'XMLOctave']
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeStaffDetails).get_child_container()
+        assert container.get_leaves(func) == ['XMLStaffType', ['XMLStaffLines', 'XMLLineDetail'], 'XMLStaffTuning', 'XMLCapo',
+                                              'XMLStaffSize']
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeInterchangeable).get_child_container()
+        assert container.get_leaves(func) == ['XMLTimeRelation', ['XMLBeats', 'XMLBeatType']]
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeLyric).get_child_container()
+        assert container.get_leaves(func) == [
+            (
+                ['XMLSyllabic', 'XMLText', [['XMLElision', 'XMLSyllabic'], 'XMLText'], 'XMLExtend'],
+                'XMLExtend', 'XMLLaughing', 'XMLHumming'
+            ), 'XMLEndLine', 'XMLEndParagraph', ['XMLFootnote', 'XMLLevel']
+        ]
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeNote).get_child_container()
+        assert container.get_leaves(func) == [
+            (
+                ['XMLGrace',
+                 (
+                     [['XMLChord', ('XMLPitch', 'XMLUnpitched', 'XMLRest')], 'XMLTie'],
+                     ['XMLCue', ['XMLChord', ('XMLPitch', 'XMLUnpitched', 'XMLRest')]]
+                 )
+                 ],
+                ['XMLCue', ['XMLChord', ('XMLPitch', 'XMLUnpitched', 'XMLRest')], 'XMLDuration'],
+                [['XMLChord', ('XMLPitch', 'XMLUnpitched', 'XMLRest')], 'XMLDuration', 'XMLTie']
+            ),
+            'XMLInstrument', ['XMLFootnote', 'XMLLevel', 'XMLVoice'], 'XMLType', 'XMLDot', 'XMLAccidental',
+            'XMLTimeModification', 'XMLStem', 'XMLNotehead', 'XMLNoteheadText', 'XMLStaff', 'XMLBeam',
+            'XMLNotations', 'XMLLyric', 'XMLPlay', 'XMLListen'
+        ]
+
+    def test_get_required_elements(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasureStyle).get_child_container()
+        assert container.get_required_element_names() == ('XMLMultipleRest', 'XMLMeasureRepeat', 'XMLBeatRepeat', 'XMLSlash')
+        container.add_element(XMLSlash())
+        assert container.get_required_element_names() is None
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeNameDisplay).get_child_container()
+        assert container.get_required_element_names() is None
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeKey).get_child_container()
+        assert container.get_required_element_names() == ('XMLFifths', ['XMLKeyStep', 'XMLKeyAlter'])
+        container.add_element(XMLFifths())
+        assert container.get_required_element_names() is None
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeAttributes).get_child_container()
+        assert container.get_required_element_names() is None
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeScorePartwise).get_child_container()
+        assert container.get_required_element_names() == ['XMLPartList', 'XMLPart']
+        container.add_element(XMLPart())
+        assert container.get_required_element_names() == 'XMLPartList'
+        container.add_element(XMLPartList())
+        assert container.get_required_element_names() is None
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypePart).get_child_container()
+        assert container.get_required_element_names() == 'XMLMeasure'
+        container.add_element(XMLMeasure())
+        assert container.get_required_element_names() is None
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasure).get_child_container()
+        assert container.get_required_element_names() is None
+
+    def test_lyric_required_elements(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeLyric).get_child_container()
+        assert container.get_required_element_names() == ('XMLText', 'XMLExtend', 'XMLLaughing', 'XMLHumming')
+
+        container.add_element(XMLText())
+        assert container.get_required_element_names() is None
+        container.add_element(XMLElision())
+        assert container.get_required_element_names() == 'XMLText'
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeLyric).get_child_container()
+        container.add_element(XMLText())
+        assert container.get_required_element_names() is None
+        container.add_element(XMLSyllabic())
+        assert container.get_required_element_names() is None
+        container.add_element(XMLSyllabic())
+        assert container.get_required_element_names() == ['XMLElision', 'XMLText']
+
+    def test_note_required_elements(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeNote).get_child_container()
+        assert container.get_required_element_names() == (
+            ['XMLGrace', (('XMLPitch', 'XMLUnpitched', 'XMLRest'), ['XMLCue', ('XMLPitch', 'XMLUnpitched', 'XMLRest')])],
+            ['XMLCue', ('XMLPitch', 'XMLUnpitched', 'XMLRest'), 'XMLDuration'],
+            [('XMLPitch', 'XMLUnpitched', 'XMLRest'), 'XMLDuration']
+        )
+        container.add_element(XMLPitch())
+        assert container.get_required_element_names() == 'XMLGrace'
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeNote).get_child_container()
+        container.add_element(XMLGrace())
+        container.check_required_elements()
+        print(container.tree_representation())
+        # assert container.get_required_element_names() == 'XMLGrace'
+
+    def test_required_choice_not_fulfilled(self):
+        """
+        Test methode add_required will show in tree presentation that the element or the choice requirement is not fulfilled
+        """
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasureStyle).get_child_container()
+        container.requirement_not_fulfilled = True
+        expected = """Choice@minOccurs=1@maxOccurs=1
+    !Required!
+    Element@name=multiple-rest@minOccurs=1@maxOccurs=1
+    Element@name=measure-repeat@minOccurs=1@maxOccurs=1
+    Element@name=beat-repeat@minOccurs=1@maxOccurs=1
+    Element@name=slash@minOccurs=1@maxOccurs=1
+"""
+        assert container.tree_representation() == expected
+
+    def test_required_element_not_fulfilled(self):
+        """
+        Test methode add_required will show in tree presentation that the element or the choice requirement is not fulfilled
+        """
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypePitch).get_child_container()
+        container.get_children()[0].requirement_not_fulfilled = True
+        container.get_children()[2].requirement_not_fulfilled = True
+        expected = """Sequence@minOccurs=1@maxOccurs=1
+    Element@name=step@minOccurs=1@maxOccurs=1
+        !Required!
+    Element@name=alter@minOccurs=0@maxOccurs=1
+    Element@name=octave@minOccurs=1@maxOccurs=1
+        !Required!
+"""
+        assert container.tree_representation() == expected
+
+    def test_check_choice(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasureStyle).get_child_container()
+        assert container.check_required_elements() is True
+        assert container.requirement_not_fulfilled is True
+        container.add_element(XMLMultipleRest())
+        assert container.requirement_not_fulfilled is False
+        assert container.check_required_elements() is False
+
+    def test_check_sequence_force_validate(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeStaffDetails).get_child_container()
+        assert container.get_children()[1].force_validate is False
+        assert container.check_required_elements() is False
+        container.get_children()[1].force_validate = True
+        assert container.check_required_elements() is True
+        assert container.get_children()[1].get_children()[0].requirement_not_fulfilled is True
+        container.add_element(XMLStaffLines())
+        assert container.get_children()[1].get_children()[0].requirement_not_fulfilled is False
+
+    def test_check_sequence(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypePitch).get_child_container()
+        assert container.check_required_elements() is True
+        assert container.get_children()[0].requirement_not_fulfilled is True
+        assert container.get_children()[2].requirement_not_fulfilled is True
+
+    def test_check_score_child_container(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeScorePartwise).get_child_container()
+        assert container.check_required_elements() is True
+        container.add_element(XMLPartList())
+        assert container.check_required_elements() is True
+        container.add_element(XMLPart())
+        assert container.check_required_elements() is False
+
+    def test_check_lyric_child_container(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeLyric).get_child_container()
+        assert container.check_required_elements() is True
+        container.add_element(XMLLaughing())
+        assert container.check_required_elements() is False
+
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeLyric).get_child_container()
+        container.add_element(XMLText())
+        container.check_required_elements()
+        assert container.check_required_elements() is False
+        container.add_element(XMLElision())
+        assert container.check_required_elements() is True
+        container.add_element(XMLText())
+        assert container.check_required_elements() is False
+        with self.assertRaises(XMLChildContainerMaxOccursError):
+            container.add_element(XMLText())
+
+    def test_check_simple_sequence(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypePitch).get_child_container()
+        assert container.check_required_elements() is True
+        # assert container.get_required_elements() == ['XMLStep', 'XMLOctave']
+        with self.assertRaises(XMLChildContainerElementRequired) as err:
+            _check_sequence_container(container)
+        assert err.exception.args[0] == 'Element XMLStep is required'
+        container.add_element(XMLStep())
+        with self.assertRaises(XMLChildContainerElementRequired) as err:
+            _check_sequence_container(container)
+        assert err.exception.args[0] == 'Element XMLOctave is required'
+        container.add_element(XMLOctave())
+        _check_sequence_container(container)
+
+    def test_check_sequence_with_sequence(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeStaffDetails).get_child_container()
+        _check_sequence_container(container)
+
+    def test_check_sequence_with_group(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeInterchangeable).get_child_container()
+        with self.assertRaises(XMLChildContainerElementRequired) as err:
+            _check_sequence_container(container)
+        assert err.exception.args[0] == 'Element XMLBeats is required'
+        container.add_element(XMLBeats())
+        with self.assertRaises(XMLChildContainerElementRequired) as err:
+            _check_sequence_container(container)
+        assert err.exception.args[0] == 'Element XMLBeatType is required'
+        container.add_element(XMLBeatType())
+        _check_sequence_container(container)

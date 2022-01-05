@@ -62,10 +62,13 @@ class TestTree(TestCase):
     child4
         grandchild3
 """
-        assert self.root.tree_repr('name') == expected
+        assert self.root.tree_representation('name') == expected
 
     def test_level(self):
         assert self.greatgrandchild1.level == 3
         assert self.grandchild2.level == 2
         assert self.child4.level == 1
         assert self.root.level == 0
+
+    def test_reversed_path_to_root(self):
+        assert list(self.greatgrandchild1.reversed_path_to_root()) == [self.greatgrandchild1, self.grandchild2, self.child2, self.root]

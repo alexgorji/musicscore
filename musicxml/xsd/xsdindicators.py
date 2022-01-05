@@ -116,4 +116,12 @@ for xsd_group in xsd_groups:
     exec(f"{class_name} = type('{class_name}', {base_classes}, {attributes})")
     xsd_group_class_names.append(class_name)
 
-__all__ = xsd_group_class_names
+# __all__ = xsd_group_class_names
+__all__ = ['XSDGroupAllMargins', 'XSDGroupBeatUnit', 'XSDGroupClef', 'XSDGroupDisplayStepOctave',
+           'XSDGroupDuration', 'XSDGroupEditorial', 'XSDGroupEditorialVoice',
+           'XSDGroupEditorialVoiceDirection', 'XSDGroupFootnote', 'XSDGroupFullNote',
+           'XSDGroupHarmonyChord', 'XSDGroupLayout', 'XSDGroupLeftRightMargins', 'XSDGroupLevel',
+           'XSDGroupMusicData', 'XSDGroupNonTraditionalKey', 'XSDGroupPartGroup',
+           'XSDGroupScoreHeader', 'XSDGroupScorePart', 'XSDGroupSlash', 'XSDGroupStaff',
+           'XSDGroupTimeSignature', 'XSDGroupTraditionalKey', 'XSDGroupTranspose', 'XSDGroupTuning',
+           'XSDGroupVirtualInstrumentData', 'XSDGroupVoice']
