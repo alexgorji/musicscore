@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from tree.tree import Tree
+from tree.tree import Tree, ChildNotFoundError
 
 
 class A(Tree):
@@ -62,7 +62,7 @@ class TestTree(TestCase):
     child4
         grandchild3
 """
-        assert self.root.tree_representation('name') == expected
+        assert self.root.tree_representation(lambda x: x.name) == expected
 
     def test_level(self):
         assert self.greatgrandchild1.level == 3
@@ -72,3 +72,12 @@ class TestTree(TestCase):
 
     def test_reversed_path_to_root(self):
         assert list(self.greatgrandchild1.reversed_path_to_root()) == [self.greatgrandchild1, self.grandchild2, self.child2, self.root]
+
+    def test_remove_child(self):
+        with self.assertRaises(ChildNotFoundError):
+            self.child2.remove(self.child1)
+
+        self.child2.remove(self.grandchild2)
+        assert self.child2.get_children() == [self.grandchild1]
+        assert self.grandchild2.get_parent() is None
+        assert self.greatgrandchild1.get_parent() == self.grandchild2

@@ -1,4 +1,4 @@
-from musicxml.util.core import cap_first, find_all_xsd_children, convert_to_xml_class_name
+from musicxml.util.core import cap_first, find_all_xsd_children, convert_to_xml_class_name, convert_to_xsd_class_name
 from musicxml.xsd.xsdtree import XSDTree, XSDTreeElement
 
 
@@ -105,7 +105,7 @@ xsd_groups = find_all_xsd_children(tag='group')
 
 for xsd_group in xsd_groups:
     xsd_tree = XSDTree(xsd_group)
-    class_name = 'XSDGroup' + ''.join([cap_first(partial) for partial in xsd_tree.name.split('-')])
+    class_name = convert_to_xsd_class_name(xsd_tree.name, 'group')
     base_classes = "(XSDGroup, )"
     attributes = """
     {

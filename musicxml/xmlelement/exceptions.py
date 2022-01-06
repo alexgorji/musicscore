@@ -10,11 +10,7 @@ class XMLChildContainerMaxOccursError(XMLChildContainerException):
     pass
 
 
-class XMLChildContainerChoiceHasOtherElement(XMLChildContainerException):
-    pass
-
-
-class XMLChildContainerElementRequired(XMLChildContainerException):
+class XMLChildContainerChoiceHasAnotherChosenChild(XMLChildContainerException):
     pass
 
 

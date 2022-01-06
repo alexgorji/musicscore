@@ -3,7 +3,7 @@ from xml.etree import ElementTree as ET
 from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired
 from musicxml.util.core import root1, ns, cap_first, convert_to_xsd_class_name, convert_to_xml_class_name
 from musicxml.xmlelement.exceptions import XMLChildContainerWrongElementError, XMLChildContainerMaxOccursError, \
-    XMLChildContainerChoiceHasOtherElement, XMLChildContainerFactoryError, XMLChildContainerElementRequired
+    XMLChildContainerChoiceHasAnotherChosenChild, XMLChildContainerFactoryError
 from musicxml.xsd.xsdcomplextype import *
 from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdcomplextype import XSDComplexType
@@ -12,56 +12,6 @@ from musicxml.xsd.xsdindicators import XSDGroup, XSDSequence, XSDChoice
 from musicxml.xsd.xsdindicators import *
 from musicxml.xsd.xsdtree import XSDTree
 from tree.tree import Tree
-
-
-def _check_element_container(xsd_container_element):
-    if not isinstance(xsd_container_element.content, XSDElement):
-        raise TypeError(xsd_container_element.content)
-    if len(xsd_container_element.content.xml_elements) < int(xsd_container_element.min_occurrences):
-        raise XMLChildContainerElementRequired(f"Element {convert_to_xml_class_name(xsd_container_element.content.name)} is required")
-
-
-def _check_group_container(xsd_container_group):
-    if not isinstance(xsd_container_group.content, XSDGroup):
-        raise TypeError(xsd_container_group.content)
-    if xsd_container_group.min_occurrences != 0:
-        if isinstance(xsd_container_group.get_children()[0].content, XSDSequence):
-            _check_sequence_container(xsd_container_group.get_children()[0])
-        else:
-            raise NotImplementedError
-
-
-def _check_sequence_container(xsd_container_sequence):
-    if not isinstance(xsd_container_sequence.content, XSDSequence):
-        raise TypeError(xsd_container_sequence.content)
-    if xsd_container_sequence.min_occurrences != 0:
-        for child in xsd_container_sequence.get_children():
-            if isinstance(child.content, XSDElement):
-                _check_element_container(child)
-            elif isinstance(child.content, XSDSequence):
-                _check_sequence_container(child)
-            elif isinstance(child.content, XSDGroup):
-                _check_group_container(child)
-            elif isinstance(child.content, XSDChoice):
-                _check_choice_container(child)
-            else:
-                raise ValueError(child)
-
-
-def _check_choice_container(xsd_container_choice):
-    if not isinstance(xsd_container_choice.content, XSDChoice):
-        raise TypeError(xsd_container_choice.content)
-    if xsd_container_choice.min_occurrences != 0:
-        for child in xsd_container_choice.get_children():
-            if isinstance(child.content, XSDElement):
-                try:
-                    _check_element_container(child)
-                    return
-                except XMLChildContainerElementRequired:
-                    pass
-        raise XMLChildContainerElementRequired(
-            f"One of choice elements {_get_choice_required_element_names(xsd_container_choice)} is required"
-        )
 
 
 def _convert_xsd_child_to_xsd_container(xsd_child):
@@ -89,79 +39,7 @@ def _convert_xsd_child_to_xsd_container(xsd_child):
         raise NotImplementedError(xsd_child.tag)
 
 
-def _get_container_required_element_names(xsd_container):
-    if isinstance(xsd_container.content, XSDSequence):
-        return _get_sequence_required_element_names(xsd_container)
-    elif isinstance(xsd_container.content, XSDGroup):
-        return _get_group_required_element_names(xsd_container)
-    elif isinstance(xsd_container.content, XSDChoice):
-        return _get_choice_required_element_names(xsd_container)
-    else:
-        raise NotImplementedError()
-
-
-def _get_choice_required_element_names(xsd_container_choice):
-    for leaf in xsd_container_choice.iterate_leaves():
-        if leaf.content.xml_elements:
-            return None
-    output = []
-    for child in xsd_container_choice.get_children():
-        if int(child.min_occurrences) == 0:
-            pass
-        elif int(child.min_occurrences) == 1:
-            if isinstance(child.content, XSDElement):
-                output.append(convert_to_xml_class_name(child.content.name))
-            else:
-                required_element_names = _get_container_required_element_names(child)
-                if required_element_names:
-                    output.append(required_element_names)
-        else:
-            raise NotImplementedError(f'child {child} with min_occurrence greater than 1')
-
-    if not output:
-        return None
-    elif len(output) == 1:
-        return output[0]
-    else:
-        return tuple(output)
-
-
-def _get_group_required_element_names(xsd_group_container):
-    return _get_sequence_required_element_names(xsd_group_container.get_children()[0])
-
-
-def _get_sequence_required_element_names(xsd_sequence_container):
-    output = []
-    for child in xsd_sequence_container.get_children():
-        if int(child.min_occurrences) == 0:
-            pass
-        elif int(child.min_occurrences) == 1:
-            if isinstance(child.content, XSDElement):
-                if not child.content.xml_elements:
-                    output.append(convert_to_xml_class_name(child.content.name))
-            else:
-                required_element_names = _get_container_required_element_names(child)
-                if required_element_names:
-                    output.append(required_element_names)
-        else:
-            raise NotImplementedError(f'child {child} with min_occurrence greater than 1')
-    if not output:
-        return None
-    elif len(output) == 1:
-        return output[0]
-    else:
-        return output
-
-
-def _check_filled_containers(xsd_container):
-    for leaf in [l for l in xsd_container.iterate_leaves() if l.content.xml_elements]:
-        for node in leaf.reversed_path_to_root():
-            if isinstance(node.content, XSDSequence) and node.min_occurrences == 0:
-                node.force_validate = True
-
-
 def _check_if_container_require_elements(xsd_container):
-    _check_filled_containers(xsd_container)
     if isinstance(xsd_container.content, XSDSequence):
         return _check_if_sequence_require_elements(xsd_container)
     elif isinstance(xsd_container.content, XSDGroup):
@@ -173,10 +51,12 @@ def _check_if_container_require_elements(xsd_container):
 
 
 def _check_if_choice_require_elements(xsd_container_choice):
-    required_element_names = []
     element_chosen = False
     for child in xsd_container_choice.get_children():
-        if child.force_validate:
+        if isinstance(child.content, XSDGroup):
+            if child.get_children()[0].force_validate:
+                _check_if_container_require_elements(child.get_children()[0])
+        elif child.force_validate:
             _check_if_container_require_elements(child)
         else:
             if child.min_occurrences == 0:
@@ -184,27 +64,18 @@ def _check_if_choice_require_elements(xsd_container_choice):
             elif int(child.min_occurrences) == 1:
                 if isinstance(child.content, XSDElement):
                     if len(child.content.xml_elements) == 0:
-                        required_element_names.append(convert_to_xml_class_name(child.content.name))
+                        pass
                     elif len(child.content.xml_elements) == 1:
                         element_chosen = True
                     else:
                         raise NotImplementedError(child)
                 else:
-                    other_required_element_names = _check_if_container_require_elements(child)
-                    if other_required_element_names:
-                        required_element_names.append(other_required_element_names)
+                    _check_if_container_require_elements(child)
             else:
                 raise NotImplementedError(f'child {child} with min_occurrence greater than 1')
 
     if element_chosen:
         xsd_container_choice.requirement_not_fulfilled = False
-        required_element_names = []
-    if not required_element_names:
-        return None
-    elif len(required_element_names) == 1:
-        return required_element_names[0]
-    else:
-        return tuple(required_element_names)
 
 
 def _check_if_group_require_elements(xsd_group_container):
@@ -222,31 +93,20 @@ def _check_if_sequence_require_elements(xsd_sequence_container):
             else:
                 _check_if_container_require_elements(child)
 
-    def force_validate_child(ch):
-        for grandchild in ch.get_children():
-            if isinstance(grandchild.content, XSDElement):
-                if len(grandchild.content.xml_elements) == 0:
-                    grandchild.requirement_not_fulfilled = True
-            else:
-                _check_if_container_require_elements(grandchild)
-
     def validate_child(ch):
         if isinstance(ch.content, XSDElement):
             if child.choices_in_reversed_path:
                 pass
-            elif len(ch.content.xml_elements) == 0:
+            elif len(ch.content.xml_elements) < ch.min_occurrences:
                 ch.requirement_not_fulfilled = True
-            elif len(ch.content.xml_elements) == 1:
-                pass
             else:
-                raise NotImplementedError(ch)
+                ch.requirement_not_fulfilled = False
         else:
             _check_if_container_require_elements(ch)
 
     for child in xsd_sequence_container.get_children():
         if child.force_validate is True:
             _check_if_container_require_elements(child)
-            # force_validate_child(child)
         elif child.min_occurrences == 0:
             pass
         elif child.min_occurrences == 1:
@@ -255,16 +115,28 @@ def _check_if_sequence_require_elements(xsd_sequence_container):
             raise NotImplementedError(f'child {child} with min_occurrence greater than 1')
 
 
+class DuplicationXSDSequence(XSDSequence):
+    sequence_xsd = """
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            </xs:sequence>
+    """
+
+    def __init__(self):
+        xsd_tree_ = XSDTree(ET.fromstring(self.sequence_xsd))
+        super().__init__(xsd_tree_)
+
+
 class XMLChildContainer(Tree):
     def __init__(self, content, min_occurrences=None, max_occurrences=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._content = None
+        self._chosen_child = None
         self._required_element_names = None
         self._requirement_not_fulfilled = None
         self.min_occurrences = 1 if min_occurrences is None else int(min_occurrences)
         self.max_occurrences = 1 if max_occurrences is None else 'unbounded' if max_occurrences == 'unbounded' else int(max_occurrences)
         self.content = content
-        self.force_validate = False
+        self._force_validate = None
 
         self._populate_children()
 
@@ -280,6 +152,43 @@ class XMLChildContainer(Tree):
     def _check_child(self, child):
         if not isinstance(child, XMLChildContainer):
             raise TypeError
+
+    def _create_empty_copy(self):
+        """
+        Creates a copy from scratch (xsd tree) without attached elements or duplicated nodes
+        :return: XMLChildContainer
+        """
+        if isinstance(self.content, XSDChoice) or isinstance(self.content, XSDSequence):
+            copied_content = self.content.__class__(self.content.xsd_tree)
+        else:
+            copied_content = eval(self.content.__class__.__name__)()
+        return XMLChildContainer(copied_content, self.min_occurrences, self.max_occurrences)
+
+    def _update_requirements_in_path(self):
+        if not isinstance(self.content, XSDElement):
+            raise ValueError
+        if self.max_is_reached:
+            self.requirement_not_fulfilled = False
+        if self.content.xml_elements:
+            for node in self.reversed_path_to_root():
+                if node.get_parent():
+                    if isinstance(node.get_parent().content, XSDChoice):
+                        if node.get_parent().chosen_child:
+                            if node.get_parent().chosen_child != node:
+                                raise XMLChildContainerChoiceHasAnotherChosenChild
+                            else:
+                                break
+                        else:
+                            node.get_parent().chosen_child = node
+                            if node.get_parent().requirement_not_fulfilled:
+                                node.get_parent().requirement_not_fulfilled = False
+                                break
+                            node.get_parent().requirement_not_fulfilled = False
+                    elif isinstance(node.get_parent().content, XSDSequence):
+                        if node.get_parent().force_validate:
+                            break
+                        else:
+                            node.get_parent().set_force_validate(node, True)
 
     def _populate_children(self):
         for xsd_child in [child for child in self.content.xsd_tree.get_children() if
@@ -350,6 +259,34 @@ class XMLChildContainer(Tree):
         return [node for node in list(self.reversed_path_to_root())[1:] if isinstance(node.content, XSDChoice)]
 
     @property
+    def chosen_child(self):
+        return self._chosen_child
+
+    @chosen_child.setter
+    def chosen_child(self, val):
+        if not isinstance(self.content, XSDChoice):
+            raise TypeError
+        self._chosen_child = val
+
+    @property
+    def force_validate(self):
+        return self._force_validate
+
+    @property
+    def max_is_reached(self):
+        if not isinstance(self.content, XSDElement):
+            raise TypeError
+        if self.max_occurrences == 'unbounded':
+            return False
+        else:
+            if len(self.content.xml_elements) == self.max_occurrences:
+                return True
+            elif len(self.content.xml_elements) > self.max_occurrences:
+                raise ValueError
+            else:
+                return False
+
+    @property
     def requirement_not_fulfilled(self):
         return self._requirement_not_fulfilled
 
@@ -361,43 +298,63 @@ class XMLChildContainer(Tree):
 
     # public methods
 
-    def add_element(self, xml_element):
+    def add_element(self, xml_element, forward=0):
+        if self._requirement_not_fulfilled is None:
+            self.check_required_elements()
+
+        def select_valid_leaves(leaves):
+            choice_has_chosen_child = False
+            for leaf in leaves:
+                for n in leaf.reversed_path_to_root():
+                    if n.get_parent() and isinstance(n.get_parent().content, XSDChoice) and n.get_parent().chosen_child:
+                        choice_has_chosen_child = True
+                        if n == n.get_parent().chosen_child:
+                            return leaf
+                        else:
+                            break
+
+            if not choice_has_chosen_child:
+                return leaves
+            else:
+                return None
+
         if not isinstance(xml_element, XMLElement):
             raise TypeError
-        _element_added = False
-        _element_max_occurrence_is_reached = False
-        _choice_has_already_an_element = False
-        for node in self.traverse():
-            if isinstance(node.content, XSDElement):
-                if node.content.name == xml_element.name:
-                    if node.max_occurrences != 'unbounded' and len(node.content.xml_elements) == node.max_occurrences:
-                        _element_max_occurrence_is_reached = True
-                        continue
-                    if isinstance(node.get_parent().content, XSDChoice):
-                        for child in node.get_parent().get_children():
-                            if isinstance(child.content, XSDElement) and child.content.xml_elements:
-                                _choice_has_already_an_element = True
-                    _element_max_occurrence_is_reached = False
-                    node.content.add_xml_element(xml_element)
-                    _element_added = True
-                    if len(node.content.xml_elements) >= int(node.min_occurrences) and node.requirement_not_fulfilled:
-                        node.requirement_not_fulfilled = False
-                    for n in node.reversed_path_to_root():
-                        if isinstance(n.content, XSDChoice):
-                            if n.requirement_not_fulfilled is True:
-                                n.requirement_not_fulfilled = False
-                                break
-                        if isinstance(n.content, XSDSequence):
-                            n.force_validate = True
-                    break
-        if _element_max_occurrence_is_reached:
-            raise XMLChildContainerMaxOccursError()
-        if _choice_has_already_an_element:
-            raise XMLChildContainerChoiceHasOtherElement()
-        if not _element_added:
+
+        same_name_leaves = [leaf for leaf in self.iterate_leaves() if leaf.content.name == xml_element.name]
+
+        if not same_name_leaves:
             raise XMLChildContainerWrongElementError()
 
-        return xml_element
+        if forward:
+            selected = same_name_leaves[forward]
+        else:
+            max_not_reached_options = [leaf for leaf in same_name_leaves if not leaf.max_is_reached]
+            if not max_not_reached_options:
+                duplicated_parent = same_name_leaves[-1]._duplicate_parent_in_path()
+                if duplicated_parent:
+                    max_not_reached_options = [leaf for leaf in duplicated_parent.iterate_leaves() if leaf.content.name ==
+                                               xml_element.name and not leaf.max_is_reached]
+                else:
+                    raise XMLChildContainerMaxOccursError()
+            options = select_valid_leaves(max_not_reached_options)
+            if options is None:
+                duplicated_parent = same_name_leaves[-1]._duplicate_parent_in_path()
+                if duplicated_parent:
+                    options = [leaf for leaf in duplicated_parent.iterate_leaves() if leaf.content.name == xml_element.name and not
+                    leaf.max_is_reached]
+                else:
+                    raise XMLChildContainerChoiceHasAnotherChosenChild
+
+            if isinstance(options, list):
+                selected = options[0]
+            else:
+                selected = options
+
+        selected.content.add_xml_element(xml_element)
+        selected._update_requirements_in_path()
+        self.check_required_elements()
+        return selected
 
     def check_required_elements(self):
         if self._requirement_not_fulfilled is None:
@@ -407,6 +364,44 @@ class XMLChildContainer(Tree):
             if node.requirement_not_fulfilled:
                 return True
         return False
+
+    def _duplicate_parent_in_path(self):
+        for node in list(self.reversed_path_to_root())[:-1]:
+            if node.get_parent().max_occurrences == 'unbounded':
+                return node.get_parent().duplicate()
+        return None
+
+    def _add_duplication_parent(self):
+
+        if not self.get_parent():
+            parent_container = XMLChildContainer(content=DuplicationXSDSequence())
+            parent_container.add_child(self)
+        elif not (isinstance(self.get_parent().content, DuplicationXSDSequence)):
+            parent_container = XMLChildContainer(content=DuplicationXSDSequence())
+            index = self.get_parent().get_children().index(self)
+            parent = self.get_parent()
+            parent.remove(self)
+            parent.get_children().insert(index, parent_container)
+            parent_container._parent = parent
+            parent_container.add_child(self)
+            if isinstance(parent.content, XSDChoice) and parent.chosen_child == self:
+                parent.chosen_child = parent_container
+        else:
+            pass
+
+    def duplicate(self):
+        if not isinstance(self.content, XSDSequence) and not isinstance(self.content, XSDChoice) and not isinstance(self.content, XSDGroup):
+            raise TypeError(self.content)
+
+        if self.max_occurrences != 'unbounded':
+            raise ValueError
+
+        self._add_duplication_parent()
+
+        copied_self = self._create_empty_copy()
+        copied_self._parent = self.get_parent()
+        self.get_parent().add_child(copied_self)
+        return copied_self
 
     def get_leaves(self, function=None):
         if isinstance(self.content, XSDElement):
@@ -426,16 +421,6 @@ class XMLChildContainer(Tree):
             if len(output) == 1:
                 return output[0]
             return output if isinstance(self.content, XSDSequence) else tuple(output)
-        # elif isinstance(self.content, XSDChoice):
-        #     output = [node.get_leaves(function=function) for node in self.get_children() if node.get_leaves(function=function)]
-        #     try:
-        #         if not output or set(output) == {None}:
-        #             return None
-        #     except TypeError:
-        #         pass
-        #     if len(output) == 1:
-        #         return output[0]
-        #     return tuple(output)
         else:
             raise NotImplementedError
 
@@ -455,60 +440,16 @@ class XMLChildContainer(Tree):
         self.check_required_elements()
         return self.get_leaves(func)
 
-    #
-    # def _get_required_element_names(self):
-    #     if isinstance(self.content, XSDElement):
-    #         if self.requirement_not_fulfilled:
-    #             return convert_to_xml_class_name(self.content.name)
-    #     elif isinstance(self.content, XSDSequence) or isinstance(self.content, XSDGroup):
-    #         output = [child._get_required_element_names() for child in self.get_children() if child._get_required_element_names()]
-    #         if not output:
-    #             return None
-    #         else:
-    #             return output
-    #     elif isinstance(self.content, XSDChoice):
-    #         if self.requirement_not_fulfilled:
-    #             output = []
-    #             for child in self.get_children():
-    #                 if isinstance(child.content, XSDElement):
-    #                     output.append(convert_to_xml_class_name(child.content.name))
-    #                 elif isinstance(child.content, XSDSequence):
-    #                     for grandchild in child.get_children():
-    #                         if isinstance(child.content, XSDElement) and grandchild.min_occurrences != 0:
-    #                             output.append(convert_to_xml_class_name(grandchild.content.name))
-    #                         else:
-    #                             required = grandchild._get_required_element_names()
-    #                             if required:
-    #                                 output.append(required)
-    #                 elif isinstance(child.content, XSDChoice):
-    #                     required = child._get_required_element_names()
-    #                     if required:
-    #                         output.append(required)
-    #                 elif isinstance(child.content, XSDGroup):
-    #                     if
-    #                     required = child._get_required_element_names()
-    #                     if required:
-    #                         output.append(required)
-    #                 else:
-    #                     raise NotImplementedError(child)
-    #                     #
-    #                     # if required:
-    #                     #     output.append(required)
-    #
-    #             if not output:
-    #                 return None
-    #             else:
-    #                 return tuple(output)
-    #     else:
-    #         raise NotImplementedError
-    #
-    #     # self.check_required_elements()
-    #     # return self._required_element_names
-    #     # return output
-    #
-    # def get_required_element_names(self):
-    #     self.check_required_elements()
-    #     return self._get_required_element_names()
+    def set_force_validate(self, node, val):
+        self._force_validate = val
+        for child in [ch for ch in self.get_children() if ch != node]:
+            for n in child.traverse():
+                if isinstance(n.content, XSDChoice):
+                    if n.min_occurrences != 0:
+                        n.requirement_not_fulfilled = True
+                    break
+                if isinstance(n.content, XSDSequence) and n.min_occurrences != 0:
+                    n._force_validate = val
 
     def __repr__(self):
         return f"XMLChildContainer:{self.compact_repr}"
@@ -524,7 +465,7 @@ class XMLChildContainerFactory:
             raise TypeError
         if not complex_type.get_xsd_indicator():
             raise XMLChildContainerFactoryError(f'complex_type {complex_type} has no xsd_indicator.')
-        child_container = XMLChildContainer(complex_type.get_xsd_indicator())
+        child_container = XMLChildContainer(*complex_type.get_xsd_indicator())
         self._child_container = child_container
 
     def get_child_container(self):
@@ -554,7 +495,7 @@ class XMLElement(Tree):
         if self.type_.XSD_TREE.is_complex_type:
             if self.type_.get_xsd_indicator():
                 children_names = [child.get_class_name() for child in self.get_children()]
-                for element_class_name in self.type_.get_xsd_indicator().required_elements:
+                for element_class_name in self.type_.get_xsd_indicator()[0].required_elements:
                     if element_class_name not in children_names:
                         raise XMLElementChildrenRequired(f"{element_class_name} is required for {self.get_class_name()}")
 

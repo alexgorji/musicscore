@@ -58,13 +58,18 @@ class XSDComplexType(XSDTreeElement):
 
     @classmethod
     def get_xsd_indicator(cls):
+        def get_occurrences(ch):
+            min_ = ch.get_attributes().get('minOccurs')
+            max_ = ch.get_attributes().get('maxOccurs')
+            return 1 if not min_ else int(min_), 1 if not max_ else 'unbounded' if max_ == 'unbounded' else int(max_)
+
         for child in cls.XSD_TREE.get_children():
             if child.tag == 'sequence':
-                return XSDSequence(child)
+                return XSDSequence(child), *get_occurrences(child)
             if child.tag == 'choice':
-                return XSDChoice(child)
+                return XSDChoice(child), *get_occurrences(child)
             if child.tag == 'group':
-                return eval(convert_to_xsd_class_name(child.get_attributes()['ref'], 'group'))()
+                return eval(convert_to_xsd_class_name(child.get_attributes()['ref'], 'group'))(), *get_occurrences(child)
             if child.tag == 'complexContent':
                 return eval(convert_to_xsd_class_name(child.get_children()[0].get_attributes()['base'],
                                                       'complex_type')).get_xsd_indicator()

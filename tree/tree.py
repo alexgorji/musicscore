@@ -1,11 +1,28 @@
 from abc import ABC, abstractmethod
 
 
+class TreeException(Exception):
+    pass
+
+
+class ChildNotFoundError(TreeException):
+    pass
+
+
 class Tree(ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._parent = None
         self._children = []
+
+    @abstractmethod
+    def _check_child(self, child):
+        """
+        """
+
+    @property
+    def compact_repr(self):
+        return self.__str__()
 
     @property
     def is_leaf(self):
@@ -14,10 +31,12 @@ class Tree(ABC):
         else:
             return False
 
-    @abstractmethod
-    def _check_child(self, child):
-        """
-        """
+    @property
+    def level(self):
+        if self.get_parent() is None:
+            return 0
+        else:
+            return self.get_parent().level + 1
 
     def add_child(self, child):
         self._check_child(child)
@@ -28,19 +47,14 @@ class Tree(ABC):
     def get_children(self):
         return self._children
 
+    def get_indentation(self):
+        indentation = ''
+        for i in range(self.get_layer_number()):
+            indentation += '    '
+        return indentation
+
     def get_parent(self):
         return self._parent
-
-    @property
-    def compact_repr(self):
-        return self.__str__()
-
-    @property
-    def level(self):
-        if self.get_parent() is None:
-            return 0
-        else:
-            return self.get_parent().level + 1
 
     def get_root(self):
         node = self
@@ -63,6 +77,12 @@ class Tree(ABC):
             if node.is_leaf:
                 yield node
 
+    def remove(self, child):
+        if child not in self.get_children():
+            raise ChildNotFoundError
+        child._parent = None
+        self.get_children().remove(child)
+
     def reversed_path_to_root(self):
         yield self
         if self.get_parent():
@@ -76,20 +96,16 @@ class Tree(ABC):
                 for node in child.traverse():
                     yield node
 
-    def get_indentation(self):
-        indentation = ''
-        for i in range(self.get_layer_number()):
-            indentation += '    '
-        return indentation
-
-    def tree_representation(self, attr='compact_repr'):
+    def tree_representation(self, function=None):
+        if not function:
+            function = lambda x: x.compact_repr
 
         """
         A string representation of the tree structure
         """
         output = ''
         for node in self.traverse():
-            output += node.get_indentation() + getattr(node, attr)
+            output += node.get_indentation() + function(node)
             output += '\n'
 
         return output

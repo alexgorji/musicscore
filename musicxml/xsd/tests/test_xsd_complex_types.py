@@ -313,8 +313,10 @@ class TestComplexTypes(MusicXmlTestCase):
         Test if complex type's method get_xsd_indicator return XSDSequence, XSDChoice or None
         """
         assert XSDComplexTypeEmpty().get_xsd_indicator() is None
-        assert isinstance(XSDComplexTypeMidiInstrument().get_xsd_indicator(), XSDSequence)
-        assert isinstance(XSDComplexTypeDynamics().get_xsd_indicator(), XSDChoice)
+        assert isinstance(XSDComplexTypeMidiInstrument().get_xsd_indicator()[0], XSDSequence)
+        assert XSDComplexTypeMidiInstrument().get_xsd_indicator()[1:] == (1, 1)
+        assert isinstance(XSDComplexTypeDynamics().get_xsd_indicator()[0], XSDChoice)
+        assert XSDComplexTypeDynamics().get_xsd_indicator()[1:] == (0, 'unbounded')
 
     def test_value_is_required(self):
         assert XSDComplexTypeOffset.value_is_required() is True
@@ -325,17 +327,18 @@ class TestComplexTypes(MusicXmlTestCase):
         """
         Test sequence with group and elements
         """
-        assert XSDComplexTypeBarline.get_xsd_indicator().elements == [('XMLBarStyle', '0', '1'), ('XMLFootnote', '0', '1'), ('XMLLevel',
-                                                                                                                             '0', '1'),
-                                                                      ('XMLWavyLine', '0', '1'), ('XMLSegno', '0', '1'),
-                                                                      ('XMLCoda', '0', '1'), ('XMLFermata', '0', '2'),
-                                                                      ('XMLEnding', '0', '1'), ('XMLRepeat', '0', '1')]
+        assert XSDComplexTypeBarline.get_xsd_indicator()[0].elements == [('XMLBarStyle', '0', '1'), ('XMLFootnote', '0', '1'), ('XMLLevel',
+                                                                                                                                '0', '1'),
+                                                                         ('XMLWavyLine', '0', '1'), ('XMLSegno', '0', '1'),
+                                                                         ('XMLCoda', '0', '1'), ('XMLFermata', '0', '2'),
+                                                                         ('XMLEnding', '0', '1'), ('XMLRepeat', '0', '1')]
 
     def test_complex_type_print_elements(self):
         """
         Test sequence with group and elements
         """
-        assert XSDComplexTypePrint.get_xsd_indicator().elements == [('XMLPageLayout', '0', '1'), ('XMLSystemLayout', '0', '1'),
-                                                                    ('XMLStaffLayout', '0', 'unbounded'), ('XMLMeasureLayout', '0', '1'),
-                                                                    ('XMLMeasureNumbering', '0', '1'), ('XMLPartNameDisplay', '0', '1'),
-                                                                    ('XMLPartAbbreviationDisplay', '0', '1')]
+        assert XSDComplexTypePrint.get_xsd_indicator()[0].elements == [('XMLPageLayout', '0', '1'), ('XMLSystemLayout', '0', '1'),
+                                                                       ('XMLStaffLayout', '0', 'unbounded'), ('XMLMeasureLayout', '0', '1'),
+                                                                       ('XMLMeasureNumbering', '0', '1'), ('XMLPartNameDisplay', '0', '1'),
+                                                                       ('XMLPartAbbreviationDisplay', '0', '1')]
+

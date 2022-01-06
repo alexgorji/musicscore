@@ -29,14 +29,14 @@ class TestScore(TestCase):
         assert score.type_ == XSDComplexTypeScorePartwise
 
     def test_xsd_complex_type_score_partwise_sequence(self):
-        assert XSDComplexTypeScorePartwise.get_xsd_indicator().elements == [('XMLWork', '0', '1'), ('XMLMovementNumber', '0', '1'),
+        assert XSDComplexTypeScorePartwise.get_xsd_indicator()[0].elements == [('XMLWork', '0', '1'), ('XMLMovementNumber', '0', '1'),
                                                                             ('XMLMovementTitle', '0', '1'), ('XMLIdentification', '0', '1'),
                                                                             ('XMLDefaults', '0', '1'), ('XMLCredit', '0', 'unbounded'),
                                                                             ('XMLPartList', '1', '1'), ('XMLPart', '1', 'unbounded')]
 
     def test_score_partwise_indicator(self):
         score = XMLScorePartwise()
-        assert isinstance(score.type_.get_xsd_indicator(), XSDSequence)
+        assert isinstance(score.type_.get_xsd_indicator()[0], XSDSequence)
 
     def test_hello_world(self):
         score = XMLScorePartwise()
