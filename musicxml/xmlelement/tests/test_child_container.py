@@ -484,7 +484,6 @@ class TestChildContainer(TestCase):
             container.add_element(XMLText())
         with self.assertRaises(XMLChildContainerChoiceHasAnotherChosenChild):
             container.add_element(XMLSyllabic())
-        print(container.tree_representation(show_force_valid))
 
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeLyric).get_child_container()
         choice = container.get_children()[0]
@@ -653,6 +652,48 @@ class TestChildContainer(TestCase):
         assert container.min_occurrences == 0
         assert container.max_occurrences == 'unbounded'
 
+    def test_container_part_list(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypePartList).get_child_container()
+        container.check_required_elements()
+        expected = """Sequence@minOccurs=1@maxOccurs=1
+    Group@name=part-group@minOccurs=0@maxOccurs=unbounded
+        Sequence@minOccurs=1@maxOccurs=1
+            Element@name=part-group@minOccurs=1@maxOccurs=1
+    Group@name=score-part@minOccurs=1@maxOccurs=1
+        Sequence@minOccurs=1@maxOccurs=1
+            Element@name=score-part@minOccurs=1@maxOccurs=1
+                !Required!
+    Choice@minOccurs=0@maxOccurs=unbounded
+        Group@name=part-group@minOccurs=1@maxOccurs=1
+            Sequence@minOccurs=1@maxOccurs=1
+                Element@name=part-group@minOccurs=1@maxOccurs=1
+        Group@name=score-part@minOccurs=1@maxOccurs=1
+            Sequence@minOccurs=1@maxOccurs=1
+                Element@name=score-part@minOccurs=1@maxOccurs=1
+"""
+        assert container.tree_representation(show_force_valid) == expected
+        container.check_required_elements()
+        element = XMLScorePart()
+        container.add_element(element)
+
+        expected = """Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
+    Group@name=part-group@minOccurs=0@maxOccurs=unbounded
+        Sequence@minOccurs=1@maxOccurs=1
+            Element@name=part-group@minOccurs=1@maxOccurs=1
+    Group@name=score-part@minOccurs=1@maxOccurs=1
+        Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
+            Element@name=score-part@minOccurs=1@maxOccurs=1
+                XMLScorePart
+    Choice@minOccurs=0@maxOccurs=unbounded
+        Group@name=part-group@minOccurs=1@maxOccurs=1
+            Sequence@minOccurs=1@maxOccurs=1
+                Element@name=part-group@minOccurs=1@maxOccurs=1
+        Group@name=score-part@minOccurs=1@maxOccurs=1
+            Sequence@minOccurs=1@maxOccurs=1
+                Element@name=score-part@minOccurs=1@maxOccurs=1
+"""
+        assert container.tree_representation(show_force_valid) == expected
+
 
 class TestDuplication(TestCase):
     def test_duplication_sequence(self):
@@ -794,6 +835,9 @@ class TestDuplication(TestCase):
                 leaf.content.xml_elements] == ['XMLPp', 'XMLPp', 'XMLPp', 'XMLPp']
 
         container.add_element(XMLMf())
+        assert len(container.get_parent().get_children()) == 5
+        assert [leaf.content.xml_elements[0].__class__.__name__ for leaf in container.get_parent().iterate_leaves() if
+                leaf.content.xml_elements] == ['XMLPp', 'XMLPp', 'XMLPp', 'XMLPp', 'XMLMf']
 
 
 class TestChildContainerCheckRequired(TestCase):

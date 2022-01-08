@@ -30,19 +30,23 @@ class TestScore(TestCase):
 
     def test_xsd_complex_type_score_partwise_sequence(self):
         assert XSDComplexTypeScorePartwise.get_xsd_indicator()[0].elements == [('XMLWork', '0', '1'), ('XMLMovementNumber', '0', '1'),
-                                                                            ('XMLMovementTitle', '0', '1'), ('XMLIdentification', '0', '1'),
-                                                                            ('XMLDefaults', '0', '1'), ('XMLCredit', '0', 'unbounded'),
-                                                                            ('XMLPartList', '1', '1'), ('XMLPart', '1', 'unbounded')]
+                                                                               ('XMLMovementTitle', '0', '1'),
+                                                                               ('XMLIdentification', '0', '1'),
+                                                                               ('XMLDefaults', '0', '1'), ('XMLCredit', '0', 'unbounded'),
+                                                                               ('XMLPartList', '1', '1'), ('XMLPart', '1', 'unbounded')]
 
     def test_score_partwise_indicator(self):
         score = XMLScorePartwise()
         assert isinstance(score.type_.get_xsd_indicator()[0], XSDSequence)
 
-    def test_hello_world(self):
+    def test_minimum_score(self):
         score = XMLScorePartwise()
-        score.add_child(XMLPartList())
-        score.add_child(XMLPart())
+        pl = score.add_child(XMLPartList())
+        sp = pl.add_child(XMLScorePart(id='P1'))
+        sp.add_child(XMLPartName('some name'))
+        p = score.add_child(XMLPart(id='P1'))
+        p.add_child(XMLMeasure(number='1'))
 
-        score.write(parent_folder / 'test_helloworld_actual.xml')
-        diff = main.diff_files('test_helloworld_actual.xml', 'test_helloworld_expected.xml')
+        score.write(parent_folder / 'test_minimum_score.xml')
+        diff = main.diff_files('test_minimum_score.xml', 'test_minimum_score_expected.xml')
         assert diff == []

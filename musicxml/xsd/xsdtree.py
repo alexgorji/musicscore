@@ -2,6 +2,7 @@ import io
 import re
 import xml.etree.ElementTree as ET
 from contextlib import redirect_stdout
+from typing import Optional
 
 from musicxml.util.core import cap_first, convert_to_xsd_class_name
 from tree.tree import Tree
@@ -50,7 +51,7 @@ class XSDTree(Tree):
         for child in [XSDTree(node) for node in self.xsd_element_tree_element.findall('./')]:
             self.add_child(child)
 
-    def _check_child(self, child):
+    def _check_child_to_be_added(self, child):
         if not isinstance(child, XSDTree):
             raise TypeError
 
@@ -217,7 +218,7 @@ class XSDTreeElement:
     """
     Abstract class of all generated XSD Classes
     """
-    XSD_TREE = None
+    XSD_TREE: Optional[XSDTree] = None
 
     @classmethod
     def get_xsd(cls):

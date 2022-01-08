@@ -19,7 +19,7 @@ class XSDComplexType(XSDTreeElement):
         required_attributes = [attribute for attribute in cls.get_xsd_attributes() if attribute.is_required]
         for required_attribute in required_attributes:
             if required_attribute.name not in val_dict:
-                raise XSDAttributeRequiredException
+                raise XSDAttributeRequiredException(f"{cls.__name__} requires attribute: {required_attribute.name}")
 
         for key in val_dict:
             if key not in [attribute.name for attribute in cls.get_xsd_attributes()]:

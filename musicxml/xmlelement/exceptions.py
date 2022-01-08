@@ -1,3 +1,11 @@
+class XMLElementException(Exception):
+    pass
+
+
+class XMLElementCannotHaveChildrenError(XMLElementException):
+    pass
+
+
 class XMLChildContainerException(Exception):
     pass
 

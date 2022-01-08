@@ -1,9 +1,10 @@
 import copy
+from typing import Optional
 from xml.etree import ElementTree as ET
 from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired
 from musicxml.util.core import root1, ns, cap_first, convert_to_xsd_class_name, convert_to_xml_class_name
 from musicxml.xmlelement.exceptions import XMLChildContainerWrongElementError, XMLChildContainerMaxOccursError, \
-    XMLChildContainerChoiceHasAnotherChosenChild, XMLChildContainerFactoryError
+    XMLChildContainerChoiceHasAnotherChosenChild, XMLChildContainerFactoryError, XMLElementCannotHaveChildrenError
 from musicxml.xsd.xsdcomplextype import *
 from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdcomplextype import XSDComplexType
@@ -39,25 +40,25 @@ def _convert_xsd_child_to_xsd_container(xsd_child):
         raise NotImplementedError(xsd_child.tag)
 
 
-def _check_if_container_require_elements(xsd_container):
+def _check_if_container_requires_elements(xsd_container):
     if isinstance(xsd_container.content, XSDSequence):
-        return _check_if_sequence_require_elements(xsd_container)
+        return _check_if_sequence_requires_elements(xsd_container)
     elif isinstance(xsd_container.content, XSDGroup):
-        return _check_if_group_require_elements(xsd_container)
+        return _check_if_group_requires_elements(xsd_container)
     elif isinstance(xsd_container.content, XSDChoice):
-        return _check_if_choice_require_elements(xsd_container)
+        return _check_if_choice_requires_elements(xsd_container)
     else:
         raise NotImplementedError(xsd_container)
 
 
-def _check_if_choice_require_elements(xsd_container_choice):
+def _check_if_choice_requires_elements(xsd_container_choice):
     element_chosen = False
     for child in xsd_container_choice.get_children():
         if isinstance(child.content, XSDGroup):
             if child.get_children()[0].force_validate:
-                _check_if_container_require_elements(child.get_children()[0])
+                _check_if_container_requires_elements(child.get_children()[0])
         elif child.force_validate:
-            _check_if_container_require_elements(child)
+            _check_if_container_requires_elements(child)
         else:
             if child.min_occurrences == 0:
                 pass
@@ -70,7 +71,7 @@ def _check_if_choice_require_elements(xsd_container_choice):
                     else:
                         raise NotImplementedError(child)
                 else:
-                    _check_if_container_require_elements(child)
+                    _check_if_container_requires_elements(child)
             else:
                 raise NotImplementedError(f'child {child} with min_occurrence greater than 1')
 
@@ -78,11 +79,13 @@ def _check_if_choice_require_elements(xsd_container_choice):
         xsd_container_choice.requirement_not_fulfilled = False
 
 
-def _check_if_group_require_elements(xsd_group_container):
-    return _check_if_sequence_require_elements(xsd_group_container.get_children()[0])
+def _check_if_group_requires_elements(xsd_group_container):
+    if xsd_group_container.min_occurrences == 0 and not xsd_group_container.get_children()[0].force_validate:
+        return
+    return _check_if_sequence_requires_elements(xsd_group_container.get_children()[0])
 
 
-def _check_if_sequence_require_elements(xsd_sequence_container):
+def _check_if_sequence_requires_elements(xsd_sequence_container):
     if xsd_sequence_container.force_validate:
         for child in xsd_sequence_container.get_children():
             if isinstance(child.content, XSDElement):
@@ -91,7 +94,7 @@ def _check_if_sequence_require_elements(xsd_sequence_container):
                 else:
                     pass
             else:
-                _check_if_container_require_elements(child)
+                _check_if_container_requires_elements(child)
 
     def validate_child(ch):
         if isinstance(ch.content, XSDElement):
@@ -102,11 +105,11 @@ def _check_if_sequence_require_elements(xsd_sequence_container):
             else:
                 ch.requirement_not_fulfilled = False
         else:
-            _check_if_container_require_elements(ch)
+            _check_if_container_requires_elements(ch)
 
     for child in xsd_sequence_container.get_children():
         if child.force_validate is True:
-            _check_if_container_require_elements(child)
+            _check_if_container_requires_elements(child)
         elif child.min_occurrences == 0:
             pass
         elif child.min_occurrences == 1:
@@ -141,6 +144,24 @@ class XMLChildContainer(Tree):
         self._populate_children()
 
     # private methods
+    def _add_duplication_parent(self):
+
+        if not self.get_parent():
+            parent_container = XMLChildContainer(content=DuplicationXSDSequence())
+            parent_container.add_child(self)
+        elif not (isinstance(self.get_parent().content, DuplicationXSDSequence)):
+            parent_container = XMLChildContainer(content=DuplicationXSDSequence())
+            index = self.get_parent().get_children().index(self)
+            parent = self.get_parent()
+            parent.remove(self)
+            parent.get_children().insert(index, parent_container)
+            parent_container._parent = parent
+            parent_container.add_child(self)
+            if isinstance(parent.content, XSDChoice) and parent.chosen_child == self:
+                parent.chosen_child = parent_container
+        else:
+            pass
+
     @staticmethod
     def _check_content_type(val):
         types = [XSDSequence, XSDChoice, XSDElement, XSDGroup]
@@ -149,13 +170,13 @@ class XMLChildContainer(Tree):
                 return
         raise TypeError(val)
 
-    def _check_child(self, child):
+    def _check_child_to_be_added(self, child):
         if not isinstance(child, XMLChildContainer):
             raise TypeError
 
     def _create_empty_copy(self):
         """
-        Creates a copy from scratch (xsd tree) without attached elements or duplicated nodes
+        Creates a copy without attached elements or duplicated nodes
         :return: XMLChildContainer
         """
         if isinstance(self.content, XSDChoice) or isinstance(self.content, XSDSequence):
@@ -163,6 +184,12 @@ class XMLChildContainer(Tree):
         else:
             copied_content = eval(self.content.__class__.__name__)()
         return XMLChildContainer(copied_content, self.min_occurrences, self.max_occurrences)
+
+    def _duplicate_parent_in_path(self):
+        for node in list(self.reversed_path_to_root())[:-1]:
+            if node.get_parent().max_occurrences == 'unbounded':
+                return node.get_parent().duplicate()
+        return None
 
     def _update_requirements_in_path(self):
         if not isinstance(self.content, XSDElement):
@@ -246,11 +273,11 @@ class XMLChildContainer(Tree):
             return output
 
     @property
-    def content(self):
+    def content(self) -> XSDElement:
         return self._content
 
     @content.setter
-    def content(self, val):
+    def content(self, val: XSDElement):
         self._check_content_type(val)
         self._content = val
 
@@ -291,65 +318,74 @@ class XMLChildContainer(Tree):
         return self._requirement_not_fulfilled
 
     @requirement_not_fulfilled.setter
-    def requirement_not_fulfilled(self, val):
+    def requirement_not_fulfilled(self, val: bool):
         if not isinstance(val, bool):
             raise TypeError
         self._requirement_not_fulfilled = val
 
     # public methods
 
-    def add_element(self, xml_element, forward=0):
+    def add_element(self, xml_element, forward: int = 0):
         if self._requirement_not_fulfilled is None:
             self.check_required_elements()
 
         def select_valid_leaves(leaves):
-            choice_has_chosen_child = False
+            output = []
+            choice_with_chosen_child = None
             for leaf in leaves:
                 for n in leaf.reversed_path_to_root():
                     if n.get_parent() and isinstance(n.get_parent().content, XSDChoice) and n.get_parent().chosen_child:
-                        choice_has_chosen_child = True
-                        if n == n.get_parent().chosen_child:
-                            return leaf
-                        else:
-                            break
+                        choice_with_chosen_child = n.get_parent()
+                        if n == choice_with_chosen_child.chosen_child:
+                            output.append(leaf)
+                        break
 
-            if not choice_has_chosen_child:
+            if not choice_with_chosen_child:
                 return leaves
-            else:
+            elif not output and choice_with_chosen_child.max_occurrences != 'unbounded':
                 return None
+            else:
+                return output
 
         if not isinstance(xml_element, XMLElement):
             raise TypeError
 
         same_name_leaves = [leaf for leaf in self.iterate_leaves() if leaf.content.name == xml_element.name]
+        # print('same_name_leaves', same_name_leaves)
 
         if not same_name_leaves:
             raise XMLChildContainerWrongElementError()
 
+        selected_same_name_leaves = select_valid_leaves(same_name_leaves)
+        # print('selected_same_name_leaves', selected_same_name_leaves)
+        if selected_same_name_leaves is None:
+            raise XMLChildContainerChoiceHasAnotherChosenChild
+
+        if selected_same_name_leaves == []:
+            duplicated_parent = same_name_leaves[-1]._duplicate_parent_in_path()
+            if duplicated_parent:
+                selected_same_name_leaves = [leaf for leaf in duplicated_parent.iterate_leaves() if
+                                             leaf.content.name == xml_element.name and not
+                                             leaf.max_is_reached]
+            else:
+                raise XMLChildContainerChoiceHasAnotherChosenChild
+
         if forward:
             selected = same_name_leaves[forward]
+            if selected not in selected_same_name_leaves:
+                raise XMLChildContainerChoiceHasAnotherChosenChild('Wrong forwarding')
         else:
-            max_not_reached_options = [leaf for leaf in same_name_leaves if not leaf.max_is_reached]
-            if not max_not_reached_options:
-                duplicated_parent = same_name_leaves[-1]._duplicate_parent_in_path()
+            selected_same_name_leaves_max_not_reached = [leaf for leaf in selected_same_name_leaves if not leaf.max_is_reached]
+            # print('selected_same_name_leaves_max_not_reached', selected_same_name_leaves_max_not_reached)
+            if not selected_same_name_leaves_max_not_reached:
+                duplicated_parent = selected_same_name_leaves[-1]._duplicate_parent_in_path()
                 if duplicated_parent:
-                    max_not_reached_options = [leaf for leaf in duplicated_parent.iterate_leaves() if leaf.content.name ==
-                                               xml_element.name and not leaf.max_is_reached]
+                    selected_same_name_leaves_max_not_reached = [leaf for leaf in duplicated_parent.iterate_leaves() if leaf.content.name ==
+                                                                 xml_element.name and not leaf.max_is_reached]
                 else:
                     raise XMLChildContainerMaxOccursError()
-            options = select_valid_leaves(max_not_reached_options)
-            if options is None:
-                duplicated_parent = same_name_leaves[-1]._duplicate_parent_in_path()
-                if duplicated_parent:
-                    options = [leaf for leaf in duplicated_parent.iterate_leaves() if leaf.content.name == xml_element.name and not
-                    leaf.max_is_reached]
-                else:
-                    raise XMLChildContainerChoiceHasAnotherChosenChild
 
-            if isinstance(options, list):
-                selected = options[0]
-            else:
-                selected = options
+            selected = selected_same_name_leaves_max_not_reached[0]
 
         selected.content.add_xml_element(xml_element)
         selected._update_requirements_in_path()
@@ -359,35 +395,11 @@ class XMLChildContainer(Tree):
     def check_required_elements(self):
         if self._requirement_not_fulfilled is None:
             self._set_requirement_not_fulfilled()
-        _check_if_container_require_elements(self)
+        _check_if_container_requires_elements(self)
         for node in self.traverse():
             if node.requirement_not_fulfilled:
                 return True
         return False
-
-    def _duplicate_parent_in_path(self):
-        for node in list(self.reversed_path_to_root())[:-1]:
-            if node.get_parent().max_occurrences == 'unbounded':
-                return node.get_parent().duplicate()
-        return None
-
-    def _add_duplication_parent(self):
-
-        if not self.get_parent():
-            parent_container = XMLChildContainer(content=DuplicationXSDSequence())
-            parent_container.add_child(self)
-        elif not (isinstance(self.get_parent().content, DuplicationXSDSequence)):
-            parent_container = XMLChildContainer(content=DuplicationXSDSequence())
-            index = self.get_parent().get_children().index(self)
-            parent = self.get_parent()
-            parent.remove(self)
-            parent.get_children().insert(index, parent_container)
-            parent_container._parent = parent
-            parent_container.add_child(self)
-            if isinstance(parent.content, XSDChoice) and parent.chosen_child == self:
-                parent.chosen_child = parent_container
-        else:
-            pass
 
     def duplicate(self):
         if not isinstance(self.content, XSDSequence) and not isinstance(self.content, XSDChoice) and not isinstance(self.content, XSDGroup):
@@ -448,11 +460,12 @@ class XMLChildContainer(Tree):
                     if n.min_occurrences != 0:
                         n.requirement_not_fulfilled = True
                     break
-                if isinstance(n.content, XSDSequence) and n.min_occurrences != 0:
+                if isinstance(n.content, XSDSequence) and n.min_occurrences != 0 and not (isinstance(n.get_parent().content, XSDGroup) and
+                                                                                          n.get_parent().min_occurrences == 0):
                     n._force_validate = val
 
     def __repr__(self):
-        return f"XMLChildContainer:{self.compact_repr}"
+        return f"XMLChildContainer:{self.compact_repr} {self.get_coordinates_in_tree()}"
 
 
 class XMLChildContainerFactory:
@@ -473,39 +486,48 @@ class XMLChildContainerFactory:
 
 
 class XMLElement(Tree):
-    XSD_TREE = None
+    XSD_TREE: Optional[XSDTree] = None
 
     def __init__(self, value=None, **kwargs):
+        self._type = None
         super().__init__()
         self._value = None
         self._attributes = None
         self._et_xml_element = None
-        self._type = None
         self._child_container_tree = None
         self.value = value
         self._set_attributes(kwargs)
         self._create_et_xml_element()
-        self._set_child_container_tree()
+        self._create_child_container_tree()
 
-    def _check_child(self, child):
+    def _check_child_to_be_added(self, child):
         if not isinstance(child, XMLElement):
             raise TypeError
-
-    def _check_required_children(self):
-        if self.type_.XSD_TREE.is_complex_type:
-            if self.type_.get_xsd_indicator():
-                children_names = [child.get_class_name() for child in self.get_children()]
-                for element_class_name in self.type_.get_xsd_indicator()[0].required_elements:
-                    if element_class_name not in children_names:
-                        raise XMLElementChildrenRequired(f"{element_class_name} is required for {self.get_class_name()}")
 
     def _create_et_xml_element(self):
         self._et_xml_element = ET.Element(self.name, self.attributes)
         if self.value:
             self._et_xml_element.text = str(self.value)
 
-    def _set_child_container_tree(self):
+    def _final_checks(self):
+        if self.type_.value_is_required() and not self.value:
+            raise XMLElementValueRequiredError(f"{self.get_class_name()} requires a value.")
+        if self._child_container_tree:
+            required_children = self._child_container_tree.get_required_element_names()
+            if required_children:
+                raise XMLElementChildrenRequired(f"{self.__class__.__name__} requires at least following children: {required_children}")
+
         if self.type_.XSD_TREE.is_complex_type:
+            self.type_.check_attributes(self.attributes)
+
+        for child in self.get_children():
+            child._final_checks()
+
+    def _create_child_container_tree(self):
+        try:
+            if self.type_.XSD_TREE.is_complex_type:
+                self._child_container_tree = XMLChildContainerFactory(complex_type=self.type_).get_child_container()
+        except XMLChildContainerFactoryError:
             pass
 
     def _set_attributes(self, val):
@@ -556,28 +578,49 @@ class XMLElement(Tree):
 
     @classmethod
     def get_class_name(cls):
-        return convert_to_xml_class_name(cls.XSD_TREE.name)
+        return cls.__name__
 
-    def add_child(self, child):
-        child = super().add_child(child)
+    def add_child(self, child: 'XMLElement') -> 'XMLElement':
+        if not self._child_container_tree:
+            raise XMLElementCannotHaveChildrenError()
+        self._child_container_tree.add_element(child)
         self._et_xml_element.append(child._et_xml_element)
         return child
 
-    def _final_checks(self):
-        if self.type_.value_is_required() and not self.value:
-            raise XMLElementValueRequiredError(f"{self.get_class_name()} requires a value.")
+    def get_children(self):
+        if self._child_container_tree:
+            return [xml_element for leaf in self._child_container_tree.iterate_leaves() for xml_element in leaf.content.xml_elements if
+                    leaf.content.xml_elements]
+        else:
+            return []
 
-        if self.type_.XSD_TREE.is_complex_type:
-            self.type_.check_attributes(self.attributes)
-
-        self._check_required_children()
-
-    def to_string(self):
+    def to_string(self) -> str:
         self._final_checks()
-        for child in self.get_children():
-            child._final_checks()
         ET.indent(self._et_xml_element, space="    ", level=self.level)
-        return ET.tostring(self._et_xml_element, encoding='unicode')
+        return ET.tostring(self._et_xml_element, encoding='unicode') + '\n'
+
+    def __setattr__(self, key, value):
+        if key != '_type':
+            if self.type_.XSD_TREE.is_complex_type:
+                try:
+                    if key in [attribute.name for attribute in self.type_.get_xsd_attributes()]:
+                        self._set_attributes({key: value})
+                        return
+                except KeyError:
+                    pass
+
+        super().__setattr__(key, value)
+
+        # super().__setattr__(key, value)
+        # if self.type_:
+        #     print(self.type_)
+        # print(self.type_)
+        # print(self.type_.XSD_TREE.is_complex_type.get_xsd_attributes())
+        # if self.type_.XSD_TREE.is_complex_type and self.type_.XSD_TREE.is_complex_type.get_xsd_attributes():
+        #     self._set_attributes({key: value})
+        # else:
+        # super().__setattr__(key, value)
+        # self._set_attributes({key: value})
 
 
 typed_elements = list(
@@ -590,14 +633,12 @@ typed_elements = list(
 )
 
 
-def get_doc(self):
+def get_doc(self) -> str:
     if self.type_.XSD_TREE.is_complex_type:
         return self.type_.__doc__
     else:
         return self.XSD_TREE.get_doc()
 
-
-__doc__ = property(get_doc)
 
 xml_element_class_names = []
 
@@ -614,7 +655,7 @@ for element in typed_elements:
     attributes = """
     {
     'XSD_TREE': xsd_tree,
-    '__doc__': __doc__,
+    '__doc__': property(get_doc),
     }
     """
     exec(f"{class_name} = type('{class_name}', {base_classes}, {attributes})")

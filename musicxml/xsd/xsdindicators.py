@@ -44,10 +44,6 @@ class XSDSequence:
         return self._elements
 
     @property
-    def required_elements(self):
-        return [el[0] for el in self.elements if el[1] == '1']
-
-    @property
     def xsd_tree(self):
         return self._xsd_tree
 
@@ -58,9 +54,6 @@ class XSDSequence:
         if value.tag != 'sequence':
             raise ValueError
         self._xsd_tree = value
-
-    def order_elements(self, elements):
-        return elements
 
 
 class XSDChoice:

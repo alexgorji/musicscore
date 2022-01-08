@@ -76,7 +76,8 @@ class TestSimpleTypes(MusicXmlTestCase):
                                                'XSDSimpleTypeStep', 'XSDSimpleTypeSyllabic', 'XSDSimpleTypeTapHand',
                                                'XSDSimpleTypeTremoloMarks', 'XSDSimpleTypeGroupBarlineValue',
                                                'XSDSimpleTypeGroupSymbolValue', 'XSDSimpleTypeMeasureText',
-                                               'XSDSimpleTypeSwingTypeValue', 'XSDSimpleTypeName', 'XSDSimpleTypeNCName', 'XSDSimpleTypeID']
+                                               'XSDSimpleTypeSwingTypeValue', 'XSDSimpleTypeName', 'XSDSimpleTypeNCName',
+                                               'XSDSimpleTypeID', 'XSDSimpleTypeIDREF']
 
     def test_generated_simple_type_xsd_snippet(self):
         """

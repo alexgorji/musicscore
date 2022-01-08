@@ -16,7 +16,7 @@ class Tree(ABC):
         self._children = []
 
     @abstractmethod
-    def _check_child(self, child):
+    def _check_child_to_be_added(self, child):
         """
         """
 
@@ -39,13 +39,21 @@ class Tree(ABC):
             return self.get_parent().level + 1
 
     def add_child(self, child):
-        self._check_child(child)
+        self._check_child_to_be_added(child)
         child._parent = self
         self._children.append(child)
         return child
 
     def get_children(self):
         return self._children
+
+    def get_coordinates_in_tree(self):
+        if self.level == 0:
+            return '0'
+        elif self.level == 1:
+            return str(self.get_parent().get_children().index(self) + 1)
+        else:
+            return f"{self.get_parent().get_coordinates_in_tree()}.{self.get_parent().get_children().index(self) + 1}"
 
     def get_indentation(self):
         indentation = ''

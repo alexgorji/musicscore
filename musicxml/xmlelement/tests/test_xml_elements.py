@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from musicxml.exceptions import XMLElementChildrenRequired, XMLElementValueRequiredError
+from musicxml.exceptions import XMLElementChildrenRequired, XMLElementValueRequiredError, XSDAttributeRequiredException
+from musicxml.xmlelement.tests.test_child_container import show_force_valid
 from musicxml.xmlelement.xmlelement import *
 from musicxml.xsd.xsdcomplextype import *
 from musicxml.xsd.xsdindicators import XSDSequence, XSDChoice
@@ -114,10 +115,10 @@ class TestXMLElements(TestCase):
                 attribute@name=sound@type=yes-no
         """
         el = XMLOffset(-2)
-        assert el.to_string() == '<offset>-2</offset>'
+        assert el.to_string() == '<offset>-2</offset>\n'
 
         el = XMLOffset(-2, sound='yes')
-        assert el.to_string() == '<offset sound="yes">-2</offset>'
+        assert el.to_string() == '<offset sound="yes">-2</offset>\n'
 
         el = XMLOffset()
         with self.assertRaises(XMLElementValueRequiredError):
@@ -156,7 +157,7 @@ class TestXMLElements(TestCase):
             el.to_string()
 
         el.value = 170
-        assert el.to_string() == '<elevation>170</elevation>'
+        assert el.to_string() == '<elevation>170</elevation>\n'
         assert el.__doc__ == 'The elevation and pan elements allow placing of sound in a 3-D space relative to the listener. Both are expressed in degrees ranging from -180 to 180. For elevation, 0 is level with the listener, 90 is directly above, and -90 is directly below.'
 
     def test_element_doc(self):
@@ -175,7 +176,7 @@ The offset affects the visual appearance of the direction. If the sound attribut
         Test that empty complex type is created properly
         """
         el = XMLChord()
-        assert el.to_string() == '<chord />'
+        assert el.to_string() == '<chord />\n'
 
     def test_all_element_tags(self):
         """
@@ -220,5 +221,36 @@ The offset affects the visual appearance of the direction. If the sound attribut
         expected = """<pitch>
     <step>A</step>
     <octave>4</octave>
-</pitch>"""
+</pitch>
+"""
+        assert el.to_string() == expected
+
+    def test_xml_element_part_list(self):
+        el = XMLPartList()
+        with self.assertRaises(XMLElementChildrenRequired) as err:
+            el.to_string()
+
+        assert err.exception.args[0] == 'XMLPartList requires at least following children: XMLScorePart'
+        sp = el.add_child(XMLScorePart())
+
+        with self.assertRaises(XMLElementChildrenRequired) as err:
+            el.to_string()
+        assert err.exception.args[0] == 'XMLScorePart requires at least following children: XMLPartName'
+
+        pn = sp.add_child(XMLPartName())
+        with self.assertRaises(XSDAttributeRequiredException) as err:
+            el.to_string()
+        assert err.exception.args[0] == 'XSDComplexTypeScorePart requires attribute: id'
+        sp.id = '1'
+        with self.assertRaises(XMLElementValueRequiredError) as err:
+            el.to_string()
+
+        assert err.exception.args[0] == 'XMLPartName requires a value.'
+        pn.value = 'part name 1'
+        expected = """<part-list>
+    <score-part>
+        <part-name>part name 1</part-name>
+    </score-part>
+</part-list>
+"""
         assert el.to_string() == expected

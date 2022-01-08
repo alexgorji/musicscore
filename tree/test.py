@@ -10,7 +10,7 @@ class A(Tree):
         self._parent = parent
         self.name = name
 
-    def _check_child(self, child):
+    def _check_child_to_be_added(self, child):
         if not isinstance(child, self.__class__):
             raise TypeError
 
@@ -81,3 +81,8 @@ class TestTree(TestCase):
         assert self.child2.get_children() == [self.grandchild1]
         assert self.grandchild2.get_parent() is None
         assert self.greatgrandchild1.get_parent() == self.grandchild2
+
+    def test_get_coordinates(self):
+        assert self.greatgrandchild1.get_coordinates_in_tree() == '2.2.1'
+        assert self.child2.get_coordinates_in_tree() == '2'
+        assert self.root.get_coordinates_in_tree() == '0'

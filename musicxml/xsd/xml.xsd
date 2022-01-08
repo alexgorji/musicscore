@@ -13,6 +13,9 @@
     <xs:simpleType name="ID" id="ID">
         <xs:restriction base="xs:NCName"/>
     </xs:simpleType>
+    <xs:simpleType name="IDREF" id="IDREF">
+        <xs:restriction base="xs:NCName"/>
+    </xs:simpleType>
 </xs:schema>
 
 

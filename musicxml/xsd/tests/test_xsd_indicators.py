@@ -107,12 +107,3 @@ class TestSequence(TestCase):
                                      ('XMLGroupAbbreviationDisplay', '0', '1'), ('XMLGroupSymbol', '0', '1'), ('XMLGroupBarline', '0', '1'),
                                      ('XMLGroupTime', '0', '1'),
                                      ('XMLFootnote', '0', '1'), ('XMLLevel', '0', '1')]
-
-    def test_sequence_initialization(self):
-        s = self.sequence
-
-        midi_channel = XMLMidiChannel()
-        midi_elevation = XMLElevation()
-        midi_unpitched = XMLMidiUnpitched()
-        midi_bank = XMLMidiBank()
-        s.order_elements(elements=[midi_channel, midi_elevation, midi_unpitched, midi_bank])
