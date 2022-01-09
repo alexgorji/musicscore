@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="NMTOKEN" id="NMTOKEN">
+        <xs:restriction base="xs:token">
+            <xs:pattern value="\c+"/>
+        </xs:restriction>
+    </xs:simpleType>
     <xs:simpleType name="Name" id="Name">
         <xs:restriction base="xs:token">
             <xs:pattern value="\i\c*"/>

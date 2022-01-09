@@ -259,16 +259,19 @@ The offset affects the visual appearance of the direction. If the sound attribut
         with self.assertRaises(XSDAttributeRequiredException) as err:
             el.to_string()
         assert err.exception.args[0] == 'XSDComplexTypeScorePart requires attribute: id'
-        sp.id = '1'
+        sp.id = 'p1'
         with self.assertRaises(XMLElementValueRequiredError) as err:
             el.to_string()
 
         assert err.exception.args[0] == 'XMLPartName requires a value.'
         pn.value = 'part name 1'
         expected = """<part-list>
-    <score-part id="1">
+    <score-part id="p1">
         <part-name>part name 1</part-name>
     </score-part>
 </part-list>
 """
         assert el.to_string() == expected
+
+    def test_order_of_children(self):
+        self.fail('Incomplete')

@@ -11,73 +11,73 @@ class TestSimpleTypes(MusicXmlTestCase):
         """
         Test if xml_simple_type_class_names in module musicxml.types.simpletype return all simple types
         """
-        assert xml_simple_type_class_names == ['XSDSimpleTypeInteger', 'XSDSimpleTypeNonNegativeInteger',
-                                               'XSDSimpleTypePositiveInteger', 'XSDSimpleTypeDecimal',
-                                               'XSDSimpleTypeString', 'XSDSimpleTypeString', 'XSDSimpleTypeToken',
-                                               'XSDSimpleTypeNMTOKEN', 'XSDSimpleTypeDate', 'XSDSimpleTypeAboveBelow',
-                                               'XSDSimpleTypeBeamLevel', 'XSDSimpleTypeColor', 'XSDSimpleTypeCommaSeparatedText',
-                                               'XSDSimpleTypeCssFontSize', 'XSDSimpleTypeDivisions',
-                                               'XSDSimpleTypeEnclosureShape', 'XSDSimpleTypeFermataShape',
-                                               'XSDSimpleTypeFontFamily', 'XSDSimpleTypeFontSize', 'XSDSimpleTypeFontStyle',
-                                               'XSDSimpleTypeFontWeight', 'XSDSimpleTypeLeftCenterRight',
-                                               'XSDSimpleTypeLeftRight', 'XSDSimpleTypeLineLength', 'XSDSimpleTypeLineShape',
-                                               'XSDSimpleTypeLineType', 'XSDSimpleTypeMidi16', 'XSDSimpleTypeMidi128',
-                                               'XSDSimpleTypeMidi16384', 'XSDSimpleTypeMute', 'XSDSimpleTypeNonNegativeDecimal',
-                                               'XSDSimpleTypeNumberLevel', 'XSDSimpleTypeNumberOfLines',
-                                               'XSDSimpleTypeNumberOrNormal', 'XSDSimpleTypeNumeralValue',
-                                               'XSDSimpleTypeOverUnder', 'XSDSimpleTypePercent', 'XSDSimpleTypePositiveDecimal',
-                                               'XSDSimpleTypePositiveDivisions', 'XSDSimpleTypePositiveIntegerOrEmpty',
-                                               'XSDSimpleTypeRotationDegrees', 'XSDSimpleTypeSemiPitched',
-                                               'XSDSimpleTypeSmuflGlyphName', 'XSDSimpleTypeSmuflAccidentalGlyphName',
-                                               'XSDSimpleTypeSmuflCodaGlyphName', 'XSDSimpleTypeSmuflLyricsGlyphName',
-                                               'XSDSimpleTypeSmuflPictogramGlyphName', 'XSDSimpleTypeSmuflSegnoGlyphName',
-                                               'XSDSimpleTypeSmuflWavyLineGlyphName', 'XSDSimpleTypeStartNote',
-                                               'XSDSimpleTypeStartStop', 'XSDSimpleTypeStartStopContinue',
-                                               'XSDSimpleTypeStartStopSingle', 'XSDSimpleTypeStringNumber',
-                                               'XSDSimpleTypeSymbolSize', 'XSDSimpleTypeTenths', 'XSDSimpleTypeTextDirection',
-                                               'XSDSimpleTypeTiedType', 'XSDSimpleTypeTimeOnly', 'XSDSimpleTypeTopBottom',
-                                               'XSDSimpleTypeTremoloType', 'XSDSimpleTypeTrillBeats', 'XSDSimpleTypeTrillStep',
-                                               'XSDSimpleTypeTwoNoteTurn', 'XSDSimpleTypeUpDown', 'XSDSimpleTypeUprightInverted',
-                                               'XSDSimpleTypeValign', 'XSDSimpleTypeValignImage', 'XSDSimpleTypeYesNo',
-                                               'XSDSimpleTypeYesNoNumber', 'XSDSimpleTypeYyyyMmDd',
-                                               'XSDSimpleTypeCancelLocation', 'XSDSimpleTypeClefSign', 'XSDSimpleTypeFifths',
-                                               'XSDSimpleTypeMode', 'XSDSimpleTypeShowFrets', 'XSDSimpleTypeStaffLine',
-                                               'XSDSimpleTypeStaffLinePosition', 'XSDSimpleTypeStaffNumber',
-                                               'XSDSimpleTypeStaffType', 'XSDSimpleTypeTimeRelation',
-                                               'XSDSimpleTypeTimeSeparator', 'XSDSimpleTypeTimeSymbol',
-                                               'XSDSimpleTypeBackwardForward', 'XSDSimpleTypeBarStyle',
-                                               'XSDSimpleTypeEndingNumber', 'XSDSimpleTypeRightLeftMiddle',
-                                               'XSDSimpleTypeStartStopDiscontinue', 'XSDSimpleTypeWinged',
-                                               'XSDSimpleTypeAccordionMiddle', 'XSDSimpleTypeBeaterValue',
-                                               'XSDSimpleTypeDegreeSymbolValue', 'XSDSimpleTypeDegreeTypeValue',
-                                               'XSDSimpleTypeEffectValue', 'XSDSimpleTypeGlassValue',
-                                               'XSDSimpleTypeHarmonyArrangement', 'XSDSimpleTypeHarmonyType',
-                                               'XSDSimpleTypeKindValue', 'XSDSimpleTypeLineEnd',
-                                               'XSDSimpleTypeMeasureNumberingValue', 'XSDSimpleTypeMembraneValue',
-                                               'XSDSimpleTypeMetalValue', 'XSDSimpleTypeMilliseconds',
-                                               'XSDSimpleTypeNumeralMode', 'XSDSimpleTypeOnOff', 'XSDSimpleTypePedalType',
-                                               'XSDSimpleTypePitchedValue', 'XSDSimpleTypePrincipalVoiceSymbol',
-                                               'XSDSimpleTypeStaffDivideSymbol', 'XSDSimpleTypeStartStopChangeContinue',
-                                               'XSDSimpleTypeSyncType', 'XSDSimpleTypeSystemRelationNumber',
-                                               'XSDSimpleTypeSystemRelation', 'XSDSimpleTypeTipDirection',
-                                               'XSDSimpleTypeStickLocation', 'XSDSimpleTypeStickMaterial',
-                                               'XSDSimpleTypeStickType', 'XSDSimpleTypeUpDownStopContinue',
-                                               'XSDSimpleTypeWedgeType', 'XSDSimpleTypeWoodValue', 'XSDSimpleTypeDistanceType',
-                                               'XSDSimpleTypeGlyphType', 'XSDSimpleTypeLineWidthType', 'XSDSimpleTypeMarginType',
-                                               'XSDSimpleTypeMillimeters', 'XSDSimpleTypeNoteSizeType',
-                                               'XSDSimpleTypeAccidentalValue', 'XSDSimpleTypeArrowDirection',
-                                               'XSDSimpleTypeArrowStyle', 'XSDSimpleTypeBeamValue', 'XSDSimpleTypeBendShape',
-                                               'XSDSimpleTypeBreathMarkValue', 'XSDSimpleTypeCaesuraValue',
-                                               'XSDSimpleTypeCircularArrow', 'XSDSimpleTypeFan', 'XSDSimpleTypeHandbellValue',
-                                               'XSDSimpleTypeHarmonClosedLocation', 'XSDSimpleTypeHarmonClosedValue',
-                                               'XSDSimpleTypeHoleClosedLocation', 'XSDSimpleTypeHoleClosedValue',
-                                               'XSDSimpleTypeNoteTypeValue', 'XSDSimpleTypeNoteheadValue', 'XSDSimpleTypeOctave',
-                                               'XSDSimpleTypeSemitones', 'XSDSimpleTypeShowTuplet', 'XSDSimpleTypeStemValue',
-                                               'XSDSimpleTypeStep', 'XSDSimpleTypeSyllabic', 'XSDSimpleTypeTapHand',
-                                               'XSDSimpleTypeTremoloMarks', 'XSDSimpleTypeGroupBarlineValue',
-                                               'XSDSimpleTypeGroupSymbolValue', 'XSDSimpleTypeMeasureText',
-                                               'XSDSimpleTypeSwingTypeValue', 'XSDSimpleTypeName', 'XSDSimpleTypeNCName',
-                                               'XSDSimpleTypeID', 'XSDSimpleTypeIDREF']
+        assert set(xml_simple_type_class_names) == {'XSDSimpleTypeInteger', 'XSDSimpleTypeNonNegativeInteger',
+                                                    'XSDSimpleTypePositiveInteger', 'XSDSimpleTypeDecimal',
+                                                    'XSDSimpleTypeString', 'XSDSimpleTypeString', 'XSDSimpleTypeToken',
+                                                    'XSDSimpleTypeNMTOKEN', 'XSDSimpleTypeDate', 'XSDSimpleTypeAboveBelow',
+                                                    'XSDSimpleTypeBeamLevel', 'XSDSimpleTypeColor', 'XSDSimpleTypeCommaSeparatedText',
+                                                    'XSDSimpleTypeCssFontSize', 'XSDSimpleTypeDivisions',
+                                                    'XSDSimpleTypeEnclosureShape', 'XSDSimpleTypeFermataShape',
+                                                    'XSDSimpleTypeFontFamily', 'XSDSimpleTypeFontSize', 'XSDSimpleTypeFontStyle',
+                                                    'XSDSimpleTypeFontWeight', 'XSDSimpleTypeLeftCenterRight',
+                                                    'XSDSimpleTypeLeftRight', 'XSDSimpleTypeLineLength', 'XSDSimpleTypeLineShape',
+                                                    'XSDSimpleTypeLineType', 'XSDSimpleTypeMidi16', 'XSDSimpleTypeMidi128',
+                                                    'XSDSimpleTypeMidi16384', 'XSDSimpleTypeMute', 'XSDSimpleTypeNonNegativeDecimal',
+                                                    'XSDSimpleTypeNumberLevel', 'XSDSimpleTypeNumberOfLines',
+                                                    'XSDSimpleTypeNumberOrNormal', 'XSDSimpleTypeNumeralValue',
+                                                    'XSDSimpleTypeOverUnder', 'XSDSimpleTypePercent', 'XSDSimpleTypePositiveDecimal',
+                                                    'XSDSimpleTypePositiveDivisions', 'XSDSimpleTypePositiveIntegerOrEmpty',
+                                                    'XSDSimpleTypeRotationDegrees', 'XSDSimpleTypeSemiPitched',
+                                                    'XSDSimpleTypeSmuflGlyphName', 'XSDSimpleTypeSmuflAccidentalGlyphName',
+                                                    'XSDSimpleTypeSmuflCodaGlyphName', 'XSDSimpleTypeSmuflLyricsGlyphName',
+                                                    'XSDSimpleTypeSmuflPictogramGlyphName', 'XSDSimpleTypeSmuflSegnoGlyphName',
+                                                    'XSDSimpleTypeSmuflWavyLineGlyphName', 'XSDSimpleTypeStartNote',
+                                                    'XSDSimpleTypeStartStop', 'XSDSimpleTypeStartStopContinue',
+                                                    'XSDSimpleTypeStartStopSingle', 'XSDSimpleTypeStringNumber',
+                                                    'XSDSimpleTypeSymbolSize', 'XSDSimpleTypeTenths', 'XSDSimpleTypeTextDirection',
+                                                    'XSDSimpleTypeTiedType', 'XSDSimpleTypeTimeOnly', 'XSDSimpleTypeTopBottom',
+                                                    'XSDSimpleTypeTremoloType', 'XSDSimpleTypeTrillBeats', 'XSDSimpleTypeTrillStep',
+                                                    'XSDSimpleTypeTwoNoteTurn', 'XSDSimpleTypeUpDown', 'XSDSimpleTypeUprightInverted',
+                                                    'XSDSimpleTypeValign', 'XSDSimpleTypeValignImage', 'XSDSimpleTypeYesNo',
+                                                    'XSDSimpleTypeYesNoNumber', 'XSDSimpleTypeYyyyMmDd',
+                                                    'XSDSimpleTypeCancelLocation', 'XSDSimpleTypeClefSign', 'XSDSimpleTypeFifths',
+                                                    'XSDSimpleTypeMode', 'XSDSimpleTypeShowFrets', 'XSDSimpleTypeStaffLine',
+                                                    'XSDSimpleTypeStaffLinePosition', 'XSDSimpleTypeStaffNumber',
+                                                    'XSDSimpleTypeStaffType', 'XSDSimpleTypeTimeRelation',
+                                                    'XSDSimpleTypeTimeSeparator', 'XSDSimpleTypeTimeSymbol',
+                                                    'XSDSimpleTypeBackwardForward', 'XSDSimpleTypeBarStyle',
+                                                    'XSDSimpleTypeEndingNumber', 'XSDSimpleTypeRightLeftMiddle',
+                                                    'XSDSimpleTypeStartStopDiscontinue', 'XSDSimpleTypeWinged',
+                                                    'XSDSimpleTypeAccordionMiddle', 'XSDSimpleTypeBeaterValue',
+                                                    'XSDSimpleTypeDegreeSymbolValue', 'XSDSimpleTypeDegreeTypeValue',
+                                                    'XSDSimpleTypeEffectValue', 'XSDSimpleTypeGlassValue',
+                                                    'XSDSimpleTypeHarmonyArrangement', 'XSDSimpleTypeHarmonyType',
+                                                    'XSDSimpleTypeKindValue', 'XSDSimpleTypeLineEnd',
+                                                    'XSDSimpleTypeMeasureNumberingValue', 'XSDSimpleTypeMembraneValue',
+                                                    'XSDSimpleTypeMetalValue', 'XSDSimpleTypeMilliseconds',
+                                                    'XSDSimpleTypeNumeralMode', 'XSDSimpleTypeOnOff', 'XSDSimpleTypePedalType',
+                                                    'XSDSimpleTypePitchedValue', 'XSDSimpleTypePrincipalVoiceSymbol',
+                                                    'XSDSimpleTypeStaffDivideSymbol', 'XSDSimpleTypeStartStopChangeContinue',
+                                                    'XSDSimpleTypeSyncType', 'XSDSimpleTypeSystemRelationNumber',
+                                                    'XSDSimpleTypeSystemRelation', 'XSDSimpleTypeTipDirection',
+                                                    'XSDSimpleTypeStickLocation', 'XSDSimpleTypeStickMaterial',
+                                                    'XSDSimpleTypeStickType', 'XSDSimpleTypeUpDownStopContinue',
+                                                    'XSDSimpleTypeWedgeType', 'XSDSimpleTypeWoodValue', 'XSDSimpleTypeDistanceType',
+                                                    'XSDSimpleTypeGlyphType', 'XSDSimpleTypeLineWidthType', 'XSDSimpleTypeMarginType',
+                                                    'XSDSimpleTypeMillimeters', 'XSDSimpleTypeNoteSizeType',
+                                                    'XSDSimpleTypeAccidentalValue', 'XSDSimpleTypeArrowDirection',
+                                                    'XSDSimpleTypeArrowStyle', 'XSDSimpleTypeBeamValue', 'XSDSimpleTypeBendShape',
+                                                    'XSDSimpleTypeBreathMarkValue', 'XSDSimpleTypeCaesuraValue',
+                                                    'XSDSimpleTypeCircularArrow', 'XSDSimpleTypeFan', 'XSDSimpleTypeHandbellValue',
+                                                    'XSDSimpleTypeHarmonClosedLocation', 'XSDSimpleTypeHarmonClosedValue',
+                                                    'XSDSimpleTypeHoleClosedLocation', 'XSDSimpleTypeHoleClosedValue',
+                                                    'XSDSimpleTypeNoteTypeValue', 'XSDSimpleTypeNoteheadValue', 'XSDSimpleTypeOctave',
+                                                    'XSDSimpleTypeSemitones', 'XSDSimpleTypeShowTuplet', 'XSDSimpleTypeStemValue',
+                                                    'XSDSimpleTypeStep', 'XSDSimpleTypeSyllabic', 'XSDSimpleTypeTapHand',
+                                                    'XSDSimpleTypeTremoloMarks', 'XSDSimpleTypeGroupBarlineValue',
+                                                    'XSDSimpleTypeGroupSymbolValue', 'XSDSimpleTypeMeasureText',
+                                                    'XSDSimpleTypeSwingTypeValue', 'XSDSimpleTypeName', 'XSDSimpleTypeNCName',
+                                                    'XSDSimpleTypeID', 'XSDSimpleTypeIDREF'}
 
     def test_generated_simple_type_xsd_snippet(self):
         """
@@ -600,6 +600,8 @@ class TestSimpleTypes(MusicXmlTestCase):
 <       /xs:simpleType>
         """
         XSDSimpleTypeNCName('_1950-10-04_10-00')
+        with self.assertRaises(ValueError):
+            XSDSimpleTypeNCName('_1950-10:04_10-00')
 
     def test_id(self):
         """
@@ -607,9 +609,20 @@ class TestSimpleTypes(MusicXmlTestCase):
             <xs:restriction base="xs:NCName"/>
         </xs:simpleType>
         """
-        XSDSimpleTypeID('_1950-10-04_10-00')
+        id_ = XSDSimpleTypeID('_1950-10-04_10-00')
+        assert isinstance(id_, XSDSimpleTypeNCName)
         with self.assertRaises(ValueError):
             XSDSimpleTypeID('_1950-10:04_10-00')
+
+    def test_idref(self):
+        """
+        <xs:simpleType name="IDREF" id="IDREF">
+            <xs:restriction base="xs:NCName"/>
+        </xs:simpleType>
+        """
+        XSDSimpleTypeIDREF('_1950-10-04_10-00')
+        with self.assertRaises(ValueError):
+            XSDSimpleTypeIDREF('1')
 
     def test_value_is_required(self):
         assert XSDSimpleTypeString.value_is_required() is True

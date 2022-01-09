@@ -615,7 +615,6 @@ class XMLElement(Tree):
                 attribute_name = '-'.join(key.split('_'))
                 try:
                     if attribute_name in [attribute.name for attribute in self.type_.get_xsd_attributes()]:
-                        print('setting')
                         self._set_attributes({attribute_name: value})
                         return
                 except KeyError:
