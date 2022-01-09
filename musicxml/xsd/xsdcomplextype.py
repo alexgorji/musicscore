@@ -23,7 +23,7 @@ class XSDComplexType(XSDTreeElement):
 
         for key in val_dict:
             if key not in [attribute.name for attribute in cls.get_xsd_attributes()]:
-                raise XSDWrongAttribute
+                raise XSDWrongAttribute(f"{cls.__name__} has no attribute {key}.")
             attribute = [attribute for attribute in cls.get_xsd_attributes() if attribute.name == key][0]
             attribute(val_dict[key])
 

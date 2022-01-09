@@ -5,7 +5,9 @@
             <part-name>some name</part-name>
         </score-part>
     </part-list>
+    <!--=========================================================-->
     <part id="P1">
-        <measure number="1" />
+        <measure number="1"/>
     </part>
+    <!--=========================================================-->
 </score-partwise>

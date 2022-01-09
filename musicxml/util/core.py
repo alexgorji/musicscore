@@ -78,3 +78,13 @@ def convert_to_xsd_class_name(name, type_='simple_type'):
 
 def convert_to_xml_class_name(name: str) -> str:
     return 'XML' + ''.join([cap_first(partial) for partial in name.split('-')])
+
+
+def replace_key_underline_with_hyphen(dict_):
+    output = {}
+    for k, v in dict_.items():
+        new_key = '-'.join(k.split('_'))
+        if output.get(new_key) is not None:
+            raise KeyError(f"Key {new_key} already exists in dictionary.")
+        output[new_key] = v
+    return output

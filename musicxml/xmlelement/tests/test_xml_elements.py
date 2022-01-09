@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from musicxml.exceptions import XMLElementChildrenRequired, XMLElementValueRequiredError, XSDAttributeRequiredException
+from musicxml.exceptions import XMLElementChildrenRequired, XMLElementValueRequiredError, XSDAttributeRequiredException, XSDWrongAttribute
 from musicxml.xmlelement.tests.test_child_container import show_force_valid
 from musicxml.xmlelement.xmlelement import *
 from musicxml.xsd.xsdcomplextype import *
@@ -139,6 +139,24 @@ class TestXMLElements(TestCase):
         el = XMLElevation()
         assert el.name == 'elevation'
 
+    def test_element_with_wrong_attribute(self):
+        with self.assertRaises(XSDWrongAttribute):
+            XMLPartName('Part 1', dummy='no')
+        el = XMLPartName('Part 1')
+        with self.assertRaises(XSDWrongAttribute):
+            el.dummy = 'no'
+
+    def test_element_attribute_with_hyphenated_name(self):
+        el = XMLPartName('Part 1', default_x=10)
+        assert el.to_string() == """<part-name default-x="10">Part 1</part-name>
+"""
+        el.print_object = 'no'
+        assert el.to_string() == """<part-name default-x="10" print-object="no">Part 1</part-name>
+"""
+        el = XMLPartName('Part 1', print_object='no')
+        assert el.to_string() == """<part-name print-object="no">Part 1</part-name>
+"""
+
     def test_element_with_simple_type(self):
         """
         <xs:element name="elevation" type="rotation-degrees" minOccurs="0">
@@ -248,7 +266,7 @@ The offset affects the visual appearance of the direction. If the sound attribut
         assert err.exception.args[0] == 'XMLPartName requires a value.'
         pn.value = 'part name 1'
         expected = """<part-list>
-    <score-part>
+    <score-part id="1">
         <part-name>part name 1</part-name>
     </score-part>
 </part-list>

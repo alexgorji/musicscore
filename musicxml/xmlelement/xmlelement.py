@@ -2,7 +2,7 @@ import copy
 from typing import Optional
 from xml.etree import ElementTree as ET
 from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired
-from musicxml.util.core import root1, ns, cap_first, convert_to_xsd_class_name, convert_to_xml_class_name
+from musicxml.util.core import root1, ns, cap_first, convert_to_xsd_class_name, convert_to_xml_class_name, replace_key_underline_with_hyphen
 from musicxml.xmlelement.exceptions import XMLChildContainerWrongElementError, XMLChildContainerMaxOccursError, \
     XMLChildContainerChoiceHasAnotherChosenChild, XMLChildContainerFactoryError, XMLElementCannotHaveChildrenError
 from musicxml.xsd.xsdcomplextype import *
@@ -76,7 +76,7 @@ def _check_if_choice_requires_elements(xsd_container_choice):
                 raise NotImplementedError(f'child {child} with min_occurrence greater than 1')
 
     if element_chosen:
-        xsd_container_choice.requirement_not_fulfilled = False
+        xsd_container_choice.requirements_not_fulfilled = False
 
 
 def _check_if_group_requires_elements(xsd_group_container):
@@ -90,7 +90,7 @@ def _check_if_sequence_requires_elements(xsd_sequence_container):
         for child in xsd_sequence_container.get_children():
             if isinstance(child.content, XSDElement):
                 if len(child.content.xml_elements) < child.min_occurrences:
-                    child.requirement_not_fulfilled = True
+                    child.requirements_not_fulfilled = True
                 else:
                     pass
             else:
@@ -101,9 +101,9 @@ def _check_if_sequence_requires_elements(xsd_sequence_container):
             if child.choices_in_reversed_path:
                 pass
             elif len(ch.content.xml_elements) < ch.min_occurrences:
-                ch.requirement_not_fulfilled = True
+                ch.requirements_not_fulfilled = True
             else:
-                ch.requirement_not_fulfilled = False
+                ch.requirements_not_fulfilled = False
         else:
             _check_if_container_requires_elements(ch)
 
@@ -195,7 +195,7 @@ class XMLChildContainer(Tree):
         if not isinstance(self.content, XSDElement):
             raise ValueError
         if self.max_is_reached:
-            self.requirement_not_fulfilled = False
+            self.requirements_not_fulfilled = False
         if self.content.xml_elements:
             for node in self.reversed_path_to_root():
                 if node.get_parent():
@@ -207,10 +207,10 @@ class XMLChildContainer(Tree):
                                 break
                         else:
                             node.get_parent().chosen_child = node
-                            if node.get_parent().requirement_not_fulfilled:
-                                node.get_parent().requirement_not_fulfilled = False
+                            if node.get_parent().requirements_not_fulfilled:
+                                node.get_parent().requirements_not_fulfilled = False
                                 break
-                            node.get_parent().requirement_not_fulfilled = False
+                            node.get_parent().requirements_not_fulfilled = False
                     elif isinstance(node.get_parent().content, XSDSequence):
                         if node.get_parent().force_validate:
                             break
@@ -225,8 +225,8 @@ class XMLChildContainer(Tree):
 
     def _set_requirement_not_fulfilled(self):
         for node in self.traverse():
-            if isinstance(node.content, XSDChoice) and node.requirement_not_fulfilled is None and True not in [
-                choice.requirement_not_fulfilled for choice in node.choices_in_reversed_path] and node.min_occurrences != 0:
+            if isinstance(node.content, XSDChoice) and node.requirements_not_fulfilled is None and True not in [
+                choice.requirements_not_fulfilled for choice in node.choices_in_reversed_path] and node.min_occurrences != 0:
                 for leaf in node.iterate_leaves():
                     if leaf.content.xml_elements:
                         node._requirement_not_fulfilled = False
@@ -249,7 +249,7 @@ class XMLChildContainer(Tree):
         if isinstance(self.content, XSDChoice):
             type_ = 'Choice'
             output = f"{type_}@minOccurs={self.min_occurrences}@maxOccurs={self.max_occurrences}"
-            if self.requirement_not_fulfilled:
+            if self.requirements_not_fulfilled:
                 output += '\n'
                 output += self.get_indentation() + '    '
                 output += '!Required!'
@@ -266,7 +266,7 @@ class XMLChildContainer(Tree):
                 output += '\n'
                 output += self.get_indentation() + '    '
                 output += xml_element.get_class_name()
-            if self.requirement_not_fulfilled:
+            if self.requirements_not_fulfilled:
                 output += '\n'
                 output += self.get_indentation() + '    '
                 output += '!Required!'
@@ -314,11 +314,11 @@ class XMLChildContainer(Tree):
                 return False
 
     @property
-    def requirement_not_fulfilled(self):
+    def requirements_not_fulfilled(self):
         return self._requirement_not_fulfilled
 
-    @requirement_not_fulfilled.setter
-    def requirement_not_fulfilled(self, val: bool):
+    @requirements_not_fulfilled.setter
+    def requirements_not_fulfilled(self, val: bool):
         if not isinstance(val, bool):
             raise TypeError
         self._requirement_not_fulfilled = val
@@ -397,7 +397,7 @@ class XMLChildContainer(Tree):
             self._set_requirement_not_fulfilled()
         _check_if_container_requires_elements(self)
         for node in self.traverse():
-            if node.requirement_not_fulfilled:
+            if node.requirements_not_fulfilled:
                 return True
         return False
 
@@ -438,10 +438,10 @@ class XMLChildContainer(Tree):
 
     def get_required_element_names(self):
         def func(leaf):
-            if leaf.requirement_not_fulfilled is True:
+            if leaf.requirements_not_fulfilled is True:
                 return convert_to_xml_class_name(leaf.content.name)
 
-            elif leaf.min_occurrences != 0 and True in [choice.requirement_not_fulfilled for choice in leaf.choices_in_reversed_path]:
+            elif leaf.min_occurrences != 0 and True in [choice.requirements_not_fulfilled for choice in leaf.choices_in_reversed_path]:
                 if isinstance(leaf.get_parent().content, XSDSequence) and leaf.get_parent().min_occurrences == 0 and not leaf.get_parent(
 
                 ).force_validate:
@@ -457,8 +457,8 @@ class XMLChildContainer(Tree):
         for child in [ch for ch in self.get_children() if ch != node]:
             for n in child.traverse():
                 if isinstance(n.content, XSDChoice):
-                    if n.min_occurrences != 0:
-                        n.requirement_not_fulfilled = True
+                    if n.min_occurrences != 0 and not n.chosen_child:
+                        n.requirements_not_fulfilled = True
                     break
                 if isinstance(n.content, XSDSequence) and n.min_occurrences != 0 and not (isinstance(n.get_parent().content, XSDGroup) and
                                                                                           n.get_parent().min_occurrences == 0):
@@ -492,12 +492,13 @@ class XMLElement(Tree):
         self._type = None
         super().__init__()
         self._value = None
-        self._attributes = None
+        self._attributes = {}
         self._et_xml_element = None
         self._child_container_tree = None
         self.value = value
         self._set_attributes(kwargs)
         self._create_et_xml_element()
+
         self._create_child_container_tree()
 
     def _check_child_to_be_added(self, child):
@@ -505,7 +506,7 @@ class XMLElement(Tree):
             raise TypeError
 
     def _create_et_xml_element(self):
-        self._et_xml_element = ET.Element(self.name, self.attributes)
+        self._et_xml_element = ET.Element(self.name, {k: str(v) for k, v in self.attributes.items()})
         if self.value:
             self._et_xml_element.text = str(self.value)
 
@@ -532,13 +533,17 @@ class XMLElement(Tree):
 
     def _set_attributes(self, val):
         if val is None:
-            val = {}
+            pass
+
         if self.type_.XSD_TREE.is_simple_type:
             if val:
                 raise AttributeError('attributes cannot be set')
+
         elif not isinstance(val, dict):
             raise TypeError
-        self._attributes = val
+        self._attributes = {**self._attributes, **replace_key_underline_with_hyphen(dict_=val)}
+        if self._et_xml_element is not None:
+            self._et_xml_element.attrib = {k: str(v) for k, v in self._attributes.items()}
 
     @property
     def attributes(self):
@@ -580,10 +585,10 @@ class XMLElement(Tree):
     def get_class_name(cls):
         return cls.__name__
 
-    def add_child(self, child: 'XMLElement') -> 'XMLElement':
+    def add_child(self, child: 'XMLElement', forward: int = 0) -> 'XMLElement':
         if not self._child_container_tree:
             raise XMLElementCannotHaveChildrenError()
-        self._child_container_tree.add_element(child)
+        self._child_container_tree.add_element(child, forward)
         self._et_xml_element.append(child._et_xml_element)
         return child
 
@@ -594,33 +599,28 @@ class XMLElement(Tree):
         else:
             return []
 
-    def to_string(self) -> str:
+    def to_string(self, add_separators=False) -> str:
         self._final_checks()
+
+        if add_separators:
+            comment = ET.Comment('=========================================================')
+            self._et_xml_element.insert(1, comment)
+            self._et_xml_element.insert(3, comment)
         ET.indent(self._et_xml_element, space="    ", level=self.level)
         return ET.tostring(self._et_xml_element, encoding='unicode') + '\n'
 
     def __setattr__(self, key, value):
         if key != '_type':
             if self.type_.XSD_TREE.is_complex_type:
+                attribute_name = '-'.join(key.split('_'))
                 try:
-                    if key in [attribute.name for attribute in self.type_.get_xsd_attributes()]:
-                        self._set_attributes({key: value})
+                    if attribute_name in [attribute.name for attribute in self.type_.get_xsd_attributes()]:
+                        print('setting')
+                        self._set_attributes({attribute_name: value})
                         return
                 except KeyError:
                     pass
-
         super().__setattr__(key, value)
-
-        # super().__setattr__(key, value)
-        # if self.type_:
-        #     print(self.type_)
-        # print(self.type_)
-        # print(self.type_.XSD_TREE.is_complex_type.get_xsd_attributes())
-        # if self.type_.XSD_TREE.is_complex_type and self.type_.XSD_TREE.is_complex_type.get_xsd_attributes():
-        #     self._set_attributes({key: value})
-        # else:
-        # super().__setattr__(key, value)
-        # self._set_attributes({key: value})
 
 
 typed_elements = list(
@@ -671,7 +671,7 @@ class XMLScorePartwise(XMLElement):
     def write(self, path):
         with open(path, 'w') as file:
             file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
-            file.write(self.to_string())
+            file.write(self.to_string(add_separators=True))
 
     @property
     def type_(self):

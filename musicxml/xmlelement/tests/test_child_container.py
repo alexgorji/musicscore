@@ -472,9 +472,9 @@ class TestChildContainer(TestCase):
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeLyric).get_child_container()
         container.check_required_elements()
         choice = container.get_children()[0]
-        assert choice.requirement_not_fulfilled is True
+        assert choice.requirements_not_fulfilled is True
         container.add_element(XMLHumming())
-        assert choice.requirement_not_fulfilled is False
+        assert choice.requirements_not_fulfilled is False
         assert choice.chosen_child == choice.get_children()[3]
         with self.assertRaises(XMLChildContainerMaxOccursError):
             container.add_element(XMLHumming())
@@ -646,6 +646,9 @@ class TestChildContainer(TestCase):
             Element@name=tie@minOccurs=0@maxOccurs=2
 """
         assert choice.chosen_child.tree_representation(function=show_force_valid) == expected
+        assert container.get_children()[0].requirements_not_fulfilled is False
+        container.add_element(XMLVoice(1))
+        assert container.get_children()[0].requirements_not_fulfilled is False
 
     def test_container_with_unbounded_choice(self):
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeDynamics).get_child_container()
@@ -982,7 +985,7 @@ class TestChildContainerCheckRequired(TestCase):
         Test methode add_required will show in tree presentation that the element or the choice requirement is not fulfilled
         """
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasureStyle).get_child_container()
-        container.requirement_not_fulfilled = True
+        container.requirements_not_fulfilled = True
         expected = """Choice@minOccurs=1@maxOccurs=1
     !Required!
     Element@name=multiple-rest@minOccurs=1@maxOccurs=1
@@ -997,8 +1000,8 @@ class TestChildContainerCheckRequired(TestCase):
         Test methode add_required will show in tree presentation that the element or the choice requirement is not fulfilled
         """
         container = XMLChildContainerFactory(complex_type=XSDComplexTypePitch).get_child_container()
-        container.get_children()[0].requirement_not_fulfilled = True
-        container.get_children()[2].requirement_not_fulfilled = True
+        container.get_children()[0].requirements_not_fulfilled = True
+        container.get_children()[2].requirements_not_fulfilled = True
         expected = """Sequence@minOccurs=1@maxOccurs=1
     Element@name=step@minOccurs=1@maxOccurs=1
         !Required!
@@ -1011,16 +1014,16 @@ class TestChildContainerCheckRequired(TestCase):
     def test_check_choice(self):
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasureStyle).get_child_container()
         assert container.check_required_elements() is True
-        assert container.requirement_not_fulfilled is True
+        assert container.requirements_not_fulfilled is True
         container.add_element(XMLMultipleRest())
-        assert container.requirement_not_fulfilled is False
+        assert container.requirements_not_fulfilled is False
         assert container.check_required_elements() is False
 
     def test_check_sequence(self):
         container = XMLChildContainerFactory(complex_type=XSDComplexTypePitch).get_child_container()
         assert container.check_required_elements() is True
-        assert container.get_children()[0].requirement_not_fulfilled is True
-        assert container.get_children()[2].requirement_not_fulfilled is True
+        assert container.get_children()[0].requirements_not_fulfilled is True
+        assert container.get_children()[2].requirements_not_fulfilled is True
 
     def test_check_score_child_container(self):
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeScorePartwise).get_child_container()

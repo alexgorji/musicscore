@@ -2,7 +2,8 @@ import re
 from unittest import TestCase
 
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.util.core import get_simple_type_all_base_classes, get_cleaned_token, convert_to_xml_class_name
+from musicxml.util.core import get_simple_type_all_base_classes, get_cleaned_token, convert_to_xml_class_name, \
+    replace_key_underline_with_hyphen
 from musicxml.util.helprervariables import name_character
 
 
@@ -19,6 +20,13 @@ class TestHelperFunctions(MusicXmlTestCase):
         assert get_cleaned_token('Hello\rAlfons') == expected
         assert get_cleaned_token('Hello\t  Alfons') == expected
         assert get_cleaned_token('Hello    Alfons') == expected
+
+    def test_replace_key_underline_with_hyphen(self):
+        dict_ = {'a': 1, 'b-c': 2, 'e_f': 3}
+        assert replace_key_underline_with_hyphen(dict_) == {'a': 1, 'b-c': 2, 'e-f': 3}
+        dict_ = {'a': 1, 'b-c': 2, 'b_c': 3}
+        with self.assertRaises(KeyError):
+            replace_key_underline_with_hyphen(dict_)
 
 
 class TestHelperVariables(TestCase):
