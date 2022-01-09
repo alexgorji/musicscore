@@ -293,7 +293,6 @@ class TestComplexTypes(MusicXmlTestCase):
         """
 
         ct = XSDComplexTypeHeelToe
-        print(XSDComplexTypeHeelToe.get_xsd_attributes())
         [attribute_1, attribute_2, attribute_3, attribute_4, attribute_5, attribute_6, attribute_7, attribute_8, attribute_9,
          attribute_10, attribute_11] = ct.get_xsd_attributes()
         assert str(attribute_1) == 'XSDAttribute@name=default-x@type=tenths'

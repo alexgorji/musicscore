@@ -1,7 +1,7 @@
 import copy
 from typing import Optional
 from xml.etree import ElementTree as ET
-from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired
+from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired, XSDWrongAttribute
 from musicxml.util.core import root1, ns, cap_first, convert_to_xsd_class_name, convert_to_xml_class_name, replace_key_underline_with_hyphen
 from musicxml.xmlelement.exceptions import XMLChildContainerWrongElementError, XMLChildContainerMaxOccursError, \
     XMLChildContainerChoiceHasAnotherChosenChild, XMLChildContainerFactoryError, XMLElementCannotHaveChildrenError
@@ -486,6 +486,7 @@ class XMLChildContainerFactory:
 
 
 class XMLElement(Tree):
+    PROPERTIES = {'compact_repr', 'is_leaf', 'level', 'attributes', 'child_container_tree', 'et_xml_element', 'name', 'type_', 'value', }
     XSD_TREE: Optional[XSDTree] = None
 
     def __init__(self, value=None, **kwargs):
@@ -534,18 +535,26 @@ class XMLElement(Tree):
             pass
 
     def _set_attributes(self, val):
-        if val is None:
-            pass
+        if not val:
+            return
 
         if self.type_.XSD_TREE.is_simple_type:
             if val:
-                raise AttributeError('attributes cannot be set')
+                raise XSDWrongAttribute(f'{self.__class__.__name__} has no attributes.')
 
         elif not isinstance(val, dict):
             raise TypeError
-        self._attributes = {**self._attributes, **replace_key_underline_with_hyphen(dict_=val)}
-        # if self._et_xml_element is not None:
-        #     self._et_xml_element.attrib = {k: str(v) for k, v in self._attributes.items()}
+
+        new_attributes = replace_key_underline_with_hyphen(dict_=val)
+        try:
+            allowed_attributes = [attribute.name for attribute in self.type_.get_xsd_attributes()]
+        except KeyError:
+            raise XSDWrongAttribute(f'{self.__class__.__name__} has no attributes.')
+        for new_attribute in new_attributes:
+            if new_attribute not in allowed_attributes:
+                raise XSDWrongAttribute(
+                    f'{self.__class__.__name__} has no attribute {new_attribute}. Allowed attributes are: {allowed_attributes}')
+        self._attributes = {**self._attributes, **new_attributes}
 
     @property
     def attributes(self):
@@ -619,16 +628,12 @@ class XMLElement(Tree):
         return ET.tostring(self.et_xml_element, encoding='unicode') + '\n'
 
     def __setattr__(self, key, value):
-        if key != '_type':
-            if self.type_.XSD_TREE.is_complex_type:
-                attribute_name = '-'.join(key.split('_'))
-                try:
-                    if attribute_name in [attribute.name for attribute in self.type_.get_xsd_attributes()]:
-                        self._set_attributes({attribute_name: value})
-                        return
-                except KeyError:
-                    pass
-        super().__setattr__(key, value)
+        if key[0] == '_' or key in self.PROPERTIES:
+            super().__setattr__(key, value)
+        else:
+            self._set_attributes({key: value})
+        # print(self.__dict__)
+        # if key != '_type':
 
 
 typed_elements = list(

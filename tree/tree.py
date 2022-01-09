@@ -10,6 +10,8 @@ class ChildNotFoundError(TreeException):
 
 
 class Tree(ABC):
+    PROPERTIES = {'compact_repr', 'is_leaf', 'level'}
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._parent = None
