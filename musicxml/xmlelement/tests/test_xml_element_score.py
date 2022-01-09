@@ -80,6 +80,4 @@ class TestScore(TestCase):
         bl.add_child(XMLBarStyle('light-heavy'))
         score.write(parent_folder / 'test_hello_world_actual.xml')
         diff = main.diff_files('test_hello_world_actual.xml', 'test_hello_world_expected.xml')
-        for node in diff:
-            print(node)
-        # assert diff == []
+        assert diff == []

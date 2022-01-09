@@ -497,7 +497,7 @@ class XMLElement(Tree):
         self._child_container_tree = None
         self.value = value
         self._set_attributes(kwargs)
-        self._create_et_xml_element()
+        # self._create_et_xml_element()
 
         self._create_child_container_tree()
 
@@ -509,6 +509,8 @@ class XMLElement(Tree):
         self._et_xml_element = ET.Element(self.name, {k: str(v) for k, v in self.attributes.items()})
         if self.value:
             self._et_xml_element.text = str(self.value)
+        for child in self.get_children():
+            self._et_xml_element.append(child.et_xml_element)
 
     def _final_checks(self):
         if self.type_.value_is_required() and not self.value:
@@ -542,8 +544,8 @@ class XMLElement(Tree):
         elif not isinstance(val, dict):
             raise TypeError
         self._attributes = {**self._attributes, **replace_key_underline_with_hyphen(dict_=val)}
-        if self._et_xml_element is not None:
-            self._et_xml_element.attrib = {k: str(v) for k, v in self._attributes.items()}
+        # if self._et_xml_element is not None:
+        #     self._et_xml_element.attrib = {k: str(v) for k, v in self._attributes.items()}
 
     @property
     def attributes(self):
@@ -552,6 +554,12 @@ class XMLElement(Tree):
     @property
     def child_container_tree(self):
         return self._child_container_tree
+
+    @property
+    def et_xml_element(self):
+        if not self._et_xml_element:
+            self._create_et_xml_element()
+        return self._et_xml_element
 
     @property
     def name(self):
@@ -574,8 +582,8 @@ class XMLElement(Tree):
     def value(self, val):
         if val is not None:
             self._value = self.type_(val)
-            if self._et_xml_element is not None:
-                self._et_xml_element.text = str(self.value)
+            # if self._et_xml_element is not None:
+            #     self._et_xml_element.text = str(self.value)
 
     @classmethod
     def get_xsd(cls):
@@ -589,7 +597,7 @@ class XMLElement(Tree):
         if not self._child_container_tree:
             raise XMLElementCannotHaveChildrenError()
         self._child_container_tree.add_element(child, forward)
-        self._et_xml_element.append(child._et_xml_element)
+        # self._et_xml_element.append(child._et_xml_element)
         return child
 
     def get_children(self):
@@ -601,13 +609,14 @@ class XMLElement(Tree):
 
     def to_string(self, add_separators=False) -> str:
         self._final_checks()
+        self._create_et_xml_element()
 
         if add_separators:
             comment = ET.Comment('=========================================================')
-            self._et_xml_element.insert(1, comment)
-            self._et_xml_element.insert(3, comment)
-        ET.indent(self._et_xml_element, space="    ", level=self.level)
-        return ET.tostring(self._et_xml_element, encoding='unicode') + '\n'
+            self.et_xml_element.insert(1, comment)
+            self.et_xml_element.insert(3, comment)
+        ET.indent(self.et_xml_element, space="    ", level=self.level)
+        return ET.tostring(self.et_xml_element, encoding='unicode') + '\n'
 
     def __setattr__(self, key, value):
         if key != '_type':

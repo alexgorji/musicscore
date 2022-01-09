@@ -202,7 +202,7 @@ The offset affects the visual appearance of the direction. If the sound attribut
         """
         for el in xml_element_class_names:
             element = eval(el)()
-            assert element._et_xml_element.tag == element.name
+            assert element.et_xml_element.tag == element.name
 
     def test_get_class_name(self):
         assert XMLPitch.get_class_name() == 'XMLPitch'
@@ -274,4 +274,32 @@ The offset affects the visual appearance of the direction. If the sound attribut
         assert el.to_string() == expected
 
     def test_order_of_children(self):
-        self.fail('Incomplete')
+        el = XMLAttributes()
+        t = el.add_child(XMLTime())
+        t.add_child(XMLBeats(4))
+        t.add_child(XMLBeatType(4))
+        el.add_child(XMLDivisions(1))
+        c = el.add_child(XMLClef())
+        c.add_child(XMLSign('G'))
+        c.add_child(XMLLine(2))
+        k = el.add_child(XMLKey())
+        k.add_child(XMLFifths(0))
+        k.add_child(XMLMode('major'))
+
+        expected = """<attributes>
+    <divisions>1</divisions>
+    <key>
+        <fifths>0</fifths>
+        <mode>major</mode>
+    </key>
+    <time>
+        <beats>4</beats>
+        <beat-type>4</beat-type>
+    </time>
+    <clef>
+        <sign>G</sign>
+        <line>2</line>
+    </clef>
+</attributes>
+"""
+        assert el.to_string() == expected

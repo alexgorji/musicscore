@@ -10,6 +10,10 @@
         <measure number="1">
             <attributes>
                 <divisions>1</divisions>
+                <key>
+                    <fifths>0</fifths>
+                    <mode>major</mode>
+                </key>
                 <time>
                     <beats>4</beats>
                     <beat-type>4</beat-type>
@@ -18,10 +22,6 @@
                     <sign>G</sign>
                     <line>2</line>
                 </clef>
-                <key>
-                    <fifths>0</fifths>
-                    <mode>major</mode>
-                </key>
             </attributes>
             <note>
                 <pitch>
