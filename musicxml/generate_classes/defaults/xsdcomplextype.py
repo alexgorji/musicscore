@@ -1,12 +1,12 @@
-from musicxml.util.core import convert_to_xsd_class_name, root1
-from musicxml.xsd.xsdattribute import XSDAttribute
+from musicxml.generate_classes.utils import musicxml_xsd_et_root
+from musicxml.util.core import convert_to_xsd_class_name
 from musicxml.exceptions import XSDAttributeRequiredException, XSDWrongAttribute
-from musicxml.xsd.xsdindicator import XSDSequence, XSDChoice
 from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdattribute import *
 from musicxml.xsd.xsdindicator import *
 from musicxml.xsd.xsdtree import XSDTreeElement, XSDTree
 import xml.etree.ElementTree as ET
+
 
 class XSDComplexType(XSDTreeElement):
 
@@ -82,19 +82,19 @@ class XSDComplexType(XSDTreeElement):
             return False
 
 
-xsd_tree_score_partwise = XSDTree(root1.find(".//{*}element[@name='score-partwise']"))
+xsd_tree_score_partwise = XSDTree(musicxml_xsd_et_root.find(".//{*}element[@name='score-partwise']"))
 
 
 class XSDComplexTypeScorePartwise(XSDComplexType):
-    XSD_TREE = XSDTree(root1.findall(".//{*}element[@name='score-partwise']//{*}complexType")[0])
+    XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(".//{*}element[@name='score-partwise']//{*}complexType")[0])
 
 
 class XSDComplexTypePart(XSDComplexType):
-    XSD_TREE = XSDTree(root1.findall(".//{*}element[@name='score-partwise']//{*}complexType")[1])
+    XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(".//{*}element[@name='score-partwise']//{*}complexType")[1])
 
 
 class XSDComplexTypeMeasure(XSDComplexType):
-    XSD_TREE = XSDTree(root1.findall(".//{*}element[@name='score-partwise']//{*}complexType")[2])
+    XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(".//{*}element[@name='score-partwise']//{*}complexType")[2])
 
 # -----------------------------------------------------
 # AUTOMATICALLY GENERATED WITH generate_complex_types.py
