@@ -2,10 +2,8 @@ import xml.etree.ElementTree as ET
 from contextlib import redirect_stdout
 from pathlib import Path
 
-from musicxml.util.core import ns
 from musicxml.util.helperclasses import MusicXmlTestCase
 from musicxml.xsd.xsdtree import XSDTree
-from musicxml.xsd.xsdindicators import XSDSequence, XSDChoice
 
 
 class TestXSDTree(MusicXmlTestCase):
@@ -267,4 +265,3 @@ class TestXSDTree(MusicXmlTestCase):
         assert self.yes_no_number_simple_type_xsd_element.is_complex_type is False
         assert self.above_below_simple_type_xsd_element.is_complex_type is False
         assert self.complex_type_xsd_element.is_complex_type is True
-

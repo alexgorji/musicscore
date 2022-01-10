@@ -1,6 +1,6 @@
-from musicxml.util.core import cap_first, find_all_xsd_children, convert_to_xml_class_name, convert_to_xsd_class_name
+from musicxml.util.core import cap_first, convert_to_xml_class_name
 from musicxml.xsd.xsdtree import XSDTree, XSDTreeElement
-
+import xml.etree.ElementTree as ET
 
 class XSDSequence:
     def __init__(self, xsd_tree):
@@ -92,29 +92,6 @@ class XSDGroup(XSDTreeElement):
                     self._sequence = XSDSequence(child)
         return self._sequence
 
-
-xsd_group_class_names = []
-xsd_groups = find_all_xsd_children(tag='group')
-
-for xsd_group in xsd_groups:
-    xsd_tree = XSDTree(xsd_group)
-    class_name = convert_to_xsd_class_name(xsd_tree.name, 'group')
-    base_classes = "(XSDGroup, )"
-    attributes = """
-    {
-    'XSD_TREE': xsd_tree,
-    '__doc__': xsd_tree.get_doc()
-    }
-    """
-    exec(f"{class_name} = type('{class_name}', {base_classes}, {attributes})")
-    xsd_group_class_names.append(class_name)
-
-# __all__ = xsd_group_class_names
-__all__ = ['XSDGroupAllMargins', 'XSDGroupBeatUnit', 'XSDGroupClef', 'XSDGroupDisplayStepOctave',
-           'XSDGroupDuration', 'XSDGroupEditorial', 'XSDGroupEditorialVoice',
-           'XSDGroupEditorialVoiceDirection', 'XSDGroupFootnote', 'XSDGroupFullNote',
-           'XSDGroupHarmonyChord', 'XSDGroupLayout', 'XSDGroupLeftRightMargins', 'XSDGroupLevel',
-           'XSDGroupMusicData', 'XSDGroupNonTraditionalKey', 'XSDGroupPartGroup',
-           'XSDGroupScoreHeader', 'XSDGroupScorePart', 'XSDGroupSlash', 'XSDGroupStaff',
-           'XSDGroupTimeSignature', 'XSDGroupTraditionalKey', 'XSDGroupTranspose', 'XSDGroupTuning',
-           'XSDGroupVirtualInstrumentData', 'XSDGroupVoice']
+# -----------------------------------------------------
+# AUTOMATICALLY GENERATED WITH generate_indicators.py
+# -----------------------------------------------------

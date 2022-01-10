@@ -3,8 +3,7 @@ from unittest import TestCase
 from xmldiff import main
 from musicxml.xmlelement.xmlelement import *
 from musicxml.xsd.xsdcomplextype import XSDComplexTypeScorePartwise
-from musicxml.xsd.xsdindicators import *
-from musicxml.xsd.xsdindicators import XSDSequence
+from musicxml.xsd.xsdindicator import XSDSequence
 
 parent_folder = Path(__file__).parent
 

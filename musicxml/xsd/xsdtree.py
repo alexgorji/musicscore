@@ -160,7 +160,9 @@ class XSDTree(Tree):
     def get_doc(self):
         for node in self.traverse():
             if node.tag == 'documentation':
-                return node.text
+                output = node.text.strip()
+                output.replace('\t', '    ')
+                return output
 
     def get_restriction(self):
         for node in self.get_children():

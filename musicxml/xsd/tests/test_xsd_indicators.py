@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 from musicxml.xmlelement.xmlelement import *
 
 from musicxml.xsd.xsdtree import XSDTree
-from musicxml.xsd.xsdindicators import XSDSequence, XSDChoice
+from musicxml.xsd.xsdindicator import XSDSequence, XSDChoice
 
 
 class TestSequence(TestCase):

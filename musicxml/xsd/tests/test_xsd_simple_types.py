@@ -1,83 +1,13 @@
 import importlib
 from musicxml.util.helperclasses import MusicXmlTestCase
-from musicxml.xsd.xsdsimpletype import XSDSimpleType, xml_simple_type_class_names
-
+# from musicxml.xsd.xsdsimpletype import XSDSimpleType, xml_simple_type_class_names
+#
+# from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdcomplextype import *
 
 
 class TestSimpleTypes(MusicXmlTestCase):
-    def test_simple_types_list(self):
-        """
-        Test if xml_simple_type_class_names in module musicxml.types.simpletype return all simple types
-        """
-        assert set(xml_simple_type_class_names) == {'XSDSimpleTypeInteger', 'XSDSimpleTypeNonNegativeInteger',
-                                                    'XSDSimpleTypePositiveInteger', 'XSDSimpleTypeDecimal',
-                                                    'XSDSimpleTypeString', 'XSDSimpleTypeString', 'XSDSimpleTypeToken',
-                                                    'XSDSimpleTypeNMTOKEN', 'XSDSimpleTypeDate', 'XSDSimpleTypeAboveBelow',
-                                                    'XSDSimpleTypeBeamLevel', 'XSDSimpleTypeColor', 'XSDSimpleTypeCommaSeparatedText',
-                                                    'XSDSimpleTypeCssFontSize', 'XSDSimpleTypeDivisions',
-                                                    'XSDSimpleTypeEnclosureShape', 'XSDSimpleTypeFermataShape',
-                                                    'XSDSimpleTypeFontFamily', 'XSDSimpleTypeFontSize', 'XSDSimpleTypeFontStyle',
-                                                    'XSDSimpleTypeFontWeight', 'XSDSimpleTypeLeftCenterRight',
-                                                    'XSDSimpleTypeLeftRight', 'XSDSimpleTypeLineLength', 'XSDSimpleTypeLineShape',
-                                                    'XSDSimpleTypeLineType', 'XSDSimpleTypeMidi16', 'XSDSimpleTypeMidi128',
-                                                    'XSDSimpleTypeMidi16384', 'XSDSimpleTypeMute', 'XSDSimpleTypeNonNegativeDecimal',
-                                                    'XSDSimpleTypeNumberLevel', 'XSDSimpleTypeNumberOfLines',
-                                                    'XSDSimpleTypeNumberOrNormal', 'XSDSimpleTypeNumeralValue',
-                                                    'XSDSimpleTypeOverUnder', 'XSDSimpleTypePercent', 'XSDSimpleTypePositiveDecimal',
-                                                    'XSDSimpleTypePositiveDivisions', 'XSDSimpleTypePositiveIntegerOrEmpty',
-                                                    'XSDSimpleTypeRotationDegrees', 'XSDSimpleTypeSemiPitched',
-                                                    'XSDSimpleTypeSmuflGlyphName', 'XSDSimpleTypeSmuflAccidentalGlyphName',
-                                                    'XSDSimpleTypeSmuflCodaGlyphName', 'XSDSimpleTypeSmuflLyricsGlyphName',
-                                                    'XSDSimpleTypeSmuflPictogramGlyphName', 'XSDSimpleTypeSmuflSegnoGlyphName',
-                                                    'XSDSimpleTypeSmuflWavyLineGlyphName', 'XSDSimpleTypeStartNote',
-                                                    'XSDSimpleTypeStartStop', 'XSDSimpleTypeStartStopContinue',
-                                                    'XSDSimpleTypeStartStopSingle', 'XSDSimpleTypeStringNumber',
-                                                    'XSDSimpleTypeSymbolSize', 'XSDSimpleTypeTenths', 'XSDSimpleTypeTextDirection',
-                                                    'XSDSimpleTypeTiedType', 'XSDSimpleTypeTimeOnly', 'XSDSimpleTypeTopBottom',
-                                                    'XSDSimpleTypeTremoloType', 'XSDSimpleTypeTrillBeats', 'XSDSimpleTypeTrillStep',
-                                                    'XSDSimpleTypeTwoNoteTurn', 'XSDSimpleTypeUpDown', 'XSDSimpleTypeUprightInverted',
-                                                    'XSDSimpleTypeValign', 'XSDSimpleTypeValignImage', 'XSDSimpleTypeYesNo',
-                                                    'XSDSimpleTypeYesNoNumber', 'XSDSimpleTypeYyyyMmDd',
-                                                    'XSDSimpleTypeCancelLocation', 'XSDSimpleTypeClefSign', 'XSDSimpleTypeFifths',
-                                                    'XSDSimpleTypeMode', 'XSDSimpleTypeShowFrets', 'XSDSimpleTypeStaffLine',
-                                                    'XSDSimpleTypeStaffLinePosition', 'XSDSimpleTypeStaffNumber',
-                                                    'XSDSimpleTypeStaffType', 'XSDSimpleTypeTimeRelation',
-                                                    'XSDSimpleTypeTimeSeparator', 'XSDSimpleTypeTimeSymbol',
-                                                    'XSDSimpleTypeBackwardForward', 'XSDSimpleTypeBarStyle',
-                                                    'XSDSimpleTypeEndingNumber', 'XSDSimpleTypeRightLeftMiddle',
-                                                    'XSDSimpleTypeStartStopDiscontinue', 'XSDSimpleTypeWinged',
-                                                    'XSDSimpleTypeAccordionMiddle', 'XSDSimpleTypeBeaterValue',
-                                                    'XSDSimpleTypeDegreeSymbolValue', 'XSDSimpleTypeDegreeTypeValue',
-                                                    'XSDSimpleTypeEffectValue', 'XSDSimpleTypeGlassValue',
-                                                    'XSDSimpleTypeHarmonyArrangement', 'XSDSimpleTypeHarmonyType',
-                                                    'XSDSimpleTypeKindValue', 'XSDSimpleTypeLineEnd',
-                                                    'XSDSimpleTypeMeasureNumberingValue', 'XSDSimpleTypeMembraneValue',
-                                                    'XSDSimpleTypeMetalValue', 'XSDSimpleTypeMilliseconds',
-                                                    'XSDSimpleTypeNumeralMode', 'XSDSimpleTypeOnOff', 'XSDSimpleTypePedalType',
-                                                    'XSDSimpleTypePitchedValue', 'XSDSimpleTypePrincipalVoiceSymbol',
-                                                    'XSDSimpleTypeStaffDivideSymbol', 'XSDSimpleTypeStartStopChangeContinue',
-                                                    'XSDSimpleTypeSyncType', 'XSDSimpleTypeSystemRelationNumber',
-                                                    'XSDSimpleTypeSystemRelation', 'XSDSimpleTypeTipDirection',
-                                                    'XSDSimpleTypeStickLocation', 'XSDSimpleTypeStickMaterial',
-                                                    'XSDSimpleTypeStickType', 'XSDSimpleTypeUpDownStopContinue',
-                                                    'XSDSimpleTypeWedgeType', 'XSDSimpleTypeWoodValue', 'XSDSimpleTypeDistanceType',
-                                                    'XSDSimpleTypeGlyphType', 'XSDSimpleTypeLineWidthType', 'XSDSimpleTypeMarginType',
-                                                    'XSDSimpleTypeMillimeters', 'XSDSimpleTypeNoteSizeType',
-                                                    'XSDSimpleTypeAccidentalValue', 'XSDSimpleTypeArrowDirection',
-                                                    'XSDSimpleTypeArrowStyle', 'XSDSimpleTypeBeamValue', 'XSDSimpleTypeBendShape',
-                                                    'XSDSimpleTypeBreathMarkValue', 'XSDSimpleTypeCaesuraValue',
-                                                    'XSDSimpleTypeCircularArrow', 'XSDSimpleTypeFan', 'XSDSimpleTypeHandbellValue',
-                                                    'XSDSimpleTypeHarmonClosedLocation', 'XSDSimpleTypeHarmonClosedValue',
-                                                    'XSDSimpleTypeHoleClosedLocation', 'XSDSimpleTypeHoleClosedValue',
-                                                    'XSDSimpleTypeNoteTypeValue', 'XSDSimpleTypeNoteheadValue', 'XSDSimpleTypeOctave',
-                                                    'XSDSimpleTypeSemitones', 'XSDSimpleTypeShowTuplet', 'XSDSimpleTypeStemValue',
-                                                    'XSDSimpleTypeStep', 'XSDSimpleTypeSyllabic', 'XSDSimpleTypeTapHand',
-                                                    'XSDSimpleTypeTremoloMarks', 'XSDSimpleTypeGroupBarlineValue',
-                                                    'XSDSimpleTypeGroupSymbolValue', 'XSDSimpleTypeMeasureText',
-                                                    'XSDSimpleTypeSwingTypeValue', 'XSDSimpleTypeName', 'XSDSimpleTypeNCName',
-                                                    'XSDSimpleTypeID', 'XSDSimpleTypeIDREF'}
 
     def test_generated_simple_type_xsd_snippet(self):
         """
@@ -85,14 +15,14 @@ class TestSimpleTypes(MusicXmlTestCase):
         show its version
         """
         expected = """<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="above-below">
-        <xs:annotation>
-            <xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:token">
-            <xs:enumeration value="above" />
-            <xs:enumeration value="below" />
-        </xs:restriction>
-    </xs:simpleType>
+    <xs:annotation>
+        <xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+        <xs:enumeration value="above" />
+        <xs:enumeration value="below" />
+    </xs:restriction>
+</xs:simpleType>
 """
         assert XSDSimpleTypeAboveBelow.get_xsd() == expected
 
@@ -107,27 +37,6 @@ class TestSimpleTypes(MusicXmlTestCase):
 
         assert XSDSimpleTypeAboveBelow.__doc__ == 'The above-below type is used to indicate whether one element appears ' \
                                                   'above or below another element.'
-
-    def test_simple_type_xsd_is_converted_to_classes(self):
-        """
-        Test that all XSDSimpleType classes are generated
-        """
-        for simple_type in self.all_simple_type_xsd_elements:
-            module = importlib.import_module('musicxml.xsd.xsdsimpletype')
-            simple_type_class = getattr(module, simple_type.xsd_element_class_name)
-            assert simple_type.xsd_element_class_name == simple_type_class.__name__
-
-    def test_base_classes_are_implemented(self):
-        """
-        Test that all needed base classes are actually inherited by all XSDSimpleType classes
-        """
-        for simple_type in self.all_simple_type_xsd_elements:
-            module = importlib.import_module('musicxml.xsd.xsdsimpletype')
-            simpletype_class = getattr(module, simple_type.xsd_element_class_name)
-            mro = simpletype_class.__mro__
-            for base_class_name in simple_type.xsd_tree_base_class_names:
-                base_class = getattr(module, base_class_name)
-                assert base_class in mro
 
     # Test Basic XSDSimpleType classes which are created manually
 

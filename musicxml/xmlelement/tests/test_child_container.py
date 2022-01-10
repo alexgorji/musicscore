@@ -6,10 +6,8 @@ from musicxml.xmlelement.exceptions import XMLChildContainerWrongElementError, X
 from musicxml.xmlelement.xmlelement import XMLChildContainerFactory, XMLChildContainer, DuplicationXSDSequence
 from musicxml.xmlelement.xmlelement import *
 from musicxml.xsd.xsdcomplextype import *
-from musicxml.xsd.xsdcomplextype import xsd_complex_type_class_names
 from musicxml.xsd.xsdelement import XSDElement
-from musicxml.xsd.xsdindicators import XSDSequence, XSDChoice
-from musicxml.xsd.xsdindicators import *
+from musicxml.xsd.xsdindicator import *
 from musicxml.xsd.xsdtree import XSDTree
 import xml.etree.ElementTree as ET
 
@@ -70,9 +68,10 @@ class TestChildContainer(TestCase):
         assert container.max_occurrences == 'unbounded'
 
     def test_that_all_complex_types_can_create_child_container(self):
+        from musicxml.xsd.xsdcomplextype import __all__
         complex_types_with_child_container = []
         complex_types_without_child_container = []
-        for complex_type_name in xsd_complex_type_class_names:
+        for complex_type_name in __all__[1:]:
             complex_type = eval(complex_type_name)
             try:
                 XMLChildContainerFactory(complex_type).get_child_container()
@@ -81,41 +80,46 @@ class TestChildContainer(TestCase):
                 complex_types_without_child_container.append(complex_type_name)
                 # print(complex_type.get_xsd())
 
-        assert complex_types_with_child_container == ['XSDComplexTypeDynamics', 'XSDComplexTypeMidiInstrument',
-                                                      'XSDComplexTypeNameDisplay', 'XSDComplexTypePlay', 'XSDComplexTypeAttributes',
-                                                      'XSDComplexTypeBeatRepeat', 'XSDComplexTypeClef', 'XSDComplexTypeForPart',
-                                                      'XSDComplexTypeInterchangeable', 'XSDComplexTypeKey', 'XSDComplexTypeMeasureStyle',
-                                                      'XSDComplexTypePartClef', 'XSDComplexTypePartTranspose', 'XSDComplexTypeSlash',
-                                                      'XSDComplexTypeStaffDetails', 'XSDComplexTypeStaffTuning', 'XSDComplexTypeTime',
-                                                      'XSDComplexTypeTranspose', 'XSDComplexTypeBarline', 'XSDComplexTypeAccord',
-                                                      'XSDComplexTypeAccordionRegistration', 'XSDComplexTypeBass',
-                                                      'XSDComplexTypeBeatUnitTied', 'XSDComplexTypeDegree', 'XSDComplexTypeDirection',
-                                                      'XSDComplexTypeDirectionType', 'XSDComplexTypeFrame', 'XSDComplexTypeFrameNote',
-                                                      'XSDComplexTypeGrouping', 'XSDComplexTypeHarmony', 'XSDComplexTypeHarpPedals',
-                                                      'XSDComplexTypeInstrumentChange', 'XSDComplexTypeListening',
-                                                      'XSDComplexTypeMetronome', 'XSDComplexTypeMetronomeNote',
-                                                      'XSDComplexTypeMetronomeTuplet', 'XSDComplexTypeNumeral',
-                                                      'XSDComplexTypeNumeralKey', 'XSDComplexTypePedalTuning', 'XSDComplexTypePercussion',
-                                                      'XSDComplexTypePrint', 'XSDComplexTypeRoot', 'XSDComplexTypeScordatura',
-                                                      'XSDComplexTypeSound', 'XSDComplexTypeStick', 'XSDComplexTypeSwing',
-                                                      'XSDComplexTypeEncoding', 'XSDComplexTypeIdentification',
-                                                      'XSDComplexTypeMiscellaneous', 'XSDComplexTypeAppearance',
-                                                      'XSDComplexTypeMeasureLayout', 'XSDComplexTypePageLayout',
-                                                      'XSDComplexTypePageMargins', 'XSDComplexTypeScaling', 'XSDComplexTypeStaffLayout',
-                                                      'XSDComplexTypeSystemDividers', 'XSDComplexTypeSystemLayout',
-                                                      'XSDComplexTypeSystemMargins', 'XSDComplexTypeArticulations', 'XSDComplexTypeArrow',
-                                                      'XSDComplexTypeBackup', 'XSDComplexTypeBend', 'XSDComplexTypeFigure',
-                                                      'XSDComplexTypeFiguredBass', 'XSDComplexTypeForward', 'XSDComplexTypeHarmonMute',
-                                                      'XSDComplexTypeHarmonic', 'XSDComplexTypeHole', 'XSDComplexTypeListen',
-                                                      'XSDComplexTypeLyric', 'XSDComplexTypeNotations', 'XSDComplexTypeNote',
-                                                      'XSDComplexTypeNoteheadText', 'XSDComplexTypeOrnaments', 'XSDComplexTypePitch',
-                                                      'XSDComplexTypeRest', 'XSDComplexTypeTechnical', 'XSDComplexTypeTimeModification',
-                                                      'XSDComplexTypeTuplet', 'XSDComplexTypeTupletPortion', 'XSDComplexTypeUnpitched',
-                                                      'XSDComplexTypeCredit', 'XSDComplexTypeDefaults', 'XSDComplexTypePartGroup',
-                                                      'XSDComplexTypePartLink', 'XSDComplexTypePartList', 'XSDComplexTypePlayer',
-                                                      'XSDComplexTypeScoreInstrument', 'XSDComplexTypeScorePart',
-                                                      'XSDComplexTypeVirtualInstrument', 'XSDComplexTypeWork',
-                                                      'XSDComplexTypeScorePartwise', 'XSDComplexTypePart', 'XSDComplexTypeMeasure']
+        assert set(complex_types_with_child_container) == {'XSDComplexTypeDynamics', 'XSDComplexTypeMidiInstrument',
+                                                           'XSDComplexTypeNameDisplay', 'XSDComplexTypePlay', 'XSDComplexTypeAttributes',
+                                                           'XSDComplexTypeBeatRepeat', 'XSDComplexTypeClef', 'XSDComplexTypeForPart',
+                                                           'XSDComplexTypeInterchangeable', 'XSDComplexTypeKey',
+                                                           'XSDComplexTypeMeasureStyle',
+                                                           'XSDComplexTypePartClef', 'XSDComplexTypePartTranspose', 'XSDComplexTypeSlash',
+                                                           'XSDComplexTypeStaffDetails', 'XSDComplexTypeStaffTuning', 'XSDComplexTypeTime',
+                                                           'XSDComplexTypeTranspose', 'XSDComplexTypeBarline', 'XSDComplexTypeAccord',
+                                                           'XSDComplexTypeAccordionRegistration', 'XSDComplexTypeBass',
+                                                           'XSDComplexTypeBeatUnitTied', 'XSDComplexTypeDegree', 'XSDComplexTypeDirection',
+                                                           'XSDComplexTypeDirectionType', 'XSDComplexTypeFrame', 'XSDComplexTypeFrameNote',
+                                                           'XSDComplexTypeGrouping', 'XSDComplexTypeHarmony', 'XSDComplexTypeHarpPedals',
+                                                           'XSDComplexTypeInstrumentChange', 'XSDComplexTypeListening',
+                                                           'XSDComplexTypeMetronome', 'XSDComplexTypeMetronomeNote',
+                                                           'XSDComplexTypeMetronomeTuplet', 'XSDComplexTypeNumeral',
+                                                           'XSDComplexTypeNumeralKey', 'XSDComplexTypePedalTuning',
+                                                           'XSDComplexTypePercussion',
+                                                           'XSDComplexTypePrint', 'XSDComplexTypeRoot', 'XSDComplexTypeScordatura',
+                                                           'XSDComplexTypeSound', 'XSDComplexTypeStick', 'XSDComplexTypeSwing',
+                                                           'XSDComplexTypeEncoding', 'XSDComplexTypeIdentification',
+                                                           'XSDComplexTypeMiscellaneous', 'XSDComplexTypeAppearance',
+                                                           'XSDComplexTypeMeasureLayout', 'XSDComplexTypePageLayout',
+                                                           'XSDComplexTypePageMargins', 'XSDComplexTypeScaling',
+                                                           'XSDComplexTypeStaffLayout',
+                                                           'XSDComplexTypeSystemDividers', 'XSDComplexTypeSystemLayout',
+                                                           'XSDComplexTypeSystemMargins', 'XSDComplexTypeArticulations',
+                                                           'XSDComplexTypeArrow',
+                                                           'XSDComplexTypeBackup', 'XSDComplexTypeBend', 'XSDComplexTypeFigure',
+                                                           'XSDComplexTypeFiguredBass', 'XSDComplexTypeForward', 'XSDComplexTypeHarmonMute',
+                                                           'XSDComplexTypeHarmonic', 'XSDComplexTypeHole', 'XSDComplexTypeListen',
+                                                           'XSDComplexTypeLyric', 'XSDComplexTypeNotations', 'XSDComplexTypeNote',
+                                                           'XSDComplexTypeNoteheadText', 'XSDComplexTypeOrnaments', 'XSDComplexTypePitch',
+                                                           'XSDComplexTypeRest', 'XSDComplexTypeTechnical',
+                                                           'XSDComplexTypeTimeModification',
+                                                           'XSDComplexTypeTuplet', 'XSDComplexTypeTupletPortion', 'XSDComplexTypeUnpitched',
+                                                           'XSDComplexTypeCredit', 'XSDComplexTypeDefaults', 'XSDComplexTypePartGroup',
+                                                           'XSDComplexTypePartLink', 'XSDComplexTypePartList', 'XSDComplexTypePlayer',
+                                                           'XSDComplexTypeScoreInstrument', 'XSDComplexTypeScorePart',
+                                                           'XSDComplexTypeVirtualInstrument', 'XSDComplexTypeWork',
+                                                           'XSDComplexTypeScorePartwise', 'XSDComplexTypePart', 'XSDComplexTypeMeasure'}
         assert complex_types_without_child_container == ['XSDComplexTypeAccidentalText', 'XSDComplexTypeCoda', 'XSDComplexTypeEmpty',
                                                          'XSDComplexTypeEmptyPlacement',
                                                          'XSDComplexTypeEmptyPlacementSmufl', 'XSDComplexTypeEmptyPrintStyle',

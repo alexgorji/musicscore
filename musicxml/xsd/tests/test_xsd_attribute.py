@@ -1,7 +1,6 @@
 from unittest import TestCase
 
 from musicxml.xsd.xsdsimpletype import *
-from musicxml.xsd.xsdattribute import XSDAttribute, xml_attribute_group_class_names
 from musicxml.xsd.xsdtree import XSDTree
 from xml.etree import ElementTree as ET
 
@@ -26,31 +25,6 @@ class TestXSDAttribute(TestCase):
 
 
 class TestXSDAttributeGroup(MusicXmlTestCase):
-    def test_xsd_attribute_group_list(self):
-        """
-        Test if xml_attribute_group_class_names in module musicxml.xsdattribute return all attribute group
-        """
-        assert xml_attribute_group_class_names == ['XSDAttributeGroupBendSound', 'XSDAttributeGroupBezier', 'XSDAttributeGroupColor',
-                                                   'XSDAttributeGroupDashedFormatting', 'XSDAttributeGroupDirective',
-                                                   'XSDAttributeGroupDocumentAttributes', 'XSDAttributeGroupEnclosure',
-                                                   'XSDAttributeGroupFont', 'XSDAttributeGroupHalign', 'XSDAttributeGroupJustify',
-                                                   'XSDAttributeGroupLetterSpacing', 'XSDAttributeGroupLevelDisplay',
-                                                   'XSDAttributeGroupLineHeight', 'XSDAttributeGroupLineLength',
-                                                   'XSDAttributeGroupLineShape', 'XSDAttributeGroupLineType',
-                                                   'XSDAttributeGroupOptionalUniqueId', 'XSDAttributeGroupOrientation',
-                                                   'XSDAttributeGroupPlacement', 'XSDAttributeGroupPosition',
-                                                   'XSDAttributeGroupPrintObject', 'XSDAttributeGroupPrintSpacing',
-                                                   'XSDAttributeGroupPrintStyle', 'XSDAttributeGroupPrintStyleAlign',
-                                                   'XSDAttributeGroupPrintout', 'XSDAttributeGroupSmufl', 'XSDAttributeGroupSystemRelation',
-                                                   'XSDAttributeGroupSymbolFormatting', 'XSDAttributeGroupTextDecoration',
-                                                   'XSDAttributeGroupTextDirection', 'XSDAttributeGroupTextFormatting',
-                                                   'XSDAttributeGroupTextRotation', 'XSDAttributeGroupTrillSound',
-                                                   'XSDAttributeGroupValign', 'XSDAttributeGroupValignImage', 'XSDAttributeGroupXPosition',
-                                                   'XSDAttributeGroupYPosition', 'XSDAttributeGroupImageAttributes',
-                                                   'XSDAttributeGroupPrintAttributes', 'XSDAttributeGroupElementPosition',
-                                                   'XSDAttributeGroupLinkAttributes', 'XSDAttributeGroupGroupNameText',
-                                                   'XSDAttributeGroupMeasureAttributes', 'XSDAttributeGroupPartAttributes',
-                                                   'XSDAttributeGroupPartNameText']
 
     def test_attribute_group_get_attributes(self):
         """
