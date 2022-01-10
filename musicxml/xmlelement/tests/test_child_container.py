@@ -3,7 +3,7 @@ from unittest import TestCase
 from musicxml.util.core import convert_to_xml_class_name
 from musicxml.xmlelement.exceptions import XMLChildContainerWrongElementError, XMLChildContainerMaxOccursError, \
     XMLChildContainerChoiceHasAnotherChosenChild, XMLChildContainerFactoryError
-from musicxml.xmlelement.xmlelement import XMLChildContainerFactory, XMLChildContainer, DuplicationXSDSequence
+from musicxml.xmlelement.xmlchildcontainer import XMLChildContainer, DuplicationXSDSequence, XMLChildContainerFactory
 from musicxml.xmlelement.xmlelement import *
 from musicxml.xsd.xsdcomplextype import *
 from musicxml.xsd.xsdelement import XSDElement
