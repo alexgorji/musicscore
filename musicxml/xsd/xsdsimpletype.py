@@ -13,6 +13,7 @@ class XSDSimpleType(XSDTreeElement):
     Parent Class for all SimpleType classes
     """
     _TYPES: list[type] = []
+    _UNION: list[Any] = []
     _FORCED_PERMITTED: list[str] = []
     _PERMITTED: list[str] = []
     _PATTERN: Optional[str] = None
@@ -23,23 +24,28 @@ class XSDSimpleType(XSDTreeElement):
             self._populate_permitted()
         if not self._FORCED_PERMITTED:
             self._populate_forced_permitted()
+        if self._UNION:
+            self._TYPES = []
+            for t_ in self._UNION:
+                self._TYPES.extend(t_._TYPES)
         self._populate_pattern()
         self._value = None
         self.value = value
 
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, v):
-        self._check_value_type(v)
-        if v not in self._FORCED_PERMITTED:
-            self._check_value(v)
-        self._value = v
-
     def _check_value(self, v):
-        if v in self._FORCED_PERMITTED:
+        if self._UNION:
+            errors = []
+            for t_ in self._UNION:
+                try:
+                    t_(v)
+                    return
+                except TypeError:
+                    pass
+                except ValueError as err:
+                    errors.append(err.args[0])
+            raise ValueError(errors)
+
+        elif v in self._FORCED_PERMITTED:
             return
         if self._PERMITTED:
             if v not in self._PERMITTED:
@@ -128,12 +134,23 @@ class XSDSimpleType(XSDTreeElement):
         if pattern:
             self._PATTERN = translate_pattern(pattern)
 
-    def __repr__(self):
-        return str(self.value)
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, v):
+        self._check_value_type(v)
+        if v not in self._FORCED_PERMITTED:
+            self._check_value(v)
+        self._value = v
 
     @classmethod
     def value_is_required(cls):
         return True
+
+    def __repr__(self):
+        return str(self.value)
 
 
 class XSDSimpleTypeInteger(XSDSimpleType):
@@ -533,20 +550,6 @@ class XSDSimpleTypeFontFamily(XSDSimpleTypeCommaSeparatedText):
                                      ))
 
 
-class XSDSimpleTypeFontSize(XSDSimpleTypeDecimal, XSDSimpleTypeCssFontSize):
-    """The font-size can be one of the CSS font sizes (xx-small, x-small, small, medium, large, x-large, xx-large) or a numeric point size."""
-    
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="font-size">
-    <xs:annotation>
-        <xs:documentation>The font-size can be one of the CSS font sizes (xx-small, x-small, small, medium, large, x-large, xx-large) or a numeric point size.</xs:documentation>
-    </xs:annotation>
-    <xs:union memberTypes="xs:decimal css-font-size" />
-</xs:simpleType>
-"""
-                                     ))
-
-
 class XSDSimpleTypeFontStyle(XSDSimpleTypeToken):
     """The font-style type represents a simplified version of the CSS font-style property."""
     
@@ -817,26 +820,6 @@ class XSDSimpleTypeNumberOfLines(XSDSimpleTypeNonNegativeInteger):
                                      ))
 
 
-class XSDSimpleTypeNumberOrNormal(XSDSimpleTypeDecimal):
-    """The number-or-normal values can be either a decimal number or the string "normal". This is used by the line-height and letter-spacing attributes."""
-    
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="number-or-normal">
-    <xs:annotation>
-        <xs:documentation>The number-or-normal values can be either a decimal number or the string "normal". This is used by the line-height and letter-spacing attributes.</xs:documentation>
-    </xs:annotation>
-    <xs:union memberTypes="xs:decimal">
-        <xs:simpleType>
-            <xs:restriction base="xs:token">
-                <xs:enumeration value="normal" />
-            </xs:restriction>
-        </xs:simpleType>
-    </xs:union>
-</xs:simpleType>
-"""
-                                     ))
-
-
 class XSDSimpleTypeNumeralValue(XSDSimpleTypePositiveInteger):
     """The numeral-value type represents a Roman numeral or Nashville number value as a positive integer from 1 to 7."""
     
@@ -915,26 +898,6 @@ class XSDSimpleTypePositiveDivisions(XSDSimpleTypeDivisions):
     <xs:restriction base="divisions">
         <xs:minExclusive value="0" />
     </xs:restriction>
-</xs:simpleType>
-"""
-                                     ))
-
-
-class XSDSimpleTypePositiveIntegerOrEmpty(XSDSimpleTypePositiveInteger):
-    """The positive-integer-or-empty values can be either a positive integer or an empty string."""
-    
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="positive-integer-or-empty">
-    <xs:annotation>
-        <xs:documentation>The positive-integer-or-empty values can be either a positive integer or an empty string.</xs:documentation>
-    </xs:annotation>
-    <xs:union memberTypes="xs:positiveInteger">
-        <xs:simpleType>
-            <xs:restriction base="xs:string">
-                <xs:enumeration value="" />
-            </xs:restriction>
-        </xs:simpleType>
-    </xs:union>
 </xs:simpleType>
 """
                                      ))
@@ -1463,20 +1426,6 @@ class XSDSimpleTypeYesNo(XSDSimpleTypeToken):
         <xs:enumeration value="yes" />
         <xs:enumeration value="no" />
     </xs:restriction>
-</xs:simpleType>
-"""
-                                     ))
-
-
-class XSDSimpleTypeYesNoNumber(XSDSimpleTypeYesNo, XSDSimpleTypeDecimal):
-    """The yes-no-number type is used for attributes that can be either boolean or numeric values."""
-    
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="yes-no-number">
-    <xs:annotation>
-        <xs:documentation>The yes-no-number type is used for attributes that can be either boolean or numeric values.</xs:documentation>
-    </xs:annotation>
-    <xs:union memberTypes="yes-no xs:decimal" />
 </xs:simpleType>
 """
                                      ))
@@ -3082,8 +3031,7 @@ class XSDSimpleTypeNoteTypeValue(XSDSimpleTypeString):
 
 
 class XSDSimpleTypeNoteheadValue(XSDSimpleTypeString):
-    """
-The notehead-value type indicates shapes other than the open and closed ovals associated with note durations. 
+    """The notehead-value type indicates shapes other than the open and closed ovals associated with note durations. 
 
 The values do, re, mi, fa, fa up, so, la, and ti correspond to Aikin's 7-shape system.  The fa up shape is typically used with upstems; the fa shape is typically used with downstems or no stems.
 
@@ -3351,4 +3299,76 @@ class XSDSimpleTypeSwingTypeValue(XSDSimpleTypeNoteTypeValue):
 """
                                      ))
 
-__all__=['XSDSimpleType', 'XSDSimpleTypeInteger', 'XSDSimpleTypeNonNegativeInteger', 'XSDSimpleTypePositiveInteger', 'XSDSimpleTypeDecimal', 'XSDSimpleTypeString', 'XSDSimpleTypeToken', 'XSDSimpleTypeDate', 'XSDSimpleTypeNMTOKEN', 'XSDSimpleTypeName', 'XSDSimpleTypeNCName', 'XSDSimpleTypeID', 'XSDSimpleTypeIDREF', 'XSDSimpleTypeAboveBelow', 'XSDSimpleTypeBeamLevel', 'XSDSimpleTypeColor', 'XSDSimpleTypeCommaSeparatedText', 'XSDSimpleTypeCssFontSize', 'XSDSimpleTypeDivisions', 'XSDSimpleTypeEnclosureShape', 'XSDSimpleTypeFermataShape', 'XSDSimpleTypeFontFamily', 'XSDSimpleTypeFontSize', 'XSDSimpleTypeFontStyle', 'XSDSimpleTypeFontWeight', 'XSDSimpleTypeLeftCenterRight', 'XSDSimpleTypeLeftRight', 'XSDSimpleTypeLineLength', 'XSDSimpleTypeLineShape', 'XSDSimpleTypeLineType', 'XSDSimpleTypeMidi16', 'XSDSimpleTypeMidi128', 'XSDSimpleTypeMidi16384', 'XSDSimpleTypeMute', 'XSDSimpleTypeNonNegativeDecimal', 'XSDSimpleTypeNumberLevel', 'XSDSimpleTypeNumberOfLines', 'XSDSimpleTypeNumberOrNormal', 'XSDSimpleTypeNumeralValue', 'XSDSimpleTypeOverUnder', 'XSDSimpleTypePercent', 'XSDSimpleTypePositiveDecimal', 'XSDSimpleTypePositiveDivisions', 'XSDSimpleTypePositiveIntegerOrEmpty', 'XSDSimpleTypeRotationDegrees', 'XSDSimpleTypeSemiPitched', 'XSDSimpleTypeSmuflGlyphName', 'XSDSimpleTypeSmuflAccidentalGlyphName', 'XSDSimpleTypeSmuflCodaGlyphName', 'XSDSimpleTypeSmuflLyricsGlyphName', 'XSDSimpleTypeSmuflPictogramGlyphName', 'XSDSimpleTypeSmuflSegnoGlyphName', 'XSDSimpleTypeSmuflWavyLineGlyphName', 'XSDSimpleTypeStartNote', 'XSDSimpleTypeStartStop', 'XSDSimpleTypeStartStopContinue', 'XSDSimpleTypeStartStopSingle', 'XSDSimpleTypeStringNumber', 'XSDSimpleTypeSymbolSize', 'XSDSimpleTypeTenths', 'XSDSimpleTypeTextDirection', 'XSDSimpleTypeTiedType', 'XSDSimpleTypeTimeOnly', 'XSDSimpleTypeTopBottom', 'XSDSimpleTypeTremoloType', 'XSDSimpleTypeTrillBeats', 'XSDSimpleTypeTrillStep', 'XSDSimpleTypeTwoNoteTurn', 'XSDSimpleTypeUpDown', 'XSDSimpleTypeUprightInverted', 'XSDSimpleTypeValign', 'XSDSimpleTypeValignImage', 'XSDSimpleTypeYesNo', 'XSDSimpleTypeYesNoNumber', 'XSDSimpleTypeYyyyMmDd', 'XSDSimpleTypeCancelLocation', 'XSDSimpleTypeClefSign', 'XSDSimpleTypeFifths', 'XSDSimpleTypeMode', 'XSDSimpleTypeShowFrets', 'XSDSimpleTypeStaffLine', 'XSDSimpleTypeStaffLinePosition', 'XSDSimpleTypeStaffNumber', 'XSDSimpleTypeStaffType', 'XSDSimpleTypeTimeRelation', 'XSDSimpleTypeTimeSeparator', 'XSDSimpleTypeTimeSymbol', 'XSDSimpleTypeBackwardForward', 'XSDSimpleTypeBarStyle', 'XSDSimpleTypeEndingNumber', 'XSDSimpleTypeRightLeftMiddle', 'XSDSimpleTypeStartStopDiscontinue', 'XSDSimpleTypeWinged', 'XSDSimpleTypeAccordionMiddle', 'XSDSimpleTypeBeaterValue', 'XSDSimpleTypeDegreeSymbolValue', 'XSDSimpleTypeDegreeTypeValue', 'XSDSimpleTypeEffectValue', 'XSDSimpleTypeGlassValue', 'XSDSimpleTypeHarmonyArrangement', 'XSDSimpleTypeHarmonyType', 'XSDSimpleTypeKindValue', 'XSDSimpleTypeLineEnd', 'XSDSimpleTypeMeasureNumberingValue', 'XSDSimpleTypeMembraneValue', 'XSDSimpleTypeMetalValue', 'XSDSimpleTypeMilliseconds', 'XSDSimpleTypeNumeralMode', 'XSDSimpleTypeOnOff', 'XSDSimpleTypePedalType', 'XSDSimpleTypePitchedValue', 'XSDSimpleTypePrincipalVoiceSymbol', 'XSDSimpleTypeStaffDivideSymbol', 'XSDSimpleTypeStartStopChangeContinue', 'XSDSimpleTypeSyncType', 'XSDSimpleTypeSystemRelationNumber', 'XSDSimpleTypeSystemRelation', 'XSDSimpleTypeTipDirection', 'XSDSimpleTypeStickLocation', 'XSDSimpleTypeStickMaterial', 'XSDSimpleTypeStickType', 'XSDSimpleTypeUpDownStopContinue', 'XSDSimpleTypeWedgeType', 'XSDSimpleTypeWoodValue', 'XSDSimpleTypeDistanceType', 'XSDSimpleTypeGlyphType', 'XSDSimpleTypeLineWidthType', 'XSDSimpleTypeMarginType', 'XSDSimpleTypeMillimeters', 'XSDSimpleTypeNoteSizeType', 'XSDSimpleTypeAccidentalValue', 'XSDSimpleTypeArrowDirection', 'XSDSimpleTypeArrowStyle', 'XSDSimpleTypeBeamValue', 'XSDSimpleTypeBendShape', 'XSDSimpleTypeBreathMarkValue', 'XSDSimpleTypeCaesuraValue', 'XSDSimpleTypeCircularArrow', 'XSDSimpleTypeFan', 'XSDSimpleTypeHandbellValue', 'XSDSimpleTypeHarmonClosedLocation', 'XSDSimpleTypeHarmonClosedValue', 'XSDSimpleTypeHoleClosedLocation', 'XSDSimpleTypeHoleClosedValue', 'XSDSimpleTypeNoteTypeValue', 'XSDSimpleTypeNoteheadValue', 'XSDSimpleTypeOctave', 'XSDSimpleTypeSemitones', 'XSDSimpleTypeShowTuplet', 'XSDSimpleTypeStemValue', 'XSDSimpleTypeStep', 'XSDSimpleTypeSyllabic', 'XSDSimpleTypeTapHand', 'XSDSimpleTypeTremoloMarks', 'XSDSimpleTypeGroupBarlineValue', 'XSDSimpleTypeGroupSymbolValue', 'XSDSimpleTypeMeasureText', 'XSDSimpleTypeSwingTypeValue']
+
+class XSDSimpleTypeFontSize(XSDSimpleType):
+    _UNION = [XSDSimpleTypeCssFontSize, XSDSimpleTypeDecimal]
+    """The font-size can be one of the CSS font sizes (xx-small, x-small, small, medium, large, x-large, xx-large) or a numeric point size."""
+
+    XSD_TREE = XSDTree(ET.fromstring("""
+<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="font-size">
+    <xs:annotation>
+        <xs:documentation>The font-size can be one of the CSS font sizes (xx-small, x-small, small, medium, large, x-large, xx-large) or a numeric point size.</xs:documentation>
+    </xs:annotation>
+    <xs:union memberTypes="xs:decimal css-font-size" />
+</xs:simpleType>
+"""
+                                     ))
+
+
+class XSDSimpleTypeYesNoNumber(XSDSimpleType):
+    _UNION = [XSDSimpleTypeYesNo, XSDSimpleTypeDecimal]
+    """The yes-no-number type is used for attributes that can be either boolean or numeric values."""
+
+    XSD_TREE = XSDTree(ET.fromstring("""
+<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="yes-no-number">
+    <xs:annotation>
+        <xs:documentation>The yes-no-number type is used for attributes that can be either boolean or numeric values.</xs:documentation>
+    </xs:annotation>
+    <xs:union memberTypes="yes-no xs:decimal" />
+</xs:simpleType>
+"""
+                                     ))
+
+class XSDSimpleTypePositiveIntegerOrEmpty(XSDSimpleTypePositiveInteger):
+    """The positive-integer-or-empty values can be either a positive integer or an empty string."""
+    _FORCED_PERMITTED = ['']
+    XSD_TREE = XSDTree(ET.fromstring("""
+<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="positive-integer-or-empty">
+    <xs:annotation>
+        <xs:documentation>The positive-integer-or-empty values can be either a positive integer or an empty string.</xs:documentation>
+    </xs:annotation>
+    <xs:union memberTypes="xs:positiveInteger">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:union>
+</xs:simpleType>
+"""
+                                     ))
+
+    def __init__(self, value='', *args, **kwargs):
+        super().__init__(value=value, *args, **kwargs)
+
+
+class XSDSimpleTypeNumberOrNormal(XSDSimpleTypeDecimal):
+    """The number-or-normal values can be either a decimal number or the string "normal". This is used by the line-height and letter-spacing attributes."""
+    _FORCED_PERMITTED = ['normal']
+    XSD_TREE = XSDTree(ET.fromstring("""
+<xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="number-or-normal">
+    <xs:annotation>
+        <xs:documentation>The number-or-normal values can be either a decimal number or the string "normal". This is used by the line-height and letter-spacing attributes.</xs:documentation>
+    </xs:annotation>
+    <xs:union memberTypes="xs:decimal">
+        <xs:simpleType>
+            <xs:restriction base="xs:token">
+                <xs:enumeration value="normal" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:union>
+</xs:simpleType>
+"""
+                                     ))
+
+__all__=['XSDSimpleType', 'XSDSimpleTypeInteger', 'XSDSimpleTypeNonNegativeInteger', 'XSDSimpleTypePositiveInteger', 'XSDSimpleTypeDecimal', 'XSDSimpleTypeString', 'XSDSimpleTypeToken', 'XSDSimpleTypeDate', 'XSDSimpleTypeNumberOrNormal', 'XSDSimpleTypePositiveIntegerOrEmpty', 'XSDSimpleTypeFontSize', 'XSDSimpleTypeYesNoNumber', 'XSDSimpleTypeNMTOKEN', 'XSDSimpleTypeName', 'XSDSimpleTypeNCName', 'XSDSimpleTypeID', 'XSDSimpleTypeIDREF', 'XSDSimpleTypeAboveBelow', 'XSDSimpleTypeBeamLevel', 'XSDSimpleTypeColor', 'XSDSimpleTypeCommaSeparatedText', 'XSDSimpleTypeCssFontSize', 'XSDSimpleTypeDivisions', 'XSDSimpleTypeEnclosureShape', 'XSDSimpleTypeFermataShape', 'XSDSimpleTypeFontFamily', 'XSDSimpleTypeFontStyle', 'XSDSimpleTypeFontWeight', 'XSDSimpleTypeLeftCenterRight', 'XSDSimpleTypeLeftRight', 'XSDSimpleTypeLineLength', 'XSDSimpleTypeLineShape', 'XSDSimpleTypeLineType', 'XSDSimpleTypeMidi16', 'XSDSimpleTypeMidi128', 'XSDSimpleTypeMidi16384', 'XSDSimpleTypeMute', 'XSDSimpleTypeNonNegativeDecimal', 'XSDSimpleTypeNumberLevel', 'XSDSimpleTypeNumberOfLines', 'XSDSimpleTypeNumeralValue', 'XSDSimpleTypeOverUnder', 'XSDSimpleTypePercent', 'XSDSimpleTypePositiveDecimal', 'XSDSimpleTypePositiveDivisions', 'XSDSimpleTypeRotationDegrees', 'XSDSimpleTypeSemiPitched', 'XSDSimpleTypeSmuflGlyphName', 'XSDSimpleTypeSmuflAccidentalGlyphName', 'XSDSimpleTypeSmuflCodaGlyphName', 'XSDSimpleTypeSmuflLyricsGlyphName', 'XSDSimpleTypeSmuflPictogramGlyphName', 'XSDSimpleTypeSmuflSegnoGlyphName', 'XSDSimpleTypeSmuflWavyLineGlyphName', 'XSDSimpleTypeStartNote', 'XSDSimpleTypeStartStop', 'XSDSimpleTypeStartStopContinue', 'XSDSimpleTypeStartStopSingle', 'XSDSimpleTypeStringNumber', 'XSDSimpleTypeSymbolSize', 'XSDSimpleTypeTenths', 'XSDSimpleTypeTextDirection', 'XSDSimpleTypeTiedType', 'XSDSimpleTypeTimeOnly', 'XSDSimpleTypeTopBottom', 'XSDSimpleTypeTremoloType', 'XSDSimpleTypeTrillBeats', 'XSDSimpleTypeTrillStep', 'XSDSimpleTypeTwoNoteTurn', 'XSDSimpleTypeUpDown', 'XSDSimpleTypeUprightInverted', 'XSDSimpleTypeValign', 'XSDSimpleTypeValignImage', 'XSDSimpleTypeYesNo', 'XSDSimpleTypeYyyyMmDd', 'XSDSimpleTypeCancelLocation', 'XSDSimpleTypeClefSign', 'XSDSimpleTypeFifths', 'XSDSimpleTypeMode', 'XSDSimpleTypeShowFrets', 'XSDSimpleTypeStaffLine', 'XSDSimpleTypeStaffLinePosition', 'XSDSimpleTypeStaffNumber', 'XSDSimpleTypeStaffType', 'XSDSimpleTypeTimeRelation', 'XSDSimpleTypeTimeSeparator', 'XSDSimpleTypeTimeSymbol', 'XSDSimpleTypeBackwardForward', 'XSDSimpleTypeBarStyle', 'XSDSimpleTypeEndingNumber', 'XSDSimpleTypeRightLeftMiddle', 'XSDSimpleTypeStartStopDiscontinue', 'XSDSimpleTypeWinged', 'XSDSimpleTypeAccordionMiddle', 'XSDSimpleTypeBeaterValue', 'XSDSimpleTypeDegreeSymbolValue', 'XSDSimpleTypeDegreeTypeValue', 'XSDSimpleTypeEffectValue', 'XSDSimpleTypeGlassValue', 'XSDSimpleTypeHarmonyArrangement', 'XSDSimpleTypeHarmonyType', 'XSDSimpleTypeKindValue', 'XSDSimpleTypeLineEnd', 'XSDSimpleTypeMeasureNumberingValue', 'XSDSimpleTypeMembraneValue', 'XSDSimpleTypeMetalValue', 'XSDSimpleTypeMilliseconds', 'XSDSimpleTypeNumeralMode', 'XSDSimpleTypeOnOff', 'XSDSimpleTypePedalType', 'XSDSimpleTypePitchedValue', 'XSDSimpleTypePrincipalVoiceSymbol', 'XSDSimpleTypeStaffDivideSymbol', 'XSDSimpleTypeStartStopChangeContinue', 'XSDSimpleTypeSyncType', 'XSDSimpleTypeSystemRelationNumber', 'XSDSimpleTypeSystemRelation', 'XSDSimpleTypeTipDirection', 'XSDSimpleTypeStickLocation', 'XSDSimpleTypeStickMaterial', 'XSDSimpleTypeStickType', 'XSDSimpleTypeUpDownStopContinue', 'XSDSimpleTypeWedgeType', 'XSDSimpleTypeWoodValue', 'XSDSimpleTypeDistanceType', 'XSDSimpleTypeGlyphType', 'XSDSimpleTypeLineWidthType', 'XSDSimpleTypeMarginType', 'XSDSimpleTypeMillimeters', 'XSDSimpleTypeNoteSizeType', 'XSDSimpleTypeAccidentalValue', 'XSDSimpleTypeArrowDirection', 'XSDSimpleTypeArrowStyle', 'XSDSimpleTypeBeamValue', 'XSDSimpleTypeBendShape', 'XSDSimpleTypeBreathMarkValue', 'XSDSimpleTypeCaesuraValue', 'XSDSimpleTypeCircularArrow', 'XSDSimpleTypeFan', 'XSDSimpleTypeHandbellValue', 'XSDSimpleTypeHarmonClosedLocation', 'XSDSimpleTypeHarmonClosedValue', 'XSDSimpleTypeHoleClosedLocation', 'XSDSimpleTypeHoleClosedValue', 'XSDSimpleTypeNoteTypeValue', 'XSDSimpleTypeNoteheadValue', 'XSDSimpleTypeOctave', 'XSDSimpleTypeSemitones', 'XSDSimpleTypeShowTuplet', 'XSDSimpleTypeStemValue', 'XSDSimpleTypeStep', 'XSDSimpleTypeSyllabic', 'XSDSimpleTypeTapHand', 'XSDSimpleTypeTremoloMarks', 'XSDSimpleTypeGroupBarlineValue', 'XSDSimpleTypeGroupSymbolValue', 'XSDSimpleTypeMeasureText', 'XSDSimpleTypeSwingTypeValue']

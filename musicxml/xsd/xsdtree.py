@@ -66,7 +66,8 @@ class XSDTree(Tree):
                 base = self.get_restriction().get_attributes()['base']
                 return [convert_to_xsd_class_name(base)]
             elif self.get_union_member_types():
-                return [convert_to_xsd_class_name(type_) for type_ in self.get_union_member_types()]
+                return []
+                # return [convert_to_xsd_class_name(type_) for type_ in self.get_union_member_types()]
             else:
                 raise AttributeError(f"Simple type {self} has no restriction with base attribute or union with memberTypes.")
         elif self.is_complex_type:

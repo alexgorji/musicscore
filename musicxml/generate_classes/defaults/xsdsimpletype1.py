@@ -13,6 +13,7 @@ class XSDSimpleType(XSDTreeElement):
     Parent Class for all SimpleType classes
     """
     _TYPES: list[type] = []
+    _UNION: list[Any] = []
     _FORCED_PERMITTED: list[str] = []
     _PERMITTED: list[str] = []
     _PATTERN: Optional[str] = None
@@ -23,23 +24,28 @@ class XSDSimpleType(XSDTreeElement):
             self._populate_permitted()
         if not self._FORCED_PERMITTED:
             self._populate_forced_permitted()
+        if self._UNION:
+            self._TYPES = []
+            for t_ in self._UNION:
+                self._TYPES.extend(t_._TYPES)
         self._populate_pattern()
         self._value = None
         self.value = value
 
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, v):
-        self._check_value_type(v)
-        if v not in self._FORCED_PERMITTED:
-            self._check_value(v)
-        self._value = v
-
     def _check_value(self, v):
-        if v in self._FORCED_PERMITTED:
+        if self._UNION:
+            errors = []
+            for t_ in self._UNION:
+                try:
+                    t_(v)
+                    return
+                except TypeError:
+                    pass
+                except ValueError as err:
+                    errors.append(err.args[0])
+            raise ValueError(errors)
+
+        elif v in self._FORCED_PERMITTED:
             return
         if self._PERMITTED:
             if v not in self._PERMITTED:
@@ -128,12 +134,23 @@ class XSDSimpleType(XSDTreeElement):
         if pattern:
             self._PATTERN = translate_pattern(pattern)
 
-    def __repr__(self):
-        return str(self.value)
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, v):
+        self._check_value_type(v)
+        if v not in self._FORCED_PERMITTED:
+            self._check_value(v)
+        self._value = v
 
     @classmethod
     def value_is_required(cls):
         return True
+
+    def __repr__(self):
+        return str(self.value)
 
 
 class XSDSimpleTypeInteger(XSDSimpleType):

@@ -490,6 +490,45 @@ class TestSimpleTypes(MusicXmlTestCase):
         with self.assertRaises(ValueError):
             XSDSimpleTypeYesNo('maybe')
 
+    def test_yes_no_number(self):
+        XSDSimpleTypeYesNoNumber('yes')
+        XSDSimpleTypeYesNoNumber('no')
+        with self.assertRaises(ValueError):
+            XSDSimpleTypeYesNoNumber('maybe')
+        XSDSimpleTypeYesNoNumber(10)
+        with self.assertRaises(TypeError):
+            XSDSimpleTypeYesNoNumber([123])
+
+    def test_font_size(self):
+        XSDSimpleTypeFontSize(12)
+        for size in ['xx-small', 'x-small', 'small', 'large', 'x-large', 'xx-large']:
+            XSDSimpleTypeFontSize(size)
+        XSDSimpleTypeFontSize(12)
+        with self.assertRaises(TypeError) as err:
+            XSDSimpleTypeFontSize([12, 3])
+        with self.assertRaises(ValueError):
+            XSDSimpleTypeFontSize('xxxx-large')
+
+    def test_number_or_normal(self):
+        XSDSimpleTypeNumberOrNormal(12)
+        XSDSimpleTypeNumberOrNormal('normal')
+        with self.assertRaises(TypeError):
+            XSDSimpleTypeNumberOrNormal('12')
+        with self.assertRaises(TypeError):
+            XSDSimpleTypeNumberOrNormal([1, 2, 3])
+
+    def test_positive_integer_empty(self):
+        XSDSimpleTypePositiveIntegerOrEmpty(12)
+        XSDSimpleTypePositiveIntegerOrEmpty()
+        with self.assertRaises(ValueError):
+            XSDSimpleTypePositiveIntegerOrEmpty(-12)
+        with self.assertRaises(TypeError):
+            XSDSimpleTypePositiveIntegerOrEmpty(10.2)
+        with self.assertRaises(ValueError):
+            XSDSimpleTypePositiveIntegerOrEmpty(0)
+        with self.assertRaises(TypeError):
+            XSDSimpleTypePositiveIntegerOrEmpty('0')
+
     def test_name(self):
         """
         <xs:simpleType name="Name" id="Name">

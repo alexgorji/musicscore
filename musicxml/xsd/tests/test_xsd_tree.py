@@ -231,25 +231,6 @@ class TestXSDTree(MusicXmlTestCase):
         assert self.yes_no_number_simple_type_xsd_element.get_union_member_types() == ['yes-no',
                                                                                        'xs:decimal']
 
-    def test_restriction_base_class_names(self):
-        """
-        Test that the xsd_tree_base_class_names method of XSDTree Element returns MLSimpleType classes which correspond to value of base
-        attribute of restriction node in musicxml xsd structure.
-        """
-        all_restriction_bases = []
-        for simpletype in self.all_simple_type_xsd_elements:
-            if simpletype.xsd_tree_base_class_names not in all_restriction_bases:
-                all_restriction_bases.append(simpletype.xsd_tree_base_class_names)
-        assert all_restriction_bases == [['XSDSimpleTypeToken'], ['XSDSimpleTypePositiveInteger'],
-                                         ['XSDSimpleTypeDecimal'], ['XSDSimpleTypeString'],
-                                         ['XSDSimpleTypeCommaSeparatedText'],
-                                         ['XSDSimpleTypeDecimal', 'XSDSimpleTypeCssFontSize'],
-                                         ['XSDSimpleTypeNonNegativeInteger'], ['XSDSimpleTypeDivisions'],
-                                         ['XSDSimpleTypeNMTOKEN'], ['XSDSimpleTypeSmuflGlyphName'],
-                                         ['XSDSimpleTypeYesNo', 'XSDSimpleTypeDecimal'], ['XSDSimpleTypeDate'],
-                                         ['XSDSimpleTypeInteger'], ['XSDSimpleTypeSystemRelationNumber'],
-                                         ['XSDSimpleTypeNoteTypeValue']]
-
     def test_is_simple_type_property(self):
         """
         Test if is_simple_type returns true if xsd is a simple type element
