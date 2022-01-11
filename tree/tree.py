@@ -87,11 +87,32 @@ class Tree(ABC):
             if node.is_leaf:
                 yield node
 
-    def remove(self, child):
+    def remove(self, child) -> None:
         if child not in self.get_children():
             raise ChildNotFoundError
         child._parent = None
         self.get_children().remove(child)
+
+    def replace_child(self, old, new, index: int = 0) -> None:
+        """
+        :param old: child or function
+        :param new: child
+        :param index: index of old in list of old appearances
+        :return: None
+        """
+        if hasattr(old, '__call__'):
+            list_of_olds = [ch for ch in self.get_children() if old(ch)]
+        else:
+            list_of_olds = [ch for ch in self.get_children() if ch == old]
+        if not list_of_olds:
+            raise ValueError(f"{old} not in list.")
+        self._check_child_to_be_added(new)
+        old_index = self.get_children().index(list_of_olds[index])
+        old_child = self.get_children()[old_index]
+        self.get_children().remove(old_child)
+        self.get_children().insert(old_index, new)
+        old_child._parent = None
+        new._parent = self
 
     def reversed_path_to_root(self):
         yield self

@@ -2,12 +2,21 @@ import copy
 
 from musicxml.util.core import convert_to_xml_class_name, cap_first
 from musicxml.xmlelement.exceptions import XMLChildContainerFactoryError, XMLChildContainerWrongElementError, \
-    XMLChildContainerChoiceHasAnotherChosenChild, XMLChildContainerMaxOccursError
+    XMLChildContainerChoiceHasAnotherChosenChild, XMLChildContainerMaxOccursError, XMLElementCannotHaveChildrenError
 from musicxml.xsd.xsdelement import XSDElement
 from musicxml.xsd.xsdindicator import *
 from musicxml.xsd.xsdtree import XSDTree
 from tree.tree import Tree
 import xml.etree.ElementTree as ET
+
+
+def show_force_valid(node):
+    output = node.compact_repr
+    if node.force_validate:
+        output += ': !!!FORCED!!!'
+    if node.chosen_child:
+        output += f': !!Chosen Child!!'
+    return output
 
 
 def _convert_xsd_child_to_xsd_container(xsd_child):
@@ -170,6 +179,60 @@ class XMLChildContainer(Tree):
         if not isinstance(child, XMLChildContainer):
             raise TypeError
 
+    def _check_choices_intelligently(self):
+        if self.get_parent_element():
+            print(f'intelligent choice for {self.get_parent_element()}')
+        """
+        Check if existing xml elements can be attached to other choice paths in order to fulfill all requirements. Only possible leaves
+        forwards will be checked.
+        """
+
+        def get_same_name_next_leaves(leaf_):
+            output = []
+            index = -1
+            record = False
+            for l in self.iterate_leaves():
+                if l.content.name == leaf_.content.name:
+                    index += 1
+                    if not record:
+                        record = True
+                    else:
+                        output.append((l, index))
+            return output
+
+        def get_sorted_xml_elements(sorted_options_):
+            unsorted_elements = [el for el in self.get_attached_elements() if el.name != sorted_options_[-1][0]]
+            output = []
+            for option in sorted_options_:
+                selected_elements = [el for el in unsorted_elements if el.name == option[1]]
+                for el in selected_elements:
+                    unsorted_elements.remove(el)
+                    output.append(el)
+            output.extend(unsorted_elements)
+            return output
+
+        current_leaves_with_xml_elements = [leaf for leaf in self.iterate_leaves() if leaf.content.xml_elements]
+        optional_next_leaves = [get_same_name_next_leaves(leaf) for leaf in current_leaves_with_xml_elements if
+                                get_same_name_next_leaves(leaf)]
+        if optional_next_leaves:
+            indices = {list_of_leaves[0][0].content.name: [l[1] for l in list_of_leaves] for list_of_leaves in optional_next_leaves}
+            sorted_options = sorted([(k, v) for k, v in indices.items()], key=lambda v: -len(v))
+            sorted_xml_elements = get_sorted_xml_elements(sorted_options)
+            efficient_xml_element_name, forward_indices = sorted_options.pop()
+            efficient_xml_elements = [el for el in self.get_attached_elements() if el.name == efficient_xml_element_name]
+            for element in efficient_xml_elements:
+                for forward_index in forward_indices:
+                    copied_container = self._create_empty_copy()
+                    copied_container.add_element(element, forward_index)
+                    try:
+                        for el in sorted_xml_elements:
+                            copied_container.add_element(el, intelligent_choice=False)
+                        if not copied_container.check_required_elements():
+                            return copied_container
+                    except XMLChildContainerChoiceHasAnotherChosenChild:
+                        pass
+        return None
+
     def _create_empty_copy(self):
         """
         Creates a copy without attached elements or duplicated nodes
@@ -185,6 +248,34 @@ class XMLChildContainer(Tree):
         for node in list(self.reversed_path_to_root())[:-1]:
             if node.get_parent().max_occurrences == 'unbounded':
                 return node.get_parent().duplicate()
+        return None
+
+    def _intelligently_chosen_leaf(self, xml_element):
+        same_name_leaves = [leaf for leaf in self.iterate_leaves() if leaf.content.name == xml_element.name]
+        choice_with_chosen_child = None
+        for leaf in same_name_leaves:
+            for n in leaf.reversed_path_to_root():
+                if n.get_parent() and isinstance(n.get_parent().content, XSDChoice) and n.get_parent().chosen_child:
+                    choice_with_chosen_child = n.get_parent()
+
+        if not choice_with_chosen_child.get_parent():
+            return
+
+        selected_leaves_in_choice_with_chosen_child = [leaf for leaf in choice_with_chosen_child.iterate_leaves() if
+                                                       leaf.content.name == xml_element.name]
+        for index, leaf in enumerate(selected_leaves_in_choice_with_chosen_child):
+            copied_choice = choice_with_chosen_child._create_empty_copy()
+
+            selected = copied_choice.add_element(xml_element, forward=index, intelligent_choice=False)
+            try:
+                for el in choice_with_chosen_child.get_attached_elements():
+                    copied_choice.add_element(el, intelligent_choice=False)
+                choice_with_chosen_child.get_parent().replace_child(choice_with_chosen_child, copied_choice)
+                del choice_with_chosen_child
+                return selected
+            except XMLElementCannotHaveChildrenError:
+                pass
+
         return None
 
     def _update_requirements_in_path(self):
@@ -231,6 +322,8 @@ class XMLChildContainer(Tree):
                         if child.min_occurrences != 0:
                             node._requirement_not_fulfilled = True
                         break
+                if node._requirement_not_fulfilled is None:
+                    node._requirement_not_fulfilled = False
             else:
                 node._requirement_not_fulfilled = False
 
@@ -321,14 +414,14 @@ class XMLChildContainer(Tree):
 
     # public methods
 
-    def add_element(self, xml_element, forward: int = 0):
+    def add_element(self, xml_element, forward=None, intelligent_choice=True):
         if self._requirement_not_fulfilled is None:
             self.check_required_elements()
 
         def select_valid_leaves(leaves):
             output = []
             choice_with_chosen_child = None
-            for leaf in leaves:
+            for index, leaf in enumerate(leaves):
                 for n in leaf.reversed_path_to_root():
                     if n.get_parent() and isinstance(n.get_parent().content, XSDChoice) and n.get_parent().chosen_child:
                         choice_with_chosen_child = n.get_parent()
@@ -338,6 +431,7 @@ class XMLChildContainer(Tree):
 
             if not choice_with_chosen_child:
                 return leaves
+
             elif not output and choice_with_chosen_child.max_occurrences != 'unbounded':
                 return None
             else:
@@ -352,9 +446,19 @@ class XMLChildContainer(Tree):
             raise XMLChildContainerWrongElementError()
 
         selected_same_name_leaves = select_valid_leaves(same_name_leaves)
-        # print('selected_same_name_leaves', selected_same_name_leaves)
+
         if selected_same_name_leaves is None:
-            raise XMLChildContainerChoiceHasAnotherChosenChild()
+            intelligently_selected = None
+            if forward is None and intelligent_choice is True:
+                intelligently_selected = self._intelligently_chosen_leaf(xml_element)
+
+            if not intelligently_selected:
+                msg = f"By adding {xml_element.__class__.__name__} to {self.get_parent_element().__class__.__name__}" if self.get_parent() else f"By adding {xml_element.__class__.__name__}"
+                raise XMLChildContainerChoiceHasAnotherChosenChild(msg)
+            else:
+                intelligently_selected._update_requirements_in_path()
+                self.check_required_elements()
+                return intelligently_selected
 
         if selected_same_name_leaves == []:
             duplicated_parent = same_name_leaves[-1]._duplicate_parent_in_path()
@@ -365,7 +469,7 @@ class XMLChildContainer(Tree):
             else:
                 raise XMLChildContainerChoiceHasAnotherChosenChild
 
-        if forward:
+        if forward is not None:
             selected = same_name_leaves[forward]
             if selected not in selected_same_name_leaves:
                 raise XMLChildContainerChoiceHasAnotherChosenChild('Wrong forwarding')
@@ -386,14 +490,24 @@ class XMLChildContainer(Tree):
         self.check_required_elements()
         return selected
 
-    def check_required_elements(self):
+    def check_required_elements(self, intelligent_choice=False):
         if self._requirement_not_fulfilled is None:
             self._set_requirement_not_fulfilled()
         _check_if_container_requires_elements(self)
+        requirements_exist = False
         for node in self.traverse():
             if node.requirements_not_fulfilled:
-                return True
-        return False
+                requirements_exist = True
+        if requirements_exist and intelligent_choice:
+            if isinstance(self.content, XSDChoice):
+                return requirements_exist
+            copy_with_intelligence = self._check_choices_intelligently()
+            if copy_with_intelligence:
+                for old_child, new_child in zip(self.get_children(), copy_with_intelligence.get_children()):
+                    self.replace_child(old_child, new_child)
+                return False
+
+        return requirements_exist
 
     def duplicate(self):
         if not isinstance(self.content, XSDSequence) and not isinstance(self.content, XSDChoice) and not isinstance(self.content, XSDGroup):
@@ -408,6 +522,12 @@ class XMLChildContainer(Tree):
         copied_self._parent = self.get_parent()
         self.get_parent().add_child(copied_self)
         return copied_self
+
+    def get_attached_elements(self):
+        output = []
+        for leaf in self.iterate_leaves():
+            output.extend(leaf.content.xml_elements)
+        return output
 
     def get_leaves(self, function=None):
         if isinstance(self.content, XSDElement):
@@ -433,7 +553,7 @@ class XMLChildContainer(Tree):
     def get_parent_element(self):
         return self._parent_element
 
-    def get_required_element_names(self):
+    def get_required_element_names(self, intelligent_choice=False):
         def func(leaf):
             if leaf.requirements_not_fulfilled is True:
                 return convert_to_xml_class_name(leaf.content.name)
@@ -446,7 +566,7 @@ class XMLChildContainer(Tree):
                 else:
                     return convert_to_xml_class_name(leaf.content.name)
 
-        self.check_required_elements()
+        self.check_required_elements(intelligent_choice)
         return self.get_leaves(func)
 
     def set_force_validate(self, node, val):
@@ -454,7 +574,7 @@ class XMLChildContainer(Tree):
         for child in [ch for ch in self.get_children() if ch != node]:
             for n in child.traverse():
                 if isinstance(n.content, XSDChoice):
-                    if n.min_occurrences != 0 and not n.chosen_child:
+                    if n.min_occurrences != 0 and not n.chosen_child and [ch for ch in n.get_children() if ch.min_occurrences != 0]:
                         n.requirements_not_fulfilled = True
                     break
                 if isinstance(n.content, XSDSequence) and n.min_occurrences != 0 and not (isinstance(n.get_parent().content, XSDGroup) and

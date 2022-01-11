@@ -86,3 +86,17 @@ class TestTree(TestCase):
         assert self.greatgrandchild1.get_coordinates_in_tree() == '2.2.1'
         assert self.child2.get_coordinates_in_tree() == '2'
         assert self.root.get_coordinates_in_tree() == '0'
+
+    def test_replace_child(self):
+        self.child2.replace_child(self.grandchild1, A(name='new_grand_child'))
+        assert [ch.name for ch in self.child2.get_children()] == ['new_grand_child', 'grandchild2']
+        self.child1.add_child('grandchild')
+        self.child1.add_child('grandchild')
+        new = A(name='other_new_grand_child')
+        self.child1.replace_child(lambda x: x.name is 'grandchild', new, 1)
+        assert new.get_parent() == self.child1
+        assert [ch.name for ch in self.child1.get_children()] == ['grandchild', 'other_new_grand_child']
+        with self.assertRaises(ValueError):
+            self.child2.replace_child(None, None)
+        with self.assertRaises(TypeError):
+            self.root.replace_child(self.child1, 34)

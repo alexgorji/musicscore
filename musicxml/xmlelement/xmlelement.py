@@ -13,10 +13,10 @@ xsd_tree_score_partwise_part = XSDTree(musicxml_xsd_et_root.find(f".//{ns}elemen
 class XMLScorePartwise(XMLElement):
     XSD_TREE = XSDTree(musicxml_xsd_et_root.find(f".//{ns}element[@name='score-partwise']"))
 
-    def write(self, path):
+    def write(self, path, intelligent_choice=False):
         with open(path, 'w') as file:
             file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
-            file.write(self.to_string(add_separators=True))
+            file.write(self.to_string(add_separators=True, intelligent_choice=intelligent_choice))
 
     @property
     def type_(self):

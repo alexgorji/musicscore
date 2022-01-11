@@ -38,11 +38,11 @@ class XMLElement(Tree):
         for child in self.get_children():
             self._et_xml_element.append(child.et_xml_element)
 
-    def _final_checks(self):
+    def _final_checks(self, intelligent_choice=False):
         if self.type_.value_is_required() and not self.value:
             raise XMLElementValueRequiredError(f"{self.get_class_name()} requires a value.")
         if self._child_container_tree:
-            required_children = self._child_container_tree.get_required_element_names()
+            required_children = self._child_container_tree.get_required_element_names(intelligent_choice=intelligent_choice)
             if required_children:
                 raise XMLElementChildrenRequired(f"{self.__class__.__name__} requires at least following children: {required_children}")
 
@@ -50,12 +50,13 @@ class XMLElement(Tree):
             self.type_.check_attributes(self.attributes)
 
         for child in self.get_children():
-            child._final_checks()
+            child._final_checks(intelligent_choice=intelligent_choice)
 
     def _create_child_container_tree(self):
         try:
             if self.type_.XSD_TREE.is_complex_type:
                 self._child_container_tree = XMLChildContainerFactory(complex_type=self.type_).get_child_container()
+                self._child_container_tree._parent_element = self
         except XMLChildContainerFactoryError:
             pass
 
@@ -125,7 +126,7 @@ class XMLElement(Tree):
     def get_class_name(cls):
         return cls.__name__
 
-    def add_child(self, child: 'XMLElement', forward: int = 0) -> 'XMLElement':
+    def add_child(self, child: 'XMLElement', forward=None) -> 'XMLElement':
         if not self._child_container_tree:
             raise XMLElementCannotHaveChildrenError()
         self._child_container_tree.add_element(child, forward)
@@ -138,8 +139,8 @@ class XMLElement(Tree):
         else:
             return []
 
-    def to_string(self, add_separators=False) -> str:
-        self._final_checks()
+    def to_string(self, add_separators=False, intelligent_choice=False) -> str:
+        self._final_checks(intelligent_choice=intelligent_choice)
         self._create_et_xml_element()
 
         if add_separators:
