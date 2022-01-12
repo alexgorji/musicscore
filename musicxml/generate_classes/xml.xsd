@@ -21,7 +21,12 @@
     <xs:simpleType name="IDREF" id="IDREF">
         <xs:restriction base="xs:NCName"/>
     </xs:simpleType>
+    
+    <xs:simpleType name="language" id="language">
+        <xs:restriction base="xs:token">
+            <xs:pattern
+                    value="([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*"
+            />
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>
-
-
-

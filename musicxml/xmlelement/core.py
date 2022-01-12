@@ -105,7 +105,7 @@ class XMLElement(Tree):
         if self._type is None:
             try:
                 self._type = eval(convert_to_xsd_class_name(self.XSD_TREE.get_attributes()['type'], 'complex_type'))
-            except NameError:
+            except (NameError, ValueError):
                 self._type = eval(convert_to_xsd_class_name(self.XSD_TREE.get_attributes()['type'], 'simple_type'))
         return self._type
 
@@ -152,6 +152,12 @@ class XMLElement(Tree):
 
     def __setattr__(self, key, value):
         if key[0] == '_' or key in self.PROPERTIES:
-            super().__setattr__(key, value)
+            if key == 'value':
+                try:
+                    self._set_attributes({key: value})
+                except XSDWrongAttribute:
+                    super().__setattr__(key, value)
+            else:
+                super().__setattr__(key, value)
         else:
             self._set_attributes({key: value})

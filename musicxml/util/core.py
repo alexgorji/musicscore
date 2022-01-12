@@ -11,10 +11,15 @@ def get_cleaned_token(string_value):
 
 
 def convert_to_xsd_class_name(name, type_='simple_type'):
+    force_simple_type = False
     try:
         name = name.split(':')[1]
+        force_simple_type = True
     except IndexError:
         pass
+    if force_simple_type and type_ != 'simple_type':
+        raise ValueError(f"Name {name} is starting with xs: and can only be converted to simple type.")
+
     name = cap_first(name)
     name = ''.join([cap_first(partial) for partial in name.split('-')])
     if type_ == 'simple_type':

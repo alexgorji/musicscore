@@ -3,11 +3,10 @@ import importlib
 from musicxml.util.helperclasses import MusicXmlTestCase
 from musicxml.xsd.xsdindicator import XSDSequence, XSDChoice
 
-from musicxml.xsd.xsdcomplextype import XSDComplexType
 from musicxml.xsd.xsdcomplextype import *
-from musicxml.xsd.xsdattribute import XSDAttribute
+from musicxml.xsd.xsdattribute.core import XSDAttribute
 from musicxml.xsd.xsdattribute import *
-from musicxml.xsd.xsdtree import XSDTree
+from musicxml.xsd.xsdcomplextype import XSDComplexType
 from musicxml.xsd.xsdsimpletype import *
 
 

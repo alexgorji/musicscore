@@ -181,7 +181,7 @@ class XMLChildContainer(Tree):
 
     def _check_choices_intelligently(self):
         if self.get_parent_element():
-            print(f'intelligent choice for {self.get_parent_element()}')
+            print(f'_check_choices_intelligently: intelligent choice for {self.get_parent_element()}')
         """
         Check if existing xml elements can be attached to other choice paths in order to fulfill all requirements. Only possible leaves
         forwards will be checked.
@@ -438,7 +438,7 @@ class XMLChildContainer(Tree):
                 return output
 
         if 'XMLElement' not in [cls.__name__ for cls in xml_element.__class__.__mro__]:
-            raise TypeError
+            raise TypeError(xml_element.__class__)
 
         same_name_leaves = [leaf for leaf in self.iterate_leaves() if leaf.content.name == xml_element.name]
 

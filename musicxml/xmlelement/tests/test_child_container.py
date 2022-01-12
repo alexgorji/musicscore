@@ -650,7 +650,7 @@ class TestChildContainer(TestCase):
 """
         assert choice.chosen_child.tree_representation(function=show_force_valid) == expected
         assert container.get_children()[0].requirements_not_fulfilled is False
-        container.add_element(XMLVoice(1))
+        container.add_element(XMLVoice('1'))
         assert container.get_children()[0].requirements_not_fulfilled is False
 
     def test_container_with_unbounded_choice(self):
@@ -979,7 +979,7 @@ class TestChildContainerCheckRequired(TestCase):
         with self.assertRaises(XMLChildContainerChoiceHasAnotherChosenChild):
             container.add_element(XMLRest())
         with self.assertRaises(XMLChildContainerChoiceHasAnotherChosenChild):
-            container.add_element(XMLCue())
+            container.add_element(XMLCue(), intelligent_choice=False)
         with self.assertRaises(XMLChildContainerChoiceHasAnotherChosenChild):
             container.add_element(XMLDuration())
 

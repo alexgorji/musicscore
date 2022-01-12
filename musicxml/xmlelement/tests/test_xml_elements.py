@@ -180,8 +180,8 @@ The offset affects the visual appearance of the direction. If the sound attribut
     def test_order_of_children(self):
         el = XMLAttributes()
         t = el.add_child(XMLTime())
-        t.add_child(XMLBeats(4))
-        t.add_child(XMLBeatType(4))
+        t.add_child(XMLBeats('4'))
+        t.add_child(XMLBeatType('4'))
         el.add_child(XMLDivisions(1))
         c = el.add_child(XMLClef())
         c.add_child(XMLSign('G'))
@@ -207,3 +207,35 @@ The offset affects the visual appearance of the direction. If the sound attribut
 </attributes>
 """
         assert el.to_string() == expected
+
+    def test_element_with_xs_simple_type(self):
+        """
+        Test if there is no conflict between simple and complex types with the same name such as:
+        xs:string vs. string: xs:string is a simple type, string is a complex type.
+        """
+        string = XMLString()
+        assert string.type_ == XSDComplexTypeString
+        software = XMLSoftware()
+        assert software.type_ == XSDSimpleTypeString
+
+    def test_element_with_type_and_value_as_attributes(self):
+        """
+        Test if an element which has attributes name type and value can be initiated without conflicts
+        """
+        supports = XMLSupports()
+        assert supports.type_ == XSDComplexTypeSupports
+        supports.element = 'print'
+        supports.type = 'yes'
+        supports.value = 'yes'
+
+    def test_xml_credit_words_attributes(self):
+        """
+        Test that XMLCreditWords can have attributes
+        """
+        cw = XMLCreditWords()
+        print(cw.type_.get_xsd())
+        for a in cw.type_.get_xsd_attributes():
+            print(a)
+            print(a.name)
+        # assert [type(a.name) for a in cw.type_.get_xsd_attributes()] == []
+        # print(cw.type_.get_xsd_attributes())

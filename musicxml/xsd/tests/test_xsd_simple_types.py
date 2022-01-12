@@ -574,3 +574,20 @@ class TestSimpleTypes(MusicXmlTestCase):
 
     def test_value_is_required(self):
         assert XSDSimpleTypeString.value_is_required() is True
+
+    def test_language(self):
+        """
+        <xs:simpleType name="language" id="language">
+        <xs:restriction base="xs:token">
+            <xs:pattern
+                    value="([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*"
+                    />
+            </xs:restriction>
+        </xs:simpleType>
+        """
+        XSDSimpleTypeLanguage('fr')
+        XSDSimpleTypeLanguage('fr-FR')
+        XSDSimpleTypeLanguage('en')
+        XSDSimpleTypeLanguage('en-US')
+        with self.assertRaises(ValueError):
+            XSDSimpleTypeLanguage('blabla')
