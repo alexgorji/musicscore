@@ -8,7 +8,7 @@ from musicxml.xsd.xsdtree import XSDTree
 
 sources_path = Path(__file__).parent / 'musicxml_4_0.xsd'
 default_path = Path(__file__).parent / 'defaults' / 'xsdattribute.py'
-target_path = Path(__file__).parent.parent / 'xsd' / 'xsdattribute.py'
+target_path = Path(__file__).parent.parent / 'xsd' / 'xsdattribute' / 'xsdattribute.py'
 
 template_string = """
 class $class_name($base_classes):
