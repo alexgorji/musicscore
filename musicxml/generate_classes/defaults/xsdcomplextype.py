@@ -15,19 +15,6 @@ class XSDComplexType(XSDTreeElement):
         self._xsd_indicator = None
 
     @classmethod
-    def check_attributes(cls, val_dict):
-        required_attributes = [attribute for attribute in cls.get_xsd_attributes() if attribute.is_required]
-        for required_attribute in required_attributes:
-            if required_attribute.name not in val_dict:
-                raise XSDAttributeRequiredException(f"{cls.__name__} requires attribute: {required_attribute.name}")
-
-        for key in val_dict:
-            if key not in [attribute.name for attribute in cls.get_xsd_attributes()]:
-                raise XSDWrongAttribute(f"{cls.__name__} has no attribute {key}.")
-            attribute = [attribute for attribute in cls.get_xsd_attributes() if attribute.name == key][0]
-            attribute(val_dict[key])
-
-    @classmethod
     def get_xsd_attributes(cls):
         output = []
         if cls.XSD_TREE.get_simple_content_extension():

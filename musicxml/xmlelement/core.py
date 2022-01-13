@@ -1,7 +1,7 @@
 from typing import Optional
 from xml.etree import ElementTree as ET
 
-from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired, XSDWrongAttribute
+from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired, XSDWrongAttribute, XSDAttributeRequiredException
 from musicxml.util.core import replace_key_underline_with_hyphen, convert_to_xsd_class_name
 from musicxml.xmlelement.exceptions import XMLChildContainerFactoryError, XMLElementCannotHaveChildrenError
 from musicxml.xmlelement.xmlchildcontainer import XMLChildContainerFactory
@@ -27,6 +27,14 @@ class XMLElement(Tree):
 
         self._create_child_container_tree()
 
+    def _check_attribute(self, name, value):
+        allowed_attributes = [attribute.name for attribute in self.type_.get_xsd_attributes()]
+        if name not in [attribute.name for attribute in self.type_.get_xsd_attributes()]:
+            raise XSDWrongAttribute(f"{self.__class__.__name__} has no attribute {name}. Allowed attributes are: {allowed_attributes}")
+
+        attribute = [attribute for attribute in self.type_.get_xsd_attributes() if attribute.name == name][0]
+        attribute(value)
+
     def _check_child_to_be_added(self, child):
         if not isinstance(child, XMLElement):
             raise TypeError
@@ -38,6 +46,13 @@ class XMLElement(Tree):
         for child in self.get_children():
             self._et_xml_element.append(child.et_xml_element)
 
+    def _check_required_attributes(self):
+        if self.type_.XSD_TREE.is_complex_type:
+            required_attributes = [attribute for attribute in self.type_.get_xsd_attributes() if attribute.is_required]
+            for required_attribute in required_attributes:
+                if required_attribute.name not in self.attributes:
+                    raise XSDAttributeRequiredException(f"{self.__class__.__name__} requires attribute: {required_attribute.name}")
+
     def _final_checks(self, intelligent_choice=False):
         if self.type_.value_is_required() and not self.value:
             raise XMLElementValueRequiredError(f"{self.get_class_name()} requires a value.")
@@ -46,8 +61,7 @@ class XMLElement(Tree):
             if required_children:
                 raise XMLElementChildrenRequired(f"{self.__class__.__name__} requires at least following children: {required_children}")
 
-        if self.type_.XSD_TREE.is_complex_type:
-            self.type_.check_attributes(self.attributes)
+        self._check_required_attributes()
 
         for child in self.get_children():
             child._final_checks(intelligent_choice=intelligent_choice)
@@ -72,14 +86,8 @@ class XMLElement(Tree):
             raise TypeError
 
         new_attributes = replace_key_underline_with_hyphen(dict_=val)
-        try:
-            allowed_attributes = [attribute.name for attribute in self.type_.get_xsd_attributes()]
-        except KeyError:
-            raise XSDWrongAttribute(f'{self.__class__.__name__} has no attributes.')
-        for new_attribute in new_attributes:
-            if new_attribute not in allowed_attributes:
-                raise XSDWrongAttribute(
-                    f'{self.__class__.__name__} has no attribute {new_attribute}. Allowed attributes are: {allowed_attributes}')
+        for key in new_attributes:
+            self._check_attribute(key, new_attributes[key])
         self._attributes = {**self._attributes, **new_attributes}
 
     @property
@@ -152,7 +160,7 @@ class XMLElement(Tree):
 
     def __setattr__(self, key, value):
         if key[0] == '_' or key in self.PROPERTIES:
-            if key == 'value':
+            if key == 'value' and value is not None:
                 try:
                     self._set_attributes({key: value})
                 except XSDWrongAttribute:

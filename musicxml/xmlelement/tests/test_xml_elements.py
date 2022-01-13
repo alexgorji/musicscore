@@ -162,7 +162,7 @@ The offset affects the visual appearance of the direction. If the sound attribut
         pn = sp.add_child(XMLPartName())
         with self.assertRaises(XSDAttributeRequiredException) as err:
             el.to_string()
-        assert err.exception.args[0] == 'XSDComplexTypeScorePart requires attribute: id'
+        assert err.exception.args[0] == 'XMLScorePart requires attribute: id'
         sp.id = 'p1'
         with self.assertRaises(XMLElementValueRequiredError) as err:
             el.to_string()
@@ -277,16 +277,25 @@ The offset affects the visual appearance of the direction. If the sound attribut
         nn.add_child(XMLTied(orientation='over', type='start'))
         assert n.to_string() == expected
 
+    def test_check_required_attributes(self):
+        """
+        Test if xml element's _check_required_attributes works properly.
+        """
+        br = XMLBeatRepeat()
+        with self.assertRaises(XSDAttributeRequiredException):
+            br._check_required_attributes()
+        br.type = 'start'
+        br._check_required_attributes()
+
     def test_font(self):
         expected = """<words default-y="-29" font-family="Arial" font-size="3" relative-x="-38">/</words>
 """
         w = XMLWords('/', default_y=-29, font_family="Arial", font_size=3, relative_x=-38)
         assert w.to_string() == expected
-        """
-        <music-font font-family="Maestro,engraved" font-size="18.2"/>
-        """
+        expected = """<music-font font-family="Maestro,engraved" font-size="18.2" />
+"""
         with self.assertRaises(ValueError):
-            mf = XMLMusicFont(font_family="Maestro,engraved", font_size="18.2")
+            XMLMusicFont(font_family="Maestro,engraved", font_size="18.2")
 
         mf = XMLMusicFont(font_family="Maestro,engraved", font_size=18.2)
-        print(mf.to_string())
+        assert mf.to_string() == expected
