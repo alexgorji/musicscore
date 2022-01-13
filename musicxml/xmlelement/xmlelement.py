@@ -15,7 +15,7 @@ class XMLScorePartwise(XMLElement):
     def write(self, path, intelligent_choice=False):
         with open(path, 'w') as file:
             file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
-            file.write(self.to_string(add_separators=True, intelligent_choice=intelligent_choice))
+            file.write(self.to_string(intelligent_choice=intelligent_choice))
 
     @property
     def type_(self):

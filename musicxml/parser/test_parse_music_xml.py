@@ -20,4 +20,6 @@ class TestParseMusicXml(TestCase):
     def test_parse_bach_partita_3(self):
         score = parse_musicxml(Path(__file__).parent / 'test_bach_partita_3_reduced.xml')
         score.write(Path(__file__).parent / 'test_bach_partita_3_reduced_created.xml', intelligent_choice=True)
+        # diff = main.diff_files('test_bach_partita_3_reduced.xml', 'test_bach_partita_3_reduced_created.xml')
+        # assert diff == []
 

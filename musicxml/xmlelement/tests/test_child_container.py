@@ -518,10 +518,36 @@ class TestChildContainer(TestCase):
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeNote).get_child_container()
         container.check_required_elements()
         choice = container.get_children()[0]
-        selected = container.add_element(XMLPitch(), 3)
+        selected = container.add_element(XMLPitch())
         assert selected.get_parent().chosen_child == selected
         expected = """Sequence@minOccurs=1@maxOccurs=1
     Choice@minOccurs=1@maxOccurs=1: !!Chosen Child!!
+        Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
+            Group@name=full-note@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
+                    Element@name=chord@minOccurs=0@maxOccurs=1
+                    Choice@minOccurs=1@maxOccurs=1: !!Chosen Child!!
+                        Element@name=pitch@minOccurs=1@maxOccurs=1
+                            XMLPitch
+                        Element@name=unpitched@minOccurs=1@maxOccurs=1
+                        Element@name=rest@minOccurs=1@maxOccurs=1
+            Group@name=duration@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
+                    Element@name=duration@minOccurs=1@maxOccurs=1
+                        !Required!
+            Element@name=tie@minOccurs=0@maxOccurs=2
+        Sequence@minOccurs=1@maxOccurs=1
+            Element@name=cue@minOccurs=1@maxOccurs=1
+            Group@name=full-note@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=chord@minOccurs=0@maxOccurs=1
+                    Choice@minOccurs=1@maxOccurs=1
+                        Element@name=pitch@minOccurs=1@maxOccurs=1
+                        Element@name=unpitched@minOccurs=1@maxOccurs=1
+                        Element@name=rest@minOccurs=1@maxOccurs=1
+            Group@name=duration@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=duration@minOccurs=1@maxOccurs=1
         Sequence@minOccurs=1@maxOccurs=1
             Element@name=grace@minOccurs=1@maxOccurs=1
             Choice@minOccurs=1@maxOccurs=1
@@ -543,32 +569,6 @@ class TestChildContainer(TestCase):
                                 Element@name=pitch@minOccurs=1@maxOccurs=1
                                 Element@name=unpitched@minOccurs=1@maxOccurs=1
                                 Element@name=rest@minOccurs=1@maxOccurs=1
-        Sequence@minOccurs=1@maxOccurs=1
-            Element@name=cue@minOccurs=1@maxOccurs=1
-            Group@name=full-note@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=chord@minOccurs=0@maxOccurs=1
-                    Choice@minOccurs=1@maxOccurs=1
-                        Element@name=pitch@minOccurs=1@maxOccurs=1
-                        Element@name=unpitched@minOccurs=1@maxOccurs=1
-                        Element@name=rest@minOccurs=1@maxOccurs=1
-            Group@name=duration@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=duration@minOccurs=1@maxOccurs=1
-        Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
-            Group@name=full-note@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
-                    Element@name=chord@minOccurs=0@maxOccurs=1
-                    Choice@minOccurs=1@maxOccurs=1: !!Chosen Child!!
-                        Element@name=pitch@minOccurs=1@maxOccurs=1
-                            XMLPitch
-                        Element@name=unpitched@minOccurs=1@maxOccurs=1
-                        Element@name=rest@minOccurs=1@maxOccurs=1
-            Group@name=duration@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
-                    Element@name=duration@minOccurs=1@maxOccurs=1
-                        !Required!
-            Element@name=tie@minOccurs=0@maxOccurs=2
     Element@name=instrument@minOccurs=0@maxOccurs=unbounded
     Group@name=editorial-voice@minOccurs=1@maxOccurs=1
         Sequence@minOccurs=1@maxOccurs=1
@@ -858,19 +858,14 @@ class TestChildContainerCheckRequired(TestCase):
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeNote).get_child_container()
         assert container.get_leaves(func) == [
             (
-                ['XMLGrace',
-                 (
-                     [['XMLChord', ('XMLPitch', 'XMLUnpitched', 'XMLRest')], 'XMLTie'],
-                     ['XMLCue', ['XMLChord', ('XMLPitch', 'XMLUnpitched', 'XMLRest')]]
-                 )
-                 ],
+                [['XMLChord', ('XMLPitch', 'XMLUnpitched', 'XMLRest')], 'XMLDuration', 'XMLTie'],
                 ['XMLCue', ['XMLChord', ('XMLPitch', 'XMLUnpitched', 'XMLRest')], 'XMLDuration'],
-                [['XMLChord', ('XMLPitch', 'XMLUnpitched', 'XMLRest')], 'XMLDuration', 'XMLTie']
+                ['XMLGrace', ([['XMLChord', ('XMLPitch', 'XMLUnpitched', 'XMLRest')], 'XMLTie'],
+                              ['XMLCue', ['XMLChord', ('XMLPitch', 'XMLUnpitched', 'XMLRest')]])]
             ),
-            'XMLInstrument', ['XMLFootnote', 'XMLLevel', 'XMLVoice'], 'XMLType', 'XMLDot', 'XMLAccidental',
-            'XMLTimeModification', 'XMLStem', 'XMLNotehead', 'XMLNoteheadText', 'XMLStaff', 'XMLBeam',
-            'XMLNotations', 'XMLLyric', 'XMLPlay', 'XMLListen'
-        ]
+            'XMLInstrument', ['XMLFootnote', 'XMLLevel', 'XMLVoice'], 'XMLType', 'XMLDot',
+            'XMLAccidental', 'XMLTimeModification', 'XMLStem', 'XMLNotehead', 'XMLNoteheadText',
+            'XMLStaff', 'XMLBeam', 'XMLNotations', 'XMLLyric', 'XMLPlay', 'XMLListen']
 
     def test_get_required_elements(self):
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeMeasureStyle).get_child_container()
@@ -926,13 +921,13 @@ class TestChildContainerCheckRequired(TestCase):
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeNote).get_child_container()
 
         assert container.get_required_element_names() == (
-            ['XMLGrace', (('XMLPitch', 'XMLUnpitched', 'XMLRest'), ['XMLCue', ('XMLPitch', 'XMLUnpitched', 'XMLRest')])],
-            ['XMLCue', ('XMLPitch', 'XMLUnpitched', 'XMLRest'), 'XMLDuration'],
-            [('XMLPitch', 'XMLUnpitched', 'XMLRest'), 'XMLDuration']
+            [('XMLPitch', 'XMLUnpitched', 'XMLRest'), 'XMLDuration'], ['XMLCue', ('XMLPitch', 'XMLUnpitched', 'XMLRest'), 'XMLDuration'],
+            ['XMLGrace', (('XMLPitch', 'XMLUnpitched', 'XMLRest'), ['XMLCue', ('XMLPitch', 'XMLUnpitched', 'XMLRest')])]
         )
+
         container.add_element(XMLPitch())
 
-        assert container.get_required_element_names() == 'XMLGrace'
+        assert container.get_required_element_names() == 'XMLDuration'
 
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeNote).get_child_container()
         choice = container.get_children()[0]
@@ -1039,90 +1034,92 @@ class TestChildContainerCheckRequired(TestCase):
         container.add_element(XMLText())
         assert container.check_required_elements() is False
 
-    def test_check_intelligent_choice(self):
-        container = XMLChildContainerFactory(complex_type=XSDComplexTypeNote).get_child_container()
-        container.add_element(XMLPitch())
-        container.add_element(XMLDuration())
-        assert container.check_required_elements(intelligent_choice=True) is False
-        expected = """Sequence@minOccurs=1@maxOccurs=1
-    Choice@minOccurs=1@maxOccurs=1
-        Sequence@minOccurs=1@maxOccurs=1
-            Element@name=grace@minOccurs=1@maxOccurs=1
-            Choice@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Group@name=full-note@minOccurs=1@maxOccurs=1
-                        Sequence@minOccurs=1@maxOccurs=1
-                            Element@name=chord@minOccurs=0@maxOccurs=1
-                            Choice@minOccurs=1@maxOccurs=1
-                                Element@name=pitch@minOccurs=1@maxOccurs=1
-                                Element@name=unpitched@minOccurs=1@maxOccurs=1
-                                Element@name=rest@minOccurs=1@maxOccurs=1
-                    Element@name=tie@minOccurs=0@maxOccurs=2
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=cue@minOccurs=1@maxOccurs=1
-                    Group@name=full-note@minOccurs=1@maxOccurs=1
-                        Sequence@minOccurs=1@maxOccurs=1
-                            Element@name=chord@minOccurs=0@maxOccurs=1
-                            Choice@minOccurs=1@maxOccurs=1
-                                Element@name=pitch@minOccurs=1@maxOccurs=1
-                                Element@name=unpitched@minOccurs=1@maxOccurs=1
-                                Element@name=rest@minOccurs=1@maxOccurs=1
-        Sequence@minOccurs=1@maxOccurs=1
-            Element@name=cue@minOccurs=1@maxOccurs=1
-            Group@name=full-note@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=chord@minOccurs=0@maxOccurs=1
-                    Choice@minOccurs=1@maxOccurs=1
-                        Element@name=pitch@minOccurs=1@maxOccurs=1
-                        Element@name=unpitched@minOccurs=1@maxOccurs=1
-                        Element@name=rest@minOccurs=1@maxOccurs=1
-            Group@name=duration@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=duration@minOccurs=1@maxOccurs=1
-        Sequence@minOccurs=1@maxOccurs=1
-            Group@name=full-note@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=chord@minOccurs=0@maxOccurs=1
-                    Choice@minOccurs=1@maxOccurs=1
-                        Element@name=pitch@minOccurs=1@maxOccurs=1
-                            XMLPitch
-                        Element@name=unpitched@minOccurs=1@maxOccurs=1
-                        Element@name=rest@minOccurs=1@maxOccurs=1
-            Group@name=duration@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=duration@minOccurs=1@maxOccurs=1
-                        XMLDuration
-            Element@name=tie@minOccurs=0@maxOccurs=2
-    Element@name=instrument@minOccurs=0@maxOccurs=unbounded
-    Group@name=editorial-voice@minOccurs=1@maxOccurs=1
-        Sequence@minOccurs=1@maxOccurs=1
-            Group@name=footnote@minOccurs=0@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=footnote@minOccurs=1@maxOccurs=1
-            Group@name=level@minOccurs=0@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=level@minOccurs=1@maxOccurs=1
-            Group@name=voice@minOccurs=0@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=voice@minOccurs=1@maxOccurs=1
-    Element@name=type@minOccurs=0@maxOccurs=1
-    Element@name=dot@minOccurs=0@maxOccurs=unbounded
-    Element@name=accidental@minOccurs=0@maxOccurs=1
-    Element@name=time-modification@minOccurs=0@maxOccurs=1
-    Element@name=stem@minOccurs=0@maxOccurs=1
-    Element@name=notehead@minOccurs=0@maxOccurs=1
-    Element@name=notehead-text@minOccurs=0@maxOccurs=1
-    Group@name=staff@minOccurs=0@maxOccurs=1
-        Sequence@minOccurs=1@maxOccurs=1
-            Element@name=staff@minOccurs=1@maxOccurs=1
-    Element@name=beam@minOccurs=0@maxOccurs=8
-    Element@name=notations@minOccurs=0@maxOccurs=unbounded
-    Element@name=lyric@minOccurs=0@maxOccurs=unbounded
-    Element@name=play@minOccurs=0@maxOccurs=1
-    Element@name=listen@minOccurs=0@maxOccurs=1
-"""
-
-        assert container.tree_representation() == expected
+    #     def test_check_intelligent_choice(self):
+    #         container = XMLChildContainerFactory(complex_type=XSDComplexTypeNote).get_child_container()
+    #         container.add_element(XMLPitch())
+    #         container.add_element(XMLDuration())
+    #         container.add_element(XMLCue())
+    #         assert container.check_required_elements() is False
+    #         expected = """Sequence@minOccurs=1@maxOccurs=1
+    #     Choice@minOccurs=1@maxOccurs=1
+    #         Sequence@minOccurs=1@maxOccurs=1
+    #             Group@name=full-note@minOccurs=1@maxOccurs=1
+    #                 Sequence@minOccurs=1@maxOccurs=1
+    #                     Element@name=chord@minOccurs=0@maxOccurs=1
+    #                     Choice@minOccurs=1@maxOccurs=1
+    #                         Element@name=pitch@minOccurs=1@maxOccurs=1
+    #                             XMLPitch
+    #                         Element@name=unpitched@minOccurs=1@maxOccurs=1
+    #                         Element@name=rest@minOccurs=1@maxOccurs=1
+    #             Group@name=duration@minOccurs=1@maxOccurs=1
+    #                 Sequence@minOccurs=1@maxOccurs=1
+    #                     Element@name=duration@minOccurs=1@maxOccurs=1
+    #                         XMLDuration
+    #             Element@name=tie@minOccurs=0@maxOccurs=2
+    #         Sequence@minOccurs=1@maxOccurs=1
+    #             Element@name=cue@minOccurs=1@maxOccurs=1
+    #             Group@name=full-note@minOccurs=1@maxOccurs=1
+    #                 Sequence@minOccurs=1@maxOccurs=1
+    #                     Element@name=chord@minOccurs=0@maxOccurs=1
+    #                     Choice@minOccurs=1@maxOccurs=1
+    #                         Element@name=pitch@minOccurs=1@maxOccurs=1
+    #                         Element@name=unpitched@minOccurs=1@maxOccurs=1
+    #                         Element@name=rest@minOccurs=1@maxOccurs=1
+    #             Group@name=duration@minOccurs=1@maxOccurs=1
+    #                 Sequence@minOccurs=1@maxOccurs=1
+    #                     Element@name=duration@minOccurs=1@maxOccurs=1
+    #         Sequence@minOccurs=1@maxOccurs=1
+    #             Element@name=grace@minOccurs=1@maxOccurs=1
+    #             Choice@minOccurs=1@maxOccurs=1
+    #                 Sequence@minOccurs=1@maxOccurs=1
+    #                     Group@name=full-note@minOccurs=1@maxOccurs=1
+    #                         Sequence@minOccurs=1@maxOccurs=1
+    #                             Element@name=chord@minOccurs=0@maxOccurs=1
+    #                             Choice@minOccurs=1@maxOccurs=1
+    #                                 Element@name=pitch@minOccurs=1@maxOccurs=1
+    #                                 Element@name=unpitched@minOccurs=1@maxOccurs=1
+    #                                 Element@name=rest@minOccurs=1@maxOccurs=1
+    #                     Element@name=tie@minOccurs=0@maxOccurs=2
+    #                 Sequence@minOccurs=1@maxOccurs=1
+    #                     Element@name=cue@minOccurs=1@maxOccurs=1
+    #                     Group@name=full-note@minOccurs=1@maxOccurs=1
+    #                         Sequence@minOccurs=1@maxOccurs=1
+    #                             Element@name=chord@minOccurs=0@maxOccurs=1
+    #                             Choice@minOccurs=1@maxOccurs=1
+    #                                 Element@name=pitch@minOccurs=1@maxOccurs=1
+    #                                 Element@name=unpitched@minOccurs=1@maxOccurs=1
+    #                                 Element@name=rest@minOccurs=1@maxOccurs=1
+    #     Element@name=instrument@minOccurs=0@maxOccurs=unbounded
+    #     Group@name=editorial-voice@minOccurs=1@maxOccurs=1
+    #         Sequence@minOccurs=1@maxOccurs=1
+    #             Group@name=footnote@minOccurs=0@maxOccurs=1
+    #                 Sequence@minOccurs=1@maxOccurs=1
+    #                     Element@name=footnote@minOccurs=1@maxOccurs=1
+    #             Group@name=level@minOccurs=0@maxOccurs=1
+    #                 Sequence@minOccurs=1@maxOccurs=1
+    #                     Element@name=level@minOccurs=1@maxOccurs=1
+    #             Group@name=voice@minOccurs=0@maxOccurs=1
+    #                 Sequence@minOccurs=1@maxOccurs=1
+    #                     Element@name=voice@minOccurs=1@maxOccurs=1
+    #     Element@name=type@minOccurs=0@maxOccurs=1
+    #     Element@name=dot@minOccurs=0@maxOccurs=unbounded
+    #     Element@name=accidental@minOccurs=0@maxOccurs=1
+    #     Element@name=time-modification@minOccurs=0@maxOccurs=1
+    #     Element@name=stem@minOccurs=0@maxOccurs=1
+    #     Element@name=notehead@minOccurs=0@maxOccurs=1
+    #     Element@name=notehead-text@minOccurs=0@maxOccurs=1
+    #     Group@name=staff@minOccurs=0@maxOccurs=1
+    #         Sequence@minOccurs=1@maxOccurs=1
+    #             Element@name=staff@minOccurs=1@maxOccurs=1
+    #     Element@name=beam@minOccurs=0@maxOccurs=8
+    #     Element@name=notations@minOccurs=0@maxOccurs=unbounded
+    #     Element@name=lyric@minOccurs=0@maxOccurs=unbounded
+    #     Element@name=play@minOccurs=0@maxOccurs=1
+    #     Element@name=listen@minOccurs=0@maxOccurs=1
+    # """
+    #
+    #         print(container.tree_representation())
+    #         assert container.tree_representation() == expected
 
     def test_note_with_voice_and_type(self):
         container = XMLChildContainerFactory(complex_type=XSDComplexTypeNote).get_child_container()
@@ -1133,6 +1130,32 @@ class TestChildContainerCheckRequired(TestCase):
         expected = """Sequence@minOccurs=1@maxOccurs=1
     Choice@minOccurs=1@maxOccurs=1
         Sequence@minOccurs=1@maxOccurs=1
+            Group@name=full-note@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=chord@minOccurs=0@maxOccurs=1
+                    Choice@minOccurs=1@maxOccurs=1
+                        Element@name=pitch@minOccurs=1@maxOccurs=1
+                            XMLPitch
+                        Element@name=unpitched@minOccurs=1@maxOccurs=1
+                        Element@name=rest@minOccurs=1@maxOccurs=1
+            Group@name=duration@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=duration@minOccurs=1@maxOccurs=1
+                        XMLDuration
+            Element@name=tie@minOccurs=0@maxOccurs=2
+        Sequence@minOccurs=1@maxOccurs=1
+            Element@name=cue@minOccurs=1@maxOccurs=1
+            Group@name=full-note@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=chord@minOccurs=0@maxOccurs=1
+                    Choice@minOccurs=1@maxOccurs=1
+                        Element@name=pitch@minOccurs=1@maxOccurs=1
+                        Element@name=unpitched@minOccurs=1@maxOccurs=1
+                        Element@name=rest@minOccurs=1@maxOccurs=1
+            Group@name=duration@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=duration@minOccurs=1@maxOccurs=1
+        Sequence@minOccurs=1@maxOccurs=1
             Element@name=grace@minOccurs=1@maxOccurs=1
             Choice@minOccurs=1@maxOccurs=1
                 Sequence@minOccurs=1@maxOccurs=1
@@ -1153,33 +1176,6 @@ class TestChildContainerCheckRequired(TestCase):
                                 Element@name=pitch@minOccurs=1@maxOccurs=1
                                 Element@name=unpitched@minOccurs=1@maxOccurs=1
                                 Element@name=rest@minOccurs=1@maxOccurs=1
-        Sequence@minOccurs=1@maxOccurs=1
-            Element@name=cue@minOccurs=1@maxOccurs=1
-                !Required!
-            Group@name=full-note@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=chord@minOccurs=0@maxOccurs=1
-                    Choice@minOccurs=1@maxOccurs=1
-                        Element@name=pitch@minOccurs=1@maxOccurs=1
-                            XMLPitch
-                        Element@name=unpitched@minOccurs=1@maxOccurs=1
-                        Element@name=rest@minOccurs=1@maxOccurs=1
-            Group@name=duration@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=duration@minOccurs=1@maxOccurs=1
-                        XMLDuration
-        Sequence@minOccurs=1@maxOccurs=1
-            Group@name=full-note@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=chord@minOccurs=0@maxOccurs=1
-                    Choice@minOccurs=1@maxOccurs=1
-                        Element@name=pitch@minOccurs=1@maxOccurs=1
-                        Element@name=unpitched@minOccurs=1@maxOccurs=1
-                        Element@name=rest@minOccurs=1@maxOccurs=1
-            Group@name=duration@minOccurs=1@maxOccurs=1
-                Sequence@minOccurs=1@maxOccurs=1
-                    Element@name=duration@minOccurs=1@maxOccurs=1
-            Element@name=tie@minOccurs=0@maxOccurs=2
     Element@name=instrument@minOccurs=0@maxOccurs=unbounded
     Group@name=editorial-voice@minOccurs=1@maxOccurs=1
         Sequence@minOccurs=1@maxOccurs=1

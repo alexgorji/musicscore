@@ -302,14 +302,12 @@ The offset affects the visual appearance of the direction. If the sound attribut
         assert mf.to_string() == expected
 
     def test_xml_credit(self):
-        """
-        <credit page="1">
-            <credit-words default-x="651" default-y="88" font-size="10" justify="center" valign="bottom">#</credit-words>
-        </credit>
-        """
+        expected = """<credit page="1">
+    <credit-words default-x="651" default-y="88" font-size="10" justify="center" valign="bottom">#</credit-words>
+</credit>
+"""
         c = XMLCredit(page=1)
         c.child_container_tree.check_requirements()
-        print(c.child_container_tree.tree_representation(show_force_valid))
         c.add_child(XMLCreditWords('#', default_x=651, default_y=88, font_size=10, justify='center', valign='bottom'))
-        print(c.child_container_tree.tree_representation(show_force_valid))
-        print(c.to_string())
+        assert c.to_string() == expected
+

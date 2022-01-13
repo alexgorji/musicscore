@@ -8,7 +8,7 @@ def _et_xml_to_music_xml(node):
     for k, v in node.attrib.items():
         try:
             setattr(output, k, v)
-        except TypeError:
+        except (TypeError, ValueError):
             try:
                 setattr(output, k, int(v))
             except ValueError:

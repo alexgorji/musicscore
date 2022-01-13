@@ -69,7 +69,7 @@ class TestScore(TestCase):
         k.add_child(XMLFifths(0))
         k.add_child(XMLMode('major'))
         n = m.add_child(XMLNote())
-        p = n.add_child(XMLPitch(), 3)
+        p = n.add_child(XMLPitch())
         p.add_child(XMLStep('C'))
         p.add_child(XMLOctave(4))
         n.add_child(XMLDuration(4))

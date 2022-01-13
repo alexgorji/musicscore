@@ -147,14 +147,10 @@ class XMLElement(Tree):
         else:
             return []
 
-    def to_string(self, add_separators=False, intelligent_choice=False) -> str:
+    def to_string(self, intelligent_choice=False) -> str:
         self._final_checks(intelligent_choice=intelligent_choice)
         self._create_et_xml_element()
 
-        if add_separators:
-            comment = ET.Comment('=========================================================')
-            self.et_xml_element.insert(1, comment)
-            self.et_xml_element.insert(3, comment)
         ET.indent(self.et_xml_element, space="    ", level=self.level)
         return ET.tostring(self.et_xml_element, encoding='unicode') + '\n'
 

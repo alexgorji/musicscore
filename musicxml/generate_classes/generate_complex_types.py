@@ -21,7 +21,7 @@ $xsd_string
 """
 
 xsd_complex_types = ['XSDComplexType', 'XSDComplexTypeScorePartwise', 'XSDComplexTypePart', 'XSDComplexTypeMeasure',
-                     'XSDComplexTypeDirective']
+                     'XSDComplexTypeDirective', 'XSDComplexTypeNote']
 
 
 def complex_type_class_as_string(complex_type_):
@@ -38,7 +38,7 @@ def complex_type_class_as_string(complex_type_):
     return t
 
 
-all_complex_type_et_elements = get_all_et_elements(sources_path, 'complexType')
+all_complex_type_et_elements = [ct for ct in get_all_et_elements(sources_path, 'complexType') if ct.attrib['name'] != 'note']
 
 with open(target_path, 'w+') as f:
     with open(default_path, 'r') as default:

@@ -5,7 +5,6 @@
       <part-name print-object="no">Part 1</part-name>
     </score-part>
   </part-list>
-  <!--=========================================================-->
   <part id="P1">
     <measure number="1">
       <attributes>
@@ -37,5 +36,4 @@
       </barline>
     </measure>
   </part>
-  <!--=========================================================-->
 </score-partwise>

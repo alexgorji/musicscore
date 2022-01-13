@@ -488,6 +488,8 @@ class XMLChildContainer(Tree):
 
         return requirements_exist
 
+    check_requirements = check_required_elements
+
     def duplicate(self):
         if not isinstance(self.content, XSDSequence) and not isinstance(self.content, XSDChoice) and not isinstance(self.content, XSDGroup):
             raise TypeError(self.content)
@@ -555,6 +557,8 @@ class XMLChildContainer(Tree):
                 if isinstance(n.content, XSDChoice):
                     if n.min_occurrences != 0 and not n.chosen_child and [ch for ch in n.get_children() if ch.min_occurrences != 0]:
                         n.requirements_not_fulfilled = True
+                    break
+                if isinstance(n.content, XSDSequence) and n.min_occurrences == 0:
                     break
                 if isinstance(n.content, XSDSequence) and n.min_occurrences != 0 and not (isinstance(n.get_parent().content, XSDGroup) and
                                                                                           n.get_parent().min_occurrences == 0):
