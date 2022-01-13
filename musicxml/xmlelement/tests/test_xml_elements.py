@@ -245,26 +245,34 @@ The offset affects the visual appearance of the direction. If the sound attribut
         assert d.to_string() == '<directive lang="en">HU</directive>\n'
 
     def test_xml_note_with_tie(self):
-        """"
-        <note default-x="125">
-        <pitch>
-          <step>F</step>
-          <alter>1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>192</duration>
-        <tie type="start"/>
-        <voice>1</voice>
-        <type>half</type>
-        <stem default-y="28">up</stem>
-        <staff>1</staff>
-        <notations>
-          <tied orientation="over" type="start"/>
-        </notations>
-      </note>
-        """
+        expected = """<note>
+    <pitch>
+        <step>F</step>
+        <alter>1</alter>
+        <octave>5</octave>
+    </pitch>
+    <duration>192</duration>
+    <tie type="start" />
+    <voice>1</voice>
+    <type>half</type>
+    <stem default-y="28">up</stem>
+    <staff>1</staff>
+    <notations>
+        <tied orientation="over" type="start" />
+    </notations>
+</note>
+"""
         n = XMLNote()
         p = n.add_child(XMLPitch())
-        d = n.add_child(XMLDuration())
-        t = n.add_child(XMLTie())
-
+        p.add_child(XMLStep('F'))
+        p.add_child(XMLAlter(1))
+        p.add_child(XMLOctave(5))
+        n.add_child(XMLDuration(192))
+        n.add_child(XMLTie(type='start'))
+        n.add_child(XMLVoice('1'))
+        n.add_child(XMLType('half'))
+        n.add_child(XMLStem('up', default_y=28))
+        n.add_child(XMLStaff(1))
+        nn = n.add_child(XMLNotations())
+        nn.add_child(XMLTied(orientation='over', type='start'))
+        assert n.to_string() == expected

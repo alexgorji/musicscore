@@ -21,8 +21,7 @@ def _et_xml_to_music_xml(node):
 
 
 def _parse_node(xml_node):
-    print('parsing node:', xml_node)
-    print(type(xml_node))
+    print('parsing node:', xml_node.tag, xml_node.attrib)
     output = _et_xml_to_music_xml(xml_node)
     print('output', output)
     for child in xml_node:

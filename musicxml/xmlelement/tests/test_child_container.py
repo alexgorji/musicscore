@@ -521,7 +521,6 @@ class TestChildContainer(TestCase):
                         XMLText
             Element@name=extend@minOccurs=0@maxOccurs=1
 """
-        print(choice.chosen_child.tree_representation(show_force_valid))
         assert choice.chosen_child.tree_representation(show_force_valid) == expected
 
     def test_add_child_note(self):
@@ -1139,8 +1138,85 @@ class TestChildContainerCheckRequired(TestCase):
         container.add_element(XMLPitch())
         container.add_element(XMLDuration())
         container.add_element(XMLVoice())
-        print(container.check_required_elements(intelligent_choice=True))
-        print(container.tree_representation())
-        # container.add_element(XMLType())
-        # container.check_required_elements()
-        # print(container.tree_representation())
+        container.add_element(XMLType())
+        expected = """Sequence@minOccurs=1@maxOccurs=1
+    Choice@minOccurs=1@maxOccurs=1
+        Sequence@minOccurs=1@maxOccurs=1
+            Element@name=grace@minOccurs=1@maxOccurs=1
+            Choice@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Group@name=full-note@minOccurs=1@maxOccurs=1
+                        Sequence@minOccurs=1@maxOccurs=1
+                            Element@name=chord@minOccurs=0@maxOccurs=1
+                            Choice@minOccurs=1@maxOccurs=1
+                                Element@name=pitch@minOccurs=1@maxOccurs=1
+                                Element@name=unpitched@minOccurs=1@maxOccurs=1
+                                Element@name=rest@minOccurs=1@maxOccurs=1
+                    Element@name=tie@minOccurs=0@maxOccurs=2
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=cue@minOccurs=1@maxOccurs=1
+                    Group@name=full-note@minOccurs=1@maxOccurs=1
+                        Sequence@minOccurs=1@maxOccurs=1
+                            Element@name=chord@minOccurs=0@maxOccurs=1
+                            Choice@minOccurs=1@maxOccurs=1
+                                Element@name=pitch@minOccurs=1@maxOccurs=1
+                                Element@name=unpitched@minOccurs=1@maxOccurs=1
+                                Element@name=rest@minOccurs=1@maxOccurs=1
+        Sequence@minOccurs=1@maxOccurs=1
+            Element@name=cue@minOccurs=1@maxOccurs=1
+                !Required!
+            Group@name=full-note@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=chord@minOccurs=0@maxOccurs=1
+                    Choice@minOccurs=1@maxOccurs=1
+                        Element@name=pitch@minOccurs=1@maxOccurs=1
+                            XMLPitch
+                        Element@name=unpitched@minOccurs=1@maxOccurs=1
+                        Element@name=rest@minOccurs=1@maxOccurs=1
+            Group@name=duration@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=duration@minOccurs=1@maxOccurs=1
+                        XMLDuration
+        Sequence@minOccurs=1@maxOccurs=1
+            Group@name=full-note@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=chord@minOccurs=0@maxOccurs=1
+                    Choice@minOccurs=1@maxOccurs=1
+                        Element@name=pitch@minOccurs=1@maxOccurs=1
+                        Element@name=unpitched@minOccurs=1@maxOccurs=1
+                        Element@name=rest@minOccurs=1@maxOccurs=1
+            Group@name=duration@minOccurs=1@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=duration@minOccurs=1@maxOccurs=1
+            Element@name=tie@minOccurs=0@maxOccurs=2
+    Element@name=instrument@minOccurs=0@maxOccurs=unbounded
+    Group@name=editorial-voice@minOccurs=1@maxOccurs=1
+        Sequence@minOccurs=1@maxOccurs=1
+            Group@name=footnote@minOccurs=0@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=footnote@minOccurs=1@maxOccurs=1
+            Group@name=level@minOccurs=0@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=level@minOccurs=1@maxOccurs=1
+            Group@name=voice@minOccurs=0@maxOccurs=1
+                Sequence@minOccurs=1@maxOccurs=1
+                    Element@name=voice@minOccurs=1@maxOccurs=1
+                        XMLVoice
+    Element@name=type@minOccurs=0@maxOccurs=1
+        XMLType
+    Element@name=dot@minOccurs=0@maxOccurs=unbounded
+    Element@name=accidental@minOccurs=0@maxOccurs=1
+    Element@name=time-modification@minOccurs=0@maxOccurs=1
+    Element@name=stem@minOccurs=0@maxOccurs=1
+    Element@name=notehead@minOccurs=0@maxOccurs=1
+    Element@name=notehead-text@minOccurs=0@maxOccurs=1
+    Group@name=staff@minOccurs=0@maxOccurs=1
+        Sequence@minOccurs=1@maxOccurs=1
+            Element@name=staff@minOccurs=1@maxOccurs=1
+    Element@name=beam@minOccurs=0@maxOccurs=8
+    Element@name=notations@minOccurs=0@maxOccurs=unbounded
+    Element@name=lyric@minOccurs=0@maxOccurs=unbounded
+    Element@name=play@minOccurs=0@maxOccurs=1
+    Element@name=listen@minOccurs=0@maxOccurs=1
+"""
+        assert container.tree_representation() == expected

@@ -179,12 +179,12 @@ class XMLChildContainer(Tree):
         if not isinstance(child, XMLChildContainer):
             raise TypeError
 
-    def _check_choices_intelligently(self):
+    def _check_choices_intelligently(self, xml_element=None):
         if self.get_parent_element():
             print(f'_check_choices_intelligently: intelligent choice for {self.get_parent_element()}')
         """
         Check if existing xml elements can be attached to other choice paths in order to fulfill all requirements. Only possible leaves
-        forwards will be checked.
+        forwards will be checked. If xml_element is given it will be treated as a new element which going to be attached to the container.
         """
 
         def get_same_name_next_leaves(leaf_):
@@ -227,6 +227,9 @@ class XMLChildContainer(Tree):
                     try:
                         for el in sorted_xml_elements:
                             copied_container.add_element(el, intelligent_choice=False)
+                        if xml_element:
+                            copied_container.add_element(xml_element, intelligent_choice=False)
+                            return copied_container
                         if not copied_container.check_required_elements():
                             return copied_container
                     except XMLChildContainerChoiceHasAnotherChosenChild:
@@ -248,37 +251,6 @@ class XMLChildContainer(Tree):
         for node in list(self.reversed_path_to_root())[:-1]:
             if node.get_parent().max_occurrences == 'unbounded':
                 return node.get_parent().duplicate()
-        return None
-
-    def _intelligently_chosen_leaf(self, xml_element):
-        if self.get_parent_element():
-            print(f'_intelligently_chosen_leaf: intelligent choice for {self.get_parent_element()} and'
-                  f' {xml_element.__class__.__name__}')
-        same_name_leaves = [leaf for leaf in self.iterate_leaves() if leaf.content.name == xml_element.name]
-        choice_with_chosen_child = None
-        for leaf in same_name_leaves:
-            for n in leaf.reversed_path_to_root():
-                if n.get_parent() and isinstance(n.get_parent().content, XSDChoice) and n.get_parent().chosen_child:
-                    choice_with_chosen_child = n.get_parent()
-
-        if not choice_with_chosen_child.get_parent():
-            return
-
-        selected_leaves_in_choice_with_chosen_child = [leaf for leaf in choice_with_chosen_child.iterate_leaves() if
-                                                       leaf.content.name == xml_element.name]
-        for index, leaf in enumerate(selected_leaves_in_choice_with_chosen_child):
-            copied_choice = choice_with_chosen_child._create_empty_copy()
-
-            selected = copied_choice.add_element(xml_element, forward=index, intelligent_choice=False)
-            try:
-                for el in choice_with_chosen_child.get_attached_elements():
-                    copied_choice.add_element(el, intelligent_choice=False)
-                choice_with_chosen_child.get_parent().replace_child(choice_with_chosen_child, copied_choice)
-                del choice_with_chosen_child
-                return selected
-            except XMLElementCannotHaveChildrenError:
-                pass
-
         return None
 
     def _update_requirements_in_path(self):
@@ -453,14 +425,17 @@ class XMLChildContainer(Tree):
         if selected_same_name_leaves is None:
             intelligently_selected = None
             if forward is None and intelligent_choice is True:
-                intelligently_selected = self._intelligently_chosen_leaf(xml_element)
+                copy_with_intelligence = self._check_choices_intelligently(xml_element)
+                if copy_with_intelligence:
+                    for old_child, new_child in zip(self.get_children(), copy_with_intelligence.get_children()):
+                        self.replace_child(old_child, new_child)
+                    return [l for l in copy_with_intelligence.iterate_leaves() if xml_element in l.content.xml_elements][0]
 
             if not intelligently_selected:
                 msg = f"{self} By adding {xml_element.__class__.__name__} to {self.get_parent_element().__class__.__name__}" if \
                     self.get_parent_element() else f"{self} By adding {xml_element.__class__.__name__}"
                 raise XMLChildContainerChoiceHasAnotherChosenChild(msg)
             else:
-                intelligently_selected._update_requirements_in_path()
                 self.check_required_elements()
                 return intelligently_selected
 
