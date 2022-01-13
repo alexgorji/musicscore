@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from musicxml.exceptions import XMLElementChildrenRequired, XMLElementValueRequiredError, XSDAttributeRequiredException, XSDWrongAttribute
+from musicxml.util.core import show_force_valid
 from musicxml.xmlelement.xmlelement import *
 from musicxml.xsd.xsdcomplextype import *
 from musicxml.xsd.xsdsimpletype import *
@@ -299,3 +300,16 @@ The offset affects the visual appearance of the direction. If the sound attribut
 
         mf = XMLMusicFont(font_family="Maestro,engraved", font_size=18.2)
         assert mf.to_string() == expected
+
+    def test_xml_credit(self):
+        """
+        <credit page="1">
+            <credit-words default-x="651" default-y="88" font-size="10" justify="center" valign="bottom">#</credit-words>
+        </credit>
+        """
+        c = XMLCredit(page=1)
+        c.child_container_tree.check_requirements()
+        print(c.child_container_tree.tree_representation(show_force_valid))
+        c.add_child(XMLCreditWords('#', default_x=651, default_y=88, font_size=10, justify='center', valign='bottom'))
+        print(c.child_container_tree.tree_representation(show_force_valid))
+        print(c.to_string())

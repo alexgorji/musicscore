@@ -45,3 +45,12 @@ def replace_key_underline_with_hyphen(dict_):
             raise KeyError(f"Key {new_key} already exists in dictionary.")
         output[new_key] = v
     return output
+
+
+def show_force_valid(node):
+    output = node.compact_repr
+    if node.force_validate:
+        output += ': !!!FORCED!!!'
+    if node.chosen_child:
+        output += f': !!Chosen Child!!'
+    return output

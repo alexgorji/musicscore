@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from musicxml.util.core import convert_to_xml_class_name
+from musicxml.util.core import convert_to_xml_class_name, show_force_valid
 from musicxml.xmlelement.exceptions import XMLChildContainerWrongElementError, XMLChildContainerMaxOccursError, \
     XMLChildContainerChoiceHasAnotherChosenChild, XMLChildContainerFactoryError
 from musicxml.xmlelement.xmlchildcontainer import XMLChildContainer, DuplicationXSDSequence, XMLChildContainerFactory
@@ -10,15 +10,6 @@ from musicxml.xsd.xsdelement import XSDElement
 from musicxml.xsd.xsdindicator import *
 from musicxml.xsd.xsdtree import XSDTree
 import xml.etree.ElementTree as ET
-
-
-def show_force_valid(node):
-    output = node.compact_repr
-    if node.force_validate:
-        output += ': !!!FORCED!!!'
-    if node.chosen_child:
-        output += f': !!Chosen Child!!'
-    return output
 
 
 class TestChildContainer(TestCase):
