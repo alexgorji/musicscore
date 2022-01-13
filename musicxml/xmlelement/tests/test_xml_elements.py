@@ -311,3 +311,13 @@ The offset affects the visual appearance of the direction. If the sound attribut
         c.add_child(XMLCreditWords('#', default_x=651, default_y=88, font_size=10, justify='center', valign='bottom'))
         assert c.to_string() == expected
 
+    def test_xml_time_modification(self):
+        expected = """<time-modification>
+    <actual-notes>3</actual-notes>
+    <normal-notes>2</normal-notes>
+</time-modification>
+"""
+        tm = XMLTimeModification()
+        tm.add_child(XMLActualNotes(3))
+        tm.add_child(XMLNormalNotes(2))
+        assert tm.to_string() == expected

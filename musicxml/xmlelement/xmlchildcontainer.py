@@ -111,15 +111,16 @@ def _check_if_sequence_requires_elements(xsd_sequence_container):
         else:
             _check_if_container_requires_elements(ch)
 
-    for child in xsd_sequence_container.get_children():
-        if child.force_validate is True:
-            _check_if_container_requires_elements(child)
-        elif child.min_occurrences == 0:
-            pass
-        elif child.min_occurrences == 1:
-            validate_child(child)
-        else:
-            raise NotImplementedError(f'child {child} with min_occurrence greater than 1')
+    if xsd_sequence_container.min_occurrences > 0:
+        for child in xsd_sequence_container.get_children():
+            if child.force_validate is True:
+                _check_if_container_requires_elements(child)
+            elif child.min_occurrences == 0:
+                pass
+            elif child.min_occurrences == 1:
+                validate_child(child)
+            else:
+                raise NotImplementedError(f'child {child} with min_occurrence greater than 1')
 
 
 class DuplicationXSDSequence(XSDSequence):
