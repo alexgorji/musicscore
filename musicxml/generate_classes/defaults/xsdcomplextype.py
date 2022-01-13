@@ -96,6 +96,10 @@ class XSDComplexTypePart(XSDComplexType):
 class XSDComplexTypeMeasure(XSDComplexType):
     XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(".//{*}element[@name='score-partwise']//{*}complexType")[2])
 
+
+class XSDComplexTypeDirective(XSDComplexType, XSDSimpleTypeString):
+    XSD_TREE = XSDTree(musicxml_xsd_et_root.find(".//{*}complexType[@name='attributes']//{*}complexType"))
+
 # -----------------------------------------------------
 # AUTOMATICALLY GENERATED WITH generate_complex_types.py
 # -----------------------------------------------------

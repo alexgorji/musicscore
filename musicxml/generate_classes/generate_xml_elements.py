@@ -36,7 +36,7 @@ typed_elements = list(
     )
 )
 
-xml_element_class_names = ['XMLScorePartwise', 'XMLPart', 'XMLMeasure']
+xml_element_class_names = ['XMLScorePartwise', 'XMLPart', 'XMLMeasure', 'XMLDirective']
 
 
 def element_class_as_string(element_):

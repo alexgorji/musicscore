@@ -251,6 +251,9 @@ class XMLChildContainer(Tree):
         return None
 
     def _intelligently_chosen_leaf(self, xml_element):
+        if self.get_parent_element():
+            print(f'_intelligently_chosen_leaf: intelligent choice for {self.get_parent_element()} and'
+                  f' {xml_element.__class__.__name__}')
         same_name_leaves = [leaf for leaf in self.iterate_leaves() if leaf.content.name == xml_element.name]
         choice_with_chosen_child = None
         for leaf in same_name_leaves:
@@ -453,7 +456,8 @@ class XMLChildContainer(Tree):
                 intelligently_selected = self._intelligently_chosen_leaf(xml_element)
 
             if not intelligently_selected:
-                msg = f"By adding {xml_element.__class__.__name__} to {self.get_parent_element().__class__.__name__}" if self.get_parent() else f"By adding {xml_element.__class__.__name__}"
+                msg = f"{self} By adding {xml_element.__class__.__name__} to {self.get_parent_element().__class__.__name__}" if \
+                    self.get_parent_element() else f"{self} By adding {xml_element.__class__.__name__}"
                 raise XMLChildContainerChoiceHasAnotherChosenChild(msg)
             else:
                 intelligently_selected._update_requirements_in_path()

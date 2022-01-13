@@ -17,6 +17,7 @@ class XSDAttributeGroup(XSDTreeElement):
                 output.extend(eval(child.xsd_element_class_name).get_xsd_attributes())
         return output
 
+
 # -----------------------------------------------------
 # AUTOMATICALLY GENERATED WITH generate_attributes.py
 # -----------------------------------------------------
@@ -31,7 +32,7 @@ class XSDAttributeGroupBendSound(XSDAttributeGroup):
 	first-beat = "25"
 	last-beat = "75"
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bend-sound">
     <xs:annotation>
@@ -63,7 +64,7 @@ The bezier-x, bezier-y, bezier-x2, and bezier-y2 attributes are specified in ten
 
 The bezier-offset and bezier-offset2 attributes are deprecated as of MusicXML 3.1. If both the bezier-x and bezier-offset attributes are present, the bezier-x attribute takes priority. Similarly, the bezier-x2 attribute takes priority over the bezier-offset2 attribute. The two types of bezier attributes are not additive.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bezier">
     <xs:annotation>
@@ -92,7 +93,7 @@ class XSDAttributeGroupColor(XSDAttributeGroup):
     """
     The color attribute group indicates the color of an element.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="color">
     <xs:annotation>
@@ -108,7 +109,7 @@ class XSDAttributeGroupDashedFormatting(XSDAttributeGroup):
     """
     The dashed-formatting entity represents the length of dashes and spaces in a dashed line. Both the dash-length and space-length attributes are represented in tenths. These attributes are ignored if the corresponding line-type attribute is not dashed.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="dashed-formatting">
     <xs:annotation>
@@ -125,7 +126,7 @@ class XSDAttributeGroupDirective(XSDAttributeGroup):
     """
     The directive attribute changes the default-x position of a direction. It indicates that the left-hand side of the direction is aligned with the left-hand side of the time signature. If no time signature is present, it is aligned with the left-hand side of the first music notational element in the measure. If a default-x, justify, or halign attribute is present, it overrides the directive attribute.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="directive">
     <xs:annotation>
@@ -143,7 +144,7 @@ class XSDAttributeGroupDocumentAttributes(XSDAttributeGroup):
 
 The version attribute was added in Version 1.1 for the score-partwise and score-timewise documents. It provides an easier way to get version information than through the MusicXML public ID. The default value is 1.0 to make it possible for programs that handle later versions to distinguish earlier version files reliably. Programs that write MusicXML 1.1 or later files should set this attribute.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="document-attributes">
     <xs:annotation>
@@ -161,7 +162,7 @@ class XSDAttributeGroupEnclosure(XSDAttributeGroup):
     """
     The enclosure attribute group is used to specify the formatting of an enclosure around text or symbols.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="enclosure">
     <xs:annotation>
@@ -177,7 +178,7 @@ class XSDAttributeGroupFont(XSDAttributeGroup):
     """
     The font attribute group gathers together attributes for determining the font within a credit or direction. They are based on the text styles for Cascading Style Sheets. The font-family is a comma-separated list of font names.The font-style can be normal or italic. The font-size can be one of the CSS sizes or a numeric point size. The font-weight can be normal or bold. The default is application-dependent, but is a text font vs. a music font.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="font">
     <xs:annotation>
@@ -203,7 +204,7 @@ Typically this type of credit is aligned to the right, so that the position info
 
 The halign attribute is used in these situations. If it is not present, its value is the same as for the justify attribute. For elements where a justify attribute is not allowed, the default is implementation-dependent.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="halign">
     <xs:annotation>
@@ -226,7 +227,7 @@ class XSDAttributeGroupJustify(XSDAttributeGroup):
     """
     The justify attribute is used to indicate left, center, or right justification. The default value varies for different elements. For elements where the justify attribute is present but the halign attribute is not, the justify attribute indicates horizontal alignment as well as justification.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="justify">
     <xs:annotation>
@@ -242,7 +243,7 @@ class XSDAttributeGroupLetterSpacing(XSDAttributeGroup):
     """
     The letter-spacing attribute specifies text tracking. Values are either "normal" or a number representing the number of ems to add between each letter. The number may be negative in order to subtract space. The default is normal, which allows flexibility of letter-spacing for purposes of text justification.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="letter-spacing">
     <xs:annotation>
@@ -258,7 +259,7 @@ class XSDAttributeGroupLevelDisplay(XSDAttributeGroup):
     """
     The level-display attribute group specifies three common ways to indicate editorial indications: putting parentheses or square brackets around a symbol, or making the symbol a different size. If not specified, they are left to application defaults. It is used by the level and accidental elements.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="level-display">
     <xs:annotation>
@@ -276,7 +277,7 @@ class XSDAttributeGroupLineHeight(XSDAttributeGroup):
     """
     The line-height attribute specifies text leading. Values are either "normal" or a number representing the percentage of the current font height to use for leading. The default is "normal". The exact normal value is implementation-dependent, but values between 100 and 120 are recommended.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line-height">
     <xs:annotation>
@@ -292,7 +293,7 @@ class XSDAttributeGroupLineLength(XSDAttributeGroup):
     """
     The line-length attribute distinguishes between different line lengths for doit, falloff, plop, and scoop articulations.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line-length">
     <xs:annotation>
@@ -308,7 +309,7 @@ class XSDAttributeGroupLineShape(XSDAttributeGroup):
     """
     The line-shape attribute distinguishes between straight and curved lines.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line-shape">
     <xs:annotation>
@@ -324,7 +325,7 @@ class XSDAttributeGroupLineType(XSDAttributeGroup):
     """
     The line-type attribute distinguishes between solid, dashed, dotted, and wavy lines.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line-type">
     <xs:annotation>
@@ -340,7 +341,7 @@ class XSDAttributeGroupOptionalUniqueId(XSDAttributeGroup):
     """
     The optional-unique-id attribute group allows an element to optionally specify an ID that is unique to the entire document. This attribute group is not used for a required id attribute, or for an id attribute that specifies an id reference.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="optional-unique-id">
     <xs:annotation>
@@ -356,7 +357,7 @@ class XSDAttributeGroupOrientation(XSDAttributeGroup):
     """
     The orientation attribute indicates whether slurs and ties are overhand (tips down) or underhand (tips up). This is distinct from the placement attribute used by any notation type.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="orientation">
     <xs:annotation>
@@ -372,7 +373,7 @@ class XSDAttributeGroupPlacement(XSDAttributeGroup):
     """
     The placement attribute indicates whether something is above or below another element, such as a note or a notation.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="placement">
     <xs:annotation>
@@ -417,7 +418,7 @@ The default-x and default-y position attributes provide higher-resolution positi
 
 As elsewhere in the MusicXML format, tenths are the global tenths defined by the scaling element, not the local tenths of a staff resized by the staff-size element.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="position">
     <xs:annotation>
@@ -465,7 +466,7 @@ class XSDAttributeGroupPrintObject(XSDAttributeGroup):
     """
     The print-object attribute specifies whether or not to print an object (e.g. a note or a rest). It is yes by default.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="print-object">
     <xs:annotation>
@@ -481,7 +482,7 @@ class XSDAttributeGroupPrintSpacing(XSDAttributeGroup):
     """
     The print-spacing attribute controls whether or not spacing is left for an invisible note or object. It is used only if no note, dot, or lyric is being printed. The value is yes (leave spacing) by default.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="print-spacing">
     <xs:annotation>
@@ -497,7 +498,7 @@ class XSDAttributeGroupPrintStyle(XSDAttributeGroup):
     """
     The print-style attribute group collects the most popular combination of printing attributes: position, font, and color.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="print-style">
     <xs:annotation>
@@ -515,7 +516,7 @@ class XSDAttributeGroupPrintStyleAlign(XSDAttributeGroup):
     """
     The print-style-align attribute group adds the halign and valign attributes to the position, font, and color attributes.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="print-style-align">
     <xs:annotation>
@@ -535,7 +536,7 @@ class XSDAttributeGroupPrintout(XSDAttributeGroup):
 
 By default, all these attributes are set to yes. If print-object is set to no, the print-dot and print-lyric attributes are interpreted to also be set to no if they are not present.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="printout">
     <xs:annotation>
@@ -556,7 +557,7 @@ class XSDAttributeGroupSmufl(XSDAttributeGroup):
     """
     The smufl attribute group is used to indicate a particular Standard Music Font Layout (SMuFL) character. Sometimes this is a formatting choice, and sometimes this is a refinement of the semantic meaning of an element.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="smufl">
     <xs:annotation>
@@ -572,7 +573,7 @@ class XSDAttributeGroupSystemRelation(XSDAttributeGroup):
     """
     The system-relation attribute group distinguishes elements that are associated with a system rather than the particular part where the element appears.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="system-relation">
     <xs:annotation>
@@ -588,7 +589,7 @@ class XSDAttributeGroupSymbolFormatting(XSDAttributeGroup):
     """
     The symbol-formatting attribute group collects the common formatting attributes for musical symbols. Default values may differ across the elements that use this group.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="symbol-formatting">
     <xs:annotation>
@@ -611,7 +612,7 @@ class XSDAttributeGroupTextDecoration(XSDAttributeGroup):
     """
     The text-decoration attribute group is based on the similar feature in XHTML and CSS. It allows for text to be underlined, overlined, or struck-through. It extends the CSS version by allow double or triple lines instead of just being on or off.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="text-decoration">
     <xs:annotation>
@@ -629,7 +630,7 @@ class XSDAttributeGroupTextDirection(XSDAttributeGroup):
     """
     The text-direction attribute is used to adjust and override the Unicode bidirectional text algorithm, similar to the Directionality data category in the W3C Internationalization Tag Set recommendation.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="text-direction">
     <xs:annotation>
@@ -645,7 +646,7 @@ class XSDAttributeGroupTextFormatting(XSDAttributeGroup):
     """
     The text-formatting attribute group collects the common formatting attributes for text elements. Default values may differ across the elements that use this group.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="text-formatting">
     <xs:annotation>
@@ -670,7 +671,7 @@ class XSDAttributeGroupTextRotation(XSDAttributeGroup):
     """
     The rotation attribute is used to rotate text around the alignment point specified by the halign and valign attributes. Positive values are clockwise rotations, while negative values are counter-clockwise rotations.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="text-rotation">
     <xs:annotation>
@@ -701,7 +702,7 @@ For mordent and inverted-mordent elements, the defaults are different:
 	The default for second-beat is "12", not "25".
 	The default for last-beat is "24", not "75".
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="trill-sound">
     <xs:annotation>
@@ -738,7 +739,7 @@ class XSDAttributeGroupValign(XSDAttributeGroup):
     """
     The valign attribute is used to indicate vertical alignment to the top, middle, bottom, or baseline of the text. Defaults are implementation-dependent.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="valign">
     <xs:annotation>
@@ -754,7 +755,7 @@ class XSDAttributeGroupValignImage(XSDAttributeGroup):
     """
     The valign-image attribute is used to indicate vertical alignment for images and graphics, so it removes the baseline value. Defaults are implementation-dependent.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="valign-image">
     <xs:annotation>
@@ -770,7 +771,7 @@ class XSDAttributeGroupXPosition(XSDAttributeGroup):
     """
     The x-position attribute group is used for elements like notes where specifying x position is common, but specifying y position is rare.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="x-position">
     <xs:annotation>
@@ -789,7 +790,7 @@ class XSDAttributeGroupYPosition(XSDAttributeGroup):
     """
     The y-position attribute group is used for elements like stems where specifying y position is common, but specifying x position is rare.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="y-position">
     <xs:annotation>
@@ -808,7 +809,7 @@ class XSDAttributeGroupImageAttributes(XSDAttributeGroup):
     """
     The image-attributes group is used to include graphical images in a score. The required source attribute is the URL for the image file. The required type attribute is the MIME type for the image file format. Typical choices include application/postscript, image/gif, image/jpeg, image/png, and image/tiff. The optional height and width attributes are used to size and scale an image. The image should be scaled independently in X and Y if both height and width are specified. If only one attribute is specified, the image should be scaled proportionally to fit in the specified dimension.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="image-attributes">
     <xs:annotation>
@@ -832,7 +833,7 @@ class XSDAttributeGroupPrintAttributes(XSDAttributeGroup):
 
 The staff-spacing attribute specifies spacing between multiple staves in tenths of staff space. This is deprecated as of Version 1.1; the staff-layout element should be used instead. If both are present, the staff-layout values take priority.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="print-attributes">
     <xs:annotation>
@@ -854,7 +855,7 @@ class XSDAttributeGroupElementPosition(XSDAttributeGroup):
     """
     The element and position attributes are new as of Version 2.0. They allow for bookmarks and links to be positioned at higher resolution than the level of music-data elements. When no element and position attributes are present, the bookmark or link element refers to the next sibling element in the MusicXML file. The element attribute specifies an element type for a descendant of the next sibling element that is not a link or bookmark. The position attribute specifies the position of this descendant element, where the first position is 1. The position attribute is ignored if the element attribute is not present. For instance, an element value of "beam" and a position value of "2" defines the link or bookmark to refer to the second beam descendant of the next sibling element that is not a link or bookmark. This is equivalent to an XPath test of [.//beam[2]] done in the context of the sibling element.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="element-position">
     <xs:annotation>
@@ -871,7 +872,7 @@ class XSDAttributeGroupLinkAttributes(XSDAttributeGroup):
     """
     The link-attributes group includes all the simple XLink attributes supported in the MusicXML format. It is also used to connect a MusicXML score with MusicXML parts or a MusicXML opus.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="link-attributes">
     <xs:annotation>
@@ -892,7 +893,7 @@ class XSDAttributeGroupGroupNameText(XSDAttributeGroup):
     """
     The group-name-text attribute group is used by the group-name and group-abbreviation elements. The print-style and justify attribute groups are deprecated in MusicXML 2.0 in favor of the new group-name-display and group-abbreviation-display elements.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group-name-text">
     <xs:annotation>
@@ -919,7 +920,7 @@ If measure numbers are not unique within a part, this can cause problems for con
 
 Measure width is specified in tenths. These are the global tenths specified in the scaling element, not local tenths as modified by the staff-size element.	The width covers the entire measure from barline or system start to barline or system end.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="measure-attributes">
     <xs:annotation>
@@ -950,7 +951,7 @@ class XSDAttributeGroupPartAttributes(XSDAttributeGroup):
     """
     In either partwise or timewise format, the part element has an id attribute that is an IDREF back to a score-part in the part-list.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-attributes">
     <xs:annotation>
@@ -966,7 +967,7 @@ class XSDAttributeGroupPartNameText(XSDAttributeGroup):
     """
     The part-name-text attribute group is used by the part-name and part-abbreviation elements. The print-style and justify attribute groups are deprecated in MusicXML 2.0 in favor of the new part-name-display and part-abbreviation-display elements.
     """
-    
+
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:attributeGroup xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-name-text">
     <xs:annotation>
@@ -979,4 +980,17 @@ class XSDAttributeGroupPartNameText(XSDAttributeGroup):
 """
                                      ))
 
-__all__=['XSDAttribute', 'XSDAttributeGroup', 'XSDAttributeGroupBendSound', 'XSDAttributeGroupBezier', 'XSDAttributeGroupColor', 'XSDAttributeGroupDashedFormatting', 'XSDAttributeGroupDirective', 'XSDAttributeGroupDocumentAttributes', 'XSDAttributeGroupEnclosure', 'XSDAttributeGroupFont', 'XSDAttributeGroupHalign', 'XSDAttributeGroupJustify', 'XSDAttributeGroupLetterSpacing', 'XSDAttributeGroupLevelDisplay', 'XSDAttributeGroupLineHeight', 'XSDAttributeGroupLineLength', 'XSDAttributeGroupLineShape', 'XSDAttributeGroupLineType', 'XSDAttributeGroupOptionalUniqueId', 'XSDAttributeGroupOrientation', 'XSDAttributeGroupPlacement', 'XSDAttributeGroupPosition', 'XSDAttributeGroupPrintObject', 'XSDAttributeGroupPrintSpacing', 'XSDAttributeGroupPrintStyle', 'XSDAttributeGroupPrintStyleAlign', 'XSDAttributeGroupPrintout', 'XSDAttributeGroupSmufl', 'XSDAttributeGroupSystemRelation', 'XSDAttributeGroupSymbolFormatting', 'XSDAttributeGroupTextDecoration', 'XSDAttributeGroupTextDirection', 'XSDAttributeGroupTextFormatting', 'XSDAttributeGroupTextRotation', 'XSDAttributeGroupTrillSound', 'XSDAttributeGroupValign', 'XSDAttributeGroupValignImage', 'XSDAttributeGroupXPosition', 'XSDAttributeGroupYPosition', 'XSDAttributeGroupImageAttributes', 'XSDAttributeGroupPrintAttributes', 'XSDAttributeGroupElementPosition', 'XSDAttributeGroupLinkAttributes', 'XSDAttributeGroupGroupNameText', 'XSDAttributeGroupMeasureAttributes', 'XSDAttributeGroupPartAttributes', 'XSDAttributeGroupPartNameText']
+
+__all__ = ['XSDAttribute', 'XSDAttributeGroup', 'XSDAttributeGroupBendSound', 'XSDAttributeGroupBezier', 'XSDAttributeGroupColor',
+           'XSDAttributeGroupDashedFormatting', 'XSDAttributeGroupDirective', 'XSDAttributeGroupDocumentAttributes',
+           'XSDAttributeGroupEnclosure', 'XSDAttributeGroupFont', 'XSDAttributeGroupHalign', 'XSDAttributeGroupJustify',
+           'XSDAttributeGroupLetterSpacing', 'XSDAttributeGroupLevelDisplay', 'XSDAttributeGroupLineHeight', 'XSDAttributeGroupLineLength',
+           'XSDAttributeGroupLineShape', 'XSDAttributeGroupLineType', 'XSDAttributeGroupOptionalUniqueId', 'XSDAttributeGroupOrientation',
+           'XSDAttributeGroupPlacement', 'XSDAttributeGroupPosition', 'XSDAttributeGroupPrintObject', 'XSDAttributeGroupPrintSpacing',
+           'XSDAttributeGroupPrintStyle', 'XSDAttributeGroupPrintStyleAlign', 'XSDAttributeGroupPrintout', 'XSDAttributeGroupSmufl',
+           'XSDAttributeGroupSystemRelation', 'XSDAttributeGroupSymbolFormatting', 'XSDAttributeGroupTextDecoration',
+           'XSDAttributeGroupTextDirection', 'XSDAttributeGroupTextFormatting', 'XSDAttributeGroupTextRotation',
+           'XSDAttributeGroupTrillSound', 'XSDAttributeGroupValign', 'XSDAttributeGroupValignImage', 'XSDAttributeGroupXPosition',
+           'XSDAttributeGroupYPosition', 'XSDAttributeGroupImageAttributes', 'XSDAttributeGroupPrintAttributes',
+           'XSDAttributeGroupElementPosition', 'XSDAttributeGroupLinkAttributes', 'XSDAttributeGroupGroupNameText',
+           'XSDAttributeGroupMeasureAttributes', 'XSDAttributeGroupPartAttributes', 'XSDAttributeGroupPartNameText']

@@ -55,3 +55,4 @@ with open(target_path, 'w+') as f:
     with open(default_path_2, 'r') as default_2:
         with redirect_stdout(f):
             print(default_2.read())
+            print(f'__all__={xsd_simple_types}')

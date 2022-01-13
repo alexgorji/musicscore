@@ -20,7 +20,8 @@ $xsd_string
                                      ))
 """
 
-xsd_complex_types = ['XSDComplexType', 'XSDComplexTypeScorePartwise', 'XSDComplexTypePart', 'XSDComplexTypeMeasure']
+xsd_complex_types = ['XSDComplexType', 'XSDComplexTypeScorePartwise', 'XSDComplexTypePart', 'XSDComplexTypeMeasure',
+                     'XSDComplexTypeDirective']
 
 
 def complex_type_class_as_string(complex_type_):
