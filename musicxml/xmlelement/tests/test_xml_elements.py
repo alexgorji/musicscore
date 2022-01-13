@@ -276,3 +276,17 @@ The offset affects the visual appearance of the direction. If the sound attribut
         nn = n.add_child(XMLNotations())
         nn.add_child(XMLTied(orientation='over', type='start'))
         assert n.to_string() == expected
+
+    def test_font(self):
+        expected = """<words default-y="-29" font-family="Arial" font-size="3" relative-x="-38">/</words>
+"""
+        w = XMLWords('/', default_y=-29, font_family="Arial", font_size=3, relative_x=-38)
+        assert w.to_string() == expected
+        """
+        <music-font font-family="Maestro,engraved" font-size="18.2"/>
+        """
+        with self.assertRaises(ValueError):
+            mf = XMLMusicFont(font_family="Maestro,engraved", font_size="18.2")
+
+        mf = XMLMusicFont(font_family="Maestro,engraved", font_size=18.2)
+        print(mf.to_string())
