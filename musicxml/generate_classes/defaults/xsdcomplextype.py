@@ -61,13 +61,6 @@ class XSDComplexType(XSDTreeElement):
                 return eval(convert_to_xsd_class_name(child.get_children()[0].get_attributes()['base'],
                                                       'complex_type')).get_xsd_indicator()
 
-    @classmethod
-    def value_is_required(cls):
-        if cls.XSD_TREE.get_simple_content():
-            return True
-        else:
-            return False
-
 
 xsd_tree_score_partwise = XSDTree(musicxml_xsd_et_root.find(".//{*}element[@name='score-partwise']"))
 

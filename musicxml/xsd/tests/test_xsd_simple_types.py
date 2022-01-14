@@ -572,9 +572,6 @@ class TestSimpleTypes(MusicXmlTestCase):
         with self.assertRaises(ValueError):
             XSDSimpleTypeIDREF('1')
 
-    def test_value_is_required(self):
-        assert XSDSimpleTypeString.value_is_required() is True
-
     def test_language(self):
         """
         <xs:simpleType name="language" id="language">

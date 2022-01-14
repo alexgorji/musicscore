@@ -46,7 +46,7 @@ class TestXSDTree(MusicXmlTestCase):
         with self.assertRaises(TypeError):
             XSDTree('Naja')
 
-        assert isinstance(self.above_below_simple_type_xsd_element.xsd_element_tree_element, ET.Element)
+        assert isinstance(self.above_below_simple_type_xsd_element.xml_element_tree_element, ET.Element)
 
     def test_xml_element_tag(self):
         """

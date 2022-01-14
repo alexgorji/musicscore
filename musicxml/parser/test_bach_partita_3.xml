@@ -544,7 +544,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <words default-y="72" font-size="10" halign="right" relative-x="182" xml:space="preserve">Johann Sebastian Bach
+          <words default-y="72" font-size="10" halign="right" relative-x="182">Johann Sebastian Bach
 BWV 828</words>
         </direction-type>
         <staff>1</staff>

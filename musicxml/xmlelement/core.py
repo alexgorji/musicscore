@@ -54,8 +54,6 @@ class XMLElement(Tree):
                     raise XSDAttributeRequiredException(f"{self.__class__.__name__} requires attribute: {required_attribute.name}")
 
     def _final_checks(self, intelligent_choice=False):
-        if self.type_.value_is_required() and not self.value:
-            raise XMLElementValueRequiredError(f"{self.get_class_name()} requires a value.")
         if self._child_container_tree:
             required_children = self._child_container_tree.get_required_element_names(intelligent_choice=intelligent_choice)
             if required_children:

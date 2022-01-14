@@ -145,10 +145,6 @@ class XSDSimpleType(XSDTreeElement):
             self._check_value(v)
         self._value = v
 
-    @classmethod
-    def value_is_required(cls):
-        return True
-
     def __repr__(self):
         return str(self.value)
 

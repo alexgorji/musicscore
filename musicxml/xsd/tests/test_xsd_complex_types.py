@@ -239,11 +239,6 @@ class TestComplexTypes(MusicXmlTestCase):
         assert isinstance(XSDComplexTypeDynamics().get_xsd_indicator()[0], XSDChoice)
         assert XSDComplexTypeDynamics().get_xsd_indicator()[1:] == (0, 'unbounded')
 
-    def test_value_is_required(self):
-        assert XSDComplexTypeOffset.value_is_required() is True
-        assert XSDComplexTypeHeelToe.value_is_required() is False
-        assert XSDComplexTypeNonArpeggiate.value_is_required() is False
-
     def test_complex_type_barline_sequence_elements(self):
         """
         Test sequence with group and elements
