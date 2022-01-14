@@ -206,7 +206,10 @@ class XSDTree(Tree):
     # magic methods
     def __deepcopy__(self, copy_parent=False):
         def copy_et_element(el):
-            return copy.deepcopy(el)
+            output = ET.Element(el.tag, el.attrib)
+            output.text = el.text
+            return output
+            # return copy.deepcopy(el)
 
         copied = self.__class__(xml_element_tree_element=copy_et_element(self.xml_element_tree_element))
         copied._tag = self.tag

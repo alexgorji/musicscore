@@ -392,6 +392,7 @@ class TestChildContainer(TestCase):
             container.add_element(XMLPartList())
         container.add_element(XMLPart())
         container.add_element(XMLPart())
+        container.check_required_elements()
         expected = """Sequence@minOccurs=1@maxOccurs=1
     Group@name=score-header@minOccurs=1@maxOccurs=1
         Sequence@minOccurs=1@maxOccurs=1
@@ -597,10 +598,12 @@ class TestChildContainer(TestCase):
     Element@name=play@minOccurs=0@maxOccurs=1
     Element@name=listen@minOccurs=0@maxOccurs=1
 """
+        container.check_required_elements()
         assert container.tree_representation(function=show_force_valid) == expected
         with self.assertRaises(XMLChildContainerChoiceHasAnotherChosenChild):
             container.add_element(XMLUnpitched())
         container.add_element(XMLChord())
+        container.check_required_elements()
         expected = """        Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
             Group@name=full-note@minOccurs=1@maxOccurs=1
                 Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
@@ -621,6 +624,7 @@ class TestChildContainer(TestCase):
         with self.assertRaises(XMLChildContainerChoiceHasAnotherChosenChild):
             container.add_element(XMLRest())
         container.add_element(XMLDuration())
+        container.check_required_elements()
         expected = """        Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
             Group@name=full-note@minOccurs=1@maxOccurs=1
                 Sequence@minOccurs=1@maxOccurs=1: !!!FORCED!!!
@@ -806,6 +810,7 @@ class TestDuplication(TestCase):
                     Element@name=key-accidental@minOccurs=0@maxOccurs=1
     Element@name=key-octave@minOccurs=0@maxOccurs=unbounded
 """
+        container.check_required_elements()
         assert container.tree_representation(show_force_valid) == expected
 
     def test_duplicate_parent(self):

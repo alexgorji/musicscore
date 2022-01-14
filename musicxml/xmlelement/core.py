@@ -28,12 +28,13 @@ class XMLElement(Tree):
         self._create_child_container_tree()
 
     def _check_attribute(self, name, value):
-        allowed_attributes = [attribute.name for attribute in self.type_.get_xsd_attributes()]
+        attributes = self.type_.get_xsd_attributes()
+        allowed_attributes = [attribute.name for attribute in attributes]
         if name not in [attribute.name for attribute in self.type_.get_xsd_attributes()]:
             raise XSDWrongAttribute(f"{self.__class__.__name__} has no attribute {name}. Allowed attributes are: {allowed_attributes}")
-
-        attribute = [attribute for attribute in self.type_.get_xsd_attributes() if attribute.name == name][0]
-        attribute(value)
+        for attribute in attributes:
+            if attribute.name == name:
+                return attribute(value)
 
     def _check_child_to_be_added(self, child):
         if not isinstance(child, XMLElement):

@@ -469,7 +469,7 @@ class XMLChildContainer(Tree):
 
         selected.content.add_xml_element(xml_element)
         selected._update_requirements_in_path()
-        self.check_required_elements()
+        # self.check_required_elements()
         return selected
 
     def check_required_elements(self, intelligent_choice=False):

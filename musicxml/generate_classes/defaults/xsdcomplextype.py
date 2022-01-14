@@ -12,7 +12,6 @@ class XSDComplexType(XSDTreeElement):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._xsd_indicator = None
 
     @classmethod
     def get_xsd_attributes(cls):
