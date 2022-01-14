@@ -137,7 +137,7 @@ class DuplicationXSDSequence(XSDSequence):
 
 
 class XMLChildContainer(Tree):
-    def __init__(self, content, min_occurrences=None, max_occurrences=None, *args, **kwargs):
+    def __init__(self, content, min_occurrences=None, max_occurrences=None, populate_children=True, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._content = None
         self._chosen_child = None
@@ -148,8 +148,8 @@ class XMLChildContainer(Tree):
         self.content = content
         self._force_validate = None
         self._parent_element = None
-
-        self._populate_children()
+        if populate_children:
+            self._populate_children()
 
     # private methods
     def _add_duplication_parent(self):
@@ -569,6 +569,15 @@ class XMLChildContainer(Tree):
 
     def __repr__(self):
         return f"XMLChildContainer:{self.compact_repr} {self.get_coordinates_in_tree()}"
+
+    def __copy__(self):
+        copied = self.__class__(content=copy.copy(self.content), min_occurrences=self.min_occurrences,
+                                max_occurrences=self.max_occurrences,
+                                populate_children=False)
+        for child in self.get_children():
+            copied.add_child(child.__copy__())
+
+        return copied
 
 
 class XMLChildContainerFactory:

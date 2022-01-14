@@ -1,3 +1,5 @@
+import copy
+
 from musicxml.xsd.xsdtree import XSDTree
 
 
@@ -31,3 +33,6 @@ class XSDElement:
     @property
     def xml_elements(self):
         return self._xml_elements
+
+    def __copy__(self):
+        return self.__class__(copy.deepcopy(self.xsd_tree))

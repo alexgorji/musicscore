@@ -1,8 +1,10 @@
+import copy
 from typing import Optional
 from xml.etree import ElementTree as ET
 
 from musicxml.exceptions import XMLElementValueRequiredError, XMLElementChildrenRequired, XSDWrongAttribute, XSDAttributeRequiredException
 from musicxml.util.core import replace_key_underline_with_hyphen, convert_to_xsd_class_name
+from musicxml.xmlelement.containers import containers
 from musicxml.xmlelement.exceptions import XMLChildContainerFactoryError, XMLElementCannotHaveChildrenError
 from musicxml.xmlelement.xmlchildcontainer import XMLChildContainerFactory
 from musicxml.xsd.xsdtree import XSDTree
@@ -68,9 +70,9 @@ class XMLElement(Tree):
     def _create_child_container_tree(self):
         try:
             if self.type_.XSD_TREE.is_complex_type:
-                self._child_container_tree = XMLChildContainerFactory(complex_type=self.type_).get_child_container()
+                self._child_container_tree = copy.copy(containers[self.type_.__name__])
                 self._child_container_tree._parent_element = self
-        except XMLChildContainerFactoryError:
+        except KeyError:
             pass
 
     def _set_attributes(self, val):

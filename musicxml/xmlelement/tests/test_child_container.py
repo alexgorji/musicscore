@@ -1,3 +1,4 @@
+import copy
 from unittest import TestCase
 
 from musicxml.util.core import convert_to_xml_class_name, show_force_valid
@@ -1212,3 +1213,13 @@ class TestChildContainerCheckRequired(TestCase):
     Element@name=listen@minOccurs=0@maxOccurs=1
 """
         assert container.tree_representation() == expected
+
+    def test_copy_container(self):
+        container = XMLChildContainerFactory(complex_type=XSDComplexTypeNote).get_child_container()
+        before_tree = container.tree_representation(show_force_valid)
+        container.add_element(XMLPitch())
+        container.add_element(XMLDuration())
+        container.add_element(XMLVoice())
+        container.add_element(XMLType())
+        copied = copy.copy(container)
+        assert before_tree == copied.tree_representation()
