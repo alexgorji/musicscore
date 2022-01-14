@@ -1,3 +1,4 @@
+import datetime
 from pathlib import Path
 from unittest import TestCase
 
@@ -17,12 +18,27 @@ class TestParseMusicXml(TestCase):
         diff = main.diff_files('test_hello_world.xml', 'test_hello_world_recreated.xml')
         assert diff == []
 
-    def test_parse_bach_partita_3(self):
+    def test_parse_bach_partita_3_reduced(self):
+        start_reading = datetime.datetime.now()
+        print("start reading score")
         score = parse_musicxml(Path(__file__).parent / 'test_bach_partita_3_reduced.xml')
-        score.write(Path(__file__).parent / 'test_bach_partita_3_reduced_created.xml', intelligent_choice=True)
+        start_writing = datetime.datetime.now()
+        print(f"start writing score :{start_writing - start_reading}")
+        score.write(Path(__file__).parent / 'test_bach_partita_3_reduced_created.xml')
+        end = datetime.datetime.now()
+        print(f"end writing score :{end - start_writing}")
         """
         main.diff_files takes too long ...
         """
         # diff = main.diff_files('test_bach_partita_3_reduced.xml', 'test_bach_partita_3_reduced_created.xml')
         # assert diff == []
 
+    def test_parse_bach_partita_3(self):
+        start_reading = datetime.datetime.now()
+        print("start reading score")
+        score = parse_musicxml(Path(__file__).parent / 'test_bach_partita_3.xml')
+        start_writing = datetime.datetime.now()
+        print(f"start writing score :{start_writing - start_reading}")
+        score.write(Path(__file__).parent / 'test_bach_partita_3_created.xml')
+        end = datetime.datetime.now()
+        print(f"end writing score :{end - start_writing}")

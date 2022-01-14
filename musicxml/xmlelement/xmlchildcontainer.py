@@ -22,6 +22,8 @@ def show_force_valid(node):
 def _convert_xsd_child_to_xsd_container(xsd_child):
     min_occurrences = xsd_child.get_attributes().get('minOccurs')
     max_occurrences = xsd_child.get_attributes().get('maxOccurs')
+
+    # copied_xml_child = xsd_child.__deepcopy__(copy_parent=True)
     copied_xml_child = copy.deepcopy(xsd_child)
     if min_occurrences is not None:
         copied_xml_child.get_attributes().pop('minOccurs')

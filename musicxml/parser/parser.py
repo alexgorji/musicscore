@@ -1,3 +1,5 @@
+import datetime
+
 from musicxml.util.core import convert_to_xml_class_name
 import xml.etree.ElementTree as ET
 from musicxml.xmlelement.xmlelement import *
@@ -37,7 +39,12 @@ def _parse_node(xml_node):
 
 
 def parse_musicxml(file_path):
+    # start_et = datetime.datetime.now()
     with open(file_path) as file:
         xml = ET.parse(file)
-
-    return _parse_node(xml.getroot())
+    end_et = datetime.datetime.now()
+    # print(f'parse musicxml ET parsing: {end_et - start_et}')
+    parsed = _parse_node(xml.getroot())
+    # end_parsing = datetime.datetime.now()
+    # print(f'parse musicxml parsing: {end_parsing - end_et}')
+    return parsed

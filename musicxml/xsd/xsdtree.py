@@ -1,3 +1,4 @@
+import copy
 import io
 import re
 import xml.etree.ElementTree as ET
@@ -14,12 +15,12 @@ XSD = XML Schema Definition
 
 class XSDTree(Tree):
     """
-    XSDTree gets a xml.etree.ElementTree.Element by initiation as its xsd_element_tree_element property and
+    XSDTree gets a xml.etree.ElementTree.Element by initiation as its xml_element_tree_element property and
     prepares all needed information for generating a XSDTreeElement class (XSDTreeElement can be XSDSimpleType, XSDComplexType, XSDGroup,
     XMLAttribute and XMLAttributeGroup)
     """
 
-    def __init__(self, xsd_element_tree_element, *args, **kwargs):
+    def __init__(self, xml_element_tree_element, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._namespace = None
         self._tag = None
@@ -27,7 +28,7 @@ class XSDTree(Tree):
         self._xml_tree_class_name = None
         self._xsd_indicator = None
 
-        self.xsd_element_tree_element = xsd_element_tree_element
+        self.xml_element_tree_element = xml_element_tree_element
 
     # ------------------
     # private properties
@@ -48,7 +49,7 @@ class XSDTree(Tree):
         return name
 
     def _populate_children(self):
-        for child in [XSDTree(node) for node in self.xsd_element_tree_element.findall('./')]:
+        for child in [XSDTree(node) for node in self.xml_element_tree_element.findall('./')]:
             self.add_child(child)
 
     def _check_child_to_be_added(self, child):
@@ -101,35 +102,35 @@ class XSDTree(Tree):
     @property
     def name(self):
         try:
-            return self.xsd_element_tree_element.attrib['name']
+            return self.xml_element_tree_element.attrib['name']
         except KeyError:
             return
 
     @property
     def namespace(self):
         if not self._namespace:
-            self._namespace = re.match(r'({.*})(.*)', self.xsd_element_tree_element.tag).group(1)
+            self._namespace = re.match(r'({.*})(.*)', self.xml_element_tree_element.tag).group(1)
         return self._namespace
 
     @property
     def tag(self):
         if not self._tag:
-            self._tag = re.match(r'({.*})(.*)', self.xsd_element_tree_element.tag).group(2)
+            self._tag = re.match(r'({.*})(.*)', self.xml_element_tree_element.tag).group(2)
         return self._tag
 
     @property
     def text(self):
-        return self.xsd_element_tree_element.text
+        return self.xml_element_tree_element.text
 
     @property
-    def xsd_element_tree_element(self):
+    def xml_element_tree_element(self):
         return self._xsd_element_tree_element
 
-    @xsd_element_tree_element.setter
-    def xsd_element_tree_element(self, value):
+    @xml_element_tree_element.setter
+    def xml_element_tree_element(self, value):
         if not isinstance(value, ET.Element):
             raise TypeError(
-                f"XSDTree must be initiated with an xsd_element_tree_element of type xml.etree.ElementTree.Element not "
+                f"XSDTree must be initiated with an xml_element_tree_element of type xml.etree.ElementTree.Element not "
                 f"{type(value)}")
         self._xsd_element_tree_element = value
 
@@ -142,7 +143,7 @@ class XSDTree(Tree):
     # ------------------
     # public methods
     def get_attributes(self):
-        return self.xsd_element_tree_element.attrib
+        return self.xml_element_tree_element.attrib
 
     def get_children(self):
         if not self._children:
@@ -192,7 +193,7 @@ class XSDTree(Tree):
 
     def get_xsd(self):
         with io.StringIO() as buf, redirect_stdout(buf):
-            ET.dump(self.xsd_element_tree_element)
+            ET.dump(self.xml_element_tree_element)
             output = buf.getvalue()
         output = output.strip()
         output += '\n'
@@ -203,6 +204,17 @@ class XSDTree(Tree):
 
     # ------------------
     # magic methods
+    def __deepcopy__(self, copy_parent=False):
+        def copy_et_element(el):
+            return copy.deepcopy(el)
+
+        copied = self.__class__(xml_element_tree_element=copy_et_element(self.xml_element_tree_element))
+        copied._tag = self.tag
+        if copy_parent and self.get_parent():
+            copied._parent = self.get_parent().__deepcopy__(copy_parent=True)
+        for ch in self.get_children():
+            copied.add_child(ch.__deepcopy__())
+        return copied
 
     def __repr__(self):
         attrs = self.get_attributes()
