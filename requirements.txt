@@ -1,1 +1,3 @@
 pdoc==8.0.1
+musicxml
+quicktions

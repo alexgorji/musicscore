@@ -1,8 +1,7 @@
 from pathlib import Path
 from unittest import TestCase
 
-from musictree.treechord import TreeChord
-from musictree.treescore import TreeScore
+from musictree.musictree import Score, Part, Measure, Chord
 
 
 class TestAcceptance(TestCase):
@@ -13,16 +12,16 @@ class TestAcceptance(TestCase):
         """
         Tester creates a timewise score
         """
-        score = TreeScore()
+        score = Score()
         """
-        He adds a measure with one part to it (default TreeMeasure has a 4/4 time signature)
+        He adds a measure with one part to it (default Measure has a 4/4 time signature)
         """
-        score.add_part()
-        score.parts[-1].add_measure()
+        p = score.add_child(Part())
+        m = p.add_child(Measure())
         """
-        He adds a TreeChord with midi 60 to the part ...
+        He adds a Chord with midi 60 to the part ...
         """
-        score.parts[-1].measures[-1].add_chord(TreeChord(midis=[60]))
+        m.add_child(Chord(quarter_duration=4))
         """
         ... and exports the xml (3.1 is default)
         """
