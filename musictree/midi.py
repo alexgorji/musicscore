@@ -189,13 +189,10 @@ class Midi:
     consisting of one or more pitches. The midi representation of a rest is a Midi object with value 0.
     """
 
-    # def __init__(self, value: Union[float, int], accidental: Optional[Accidental] = None,
-    #              notehead: Optional[Union[str, XMLNotehead]] = None, *args, **kwargs):
     def __init__(self, value: Union[float, int], accidental: Optional[Accidental] = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._value = None
         self._accidental = None
-        self._note_head = None
         self._pitch_or_rest = None
 
         self.value = value
@@ -285,24 +282,6 @@ class Midi:
         return f"{self.get_pitch_parameters()[0]}{accidental}{self.octave}"
 
     # //public methods
-
-    # # set
-    #
-    # def set_notehead_value(self, val: XSDSimpleTypeNoteheadValue, **kwargs) -> None:
-    #     """
-    #     set self.notehead. Rest cannot set notehead.
-    #     """
-    #     self.set_notehead_object(XMLNotehead(val, **kwargs))
-    #
-    # def set_notehead_object(self, val: XMLNotehead) -> None:
-    #     """
-    #     set self.notehead for pitch. Rest cannot set notehead.
-    #     """
-    #     if self.value == 0:
-    #         raise TypeError('Midi with value 0 cannot set notehead')
-    #     if not isinstance(val, XMLNotehead):
-    #         raise TypeError()
-    #     self.notehead = val
 
     def get_pitch_parameters(self) -> Optional[tuple]:
         """
