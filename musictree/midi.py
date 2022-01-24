@@ -138,10 +138,15 @@ class Accidental:
         self._mode = None
         self._force_show = None
         self._force_hide = None
+        self.parent_midi = None
 
         self.mode = mode
         self.force_show = force_show
         self.force_hide = force_hide
+
+    def _update_parent_midi(self):
+        if self.parent_midi:
+            self.parent_midi.update_accidental()
 
     @property
     def mode(self):
@@ -153,6 +158,7 @@ class Accidental:
         if value not in permitted:
             raise TypeError(f'accidental_mode.value {value} must be in {permitted}')
         self._mode = value
+        self._update_parent_midi()
 
     @property
     def force_show(self):
@@ -165,6 +171,7 @@ class Accidental:
         if self.force_hide is True and val is True:
             self.force_hide = False
         self._force_show = val
+        self._update_parent_midi()
 
     @property
     def force_hide(self):
@@ -177,6 +184,7 @@ class Accidental:
         if self.force_show is True and val is True:
             self.force_show = False
         self._force_hide = val
+        self._update_parent_midi()
 
     def __deepcopy__(self, memodict={}, **kwargs):
         output = self.__class__(mode=self.mode, force_show=self.force_show, force_hide=self.force_hide, **kwargs)
@@ -194,22 +202,32 @@ class Midi:
         self._value = None
         self._accidental = None
         self._pitch_or_rest = None
+        self._parent_note = None
 
         self.value = value
         self.accidental = accidental
-        self._set_pitch_or_rest()
 
-    def _set_pitch_or_rest(self):
-        if self.value == 0:
-            self._pitch_or_rest = XMLRest()
+    def _update_parent_note(self):
+        if self.parent_note:
+            self.parent_note.update_midi()
+
+    def update_pitch_or_rest(self):
+        if self._pitch_or_rest is None:
+            if self.value == 0:
+                self._pitch_or_rest = XMLRest()
+            else:
+                self._pitch_or_rest = XMLPitch()
         else:
-            pitch = XMLPitch()
-            parameters = self.get_pitch_parameters()
-            pitch.add_child(XMLStep(parameters[0]))
-            if parameters[1]:
-                pitch.add_child(XMLAlter(parameters[1]))
-            pitch.add_child(XMLOctave(parameters[2]))
-            self._pitch_or_rest = pitch
+            if self.value == 0:
+                if not isinstance(self._pitch_or_rest, XMLRest):
+                    self._pitch_or_rest = XMLRest()
+                else:
+                    pass
+            else:
+                if not isinstance(self._pitch_or_rest, XMLPitch):
+                    self._pitch_or_rest = XMLPitch()
+                if self.accidental:
+                    self.update_accidental()
 
     # //public properties
     @property
@@ -219,24 +237,28 @@ class Midi:
     @accidental.setter
     def accidental(self, value):
         if not value:
-            value = Accidental()
-        if not isinstance(value, Accidental):
+            if self.value:
+                value = Accidental()
+        elif not isinstance(value, Accidental):
             raise TypeError(f'accidental.value must be of type Accidental not {type(value)}')
         self._accidental = value
-
-    @property
-    def notehead(self):
-        return self._note_head
-
-    @notehead.setter
-    def notehead(self, val):
-        if val is not None and not isinstance(val, XMLNotehead):
-            val = XMLNotehead(val)
-        self._note_head = val
+        if value:
+            self._accidental.parent_midi = self
+            self.update_accidental()
 
     @property
     def octave(self):
         return int(self.value / 12) - 1
+
+    @property
+    def parent_note(self):
+        return self._parent_note
+
+    @parent_note.setter
+    def parent_note(self, value):
+        if value is not None and 'Note' not in [cls.__name__ for cls in value.__class__.__mro__]:
+            raise TypeError
+        self._parent_note = value
 
     @property
     def value(self):
@@ -244,13 +266,14 @@ class Midi:
 
     @value.setter
     def value(self, v):
-        if self._value is not None:
-            raise AttributeError('Midi.value can only be set by initialization.')
         if not isinstance(v, float) and not isinstance(v, int):
             raise TypeError(f'Midi.value must be of type float or int not{type(v)}')
         if v != 0 and (v < 12 or v > 127):
             raise ValueError(f'Midi.value {v} can be zero for a rest or must be in a range between 12 and 127 inclusively')
         self._value = v
+        self.update_pitch_or_rest()
+        self._update_parent_note()
+
 
     @property
     def name(self):
@@ -308,7 +331,6 @@ class Midi:
 
         else:
             raise ValueError
-
         return output[0], output[1], output[2] + (int(self.value // 12)) - 1
 
     def get_pitch_or_rest(self) -> Union['XMLPitch', 'XMLRest']:
@@ -317,19 +339,31 @@ class Midi:
         """
         return self._pitch_or_rest
 
+    def update_accidental(self):
+        pitch = self.get_pitch_or_rest()
+        if isinstance(pitch, XMLPitch):
+            if not self.get_pitch_parameters()[1]:
+                if pitch.xml_alter:
+                    pitch.remove(pitch.xml_alter)
+                pitch.xml_step, pitch.xml_octave = self.get_pitch_parameters()[0], self.get_pitch_parameters()[2]
+            else:
+                pitch.xml_step, pitch.xml_alter, pitch.xml_octave = self.get_pitch_parameters()
+        else:
+            raise TypeError
+
     # other
-
-    def flatten(self) -> 'Midi':
-        """
-        :return: A halftone lower Midi with flat as accidental mode.
-        """
-        return Midi(value=self.value - 1, accidental=Accidental(mode='flat'))
-
-    def sharpen(self) -> 'Midi':
-        """
-        :return: A halftone higher Midi with sharp as accidental mode.
-        """
-        return Midi(value=self.value + 1, accidental=Accidental(mode='sharp'))
+    #
+    # def flatten(self) -> 'Midi':
+    #     """
+    #     :return: A halftone lower Midi with flat as accidental mode.
+    #     """
+    #     return Midi(value=self.value - 1, accidental=Accidental(mode='flat'))
+    #
+    # def sharpen(self) -> 'Midi':
+    #     """
+    #     :return: A halftone higher Midi with sharp as accidental mode.
+    #     """
+    #     return Midi(value=self.value + 1, accidental=Accidental(mode='sharp'))
 
     def transpose(self, val: float) -> 'Midi':
         """

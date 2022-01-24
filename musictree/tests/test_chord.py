@@ -107,7 +107,104 @@ class TestTreeChord(TestCase):
         assert Chord(0, 1).is_rest
         assert not Chord(50, 1).is_rest
 
+    def test_chord_attributes(self):
+        """
+        Test that a dot operator can set and get note attributes
+        """
+        c = Chord([60, 61, 62], 2)
+        c.relative_x = 10
+        assert c.relative_x == [10, 10, 10]
+        c.relative_y = [None, 20, 10]
+        assert c.relative_y == [None, 20, 10]
+        c.relative_y = [10]
+        assert c.relative_y == [10, 20, 10]
+        c.default_y = [10]
+        assert c.default_y == [10, None, None]
+
     def test_chord_one_note(self):
+        # add chord to measure
+        m = Measure(number='1')
+        c = Chord(70, 4, relative_x=10)
+        m.add_child(c)
+        expected = """<note relative-x="10">
+    <pitch>
+        <step>B</step>
+        <alter>-1</alter>
+        <octave>4</octave>
+    </pitch>
+    <duration>4</duration>
+    <voice>1</voice>
+</note>
+"""
+        assert c.notes[0].to_string() == expected
+        # change measures divisions
+        m.divisions = 4
+        assert c.notes[0].xml_duration.value == 16
+        # change chord's midi (non-zero)
+        c.midis[0].value = 72
+        expected = """<note relative-x="10">
+    <pitch>
+        <step>C</step>
+        <octave>5</octave>
+    </pitch>
+    <duration>16</duration>
+    <voice>1</voice>
+</note>
+"""
+        assert c.notes[0].to_string() == expected
+        # change chord's midi (zero)
+        c.midis[0].value = 0
+
+        expected = """<note relative-x="10">
+    <rest />
+    <duration>16</duration>
+    <voice>1</voice>
+</note>
+"""
+        assert c.notes[0].to_string() == expected
+        # change chord's duration (not zero)
+        c.quarter_duration = 1
+        expected = """<note relative-x="10">
+    <rest />
+    <duration>4</duration>
+    <voice>1</voice>
+</note>
+"""
+        assert c.notes[0].to_string() == expected
+        # change chord's duration (zero)
+        with self.assertRaises(ValueError):
+            c.quarter_duration = 0
+        c.midis[0].value = 60
+        c.quarter_duration = 0
+        expected = """<note relative-x="10">
+    <grace />
+    <pitch>
+        <step>C</step>
+        <octave>4</octave>
+    </pitch>
+    <voice>1</voice>
+</note>
+"""
+        assert c.notes[0].to_string() == expected
+        # change chord's attributes?
+        with self.assertRaises(AttributeError):
+            c.xml_object
+        with self.assertRaises(AttributeError):
+            c.relative_x = 20
+        c.notes[0].relative_x = 20
+        c.notes[0].relative_y = 15
+        expected = """<note relative-x="20" relative-y="15">
+    <grace />
+    <pitch>
+        <step>C</step>
+        <octave>4</octave>
+    </pitch>
+    <voice>1</voice>
+</note>
+"""
+        assert c.notes[0].to_string() == expected
+
+    def test_measure_chord_one_note(self):
         m = Measure(number='1')
         c = Chord(70, 4, relative_x=10)
         m.add_child(c)
@@ -115,7 +212,7 @@ class TestTreeChord(TestCase):
     <attributes>
         <divisions>1</divisions>
     </attributes>
-    <note>
+    <note relative-x="10">
         <pitch>
             <step>B</step>
             <alter>-1</alter>
@@ -132,30 +229,85 @@ class TestTreeChord(TestCase):
         c.quarter_duration = 3
         assert xml_note.xml_duration.value == 3
         # change notes midi value
-        c.get_notes()[0].midi.value = 72
-        expected = """<pitch>
-    <step>C</step>
-    <alter>0</alter>
-    <octave>5</octave>
-</pitch>
+        c.notes[0].midi.value = 72
+        expected = """<measure number="1">
+    <attributes>
+        <divisions>1</divisions>
+    </attributes>
+    <note relative-x="10">
+        <pitch>
+            <step>C</step>
+            <octave>5</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+    </note>
+</measure>
 """
-        assert c.to_string() == expected
+        assert m.to_string() == expected
         # change notes midi accidental mode
-        c.get_notes()[0].midi.value = 73
-        c.get_notes()[0].midi.accidental.mode = 'flat'
-        expected = """<pitch>
+        c.notes[0].midi.value = 73
+        c.notes[0].midi.accidental.mode = 'flat'
+        expected = """<measure number="1">
+    <attributes>
+        <divisions>1</divisions>
+    </attributes>
+    <note relative-x="10">
+        <pitch>
             <step>D</step>
             <alter>-1</alter>
             <octave>5</octave>
         </pitch>
-        """
-        assert c.to_string() == expected
+        <duration>3</duration>
+        <voice>1</voice>
+    </note>
+</measure>
+"""
+        assert m.to_string() == expected
 
-    def test_chord_one_note_rest(self):
-        pass
-
-    def test_chord_multiple_notes(self):
-        pass
+    def test_measure_with_chord_multiple_notes(self):
+        m = Measure(number='1')
+        m.divisions = 2
+        c = Chord([70, Midi(73, accidental=Accidental(mode='enharmonic_1')), 65], 3, voice=2, relative_x=10)
+        m.add_child(c)
+        c.xml_staff = 1
+        expected = """<measure number="1">
+    <attributes>
+        <divisions>2</divisions>
+    </attributes>
+    <note relative-x="10">
+        <pitch>
+            <step>B</step>
+            <alter>-1</alter>
+            <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>2</voice>
+        <staff>1</staff>
+    </note>
+    <note relative-x="10">
+        <pitch>
+            <step>D</step>
+            <alter>-1</alter>
+            <octave>5</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>2</voice>
+        <staff>1</staff>
+    </note>
+    <note relative-x="10">
+        <pitch>
+            <step>F</step>
+            <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>2</voice>
+        <staff>1</staff>
+    </note>
+</measure>
+"""
+        c.xml_staff = 1
+        assert m.to_string() == expected
 
     def test_get_elements_single_non_rest(self):
         """

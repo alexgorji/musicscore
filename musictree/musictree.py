@@ -1,6 +1,6 @@
 from musicxml.exceptions import XSDWrongAttribute
 from musicxml.xmlelement.xmlelement import *
-from typing import Union, List
+from typing import Union, List, Optional
 from quicktions import Fraction
 
 from musictree.exceptions import MusicTreeDurationError
@@ -14,7 +14,7 @@ class MusicTree(Tree):
     Chord (third layer). An abstract grid-like layer of TreeBeats can be imagined as a quantity between Measure and
     Chord depending on measures time signature.
     """
-    _ATTRIBUTES = []
+    _ATTRIBUTES = {}
 
     def _check_child_to_be_added(self, child):
         if isinstance(self, Score) and not isinstance(child, Part):
@@ -69,20 +69,36 @@ class Part(MusicTree):
 
 
 class Measure(MusicTree):
-    def __init__(self, *args, **kwargs):
+    _ATTRIBUTES = {'divisions'}
+
+    def __init__(self, divisions=1, *args, **kwargs):
         super().__init__()
         self._xml_object = XMLMeasure(*args, **kwargs)
-        xattr = self._xml_object.add_child(XMLAttributes())
-        xattr.add_child(XMLDivisions(1))
+        self.xml_object.xml_attributes = XMLAttributes()
+        self._divisions = None
+        self.divisions = divisions
+
+    @property
+    def divisions(self):
+        return self._divisions
+
+    @divisions.setter
+    def divisions(self, val):
+        self._divisions = val
+        self.xml_object.xml_attributes.xml_divisions = val
+        for child in self.get_children():
+            child._update_duration()
 
     def add_child(self, child):
         super().add_child(child)
-        for note in child.get_notes():
+        for note in child.notes:
             self.xml_object.add_child(note.xml_object)
+            note.parent_measure = self
+        child._update_duration()
 
 
 class Note(MusicTree):
-    _ATTRIBUTES = ['midi', 'duration', 'voice']
+    _ATTRIBUTES = {'midi', 'duration', 'voice', 'parent_measure'}
 
     def __init__(self, midi=None, duration=None, voice=1, *args, **kwargs):
         super().__init__()
@@ -94,26 +110,47 @@ class Note(MusicTree):
         self.duration = duration
         self.midi = midi
         self.voice = voice
+        self.parent_measure = None
 
-    def _add_duration_to_note(self, duration: int):
-        if duration == 0:
-            self._xml_object.add_child(XMLGrace())
+    def _add_xml_duration_to_note(self, duration: int):
+        if duration is None:
+            self.xml_object.xml_duration = None
+            self.xml_object.xml_grace = None
         else:
-            self._xml_object.add_child(XMLDuration(duration))
+            if not isinstance(duration, int):
+                raise TypeError
+            if duration < 0:
+                raise ValueError
+            if duration == 0:
+                if self.midi and self.midi.value == 0:
+                    raise ValueError('A rest cannot be a grace note.')
+                self.xml_object.xml_duration = None
+                if not self.xml_object.xml_grace:
+                    self.xml_object.xml_grace = XMLGrace()
+            else:
+                self.xml_object.xml_grace = None
+                self.xml_object.xml_duration = duration
 
-    def _convert_midi_to_pitch(self, midi: Midi):
-        if not isinstance(midi, Midi):
-            raise TypeError
-        if midi.value == 0:
-            raise ValueError()
-
-        if not self.xml_object.xml_pitch:
-            self.xml_object.xml_pitch = midi.get_pitch_or_rest()
+    def update_midi(self):
+        midi = self.midi
+        if midi is None:
+            self.xml_object.xml_pitch = None
+            self.xml_object.xml_rest = None
         else:
-            step, alter, octave = midi.get_pitch_parameters()
-            self.xml_object.xml_pitch.xml_step = step
-            self.xml_object.xml_pitch.xml_alter = alter
-            self.xml_object.xml_pitch.xml_octave = octave
+            if not isinstance(midi, Midi):
+                raise TypeError
+            if self.midi.value == 0 and self.duration == 0:
+                raise ValueError('A rest cannot be a grace note.')
+            pitch_or_rest = midi.get_pitch_or_rest()
+            if isinstance(pitch_or_rest, XMLRest):
+                if self.xml_object.xml_pitch:
+                    self.xml_object.xml_pitch = None
+                self.xml_object.xml_rest = pitch_or_rest
+                self.xml_object.xml_notehead = None
+            else:
+                if self.xml_object.xml_rest:
+                    self.xml_object.xml_rest = None
+                self.xml_object.xml_pitch = pitch_or_rest
 
     @property
     def duration(self):
@@ -121,11 +158,8 @@ class Note(MusicTree):
 
     @duration.setter
     def duration(self, value):
-        if self._duration is None:
-            self._add_duration_to_note(value)
-            self._duration = value
-        else:
-            raise AttributeError('duration can only be set by initiation.')
+        self._add_xml_duration_to_note(value)
+        self._duration = value
 
     @property
     def midi(self):
@@ -133,11 +167,10 @@ class Note(MusicTree):
 
     @midi.setter
     def midi(self, value):
-        if self._midi is None:
-            self._convert_midi_to_pitch(value)
-            self._midi = value
-        else:
-            raise AttributeError('midi can only be set by initiation.')
+        self._midi = value if isinstance(value, Midi) or value is None else Midi(value)
+        self.update_midi()
+        if value is not None:
+            self.midi.parent_note = self
 
     @property
     def voice(self):
@@ -275,7 +308,7 @@ class Chord(MusicTree):
     :param midis: midi, midis, midi value or midi values. 0 or [0] for a rest.
     :param quarter_duration: int or float for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
-    _ATTRIBUTES = ['midis', 'quarter_duration', 'voice']
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'voice', 'notes', '_note_attributes'}
 
     def __init__(self, midis: Union[List[Union[float, int]], List[Midi], float, int, Midi],
                  quarter_duration: Union[float, int, Fraction, QuarterDuration], voice=1, **kwargs):
@@ -285,17 +318,10 @@ class Chord(MusicTree):
         self._midis = None
         self._notes = []
 
-        self.note_attributes = kwargs
+        self._note_attributes = kwargs
         self.voice = voice
         self.quarter_duration = quarter_duration
         self._set_midis(midis)
-
-    @property
-    def is_rest(self):
-        if self._midis[0].value == 0:
-            return True
-        else:
-            return False
 
     def _get_duration(self):
         if self.get_parent() is None:
@@ -305,6 +331,16 @@ class Chord(MusicTree):
         if duration != int(duration):
             raise ValueError(f'xml duration {duration} must be an integer.')
         return int(duration)
+
+    def _update_duration(self):
+        if self._quarter_duration is not None and self.get_parent():
+            for note in self.notes:
+                note.duration = self._get_duration()
+
+    def _update_voice(self):
+        if self.voice:
+            for note in self.notes:
+                note.xml_voice = str(self.voice)
 
     def _set_midis(self, midis):
         if isinstance(midis, str):
@@ -320,16 +356,28 @@ class Chord(MusicTree):
             raise ValueError('A rest cannot be a grace note')
 
         self._midis = [Midi(v) if not isinstance(v, Midi) else v for v in midis]
+        self._notes = [Note(midi, **self._note_attributes) for midi in self._midis]
+        self._update_duration()
+        self._update_voice()
 
     @property
-    def voice(self):
-        return self._voice
+    def is_rest(self):
+        if self._midis[0].value == 0:
+            return True
+        else:
+            return False
 
-    @voice.setter
-    def voice(self, val):
-        self._voice = val
-        for note in self.get_notes():
-            note.xml_voice = val
+    @property
+    def midis(self):
+        return self._midis
+
+    @midis.setter
+    def midis(self, val):
+        self._set_midis(val)
+
+    @property
+    def notes(self):
+        return self._notes
 
     @property
     def quarter_duration(self):
@@ -343,29 +391,39 @@ class Chord(MusicTree):
 
         if val < 0:
             raise ValueError()
-        old_q_d = self.quarter_duration
         if not isinstance(self.quarter_duration, QuarterDuration):
             self._quarter_duration = QuarterDuration(val)
-        if old_q_d != self.quarter_duration:
-            self._notes = []
+        else:
+            self._quarter_duration.value = val
+        self._update_duration()
 
-    def get_notes(self):
-        if self.get_parent():
-            if not self._notes:
-                for midi in self._midis:
-                    new_note = Note(midi, self._get_duration())
-                    if self.voice:
-                        new_note.xml_voice = str(self.voice)
-                    self._notes.append(new_note)
-        return self._notes
+    @property
+    def voice(self):
+        return self._voice
 
-    #
-    # def get_xml_elements(self):
-    #     output = []
-    #     first_midi = True
-    #     for midi in self.midis:
-    #         note = XMLNote()
+    @voice.setter
+    def voice(self, val):
+        self._voice = val
+        self._update_voice()
 
     @property
     def xml_object(self):
-        raise AttributeError('TreeChord has not xml_object. Use get_elements() instead.')
+        raise AttributeError("object 'Chord' has no xml_object. Use 'notes' property instead.")
+
+    def to_string(self):
+        raise AttributeError("object 'Chord' cannot return a string.")
+
+    def __setattr__(self, key, value):
+        if key not in self._ATTRIBUTES.union(self.PROPERTIES) and key not in [f'_{attr}' for attr in self._ATTRIBUTES.union(
+                self.PROPERTIES)] and key not in self.__dict__:
+            try:
+                value = list(value)
+            except TypeError:
+                value = [value] * len(self.notes)
+            for n, v in zip(self.notes, value):
+                setattr(n, key, v)
+        else:
+            super().__setattr__(key, value)
+
+    def __getattr__(self, item):
+        return [getattr(n, item) for n in self.notes]

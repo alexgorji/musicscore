@@ -3,6 +3,7 @@ from unittest import TestCase
 from musicxml.xmlelement.xmlelement import XMLPitch, XMLRest
 
 from musictree.midi import Midi, C, B, G
+from musictree.musictree import Note, Measure
 
 
 class TestMidi(TestCase):
@@ -21,11 +22,7 @@ class TestMidi(TestCase):
 
         m = Midi(80)
         assert (m.accidental.mode, m.accidental.force_hide, m.accidental.force_show) == ('standard', False, False)
-        assert not m.notehead
         assert m.name == 'Ab5'
-        with self.assertRaises(AttributeError):
-            m.value = 90
-
         assert m.get_pitch_parameters() == ('A', -1, 5)
         assert isinstance(m.get_pitch_or_rest(), XMLPitch)
         expected = """<pitch>
@@ -34,7 +31,24 @@ class TestMidi(TestCase):
     <octave>5</octave>
 </pitch>
 """
+
         assert m.get_pitch_or_rest().to_string() == expected
+        m = Midi(60)
+        expected = """<pitch>
+    <step>C</step>
+    <octave>4</octave>
+</pitch>
+"""
+
+        assert m.get_pitch_or_rest().to_string() == expected
+
+    def test_midi_accidental_modes(self):
+        m = Midi(60)
+        assert m.get_pitch_parameters() == ('C', 0, 4)
+        m.accidental.mode = 'enharmonic_1'
+        assert m.get_pitch_parameters() == ('B', 1, 3)
+        m.accidental.mode = 'enharmonic_2'
+        assert m.get_pitch_parameters() == ('D', -2, 4)
 
     def test_midi_note(self):
         m = C(4, 's')
@@ -51,3 +65,56 @@ class TestMidi(TestCase):
         assert isinstance(r.get_pitch_or_rest(), XMLRest)
         assert r.get_pitch_parameters() is None
         assert r.get_pitch_or_rest().to_string() == '<rest />\n'
+
+    def test_midi_parent_note(self):
+        """
+        Test if a midi object which is being contained in a note can access it via its parent_note attribute.
+        """
+        m = Midi(70)
+        assert m.parent_note is None
+        n = Note(midi=m)
+        assert m.parent_note == n
+        with self.assertRaises(TypeError):
+            m.parent_note = Measure()
+
+    def test_change_midi_value_or_accidental_mode(self):
+        """
+        Test if changing midi value changes its pitch or rest
+        """
+        m = Midi(70)
+        expected = """<pitch>
+    <step>B</step>
+    <alter>-1</alter>
+    <octave>4</octave>
+</pitch>
+"""
+        assert m.get_pitch_or_rest().to_string() == expected
+        m.value = 69
+        expected = """<pitch>
+    <step>A</step>
+    <octave>4</octave>
+</pitch>
+"""
+        assert m.get_pitch_or_rest().to_string() == expected
+        m.accidental.mode = 'enharmonic_2'
+        expected = """<pitch>
+    <step>B</step>
+    <alter>-2</alter>
+    <octave>4</octave>
+</pitch>
+"""
+        assert m.get_pitch_or_rest().to_string() == expected
+
+        m.value = 0
+        expected = """<rest />
+"""
+        assert m.get_pitch_or_rest().to_string() == expected
+        m.value = 61
+        m.accidental.mode = 'flat'
+        expected = """<pitch>
+    <step>D</step>
+    <alter>-1</alter>
+    <octave>4</octave>
+</pitch>
+"""
+        assert m.get_pitch_or_rest().to_string() == expected
