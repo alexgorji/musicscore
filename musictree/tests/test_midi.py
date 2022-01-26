@@ -3,7 +3,8 @@ from unittest import TestCase
 from musicxml.xmlelement.xmlelement import XMLPitch, XMLRest
 
 from musictree.midi import Midi, C, B, G
-from musictree.musictree import Note, Measure
+from musictree.note import Note
+from musictree.measure import Measure
 
 
 class TestMidi(TestCase):
@@ -21,9 +22,9 @@ class TestMidi(TestCase):
             Midi(128)
 
         m = Midi(80)
-        assert (m.accidental.mode, m.accidental.force_hide, m.accidental.force_show) == ('standard', False, False)
+        assert m.accidental.mode == 'standard'
         assert m.name == 'Ab5'
-        assert m.get_pitch_parameters() == ('A', -1, 5)
+        assert m.accidental.get_pitch_parameters() == ('A', -1, 5)
         assert isinstance(m.get_pitch_or_rest(), XMLPitch)
         expected = """<pitch>
     <step>A</step>
@@ -44,17 +45,17 @@ class TestMidi(TestCase):
 
     def test_midi_accidental_modes(self):
         m = Midi(60)
-        assert m.get_pitch_parameters() == ('C', 0, 4)
+        assert m.accidental.get_pitch_parameters() == ('C', 0, 4)
         m.accidental.mode = 'enharmonic_1'
-        assert m.get_pitch_parameters() == ('B', 1, 3)
+        assert m.accidental.get_pitch_parameters() == ('B', 1, 3)
         m.accidental.mode = 'enharmonic_2'
-        assert m.get_pitch_parameters() == ('D', -2, 4)
+        assert m.accidental.get_pitch_parameters() == ('D', -2, 4)
 
     def test_midi_note(self):
         m = C(4, 's')
-        assert m.get_pitch_parameters() == ('C', 1, 4)
+        assert m.accidental.get_pitch_parameters() == ('C', 1, 4)
         m = C(0)
-        assert m.get_pitch_parameters() == ('C', 0, 0)
+        assert m.accidental.get_pitch_parameters() == ('C', 0, 0)
         with self.assertRaises(ValueError):
             B(-1)
         with self.assertRaises(ValueError):
@@ -63,7 +64,7 @@ class TestMidi(TestCase):
     def test_midi_rest(self):
         r = Midi(0)
         assert isinstance(r.get_pitch_or_rest(), XMLRest)
-        assert r.get_pitch_parameters() is None
+        assert r.accidental.get_pitch_parameters() is None
         assert r.get_pitch_or_rest().to_string() == '<rest />\n'
 
     def test_midi_parent_note(self):
