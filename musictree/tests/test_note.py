@@ -2,10 +2,10 @@ from unittest import TestCase
 
 from musicxml.exceptions import XMLElementChildrenRequired
 from musicxml.xmlelement.xmlelement import *
+from fractions import Fraction
 
 from musictree.midi import Midi
 from musictree.note import Note
-from musictree.quarterduration import QuarterDuration
 
 
 class TestNote(TestCase):
@@ -44,7 +44,7 @@ class TestNote(TestCase):
         assert n.to_string() == expected
 
     def test_note_set_divisions(self):
-        n = Note(Midi(61), quarter_duration=QuarterDuration(1, 3))
+        n = Note(Midi(61), quarter_duration=Fraction(1, 3))
         assert n.get_divisions() == 3
         assert n.xml_duration.value == 1
         n.set_divisions(6)

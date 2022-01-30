@@ -1,3 +1,5 @@
+from typing import Union, List
+
 note_types = {(1, 12): '32nd',
               (1, 11): '32nd',
               (2, 11): '16th',
@@ -40,3 +42,20 @@ note_types = {(1, 12): '32nd',
               (8, 1): 'breve',
               (12, 1): 'breve'
               }
+
+
+def isinstance_as_string(child_class: type, parent_class_names: Union[str, List[str]]) -> bool:
+    """
+    This function can be used to check if some class names (parent_class_names) can be found in another class's __mro__.
+    If parent classes cannot be imported due to recursive imports this can be used instead of isinstance function.
+    :param type child_class:
+    :param str/[str] parent_class_names:
+    :return: bool
+    """
+    if isinstance(parent_class_names, str):
+        parent_class_names = [parent_class_names]
+
+    for parent_class_name in parent_class_names:
+        if parent_class_name not in [cls.__name__ for cls in child_class.__mro__]:
+            return False
+    return True

@@ -5,9 +5,10 @@ from musicxml.xmlelement.xmlelement import *  # type: ignore
 from musicxml.xsd.xsdsimpletype import XSDSimpleTypeNoteheadValue  # type: ignore
 
 from musictree.accidental import Accidental
+from musictree.musictree import MusicTree
 
 
-class Midi:
+class Midi(MusicTree):
     """
     Midi is the representation of a Pitch with its midi value, and accidental sign. This object is used to create a Chord
     consisting of one or more pitches. The midi representation of a rest is a Midi object with value 0.

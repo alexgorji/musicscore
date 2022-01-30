@@ -1,49 +1,14 @@
 from unittest import TestCase
 
-from quicktions import Fraction
+from fractions import Fraction
 
 from musictree.midi import Midi
 from musictree.accidental import Accidental
 from musictree.chord import Chord
-from musictree.quarterduration import QuarterDuration
 
 
 def get_chord_midi_values(chord):
     return [m.value for m in chord._midis]
-
-
-class TestQuarterDuration(TestCase):
-    def test_quarter_duration_comparisons(self):
-        """
-        Test all possible input types
-        """
-        qd = QuarterDuration(10)
-        assert qd == 10
-        qd = QuarterDuration(1.2)
-        assert qd == 6 / 5
-        assert qd <= 6 / 5
-        assert qd >= 6 / 5
-        with self.assertRaises(AssertionError):
-            assert qd != 6 / 5
-        with self.assertRaises(AssertionError):
-            assert qd < 6 / 5
-        with self.assertRaises(AssertionError):
-            assert qd > 6 / 5
-
-        qd = QuarterDuration(6 / 4)
-        assert qd == 1.5
-        qd = QuarterDuration(Fraction(5, 7))
-        assert qd == 5 / 7
-        assert QuarterDuration(1.2) < 1.3
-
-    def test_quarter_duration_operators(self):
-        assert QuarterDuration(1.2) * 5 == 6
-        assert QuarterDuration(1.2) / 0.2 == 6
-        assert QuarterDuration(1.2) // 0.2 == 6
-        assert QuarterDuration(1.2) + 1.2 == 2.4
-        assert QuarterDuration(1.2) - 0.2 == 1
-        assert QuarterDuration(10) % 3 == 1
-        assert QuarterDuration(10) ** 2 == 100
 
 
 class TestTreeChord(TestCase):
@@ -79,14 +44,14 @@ class TestTreeChord(TestCase):
 
     def test_init_quarter_durations(self):
         """
-        Test types and values of quarter_duration
+        Test values of quarter_duration
         """
         ch = Chord(90, 1.25)
         assert ch.quarter_duration == 1.25
         assert ch.notes[0].quarter_duration == 1
         ch = Chord(80, 1.2)
-        assert ch.quarter_duration == 1.2
-        assert ch.quarter_duration == 6 / 5
+        assert ch.quarter_duration == Fraction(1.2).limit_denominator(1000)
+        assert ch.quarter_duration == Fraction(6 / 5).limit_denominator(1000)
         ch = Chord(80, 8)
         assert ch.quarter_duration == 8
         with self.assertRaises(TypeError):
@@ -324,3 +289,23 @@ class TestTreeChord(TestCase):
 """
         for note, expected in zip(chord.notes, [expected_1, expected_2, expected_3]):
             assert note.to_string() == expected
+
+    def test_chord_with_none_midis(self):
+        ch = Chord(midis=None, quarter_duration=1)
+        assert ch.notes == []
+        ch.midis = 60
+        assert len(ch.notes) == 1
+        assert ch.notes[0].midi.value == 60
+        ch.midis = None
+        assert ch.notes == []
+
+    def test_chord_with_none_quarter_duration(self):
+        ch = Chord(midis=None, quarter_duration=None)
+        assert ch.notes == []
+        ch.midis = 60
+        assert len(ch.notes) == 1
+        assert ch.notes[0].midi.value == 60
+        assert ch.notes[0].quarter_duration == Fraction(1, 1)
+        ch.quarter_duration = 2
+        assert len(ch.notes) == 1
+        assert ch.notes[0].quarter_duration == Fraction(2, 1)

@@ -3,6 +3,7 @@ from typing import Optional
 from musicxml.xmlelement.xmlelement import XMLAccidental
 
 from musictree.musictree import MusicTree
+from musictree.xmlwrapper import XMLWrapper
 
 STANDARD = {
     0: ('C', 0, 0),
@@ -137,7 +138,7 @@ SIGNS = {-2: 'flat-flat',
          }
 
 
-class Accidental(MusicTree):
+class Accidental(MusicTree, XMLWrapper):
     """
     Accidental can be of different modes: standard, flat, sharp, enharmonic_1 or enharmonic_2. It accepts furthermore two parameters:
     force_show and force_hide.
@@ -162,7 +163,7 @@ class Accidental(MusicTree):
         if self.sign:
             self._xml_object.value = self.sign
 
-    @MusicTree.xml_object.getter
+    @XMLWrapper.xml_object.getter
     def xml_object(self):
         if not self.parent_midi or (self.parent_midi and self.parent_midi.value == 0):
             return None

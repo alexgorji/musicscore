@@ -9,7 +9,81 @@ from musictree.musictree import MusicTree
 from musictree.chord import Chord
 from musictree.measure import Measure
 from musictree.part import Part
+from musictree.staff import Staff
+from musictree.time import Time
+from musictree.voice import Voice
 
+
+class TestMeasure(TestCase):
+    def test_number(self):
+        m = Measure(number=2)
+        assert m.number == 2
+        m.number = 4
+        assert m.number == 4
+        m.xml_object.number = '3'
+        assert m.number == 3
+
+    def test_measure_time_signature(self):
+        m = Measure(1)
+        expected = """<time>
+    <beats>4</beats>
+    <beat-type>4</beat-type>
+</time>
+"""
+        assert m.time.to_string() == expected
+        m.time = Time(3, 4)
+        expected = """<time>
+    <beats>3</beats>
+    <beat-type>4</beat-type>
+</time>
+"""
+        assert m.time.to_string() == expected
+        m = Measure(2, time=Time(5, 8, 2, 4))
+        expected = """<time>
+    <beats>5</beats>
+    <beat-type>8</beat-type>
+    <beats>2</beats>
+    <beat-type>4</beat-type>
+</time>
+"""
+        assert m.time.to_string() == expected
+
+    def test_measure_add_child_staff(self):
+        m = Measure(1)
+        assert m.get_children() == []
+        st1 = m.add_child(Staff())
+        assert st1.value is None
+        assert m.get_children() == [st1]
+        st2 = m.add_child(Staff())
+        assert m.get_children() == [st1, st2]
+        assert (st1.value, st2.value) == (1, 2)
+        with self.assertRaises(ValueError):
+            m.add_child(Staff(2))
+
+        m = Measure(1)
+        st1 = m.add_child(Staff(1))
+        assert st1.value == 1
+
+        m = Measure(1)
+        with self.assertRaises(ValueError):
+            m.add_child(Staff(2))
+
+    def test_add_chord(self):
+        m = Measure(1)
+        ch = Chord(60, quarter_duration=4)
+        m.add_chord(ch)
+        expected = """<note>
+    <pitch>
+        <step>C</step>
+        <octave>4</octave>
+    </pitch>
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
+</note>
+"""
+        assert m.chords[0].notes[0].to_string() == expected
+        print(m.to_string())
 
 # class TestMeasure(TestCase):
 #     def test_add_child(self):

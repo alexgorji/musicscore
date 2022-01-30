@@ -3,30 +3,28 @@ from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest
 from musictree.exceptions import NoteTypeError
 from musictree.midi import Midi
 from musictree.musictree import MusicTree
-from musictree.quarterduration import _check_quarter_duration, QuarterDuration
+from musictree.quarterduration import QuarterDurationMixin
 from musictree.util import note_types
+from musictree.xmlwrapper import XMLWrapper
 
 
-class Note(MusicTree):
+class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     _ATTRIBUTES = {'midi', 'quarter_duration', 'voice', 'parent_measure', '_divisions', '_type', '_dots'}
 
     def __init__(self, midi=Midi(60), quarter_duration=1, voice=1, *args, **kwargs):
-        super().__init__()
         self._xml_object = XMLNote(*args, **kwargs)
         self._midi = None
-        self._quarter_duration = None
         self._divisions = None
         self._voice = None
         self._type = None
         self._dots = None
         self.parent_measure = None
-
-        self.quarter_duration = quarter_duration
+        super().__init__(quarter_duration=quarter_duration)
         self.midi = midi
         self.voice = voice
 
     def _calculate_divisions(self):
-        return self._quarter_duration.value.denominator
+        return self._quarter_duration.denominator
 
     @staticmethod
     def _check_xml_duration_value(duration):
@@ -49,17 +47,11 @@ class Note(MusicTree):
             pass
 
     def _set_quarter_duration(self, val):
-        _check_quarter_duration(val)
         old_quarter_duration = self._quarter_duration
-        if isinstance(val, QuarterDuration):
-            self._quarter_duration = val
-        elif not self._quarter_duration:
-            self._quarter_duration = QuarterDuration(val)
-        else:
-            self._quarter_duration.value = val
+        super()._set_quarter_duration(val)
         if self._type is None and self._quarter_duration != 0:
             try:
-                note_types[self._quarter_duration.value.as_integer_ratio()]
+                note_types[self._quarter_duration.as_integer_ratio()]
             except KeyError:
                 msg = f"A note with quarter_duration {self._quarter_duration} is not writable and must be split."
                 self._quarter_duration = old_quarter_duration
@@ -84,14 +76,14 @@ class Note(MusicTree):
     def _update_xml_type(self):
         if self._type is None:
             if self.quarter_duration != 0:
-                self.xml_type = note_types[self.quarter_duration.value.as_integer_ratio()]
+                self.xml_type = note_types[self.quarter_duration.as_integer_ratio()]
             else:
                 self.xml_type = None
 
     def _update_xml_dots(self):
         if self._dots is None:
             if self.quarter_duration != 0:
-                if self.quarter_duration.value.numerator % 3 == 0:
+                if self.quarter_duration.numerator % 3 == 0:
                     self._check_dots(numer_of_dots=1)
                 elif True in [self.quarter_duration == x for x in [7, 7 / 2, 7 / 4, 7 / 8, 7 / 16, 7 / 32, 7 / 64]]:
                     self._check_dots(numer_of_dots=2)
@@ -142,11 +134,7 @@ class Note(MusicTree):
                     self.xml_object.xml_rest = None
                 self.xml_object.xml_pitch = pitch_or_rest
 
-    @property
-    def quarter_duration(self):
-        return self._quarter_duration
-
-    @quarter_duration.setter
+    @QuarterDurationMixin.quarter_duration.setter
     def quarter_duration(self, value):
         if value is not None:
             self._set_quarter_duration(value)
@@ -184,7 +172,7 @@ class Note(MusicTree):
 
     def set_divisions(self, val):
         if val != self.get_divisions():
-            self._check_xml_duration_value(float(self.quarter_duration) * val)
+            self._check_xml_duration_value(self.quarter_duration * val)
             self._divisions = val
             self._update_xml_duration()
         else:

@@ -1,15 +1,15 @@
-from typing import Union, List
+from typing import Union, List, Optional
 
-from quicktions import Fraction
+from fractions import Fraction
 
 from musictree.exceptions import NoteTypeError
 from musictree.midi import Midi
 from musictree.musictree import MusicTree
 from musictree.note import Note
-from musictree.quarterduration import QuarterDuration, _check_quarter_duration
+from musictree.quarterduration import QuarterDurationMixin
 
 
-class Chord(MusicTree):
+class Chord(MusicTree, QuarterDurationMixin):
     """
     Chord is a sequence of one or more XMLNotes which occur at the same time in a XMLMeasure of a XMLPart.
     :param midis: midi, midis, midi value or midi values. 0 or [0] for a rest.
@@ -17,17 +17,15 @@ class Chord(MusicTree):
     """
     _ATTRIBUTES = {'midis', 'quarter_duration', 'voice', 'notes', '_note_attributes'}
 
-    def __init__(self, midis: Union[List[Union[float, int]], List[Midi], float, int, Midi],
-                 quarter_duration: Union[float, int, Fraction, QuarterDuration], voice=1, **kwargs):
-        super().__init__()
-        self._quarter_duration = None
+    def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
+                 quarter_duration: Optional[Union[float, int, 'Fraction']] = None, voice=1, **kwargs):
         self._voice = None
         self._midis = None
         self._notes = []
 
         self._note_attributes = kwargs
         self.voice = voice
-        self.quarter_duration = quarter_duration
+        super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
 
     def _update_notes_quarter_duration(self):
@@ -39,20 +37,13 @@ class Chord(MusicTree):
                 print(err)
                 break
 
-    def _set_quarter_duration(self, val):
-        _check_quarter_duration(val)
-        if isinstance(val, QuarterDuration):
-            self._quarter_duration = val
-        elif not self._quarter_duration:
-            self._quarter_duration = QuarterDuration(val)
-        else:
-            self._quarter_duration.value = val
-
     def _set_midis(self, midis):
         if isinstance(midis, str):
             raise TypeError
         if hasattr(midis, '__iter__'):
             pass
+        elif midis is None:
+            midis = []
         else:
             midis = [midis]
         if len(midis) > 1 and 0 in midis:
@@ -86,11 +77,7 @@ class Chord(MusicTree):
     def notes(self):
         return self._notes
 
-    @property
-    def quarter_duration(self):
-        return self._quarter_duration
-
-    @quarter_duration.setter
+    @QuarterDurationMixin.quarter_duration.setter
     def quarter_duration(self, val):
         if val is not None:
             self._set_quarter_duration(val)
@@ -113,8 +100,9 @@ class Chord(MusicTree):
         raise AttributeError("object 'Chord' cannot return a string.")
 
     def __setattr__(self, key, value):
-        if key not in self._ATTRIBUTES.union(self.PROPERTIES) and key not in [f'_{attr}' for attr in self._ATTRIBUTES.union(
-                self.PROPERTIES)] and key not in self.__dict__:
+        if key not in self._ATTRIBUTES.union(self.TREE_ATTRIBUTES) and key not in [f'_{attr}' for attr in
+                                                                                   self._ATTRIBUTES.union(
+                                                                                       self.TREE_ATTRIBUTES)] and key not in self.__dict__:
             if isinstance(value, str) or not hasattr(value, '__iter__'):
                 value = [value] * len(self.notes)
             for n, v in zip(self.notes, value):

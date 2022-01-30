@@ -10,7 +10,7 @@ class ChildNotFoundError(TreeException):
 
 
 class Tree(ABC):
-    PROPERTIES = {'compact_repr', 'is_leaf', 'level', '_parent', '_children'}
+    TREE_ATTRIBUTES = {'compact_repr', 'is_leaf', 'level', '_parent', '_children', 'up'}
 
     def __init__(self, *args: object, **kwargs: object) -> object:
         super().__init__(*args, **kwargs)
@@ -44,6 +44,24 @@ class Tree(ABC):
         else:
             return self.get_parent().level + 1
 
+    @property
+    def next(self):
+        if self.up and self != self.up.get_children()[-1]:
+            return self.up.get_children()[self.up.get_children().index(self) + 1]
+        else:
+            return None
+
+    @property
+    def previous(self):
+        if self.up and self != self.up.get_children()[0]:
+            return self.up.get_children()[self.up.get_children().index(self) - 1]
+        else:
+            return None
+
+    @property
+    def up(self):
+        return self.get_parent()
+
     def add_child(self, child):
         self._check_child_to_be_added(child)
         child._parent = self
@@ -70,6 +88,28 @@ class Tree(ABC):
     def get_parent(self):
         return self._parent
 
+    def get_leaves(self, key=None):
+        output = []
+        # for node in self.traverse():
+        #     if not node.is_leaf:
+        #         output.append(node.get_leaves(key=key))
+        #     else:
+        #         if key is not None:
+        #             output.append(key(node))
+        #         else:
+        #             output.append(node)
+        # return output
+        for child in self.get_children():
+            if not child.is_leaf:
+                output.append(child.get_leaves(key=key))
+            else:
+                if key is not None:
+                    output.append(key(child))
+                else:
+                    output.append(child)
+
+        return output
+
     def get_root(self):
         node = self
         parent = node.get_parent()
@@ -77,6 +117,23 @@ class Tree(ABC):
             node = parent
             parent = node.get_parent()
         return node
+
+    def get_layer(self, layer, key=None):
+        if layer == 0:
+            output = [self]
+        elif layer == 1:
+            output = self.get_children()
+        else:
+            output = []
+            for child in self.get_layer(layer - 1):
+                if child.is_leaf:
+                    output.append(child)
+                else:
+                    output.extend(child.get_children())
+        if key is None:
+            return output
+        else:
+            return [key(child) for child in output]
 
     def get_layer_number(self):
         output = 0
@@ -124,12 +181,25 @@ class Tree(ABC):
             for node in self.get_parent().reversed_path_to_root():
                 yield node
 
-    def traverse(self):
-        if self is not None:
+    def traverse(self, mode='dfs'):
+        """
+        :param str mode:  dfs: depth first search; bfs: breadth first search
+        :return: generator
+        """
+        if mode == 'dfs':
             yield self
             for child in self.get_children():
-                for node in child.traverse():
+                for node in child.traverse(mode=mode):
                     yield node
+        elif mode == 'bfs':
+            queue = [self]
+            while queue:
+                current = queue.pop()
+                yield current
+                for child in current.get_children():
+                    queue.insert(0, child)
+        else:
+            raise NotImplementedError
 
     def tree_representation(self, function=None):
         if not function:
