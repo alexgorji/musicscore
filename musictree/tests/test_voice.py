@@ -29,6 +29,13 @@ class TestVoice(TestCase):
         v.update_beats([1 / 4] * 3)
         assert [child.quarter_duration.as_integer_ratio() for child in v.get_children()] == [(1, 4)] * 3
 
+    def test_update_beats_with_old_beats(self):
+        v = Voice()
+        v.update_beats(1 / 4, 1 / 4, 1 / 4, 1 / 4)
+        v.update_beats(1 / 4, 1 / 2)
+
+        assert [child.quarter_duration.as_integer_ratio() for child in v.get_children()] == [(1, 4), (1, 2)]
+
     def test_update_beats_from_parent_measure(self):
         v = Voice()
         m = Measure(1)
@@ -49,6 +56,25 @@ class TestVoice(TestCase):
 
         m.time.actual_signatures = [1, 8, 1, 8]
         assert [child.quarter_duration.as_integer_ratio() for child in v.get_children()] == [(1, 8)] * 2
+
+    def test_get_current_beat(self):
+        v = Voice()
+        beats = v.update_beats(1 / 4, 1 / 4, 1 / 4, 1 / 4)
+        assert v.get_current_beat() == beats[0]
+        v.get_children()[0]._filled_quarter_duration = 1 / 8
+        assert v.get_current_beat() == beats[0]
+        v.get_children()[0]._filled_quarter_duration = 1 / 4
+        assert v.get_current_beat() == beats[1]
+        v.get_children()[1]._filled_quarter_duration = 1 / 8
+        assert v.get_current_beat() == beats[1]
+        v.get_children()[1]._filled_quarter_duration = 1 / 4
+        assert v.get_current_beat() == beats[2]
+        v.get_children()[2]._filled_quarter_duration = 1 / 4
+        assert v.get_current_beat() == beats[3]
+        v.get_children()[3]._filled_quarter_duration = 1 / 8
+        assert v.get_current_beat() == beats[3]
+        v.get_children()[3]._filled_quarter_duration = 1 / 4
+        assert v.get_current_beat() is None
 
     def test_add_chord(self):
         v = Voice()

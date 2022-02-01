@@ -1,4 +1,4 @@
-from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest
+from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied
 
 from musictree.exceptions import NoteTypeError
 from musictree.midi import Midi
@@ -8,8 +8,26 @@ from musictree.util import note_types
 from musictree.xmlwrapper import XMLWrapper
 
 
+def tie(*notes):
+    notes[0].start_tie()
+    if len(notes) > 1:
+        for note in notes[1:-1]:
+            note.stop_tie()
+            note.start_tie()
+        notes[-1].stop_tie()
+
+
+def untie(*notes):
+    notes[0].remove_tie('start')
+    if len(notes) > 1:
+        for note in notes[1:-1]:
+            note.remove_tie('stop')
+            note.remove_tie('start')
+        notes[-1].remove_tie('stop')
+
+
 class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
-    _ATTRIBUTES = {'midi', 'quarter_duration', 'voice', 'parent_measure', '_divisions', '_type', '_dots'}
+    _ATTRIBUTES = {'midi', 'quarter_duration', 'voice', 'parent_measure', '_divisions', '_type', '_dots', 'is_tied', 'is_tied_to_previous'}
 
     def __init__(self, midi=Midi(60), quarter_duration=1, voice=1, *args, **kwargs):
         self._xml_object = XMLNote(*args, **kwargs)
@@ -56,6 +74,19 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
                 msg = f"A note with quarter_duration {self._quarter_duration} is not writable and must be split."
                 self._quarter_duration = old_quarter_duration
                 raise NoteTypeError(msg)
+
+    def _set_xml_tied(self, val):
+        if not self.xml_notations:
+            self.xml_notations = XMLNotations()
+        tied_xml_objects = self.xml_notations.find_children('XMLTied')
+        tied_xml_types = [t.type for t in tied_xml_objects]
+        if val in tied_xml_types:
+            pass
+        elif val == 'stop' and 'start' in tied_xml_types:
+            tied_xml_objects[0].type = 'stop'
+            self.xml_notations.add_child(XMLTied(type='start'))
+        else:
+            self.xml_notations.add_child(XMLTied(type=val))
 
     def _update_divisions(self):
         d = self._calculate_divisions()
@@ -134,6 +165,26 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
                     self.xml_object.xml_rest = None
                 self.xml_object.xml_pitch = pitch_or_rest
 
+    @property
+    def is_tied(self):
+        type_types = [t.type for t in self.find_children('XMLTie')]
+        if 'start' in type_types:
+            return True
+        else:
+            return False
+
+    @property
+    def is_tied_to_next(self):
+        return self.is_tied
+
+    @property
+    def is_tied_to_previous(self):
+        type_types = [t.type for t in self.find_children('XMLTie')]
+        if 'stop' in type_types:
+            return True
+        else:
+            return False
+
     @QuarterDurationMixin.quarter_duration.setter
     def quarter_duration(self, value):
         if value is not None:
@@ -190,3 +241,45 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             self._update_xml_type()
         else:
             self.xml_object.xml_type = val
+
+    def start_tie(self):
+        if not self.is_tied:
+            self.xml_object.add_child(XMLTie(type='start'))
+            self._set_xml_tied('start')
+
+    def stop_tie(self):
+        if self.is_tied_to_previous:
+            pass
+        elif self.is_tied:
+            self.find_children('XMLTie')[0].type = 'stop'
+            self.xml_object.add_child(XMLTie(type='start'))
+            self._set_xml_tied('stop')
+        else:
+            self.xml_object.add_child(XMLTie(type='stop'))
+            self._set_xml_tied('stop')
+
+    def remove_tie(self, type_=None):
+        ties = self.find_children('XMLTie')
+        tie_to_be_removed = None
+        if len(ties) == 0:
+            pass
+        elif len(ties) == 1:
+            if type_ is None:
+                tie_to_be_removed = ties[0]
+            else:
+                tie_to_be_removed = ties[0] if ties[0].type == type_ else None
+        elif len(ties) == 2:
+            if type_ is None:
+                raise ValueError('Note has stop and start ties. Specify type_=start or type_=stop to decide which one should be removed')
+            else:
+                tie_to_be_removed = [t for t in ties if t.type == type_]
+                tie_to_be_removed = None if not tie_to_be_removed else tie_to_be_removed[0]
+        else:
+            raise NotImplementedError
+        if tie_to_be_removed:
+            tied_to_be_removed = [t for t in self.xml_notations.find_children('XMLTied') if t.type == tie_to_be_removed.type][0]
+            tie_to_be_removed.up.remove(tie_to_be_removed)
+            xml_notations = tied_to_be_removed.up
+            xml_notations.remove(tied_to_be_removed)
+            if not xml_notations.get_children():
+                xml_notations.up.remove(xml_notations)

@@ -32,3 +32,15 @@ class VoiceException(MusicTreeException):
 
 class VoiceHasNoBeatsError(VoiceException):
     pass
+
+
+class ChordException(MusicTreeException):
+    pass
+
+
+class ChordAlreadySplitError(ChordException):
+    pass
+
+
+class ChordCannotSplitError(ChordException):
+    pass

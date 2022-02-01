@@ -2,10 +2,10 @@ from unittest import TestCase
 
 from musicxml.exceptions import XMLElementChildrenRequired
 from musicxml.xmlelement.xmlelement import *
-from fractions import Fraction
+from quicktions import Fraction
 
 from musictree.midi import Midi
-from musictree.note import Note
+from musictree.note import Note, tie, untie
 
 
 class TestNote(TestCase):
@@ -250,3 +250,144 @@ class TestNote(TestCase):
 </note>
 """
         assert n.to_string() == expected
+
+
+standard_note_xml = """<note>
+    <pitch>
+        <step>C</step>
+        <octave>4</octave>
+    </pitch>
+    <duration>1</duration>
+    <voice>1</voice>
+    <type>quarter</type>
+</note>
+"""
+standard_note_xml_start_tie = """<note>
+    <pitch>
+        <step>C</step>
+        <octave>4</octave>
+    </pitch>
+    <duration>1</duration>
+    <tie type="start" />
+    <voice>1</voice>
+    <type>quarter</type>
+    <notations>
+        <tied type="start" />
+    </notations>
+</note>
+"""
+
+standard_note_xml_stop_tie = """<note>
+    <pitch>
+        <step>C</step>
+        <octave>4</octave>
+    </pitch>
+    <duration>1</duration>
+    <tie type="stop" />
+    <voice>1</voice>
+    <type>quarter</type>
+    <notations>
+        <tied type="stop" />
+    </notations>
+</note>
+"""
+standard_note_xml_stop_start_tie = """<note>
+    <pitch>
+        <step>C</step>
+        <octave>4</octave>
+    </pitch>
+    <duration>1</duration>
+    <tie type="stop" />
+    <tie type="start" />
+    <voice>1</voice>
+    <type>quarter</type>
+    <notations>
+        <tied type="stop" />
+        <tied type="start" />
+    </notations>
+</note>
+"""
+
+
+class TestNoteTie(TestCase):
+    def test_tie_manually(self):
+        n = Note()
+        n.xml_object.add_child(XMLTie(type='start'))
+        n.xml_notations = XMLNotations()
+        n.xml_notations.add_child(XMLTied(type='start'))
+        assert n.is_tied
+        assert not n.is_tied_to_previous
+        assert n.to_string() == standard_note_xml_start_tie
+
+    def test_start_tie(self):
+        n = Note()
+        n.start_tie()
+        assert n.is_tied
+        assert not n.is_tied_to_previous
+        assert n.to_string() == standard_note_xml_start_tie
+        n.remove_tie()
+        assert not n.is_tied
+        assert not n.is_tied_to_previous
+        assert n.to_string() == standard_note_xml
+
+    def test_stop_tie(self):
+        n = Note()
+        n.stop_tie()
+        assert not n.is_tied
+        assert n.is_tied_to_previous
+        assert n.to_string() == standard_note_xml_stop_tie
+        n.remove_tie()
+        assert not n.is_tied
+        assert not n.is_tied_to_previous
+        assert n.to_string() == standard_note_xml
+
+    def test_start_stop_tie(self):
+        n = Note()
+        n.stop_tie()
+        n.start_tie()
+        assert n.is_tied
+        assert n.is_tied_to_previous
+        assert n.to_string() == standard_note_xml_stop_start_tie
+
+        n = Note()
+        n.start_tie()
+        n.stop_tie()
+        assert n.is_tied
+        assert n.is_tied_to_previous
+        assert n.to_string() == standard_note_xml_stop_start_tie
+
+        n.remove_tie('start')
+        assert not n.is_tied
+        assert n.is_tied_to_previous
+        assert n.to_string() == standard_note_xml_stop_tie
+        n.remove_tie()
+        assert not n.is_tied
+        assert not n.is_tied_to_previous
+        assert n.to_string() == standard_note_xml
+
+    def test_tie_untie_one_note(self):
+        n = Note()
+        tie(n)
+        assert n.to_string() == standard_note_xml_start_tie
+        untie(n)
+        assert n.to_string() == standard_note_xml
+
+    def test_tie_untie_two_notes(self):
+        n1 = Note()
+        n2 = Note()
+        tie(n1, n2)
+        assert n1.to_string() + n2.to_string() == standard_note_xml_start_tie + standard_note_xml_stop_tie
+        untie(n1, n2)
+        assert n1.to_string() + n2.to_string() == standard_note_xml + standard_note_xml
+
+    def test_tie_untie_tree_or_more_notes(self):
+        n1 = Note()
+        n2 = Note()
+        n3 = Note()
+        n4 = Note()
+        tie(n1, n2, n3, n4)
+        assert n1.to_string() + n2.to_string() + n3.to_string() + n4.to_string() == standard_note_xml_start_tie + \
+               standard_note_xml_stop_start_tie + standard_note_xml_stop_start_tie + standard_note_xml_stop_tie
+        untie(n1, n2, n3, n4)
+        assert n1.to_string() + n2.to_string() + n3.to_string() + n4.to_string() == standard_note_xml + standard_note_xml + \
+               standard_note_xml + standard_note_xml

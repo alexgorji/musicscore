@@ -1,5 +1,5 @@
 from musicxml.xmlelement.xmlelement import XMLTime, XMLBeats, XMLBeatType
-from fractions import Fraction
+from quicktions import Fraction
 
 from musictree.xmlwrapper import XMLWrapper
 

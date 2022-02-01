@@ -2,9 +2,12 @@ from unittest import TestCase
 
 from fractions import Fraction
 
+from musictree.beat import Beat
+from musictree.exceptions import ChordAlreadySplitError
 from musictree.midi import Midi
 from musictree.accidental import Accidental
 from musictree.chord import Chord
+from musictree.voice import Voice
 
 
 def get_chord_midi_values(chord):
@@ -50,8 +53,10 @@ class TestTreeChord(TestCase):
         assert ch.quarter_duration == 1.25
         assert ch.notes[0].quarter_duration == 1
         ch = Chord(80, 1.2)
-        assert ch.quarter_duration == Fraction(1.2).limit_denominator(1000)
-        assert ch.quarter_duration == Fraction(6 / 5).limit_denominator(1000)
+        assert ch.quarter_duration == Fraction(1.2)
+        assert ch.quarter_duration == 1.2
+        assert ch.quarter_duration == Fraction(6 / 5)
+        assert ch.quarter_duration == 6 / 5
         ch = Chord(80, 8)
         assert ch.quarter_duration == 8
         with self.assertRaises(TypeError):
@@ -309,3 +314,109 @@ class TestTreeChord(TestCase):
         ch.quarter_duration = 2
         assert len(ch.notes) == 1
         assert ch.notes[0].quarter_duration == Fraction(2, 1)
+
+    def test_chord_tie_untie(self):
+        ch1 = Chord(midis=[60, 61], quarter_duration=1)
+        ch2 = Chord(midis=[60, 61], quarter_duration=1)
+        ch1.start_tie()
+        ch2.stop_tie()
+        assert [n.is_tied for n in ch1.notes] == [True, True]
+        assert [n.is_tied for n in ch2.notes] == [False, False]
+        assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
+
+#
+# class TestChordSplit(TestCase):
+#     def test_chord_split_quarter_durations(self):
+#         # v = Voice()
+#         # beats = v.update_beats(1, 1, 1, 1)
+#         # chord = Chord(quarter_duration=4)
+#         # chord.split_beatwise(beats)
+#         # assert v.left_over_chord is None
+#         # for index, beat in enumerate(beats):
+#         #     if index == 0:
+#         #         assert beat.get_children() == [chord]
+#         #         assert beat.is_filled
+#         #     else:
+#         #         assert beat.is_filled
+#         #
+#         # v = Voice()
+#         # beats = v.update_beats(1, 1, 1, 1)
+#         # chord = Chord(quarter_duration=3.5)
+#         # chord.split_beatwise(beats)
+#         # assert v.left_over_chord is None
+#         # for index, beat in enumerate(beats):
+#         #     if index == 0:
+#         #         assert beat.get_children() == [chord]
+#         #         assert beat.get_children()[0].quarter_duration == 3
+#         #         assert beat.is_filled
+#         #     elif index == 3:
+#         #         assert len(beat.get_children()) == 1
+#         #         assert beat.get_children()[0].quarter_duration == 0.5
+#         #         assert not beat.is_filled
+#         #         assert beat.filled_quarter_duration == 0.5
+#         #     else:
+#         #         assert beat.is_filled
+#
+#         v = Voice()
+#         beats = v.update_beats(1, 1, 1, 1)
+#         beats[0].add_child(Chord(midis=0, quarter_duration=0.5))
+#         print(beats[0].filled_quarter_duration)
+#         chord = Chord(midis=60, quarter_duration=3.5)
+#         chord.split_beatwise(beats)
+#         assert v.left_over_chord is None
+#         for index, beat in enumerate(beats):
+#             if index == 0:
+#                 # assert [ch.is_rest for ch in beat.get_children()] == [True, False]
+#                 assert [ch.quarter_duration for ch in beat.get_children()] == [0.5, 0.5]
+#                 print([ch.midis[0].value for ch in beat.get_children()])
+#                 assert beat.is_filled
+#             elif index == 1:
+#                 assert len(beat.get_children()) == 1
+#                 assert beat.get_children()[0].quarter_duration == 3
+#                 assert beat.is_filled
+#             else:
+#                 assert beat.is_filled
+#         #
+#         # v = Voice()
+#         # v.update_beats(1, 1, 1, 1)
+#         # chord = Chord(quarter_duration=4, offset=0.5)
+#         # chord.split_beatwise(beats=v.get_children())
+#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.5, 3]
+#         # assert chord.left_over_chord.quarter_duration == 0.5
+#         #
+#         # v = Voice()
+#         # v.update_beats(1, 1, 1, 1)
+#         # chord = Chord(quarter_duration=4, offset=0.25)
+#         # chord.split_beatwise(beats=v.get_children()[:3])
+#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.75, 2]
+#         # assert chord.left_over_chord.quarter_duration == 1.25
+#         #
+#         # v = Voice()
+#         # v.update_beats(1, 1.5, 1.5, 0.5)
+#         # chord = Chord(quarter_duration=4, offset=0.5)
+#         # chord.split_beatwise(beats=v.get_children())
+#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.5, 3, 0.5]
+#         # assert chord.left_over_chord is None
+#         #
+#         # v = Voice()
+#         # v.update_beats(1, 1, 0.5, 0.5)
+#         # chord = Chord(quarter_duration=3, offset=0.5)
+#         # chord.split_beatwise(beats=v.get_children())
+#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.5, 2]
+#         # assert chord.left_over_chord.quarter_duration == 0.5
+#         #
+#         # v = Voice()
+#         # v.update_beats(0.5, 0.5, 1, 1)
+#         # chord = Chord(quarter_duration=4, offset=0.15)
+#         # chord.split_beatwise(beats=v.get_children())
+#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.35, 1.5, 1]
+#         # assert chord.left_over_chord.quarter_duration == 1.15
+#         #
+#         # chord.offset = 0.5
+#         # v.update_beats(1, 1.5, 1.5, 0.5)
+#         # with self.assertRaises(ChordAlreadySplitError):
+#         #     chord.split_beatwise(beats=v.get_children())
+#         # chord.remove_children()
+#         # chord.split_beatwise(beats=v.get_children())
+#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.5, 3, 0.5]
+#         # assert chord.left_over_chord is None

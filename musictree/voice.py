@@ -7,13 +7,14 @@ from musictree.xmlwrapper import XMLWrapper
 
 
 class Voice(MusicTree, XMLWrapper):
-    _ATTRIBUTES = {'value', '_chords', '_current_beat'}
+    _ATTRIBUTES = {'value', '_chords', '_current_beat', 'left_over_chord'}
 
     def __init__(self, value=None, *args, **kwargs):
         super().__init__()
         self._xml_object = XMLVoice(*args, **kwargs)
         self.value = value
         self._current_beat = None
+        self.left_over_chord = None
 
     @property
     def value(self):
@@ -45,6 +46,14 @@ class Voice(MusicTree, XMLWrapper):
     def get_chords(self):
         return [grandchild for ch in self.get_children() for grandchild in ch.get_children()]
 
+    def get_current_beat(self):
+        if not self.get_children():
+            raise ValueError('Voice has no beats.')
+        else:
+            for beat in self.get_children():
+                if not beat.is_filled:
+                    return beat
+
     def update_beats(self, *quarter_durations):
         if not quarter_durations:
             if self.up and self.up.up:
@@ -55,12 +64,8 @@ class Voice(MusicTree, XMLWrapper):
             if len(quarter_durations) == 1 and hasattr(quarter_durations[0], '__iter__'):
                 quarter_durations = quarter_durations[0]
 
-        for child in self.get_children()[:]:
-            if quarter_durations:
-                child.quarter_duration = quarter_durations.pop(0)
-            else:
-                child.up.remove(child)
+        self.remove_children()
 
         for quarter_duration in quarter_durations:
-            print('adding beat', quarter_duration)
             self.add_child(Beat(quarter_duration))
+        return self.get_children()

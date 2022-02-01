@@ -38,7 +38,6 @@ class XMLWrapper:
         if item == 'xml_object':
             return super().__getattribute__(item)
         try:
-            print('huhu', item)
             return self._xml_object.__getattribute__(item)
         except AttributeError:
             try:

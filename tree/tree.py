@@ -154,6 +154,10 @@ class Tree(ABC):
         child._parent = None
         self.get_children().remove(child)
 
+    def remove_children(self):
+        for child in self.get_children()[:]:
+            child.up.remove(child)
+
     def replace_child(self, old, new, index: int = 0) -> None:
         """
         :param old: child or function
