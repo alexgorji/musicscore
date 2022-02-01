@@ -44,3 +44,15 @@ class ChordAlreadySplitError(ChordException):
 
 class ChordCannotSplitError(ChordException):
     pass
+
+
+class IdException(MusicTreeException):
+    pass
+
+
+class IdHasAlreadyParentOfSameTypeError(IdException):
+    pass
+
+
+class IdWithSameValueExistsError(IdException):
+    pass

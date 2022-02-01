@@ -127,7 +127,6 @@ class Chord(MusicTree, QuarterDurationMixin):
             raise ChordAlreadySplitError("Remove chord's children if you wish to split it again.")
         quarter_durations = self.quarter_duration.get_beatwise_sections(
             offset=beats[0].filled_quarter_duration, beats=beats)
-
         self.quarter_duration = quarter_durations[0][0]
         self.split = True
         voice.get_current_beat().add_child(self)

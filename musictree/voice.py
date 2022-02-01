@@ -32,16 +32,7 @@ class Voice(MusicTree, XMLWrapper):
     def add_chord(self, chord):
         if not self.get_children():
             raise VoiceHasNoBeatsError
-        if self._current_beat is None:
-            self._current_beat = self.get_children()[0]
-        diff = chord.quarter_duration - self._get_filled_quartrer_duration()
-        if diff > 1:
-            copied_chord = chord.split_copy()
-            copied_chord.quarter_duration = diff
-            self._current_beat.add_child(chord)
-            return copied_chord
-
-        self._current_beat.add_child(chord)
+        self.get_current_beat().add_child(chord)
 
     def get_chords(self):
         return [grandchild for ch in self.get_children() for grandchild in ch.get_children()]

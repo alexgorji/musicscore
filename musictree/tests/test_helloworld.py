@@ -54,7 +54,7 @@ class TestAcceptance(TestCase):
         """
         He adds a measure with one part to it (default Measure has a 4/4 time signature)
         """
-        p = score.add_child(Part())
+        p = score.add_child(Part('p1'))
         m = p.add_child(Measure(number=1))
         """
         He adds a Chord with midi 60 to the measure

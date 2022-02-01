@@ -13,7 +13,7 @@ class Measure(MusicTree, XMLWrapper):
     def __init__(self, number, time=None, *args, **kwargs):
         super().__init__()
         self._xml_object = XMLMeasure(*args, **kwargs)
-        self.xml_object.xml_attributes = XMLAttributes()
+        # self.xml_object.xml_attributes = XMLAttributes()
         self.number = number
         self._time = None
         self.time = time
@@ -74,4 +74,4 @@ class Measure(MusicTree, XMLWrapper):
         for x in range(voice - len(staff.get_children())):
             staff.add_child(Voice())
         voice = staff.get_children()[voice - 1]
-        return voice.add_child(chord)
+        return voice.add_chord(chord)
