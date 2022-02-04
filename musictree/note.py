@@ -1,6 +1,6 @@
 from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied
 
-from musictree.exceptions import NoteTypeError
+from musictree.exceptions import NoteTypeError, NoteHasNoParentChordError
 from musictree.midi import Midi
 from musictree.musictree import MusicTree
 from musictree.quarterduration import QuarterDurationMixin
@@ -27,27 +27,22 @@ def untie(*notes):
 
 
 class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
-    _ATTRIBUTES = {'midi', 'quarter_duration', 'voice', 'parent_measure', '_divisions', '_type', '_dots', 'is_tied', 'is_tied_to_previous'}
+    _ATTRIBUTES = {'midi', 'quarter_duration', 'parent_chord', '_type', '_dots', 'is_tied', 'is_tied_to_previous'}
 
-    def __init__(self, midi=Midi(60), quarter_duration=1, voice=1, *args, **kwargs):
+    def __init__(self, parent_chord, midi=None, quarter_duration=None, *args, **kwargs):
+        self._parent_chord = parent_chord
         self._xml_object = XMLNote(*args, **kwargs)
+        self._update_xml_voice()
         self._midi = None
-        self._divisions = None
-        self._voice = None
         self._type = None
         self._dots = None
-        self.parent_measure = None
         super().__init__(quarter_duration=quarter_duration)
         self.midi = midi
-        self.voice = voice
-
-    def _calculate_divisions(self):
-        return self._quarter_duration.denominator
 
     @staticmethod
     def _check_xml_duration_value(duration):
         if int(duration) != duration:
-            raise ValueError('product of quarter_duration and divisions must be an integer')
+            raise ValueError(f'product of quarter_duration and divisions {duration} must be an integer')
         if duration < 0:
             raise ValueError
 
@@ -88,22 +83,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         else:
             self.xml_notations.add_child(XMLTied(type=val))
 
-    def _update_divisions(self):
-        d = self._calculate_divisions()
-        if self._divisions is None:
-            self._divisions = d
-            if self.parent_measure:
-                self.parent_measure.update_divisions()
-        elif self._divisions != d:
-            if self._divisions % d == 0:
-                pass
-            else:
-                self._divisions = d
-                if self.parent_measure:
-                    self.parent_measure.update_divisions()
-        else:
-            pass
-
     def _update_xml_type(self):
         if self._type is None:
             if self.quarter_duration != 0:
@@ -131,7 +110,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             self.xml_object.xml_accidental = self.midi.accidental.xml_object
 
     def _update_xml_duration(self):
-        duration = float(self.quarter_duration) * self._divisions
+        duration = float(self.quarter_duration) * self.get_parent_measure().get_divisions()
         self._check_xml_duration_value(duration)
         duration = int(duration)
         if duration == 0:
@@ -165,6 +144,9 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
                     self.xml_object.xml_rest = None
                 self.xml_object.xml_pitch = pitch_or_rest
 
+    def _update_xml_voice(self):
+        self.xml_object.xml_voice = str(self.get_voice_number())
+
     @property
     def is_tied(self):
         type_types = [t.type for t in self.find_children('XMLTie')]
@@ -185,18 +167,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         else:
             return False
 
-    @QuarterDurationMixin.quarter_duration.setter
-    def quarter_duration(self, value):
-        if value is not None:
-            self._set_quarter_duration(value)
-            self._update_divisions()
-            self._update_xml_duration()
-            self._update_xml_type()
-            self._update_xml_dots()
-            self._update_xml_time_modifications()
-        else:
-            self.xml_object.xml_duration = None
-
     @property
     def midi(self):
         return self._midi
@@ -210,24 +180,31 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             self._update_xml_accidental()
 
     @property
+    def parent_chord(self):
+        return self._parent_chord
+
+    @QuarterDurationMixin.quarter_duration.setter
+    def quarter_duration(self, value):
+        if value is not None:
+            if not self.parent_chord:
+                raise NoteHasNoParentChordError()
+            self._set_quarter_duration(value)
+            self._update_xml_duration()
+            self._update_xml_type()
+            self._update_xml_dots()
+            self._update_xml_time_modifications()
+        else:
+            self.xml_object.xml_duration = None
+
+    @property
     def voice(self):
         return self._voice
 
-    @voice.setter
-    def voice(self, val):
-        self.xml_object.xml_voice = str(val)
-        self._voice = val
+    def get_parent_measure(self):
+        return self.parent_chord.get_parent_measure()
 
-    def get_divisions(self):
-        return self._divisions
-
-    def set_divisions(self, val):
-        if val != self.get_divisions():
-            self._check_xml_duration_value(self.quarter_duration * val)
-            self._divisions = val
-            self._update_xml_duration()
-        else:
-            self._divisions = val
+    def get_voice_number(self):
+        return self.parent_chord.get_voice_number()
 
     def set_dots(self, number_of_dots=None):
         if number_of_dots is None:

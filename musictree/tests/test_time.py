@@ -72,13 +72,13 @@ class TestTime(TestCase):
 
     def test_get_beats_quarter_durations(self):
         t = Time()
-        assert t.get_beats_quarter_durations() == [Fraction(1, 4)] * 4
+        assert t.get_beats_quarter_durations() == [Fraction(1)] * 4
         t.signatures = [3, 4]
-        assert t.get_beats_quarter_durations() == [Fraction(1, 4)] * 3
-        t.signatures = [6, 6]
-        assert t.get_beats_quarter_durations() == [Fraction(3, 6)] * 2
-        t.actual_signatures = [1, 6] * 6
-        assert t.get_beats_quarter_durations() == [Fraction(1, 6)] * 6
-        t.signatures = [3, 4, 2, 6]
+        assert t.get_beats_quarter_durations() == [Fraction(1)] * 3
+        t.signatures = [6, 8]
+        assert t.get_beats_quarter_durations() == [Fraction(3, 2)] * 2
+        t.actual_signatures = [1, 8] * 6
+        assert t.get_beats_quarter_durations() == [Fraction(1, 2)] * 6
+        t.signatures = [3, 4, 2, 8]
         t.reset_actual_signatures()
-        assert t.get_beats_quarter_durations() == [Fraction(1, 4)] * 3 + [Fraction(1, 6)] * 2
+        assert t.get_beats_quarter_durations() == [Fraction(1)] * 3 + [Fraction(1, 2)] * 2

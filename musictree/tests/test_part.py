@@ -1,16 +1,10 @@
-from unittest import TestCase
-
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError
 from musictree.measure import Measure
 from musictree.part import Part, ScorePart, Id
+from musictree.tests.util import IdTestCase
 
 
-class TestWithId(TestCase):
-    def setUp(self) -> None:
-        Id.__refs__.clear()
-
-
-class TestId(TestWithId):
+class TestId(IdTestCase):
 
     def test_id_refs(self):
         id1 = Id('p1')
@@ -53,15 +47,11 @@ class TestId(TestWithId):
         assert p.xml_object.id == p.score_part.xml_object.id == 'p3'
 
 
-class TestPart(TestWithId):
+class TestPart(IdTestCase):
     def test_part_init(self):
         p = Part(id='p1')
         p.add_child(Measure(1))
-        expected = """<part id="p1">
-    <measure number="1" />
-</part>
-"""
-        assert p.to_string() == expected
+        assert p.xml_object.id == 'p1'
 
     def test_part_name(self):
         p = Part(id='p1')
@@ -77,7 +67,7 @@ class TestPart(TestWithId):
         assert p.score_part.xml_object.id == p.xml_object.id
 
 
-class TestScorePart(TestWithId):
+class TestScorePart(IdTestCase):
 
     def test_score_part_name(self):
         p = Part(id='p1')

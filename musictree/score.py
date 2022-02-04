@@ -28,3 +28,11 @@ class Score(MusicTree, XMLWrapper):
         self.xml_object.add_child(child.xml_object)
         self.xml_part_list.xml_score_part = child.score_part.xml_object
         return child
+
+    def get_chords(self):
+        return [ch for part in self.get_children() for measure in part.get_children() for staff in measure.get_children() for voice in
+                staff.get_children() for beat in voice.get_children() for ch in beat.get_children()]
+
+    def update_xml_notes(self):
+        for measure in [m for p in self.get_children() for m in p.get_children()]:
+            measure.update_xml_notes()

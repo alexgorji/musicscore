@@ -1,4 +1,5 @@
 from unittest import TestCase
+from unittest.mock import patch, Mock
 
 from musicxml.exceptions import XMLElementChildrenRequired
 from musicxml.xmlelement.xmlelement import *
@@ -8,9 +9,26 @@ from musictree.midi import Midi
 from musictree.note import Note, tie, untie
 
 
-class TestNote(TestCase):
+class NoteTestCase(TestCase):
+    def setUp(self) -> None:
+        self.mock_chord = Mock()
+        self.mock_chord.get_voice_number.return_value = 1
+        self.mock_measure = Mock()
+        self.mock_measure.get_divisions.return_value = 1
+        self.mock_chord.get_parent_measure.return_value = self.mock_measure
+
+    def tearDown(self):
+        patch.stopall()
+
+
+class TestNote(NoteTestCase):
+
+    def test_mock_chord(self):
+        assert self.mock_chord.get_voice_number() == 1
+        assert self.mock_chord.get_parent_measure().get_divisions() == 1
+
     def test_note_init(self):
-        n = Note()
+        n = Note(parent_chord=self.mock_chord)
         n.quarter_duration = 2
         n.midi = Midi(71)
         expected = """<note>
@@ -24,9 +42,11 @@ class TestNote(TestCase):
 </note>
 """
         assert n.to_string() == expected
-        n = Note(Midi(61), quarter_duration=2, voice=2, default_x=10)
+        self.mock_chord.get_voice_number.return_value = 2
+        n = Note(parent_chord=self.mock_chord, midi=Midi(61), default_x=10)
+        self.mock_measure.get_divisions.return_value = 2
+        n.quarter_duration = 2
         n.xml_notehead = XMLNotehead('square')
-        n.set_divisions(2)
         assert n.midi.value == 61
         expected = """<note default-x="10">
     <pitch>
@@ -44,17 +64,15 @@ class TestNote(TestCase):
         assert n.to_string() == expected
 
     def test_note_set_divisions(self):
-        n = Note(Midi(61), quarter_duration=Fraction(1, 3))
-        assert n.get_divisions() == 3
+        self.mock_measure.get_divisions.return_value = 3
+        n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=Fraction(1, 3))
         assert n.xml_duration.value == 1
-        n.set_divisions(6)
+        self.mock_measure.get_divisions.return_value = 6
+        n._update_xml_duration()
         assert n.xml_duration.value == 2
-        with self.assertRaises(ValueError):
-            n.set_divisions(4)
-        assert n.get_divisions() == 6
 
     def test_note_type(self):
-        n = Note(quarter_duration=2)
+        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=2)
         expected = """<note>
     <pitch>
         <step>C</step>
@@ -94,7 +112,8 @@ class TestNote(TestCase):
             n.type = n.set_type('bla')
 
     def test_note_dots(self):
-        n = Note(quarter_duration=1.5)
+        self.mock_measure.get_divisions.return_value = 2
+        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1.5)
         expected = """<note>
     <pitch>
         <step>C</step>
@@ -114,11 +133,13 @@ class TestNote(TestCase):
         assert len(n.xml_object.find_children('XMLDot')) == 3
         n.set_dots()
         assert len(n.xml_object.find_children('XMLDot')) == 1
-        n = Note(quarter_duration=1.75)
+        self.mock_measure.get_divisions.return_value = 4
+        n.quarter_duration = 1.75
         assert len(n.xml_object.find_children('XMLDot')) == 2
 
     def test_change_midi_or_duration(self):
-        n = Note(Midi(61), quarter_duration=2, voice=2, default_x=10)
+        self.mock_chord.get_voice_number.return_value = 2
+        n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=2, default_x=10)
         n.xml_notehead = 'square'
         expected = """<note default-x="10">
     <pitch>
@@ -201,7 +222,7 @@ class TestNote(TestCase):
             n.midi = 0
 
     def test_grace_note(self):
-        n = Note(Midi(61), quarter_duration=0, default_x=10)
+        n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=0, default_x=10)
         n.xml_notehead = XMLNotehead('square')
         expected = """<note default-x="10">
     <grace />
@@ -218,7 +239,7 @@ class TestNote(TestCase):
         assert n.xml_object.to_string() == expected
 
     def test_cue_note(self):
-        n = Note(Midi(61), quarter_duration=2)
+        n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=2)
         n.xml_cue = XMLCue()
         expected = """<note>
     <cue />
@@ -236,7 +257,7 @@ class TestNote(TestCase):
         assert n.xml_object.to_string() == expected
 
     def test_note_stem(self):
-        n = Note()
+        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         n.xml_stem = 'up'
         expected = """<note>
     <pitch>
@@ -309,9 +330,9 @@ standard_note_xml_stop_start_tie = """<note>
 """
 
 
-class TestNoteTie(TestCase):
+class TestNoteTie(NoteTestCase):
     def test_tie_manually(self):
-        n = Note()
+        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         n.xml_object.add_child(XMLTie(type='start'))
         n.xml_notations = XMLNotations()
         n.xml_notations.add_child(XMLTied(type='start'))
@@ -320,7 +341,7 @@ class TestNoteTie(TestCase):
         assert n.to_string() == standard_note_xml_start_tie
 
     def test_start_tie(self):
-        n = Note()
+        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         n.start_tie()
         assert n.is_tied
         assert not n.is_tied_to_previous
@@ -331,7 +352,7 @@ class TestNoteTie(TestCase):
         assert n.to_string() == standard_note_xml
 
     def test_stop_tie(self):
-        n = Note()
+        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         n.stop_tie()
         assert not n.is_tied
         assert n.is_tied_to_previous
@@ -342,14 +363,14 @@ class TestNoteTie(TestCase):
         assert n.to_string() == standard_note_xml
 
     def test_start_stop_tie(self):
-        n = Note()
+        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         n.stop_tie()
         n.start_tie()
         assert n.is_tied
         assert n.is_tied_to_previous
         assert n.to_string() == standard_note_xml_stop_start_tie
 
-        n = Note()
+        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         n.start_tie()
         n.stop_tie()
         assert n.is_tied
@@ -366,25 +387,26 @@ class TestNoteTie(TestCase):
         assert n.to_string() == standard_note_xml
 
     def test_tie_untie_one_note(self):
-        n = Note()
+        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         tie(n)
         assert n.to_string() == standard_note_xml_start_tie
         untie(n)
         assert n.to_string() == standard_note_xml
 
     def test_tie_untie_two_notes(self):
-        n1 = Note()
-        n2 = Note()
+        n1 = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
+        n2 = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
+
         tie(n1, n2)
         assert n1.to_string() + n2.to_string() == standard_note_xml_start_tie + standard_note_xml_stop_tie
         untie(n1, n2)
         assert n1.to_string() + n2.to_string() == standard_note_xml + standard_note_xml
 
     def test_tie_untie_tree_or_more_notes(self):
-        n1 = Note()
-        n2 = Note()
-        n3 = Note()
-        n4 = Note()
+        n1 = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
+        n2 = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
+        n3 = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
+        n4 = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         tie(n1, n2, n3, n4)
         assert n1.to_string() + n2.to_string() + n3.to_string() + n4.to_string() == standard_note_xml_start_tie + \
                standard_note_xml_stop_start_tie + standard_note_xml_stop_start_tie + standard_note_xml_stop_tie

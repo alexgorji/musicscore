@@ -1,6 +1,7 @@
 from musicxml.xmlelement.xmlelement import XMLTime, XMLBeats, XMLBeatType
 from quicktions import Fraction
 
+from musictree.exceptions import StaffHasNoParentError
 from musictree.xmlwrapper import XMLWrapper
 
 
@@ -21,7 +22,7 @@ class Time(XMLWrapper):
         signatures = [self.signatures[i:i + 2] for i in range(0, len(self.signatures), 2)]
         self._intern_actual_signatures = []
         for signature in signatures:
-            if signature[1] % 3 == 0 and signature[0] % signature[1] == 0:
+            if signature[1] % 8 == 0 and signature[0] % 3 == 0:
                 self._intern_actual_signatures.extend([3, signature[1]] * (signature[0] // 3))
             else:
                 self._intern_actual_signatures.extend([1, signature[1]] * signature[0])
@@ -39,7 +40,7 @@ class Time(XMLWrapper):
     def actual_signatures(self, val):
         self._actual_signatures = val
         if self.parent_measure:
-            self.parent_measure.update_voice_beats()
+            self.parent_measure._update_voice_beats()
 
     @property
     def signatures(self):
@@ -56,7 +57,12 @@ class Time(XMLWrapper):
         self._update_signature()
         self._intern_actual_signatures = None
         if self.parent_measure:
-            self.parent_measure.update_voice_beats()
+            self.parent_measure._update_voice_beats()
+
+    def add_child(self, child):
+        if not self.up:
+            raise StaffHasNoParentError('A child Voice can only be added to a Staff if staff has a Measure parent.')
+        return super().add_child(child)
 
     def reset_actual_signatures(self):
         self._actual_signatures = None
@@ -77,6 +83,6 @@ class Time(XMLWrapper):
             self._xml_object.add_child(XMLBeatType(str(beat_type)))
 
     def get_beats_quarter_durations(self):
-        return [Fraction(nominator, denominator) for nominator, denominator in [self.actual_signatures[i:i + 2] for i in range(0,
-                                                                                                                               len(self.actual_signatures),
-                                                                                                                               2)]]
+        return [Fraction(nominator, denominator) * 4 for nominator, denominator in [self.actual_signatures[i:i + 2] for i in range(0,
+                                                                                                                                   len(self.actual_signatures),
+                                                                                                                                   2)]]

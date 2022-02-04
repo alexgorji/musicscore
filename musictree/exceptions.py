@@ -6,7 +6,39 @@ class NoteException(MusicTreeException):
     pass
 
 
+class NoteHasNoParentChordError(NoteException):
+    pass
+
+
 class NoteTypeError(NoteException):
+    pass
+
+
+class ChordException(MusicTreeException):
+    pass
+
+
+class ChordAlreadySplitError(ChordException):
+    pass
+
+
+class ChordCannotSplitError(ChordException):
+    pass
+
+
+class ChordHasNoParentError(ChordException):
+    pass
+
+
+class ChordHasNoQuarterDurationError(ChordException):
+    pass
+
+
+class ChordQuarterDurationAlreadySetError(ChordException):
+    pass
+
+
+class ChordHasNoMidisError(ChordException):
     pass
 
 
@@ -34,15 +66,19 @@ class VoiceHasNoBeatsError(VoiceException):
     pass
 
 
-class ChordException(MusicTreeException):
+class VoiceHasNoParentError(VoiceException):
     pass
 
 
-class ChordAlreadySplitError(ChordException):
+class StaffException(MusicTreeException):
     pass
 
 
-class ChordCannotSplitError(ChordException):
+class StaffHasNoParentError(StaffException):
+    pass
+
+
+class MeasureException(MusicTreeException):
     pass
 
 

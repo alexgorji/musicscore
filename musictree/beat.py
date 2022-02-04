@@ -1,5 +1,6 @@
 from musictree.chord import Chord
-from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError
+from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, ChordHasNoQuarterDurationError, \
+    ChordHasNoMidisError
 from musictree.musictree import MusicTree
 from musictree.quarterduration import QuarterDurationMixin
 
@@ -39,8 +40,13 @@ class Beat(MusicTree, QuarterDurationMixin):
             return self.previous.offset + self.previous.quarter_duration
 
     def add_child(self, child):
+        self._check_child_to_be_added(child)
         if not self.up:
             raise BeatHasNoParentError('A child Chord can only be added to a beat if it has a voice parent.')
+        if child.quarter_duration is None:
+            raise ChordHasNoQuarterDurationError('Chord with no quarter_duration cannot be added to Beat.')
+        if not child.midis:
+            raise ChordHasNoMidisError('Chord with no midis cannot be added to Beat.')
         if self.is_filled:
             raise BeatIsFullError()
         child.offset = self.filled_quarter_duration
@@ -61,7 +67,7 @@ class Beat(MusicTree, QuarterDurationMixin):
                         break
             else:
                 beats = self.up.get_children()[self.up.get_children().index(self):]
-                child.split_beatwise(beats)
-                return child
-
-        return super().add_child(child)
+                return child.split_beatwise(beats)
+        child._parent = self
+        self._children.append(child)
+        return child

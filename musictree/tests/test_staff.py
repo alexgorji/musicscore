@@ -1,5 +1,6 @@
 from unittest import TestCase
 
+from musictree.measure import Measure
 from musictree.staff import Staff
 from musictree.voice import Voice
 
@@ -19,7 +20,9 @@ class TestStaff(TestCase):
         assert st.xml_object.value is None
 
     def test_add_voice(self):
+        m = Measure(1)
         st = Staff()
+        m.add_child(st)
         assert [child.value for child in st.get_children()] == []
         st.add_child(Voice())
         assert [child.value for child in st.get_children()] == [1]

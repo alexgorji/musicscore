@@ -1,13 +1,12 @@
-from unittest import TestCase
-
 from fractions import Fraction
+from unittest import TestCase
+from unittest.mock import Mock, patch
 
-from musictree.beat import Beat
-from musictree.exceptions import ChordAlreadySplitError
-from musictree.midi import Midi
 from musictree.accidental import Accidental
 from musictree.chord import Chord
-from musictree.voice import Voice
+from musictree.exceptions import ChordHasNoParentError, ChordQuarterDurationAlreadySetError, NoteTypeError
+from musictree.midi import Midi
+from musictree.tests.util import check_notes
 
 
 def get_chord_midi_values(chord):
@@ -15,6 +14,31 @@ def get_chord_midi_values(chord):
 
 
 class TestTreeChord(TestCase):
+    def setUp(self) -> None:
+        self.mock_beat = Mock()
+        self.mock_voice = Mock()
+        self.mock_staff = Mock()
+        self.mock_measure = Mock()
+
+        self.mock_voice.value = 1
+        self.mock_beat.up = self.mock_voice
+        self.mock_voice.up = self.mock_staff
+        self.mock_staff.up = self.mock_measure
+        self.mock_measure.get_divisions.return_value = 1
+
+    def tearDown(self) -> None:
+        patch.stopall()
+
+    def test_mocks(self):
+        assert self.mock_voice.value == 1
+        assert self.mock_beat.up.value == 1
+        ch = Chord()
+        ch._parent = self.mock_beat
+        assert ch.up == self.mock_beat
+        assert ch.up.up == self.mock_voice
+        assert ch.up.up.up == self.mock_staff
+        assert ch.up.up.up.up == self.mock_measure
+        assert ch.get_parent_measure() == self.mock_measure
 
     def test_chord_init_midis(self):
         """
@@ -40,10 +64,29 @@ class TestTreeChord(TestCase):
         with self.assertRaises(ValueError):
             Chord(0, 0)
 
-    def test_chord_update_notes_duration(self):
+    def test_chord_needs_parent_error(self):
         ch = Chord(70, 1)
-        ch.quarter_duration = 1.5
-        # assert ch.notes[0].xml_duration.value == 1
+        with self.assertRaises(ChordHasNoParentError):
+            ch.update_notes()
+        ch._parent = self.mock_beat
+        ch.update_notes()
+
+    def test_chord_update_notes(self):
+        ch1 = Chord()
+        assert ch1.notes is None
+        with self.assertRaises(ChordHasNoParentError):
+            ch1.update_notes()
+        ch1.quarter_duration = 1
+        ch1.midis = [70]
+        ch1._parent = self.mock_beat
+        ch1.update_notes()
+        check_notes(ch1.notes, [70], [1])
+        with self.assertRaises(ChordQuarterDurationAlreadySetError):
+            ch1.quarter_duration = 1.5
+        ch2 = Chord(quarter_duration=2.5, midis=[71])
+        ch2._parent = self.mock_beat
+        with self.assertRaises(NoteTypeError):
+            ch2.update_notes()
 
     def test_init_quarter_durations(self):
         """
@@ -51,7 +94,6 @@ class TestTreeChord(TestCase):
         """
         ch = Chord(90, 1.25)
         assert ch.quarter_duration == 1.25
-        assert ch.notes[0].quarter_duration == 1
         ch = Chord(80, 1.2)
         assert ch.quarter_duration == Fraction(1.2)
         assert ch.quarter_duration == 1.2
@@ -74,6 +116,8 @@ class TestTreeChord(TestCase):
         Test that a dot operator can set and get note attributes
         """
         c = Chord([60, 61, 62], 2)
+        c._parent = self.mock_beat
+        c.update_notes()
         c.relative_x = 10
         assert c.relative_x == [10, 10, 10]
         c.relative_y = [None, 20, 10]
@@ -85,6 +129,8 @@ class TestTreeChord(TestCase):
 
     def test_chord_one_note(self):
         c = Chord(70, 4, relative_x=10)
+        c._parent = self.mock_beat
+        c.update_notes()
         expected = """<note relative-x="10">
     <pitch>
         <step>B</step>
@@ -98,17 +144,13 @@ class TestTreeChord(TestCase):
 </note>
 """
         assert c.notes[0].to_string() == expected
-        # change measures divisions
-        c.notes[0].set_divisions(4)
-        assert c.notes[0].xml_duration.value == 16
-        # change chord's midi (non-zero)
         c.midis[0].value = 72
         expected = """<note relative-x="10">
     <pitch>
         <step>C</step>
         <octave>5</octave>
     </pitch>
-    <duration>16</duration>
+    <duration>4</duration>
     <voice>1</voice>
     <type>whole</type>
 </note>
@@ -119,28 +161,34 @@ class TestTreeChord(TestCase):
 
         expected = """<note relative-x="10">
     <rest />
-    <duration>16</duration>
+    <duration>4</duration>
     <voice>1</voice>
     <type>whole</type>
 </note>
 """
         assert c.notes[0].to_string() == expected
+        c = Chord(midis=0, quarter_duration=2)
         # change chord's duration (not zero)
         c.quarter_duration = 1
-        expected = """<note relative-x="10">
+        c._parent = self.mock_beat
+        c.update_notes()
+        expected = """<note>
     <rest />
-    <duration>4</duration>
+    <duration>1</duration>
     <voice>1</voice>
     <type>quarter</type>
 </note>
 """
         assert c.notes[0].to_string() == expected
+        c = Chord(0, 1)
         # change chord's duration (zero)
         with self.assertRaises(ValueError):
             c.quarter_duration = 0
         c.midis[0].value = 60
         c.quarter_duration = 0
-        expected = """<note relative-x="10">
+        c._parent = self.mock_beat
+        c.update_notes()
+        expected = """<note>
     <grace />
     <pitch>
         <step>C</step>
@@ -169,10 +217,13 @@ class TestTreeChord(TestCase):
         Test a chord with a non rest single midi
         """
         c = Chord(72, 2)
-        c.xml_voice = '1'
+        c._parent = self.mock_beat
+        c.update_notes()
+
         c.xml_type = '16th'
         c.xml_stem = 'up'
         c.xml_staff = 1
+
         expected = """<note>
     <pitch>
         <step>C</step>
@@ -204,6 +255,8 @@ class TestTreeChord(TestCase):
         Test chord with a non rest single midi with accidental set.
         """
         chord = Chord(Midi(70, accidental=Accidental(mode='sharp')), 1)
+        chord._parent = self.mock_beat
+        chord.update_notes()
         expected = """<pitch>
         <step>A</step>
         <alter>1</alter>
@@ -217,6 +270,7 @@ class TestTreeChord(TestCase):
         Test chord with a rest midi
         """
         chord = Chord(0, 2)
+        chord._parent = self.mock_beat
         expected = """<note>
     <rest />
     <duration>2</duration>
@@ -224,6 +278,7 @@ class TestTreeChord(TestCase):
     <type>half</type>
 </note>
 """
+        chord.update_notes()
         assert chord.notes[0].to_string() == expected
         chord.midis = [60, 61]
         expected = """<pitch>
@@ -239,6 +294,11 @@ class TestTreeChord(TestCase):
     </pitch>
 """
         assert chord.notes[1].xml_pitch.to_string() == expected
+
+    def test_chord_to_rest(self):
+        chord = Chord(60, 2)
+        chord._parent = self.mock_beat
+        chord.update_notes()
         chord.to_rest()
         expected = """<note>
     <rest />
@@ -256,6 +316,8 @@ class TestTreeChord(TestCase):
         """
 
         chord = Chord([60, 62, 63], 2)
+        chord._parent = self.mock_beat
+        chord.update_notes()
         chord.xml_stem = 'up'
         expected_1 = """<note>
     <pitch>
@@ -295,128 +357,29 @@ class TestTreeChord(TestCase):
         for note, expected in zip(chord.notes, [expected_1, expected_2, expected_3]):
             assert note.to_string() == expected
 
-    def test_chord_with_none_midis(self):
-        ch = Chord(midis=None, quarter_duration=1)
-        assert ch.notes == []
-        ch.midis = 60
-        assert len(ch.notes) == 1
-        assert ch.notes[0].midi.value == 60
-        ch.midis = None
-        assert ch.notes == []
-
-    def test_chord_with_none_quarter_duration(self):
-        ch = Chord(midis=None, quarter_duration=None)
-        assert ch.notes == []
-        ch.midis = 60
-        assert len(ch.notes) == 1
-        assert ch.notes[0].midi.value == 60
-        assert ch.notes[0].quarter_duration == Fraction(1, 1)
-        ch.quarter_duration = 2
-        assert len(ch.notes) == 1
-        assert ch.notes[0].quarter_duration == Fraction(2, 1)
-
     def test_chord_tie_untie(self):
         ch1 = Chord(midis=[60, 61], quarter_duration=1)
         ch2 = Chord(midis=[60, 61], quarter_duration=1)
-        ch1.start_tie()
-        ch2.stop_tie()
+        ch1.add_tie('start')
+        ch2.add_tie('stop')
+        ch1._parent = self.mock_beat
+        ch2._parent = self.mock_beat
+        ch1.update_notes()
+        ch2.update_notes()
         assert [n.is_tied for n in ch1.notes] == [True, True]
         assert [n.is_tied for n in ch2.notes] == [False, False]
         assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
 
-#
-# class TestChordSplit(TestCase):
-#     def test_chord_split_quarter_durations(self):
-#         # v = Voice()
-#         # beats = v.update_beats(1, 1, 1, 1)
-#         # chord = Chord(quarter_duration=4)
-#         # chord.split_beatwise(beats)
-#         # assert v.left_over_chord is None
-#         # for index, beat in enumerate(beats):
-#         #     if index == 0:
-#         #         assert beat.get_children() == [chord]
-#         #         assert beat.is_filled
-#         #     else:
-#         #         assert beat.is_filled
-#         #
-#         # v = Voice()
-#         # beats = v.update_beats(1, 1, 1, 1)
-#         # chord = Chord(quarter_duration=3.5)
-#         # chord.split_beatwise(beats)
-#         # assert v.left_over_chord is None
-#         # for index, beat in enumerate(beats):
-#         #     if index == 0:
-#         #         assert beat.get_children() == [chord]
-#         #         assert beat.get_children()[0].quarter_duration == 3
-#         #         assert beat.is_filled
-#         #     elif index == 3:
-#         #         assert len(beat.get_children()) == 1
-#         #         assert beat.get_children()[0].quarter_duration == 0.5
-#         #         assert not beat.is_filled
-#         #         assert beat.filled_quarter_duration == 0.5
-#         #     else:
-#         #         assert beat.is_filled
-#
-#         v = Voice()
-#         beats = v.update_beats(1, 1, 1, 1)
-#         beats[0].add_child(Chord(midis=0, quarter_duration=0.5))
-#         print(beats[0].filled_quarter_duration)
-#         chord = Chord(midis=60, quarter_duration=3.5)
-#         chord.split_beatwise(beats)
-#         assert v.left_over_chord is None
-#         for index, beat in enumerate(beats):
-#             if index == 0:
-#                 # assert [ch.is_rest for ch in beat.get_children()] == [True, False]
-#                 assert [ch.quarter_duration for ch in beat.get_children()] == [0.5, 0.5]
-#                 print([ch.midis[0].value for ch in beat.get_children()])
-#                 assert beat.is_filled
-#             elif index == 1:
-#                 assert len(beat.get_children()) == 1
-#                 assert beat.get_children()[0].quarter_duration == 3
-#                 assert beat.is_filled
-#             else:
-#                 assert beat.is_filled
-#         #
-#         # v = Voice()
-#         # v.update_beats(1, 1, 1, 1)
-#         # chord = Chord(quarter_duration=4, offset=0.5)
-#         # chord.split_beatwise(beats=v.get_children())
-#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.5, 3]
-#         # assert chord.left_over_chord.quarter_duration == 0.5
-#         #
-#         # v = Voice()
-#         # v.update_beats(1, 1, 1, 1)
-#         # chord = Chord(quarter_duration=4, offset=0.25)
-#         # chord.split_beatwise(beats=v.get_children()[:3])
-#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.75, 2]
-#         # assert chord.left_over_chord.quarter_duration == 1.25
-#         #
-#         # v = Voice()
-#         # v.update_beats(1, 1.5, 1.5, 0.5)
-#         # chord = Chord(quarter_duration=4, offset=0.5)
-#         # chord.split_beatwise(beats=v.get_children())
-#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.5, 3, 0.5]
-#         # assert chord.left_over_chord is None
-#         #
-#         # v = Voice()
-#         # v.update_beats(1, 1, 0.5, 0.5)
-#         # chord = Chord(quarter_duration=3, offset=0.5)
-#         # chord.split_beatwise(beats=v.get_children())
-#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.5, 2]
-#         # assert chord.left_over_chord.quarter_duration == 0.5
-#         #
-#         # v = Voice()
-#         # v.update_beats(0.5, 0.5, 1, 1)
-#         # chord = Chord(quarter_duration=4, offset=0.15)
-#         # chord.split_beatwise(beats=v.get_children())
-#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.35, 1.5, 1]
-#         # assert chord.left_over_chord.quarter_duration == 1.15
-#         #
-#         # chord.offset = 0.5
-#         # v.update_beats(1, 1.5, 1.5, 0.5)
-#         # with self.assertRaises(ChordAlreadySplitError):
-#         #     chord.split_beatwise(beats=v.get_children())
-#         # chord.remove_children()
-#         # chord.split_beatwise(beats=v.get_children())
-#         # assert [ch.quarter_duration for ch in chord.get_children()] == [0.5, 3, 0.5]
-#         # assert chord.left_over_chord is None
+        ch1 = Chord(midis=[60, 61], quarter_duration=1)
+        ch2 = Chord(midis=[60, 61], quarter_duration=1)
+        ch1._parent = self.mock_beat
+        ch2._parent = self.mock_beat
+        ch1.update_notes()
+        ch2.update_notes()
+
+        ch1.add_tie('start')
+        ch2.add_tie('stop')
+
+        assert [n.is_tied for n in ch1.notes] == [True, True]
+        assert [n.is_tied for n in ch2.notes] == [False, False]
+        assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]

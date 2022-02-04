@@ -1,7 +1,7 @@
 from musicxml.xmlelement.xmlelement import XMLVoice
 
 from musictree.beat import Beat
-from musictree.exceptions import VoiceHasNoBeatsError
+from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, ChordHasNoQuarterDurationError
 from musictree.musictree import MusicTree
 from musictree.xmlwrapper import XMLWrapper
 
@@ -29,13 +29,18 @@ class Voice(MusicTree, XMLWrapper):
         else:
             self.xml_object.value = None
 
+    def add_child(self, child):
+        if not self.up:
+            raise VoiceHasNoParentError('A child Beat can only be added to a Voice if voice has a Staff parent.')
+        return super().add_child(child)
+
     def add_chord(self, chord):
         if not self.get_children():
             raise VoiceHasNoBeatsError
-        self.get_current_beat().add_child(chord)
+        return self.get_current_beat().add_child(chord)
 
     def get_chords(self):
-        return [grandchild for ch in self.get_children() for grandchild in ch.get_children()]
+        return [ch for b in self.get_children() for ch in b.get_children()]
 
     def get_current_beat(self):
         if not self.get_children():

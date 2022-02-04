@@ -1,4 +1,5 @@
 from unittest import TestCase
+from unittest.mock import patch
 
 from musicxml.xmlelement.xmlelement import XMLPitch, XMLRest
 
@@ -67,13 +68,14 @@ class TestMidi(TestCase):
         assert r.accidental.get_pitch_parameters() is None
         assert r.get_pitch_or_rest().to_string() == '<rest />\n'
 
-    def test_midi_parent_note(self):
+    @patch('musictree.chord.Chord')
+    def test_midi_parent_note(self, mock_chord):
         """
         Test if a midi object which is being contained in a note can access it via its parent_note attribute.
         """
         m = Midi(70)
         assert m.parent_note is None
-        n = Note(midi=m)
+        n = Note(parent_chord=mock_chord, midi=m)
         assert m.parent_note == n
         with self.assertRaises(TypeError):
             m.parent_note = Measure()
