@@ -132,27 +132,27 @@ class TestTreeChord(TestCase):
         c._parent = self.mock_beat
         c.update_notes()
         expected = """<note relative-x="10">
-    <pitch>
-        <step>B</step>
-        <alter>-1</alter>
-        <octave>4</octave>
-    </pitch>
-    <duration>4</duration>
-    <voice>1</voice>
-    <type>whole</type>
-    <accidental>flat</accidental>
+  <pitch>
+    <step>B</step>
+    <alter>-1</alter>
+    <octave>4</octave>
+  </pitch>
+  <duration>4</duration>
+  <voice>1</voice>
+  <type>whole</type>
+  <accidental>flat</accidental>
 </note>
 """
         assert c.notes[0].to_string() == expected
         c.midis[0].value = 72
         expected = """<note relative-x="10">
-    <pitch>
-        <step>C</step>
-        <octave>5</octave>
-    </pitch>
-    <duration>4</duration>
-    <voice>1</voice>
-    <type>whole</type>
+  <pitch>
+    <step>C</step>
+    <octave>5</octave>
+  </pitch>
+  <duration>4</duration>
+  <voice>1</voice>
+  <type>whole</type>
 </note>
 """
         assert c.notes[0].to_string() == expected
@@ -160,10 +160,10 @@ class TestTreeChord(TestCase):
         c.midis[0].value = 0
 
         expected = """<note relative-x="10">
-    <rest />
-    <duration>4</duration>
-    <voice>1</voice>
-    <type>whole</type>
+  <rest />
+  <duration>4</duration>
+  <voice>1</voice>
+  <type>whole</type>
 </note>
 """
         assert c.notes[0].to_string() == expected
@@ -173,10 +173,10 @@ class TestTreeChord(TestCase):
         c._parent = self.mock_beat
         c.update_notes()
         expected = """<note>
-    <rest />
-    <duration>1</duration>
-    <voice>1</voice>
-    <type>quarter</type>
+  <rest />
+  <duration>1</duration>
+  <voice>1</voice>
+  <type>quarter</type>
 </note>
 """
         assert c.notes[0].to_string() == expected
@@ -189,12 +189,12 @@ class TestTreeChord(TestCase):
         c._parent = self.mock_beat
         c.update_notes()
         expected = """<note>
-    <grace />
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <voice>1</voice>
+  <grace />
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <voice>1</voice>
 </note>
 """
         assert c.notes[0].to_string() == expected
@@ -202,12 +202,12 @@ class TestTreeChord(TestCase):
         c.notes[0].relative_x = 20
         c.notes[0].relative_y = 15
         expected = """<note relative-x="20" relative-y="15">
-    <grace />
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <voice>1</voice>
+  <grace />
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <voice>1</voice>
 </note>
 """
         assert c.notes[0].to_string() == expected
@@ -225,23 +225,23 @@ class TestTreeChord(TestCase):
         c.xml_staff = 1
 
         expected = """<note>
-    <pitch>
-        <step>C</step>
-        <octave>5</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>1</voice>
-    <type>16th</type>
-    <stem>up</stem>
-    <staff>1</staff>
+  <pitch>
+    <step>C</step>
+    <octave>5</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>16th</type>
+  <stem>up</stem>
+  <staff>1</staff>
 </note>
 """
         assert c.notes[0].to_string() == expected
         c.midis[0].value = 61
         expected = """<pitch>
-    <step>C</step>
-    <alter>1</alter>
-    <octave>4</octave>
+  <step>C</step>
+  <alter>1</alter>
+  <octave>4</octave>
 </pitch>
 """
         assert c.notes[0].xml_pitch.to_string() == expected
@@ -258,10 +258,10 @@ class TestTreeChord(TestCase):
         chord._parent = self.mock_beat
         chord.update_notes()
         expected = """<pitch>
-        <step>A</step>
-        <alter>1</alter>
-        <octave>4</octave>
-    </pitch>
+    <step>A</step>
+    <alter>1</alter>
+    <octave>4</octave>
+  </pitch>
 """
         assert chord.notes[0].xml_pitch.to_string() == expected
 
@@ -272,26 +272,26 @@ class TestTreeChord(TestCase):
         chord = Chord(0, 2)
         chord._parent = self.mock_beat
         expected = """<note>
-    <rest />
-    <duration>2</duration>
-    <voice>1</voice>
-    <type>half</type>
+  <rest />
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>half</type>
 </note>
 """
         chord.update_notes()
         assert chord.notes[0].to_string() == expected
         chord.midis = [60, 61]
         expected = """<pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
 """
         assert chord.notes[0].xml_pitch.to_string() == expected
         expected = """<pitch>
-        <step>C</step>
-        <alter>1</alter>
-        <octave>4</octave>
-    </pitch>
+    <step>C</step>
+    <alter>1</alter>
+    <octave>4</octave>
+  </pitch>
 """
         assert chord.notes[1].xml_pitch.to_string() == expected
 
@@ -301,10 +301,10 @@ class TestTreeChord(TestCase):
         chord.update_notes()
         chord.to_rest()
         expected = """<note>
-    <rest />
-    <duration>2</duration>
-    <voice>1</voice>
-    <type>half</type>
+  <rest />
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>half</type>
 </note>
 """
         assert chord.notes[0].to_string() == expected
@@ -320,38 +320,38 @@ class TestTreeChord(TestCase):
         chord.update_notes()
         chord.xml_stem = 'up'
         expected_1 = """<note>
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>1</voice>
-    <type>half</type>
-    <stem>up</stem>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>half</type>
+  <stem>up</stem>
 </note>
 """
         expected_2 = """<note>
-    <pitch>
-        <step>D</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>1</voice>
-    <type>half</type>
-    <stem>up</stem>
+  <pitch>
+    <step>D</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>half</type>
+  <stem>up</stem>
 </note>
 """
         expected_3 = """<note>
-    <pitch>
-        <step>E</step>
-        <alter>-1</alter>
-        <octave>4</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>1</voice>
-    <type>half</type>
-    <accidental>flat</accidental>
-    <stem>up</stem>
+  <pitch>
+    <step>E</step>
+    <alter>-1</alter>
+    <octave>4</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>half</type>
+  <accidental>flat</accidental>
+  <stem>up</stem>
 </note>
 """
         for note, expected in zip(chord.notes, [expected_1, expected_2, expected_3]):

@@ -80,7 +80,7 @@ class TestScorePart(IdTestCase):
     def test_score_part_to_string(self):
         p = Part(id='p1')
         expected = """<score-part id="p1">
-    <part-name>p1</part-name>
+  <part-name>p1</part-name>
 </score-part>
 """
         assert p.score_part.to_string() == expected

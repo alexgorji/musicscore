@@ -19,29 +19,29 @@ class TestScore(IdTestCase):
         assert s.xml_part_list.find_child('XMLScorePart') == p.score_part.xml_object
 
         expected = """<score-partwise version="4.0">
-    <part-list>
-        <score-part id="p1">
-            <part-name>p1</part-name>
-        </score-part>
-    </part-list>
-    <part id="p1">
-        <measure number="1">
-            <attributes>
-                <divisions>1</divisions>
-                <key>
-                    <fifths>0</fifths>
-                </key>
-                <time>
-                    <beats>4</beats>
-                    <beat-type>4</beat-type>
-                </time>
-                <clef>
-                    <sign>G</sign>
-                    <line>2</line>
-                </clef>
-            </attributes>
-        </measure>
-    </part>
+  <part-list>
+    <score-part id="p1">
+      <part-name>p1</part-name>
+    </score-part>
+  </part-list>
+  <part id="p1">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+    </measure>
+  </part>
 </score-partwise>
 """
         assert s.to_string() == expected

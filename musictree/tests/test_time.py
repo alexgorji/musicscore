@@ -9,24 +9,24 @@ class TestTime(TestCase):
     def test_time_init(self):
         t = Time()
         expected = """<time>
-    <beats>4</beats>
-    <beat-type>4</beat-type>
+  <beats>4</beats>
+  <beat-type>4</beat-type>
 </time>
 """
         assert t.to_string() == expected
         t.xml_beats = '3'
         expected = """<time>
-    <beats>3</beats>
-    <beat-type>4</beat-type>
+  <beats>3</beats>
+  <beat-type>4</beat-type>
 </time>
 """
         assert t.to_string() == expected
         t = Time(6, 8, 3, 4)
         expected = """<time>
-    <beats>6</beats>
-    <beat-type>8</beat-type>
-    <beats>3</beats>
-    <beat-type>4</beat-type>
+  <beats>6</beats>
+  <beat-type>8</beat-type>
+  <beats>3</beats>
+  <beat-type>4</beat-type>
 </time>
 """
         assert t.to_string() == expected
@@ -35,24 +35,24 @@ class TestTime(TestCase):
         t = Time()
         t.signatures = [7, 8, 3, 4]
         expected = """<time>
-    <beats>7</beats>
-    <beat-type>8</beat-type>
-    <beats>3</beats>
-    <beat-type>4</beat-type>
+  <beats>7</beats>
+  <beat-type>8</beat-type>
+  <beats>3</beats>
+  <beat-type>4</beat-type>
 </time>
 """
         assert t.to_string() == expected
         t.signatures = None
         expected = """<time>
-    <beats>4</beats>
-    <beat-type>4</beat-type>
+  <beats>4</beats>
+  <beat-type>4</beat-type>
 </time>
 """
         assert t.to_string() == expected
         t.signatures = [2, 4]
         expected = """<time>
-    <beats>2</beats>
-    <beat-type>4</beat-type>
+  <beats>2</beats>
+  <beat-type>4</beat-type>
 </time>
 """
         assert t.to_string() == expected

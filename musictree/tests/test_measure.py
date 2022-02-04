@@ -13,20 +13,20 @@ class TestMeasure(TestCase):
 
     def test_measure_default_init(self):
         expected = """<measure number="1">
-    <attributes>
-        <divisions>1</divisions>
-        <key>
-            <fifths>0</fifths>
-        </key>
-        <time>
-            <beats>4</beats>
-            <beat-type>4</beat-type>
-        </time>
-        <clef>
-            <sign>G</sign>
-            <line>2</line>
-        </clef>
-    </attributes>
+  <attributes>
+    <divisions>1</divisions>
+    <key>
+      <fifths>0</fifths>
+    </key>
+    <time>
+      <beats>4</beats>
+      <beat-type>4</beat-type>
+    </time>
+    <clef>
+      <sign>G</sign>
+      <line>2</line>
+    </clef>
+  </attributes>
 </measure>
 """
         m = Measure(1)
@@ -43,25 +43,25 @@ class TestMeasure(TestCase):
     def test_measure_time_signature(self):
         m = Measure(1)
         expected = """<time>
-            <beats>4</beats>
-            <beat-type>4</beat-type>
-        </time>
+      <beats>4</beats>
+      <beat-type>4</beat-type>
+    </time>
 """
         assert m.time.to_string() == expected
         m.time = Time(3, 4)
         expected = """<time>
-    <beats>3</beats>
-    <beat-type>4</beat-type>
+  <beats>3</beats>
+  <beat-type>4</beat-type>
 </time>
 """
         assert m.time.to_string() == expected
         m = Measure(2, time=Time(5, 8, 2, 4))
         expected = """<time>
-            <beats>5</beats>
-            <beat-type>8</beat-type>
-            <beats>2</beats>
-            <beat-type>4</beat-type>
-        </time>
+      <beats>5</beats>
+      <beat-type>8</beat-type>
+      <beats>2</beats>
+      <beat-type>4</beat-type>
+    </time>
 """
         assert m.time.to_string() == expected
 
@@ -107,76 +107,76 @@ class TestMeasure(TestCase):
         for xml_note, duration in zip(m.find_children('XMLNote'), [4, 1, 1, 2]):
             assert xml_note.xml_duration.value == duration
         expected = """<measure number="1">
-    <attributes>
-        <divisions>2</divisions>
-        <key>
-            <fifths>0</fifths>
-        </key>
-        <time>
-            <beats>4</beats>
-            <beat-type>4</beat-type>
-        </time>
-        <clef>
-            <sign>G</sign>
-            <line>2</line>
-        </clef>
-    </attributes>
-    <note>
-        <pitch>
-            <step>C</step>
-            <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <tie type="start" />
-        <voice>1</voice>
-        <type>half</type>
-        <notations>
-            <tied type="start" />
-        </notations>
-    </note>
-    <note>
-        <pitch>
-            <step>C</step>
-            <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <tie type="stop" />
-        <voice>1</voice>
-        <type>eighth</type>
-        <notations>
-            <tied type="stop" />
-        </notations>
-    </note>
-    <note>
-        <pitch>
-            <step>C</step>
-            <alter>1</alter>
-            <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <tie type="start" />
-        <voice>1</voice>
-        <type>eighth</type>
-        <accidental>sharp</accidental>
-        <notations>
-            <tied type="start" />
-        </notations>
-    </note>
-    <note>
-        <pitch>
-            <step>C</step>
-            <alter>1</alter>
-            <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <tie type="stop" />
-        <voice>1</voice>
-        <type>quarter</type>
-        <accidental>sharp</accidental>
-        <notations>
-            <tied type="stop" />
-        </notations>
-    </note>
+  <attributes>
+    <divisions>2</divisions>
+    <key>
+      <fifths>0</fifths>
+    </key>
+    <time>
+      <beats>4</beats>
+      <beat-type>4</beat-type>
+    </time>
+    <clef>
+      <sign>G</sign>
+      <line>2</line>
+    </clef>
+  </attributes>
+  <note>
+    <pitch>
+      <step>C</step>
+      <octave>4</octave>
+    </pitch>
+    <duration>4</duration>
+    <tie type="start" />
+    <voice>1</voice>
+    <type>half</type>
+    <notations>
+      <tied type="start" />
+    </notations>
+  </note>
+  <note>
+    <pitch>
+      <step>C</step>
+      <octave>4</octave>
+    </pitch>
+    <duration>1</duration>
+    <tie type="stop" />
+    <voice>1</voice>
+    <type>eighth</type>
+    <notations>
+      <tied type="stop" />
+    </notations>
+  </note>
+  <note>
+    <pitch>
+      <step>C</step>
+      <alter>1</alter>
+      <octave>4</octave>
+    </pitch>
+    <duration>1</duration>
+    <tie type="start" />
+    <voice>1</voice>
+    <type>eighth</type>
+    <accidental>sharp</accidental>
+    <notations>
+      <tied type="start" />
+    </notations>
+  </note>
+  <note>
+    <pitch>
+      <step>C</step>
+      <alter>1</alter>
+      <octave>4</octave>
+    </pitch>
+    <duration>2</duration>
+    <tie type="stop" />
+    <voice>1</voice>
+    <type>quarter</type>
+    <accidental>sharp</accidental>
+    <notations>
+      <tied type="stop" />
+    </notations>
+  </note>
 </measure>
 """
         assert m.to_string() == expected
@@ -209,23 +209,23 @@ class TestMeasure(TestCase):
         m.xml_barline = XMLBarline()
         m.xml_barline.xml_bar_style = 'light-light'
         expected = """<measure number="1">
-    <attributes>
-        <divisions>1</divisions>
-        <key>
-            <fifths>0</fifths>
-        </key>
-        <time>
-            <beats>4</beats>
-            <beat-type>4</beat-type>
-        </time>
-        <clef>
-            <sign>G</sign>
-            <line>2</line>
-        </clef>
-    </attributes>
-    <barline>
-        <bar-style>light-light</bar-style>
-    </barline>
+  <attributes>
+    <divisions>1</divisions>
+    <key>
+      <fifths>0</fifths>
+    </key>
+    <time>
+      <beats>4</beats>
+      <beat-type>4</beat-type>
+    </time>
+    <clef>
+      <sign>G</sign>
+      <line>2</line>
+    </clef>
+  </attributes>
+  <barline>
+    <bar-style>light-light</bar-style>
+  </barline>
 </measure>
 """
         assert m.xml_object.to_string() == expected

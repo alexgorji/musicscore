@@ -32,13 +32,13 @@ class TestNote(NoteTestCase):
         n.quarter_duration = 2
         n.midi = Midi(71)
         expected = """<note>
-    <pitch>
-        <step>B</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>1</voice>
-    <type>half</type>
+  <pitch>
+    <step>B</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>half</type>
 </note>
 """
         assert n.to_string() == expected
@@ -49,16 +49,16 @@ class TestNote(NoteTestCase):
         n.xml_notehead = XMLNotehead('square')
         assert n.midi.value == 61
         expected = """<note default-x="10">
-    <pitch>
-        <step>C</step>
-        <alter>1</alter>
-        <octave>4</octave>
-    </pitch>
-    <duration>4</duration>
-    <voice>2</voice>
-    <type>half</type>
-    <accidental>sharp</accidental>
-    <notehead>square</notehead>
+  <pitch>
+    <step>C</step>
+    <alter>1</alter>
+    <octave>4</octave>
+  </pitch>
+  <duration>4</duration>
+  <voice>2</voice>
+  <type>half</type>
+  <accidental>sharp</accidental>
+  <notehead>square</notehead>
 </note>
 """
         assert n.to_string() == expected
@@ -74,37 +74,37 @@ class TestNote(NoteTestCase):
     def test_note_type(self):
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=2)
         expected = """<note>
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>1</voice>
-    <type>half</type>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>half</type>
 </note>
 """
         assert n.to_string() == expected
         n.set_type('whole')
         expected = """<note>
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>1</voice>
-    <type>whole</type>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>whole</type>
 </note>
 """
         assert n.to_string() == expected
         n.set_type()
         expected = """<note>
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>1</voice>
-    <type>half</type>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>half</type>
 </note>
 """
         assert n.to_string() == expected
@@ -115,14 +115,14 @@ class TestNote(NoteTestCase):
         self.mock_measure.get_divisions.return_value = 2
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1.5)
         expected = """<note>
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>3</duration>
-    <voice>1</voice>
-    <type>quarter</type>
-    <dot />
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>3</duration>
+  <voice>1</voice>
+  <type>quarter</type>
+  <dot />
 </note>
 """
         assert n.to_string() == expected
@@ -142,62 +142,62 @@ class TestNote(NoteTestCase):
         n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=2, default_x=10)
         n.xml_notehead = 'square'
         expected = """<note default-x="10">
-    <pitch>
-        <step>C</step>
-        <alter>1</alter>
-        <octave>4</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>2</voice>
-    <type>half</type>
-    <accidental>sharp</accidental>
-    <notehead>square</notehead>
+  <pitch>
+    <step>C</step>
+    <alter>1</alter>
+    <octave>4</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>2</voice>
+  <type>half</type>
+  <accidental>sharp</accidental>
+  <notehead>square</notehead>
 </note>
 """
         assert n.to_string() == expected
         n.midi.value = 62
         expected = """<note default-x="10">
-    <pitch>
-        <step>D</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>2</voice>
-    <type>half</type>
-    <notehead>square</notehead>
+  <pitch>
+    <step>D</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>2</voice>
+  <type>half</type>
+  <notehead>square</notehead>
 </note>
 """
         assert n.midi.parent_note == n
         assert n.to_string() == expected
         n.midi.value = 0
         expected = """<note default-x="10">
-    <rest />
-    <duration>2</duration>
-    <voice>2</voice>
-    <type>half</type>
+  <rest />
+  <duration>2</duration>
+  <voice>2</voice>
+  <type>half</type>
 </note>
 """
         assert n.to_string() == expected
         n.midi.value = 72
         n.xml_notehead = XMLNotehead('diamond')
         expected = """<note default-x="10">
-    <pitch>
-        <step>C</step>
-        <octave>5</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>2</voice>
-    <type>half</type>
-    <notehead>diamond</notehead>
+  <pitch>
+    <step>C</step>
+    <octave>5</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>2</voice>
+  <type>half</type>
+  <notehead>diamond</notehead>
 </note>
 """
         assert n.to_string() == expected
         n.midi.value = 0
         expected = """<note default-x="10">
-    <rest />
-    <duration>2</duration>
-    <voice>2</voice>
-    <type>half</type>
+  <rest />
+  <duration>2</duration>
+  <voice>2</voice>
+  <type>half</type>
 </note>
 """
         assert n.to_string() == expected
@@ -207,14 +207,14 @@ class TestNote(NoteTestCase):
         n.midi = Midi(80)
         n.quarter_duration = 0
         expected = """<note default-x="10">
-    <grace />
-    <pitch>
-        <step>A</step>
-        <alter>-1</alter>
-        <octave>5</octave>
-    </pitch>
-    <voice>2</voice>
-    <accidental>flat</accidental>
+  <grace />
+  <pitch>
+    <step>A</step>
+    <alter>-1</alter>
+    <octave>5</octave>
+  </pitch>
+  <voice>2</voice>
+  <accidental>flat</accidental>
 </note>
 """
         assert n.to_string() == expected
@@ -225,15 +225,15 @@ class TestNote(NoteTestCase):
         n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=0, default_x=10)
         n.xml_notehead = XMLNotehead('square')
         expected = """<note default-x="10">
-    <grace />
-    <pitch>
-        <step>C</step>
-        <alter>1</alter>
-        <octave>4</octave>
-    </pitch>
-    <voice>1</voice>
-    <accidental>sharp</accidental>
-    <notehead>square</notehead>
+  <grace />
+  <pitch>
+    <step>C</step>
+    <alter>1</alter>
+    <octave>4</octave>
+  </pitch>
+  <voice>1</voice>
+  <accidental>sharp</accidental>
+  <notehead>square</notehead>
 </note>
 """
         assert n.xml_object.to_string() == expected
@@ -242,16 +242,16 @@ class TestNote(NoteTestCase):
         n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=2)
         n.xml_cue = XMLCue()
         expected = """<note>
-    <cue />
-    <pitch>
-        <step>C</step>
-        <alter>1</alter>
-        <octave>4</octave>
-    </pitch>
-    <duration>2</duration>
-    <voice>1</voice>
-    <type>half</type>
-    <accidental>sharp</accidental>
+  <cue />
+  <pitch>
+    <step>C</step>
+    <alter>1</alter>
+    <octave>4</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>half</type>
+  <accidental>sharp</accidental>
 </note>
 """
         assert n.xml_object.to_string() == expected
@@ -260,72 +260,72 @@ class TestNote(NoteTestCase):
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         n.xml_stem = 'up'
         expected = """<note>
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>1</duration>
-    <voice>1</voice>
-    <type>quarter</type>
-    <stem>up</stem>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>1</duration>
+  <voice>1</voice>
+  <type>quarter</type>
+  <stem>up</stem>
 </note>
 """
         assert n.to_string() == expected
 
 
 standard_note_xml = """<note>
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>1</duration>
-    <voice>1</voice>
-    <type>quarter</type>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>1</duration>
+  <voice>1</voice>
+  <type>quarter</type>
 </note>
 """
 standard_note_xml_start_tie = """<note>
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>1</duration>
-    <tie type="start" />
-    <voice>1</voice>
-    <type>quarter</type>
-    <notations>
-        <tied type="start" />
-    </notations>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>1</duration>
+  <tie type="start" />
+  <voice>1</voice>
+  <type>quarter</type>
+  <notations>
+    <tied type="start" />
+  </notations>
 </note>
 """
 
 standard_note_xml_stop_tie = """<note>
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>1</duration>
-    <tie type="stop" />
-    <voice>1</voice>
-    <type>quarter</type>
-    <notations>
-        <tied type="stop" />
-    </notations>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>1</duration>
+  <tie type="stop" />
+  <voice>1</voice>
+  <type>quarter</type>
+  <notations>
+    <tied type="stop" />
+  </notations>
 </note>
 """
 standard_note_xml_stop_start_tie = """<note>
-    <pitch>
-        <step>C</step>
-        <octave>4</octave>
-    </pitch>
-    <duration>1</duration>
-    <tie type="stop" />
-    <tie type="start" />
-    <voice>1</voice>
-    <type>quarter</type>
-    <notations>
-        <tied type="stop" />
-        <tied type="start" />
-    </notations>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>1</duration>
+  <tie type="stop" />
+  <tie type="start" />
+  <voice>1</voice>
+  <type>quarter</type>
+  <notations>
+    <tied type="stop" />
+    <tied type="start" />
+  </notations>
 </note>
 """
 

@@ -28,17 +28,17 @@ class TestMidi(TestCase):
         assert m.accidental.get_pitch_parameters() == ('A', -1, 5)
         assert isinstance(m.get_pitch_or_rest(), XMLPitch)
         expected = """<pitch>
-    <step>A</step>
-    <alter>-1</alter>
-    <octave>5</octave>
+  <step>A</step>
+  <alter>-1</alter>
+  <octave>5</octave>
 </pitch>
 """
 
         assert m.get_pitch_or_rest().to_string() == expected
         m = Midi(60)
         expected = """<pitch>
-    <step>C</step>
-    <octave>4</octave>
+  <step>C</step>
+  <octave>4</octave>
 </pitch>
 """
 
@@ -86,24 +86,24 @@ class TestMidi(TestCase):
         """
         m = Midi(70)
         expected = """<pitch>
-    <step>B</step>
-    <alter>-1</alter>
-    <octave>4</octave>
+  <step>B</step>
+  <alter>-1</alter>
+  <octave>4</octave>
 </pitch>
 """
         assert m.get_pitch_or_rest().to_string() == expected
         m.value = 69
         expected = """<pitch>
-    <step>A</step>
-    <octave>4</octave>
+  <step>A</step>
+  <octave>4</octave>
 </pitch>
 """
         assert m.get_pitch_or_rest().to_string() == expected
         m.accidental.mode = 'enharmonic_2'
         expected = """<pitch>
-    <step>B</step>
-    <alter>-2</alter>
-    <octave>4</octave>
+  <step>B</step>
+  <alter>-2</alter>
+  <octave>4</octave>
 </pitch>
 """
         assert m.get_pitch_or_rest().to_string() == expected
@@ -115,9 +115,9 @@ class TestMidi(TestCase):
         m.value = 61
         m.accidental.mode = 'flat'
         expected = """<pitch>
-    <step>D</step>
-    <alter>-1</alter>
-    <octave>4</octave>
+  <step>D</step>
+  <alter>-1</alter>
+  <octave>4</octave>
 </pitch>
 """
         assert m.get_pitch_or_rest().to_string() == expected

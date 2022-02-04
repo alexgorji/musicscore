@@ -1,4 +1,4 @@
-from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLScorePart
+from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList
 
 from musictree.musictree import MusicTree
 from musictree.xmlwrapper import XMLWrapper
@@ -28,6 +28,15 @@ class Score(MusicTree, XMLWrapper):
         self.xml_object.add_child(child.xml_object)
         self.xml_part_list.xml_score_part = child.score_part.xml_object
         return child
+
+    def export_xml(self, path):
+        with open(path, '+w') as f:
+            f.write("""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC
+    "-//Recordare//DTD MusicXML 4.0 Partwise//EN"
+    "http://www.musicxml.org/dtds/partwise.dtd">
+""")
+            f.write(self.to_string())
 
     def get_chords(self):
         return [ch for part in self.get_children() for measure in part.get_children() for staff in measure.get_children() for voice in
