@@ -60,12 +60,10 @@
         </pitch>
         <duration>2</duration>
         <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <notations>
           <tied type="stop" />
-          <tied type="start" />
         </notations>
       </note>
     </measure>
@@ -123,12 +121,10 @@
         </pitch>
         <duration>1</duration>
         <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
         <type>quarter</type>
         <notations>
           <tied type="stop" />
-          <tied type="start" />
         </notations>
       </note>
     </measure>

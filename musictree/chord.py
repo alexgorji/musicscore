@@ -188,6 +188,12 @@ class Chord(MusicTree, QuarterDurationMixin):
             left_over_chord = None
         self.up.left_over_chord = left_over_chord
         self.up.up.left_over_chord = left_over_chord
+        # if chord_is_tied_to_next:
+        #     if left_over_chord and chord_is_tied_to_next:
+        #         left_over_chord.add_tie('start')
+        #     else:
+        #         output[-1].add_tie('start')
+
         return output
 
     def to_rest(self):
@@ -229,5 +235,5 @@ def split_copy(chord, new_quarter_duration=None):
     if new_quarter_duration is None:
         new_quarter_duration = chord.quarter_duration.__copy__()
     new_chord = Chord(midis=[m.__deepcopy__() for m in chord.midis], quarter_duration=new_quarter_duration)
-    new_chord._ties = chord._ties[:]
+    # new_chord._ties = chord._ties[:]
     return new_chord

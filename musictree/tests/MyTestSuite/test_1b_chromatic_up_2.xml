@@ -201,12 +201,10 @@
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
         <notations>
           <tied type="stop" />
-          <tied type="start" />
         </notations>
       </note>
       <note>

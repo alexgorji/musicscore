@@ -192,6 +192,68 @@ class TestPart(IdTestCase):
         p.add_chord(Chord(60, 5))
         assert p.get_current_measure() == m2
 
+    def test_part_add_split_chord_without_left_over(self):
+        chord = Chord(midis=60, quarter_duration=5)
+        p = Part('p1')
+        p.add_measure((5, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 1
+        m = p.get_children()[-1]
+        all_chords = [ch1, ch2] = m.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [4, 1]
+        assert ch1._ties == ['start']
+        assert ch2._ties == ['stop']
+
+        chord = Chord(midis=60, quarter_duration=10)
+        p = Part('p2')
+        p.add_measure((10, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 1
+        m = p.get_children()[-1]
+        all_chords = [ch1, ch2, ch3] = m.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [4, 4, 2]
+        assert ch1._ties == ['start']
+        assert ch2._ties == ['stop', 'start']
+        assert ch3._ties == ['stop']
+
+    def test_split_tied_chord(self):
+        chord = Chord(midis=60, quarter_duration=5)
+        chord.add_tie('start')
+        p = Part('p1')
+        p.add_measure((5, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 1
+        m = p.get_children()[-1]
+        all_chords = [ch1, ch2] = m.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [4, 1]
+        assert ch1._ties == ['start']
+        assert ch2._ties == ['stop', 'start']
+
+        chord = Chord(midis=60, quarter_duration=10)
+        chord.add_tie('start')
+        p = Part('p2')
+        p.add_measure((10, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 1
+        m = p.get_children()[-1]
+        all_chords = [ch1, ch2, ch3] = m.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [4, 4, 2]
+        assert ch1._ties == ['start']
+        assert ch2._ties == ['stop', 'start']
+        assert ch3._ties == ['stop', 'start']
+
+        chord = Chord(midis=60, quarter_duration=10)
+        # chord.add_tie('start')
+        p = Part('p3')
+        p.add_measure((4, 4))
+        p.add_chord(chord)
+        m1, m2, m3 = p.get_children()
+        all_chords = m1.get_chords() + m2.get_chords() + m3.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [4, 4, 2]
+        assert ch1._ties == ['start']
+        assert ch2._ties == ['stop', 'start']
+        assert ch3._ties == ['stop']
+
 
 class TestScorePart(IdTestCase):
 
