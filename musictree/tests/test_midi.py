@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from musicxml.xmlelement.xmlelement import XMLPitch, XMLRest
 
+from musictree.accidental import Accidental
 from musictree.midi import Midi, C, B, G
 from musictree.note import Note
 from musictree.measure import Measure
@@ -121,3 +122,18 @@ class TestMidi(TestCase):
 </pitch>
 """
         assert m.get_pitch_or_rest().to_string() == expected
+
+    def test_midi_copy(self):
+        m = Midi(61, accidental=Accidental(mode='sharp', show=False))
+        copied = m.__deepcopy__()
+        assert m != copied
+        assert m.value == copied.value
+        assert m.accidental != copied.accidental
+        assert m.accidental.mode == copied.accidental.mode
+        assert m.accidental.show == copied.accidental.show
+
+    @patch('musictree.chord.Chord')
+    def test_midi_up_note(self, mock_chord):
+        m = Midi(70)
+        n = Note(parent_chord=mock_chord, midi=m)
+        assert m.up == n

@@ -1,3 +1,4 @@
+import math
 from typing import Union, List
 
 note_types = {(1, 12): '32nd',
@@ -61,24 +62,29 @@ def isinstance_as_string(child_class: type, parent_class_names: Union[str, List[
     return True
 
 
+#
+# def lcm(l):
+#     """least common multiple of numbers in a list"""
+#
+#     def _lcm(a, b):
+#         if a > b:
+#             greater = a
+#         else:
+#             greater = b
+#
+#         while True:
+#             if greater % a == 0 and greater % b == 0:
+#                 lcm_ = greater
+#                 break
+#             greater += 1
+#
+#         return lcm_
+#
+#     x = l[0]
+#     for y in l:
+#         x = _lcm(x, y)
+#     return x
+
 def lcm(l):
-    """least common multiple of numbers in a list"""
-
-    def _lcm(a, b):
-        if a > b:
-            greater = a
-        else:
-            greater = b
-
-        while True:
-            if greater % a == 0 and greater % b == 0:
-                lcm_ = greater
-                break
-            greater += 1
-
-        return lcm_
-
-    x = l[0]
-    for y in l:
-        x = _lcm(x, y)
-    return x
+    return math.lcm(*l)
+    # return abs(a * b) // math.gcd(a, b)

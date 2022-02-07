@@ -1,9 +1,8 @@
+from fractions import Fraction
 from typing import Union, List, Optional
 
-from fractions import Fraction
-
-from musictree.exceptions import NoteTypeError, ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
-    ChordHasNoQuarterDurationError, ChordQuarterDurationAlreadySetError
+from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
+    ChordQuarterDurationAlreadySetError
 from musictree.midi import Midi
 from musictree.musictree import MusicTree
 from musictree.note import Note
@@ -16,11 +15,10 @@ class Chord(MusicTree, QuarterDurationMixin):
     :param midis: midi, midis, midi value or midi values. 0 or [0] for a rest.
     :param quarter_duration: int or float for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', 'voice', 'ties'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', '_voice', 'ties'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, offset=0, **kwargs):
-        self._voice = None
         self._midis = None
         self._notes = None
         self._offset = None
@@ -126,12 +124,12 @@ class Chord(MusicTree, QuarterDurationMixin):
 
     @property
     def voice(self):
-        if self._voice is None:
-            if self.up and self.up.up:
-                return self.up.up.value
-            else:
-                return 1
-        return self._voice
+        if not self.up:
+            raise ChordHasNoParentError()
+        if self.up and self.up.up:
+            return self.up.up.value
+        else:
+            return 1
 
     def add_tie(self, val):
         if val not in ['start', 'stop']:
@@ -150,19 +148,19 @@ class Chord(MusicTree, QuarterDurationMixin):
         voice_set = {beat.up for beat in beats}
         if len(voice_set) != 1:
             raise ChordCannotSplitError('Beats have must have a single Voice as common ancestor.')
+
         voice = voice_set.pop()
         if voice is None:
             raise ChordCannotSplitError('Beats have no parent.')
+
         if voice.get_children()[voice.get_children().index(beats[0]): voice.get_children().index(beats[-1]) + 1] != beats:
-            raise ChordCannotSplitError()
+            raise ChordCannotSplitError("Beats as Voice's children has another order as input list of beats")
 
         if beats[0] != voice.get_current_beat():
             raise ChordAlreadySplitError('First beat must be the next beat in voice which can accept chords.')
         if beats[-1] != voice.get_children()[-1]:
             raise ChordAlreadySplitError('Last beat must be the last beat in voice.')
 
-        # if self.get_children():
-        #     raise ChordAlreadySplitError("Remove chord's children if you wish to split it again.")
         quarter_durations = self.quarter_duration.get_beatwise_sections(
             offset=beats[0].filled_quarter_duration, beats=beats)
         self.quarter_duration = quarter_durations[0][0]
@@ -171,17 +169,21 @@ class Chord(MusicTree, QuarterDurationMixin):
         current_chord = self
         output = [self]
         for qd in quarter_durations[0][1:]:
-            copied = Chord(midis=self.midis, quarter_duration=qd)
+            copied = split_copy(self, qd)
             copied.split = True
             voice.get_current_beat().add_child(copied)
             current_chord.add_tie('start')
             copied.add_tie('stop')
+            for midi in copied.midis:
+                midi.accidental.show = False
             current_chord = copied
             output.append(current_chord)
         if quarter_durations[1]:
-            left_over_chord = Chord(midis=self.midis, quarter_duration=quarter_durations[1])
+            left_over_chord = split_copy(self, quarter_durations[1])
             current_chord.add_tie('start')
             left_over_chord.add_tie('stop')
+            for midi in left_over_chord.midis:
+                midi.accidental.show = False
         else:
             left_over_chord = None
         self.up.left_over_chord = left_over_chord
@@ -221,5 +223,11 @@ class Chord(MusicTree, QuarterDurationMixin):
         if output and callable(output[0]):
             raise AttributeError(f"Chord cannot call Note method {item}. Call this method on each note separately")
         return output
-        # return [getattr(n, item) for n in self.notes]
-        # return [n.__getattr__(item) for n in self.notes]
+
+
+def split_copy(chord, new_quarter_duration=None):
+    if new_quarter_duration is None:
+        new_quarter_duration = chord.quarter_duration.__copy__()
+    new_chord = Chord(midis=[m.__deepcopy__() for m in chord.midis], quarter_duration=new_quarter_duration)
+    new_chord._ties = chord._ties[:]
+    return new_chord

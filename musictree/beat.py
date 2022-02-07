@@ -70,4 +70,6 @@ class Beat(MusicTree, QuarterDurationMixin):
                 return child.split_beatwise(beats)
         child._parent = self
         self._children.append(child)
+        if self.up.up.up.up:
+            self.up.up.up.up.set_current_measure(staff=self.up.up.value, voice=self.up.value, measure=self.up.up.up)
         return child

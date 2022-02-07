@@ -27,7 +27,7 @@ def untie(*notes):
 
 
 class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
-    _ATTRIBUTES = {'midi', 'quarter_duration', 'parent_chord', '_type', '_dots', 'is_tied', 'is_tied_to_previous'}
+    _ATTRIBUTES = {'midi', 'quarter_duration', 'parent_chord', '_type', '_dots', 'is_tied', 'is_tied_to_previous', '_parent'}
 
     def __init__(self, parent_chord, midi=None, quarter_duration=None, *args, **kwargs):
         self._parent_chord = parent_chord
@@ -38,6 +38,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self._dots = None
         super().__init__(quarter_duration=quarter_duration)
         self.midi = midi
+        self._parent = self.parent_chord
 
     @staticmethod
     def _check_xml_duration_value(duration):
@@ -104,10 +105,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         pass
 
     def _update_xml_accidental(self):
-        if self.midi.accidental.sign == 'natural':
-            self.xml_object.xml_accidental = None
-        else:
-            self.xml_object.xml_accidental = self.midi.accidental.xml_object
+        self.xml_object.xml_accidental = self.midi.accidental.xml_object
 
     def _update_xml_duration(self):
         duration = float(self.quarter_duration) * self.get_parent_measure().get_divisions()

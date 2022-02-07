@@ -24,7 +24,7 @@ class Midi(MusicTree):
         self.value = value
         self.accidental = accidental
 
-    def _update_parent_note(self):
+    def update_parent_note(self):
         if self.parent_note:
             self.parent_note._update_xml_pitch_or_rest()
             self.parent_note._update_xml_accidental()
@@ -59,6 +59,8 @@ class Midi(MusicTree):
                 if self.accidental:
                     self.accidental._update_xml_object()
                     self._update_pitch_parameters()
+        if self.up:
+            self.up._update_xml_pitch_or_rest()
 
     # //public properties
     @property
@@ -88,6 +90,7 @@ class Midi(MusicTree):
         if value is not None and 'Note' not in [cls.__name__ for cls in value.__class__.__mro__]:
             raise TypeError
         self._parent_note = value
+        self._parent = value
 
     @property
     def value(self):
@@ -101,7 +104,6 @@ class Midi(MusicTree):
             raise ValueError(f'Midi.value {v} can be zero for a rest or must be in a range between 12 and 127 inclusively')
         self._value = v
         self.update_pitch_or_rest()
-        self._update_parent_note()
 
     @property
     def name(self):
@@ -159,6 +161,14 @@ class Midi(MusicTree):
 
     def __ge__(self, other):  # For x >= y
         return self.value >= other.value
+
+    def __copy__(self):
+        return self.__class__(value=self.value, accidental=self.accidental)
+
+    def __deepcopy__(self):
+        copied_accidental = self.accidental.__copy__()
+        copied = self.__class__(value=self.value, accidental=copied_accidental)
+        return copied
 
 
 class MidiNote(Midi):

@@ -44,7 +44,6 @@ class TestAccidental(TestCase):
 
     def test_get_xml_accidental(self):
         a = Accidental()
-        assert a.xml_object is None
         midi = Midi(61)
         expected = """<accidental>sharp</accidental>
 """
@@ -63,3 +62,38 @@ class TestAccidental(TestCase):
         assert midi.accidental.xml_object.to_string() == expected
         midi.value = 0
         assert midi.accidental.xml_object is None
+
+    def test_accidental_show_mode(self):
+        midi = Midi(60)
+        assert midi.accidental.show is True
+        assert midi.accidental.sign == 'natural'
+        assert midi.accidental.xml_object.value == 'natural'
+        midi.accidental.show = False
+        assert midi.accidental.xml_object is None
+
+        midi.accidental.show = True
+        midi.value = 61
+        assert midi.accidental.sign == 'sharp'
+        assert midi.accidental.xml_object.value == 'sharp'
+        midi.accidental.mode = 'flat'
+        assert midi.accidental.xml_object.value == 'flat'
+        midi.accidental.show = False
+        assert midi.accidental.xml_object is None
+
+    def test_accidental_midi(self):
+        midi = Midi(61)
+        assert midi.accidental.sign == 'sharp'
+        assert midi.accidental.xml_object.value == 'sharp'
+
+    def test_accidental_up_midi(self):
+        m = Midi(70)
+        assert m.accidental.up == m
+
+    def test_accidental_copy(self):
+        a = Accidental(mode='sharp', show=True)
+        copied = a.__copy__()
+        assert a != copied
+        assert a.xml_object != copied.xml_object
+        assert a.xml_object.value == copied.xml_object.value
+        assert a.mode == copied.mode
+        assert a.show == copied.show

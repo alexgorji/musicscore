@@ -1,15 +1,11 @@
-import difflib
 from pathlib import Path
 from unittest import TestCase
-
-import xmldiff
-from xmldiff.main import diff_trees
 
 from musictree.chord import Chord
 from musictree.measure import Measure
 from musictree.part import Part
 from musictree.score import Score
-from musictree.tests.util import diff_xml
+from musictree.tests.util import diff_xml, IdTestCase
 
 expected = """<score-partwise version="4.0">
   <part-list>
@@ -48,7 +44,7 @@ expected = """<score-partwise version="4.0">
 """
 
 
-class TestAcceptance(TestCase):
+class TestHelloWorld(IdTestCase):
     def test_export_hello_world(self):
         """
         Hello World as musicxml means having a C4 pitch as a whole in a 4/4 measure with treble clef.
@@ -66,6 +62,7 @@ class TestAcceptance(TestCase):
         He adds a Chord with midi 60 to the measure
         """
         m.add_chord(Chord(60, 4))
+        m.update_chord_accidentals()
         s.update_xml_notes()
         assert s.to_string() == expected
         """

@@ -31,6 +31,7 @@ class TestNote(NoteTestCase):
         n = Note(parent_chord=self.mock_chord)
         n.quarter_duration = 2
         n.midi = Midi(71)
+        n.midi.accidental.show = False
         expected = """<note>
   <pitch>
     <step>B</step>
@@ -73,6 +74,7 @@ class TestNote(NoteTestCase):
 
     def test_note_type(self):
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=2)
+        n.midi.accidental.show = False
         expected = """<note>
   <pitch>
     <step>C</step>
@@ -114,6 +116,7 @@ class TestNote(NoteTestCase):
     def test_note_dots(self):
         self.mock_measure.get_divisions.return_value = 2
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1.5)
+        n.midi.accidental.show = False
         expected = """<note>
   <pitch>
     <step>C</step>
@@ -156,6 +159,7 @@ class TestNote(NoteTestCase):
 """
         assert n.to_string() == expected
         n.midi.value = 62
+        n.midi.accidental.show = False
         expected = """<note default-x="10">
   <pitch>
     <step>D</step>
@@ -167,7 +171,7 @@ class TestNote(NoteTestCase):
   <notehead>square</notehead>
 </note>
 """
-        assert n.midi.parent_note == n
+        assert n.midi.up == n
         assert n.to_string() == expected
         n.midi.value = 0
         expected = """<note default-x="10">
@@ -258,6 +262,7 @@ class TestNote(NoteTestCase):
 
     def test_note_stem(self):
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
+        n.midi.accidental.show = False
         n.xml_stem = 'up'
         expected = """<note>
   <pitch>
@@ -272,6 +277,29 @@ class TestNote(NoteTestCase):
 """
         assert n.to_string() == expected
 
+    def test_note_hide_show_accidental(self):
+        n = Note(parent_chord=self.mock_chord, midi=Midi(60))
+        assert n.xml_accidental.value == 'natural'
+        assert n.midi.accidental.show
+        n.midi.accidental.show = False
+        assert n.midi.accidental.xml_object is None
+        assert n.xml_object.xml_accidental is None
+
+    def test_note_up_chord(self):
+        self.mock_chord.get_voice_number.return_value = 1
+        n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=1)
+        assert n.up == self.mock_chord
+
+    def test_note_midi_change_accidental_show(self):
+        self.mock_chord.get_voice_number.return_value = 1
+        n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=2, default_x=10)
+        assert n.xml_object.xml_accidental == n.midi.accidental.xml_object
+        assert n.xml_object.xml_accidental.value == n.midi.accidental.xml_object.value == 'sharp'
+        n.midi.value = 62
+        assert n.xml_object.xml_accidental.value == n.midi.accidental.xml_object.value == 'natural'
+        n.midi.accidental.show = False
+        assert n.xml_object.xml_accidental == n.midi.accidental.xml_object
+
 
 standard_note_xml = """<note>
   <pitch>
@@ -281,6 +309,7 @@ standard_note_xml = """<note>
   <duration>1</duration>
   <voice>1</voice>
   <type>quarter</type>
+  <accidental>natural</accidental>
 </note>
 """
 standard_note_xml_start_tie = """<note>
@@ -292,6 +321,7 @@ standard_note_xml_start_tie = """<note>
   <tie type="start" />
   <voice>1</voice>
   <type>quarter</type>
+  <accidental>natural</accidental>
   <notations>
     <tied type="start" />
   </notations>
@@ -307,6 +337,7 @@ standard_note_xml_stop_tie = """<note>
   <tie type="stop" />
   <voice>1</voice>
   <type>quarter</type>
+  <accidental>natural</accidental>
   <notations>
     <tied type="stop" />
   </notations>
@@ -322,6 +353,7 @@ standard_note_xml_stop_start_tie = """<note>
   <tie type="start" />
   <voice>1</voice>
   <type>quarter</type>
+  <accidental>natural</accidental>
   <notations>
     <tied type="stop" />
     <tied type="start" />
@@ -364,13 +396,6 @@ class TestNoteTie(NoteTestCase):
 
     def test_start_stop_tie(self):
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
-        n.stop_tie()
-        n.start_tie()
-        assert n.is_tied
-        assert n.is_tied_to_previous
-        assert n.to_string() == standard_note_xml_stop_start_tie
-
-        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         n.start_tie()
         n.stop_tie()
         assert n.is_tied
@@ -385,6 +410,18 @@ class TestNoteTie(NoteTestCase):
         assert not n.is_tied
         assert not n.is_tied_to_previous
         assert n.to_string() == standard_note_xml
+
+    # def test_tie_accidentals(self):
+    #     n = Note(parent_chord=self.mock_chord, midi=61, quarter_duration=1)
+    #     n.stop_tie()
+    #     n.start_tie()
+    #     assert n.midi.accidental.show is False
+    #     assert n.xml_object.xml_accidental is None
+    #
+    #     n.remove_tie('start')
+    #     assert n.midi.accidental.show is False
+    #     n.remove_tie()
+    #     assert n.midi.accidental.show is None
 
     def test_tie_untie_one_note(self):
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)

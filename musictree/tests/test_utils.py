@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from musictree.score import Score
 from musictree.tests.util import diff_xml, _create_expected_path
-from musictree.util import isinstance_as_string
+from musictree.util import isinstance_as_string, lcm
 
 
 class TestUtils(TestCase):
@@ -30,3 +30,7 @@ class TestUtils(TestCase):
         path = Path(__file__).parent / 'test_util_diff_xml.xml'
         path2 = Path(__file__).parent / 'test_util_diff_xml_with_diff.xml'
         assert diff_xml(path, path2) == ['- <key>', '- <fifths>0</fifths>', '- </key>']
+
+    def test_lcm(self):
+        assert lcm([3, 4, 5, 7]) == 420
+        assert lcm([2, 4, 6]) == 12

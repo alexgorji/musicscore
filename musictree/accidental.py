@@ -143,16 +143,17 @@ class Accidental(MusicTree, XMLWrapper):
     Accidental can be of different modes: standard, flat, sharp, enharmonic_1 or enharmonic_2. It accepts furthermore two parameters:
     force_show and force_hide.
     """
-    _ATTRIBUTES = {'mode', 'parent_midi'}
+    _ATTRIBUTES = {'mode', 'show', 'parent_midi'}
 
     # (stem, alter, octaveAdd)
 
-    def __init__(self, mode='standard', *args, **kwargs):
+    def __init__(self, mode='standard', show=True, *args, **kwargs):
         super().__init__()
         self._xml_object = XMLAccidental(*args, **kwargs)
         self._mode = None
         self._parent_midi = None
-
+        self._show = None
+        self.show = show
         self.mode = mode
 
     def _update_parent_midi(self):
@@ -165,10 +166,12 @@ class Accidental(MusicTree, XMLWrapper):
 
     @XMLWrapper.xml_object.getter
     def xml_object(self):
-        if not self.parent_midi or (self.parent_midi and self.parent_midi.value == 0):
+        if self.parent_midi and self.parent_midi.value == 0:
             return None
-        else:
+        if self.show is True:
             return self._xml_object
+        elif self.show is False:
+            return None
 
     @property
     def mode(self):
@@ -192,6 +195,7 @@ class Accidental(MusicTree, XMLWrapper):
         self._parent_midi = val
         self._update_xml_object()
         self._update_parent_midi()
+        self._parent = val
 
     @property
     def sign(self):
@@ -200,6 +204,21 @@ class Accidental(MusicTree, XMLWrapper):
             return SIGNS[alter]
         except TypeError:
             return None
+
+    @property
+    def show(self):
+        return self._show
+
+    @show.setter
+    def show(self, val):
+        if not isinstance(val, bool):
+            raise TypeError
+        if val != self._show:
+            self._show = val
+            try:
+                self.up.up._update_xml_accidental()
+            except AttributeError:
+                pass
 
     def get_pitch_parameters(self, midi_value: Optional[float] = None) -> Optional[tuple]:
         """
@@ -232,3 +251,6 @@ class Accidental(MusicTree, XMLWrapper):
         else:
             raise ValueError
         return output[0], output[1], output[2] + (int(midi_value // 12)) - 1
+
+    def __copy__(self):
+        return self.__class__(mode=self.mode, show=self.show)

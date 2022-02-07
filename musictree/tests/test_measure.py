@@ -1,9 +1,11 @@
+import itertools
 from unittest import TestCase
 
 from musicxml.xmlelement.xmlelement import *
 
 from musictree.chord import Chord
-from musictree.measure import Measure
+from musictree.exceptions import VoiceIsAlreadyFullError
+from musictree.measure import Measure, generate_measures
 from musictree.staff import Staff
 from musictree.time import Time
 from musictree.voice import Voice
@@ -101,7 +103,9 @@ class TestMeasure(TestCase):
 
     def test_add_chord(self):
         m = Measure(1)
-        m.add_chord(Chord(60, quarter_duration=2.5))
+        chord = Chord(60, quarter_duration=2.5)
+        chord.midis[0].accidental.show = False
+        m.add_chord(chord)
         m.add_chord(Chord(61, quarter_duration=1.5))
         m.update_xml_notes()
         for xml_note, duration in zip(m.find_children('XMLNote'), [4, 1, 1, 2]):
@@ -172,7 +176,6 @@ class TestMeasure(TestCase):
     <tie type="stop" />
     <voice>1</voice>
     <type>quarter</type>
-    <accidental>sharp</accidental>
     <notations>
       <tied type="stop" />
     </notations>
@@ -180,6 +183,86 @@ class TestMeasure(TestCase):
 </measure>
 """
         assert m.to_string() == expected
+
+    def test_get_staff(self):
+        m = Measure(1)
+        assert m.get_staff(staff=None) is None
+        st = m.add_child(Staff())
+        assert m.get_staff(staff=None) == st
+        st.value = 1
+        assert m.get_staff(staff=1) == st
+        st = m.add_child(Staff())
+        assert m.get_staff(staff=2) == st
+
+    def test_add_staff(self):
+        m = Measure(1)
+        st = m.add_staff()
+        assert m.get_staff(staff=None) == st
+
+        st = m.add_staff()
+        assert st.value is None
+
+        st = m.add_staff(1)
+        assert m.get_staff(staff=1) == st
+
+        st = m.add_staff(5)
+        assert m.get_staff(staff=5) == st
+        assert len(m.get_children()) == 5
+        assert [st.value for st in m.get_children()] == [1, 2, 3, 4, 5]
+
+    def test_add_voice(self):
+        m = Measure(1)
+        v = m.add_voice(staff=None, voice=2)
+        st = m.get_staff(staff=None)
+        assert st.get_children()[-1] == v
+        assert [v.value for v in st.get_children()] == [1, 2]
+
+        v = m.add_voice(staff=2, voice=3)
+        assert [st.value for st in m.get_children()] == [1, 2]
+        assert [v.value for v in m.get_staff(2).get_children()] == [1, 2, 3]
+
+    def test_get_voice(self):
+        m = Measure(1)
+        with self.assertRaises(TypeError):
+            m.get_voice(None, 1)
+        assert m.get_voice(staff=None, voice=1) is None
+        st = m.add_child(Staff())
+        assert m.get_voice(staff=None, voice=1) is None
+        v = st.add_child(Voice())
+        assert m.get_voice(staff=None, voice=1) == v
+        assert m.get_voice(staff=1, voice=1) == v
+        v = st.add_child(Voice())
+        assert m.get_voice(staff=None, voice=2) == v
+
+    def test_add_chord_voice_filled(self):
+        m = Measure(1)
+        ch = Chord(quarter_duration=2, midis=60)
+        returned_chords = m.add_chord(ch)
+        assert len(returned_chords) == 1
+        assert returned_chords[0] == ch
+        assert returned_chords[0].quarter_duration == 2
+        assert m.get_children()[0].get_children()[0].left_over_chord is None
+        ch = Chord(quarter_duration=2, midis=60)
+        returned_chords = m.add_chord(ch)
+        assert len(returned_chords) == 1
+        assert returned_chords[0] == ch
+        assert returned_chords[0].quarter_duration == 2
+        assert m.get_children()[0].get_children()[0].left_over_chord is None
+        with self.assertRaises(VoiceIsAlreadyFullError):
+            m.add_chord(Chord(quarter_duration=2, midis=60))
+        ch = Chord(quarter_duration=2, midis=60)
+        returned_chords = m.add_chord(ch, voice=2)
+        assert len(returned_chords) == 1
+        assert [ch.voice for ch in m.get_chords()] == [1, 1, 2]
+
+    def test_add_chord_left_over(self):
+        m = Measure(1)
+        ch = Chord(quarter_duration=5, midis=60)
+        returned_chords = m.add_chord(ch)
+        assert len(returned_chords) == 1
+        assert returned_chords[0] == ch
+        assert returned_chords[0].quarter_duration == 4
+        assert m.get_voice(staff=1, voice=1).left_over_chord.quarter_duration == 1
 
     def test_attributes(self):
         """
@@ -250,3 +333,26 @@ class TestMeasure(TestCase):
 
         m.time.actual_signatures = [1, 8, 1, 8]
         assert [child.quarter_duration.as_integer_ratio() for child in v.get_children()] == [(1, 2)] * 2
+
+    def test_generate_measures(self):
+        # times = [2 * (1, 4), 3 * (1, 8), Time(1, 8, 3, 4), Time(3, 4, actual_signatures=(1, 8, 2, 4, 1, 8))]
+        times = [2 * Time(3, 8), (3, 4), 3 * [(1, 8)], Time(1, 8, 3, 4), Time(3, 4)]
+        measures = generate_measures(times, 3)
+        assert len(measures) == 8
+        assert [m.time.signatures for m in measures] == [(3, 8), (3, 8), (3, 4), (1, 8), (1, 8), (1, 8), (1, 8, 3, 4), (3, 4)]
+        assert [m.number for m in measures] == list(range(3, 11))
+
+    def test_add_chord_staff_and_voice(self):
+        m = Measure(1)
+        m.add_chord(Chord(60, 1), staff=2, voice=2)
+        assert m.get_staff(2) is not None
+        assert m.get_voice(staff=2, voice=2) is not None
+        m.add_chord(Chord(60, 1), staff=4, voice=5)
+        assert m.get_voice(staff=3, voice=1) is not None
+        assert m.get_voice(staff=3, voice=2) is None
+        assert m.get_voice(staff=3, voice=5) is None
+        assert m.get_voice(staff=4, voice=1) is not None
+        assert m.get_voice(staff=4, voice=2) is not None
+        assert m.get_voice(staff=4, voice=3) is not None
+        assert m.get_voice(staff=4, voice=4) is not None
+        assert m.get_voice(staff=4, voice=5) is not None

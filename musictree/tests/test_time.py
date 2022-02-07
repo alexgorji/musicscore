@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from fractions import Fraction
 
-from musictree.time import Time
+from musictree.time import Time, flatten_times
 
 
 class TestTime(TestCase):
@@ -82,3 +82,8 @@ class TestTime(TestCase):
         t.signatures = [3, 4, 2, 8]
         t.reset_actual_signatures()
         assert t.get_beats_quarter_durations() == [Fraction(1)] * 3 + [Fraction(1, 2)] * 2
+
+    def test_flatten_times(self):
+        times = [2 * Time(3, 8), (3, 4), 3 * [(1, 8)], Time(1, 8, 3, 4), Time(3, 4)]
+        flattened_times = flatten_times(times)
+        assert [t.signatures for t in flattened_times] == [(3, 8), (3, 8), (3, 4), (1, 8), (1, 8), (1, 8), (1, 8, 3, 4), (3, 4)]

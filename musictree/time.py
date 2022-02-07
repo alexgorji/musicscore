@@ -59,10 +59,10 @@ class Time(XMLWrapper):
         if self.parent_measure:
             self.parent_measure._update_voice_beats()
 
-    def add_child(self, child):
-        if not self.up:
-            raise StaffHasNoParentError('A child Voice can only be added to a Staff if staff has a Measure parent.')
-        return super().add_child(child)
+    # def add_child(self, child):
+    #     if not self.up:
+    #         raise StaffHasNoParentError('A child Voice can only be added to a Staff if staff has a Measure parent.')
+    #     return super().add_child(child)
 
     def reset_actual_signatures(self):
         self._actual_signatures = None
@@ -86,3 +86,28 @@ class Time(XMLWrapper):
         return [Fraction(nominator, denominator) * 4 for nominator, denominator in [self.actual_signatures[i:i + 2] for i in range(0,
                                                                                                                                    len(self.actual_signatures),
                                                                                                                                    2)]]
+
+    def __copy__(self):
+        cp = self.__class__(*self.signatures)
+        cp._actual_signatures = self._actual_signatures
+        return cp
+
+    def __rmul__(self, other):
+        return [self.__copy__() for _ in range(other)]
+
+
+def flatten_times(times):
+    output = []
+    for time in times:
+        if isinstance(time, Time):
+            output.append(time)
+        elif hasattr(time, '__iter__'):
+            if {isinstance(t, int) for t in time} == {True}:
+                output.append(Time(*time))
+            else:
+                for t in time:
+                    if isinstance(t, Time):
+                        output.append(t)
+                    else:
+                        output.append(Time(*t))
+    return output

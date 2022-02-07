@@ -176,6 +176,9 @@ class QuarterDuration(numbers.Rational):
     def __eq__(self, other):
         return self.value.__eq__(_convert_other(other))
 
+    def __copy__(self):
+        return self.__class__(self.value)
+
 
 class QuarterDurationMixin:
     def __init__(self, quarter_duration=None):

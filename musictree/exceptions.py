@@ -70,6 +70,10 @@ class VoiceHasNoParentError(VoiceException):
     pass
 
 
+class VoiceIsAlreadyFullError(VoiceException):
+    pass
+
+
 class StaffException(MusicTreeException):
     pass
 

@@ -175,3 +175,34 @@ class TestBeatAddChild(TestCase):
                 assert [ch.midis[0].value for ch in beat.get_children()] == [62]
                 assert beat.is_filled
         assert v.left_over_chord.quarter_duration == 4 - 2.5 - 0.6
+
+    def test_split_chord_different_accidental_instances(self):
+        v1 = create_voice()
+        v1.update_beats(1, 1.5)
+        chord = Chord(midis=61, quarter_duration=2.5)
+        v1.get_current_beat().add_child(chord)
+        ch1, ch2 = v1.get_chords()
+
+        assert ch1.midis[0].accidental != ch2.midis[0].accidental
+
+    def test_split_chord_accidentals(self):
+        v1 = create_voice()
+        v1.update_beats(1, 1.5, 1)
+        chord = Chord(midis=61, quarter_duration=7)
+        assert chord.midis[0].accidental.xml_object.value == 'sharp'
+        v1.get_current_beat().add_child(chord)
+        v2 = create_voice()
+        v2.update_beats(1, 1, 1)
+        v2.get_current_beat().add_child(v1.left_over_chord)
+        all_chords = v1.get_chords() + v2.get_chords()
+        for ch in all_chords:
+            ch.update_notes()
+        assert [ch.midis[0].accidental.xml_object.value if ch.midis[0].accidental.xml_object else None for ch in all_chords] == ['sharp',
+                                                                                                                                 None, None,
+                                                                                                                                 None]
+        all_chords[1].midis[0].accidental.show = True
+
+        assert [ch.midis[0].accidental.xml_object.value if ch.midis[0].accidental.xml_object else None for ch in all_chords] == ['sharp',
+                                                                                                                                 'sharp',
+                                                                                                                                 None,
+                                                                                                                                 None]

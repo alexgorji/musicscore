@@ -64,3 +64,9 @@ class TestQuarterDuration(TestCase):
                                                                                                                           None]
         assert QuarterDuration(3).get_beatwise_sections(offset=0.5, beats=[Beat(1), Beat(1), Beat(0.5), Beat(0.5)]) == [[0.5, 2], 0.5]
         assert QuarterDuration(4).get_beatwise_sections(offset=0.15, beats=[Beat(0.5), Beat(1.5), Beat(1)]) == [[0.35, 1.5, 1], 1.15]
+
+    def test_copy_quarter_duration(self):
+        qd = QuarterDuration(3, 4)
+        copied = qd.__copy__()
+        assert id(qd.value) != id(copied.value)
+        assert qd.value == copied.value

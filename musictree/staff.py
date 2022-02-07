@@ -2,6 +2,7 @@ from musicxml.xmlelement.xmlelement import XMLStaff
 
 from musictree.exceptions import StaffHasNoParentError
 from musictree.musictree import MusicTree
+from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
 
 
@@ -23,4 +24,21 @@ class Staff(MusicTree, XMLWrapper):
 
         super().add_child(child)
         child.update_beats()
+
         return child
+
+    def add_voice(self, voice=1):
+        voice_object = self.get_voice(voice=voice)
+        if voice_object is None:
+            for _ in range(voice - len(self.get_children())):
+                voice = self.add_child(Voice())
+            return voice
+        return voice_object
+
+    def get_chords(self):
+        return [ch for voice in self.get_children() for ch in voice.get_chords()]
+
+    def get_voice(self, voice=1):
+        for ch in self.get_children():
+            if ch.value == voice:
+                return ch

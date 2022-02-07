@@ -1,13 +1,13 @@
 from musicxml.xmlelement.xmlelement import XMLVoice
 
 from musictree.beat import Beat
-from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, ChordHasNoQuarterDurationError
+from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, ChordHasNoQuarterDurationError, VoiceIsAlreadyFullError
 from musictree.musictree import MusicTree
 from musictree.xmlwrapper import XMLWrapper
 
 
 class Voice(MusicTree, XMLWrapper):
-    _ATTRIBUTES = {'value', '_chords', '_current_beat', 'left_over_chord'}
+    _ATTRIBUTES = {'value', '_chords', '_current_beat', 'left_over_chord', 'is_filled'}
 
     def __init__(self, value=None, *args, **kwargs):
         super().__init__()
@@ -15,6 +15,13 @@ class Voice(MusicTree, XMLWrapper):
         self.value = value
         self._current_beat = None
         self.left_over_chord = None
+
+    @property
+    def is_filled(self):
+        if self.get_children():
+            return self.get_children()[-1].is_filled
+        else:
+            return False
 
     @property
     def value(self):
@@ -37,6 +44,8 @@ class Voice(MusicTree, XMLWrapper):
     def add_chord(self, chord):
         if not self.get_children():
             raise VoiceHasNoBeatsError
+        if self.get_current_beat() is None:
+            raise VoiceIsAlreadyFullError(f'Voice number {self.value} of Measure number {self.up.up.number} is full.')
         return self.get_current_beat().add_child(chord)
 
     def get_chords(self):

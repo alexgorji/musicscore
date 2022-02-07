@@ -1,7 +1,9 @@
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
-from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError
+from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError
+from musictree.measure import Measure
 from musictree.musictree import MusicTree
+from musictree.time import Time
 from musictree.xmlwrapper import XMLWrapper
 
 
@@ -85,7 +87,7 @@ class ScorePart(XMLWrapper):
 
 
 class Part(MusicTree, XMLWrapper):
-    _ATTRIBUTES = {'id_', 'name', '_score_part'}
+    _ATTRIBUTES = {'id_', 'name', '_score_part', '_current_measures'}
 
     def __init__(self, id, name=None, *args, **kwargs):
         super().__init__()
@@ -95,6 +97,27 @@ class Part(MusicTree, XMLWrapper):
         self._name = None
         self.name = name
         self._score_part = ScorePart(part=self)
+        self._current_measures = {}
+
+    def set_current_measure(self, staff, voice, measure):
+        if staff is None:
+            staff = 1
+        if not isinstance(measure, Measure):
+            raise TypeError(f"{measure} must be of type 'Measure'.")
+        if self._current_measures.get(staff):
+            self._current_measures[staff][voice] = measure
+        else:
+            self._current_measures[staff] = {voice: measure}
+
+    def _set_first_current_measure(self, staff, voice):
+        for m in self.get_children():
+            if m.get_voice(staff=staff, voice=voice):
+                self.set_current_measure(staff, voice, m)
+                return m
+
+    @property
+    def current_measures(self):
+        return self._current_measures
 
     @property
     def id_(self):
@@ -136,3 +159,57 @@ class Part(MusicTree, XMLWrapper):
         super().add_child(child)
         self.xml_object.add_child(child.xml_object)
         return child
+
+    def add_chord(self, chord, *, staff=None, voice=1):
+        def add_to_next_measure(current_measure, ch):
+            if current_measure.next:
+                current_measure = current_measure.next
+            else:
+                current_measure = self.add_measure()
+            current_measure.add_chord(ch, staff=staff, voice=voice)
+            return current_measure
+
+        if staff is None:
+            staff = 1
+        current_measure = self.get_current_measure(staff=staff, voice=voice)
+
+        if not current_measure:
+            if self.get_children():
+                current_measure = self.get_children()[0]
+            else:
+                current_measure = self.add_measure()
+        try:
+            current_measure.add_chord(chord, staff=staff, voice=voice)
+        except VoiceIsAlreadyFullError:
+            current_measure = add_to_next_measure(current_measure, chord)
+
+        left_over_chord = current_measure.get_voice(staff=staff, voice=voice).left_over_chord
+        while left_over_chord:
+            current_measure = add_to_next_measure(current_measure, left_over_chord)
+            left_over_chord = current_measure.get_voice(staff=staff, voice=voice).left_over_chord
+
+    def add_measure(self, time=None, number=None):
+        if not time:
+            if self.get_children():
+                time = self.get_children()[-1].time.__copy__()
+            else:
+                time = Time(4, 4)
+        else:
+            if not isinstance(time, Time):
+                time = Time(*time)
+        if not number:
+            if self.get_children():
+                number = self.get_children()[-1].number + 1
+            else:
+                number = 1
+        m = Measure(number=number, time=time)
+        m.add_voice(staff=None, voice=1)
+        return self.add_child(m)
+
+    def get_current_measure(self, staff=1, voice=1):
+        if staff is None:
+            staff = 1
+        try:
+            return self.current_measures[staff][voice]
+        except KeyError:
+            return self._set_first_current_measure(staff=staff, voice=voice)

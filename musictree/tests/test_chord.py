@@ -3,7 +3,8 @@ from unittest import TestCase
 from unittest.mock import Mock, patch
 
 from musictree.accidental import Accidental
-from musictree.chord import Chord
+from musictree.beat import Beat
+from musictree.chord import Chord, split_copy
 from musictree.exceptions import ChordHasNoParentError, ChordQuarterDurationAlreadySetError, NoteTypeError
 from musictree.midi import Midi
 from musictree.tests.util import check_notes
@@ -153,11 +154,13 @@ class TestTreeChord(TestCase):
   <duration>4</duration>
   <voice>1</voice>
   <type>whole</type>
+  <accidental>natural</accidental>
 </note>
 """
         assert c.notes[0].to_string() == expected
         # change chord's midi (zero)
         c.midis[0].value = 0
+        c.update_notes()
 
         expected = """<note relative-x="10">
   <rest />
@@ -195,6 +198,7 @@ class TestTreeChord(TestCase):
     <octave>4</octave>
   </pitch>
   <voice>1</voice>
+  <accidental>natural</accidental>
 </note>
 """
         assert c.notes[0].to_string() == expected
@@ -208,6 +212,7 @@ class TestTreeChord(TestCase):
     <octave>4</octave>
   </pitch>
   <voice>1</voice>
+  <accidental>natural</accidental>
 </note>
 """
         assert c.notes[0].to_string() == expected
@@ -232,6 +237,7 @@ class TestTreeChord(TestCase):
   <duration>2</duration>
   <voice>1</voice>
   <type>16th</type>
+  <accidental>natural</accidental>
   <stem>up</stem>
   <staff>1</staff>
 </note>
@@ -246,6 +252,7 @@ class TestTreeChord(TestCase):
 """
         assert c.notes[0].xml_pitch.to_string() == expected
         c.midis[0].value = 0
+        c.update_notes()
         assert c.notes[0].xml_pitch is None
         assert c.notes[0].xml_rest is not None
         assert c.is_rest
@@ -327,6 +334,7 @@ class TestTreeChord(TestCase):
   <duration>2</duration>
   <voice>1</voice>
   <type>half</type>
+  <accidental>natural</accidental>
   <stem>up</stem>
 </note>
 """
@@ -338,6 +346,7 @@ class TestTreeChord(TestCase):
   <duration>2</duration>
   <voice>1</voice>
   <type>half</type>
+  <accidental>natural</accidental>
   <stem>up</stem>
 </note>
 """
@@ -356,6 +365,45 @@ class TestTreeChord(TestCase):
 """
         for note, expected in zip(chord.notes, [expected_1, expected_2, expected_3]):
             assert note.to_string() == expected
+
+    # def test_chord_copy(self):
+    #     ch = Chord(midis=[Midi(61, accidental=Accidental(mode='sharp'))], quarter_duration=2, offset=0.5)
+    #     copied = ch.__copy__()
+
+    # def test_chord_deepcopy(self):
+    #     ch = Chord(midis=[Midi(61, accidental=Accidental(mode='sharp'))], quarter_duration=2, offset=0.5)
+    #     copied = ch.__deepcopy__()
+    #
+    def test_split_copy(self):
+        ch = Chord(midis=[Midi(61, accidental=Accidental(mode='sharp'))], quarter_duration=2, offset=0.5)
+        copied = split_copy(ch)
+        assert ch.midis != copied.midis
+        assert ch.midis[0].value == copied.midis[0].value
+        assert ch.midis[0].accidental != copied.midis[0].accidental
+        assert ch.midis[0].accidental.mode == copied.midis[0].accidental.mode
+        copied.midis[0].accidental.show = False
+        assert ch.midis[0].accidental.show is True
+        assert copied.midis[0].accidental.show is False
+
+    def test_split_tied_copy(self):
+        ch = Chord(midis=60, quarter_duration=1)
+        copied = split_copy(ch)
+        assert ch._ties == copied._ties == []
+
+    def test_split_quarter_durations(self):
+        ch = Chord(midis=60, quarter_duration=4)
+        copied = split_copy(ch)
+        assert id(ch.quarter_duration) != id(copied.quarter_duration)
+        ch.quarter_duration = 2
+        assert copied.quarter_duration == 4
+        assert ch.quarter_duration == 2
+
+        ch = Chord(midis=60, quarter_duration=5)
+        beats = [Beat(1), Beat(1), Beat(1), Beat(1)]
+        quarter_durations = ch.quarter_duration.get_beatwise_sections(beats=beats)
+        ch.quarter_duration = quarter_durations[0][0]
+        copied = split_copy(ch, quarter_durations[1])
+        assert [ch.quarter_duration, copied.quarter_duration] == [4, 1]
 
     def test_chord_tie_untie(self):
         ch1 = Chord(midis=[60, 61], quarter_duration=1)
