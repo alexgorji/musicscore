@@ -104,7 +104,7 @@ class TestTree(TestCase):
         self.child1.add_child('grandchild')
         self.child1.add_child('grandchild')
         new = A(name='other_new_grand_child')
-        self.child1.replace_child(lambda x: x.name is 'grandchild', new, 1)
+        self.child1.replace_child(lambda x: x.name == 'grandchild', new, 1)
         assert new.get_parent() == self.child1
         assert [ch.name for ch in self.child1.get_children()] == ['grandchild', 'other_new_grand_child']
         with self.assertRaises(ValueError):
