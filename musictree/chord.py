@@ -1,5 +1,8 @@
+import math
 from fractions import Fraction
 from typing import Union, List, Optional
+
+from musicxml.xmlelement.xmlelement import XMLTimeModification
 
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError
@@ -63,6 +66,17 @@ class Chord(MusicTree, QuarterDurationMixin):
                 if 'start' in self._ties:
                     for note in self.notes:
                         note.start_tie()
+
+    def _update_time_modification(self):
+        normal_notes = [pow(2, x) for x in range(7)]
+        if self.quarter_duration.denominator in normal_notes:
+            return
+        for normal_note in normal_notes:
+            if self.quarter_duration.denominator > normal_note:
+                for note in self.notes:
+                    note.xml_time_modification = XMLTimeModification()
+                    note.xml_time_modification.xml_actual_notes = note.quarter_duration.denominator
+                    note.xml_time_modification.xml_normal_notes = normal_note
 
     def _set_midis(self, midis):
         if isinstance(midis, str):
@@ -208,6 +222,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         self.get_parent_measure().update_divisions()
         self._notes = [Note(parent_chord=self, midi=midi, **self._note_attributes) for midi in self._midis]
         self._update_notes_quarter_duration()
+        self._update_time_modification()
         self._update_tie()
 
     def __setattr__(self, key, value):

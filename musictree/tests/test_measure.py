@@ -356,3 +356,41 @@ class TestMeasure(TestCase):
         assert m.get_voice(staff=4, voice=3) is not None
         assert m.get_voice(staff=4, voice=4) is not None
         assert m.get_voice(staff=4, voice=5) is not None
+
+    def test_simple_triplet(self):
+        expected = """<note>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>1</duration>
+  <voice>1</voice>
+  <type>eighth</type>
+  <time-modification>
+    <actual-notes>3</actual-notes>
+    <normal-notes>2</normal-notes>
+  </time-modification>
+  <notations>
+    <tuplet bracket="yes" number="1" type="start"/>
+  </notations>
+</note>
+<note>
+  <pitch>
+    <step>C</step>
+    <octave>4</octave>
+  </pitch>
+  <duration>2</duration>
+  <voice>1</voice>
+  <type>quarter</type>
+  <time-modification>
+    <actual-notes>3</actual-notes>
+    <normal-notes>2</normal-notes>
+  </time-modification>
+  <notations>
+    <tuplet number="1" type="stop"/>
+  </notations>
+</note>
+"""
+        ch1 = Chord(midis=60, quarter_duration=1 / 3)
+        ch2 = Chord(midis=60, quarter_duration=2 / 3)
+        self.fail('Incomplete')
