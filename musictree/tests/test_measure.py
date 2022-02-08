@@ -1,4 +1,5 @@
 import itertools
+from re import X
 from unittest import TestCase
 
 from musicxml.xmlelement.xmlelement import *
@@ -356,3 +357,20 @@ class TestMeasure(TestCase):
         assert m.get_voice(staff=4, voice=3) is not None
         assert m.get_voice(staff=4, voice=4) is not None
         assert m.get_voice(staff=4, voice=5) is not None
+
+    def test_chord_simple_bracket(self):
+      m = Measure(1)
+      chords = [Chord(60, 1/3), Chord(61, 2/3)]
+
+      for x in chords:
+        m.add_chord(x)
+
+      m.update_xml_notes()
+      m.update_xml_brackets()
+
+    
+
+      tuplet_1, tuplet_2 = [ch.notes[0].xml_notations.xml_tuplet for ch in chords]
+
+    
+

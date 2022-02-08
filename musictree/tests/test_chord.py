@@ -431,3 +431,6 @@ class TestTreeChord(TestCase):
         assert [n.is_tied for n in ch1.notes] == [True, True]
         assert [n.is_tied for n in ch2.notes] == [False, False]
         assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
+
+    def test_simple_bracket(self):
+      chord_one = Chord()

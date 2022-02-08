@@ -116,6 +116,14 @@ class Measure(MusicTree, XMLWrapper):
                 if child.value == voice:
                     return child
 
+    def update_xml_brackets(self):
+        for staff in self.get_children():
+            for voice in staff.get_children():
+                for beat in voice.get_children():
+                    beat.update_xml_brackets()
+
+
+
     def update_xml_notes(self):
         current_xml_notes = self.xml_object.find_children('XMLNote')
         for note in current_xml_notes:

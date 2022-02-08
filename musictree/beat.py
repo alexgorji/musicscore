@@ -1,4 +1,5 @@
 from musictree.chord import Chord
+from musicxml.xmlelement.xmlelement import XMLNotations
 from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError
 from musictree.musictree import MusicTree
@@ -73,3 +74,20 @@ class Beat(MusicTree, QuarterDurationMixin):
         if self.up.up.up.up:
             self.up.up.up.up.set_current_measure(staff=self.up.up.value, voice=self.up.value, measure=self.up.up.up)
         return child
+
+    def update_xml_brackets(self):
+        def add_bracket_to_notes(chord, mode):
+            for note in chord.notes:
+                if not note.xml_notations:
+                    note.xml_notations = XMLNotations()
+                    note.xml_notations.xml_tuplet = mode
+        start = False
+        for index, chord in enumerate(self.get_children()[:-1]):
+            if chord.xml_time_modification:
+                if not start:
+                    start = True
+                add_bracket_to_notes(chord, 'start')
+            if start and self.get_children()[index + 1].xml_time_modification is None:
+                start = False
+                add_bracket_to_notes(chord, 'stop')
+
