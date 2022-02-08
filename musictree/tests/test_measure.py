@@ -1,4 +1,5 @@
 import itertools
+from re import X
 from unittest import TestCase
 
 from musicxml.xmlelement.xmlelement import *
@@ -359,38 +360,50 @@ class TestMeasure(TestCase):
 
     def test_simple_triplet(self):
         expected = """<note>
-  <pitch>
-    <step>C</step>
-    <octave>4</octave>
-  </pitch>
-  <duration>1</duration>
-  <voice>1</voice>
-  <type>eighth</type>
-  <time-modification>
-    <actual-notes>3</actual-notes>
-    <normal-notes>2</normal-notes>
-  </time-modification>
-  <notations>
-    <tuplet bracket="yes" number="1" type="start"/>
-  </notations>
-</note>
-<note>
-  <pitch>
-    <step>C</step>
-    <octave>4</octave>
-  </pitch>
-  <duration>2</duration>
-  <voice>1</voice>
-  <type>quarter</type>
-  <time-modification>
-    <actual-notes>3</actual-notes>
-    <normal-notes>2</normal-notes>
-  </time-modification>
-  <notations>
-    <tuplet number="1" type="stop"/>
-  </notations>
-</note>
-"""
+      <pitch>
+        <step>C</step>
+        <octave>4</octave>
+      </pitch>
+      <duration>1</duration>
+      <voice>1</voice>
+      <type>eighth</type>
+      <time-modification>
+        <actual-notes>3</actual-notes>
+        <normal-notes>2</normal-notes>
+      </time-modification>
+      <notations>
+        <tuplet bracket="yes" number="1" type="start"/>
+      </notations>
+    </note>
+    <note>
+      <pitch>
+        <step>C</step>
+        <octave>4</octave>
+      </pitch>
+      <duration>2</duration>
+      <voice>1</voice>
+      <type>quarter</type>
+      <time-modification>
+        <actual-notes>3</actual-notes>
+        <normal-notes>2</normal-notes>
+      </time-modification>
+      <notations>
+        <tuplet number="1" type="stop"/>
+      </notations>
+    </note>
+    """
         ch1 = Chord(midis=60, quarter_duration=1 / 3)
         ch2 = Chord(midis=60, quarter_duration=2 / 3)
         self.fail('Incomplete')
+
+    def test_chord_simple_bracket(self):
+        m = Measure(1)
+        chords = [Chord(60, 1 / 3), Chord(61, 2 / 3)]
+
+        for x in chords:
+            m.add_chord(x)
+
+        m.update_xml_notes()
+        m.update_xml_brackets()
+
+        tuplet_1, tuplet_2 = [ch.notes[0].xml_notations.xml_tuplet for ch in chords]

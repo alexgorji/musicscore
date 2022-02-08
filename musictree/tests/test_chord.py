@@ -432,14 +432,6 @@ class TestTreeChord(TestCase):
         assert [n.is_tied for n in ch2.notes] == [False, False]
         assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
 
-    @patch('musictree.beat.Beat')
-    def test_simple_simplet(self, mock_beat):
-        mock_beat.up.up.up.get_divisions.return_value = 2
-        ch1 = Chord(midis=60, quarter_duration=1 / 2)
-        ch1._parent = mock_beat
-        ch1.update_notes()
-        note = ch1.notes[0]
-        assert note.xml_time_modification is None
 
     @patch('musictree.beat.Beat')
     def test_simple_time_modification(self, mock_beat):
