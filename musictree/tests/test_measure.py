@@ -337,7 +337,6 @@ class TestMeasure(TestCase):
         assert [child.quarter_duration.as_integer_ratio() for child in v.get_children()] == [(1, 2)] * 2
 
     def test_generate_measures(self):
-        # times = [2 * (1, 4), 3 * (1, 8), Time(1, 8, 3, 4), Time(3, 4, actual_signatures=(1, 8, 2, 4, 1, 8))]
         times = [2 * Time(3, 8), (3, 4), 3 * [(1, 8)], Time(1, 8, 3, 4), Time(3, 4)]
         measures = generate_measures(times, 3)
         assert len(measures) == 8

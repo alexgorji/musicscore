@@ -30,9 +30,6 @@ class QuarterDuration(numbers.Rational):
         self._value = None
         self.value = value
 
-    def as_integer_ratio(self):
-        return self.value.as_integer_ratio()
-
     @property
     def numerator(self):
         return self.value.numerator
@@ -60,6 +57,9 @@ class QuarterDuration(numbers.Rational):
                 self._value = Fraction(*val).limit_denominator(1000)
             else:
                 raise ValueError
+
+    def as_integer_ratio(self):
+        return self.value.as_integer_ratio()
 
     def get_beatwise_sections(self, beats, offset=0):
         output = [None, [], None]
@@ -181,6 +181,13 @@ class QuarterDurationMixin:
         self._quarter_duration = None
         self.quarter_duration = quarter_duration
 
+    def _set_quarter_duration(self, val):
+        _check_quarter_duration(val)
+        if isinstance(val, QuarterDuration):
+            self._quarter_duration = val
+        else:
+            self._quarter_duration = QuarterDuration(val)
+
     @property
     def quarter_duration(self):
         return self._quarter_duration
@@ -191,10 +198,3 @@ class QuarterDurationMixin:
             self._set_quarter_duration(val)
         else:
             self._quarter_duration = None
-
-    def _set_quarter_duration(self, val):
-        _check_quarter_duration(val)
-        if isinstance(val, QuarterDuration):
-            self._quarter_duration = val
-        else:
-            self._quarter_duration = QuarterDuration(val)

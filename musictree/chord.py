@@ -1,8 +1,7 @@
-import math
 from fractions import Fraction
 from typing import Union, List, Optional
 
-from musicxml.xmlelement.xmlelement import XMLTimeModification, XMLChord
+from musicxml.xmlelement.xmlelement import XMLChord
 
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, ChordNotesAreAlreadyCreatedError
@@ -18,69 +17,20 @@ class Chord(MusicTree, QuarterDurationMixin):
     :param midis: midi, midis, midi value or midi values. 0 or [0] for a rest.
     :param quarter_duration: int or float for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', '_voice', 'ties'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', '_voice', 'ties', '_notes_are_set'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, offset=0, **kwargs):
         self._midis = None
-        self._notes = None
         self._offset = None
         self._ties = []
 
         self._note_attributes = kwargs
         self.offset = offset
+        self._notes_are_set = False
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
         self.split = False
-
-    def _update_notes_quarter_duration(self):
-        if self.notes is not None:
-            for note in self.notes:
-                note.quarter_duration = self.quarter_duration
-
-    def _update_notes_pitch_or_rest(self):
-        if self.notes:
-            len_diff = len(self.notes) - len(self.midis)
-            if len_diff > 0:
-                to_be_removed = self.notes[len_diff:]
-                self._notes = self.notes[:len_diff]
-                for note in to_be_removed:
-                    note.up.remove(note)
-                    note.parent_chord = None
-                    del note
-            for index, m in enumerate(self.midis):
-                if index < len(self.notes):
-                    self.notes[index].midi = m
-                else:
-                    new_note = Note(parent_chord=self, midi=m, quarter_duration=self.quarter_duration)
-                    self._notes.append(new_note)
-                    self.add_child(new_note)
-
-    def _update_tie(self):
-        if self.notes:
-            if not self._ties:
-                for note in self.notes:
-                    note.remove_tie()
-            else:
-                if 'stop' in self._ties:
-                    for note in self.notes:
-                        note.stop_tie()
-                if 'start' in self._ties:
-                    for note in self.notes:
-                        note.start_tie()
-
-    def _update_time_modification(self):
-        normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
-        types = {8: '32nd', 4: '16th', 2: 'eighth'}
-        try:
-            normal = normals[self.quarter_duration.denominator]
-            for note in self.notes:
-                note.xml_time_modification = XMLTimeModification()
-                note.xml_time_modification.xml_actual_notes = self.quarter_duration.denominator
-                note.xml_time_modification.xml_normal_notes = normal
-                note.xml_time_modification.xml_normal_type = types[normal]
-        except KeyError:
-            pass
 
     def _set_midis(self, midis):
         if isinstance(midis, str):
@@ -99,6 +49,38 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._midis = [Midi(v) if not isinstance(v, Midi) else v for v in midis]
         self._update_notes_pitch_or_rest()
 
+    def _update_notes_quarter_duration(self):
+        for note in self.notes:
+            note.quarter_duration = self.quarter_duration
+
+    def _update_notes_pitch_or_rest(self):
+        if self.notes:
+            len_diff = len(self.notes) - len(self.midis)
+            if len_diff > 0:
+                to_be_removed = self.notes[len_diff:]
+                for note in to_be_removed:
+                    note.up.remove(note)
+                    note.parent_chord = None
+                    del note
+            for index, m in enumerate(self.midis):
+                if index < len(self.notes):
+                    self.notes[index].midi = m
+                else:
+                    new_note = Note(parent_chord=self, midi=m, quarter_duration=self.quarter_duration)
+                    self.add_child(new_note)
+
+    def _update_tie(self):
+        if not self._ties:
+            for note in self.notes:
+                note.remove_tie()
+        else:
+            if 'stop' in self._ties:
+                for note in self.notes:
+                    note.stop_tie()
+            if 'start' in self._ties:
+                for note in self.notes:
+                    note.start_tie()
+
     @property
     def is_rest(self):
         if self._midis[0].value == 0:
@@ -116,7 +98,7 @@ class Chord(MusicTree, QuarterDurationMixin):
 
     @property
     def notes(self):
-        return self._notes
+        return self.get_children()
 
     @property
     def offset(self):
@@ -138,7 +120,8 @@ class Chord(MusicTree, QuarterDurationMixin):
             if self.midis and self.is_rest and val == 0:
                 raise ValueError('A rest cannot be a grace note')
             self._set_quarter_duration(val)
-            self._update_notes_quarter_duration()
+            if self._notes_are_set:
+                self._update_notes_quarter_duration()
 
     @property
     def voice(self):
@@ -216,25 +199,25 @@ class Chord(MusicTree, QuarterDurationMixin):
         raise AttributeError("object 'Chord' cannot return a string.")
 
     def update_notes(self):
-        if self._notes:
+        if self.get_children():
             raise ChordNotesAreAlreadyCreatedError()
         if not self.up:
             raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
         self.get_parent_measure().update_divisions()
-        self._notes = [Note(parent_chord=self, midi=midi, **self._note_attributes) for midi in self._midis]
-        if len(self._notes) > 1:
-            self._notes[0].xml_object.add_child(XMLChord())
-        self._update_notes_quarter_duration()
-        self._update_time_modification()
-        self._update_tie()
-        for note in self.notes:
+        notes = [Note(parent_chord=self, midi=midi, **self._note_attributes) for midi in self._midis]
+        if len(notes) > 1:
+            notes[0].xml_object.add_child(XMLChord())
+        for note in notes:
             self.add_child(note)
+        self._notes_are_set = True
+        self._update_notes_quarter_duration()
+        self._update_tie()
 
     def __setattr__(self, key, value):
         if key not in self._ATTRIBUTES.union(self.TREE_ATTRIBUTES) and key not in [f'_{attr}' for attr in
                                                                                    self._ATTRIBUTES.union(
                                                                                        self.TREE_ATTRIBUTES)] and key not in self.__dict__:
-            if self.notes is not None:
+            if self.notes:
                 if isinstance(value, str) or not hasattr(value, '__iter__'):
                     value = [value] * len(self.notes)
                 for n, v in zip(self.notes, value):
@@ -243,7 +226,7 @@ class Chord(MusicTree, QuarterDurationMixin):
             super().__setattr__(key, value)
 
     def __getattr__(self, item):
-        if not self.notes:
+        if not self._notes_are_set:
             raise AttributeError(f"AttributeError: 'Chord' object has no attribute '{item}'")
         output = [getattr(n, item) for n in self.notes]
         if output and callable(output[0]):
@@ -255,5 +238,4 @@ def split_copy(chord, new_quarter_duration=None):
     if new_quarter_duration is None:
         new_quarter_duration = chord.quarter_duration.__copy__()
     new_chord = Chord(midis=[m.__deepcopy__() for m in chord.midis], quarter_duration=new_quarter_duration)
-    # new_chord._ties = chord._ties[:]
     return new_chord

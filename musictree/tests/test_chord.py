@@ -74,7 +74,7 @@ class TestTreeChord(TestCase):
 
     def test_chord_update_notes(self):
         ch1 = Chord()
-        assert ch1.notes is None
+        assert not ch1.notes
         with self.assertRaises(ChordHasNoParentError):
             ch1.update_notes()
         ch1.quarter_duration = 1
@@ -367,14 +367,6 @@ class TestTreeChord(TestCase):
         for note, expected in zip(chord.notes, [expected_1, expected_2, expected_3]):
             assert note.to_string() == expected
 
-    # def test_chord_copy(self):
-    #     ch = Chord(midis=[Midi(61, accidental=Accidental(mode='sharp'))], quarter_duration=2, offset=0.5)
-    #     copied = ch.__copy__()
-
-    # def test_chord_deepcopy(self):
-    #     ch = Chord(midis=[Midi(61, accidental=Accidental(mode='sharp'))], quarter_duration=2, offset=0.5)
-    #     copied = ch.__deepcopy__()
-    #
     def test_split_copy(self):
         ch = Chord(midis=[Midi(61, accidental=Accidental(mode='sharp'))], quarter_duration=2, offset=0.5)
         copied = split_copy(ch)
