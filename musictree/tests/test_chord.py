@@ -160,7 +160,7 @@ class TestTreeChord(TestCase):
         assert c.notes[0].to_string() == expected
         # change chord's midi (zero)
         c.midis[0].value = 0
-        c.update_notes()
+        # c.update_notes()
 
         expected = """<note relative-x="10">
   <rest />
@@ -252,7 +252,7 @@ class TestTreeChord(TestCase):
 """
         assert c.notes[0].xml_pitch.to_string() == expected
         c.midis[0].value = 0
-        c.update_notes()
+        # c.update_notes()
         assert c.notes[0].xml_pitch is None
         assert c.notes[0].xml_rest is not None
         assert c.is_rest
@@ -327,6 +327,7 @@ class TestTreeChord(TestCase):
         chord.update_notes()
         chord.xml_stem = 'up'
         expected_1 = """<note>
+  <chord />
   <pitch>
     <step>C</step>
     <octave>4</octave>
@@ -431,41 +432,3 @@ class TestTreeChord(TestCase):
         assert [n.is_tied for n in ch1.notes] == [True, True]
         assert [n.is_tied for n in ch2.notes] == [False, False]
         assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
-
-
-    @patch('musictree.beat.Beat')
-    def test_simple_time_modification(self, mock_beat):
-        mock_beat.up.up.up.get_divisions.return_value = 3
-        ch1 = Chord(midis=60, quarter_duration=1 / 3)
-        ch1._parent = mock_beat
-        ch1.update_notes()
-        note = ch1.notes[0]
-        assert note.xml_time_modification is not None
-        assert note.xml_time_modification.xml_actual_notes.value == 3
-        assert note.xml_time_modification.xml_normal_notes.value == 2
-
-        mock_beat.up.up.up.get_divisions.return_value = 3
-        ch1 = Chord(midis=60, quarter_duration=2 / 3)
-        ch1._parent = mock_beat
-        ch1.update_notes()
-        note = ch1.notes[0]
-        assert note.xml_time_modification is not None
-        assert note.xml_time_modification.xml_actual_notes.value == 3
-        assert note.xml_time_modification.xml_normal_notes.value == 2
-
-        mock_beat.up.up.up.get_divisions.return_value = 2
-        ch1 = Chord(midis=60, quarter_duration=1 / 2)
-        ch1._parent = mock_beat
-        ch1.update_notes()
-        note = ch1.notes[0]
-        assert note.xml_time_modification is None
-
-        for x in range(1, 5):
-            mock_beat.up.up.up.get_divisions.return_value = 5
-            ch1 = Chord(midis=60, quarter_duration=x / 5)
-            ch1._parent = mock_beat
-            ch1.update_notes()
-            note = ch1.notes[0]
-            assert note.xml_time_modification is not None
-            assert note.xml_time_modification.xml_actual_notes.value == 5
-            assert note.xml_time_modification.xml_normal_notes.value == 4

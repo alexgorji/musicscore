@@ -206,19 +206,4 @@ class TestBeatAddChild(TestCase):
                                                                                                                                  'sharp',
                                                                                                                                  None,
                                                                                                                                  None]
-    def test_update_xml_brackets(self):
-        v1 = create_voice()
-        beats = v1.update_beats(1, 1, 1, 1)
-        chords = [Chord(60, 1/3), Chord(61, 2/3)]
-        for ch in chords:
-            beats[0].add_child(ch)
-        for chord in chords:
-            chord.update_notes()
-        print(chords[0].tree_representation())
-        beats[0].update_xml_brackets()
-        assert chord.notes[0].xml_notations.xml_tuplet.type == 'start'
-        assert chord.notes[0].xml_notations.xml_tuplet.bracket == 'yes'
-        assert chord.notes[0].xml_notations.xml_tuplet.number == 1
-        assert chord.notes[1].xml_notations.xml_tuplet.type == 'stop'
-        assert chord.notes[1].xml_notations.xml_tuplet.number == 2
 

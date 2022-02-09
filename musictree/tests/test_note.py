@@ -116,6 +116,7 @@ class TestNote(NoteTestCase):
     def test_note_dots(self):
         self.mock_measure.get_divisions.return_value = 2
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1.5)
+        n.set_dots(1)
         n.midi.accidental.show = False
         expected = """<note>
   <pitch>
@@ -134,10 +135,11 @@ class TestNote(NoteTestCase):
         assert len(n.xml_object.find_children('XMLDot')) == 0
         n.set_dots(3)
         assert len(n.xml_object.find_children('XMLDot')) == 3
-        n.set_dots()
+        n.set_dots(1)
         assert len(n.xml_object.find_children('XMLDot')) == 1
         self.mock_measure.get_divisions.return_value = 4
         n.quarter_duration = 1.75
+        n.set_dots(2)
         assert len(n.xml_object.find_children('XMLDot')) == 2
 
     def test_change_midi_or_duration(self):

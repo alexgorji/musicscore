@@ -2,10 +2,10 @@ import math
 from fractions import Fraction
 from typing import Union, List, Optional
 
-from musicxml.xmlelement.xmlelement import XMLTimeModification
+from musicxml.xmlelement.xmlelement import XMLTimeModification, XMLChord
 
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
-    ChordQuarterDurationAlreadySetError
+    ChordQuarterDurationAlreadySetError, ChordNotesAreAlreadyCreatedError
 from musictree.midi import Midi
 from musictree.musictree import MusicTree
 from musictree.note import Note
@@ -42,9 +42,10 @@ class Chord(MusicTree, QuarterDurationMixin):
         if self.notes:
             len_diff = len(self.notes) - len(self.midis)
             if len_diff > 0:
-                to_be_removed = self.self.notes[len_diff:]
+                to_be_removed = self.notes[len_diff:]
                 self._notes = self.notes[:len_diff]
                 for note in to_be_removed:
+                    note.up.remove(note)
                     note.parent_chord = None
                     del note
             for index, m in enumerate(self.midis):
@@ -53,6 +54,7 @@ class Chord(MusicTree, QuarterDurationMixin):
                 else:
                     new_note = Note(parent_chord=self, midi=m, quarter_duration=self.quarter_duration)
                     self._notes.append(new_note)
+                    self.add_child(new_note)
 
     def _update_tie(self):
         if self.notes:
@@ -68,15 +70,17 @@ class Chord(MusicTree, QuarterDurationMixin):
                         note.start_tie()
 
     def _update_time_modification(self):
-        normal_notes = [pow(2, x) for x in range(7)]
-        if self.quarter_duration.denominator in normal_notes:
-            return
-        for normal_note in normal_notes:
-            if self.quarter_duration.denominator > normal_note:
-                for note in self.notes:
-                    note.xml_time_modification = XMLTimeModification()
-                    note.xml_time_modification.xml_actual_notes = note.quarter_duration.denominator
-                    note.xml_time_modification.xml_normal_notes = normal_note
+        normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
+        types = {8: '32nd', 4: '16th', 2: 'eighth'}
+        try:
+            normal = normals[self.quarter_duration.denominator]
+            for note in self.notes:
+                note.xml_time_modification = XMLTimeModification()
+                note.xml_time_modification.xml_actual_notes = self.quarter_duration.denominator
+                note.xml_time_modification.xml_normal_notes = normal
+                note.xml_time_modification.xml_normal_type = types[normal]
+        except KeyError:
+            pass
 
     def _set_midis(self, midis):
         if isinstance(midis, str):
@@ -202,11 +206,6 @@ class Chord(MusicTree, QuarterDurationMixin):
             left_over_chord = None
         self.up.left_over_chord = left_over_chord
         self.up.up.left_over_chord = left_over_chord
-        # if chord_is_tied_to_next:
-        #     if left_over_chord and chord_is_tied_to_next:
-        #         left_over_chord.add_tie('start')
-        #     else:
-        #         output[-1].add_tie('start')
 
         return output
 
@@ -217,13 +216,19 @@ class Chord(MusicTree, QuarterDurationMixin):
         raise AttributeError("object 'Chord' cannot return a string.")
 
     def update_notes(self):
+        if self._notes:
+            raise ChordNotesAreAlreadyCreatedError()
         if not self.up:
             raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
         self.get_parent_measure().update_divisions()
         self._notes = [Note(parent_chord=self, midi=midi, **self._note_attributes) for midi in self._midis]
+        if len(self._notes) > 1:
+            self._notes[0].xml_object.add_child(XMLChord())
         self._update_notes_quarter_duration()
         self._update_time_modification()
         self._update_tie()
+        for note in self.notes:
+            self.add_child(note)
 
     def __setattr__(self, key, value):
         if key not in self._ATTRIBUTES.union(self.TREE_ATTRIBUTES) and key not in [f'_{attr}' for attr in

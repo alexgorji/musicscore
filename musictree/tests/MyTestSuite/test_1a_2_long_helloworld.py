@@ -2,10 +2,8 @@ from pathlib import Path
 from unittest import TestCase
 
 from musictree.chord import Chord
-from musictree.measure import Measure
 from musictree.part import Part
 from musictree.score import Score
-from musictree.tests.util import diff_xml
 
 
 class TestHelloWorld(TestCase):

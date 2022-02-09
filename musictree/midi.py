@@ -51,11 +51,13 @@ class Midi(MusicTree):
             if self.value == 0:
                 if not isinstance(self._pitch_or_rest, XMLRest):
                     self._pitch_or_rest = XMLRest()
+                    self.update_parent_note()
                 else:
                     pass
             else:
                 if not isinstance(self._pitch_or_rest, XMLPitch):
                     self._pitch_or_rest = XMLPitch()
+                    self.update_parent_note()
                 if self.accidental:
                     self.accidental._update_xml_object()
                     self._update_pitch_parameters()

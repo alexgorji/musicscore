@@ -1,6 +1,9 @@
+import itertools
 from difflib import Differ
 from pathlib import Path
 from unittest import TestCase
+
+from quicktions import Fraction
 
 from musictree.part import Id
 
@@ -33,3 +36,32 @@ def diff_xml(path_1, path_2=None):
     diff = Differ()
     difference = list(diff.compare(f_1, f_2))
     return [d for d in difference if d.startswith('-') or d.startswith('+')]
+
+
+def generate_all_quintuplets():
+    output = [tuple(5 * [Fraction(1, 5)])]
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 5), Fraction(1, 5), Fraction(1, 5), Fraction(2, 5)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 5), Fraction(2, 5), Fraction(2, 5)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 5), Fraction(1, 5), Fraction(3, 5)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(2, 5), Fraction(3, 5)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 5), Fraction(4, 5)]))))
+    return output
+
+
+def generate_all_sextuplets():
+    output = [tuple(6 * [Fraction(1, 6)])]
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6),
+                                                             Fraction(2, 6)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(1, 6), Fraction(2, 6),
+                                                             Fraction(2, 6)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(3, 6)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(2, 6), Fraction(3, 6)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(1, 6), Fraction(4, 6)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(5, 6)]))))
+    return output
+
+
+def generate_all_triplets():
+    output = [tuple(3 * [Fraction(1, 3)])]
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 3), Fraction(2, 3)]))))
+    return output

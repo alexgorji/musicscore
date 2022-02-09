@@ -2,7 +2,6 @@ from quicktions import Fraction
 import numbers
 
 
-
 def _check_quarter_duration(val):
     if not isinstance(val, int) and not isinstance(val, float) and not isinstance(val, Fraction) and not isinstance(val, QuarterDuration):
         raise TypeError(f'Wrong type for quarter duration: {type(val)}')
@@ -93,7 +92,7 @@ class QuarterDuration(numbers.Rational):
         return output
 
     def __repr__(self):
-        return f'QuarterDuration: {repr(self.value)}'
+        return f'QuarterDuration: {repr(self.value)} {id(self)}'
 
     def __str__(self):
         return f'QuarterDuration: {str(self.value)}'

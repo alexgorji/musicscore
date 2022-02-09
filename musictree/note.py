@@ -1,4 +1,5 @@
 from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied
+from quicktions import Fraction
 
 from musictree.exceptions import NoteTypeError, NoteHasNoParentChordError
 from musictree.midi import Midi
@@ -27,7 +28,7 @@ def untie(*notes):
 
 
 class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
-    _ATTRIBUTES = {'midi', 'quarter_duration', 'parent_chord', '_type', '_dots', 'is_tied', 'is_tied_to_previous', '_parent'}
+    _ATTRIBUTES = {'midi', 'quarter_duration', 'parent_chord', '_type', 'number_of_dots', 'is_tied', 'is_tied_to_previous', '_parent'}
 
     def __init__(self, parent_chord, midi=None, quarter_duration=None, *args, **kwargs):
         self._parent_chord = parent_chord
@@ -35,7 +36,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self._update_xml_voice()
         self._midi = None
         self._type = None
-        self._dots = None
+        self._number_of_dots = None
         super().__init__(quarter_duration=quarter_duration)
         self.midi = midi
         self._parent = self.parent_chord
@@ -47,15 +48,23 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         if duration < 0:
             raise ValueError
 
-    def _check_dots(self, numer_of_dots):
+    @property
+    def number_of_dots(self):
+        return self._number_of_dots
+
+    @number_of_dots.setter
+    def number_of_dots(self, val):
+        self._number_of_dots = val
+
+    def _check_dots(self, number_of_dots):
         dots = self.xml_object.find_children('XMLDot')
-        if numer_of_dots > len(dots):
-            diff = numer_of_dots - len(dots)
+        if number_of_dots > len(dots):
+            diff = number_of_dots - len(dots)
             while diff:
                 self.xml_object.add_child(XMLDot())
                 diff -= 1
-        elif numer_of_dots < len(dots):
-            for dot in dots[numer_of_dots:]:
+        elif number_of_dots < len(dots):
+            for dot in dots[number_of_dots:]:
                 dot.get_parent().remove(dot)
         else:
             pass
@@ -90,19 +99,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
                 self.xml_type = note_types[self.quarter_duration.as_integer_ratio()]
             else:
                 self.xml_type = None
-
-    def _update_xml_dots(self):
-        if self._dots is None:
-            if self.quarter_duration != 0:
-                if self.quarter_duration.numerator % 3 == 0:
-                    self._check_dots(numer_of_dots=1)
-                elif True in [self.quarter_duration == x for x in [7, 7 / 2, 7 / 4, 7 / 8, 7 / 16, 7 / 32, 7 / 64]]:
-                    self._check_dots(numer_of_dots=2)
-                else:
-                    self._check_dots(numer_of_dots=0)
-
-    def _update_xml_time_modifications(self):
-        pass
 
     def _update_xml_accidental(self):
         self.xml_object.xml_accidental = self.midi.accidental.xml_object
@@ -189,8 +185,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             self._set_quarter_duration(value)
             self._update_xml_duration()
             self._update_xml_type()
-            self._update_xml_dots()
-            self._update_xml_time_modifications()
         else:
             self.xml_object.xml_duration = None
 
@@ -204,11 +198,9 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     def get_voice_number(self):
         return self.parent_chord.get_voice_number()
 
-    def set_dots(self, number_of_dots=None):
-        if number_of_dots is None:
-            self._update_xml_dots()
-        else:
-            self._check_dots(number_of_dots)
+    def set_dots(self, number_of_dots):
+        self._number_of_dots = number_of_dots
+        self._check_dots(number_of_dots)
 
     def set_type(self, val=None):
         self._type = val

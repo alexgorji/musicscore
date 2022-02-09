@@ -34,6 +34,10 @@ class ChordHasNoQuarterDurationError(ChordException):
     pass
 
 
+class ChordNotesAreAlreadyCreatedError(ChordException):
+    pass
+
+
 class ChordQuarterDurationAlreadySetError(ChordException):
     pass
 
@@ -55,6 +59,10 @@ class BeatIsFullError(BeatException):
 
 
 class BeatHasNoParentError(BeatException):
+    pass
+
+
+class BeatHasWrongTupletError(BeatException):
     pass
 
 

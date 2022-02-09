@@ -23,16 +23,22 @@ class TestHelloWorld(IdTestCase):
         """
         He adds a 4/4 measure
         """
-        p.add_measure((3, 4))
+        p.add_measure((4, 4))
         """
         He adds a fractional Chord with midi 61 to Part
         """
-        p.add_chord(Chord(60, 1/3))
-        p.add_chord(Chord(60, 2/3))
-        p.add_chord(Chord(60, 1/5))
-        p.add_chord(Chord(60, 4/5))
-        p.add_chord(Chord(60, 2/5))
-        p.add_chord(Chord(60, 3/5))
+        p.add_chord(Chord(60, 1 / 3))
+        p.add_chord(Chord(60, 2 / 3))
+        p.add_chord(Chord(60, 1 / 5))
+        p.add_chord(Chord(60, 4 / 5))
+        p.add_chord(Chord(60, 2 / 5))
+        p.add_chord(Chord(60, 3 / 5))
+        p.add_chord(Chord(60, 1 / 6))
+        p.add_chord(Chord(60, 1 / 6))
+        p.add_chord(Chord(60, 1 / 6))
+        p.add_chord(Chord(60, 1 / 10))
+        p.add_chord(Chord(60, 3 / 10))
+        p.add_chord(Chord(60, 1 / 10))
         s.update_xml_notes()
         """
         ... and exports the xml (3.1 is default)
