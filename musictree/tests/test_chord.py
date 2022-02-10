@@ -4,7 +4,7 @@ from unittest.mock import Mock, patch
 
 from musictree.accidental import Accidental
 from musictree.beat import Beat
-from musictree.chord import Chord, split_copy
+from musictree.chord import Chord, split_copy, group_chords
 from musictree.exceptions import ChordHasNoParentError, ChordQuarterDurationAlreadySetError, NoteTypeError
 from musictree.midi import Midi
 from musictree.tests.util import check_notes
@@ -68,26 +68,26 @@ class TestTreeChord(TestCase):
     def test_chord_needs_parent_error(self):
         ch = Chord(70, 1)
         with self.assertRaises(ChordHasNoParentError):
-            ch.update_notes()
+            ch._update_notes()
         ch._parent = self.mock_beat
-        ch.update_notes()
+        ch._update_notes()
 
     def test_chord_update_notes(self):
         ch1 = Chord()
         assert not ch1.notes
         with self.assertRaises(ChordHasNoParentError):
-            ch1.update_notes()
+            ch1._update_notes()
         ch1.quarter_duration = 1
         ch1.midis = [70]
         ch1._parent = self.mock_beat
-        ch1.update_notes()
+        ch1._update_notes()
         check_notes(ch1.notes, [70], [1])
         with self.assertRaises(ChordQuarterDurationAlreadySetError):
             ch1.quarter_duration = 1.5
         ch2 = Chord(quarter_duration=2.5, midis=[71])
         ch2._parent = self.mock_beat
         with self.assertRaises(NoteTypeError):
-            ch2.update_notes()
+            ch2._update_notes()
 
     def test_init_quarter_durations(self):
         """
@@ -118,7 +118,7 @@ class TestTreeChord(TestCase):
         """
         c = Chord([60, 61, 62], 2)
         c._parent = self.mock_beat
-        c.update_notes()
+        c._update_notes()
         c.relative_x = 10
         assert c.relative_x == [10, 10, 10]
         c.relative_y = [None, 20, 10]
@@ -131,7 +131,7 @@ class TestTreeChord(TestCase):
     def test_chord_one_note(self):
         c = Chord(70, 4, relative_x=10)
         c._parent = self.mock_beat
-        c.update_notes()
+        c._update_notes()
         expected = """<note relative-x="10">
   <pitch>
     <step>B</step>
@@ -160,7 +160,7 @@ class TestTreeChord(TestCase):
         assert c.notes[0].to_string() == expected
         # change chord's midi (zero)
         c.midis[0].value = 0
-        # c.update_notes()
+        # c._update_notes()
 
         expected = """<note relative-x="10">
   <rest />
@@ -174,7 +174,7 @@ class TestTreeChord(TestCase):
         # change chord's duration (not zero)
         c.quarter_duration = 1
         c._parent = self.mock_beat
-        c.update_notes()
+        c._update_notes()
         expected = """<note>
   <rest />
   <duration>1</duration>
@@ -190,7 +190,7 @@ class TestTreeChord(TestCase):
         c.midis[0].value = 60
         c.quarter_duration = 0
         c._parent = self.mock_beat
-        c.update_notes()
+        c._update_notes()
         expected = """<note>
   <grace />
   <pitch>
@@ -223,7 +223,7 @@ class TestTreeChord(TestCase):
         """
         c = Chord(72, 2)
         c._parent = self.mock_beat
-        c.update_notes()
+        c._update_notes()
 
         c.xml_type = '16th'
         c.xml_stem = 'up'
@@ -252,7 +252,7 @@ class TestTreeChord(TestCase):
 """
         assert c.notes[0].xml_pitch.to_string() == expected
         c.midis[0].value = 0
-        # c.update_notes()
+        # c._update_notes()
         assert c.notes[0].xml_pitch is None
         assert c.notes[0].xml_rest is not None
         assert c.is_rest
@@ -263,7 +263,7 @@ class TestTreeChord(TestCase):
         """
         chord = Chord(Midi(70, accidental=Accidental(mode='sharp')), 1)
         chord._parent = self.mock_beat
-        chord.update_notes()
+        chord._update_notes()
         expected = """<pitch>
     <step>A</step>
     <alter>1</alter>
@@ -285,7 +285,7 @@ class TestTreeChord(TestCase):
   <type>half</type>
 </note>
 """
-        chord.update_notes()
+        chord._update_notes()
         assert chord.notes[0].to_string() == expected
         chord.midis = [60, 61]
         expected = """<pitch>
@@ -305,7 +305,7 @@ class TestTreeChord(TestCase):
     def test_chord_to_rest(self):
         chord = Chord(60, 2)
         chord._parent = self.mock_beat
-        chord.update_notes()
+        chord._update_notes()
         chord.to_rest()
         expected = """<note>
   <rest />
@@ -324,7 +324,7 @@ class TestTreeChord(TestCase):
 
         chord = Chord([60, 62, 63], 2)
         chord._parent = self.mock_beat
-        chord.update_notes()
+        chord._update_notes()
         chord.xml_stem = 'up'
         expected_1 = """<note>
   <chord />
@@ -405,8 +405,8 @@ class TestTreeChord(TestCase):
         ch2.add_tie('stop')
         ch1._parent = self.mock_beat
         ch2._parent = self.mock_beat
-        ch1.update_notes()
-        ch2.update_notes()
+        ch1._update_notes()
+        ch2._update_notes()
         assert [n.is_tied for n in ch1.notes] == [True, True]
         assert [n.is_tied for n in ch2.notes] == [False, False]
         assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
@@ -415,8 +415,8 @@ class TestTreeChord(TestCase):
         ch2 = Chord(midis=[60, 61], quarter_duration=1)
         ch1._parent = self.mock_beat
         ch2._parent = self.mock_beat
-        ch1.update_notes()
-        ch2.update_notes()
+        ch1._update_notes()
+        ch2._update_notes()
 
         ch1.add_tie('start')
         ch2.add_tie('stop')
@@ -424,3 +424,11 @@ class TestTreeChord(TestCase):
         assert [n.is_tied for n in ch1.notes] == [True, True]
         assert [n.is_tied for n in ch2.notes] == [False, False]
         assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
+
+    def test_group_chords(self):
+        chords = [Chord(60, qd) for qd in [1 / 6, 1 / 6, 1 / 6, 1 / 10, 3 / 10, 1 / 10]]
+        with self.assertRaises(ValueError):
+            assert group_chords(chords, [1 / 2, 1 / 2, 1 / 2])
+        assert group_chords(chords, [1 / 2, 1 / 2]) == [chords[:3], chords[3:]]
+        assert group_chords(chords, [1 / 3, 2 / 3]) == [chords[:2], chords[2:]]
+        assert group_chords(chords, [1 / 4, 3 / 4]) is None

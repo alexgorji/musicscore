@@ -198,7 +198,7 @@ class Chord(MusicTree, QuarterDurationMixin):
     def to_string(self):
         raise AttributeError("object 'Chord' cannot return a string.")
 
-    def update_notes(self):
+    def _update_notes(self):
         if self.get_children():
             raise ChordNotesAreAlreadyCreatedError()
         if not self.up:
@@ -239,3 +239,27 @@ def split_copy(chord, new_quarter_duration=None):
         new_quarter_duration = chord.quarter_duration.__copy__()
     new_chord = Chord(midis=[m.__deepcopy__() for m in chord.midis], quarter_duration=new_quarter_duration)
     return new_chord
+
+
+def group_chords(chords, quarter_durations):
+    if sum([c.quarter_duration for c in chords]) != sum(quarter_durations):
+        raise ValueError
+    output = []
+    for _ in quarter_durations:
+        output.append([])
+    index = 0
+    current_quarter_duration = quarter_durations[0]
+    for ch in chords:
+        output[index].append(ch)
+        current_sum = sum([c.quarter_duration for c in output[index]])
+        if current_sum < current_quarter_duration:
+            pass
+        elif current_sum == current_quarter_duration:
+            index += 1
+            if index == len(quarter_durations):
+                pass
+            else:
+                current_quarter_duration = quarter_durations[index]
+        else:
+            return None
+    return output

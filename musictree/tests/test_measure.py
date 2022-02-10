@@ -280,6 +280,7 @@ class TestMeasure(TestCase):
         with self.assertRaises(AttributeError):
             m.hello = 'bbb'
         m.xml_object.width = 10
+
         assert m.xml_object.width == 10
         assert m.width == 10
 
@@ -515,22 +516,20 @@ class TestTuplets(TestCase):
         assert ch2.notes[0].xml_notations is None
         assert ch3.notes[0].xml_notations.xml_tuplet.type == 'stop'
         assert ch3.notes[0].xml_notations.xml_tuplet.number == 1
-    #
-    # def test_complex_tuplet(self):
-    #     v1 = create_voice()
-    #     v1.update_beats(1, 1, 1, 1)
-    #     for quarter_duration in [1 / 6, 1 / 6, 1 / 6, 2 / 10, 3 / 10]:
-    #         v1.add_chord(Chord(60, quarter_duration))
-    #     v1.get_children()[0].update_notes()
-    #     n1, n2, n3, n4, n5 = [ch.notes[0] for ch in v1.get_chords()]
-    #     for n in [n1, n2, n3]:
-    #         assert (n.xml_time_modification.xml_actual_notes.value, n.xml_time_modification.xml_normal_notes.value) == (6, 4)
-    #     for n in [n4, n5]:
-    #         assert (n.xml_time_modification.xml_actual_notes.value, n.xml_time_modification.xml_normal_notes.value,
-    #                 n.xml_time_modification.xml_normal_type.value) == (10, 8, '32nd')
-    #     for n in [n1, n3, n4]:
-    #         assert n.xml_notations is not None
-    #     assert n1.xml_notations.xml_tuplet.type == 'start'
-    #     assert n3.xml_notations.xml_tuplet.type == 'stop'
-    #     assert n4.xml_notations.xml_tuplet.type == 'start'
-    #     assert n5.xml_notations.xml_tuplet.type == 'stop'
+
+    def test_complex_tuplet(self):
+        v1 = create_voice()
+        beats = v1.update_beats(1)
+        for quarter_duration in [1 / 6, 1 / 6, 1 / 6, 1 / 10, 3 / 10, 1 / 10]:
+            v1.add_chord(Chord(60, quarter_duration))
+        beats[0].update_notes()
+        n1, n2, n3, n4, n5, n6 = [ch.notes[0] for ch in v1.get_chords()]
+        for n in [n1, n2, n3]:
+            assert (n.xml_time_modification.xml_actual_notes.value, n.xml_time_modification.xml_normal_notes.value) == (3, 2)
+        for n in [n4, n5, n6]:
+            assert (n.xml_time_modification.xml_actual_notes.value, n.xml_time_modification.xml_normal_notes.value,
+                    n.xml_time_modification.xml_normal_type.value) == (5, 4)
+        assert n1.xml_notations.xml_tuplet.type == 'start'
+        assert n3.xml_notations.xml_tuplet.type == 'stop'
+        assert n4.xml_notations.xml_tuplet.type == 'start'
+        assert n6.xml_notations.xml_tuplet.type == 'stop'

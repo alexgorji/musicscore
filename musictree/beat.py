@@ -61,6 +61,7 @@ class Beat(MusicTree, QuarterDurationMixin):
                         note.set_dots(number_of_dots=0)
 
     def _update_time_modification(self):
+
         def add_bracket_to_notes(chord, type_, number=1):
             for note in chord.notes:
                 if not note.xml_notations:
@@ -77,6 +78,9 @@ class Beat(MusicTree, QuarterDurationMixin):
         if len(denominators) > 1:
             l_c_m = lcm(denominators)
             if l_c_m not in denominators:
+                # if self.quarter_duration == 1:
+                #     g1, g2 =
+                # else:
                 raise NotImplementedError()
             else:
                 actual_notes = l_c_m
@@ -165,7 +169,7 @@ class Beat(MusicTree, QuarterDurationMixin):
 
     def update_notes(self):
         for chord in self.get_children():
-            chord.update_notes()
+            chord._update_notes()
         self.update_tuplets()
         self._update_dots()
 
