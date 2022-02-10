@@ -38,6 +38,12 @@ def diff_xml(path_1, path_2=None):
     return [d for d in difference if d.startswith('-') or d.startswith('+')]
 
 
+def generate_all_16ths():
+    output = [tuple(4 * [Fraction(1, 4)])]
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 4), Fraction(1, 4), Fraction(1, 2)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 4), Fraction(3, 4)]))))
+
+
 def generate_all_quintuplets():
     output = [tuple(5 * [Fraction(1, 5)])]
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 5), Fraction(1, 5), Fraction(1, 5), Fraction(2, 5)]))))

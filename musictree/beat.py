@@ -1,4 +1,4 @@
-from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification
+from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
 
 from musictree.chord import split_copy, group_chords
@@ -6,6 +6,7 @@ from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHa
     ChordHasNoMidisError
 from musictree.musictree import MusicTree
 from musictree.quarterduration import QuarterDurationMixin, QuarterDuration
+from musictree.tests.util import generate_all_quintuplets
 from musictree.util import lcm
 
 
@@ -197,4 +198,12 @@ class Beat(MusicTree, QuarterDurationMixin):
 
 
 def beam_chord_group(chord_group):
-    pass
+    # beams = {'eight': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
+    def add_beam(chord, number, value):
+        for note in chord.notes:
+            note.xml_object.add_child(XMLBeam(number=number, value=value))
+
+    if [ch.quarter_duration for ch in chord_group] == [QuarterDuration(1, 3), QuarterDuration(1, 3), QuarterDuration(1, 3)]:
+        add_beam(chord=chord_group[0], number=1, value='begin')
+        add_beam(chord=chord_group[1], number=1, value='continue')
+        add_beam(chord=chord_group[2], number=1, value='end')

@@ -8,7 +8,7 @@ from musictree.exceptions import VoiceIsAlreadyFullError
 from musictree.measure import Measure, generate_measures
 from musictree.staff import Staff
 from musictree.tests.test_beat import create_voice
-from musictree.tests.util import generate_all_quintuplets, generate_all_sextuplets, generate_all_triplets
+from musictree.tests.util import generate_all_quintuplets, generate_all_sextuplets, generate_all_triplets, generate_all_16ths
 from musictree.time import Time
 from musictree.voice import Voice
 
@@ -546,10 +546,28 @@ class TestTuplets(TestCase):
             beat.update_notes()
             if index == 0:
                 for i, c in enumerate(beat.get_children()):
-                    beams = c.notes[0].find_children('XMLBeat')
+                    beams = c.notes[0].find_children('XMLBeam')
                     assert len(beams) == 1
                     assert beams[0].number == 1
                     assert beams[0].value == 'begin' if i == 0 else 'continue' if i == 1 else 'end'
             else:
                 for c in beat.get_children():
-                    assert c.notes[0].find_child('XMLBeat') is None
+                    assert c.notes[0].find_child('XMLBeam') is None
+
+    def test_group_beams_16th(self):
+        v1 = create_voice()
+        print(len(generate_all_16ths()))
+        beats = v1.update_beats(1, 1, 1)
+        # for quarter_duration in [q for group in generate_all_16ths() for q in group]:
+        #     v1.add_chord(Chord(60, quarter_duration))
+        # for index, beat in enumerate(beats):
+        #     beat.update_notes()
+        #     if index == 0:
+        #         for i, c in enumerate(beat.get_children()):
+        #             beams = c.notes[0].find_children('XMLBeam')
+        #             assert len(beams) == 1
+        #             assert beams[0].number == 1
+        #             assert beams[0].value == 'begin' if i == 0 else 'continue' if i == 1 else 'end'
+        #     else:
+        #         for c in beat.get_children():
+        #             assert c.notes[0].find_child('XMLBeam') is None
