@@ -15,7 +15,6 @@ class Beat(MusicTree, QuarterDurationMixin):
     def __init__(self, quarter_duration=1):
         super().__init__(quarter_duration=quarter_duration)
         self._filled_quarter_duration = 0
-        self._divisions = None
         self.left_over_chord = None
 
     def _add_child(self, child):
@@ -47,21 +46,20 @@ class Beat(MusicTree, QuarterDurationMixin):
             return [chord, copied]
         return None
 
-    def _update_dots(self):
-        for note in [n for ch in self.get_children() for n in ch.get_children()]:
+    def _update_dots(self, chord_group, actual_notes):
+        for note in [n for ch in chord_group for n in ch.get_children()]:
             if note.number_of_dots is None:
                 if note.quarter_duration != 0:
                     if note.quarter_duration.numerator % 3 == 0:
                         note.set_dots(number_of_dots=1)
-                    elif note.quarter_duration == Fraction(1, 2) and self.divisions == 6:
+                    elif note.quarter_duration == Fraction(1, 2) and actual_notes == 6:
                         note.set_dots(number_of_dots=1)
                     elif True in [note.quarter_duration == x for x in [7, 7 / 2, 7 / 4, 7 / 8, 7 / 16, 7 / 32, 7 / 64]]:
                         note.set_dots(number_of_dots=2)
                     else:
                         note.set_dots(number_of_dots=0)
 
-    def _update_time_modification(self):
-
+    def _update_tuplets(self, chord_group, actual_notes):
         def add_bracket_to_notes(chord, type_, number=1):
             for note in chord.notes:
                 if not note.xml_notations:
@@ -74,38 +72,37 @@ class Beat(MusicTree, QuarterDurationMixin):
 
         normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
         types = {8: '32nd', 4: '16th', 2: 'eighth'}
-        denominators = list(dict.fromkeys([ch.quarter_duration.denominator for ch in self.get_children()]))
-        if len(denominators) > 1:
-            l_c_m = lcm(denominators)
-            if l_c_m not in denominators:
-                # if self.quarter_duration == 1:
-                #     g1, g2 =
-                # else:
-                raise NotImplementedError()
-            else:
-                actual_notes = l_c_m
-        else:
-            actual_notes = next(iter(denominators))
         if actual_notes in normals:
-            self._divisions = actual_notes
             normal = normals[actual_notes]
             type_ = types[normal]
-            for chord in self.get_children():
+            for chord in chord_group:
                 for note in chord.notes:
                     note.xml_time_modification = XMLTimeModification()
                     note.xml_time_modification.xml_actual_notes = actual_notes
                     note.xml_time_modification.xml_normal_notes = normal
                     note.xml_time_modification.xml_normal_type = type_
-                if chord == self.get_children()[0]:
+                if chord == chord_group[0]:
                     add_bracket_to_notes(chord, type_='start')
-                elif chord == self.get_children()[-1]:
+                elif chord == chord_group[-1]:
                     add_bracket_to_notes(chord, type_='stop')
                 else:
                     pass
 
-    @property
-    def divisions(self):
-        return self._divisions
+    def _update_note_tuplets_dots_beams(self):
+        denominators = list(dict.fromkeys([ch.quarter_duration.denominator for ch in self.get_children()]))
+        grouped_chords = [self.get_children()]
+        if len(denominators) > 1:
+            l_c_m = lcm(denominators)
+            if l_c_m not in denominators:
+                raise NotImplementedError()
+            else:
+                actual_notes = l_c_m
+        else:
+            actual_notes = next(iter(denominators))
+        for group in grouped_chords:
+            print(group, actual_notes)
+            self._update_tuplets(group, actual_notes)
+            self._update_dots(group, actual_notes)
 
     @property
     def is_filled(self):
@@ -168,11 +165,7 @@ class Beat(MusicTree, QuarterDurationMixin):
                 return child.split_beatwise(beats)
 
     def update_notes(self):
-        for chord in self.get_children():
-            chord._update_notes()
-        self.update_tuplets()
-        self._update_dots()
-
-    def update_tuplets(self):
         if self.get_children():
-            self._update_time_modification()
+            for chord in self.get_children():
+                chord._update_notes()
+            self._update_note_tuplets_dots_beams()
