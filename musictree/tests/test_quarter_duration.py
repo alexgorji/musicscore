@@ -51,6 +51,10 @@ class TestQuarterDuration(TestCase):
         assert QuarterDuration(1, 6) * 2 == 1 / 3
         assert 2 * QuarterDuration(1, 6) == 1 / 3
 
+    def test_rtruediv(self):
+        assert 2 / (1 / 2) == 4
+        assert 2 / QuarterDuration(1, 2) == 4
+
     def test_split_quarter_duration(self):
         """
         Test if get_beatwise_sections can split quarter duration to writable sections.

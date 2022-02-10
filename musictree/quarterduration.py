@@ -161,7 +161,7 @@ class QuarterDuration(numbers.Rational):
         return QuarterDuration(self.value.__rpow__(_convert_other(other)))
 
     def __rtruediv__(self, other):
-        return QuarterDuration(self.value.__rtuediv(_convert_other(other)))
+        return QuarterDuration(self.value.__rtruediv__(_convert_other(other)))
 
     def __truediv__(self, other):
         return QuarterDuration(self.value.__truediv__(_convert_other(other)))

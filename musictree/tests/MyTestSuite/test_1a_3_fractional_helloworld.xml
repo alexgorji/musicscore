@@ -143,8 +143,8 @@
         <type>16th</type>
         <accidental>natural</accidental>
         <time-modification>
-          <actual-notes>6</actual-notes>
-          <normal-notes>4</normal-notes>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
@@ -161,8 +161,8 @@
         <type>16th</type>
         <accidental>natural</accidental>
         <time-modification>
-          <actual-notes>6</actual-notes>
-          <normal-notes>4</normal-notes>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
       </note>
@@ -176,8 +176,8 @@
         <type>16th</type>
         <accidental>natural</accidental>
         <time-modification>
-          <actual-notes>6</actual-notes>
-          <normal-notes>4</normal-notes>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
@@ -194,8 +194,8 @@
         <type>32nd</type>
         <accidental>natural</accidental>
         <time-modification>
-          <actual-notes>10</actual-notes>
-          <normal-notes>8</normal-notes>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
           <normal-type>32nd</normal-type>
         </time-modification>
         <notations>
@@ -213,8 +213,8 @@
         <dot />
         <accidental>natural</accidental>
         <time-modification>
-          <actual-notes>10</actual-notes>
-          <normal-notes>8</normal-notes>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
           <normal-type>32nd</normal-type>
         </time-modification>
       </note>
@@ -228,8 +228,8 @@
         <type>32nd</type>
         <accidental>natural</accidental>
         <time-modification>
-          <actual-notes>10</actual-notes>
-          <normal-notes>8</normal-notes>
+          <actual-notes>5</actual-notes>
+          <normal-notes>4</normal-notes>
           <normal-type>32nd</normal-type>
         </time-modification>
         <notations>

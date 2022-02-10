@@ -8,7 +8,7 @@ from musictree.exceptions import VoiceIsAlreadyFullError
 from musictree.measure import Measure, generate_measures
 from musictree.staff import Staff
 from musictree.tests.test_beat import create_voice
-from musictree.tests.util import generate_all_quintuplets, generate_all_sextuplets
+from musictree.tests.util import generate_all_quintuplets, generate_all_sextuplets, generate_all_triplets
 from musictree.time import Time
 from musictree.voice import Voice
 
@@ -525,11 +525,31 @@ class TestTuplets(TestCase):
         beats[0].update_notes()
         n1, n2, n3, n4, n5, n6 = [ch.notes[0] for ch in v1.get_chords()]
         for n in [n1, n2, n3]:
-            assert (n.xml_time_modification.xml_actual_notes.value, n.xml_time_modification.xml_normal_notes.value) == (3, 2)
+            assert (n.xml_time_modification.xml_actual_notes.value, n.xml_time_modification.xml_normal_notes.value,
+                    n.xml_time_modification.xml_normal_type.value) == (3, 2, '16th')
         for n in [n4, n5, n6]:
             assert (n.xml_time_modification.xml_actual_notes.value, n.xml_time_modification.xml_normal_notes.value,
-                    n.xml_time_modification.xml_normal_type.value) == (5, 4)
+                    n.xml_time_modification.xml_normal_type.value) == (5, 4, '32nd')
         assert n1.xml_notations.xml_tuplet.type == 'start'
+        assert n2.xml_notations is None
         assert n3.xml_notations.xml_tuplet.type == 'stop'
         assert n4.xml_notations.xml_tuplet.type == 'start'
+        assert n5.xml_notations is None
         assert n6.xml_notations.xml_tuplet.type == 'stop'
+
+    def test_group_beams_triplets(self):
+        v1 = create_voice()
+        beats = v1.update_beats(1, 1, 1)
+        for quarter_duration in [q for group in generate_all_triplets() for q in group]:
+            v1.add_chord(Chord(60, quarter_duration))
+        for index, beat in enumerate(beats):
+            beat.update_notes()
+            if index == 0:
+                for i, c in enumerate(beat.get_children()):
+                    beams = c.notes[0].find_children('XMLBeat')
+                    assert len(beams) == 1
+                    assert beams[0].number == 1
+                    assert beams[0].value == 'begin' if i == 0 else 'continue' if i == 1 else 'end'
+            else:
+                for c in beat.get_children():
+                    assert c.notes[0].find_child('XMLBeat') is None

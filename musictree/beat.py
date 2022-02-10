@@ -1,7 +1,7 @@
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification
 from quicktions import Fraction
 
-from musictree.chord import split_copy
+from musictree.chord import split_copy, group_chords
 from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError
 from musictree.musictree import MusicTree
@@ -59,7 +59,7 @@ class Beat(MusicTree, QuarterDurationMixin):
                     else:
                         note.set_dots(number_of_dots=0)
 
-    def _update_tuplets(self, chord_group, actual_notes):
+    def _update_tuplets(self, chord_group, actual_notes, factor=1):
         def add_bracket_to_notes(chord, type_, number=1):
             for note in chord.notes:
                 if not note.xml_notations:
@@ -72,9 +72,15 @@ class Beat(MusicTree, QuarterDurationMixin):
 
         normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
         types = {8: '32nd', 4: '16th', 2: 'eighth'}
+
+        actual_notes *= factor
+        if int(actual_notes) != actual_notes:
+            raise ValueError
+        actual_notes = int(actual_notes)
+
         if actual_notes in normals:
             normal = normals[actual_notes]
-            type_ = types[normal]
+            type_ = types[normal / factor]
             for chord in chord_group:
                 for note in chord.notes:
                     note.xml_time_modification = XMLTimeModification()
@@ -88,21 +94,39 @@ class Beat(MusicTree, QuarterDurationMixin):
                 else:
                     pass
 
-    def _update_note_tuplets_dots_beams(self):
-        denominators = list(dict.fromkeys([ch.quarter_duration.denominator for ch in self.get_children()]))
-        grouped_chords = [self.get_children()]
+    @staticmethod
+    def _get_actual_notes(chords):
+        denominators = list(dict.fromkeys([ch.quarter_duration.denominator for ch in chords]))
         if len(denominators) > 1:
             l_c_m = lcm(denominators)
             if l_c_m not in denominators:
-                raise NotImplementedError()
+                return None
             else:
-                actual_notes = l_c_m
+                return l_c_m
         else:
-            actual_notes = next(iter(denominators))
-        for group in grouped_chords:
-            print(group, actual_notes)
-            self._update_tuplets(group, actual_notes)
-            self._update_dots(group, actual_notes)
+            return next(iter(denominators))
+
+    def _update_note_tuplets_dots(self):
+        actual_notes = self._get_actual_notes(self.get_children())
+        if not actual_notes:
+            if self.quarter_duration == 1:
+                grouped_chords = group_chords(self.get_children(), [1 / 2, 1 / 2])
+                if grouped_chords:
+                    for g in grouped_chords:
+                        actual_notes = self._get_actual_notes(g)
+                        self._update_tuplets(g, actual_notes, 1 / 2)
+                        self._update_dots(g, actual_notes)
+                    return
+                else:
+                    raise NotImplementedError('Beat cannot be halved. It cannot manage the necessary grouping of chords.')
+            else:
+                raise NotImplementedError('Beat with quarter_duration other than one cannot manage more than one group of chords.')
+        self._update_tuplets(self.get_children(), actual_notes)
+        self._update_dots(self.get_children(), actual_notes)
+
+    def _update_note_beams(self):
+        if self.get_children():
+            beam_chord_group(chord_group=self.get_children())
 
     @property
     def is_filled(self):
@@ -168,4 +192,9 @@ class Beat(MusicTree, QuarterDurationMixin):
         if self.get_children():
             for chord in self.get_children():
                 chord._update_notes()
-            self._update_note_tuplets_dots_beams()
+            self._update_note_tuplets_dots()
+            self._update_note_beams()
+
+
+def beam_chord_group(chord_group):
+    pass
