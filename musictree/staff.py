@@ -58,7 +58,7 @@ class Staff(MusicTree, XMLWrapper):
             last_chord = v.get_chords()[-1]
             if not last_chord.is_rest:
                 for m in last_chord.midis:
-                    if m.accidental.sign != 'natural' and m.accidental.show is not False:
+                    if m.accidental.sign != 'natural':
                         step = m.accidental.get_pitch_parameters()[0]
                         if step not in output:
                             output.add(step)

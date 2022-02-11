@@ -444,3 +444,11 @@ class TestTreeChord(TestCase):
         assert not ch1.has_same_pitches(ch2)
         ch2 = Chord([60, Midi(61, accidental=Accidental(show=True, mode='flat')), 62], 1)
         assert not ch1.has_same_pitches(ch2)
+
+    def test_add_lyric(self):
+        ch = Chord(60, 2)
+        ch._parent = self.mock_beat
+        ch.add_lyric('test')
+        ch._update_notes()
+        assert ch.notes[0].xml_lyric is not None
+        assert ch.notes[0].xml_lyric.xml_text.value == 'test'

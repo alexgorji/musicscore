@@ -21,7 +21,7 @@ class TestHelloTuplets1(IdTestCase):
 
     def test_export_hello_world_tuplets_1(self):
         """
-        Wright all possible tuplet combinations up until SEXTUPLETS
+        Write all possible tuplet combinations up until SEXTUPLETS
         """
         """
         Tester creates a timewise score

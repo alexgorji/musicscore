@@ -1,7 +1,7 @@
 from fractions import Fraction
 from typing import Union, List, Optional
 
-from musicxml.xmlelement.xmlelement import XMLChord
+from musicxml.xmlelement.xmlelement import XMLChord, XMLLyric
 
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, ChordNotesAreAlreadyCreatedError
@@ -17,13 +17,15 @@ class Chord(MusicTree, QuarterDurationMixin):
     :param midis: midi, midis, midi value or midi values. 0 or [0] for a rest.
     :param quarter_duration: int or float for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', '_voice', 'ties', '_notes_are_set'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', '_voice', '_lyrics', 'ties',
+                   '_notes_are_set'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, offset=0, **kwargs):
         self._midis = None
         self._offset = None
         self._ties = []
+        self._lyrics = []
 
         self._note_attributes = kwargs
         self.offset = offset
@@ -139,6 +141,12 @@ class Chord(MusicTree, QuarterDurationMixin):
             self._ties.append(val)
             self._update_tie()
 
+    def add_lyric(self, text):
+        l = XMLLyric()
+        l.xml_text = str(text)
+        self._lyrics.append(l)
+        return l
+
     def get_voice_number(self):
         return self.up.up.value
 
@@ -223,6 +231,8 @@ class Chord(MusicTree, QuarterDurationMixin):
             notes[0].xml_object.add_child(XMLChord())
         for note in notes:
             self.add_child(note)
+        for lyric in self._lyrics:
+            notes[0].xml_object.xml_lyric = lyric
         self._notes_are_set = True
         self._update_notes_quarter_duration()
         self._update_tie()
