@@ -45,6 +45,32 @@ def generate_all_16ths():
     return output
 
 
+def generate_all_32nds():
+    output = [tuple(8 * [Fraction(1, 8)])]
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(2, 8)] + 6 * [Fraction(1, 8)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations(2 * [Fraction(2, 8)] + 4 * [Fraction(1, 8)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations(3 * [Fraction(2, 8)] + 2 * [Fraction(1, 8)]))))
+
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(3, 8)] + 5 * [Fraction(1, 8)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(3, 8)] + 1 * [Fraction(2, 8)] + 3 * [Fraction(1, 8)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(3, 8)] + 2 * [Fraction(2, 8)] + 1 * [Fraction(1, 8)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations(2 * [Fraction(3, 8)] + 2 * [Fraction(1, 8)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations(2 * [Fraction(3, 8)] + 1 * [Fraction(2, 8)]))))
+
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(4, 8)] + 4 * [Fraction(1, 8)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(4, 8)] + 1 * [Fraction(2, 8)] + 2 * [Fraction(1, 8)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(4, 8)] + 1 * [Fraction(3, 8)] + 1 * [Fraction(1, 8)]))))
+
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(5, 8)] + 3 * [Fraction(1, 8)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(5, 8)] + 1 * [Fraction(2, 8)] + 1 * [Fraction(1, 8)]))))
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(5, 8)] + 1 * [Fraction(3, 8)]))))
+
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(6, 8)] + 2 * [Fraction(1, 8)]))))
+
+    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(7, 8)] + 1 * [Fraction(1, 8)]))))
+    return output
+
+
 def generate_all_quintuplets():
     output = [tuple(5 * [Fraction(1, 5)])]
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 5), Fraction(1, 5), Fraction(1, 5), Fraction(2, 5)]))))

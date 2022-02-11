@@ -4,9 +4,8 @@ from quicktions import Fraction
 
 from musictree.chord import Chord
 from musictree.part import Part
-from musictree.quarterduration import QuarterDuration
 from musictree.score import Score
-from musictree.tests.util import IdTestCase, generate_all_16ths
+from musictree.tests.util import IdTestCase, generate_all_16ths, generate_all_32nds
 
 
 class TestHelloTBeams1(IdTestCase):
@@ -29,10 +28,14 @@ class TestHelloTBeams1(IdTestCase):
         """
         All possible combinations are:
         """
-        groups = [(Fraction(1, 2), Fraction(1, 2))] + generate_all_16ths()
+        groups = [(Fraction(1, 2), Fraction(1, 2))] + generate_all_16ths() + generate_all_32nds()
         for group in groups:
             for qd in group:
                 p.add_chord(Chord(60, qd))
+        # for qd in groups[13]:
+        #     p.add_chord(Chord(60, qd))
+        # for qd in groups[7]:
+        #     p.add_chord(Chord(60, qd))
         s.update_xml_notes()
         """
         ... and exports the xml

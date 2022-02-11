@@ -33,8 +33,12 @@ class Beat(MusicTree, QuarterDurationMixin):
     def _split_chord(chord, quarter_durations):
         output = [chord]
         chord.quarter_duration = quarter_durations[0]
+        offset = chord.offset + chord.quarter_duration
         for qd in quarter_durations[1:]:
-            output.append(split_copy(chord, qd))
+            copied = split_copy(chord, qd)
+            copied.offset = offset
+            offset += qd
+            output.append(copied)
         for index, ch in enumerate(output[:-1]):
             next_ch = output[index + 1]
             chord.add_tie('start')
@@ -44,13 +48,24 @@ class Beat(MusicTree, QuarterDurationMixin):
         return output
 
     def _split_not_writable(self, chord):
-        if chord.quarter_duration == QuarterDuration(5, 6):
-            if chord.offset == 0:
-                return self._split_chord(chord, [QuarterDuration(1, 2), QuarterDuration(1, 3)])
+        if chord.offset == QuarterDuration(1, 8) and chord.quarter_duration > QuarterDuration(3, 8):
+            return self._split_chord(chord, [QuarterDuration(3, 8), chord.quarter_duration - QuarterDuration(3, 8)])
+        elif chord.offset == QuarterDuration(2, 8) and chord.quarter_duration == QuarterDuration(3, 8):
+            return self._split_chord(chord, [QuarterDuration(2, 8), QuarterDuration(1, 8)])
+        if chord.offset == QuarterDuration(3, 8) and chord.quarter_duration > QuarterDuration(1, 8):
+            return self._split_chord(chord, [QuarterDuration(1, 8), chord.quarter_duration - QuarterDuration(1, 8)])
+
+        elif chord.quarter_duration.numerator == 5:
+            denom = chord.quarter_duration.denominator
+            if denom == 6 and chord.offset != 0:
+                return self._split_chord(chord, [QuarterDuration(2, 6), QuarterDuration(3, 6)])
+            elif denom == 8 and chord.offset in [0, QuarterDuration(1, 4)]:
+                return self._split_chord(chord, [QuarterDuration(4, 8), QuarterDuration(1, 8)])
             else:
-                return self._split_chord(chord, [QuarterDuration(1, 3), QuarterDuration(1, 2)])
-        elif chord.quarter_duration == QuarterDuration(5, 7):
-            return self._split_chord(chord, [QuarterDuration(3, 7), QuarterDuration(2, 7)])
+                return self._split_chord(chord, [QuarterDuration(3, denom), QuarterDuration(2, denom)])
+        elif chord.quarter_duration.numerator == 9:
+            denom = chord.quarter_duration.denominator
+            return self._split_chord(chord, [QuarterDuration(5, denom), QuarterDuration(4, denom)])
         else:
             return None
 
@@ -214,17 +229,24 @@ def beam_chord_group(chord_group):
         for note in chord.notes:
             note.xml_object.add_child(XMLBeam(number=number, value=value))
 
-    def add_last_beam(chord, last_beam, current_beams):
-        if last_beam < current_beams:
-            for n in range(1, last_beam + 1):
-                add_beam(chord, n, 'end')
-        elif last_beam == current_beams:
-            for n in range(1, last_beam + 1):
-                add_beam(chord, n, 'end')
+    def add_last_beam(chord, last_beam, current_beams, cont=False):
+        if last_beam <= current_beams:
+            if cont:
+                add_beam(chord, 1, 'continue')
+                for n in range(2, last_beam + 1):
+                    add_beam(chord, n, 'end')
+            else:
+                for n in range(1, last_beam + 1):
+                    add_beam(chord, n, 'end')
         else:
             if current_beams != 0:
-                for n in range(1, current_beams + 1):
-                    add_beam(chord, n, 'end')
+                if cont:
+                    add_beam(chord, 1, 'continue')
+                    for n in range(2, current_beams + 1):
+                        add_beam(chord, n, 'end')
+                else:
+                    for n in range(1, current_beams + 1):
+                        add_beam(chord, n, 'end')
                 for n in range(current_beams + 1, last_beam + 1):
                     add_beam(chord, n, 'backward hook')
 
@@ -235,57 +257,54 @@ def beam_chord_group(chord_group):
         next_chord = chord_group[index + 1]
         t1, t2 = chord.notes[0].xml_type.value, next_chord.notes[0].xml_type.value
         b1, b2 = beams.get(t1), beams.get(t2)
-        types = {'begin': None, 'continue': None, 'end': None, 'hook': None}
+        types = []
         if b1 and b2:
-            if b2 < b1 < current_beams:
-                types['continue'] = (0, b2)
-                types['end'] = (b2, current_beams)
-
-            elif b2 < b1 == current_beams:
-                types['continue'] = (0, b2)
-                types['continue'] = (b2, current_beams)
-
+            if next_chord.offset == QuarterDuration(1, 2) and (b1 == 3 or b2 == 3 or current_beams == 3 or chord.quarter_duration ==
+                                                               QuarterDuration(3, 8) or next_chord.quarter_duration == QuarterDuration(3,
+                                                                                                                                       8)):
+                add_last_beam(chord, b1, current_beams, True)
+                current_beams = 1
+            elif b2 < b1 <= current_beams:
+                types.append(('continue', 0, b2))
+                types.append(('end', b2, current_beams))
+                current_beams = b1
             elif b2 < b1 > current_beams:
                 if current_beams == 0:
-                    types['begin'] = (0, b2)
+                    types.append(('begin', 0, b2))
                 else:
-                    types['continue'] = (0, b2)
-                types['hook'] = (b2, b1)
-
-            elif b2 == b1 < current_beams:
-                types['continue'] = (0, b1)
-
-            elif b2 == b1 == current_beams:
-                types['continue'] = (0, b1)
+                    types.append(('continue', 0, current_beams))
+                    types.append(('begin', current_beams, b2))
+                    types.append(('hook', b2, b1))
+                current_beams = b1
+            elif b2 == b1 <= current_beams:
+                types.append(('continue', 0, b1))
+                current_beams = b1
 
             elif b2 == b1 > current_beams:
                 if current_beams == 0:
-                    types['begin'] = (0, b2)
+                    types.append(('begin', 0, b2))
                 else:
-                    types['begin'] = (current_beams, b2)
-                    types['continue'] = (0, current_beams)
+                    types.append(('continue', 0, current_beams))
+                    types.append(('begin', current_beams, b2))
+                current_beams = b1
 
-            elif b2 > b1 < current_beams:
-                types['continue'] = (0, b1)
-
-            elif b2 > b1 == current_beams:
-                types['continue'] = (0, b1)
+            elif b2 > b1 <= current_beams:
+                types.append(('continue', 0, b1))
+                current_beams = b1
 
             elif b2 > b1 > current_beams:
                 if current_beams == 0:
-                    types['begin'] = (0, b1)
+                    types.append(('begin', 0, b1))
                 else:
-                    types['begin'] = (current_beams, b1)
-                    types['continue'] = (0, current_beams)
-
-            current_beams = b1
+                    types.append(('continue', 0, current_beams))
+                    types.append(('begin', current_beams, b1))
+                current_beams = b1
         elif b1 and not b2:
             add_last_beam(chord, b1, current_beams)
         else:
             pass
-        for key, val in types.items():
-            if val is not None:
-                for n in range(val[0] + 1, val[1] + 1):
-                    add_beam(chord, n, key)
+        for l in types:
+            for n in range(l[1] + 1, l[2] + 1):
+                add_beam(chord, n, l[0])
         if index == len(chord_group) - 2 and b2:
             add_last_beam(next_chord, b2, current_beams)

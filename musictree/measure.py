@@ -34,6 +34,9 @@ class Measure(MusicTree, XMLWrapper):
             for voice in staff.get_children():
                 voice.update_beats()
 
+    def _update_accidentals(self):
+        pass
+
     @property
     def number(self):
         return int(self.xml_object.number)
@@ -123,6 +126,7 @@ class Measure(MusicTree, XMLWrapper):
         self.update_divisions()
         for beat in [b for staff in self.get_children() for voice in staff.get_children() for b in voice.get_children()]:
             beat.update_notes()
+        self._update_accidentals()
         current_notes = [note for chord in self.get_chords() for note in chord.notes]
         for note in current_notes:
             self.xml_object.add_child(note.xml_object)
