@@ -32,7 +32,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
       </note>
       <note>
@@ -43,7 +42,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
       </note>
     </measure>
@@ -70,7 +68,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -82,7 +79,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -94,7 +90,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -106,7 +101,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -134,7 +128,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -146,7 +139,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -158,7 +150,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
       </note>
     </measure>
@@ -185,7 +176,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
       </note>
       <note>
@@ -196,7 +186,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
       </note>
       <note>
@@ -207,7 +196,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
       </note>
@@ -235,7 +223,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
       </note>
       <note>
@@ -246,7 +233,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -258,7 +244,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -286,7 +271,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
       </note>
       <note>
@@ -298,7 +282,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
       </note>
     </measure>
@@ -326,7 +309,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
       </note>
       <note>
@@ -337,7 +319,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
       </note>
@@ -365,7 +346,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -378,7 +358,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -391,7 +370,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -404,7 +382,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -417,7 +394,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -430,7 +406,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -443,7 +418,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -456,7 +430,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -485,7 +458,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -497,7 +469,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -510,7 +481,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -523,7 +493,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -536,7 +505,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -549,7 +517,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -562,7 +529,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -591,7 +557,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -603,7 +568,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -615,7 +579,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -628,7 +591,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -641,7 +603,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -654,7 +615,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -667,7 +627,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -696,7 +655,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -709,7 +667,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -722,7 +679,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -734,7 +690,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -747,7 +702,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -760,7 +714,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -773,7 +726,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -802,7 +754,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -815,7 +766,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -828,7 +778,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -842,7 +791,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -874,7 +822,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -887,7 +834,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -900,7 +846,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -929,7 +874,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -942,7 +886,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -955,7 +898,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -968,7 +910,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -981,7 +922,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -993,7 +933,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -1006,7 +945,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1035,7 +973,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -1048,7 +985,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -1061,7 +997,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -1074,7 +1009,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1087,7 +1021,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -1100,7 +1033,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -1112,7 +1044,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -1141,7 +1072,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -1154,7 +1084,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -1167,7 +1096,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -1180,7 +1108,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1193,7 +1120,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -1206,7 +1132,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -1219,7 +1144,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -1247,7 +1171,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -1259,7 +1182,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -1271,7 +1193,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -1284,7 +1205,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -1297,7 +1217,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -1310,7 +1229,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1339,7 +1257,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -1351,7 +1268,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -1365,7 +1281,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1397,7 +1312,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -1410,7 +1324,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -1423,7 +1336,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1452,7 +1364,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -1464,7 +1375,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -1477,7 +1387,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1490,7 +1399,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -1502,7 +1410,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -1515,7 +1422,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1544,7 +1450,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -1556,7 +1461,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -1569,7 +1473,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1582,7 +1485,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -1595,7 +1497,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -1607,7 +1508,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -1636,7 +1536,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -1648,7 +1547,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -1661,7 +1559,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1674,7 +1571,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -1687,7 +1583,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -1700,7 +1595,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -1728,7 +1622,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -1740,7 +1633,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -1753,7 +1645,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -1785,7 +1676,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -1798,7 +1688,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -1811,7 +1700,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1840,7 +1728,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -1852,7 +1739,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -1864,7 +1750,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -1877,7 +1762,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -1889,7 +1773,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -1902,7 +1785,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -1931,7 +1813,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -1943,7 +1824,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -1955,7 +1835,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -1968,7 +1847,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -1981,7 +1859,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -1993,7 +1870,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -2022,7 +1898,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -2034,7 +1909,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -2046,7 +1920,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -2059,7 +1932,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -2072,7 +1944,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -2085,7 +1956,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -2113,7 +1983,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -2126,7 +1995,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -2139,7 +2007,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -2151,7 +2018,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -2163,7 +2029,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -2176,7 +2041,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -2205,7 +2069,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -2218,7 +2081,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -2231,7 +2093,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -2243,7 +2104,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -2256,7 +2116,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -2268,7 +2127,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -2297,7 +2155,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -2310,7 +2167,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -2323,7 +2179,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -2335,7 +2190,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -2348,7 +2202,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -2361,7 +2214,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -2389,7 +2241,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -2402,7 +2253,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -2415,7 +2265,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -2429,7 +2278,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -2461,7 +2309,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -2473,7 +2320,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -2502,7 +2348,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -2515,7 +2360,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -2528,7 +2372,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -2542,7 +2385,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -2574,7 +2416,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -2587,7 +2428,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -2615,7 +2455,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -2628,7 +2467,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -2641,7 +2479,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -2654,7 +2491,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -2667,7 +2503,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -2679,7 +2514,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -2707,7 +2541,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -2719,7 +2552,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -2731,7 +2563,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -2743,7 +2574,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -2756,7 +2586,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -2785,7 +2614,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -2797,7 +2625,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -2809,7 +2636,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -2822,7 +2648,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -2834,7 +2659,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -2863,7 +2687,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -2875,7 +2698,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -2887,7 +2709,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -2900,7 +2721,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -2913,7 +2733,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -2941,7 +2760,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -2953,7 +2771,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -2967,7 +2784,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -2999,7 +2815,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -3011,7 +2826,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -3040,7 +2854,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -3052,7 +2865,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -3066,7 +2878,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -3098,7 +2909,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -3111,7 +2921,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -3139,7 +2948,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -3151,7 +2959,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -3164,7 +2971,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -3177,7 +2983,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -3189,7 +2994,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -3217,7 +3021,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -3229,7 +3032,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -3242,7 +3044,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -3274,7 +3075,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -3286,7 +3086,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -3315,7 +3114,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -3327,7 +3125,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -3340,7 +3137,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -3372,7 +3168,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -3385,7 +3180,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -3413,7 +3207,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -3425,7 +3218,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -3437,7 +3229,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -3450,7 +3241,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -3462,7 +3252,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -3490,7 +3279,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -3503,7 +3291,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -3516,7 +3303,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -3528,7 +3314,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -3540,7 +3325,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -3569,7 +3353,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -3581,7 +3364,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -3594,7 +3376,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -3607,7 +3388,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -3620,7 +3400,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -3633,7 +3412,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -3662,7 +3440,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -3675,7 +3452,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -3687,7 +3463,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -3700,7 +3475,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -3713,7 +3487,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -3726,7 +3499,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -3755,7 +3527,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -3768,7 +3539,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -3782,7 +3552,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -3813,7 +3582,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -3826,7 +3594,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -3839,7 +3606,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -3868,7 +3634,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -3881,7 +3646,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -3894,7 +3658,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -3908,7 +3671,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -3939,7 +3701,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -3952,7 +3713,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -3981,7 +3741,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -3994,7 +3753,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -4007,7 +3765,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -4020,7 +3777,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -4034,7 +3790,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4046,7 +3801,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -4075,7 +3829,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -4088,7 +3841,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -4101,7 +3853,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -4114,7 +3865,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -4127,7 +3877,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -4141,7 +3890,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -4170,7 +3918,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4183,7 +3930,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -4215,7 +3961,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -4228,7 +3973,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -4241,7 +3985,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -4271,7 +4014,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4283,7 +4025,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -4296,7 +4037,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4308,7 +4048,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -4321,7 +4060,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -4351,7 +4089,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4363,7 +4100,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -4376,7 +4112,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -4389,7 +4124,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -4401,7 +4135,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -4431,7 +4164,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4443,7 +4175,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -4456,7 +4187,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -4469,7 +4199,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -4482,7 +4211,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -4510,7 +4238,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4523,7 +4250,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -4554,7 +4280,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -4567,7 +4292,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -4580,7 +4304,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -4609,7 +4332,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4621,7 +4343,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -4635,7 +4356,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -4666,7 +4386,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -4679,7 +4398,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -4708,7 +4426,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4720,7 +4437,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -4733,7 +4449,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -4747,7 +4462,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4759,7 +4473,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -4788,7 +4501,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4800,7 +4512,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -4813,7 +4524,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -4826,7 +4536,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -4840,7 +4549,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -4868,7 +4576,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4881,7 +4588,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -4893,7 +4599,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4905,7 +4610,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -4918,7 +4622,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -4947,7 +4650,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -4960,7 +4662,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -4972,7 +4673,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -4985,7 +4685,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -4997,7 +4696,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -5026,7 +4724,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -5039,7 +4736,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -5051,7 +4747,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -5064,7 +4759,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -5077,7 +4771,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -5105,7 +4798,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -5117,7 +4809,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -5130,7 +4821,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -5161,7 +4851,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -5174,7 +4863,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -5203,7 +4891,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -5215,7 +4902,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -5227,7 +4913,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -5241,7 +4926,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -5253,7 +4937,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -5282,7 +4965,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -5294,7 +4976,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -5306,7 +4987,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -5319,7 +4999,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -5333,7 +5012,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -5361,7 +5039,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -5374,7 +5051,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -5388,7 +5064,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -5419,7 +5094,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -5431,7 +5105,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -5460,7 +5133,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -5473,7 +5145,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -5487,7 +5158,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -5518,7 +5188,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -5531,7 +5200,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -5559,7 +5227,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -5572,7 +5239,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -5585,7 +5251,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -5598,7 +5263,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -5610,7 +5274,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -5639,7 +5302,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -5652,7 +5314,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -5665,7 +5326,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -5677,7 +5337,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -5691,7 +5350,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -5719,7 +5377,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -5732,7 +5389,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -5745,7 +5401,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -5759,7 +5414,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -5790,7 +5444,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -5818,7 +5471,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -5831,7 +5483,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -5844,7 +5495,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -5858,7 +5508,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -5891,7 +5540,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -5920,7 +5568,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -5933,7 +5580,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -5965,7 +5611,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -5977,7 +5622,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -6007,7 +5651,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6020,7 +5663,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -6052,7 +5694,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -6065,7 +5706,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -6094,7 +5734,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6106,7 +5745,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -6119,7 +5757,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6131,7 +5768,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -6159,7 +5795,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6172,7 +5807,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -6203,7 +5837,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -6215,7 +5848,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -6244,7 +5876,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6257,7 +5888,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -6288,7 +5918,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -6301,7 +5930,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -6329,7 +5957,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6341,7 +5968,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -6354,7 +5980,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6366,7 +5991,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -6395,7 +6019,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6407,7 +6030,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -6419,7 +6041,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -6433,7 +6054,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -6461,7 +6081,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6473,7 +6092,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -6487,7 +6105,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -6518,7 +6135,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -6546,7 +6162,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6558,7 +6173,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -6572,7 +6186,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -6605,7 +6218,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -6633,7 +6245,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6646,7 +6257,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -6658,7 +6268,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6670,7 +6279,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -6698,7 +6306,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6710,7 +6317,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -6723,7 +6329,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -6754,7 +6359,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -6782,7 +6386,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6794,7 +6397,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -6807,7 +6409,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -6840,7 +6441,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -6869,7 +6469,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6882,7 +6481,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -6913,7 +6511,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -6926,7 +6523,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -6956,7 +6552,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6968,7 +6563,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -6982,7 +6576,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -6994,7 +6587,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -7024,7 +6616,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -7036,7 +6627,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -7049,7 +6639,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -7063,7 +6652,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -7091,7 +6679,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -7104,7 +6691,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -7117,7 +6703,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -7129,7 +6714,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -7158,7 +6742,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -7171,7 +6754,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -7183,7 +6765,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -7197,7 +6778,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -7225,7 +6805,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -7238,7 +6817,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -7252,7 +6830,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -7284,7 +6861,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -7313,7 +6889,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -7326,7 +6901,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -7357,7 +6931,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -7386,7 +6959,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -7399,7 +6971,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -7432,7 +7003,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -7460,7 +7030,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -7473,7 +7042,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -7505,7 +7073,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -7533,7 +7100,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
@@ -7543,7 +7109,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -7556,7 +7121,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -7569,7 +7133,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -7582,7 +7145,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -7611,7 +7173,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -7625,7 +7186,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -7656,7 +7216,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -7669,7 +7228,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -7682,7 +7240,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -7711,7 +7268,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -7724,7 +7280,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -7737,7 +7292,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
       </note>
       <note>
@@ -7748,7 +7302,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -7761,7 +7314,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -7790,7 +7342,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -7803,7 +7354,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -7816,7 +7366,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -7830,7 +7379,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -7862,7 +7410,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -7891,7 +7438,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -7904,7 +7450,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -7917,7 +7462,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -7930,7 +7474,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -7943,7 +7486,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
       </note>
     </measure>
@@ -7970,7 +7512,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
       </note>
       <note>
@@ -7981,7 +7522,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -7993,7 +7533,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -8006,7 +7545,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -8035,7 +7573,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
@@ -8045,7 +7582,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -8058,7 +7594,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -8070,7 +7605,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -8099,7 +7633,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
@@ -8109,7 +7642,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -8122,7 +7654,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -8135,7 +7666,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -8163,7 +7693,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
       </note>
       <note>
@@ -8174,7 +7703,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
       </note>
       <note>
@@ -8185,7 +7713,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -8198,7 +7725,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -8227,7 +7753,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -8239,7 +7764,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -8253,7 +7777,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -8285,7 +7808,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -8314,7 +7836,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -8326,7 +7847,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -8339,7 +7859,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -8352,7 +7871,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
       </note>
     </measure>
@@ -8379,7 +7897,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -8393,7 +7910,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -8424,7 +7940,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -8436,7 +7951,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -8465,7 +7979,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -8479,7 +7992,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -8510,7 +8022,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -8523,7 +8034,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -8551,7 +8061,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -8563,7 +8072,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -8576,7 +8084,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -8608,7 +8115,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -8637,7 +8143,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -8649,7 +8154,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -8661,7 +8165,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -8674,7 +8177,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
       </note>
     </measure>
@@ -8701,7 +8203,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -8714,7 +8215,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -8727,7 +8227,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
       </note>
       <note>
@@ -8738,7 +8237,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
       </note>
@@ -8766,7 +8264,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -8779,7 +8276,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -8792,7 +8288,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -8804,7 +8299,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
       </note>
     </measure>
@@ -8831,7 +8325,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
@@ -8842,7 +8335,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
       </note>
@@ -8854,7 +8346,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -8883,7 +8374,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
@@ -8893,7 +8383,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">forward hook</beam>
@@ -8907,7 +8396,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -8936,7 +8424,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -8949,7 +8436,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -8981,7 +8467,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -9011,7 +8496,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -9023,7 +8507,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -9036,7 +8519,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
       </note>
     </measure>
@@ -9063,7 +8545,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -9077,7 +8558,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -9109,7 +8589,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -9137,7 +8616,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -9150,7 +8628,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
@@ -9162,7 +8639,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
       </note>
     </measure>
@@ -9190,7 +8666,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <notations>
           <tied type="start" />
         </notations>
@@ -9219,7 +8694,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -9232,7 +8706,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -9245,7 +8718,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -9274,7 +8746,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -9288,7 +8759,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -9318,7 +8788,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -9331,7 +8800,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -9360,7 +8828,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -9373,7 +8840,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -9387,7 +8853,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <notations>
           <tied type="start" />
@@ -9417,7 +8882,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -9446,7 +8910,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -9459,7 +8922,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -9472,7 +8934,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">continue</beam>
@@ -9486,7 +8947,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -9533,7 +8993,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <notations>
           <tied type="start" />
         </notations>
@@ -9562,7 +9021,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -9574,7 +9032,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -9604,7 +9061,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <notations>
           <tied type="start" />
         </notations>
@@ -9633,7 +9089,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
@@ -9646,7 +9101,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -9674,7 +9128,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
       </note>
       <note>
@@ -9686,7 +9139,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <notations>
           <tied type="start" />
@@ -9716,7 +9168,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -9745,7 +9196,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -9757,7 +9207,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
@@ -9771,7 +9220,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -9817,7 +9265,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -9831,7 +9278,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -9861,7 +9307,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -9889,7 +9334,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -9901,7 +9345,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
       </note>
@@ -9914,7 +9357,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -9961,7 +9403,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <notations>
           <tied type="start" />
         </notations>
@@ -9991,7 +9432,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
@@ -10020,7 +9460,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -10033,7 +9472,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -10080,7 +9518,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
       </note>
       <note>
@@ -10091,7 +9528,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -10104,7 +9540,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -10133,7 +9568,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -10147,7 +9581,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>
@@ -10178,7 +9611,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
@@ -10207,7 +9639,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
@@ -10220,7 +9651,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
@@ -10234,7 +9664,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
       </note>
     </measure>
@@ -10263,7 +9692,6 @@
         <type>eighth</type>
         <dot />
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
       </note>
       <note>
@@ -10274,7 +9702,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <beam number="3">backward hook</beam>
@@ -10303,7 +9730,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>32nd</type>
-        <accidental>natural</accidental>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
@@ -10317,7 +9743,6 @@
         <voice>1</voice>
         <type>16th</type>
         <dot />
-        <accidental>natural</accidental>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
         <notations>

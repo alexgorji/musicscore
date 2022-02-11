@@ -45,6 +45,7 @@ class TestAccidental(TestCase):
     def test_get_xml_accidental(self):
         a = Accidental()
         midi = Midi(61)
+        midi.accidental.show = True
         expected = """<accidental>sharp</accidental>
 """
         assert midi.accidental.xml_object.to_string() == expected
@@ -65,8 +66,9 @@ class TestAccidental(TestCase):
 
     def test_accidental_show_mode(self):
         midi = Midi(60)
-        assert midi.accidental.show is True
+        assert midi.accidental.show is None
         assert midi.accidental.sign == 'natural'
+        midi.accidental.show = True
         assert midi.accidental.xml_object.value == 'natural'
         midi.accidental.show = False
         assert midi.accidental.xml_object is None
@@ -83,6 +85,7 @@ class TestAccidental(TestCase):
     def test_accidental_midi(self):
         midi = Midi(61)
         assert midi.accidental.sign == 'sharp'
+        midi.accidental.show = True
         assert midi.accidental.xml_object.value == 'sharp'
 
     def test_accidental_up_midi(self):

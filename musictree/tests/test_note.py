@@ -49,6 +49,7 @@ class TestNote(NoteTestCase):
         n.quarter_duration = 2
         n.xml_notehead = XMLNotehead('square')
         assert n.midi.value == 61
+        n.midi.accidental.show = True
         expected = """<note default-x="10">
   <pitch>
     <step>C</step>
@@ -145,7 +146,9 @@ class TestNote(NoteTestCase):
     def test_change_midi_or_duration(self):
         self.mock_chord.get_voice_number.return_value = 2
         n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=2, default_x=10)
+        n.midi.accidental.show = True
         n.xml_notehead = 'square'
+        n.midi.accidental.show = True
         expected = """<note default-x="10">
   <pitch>
     <step>C</step>
@@ -211,6 +214,7 @@ class TestNote(NoteTestCase):
         with self.assertRaises(XMLElementChildrenRequired):
             n.to_string()
         n.midi = Midi(80)
+        n.midi.accidental.show = True
         n.quarter_duration = 0
         expected = """<note default-x="10">
   <grace />
@@ -229,6 +233,7 @@ class TestNote(NoteTestCase):
 
     def test_grace_note(self):
         n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=0, default_x=10)
+        n.midi.accidental.show = True
         n.xml_notehead = XMLNotehead('square')
         expected = """<note default-x="10">
   <grace />
@@ -246,6 +251,7 @@ class TestNote(NoteTestCase):
 
     def test_cue_note(self):
         n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=2)
+        n.midi.accidental.show = True
         n.xml_cue = XMLCue()
         expected = """<note>
   <cue />
@@ -281,8 +287,8 @@ class TestNote(NoteTestCase):
 
     def test_note_hide_show_accidental(self):
         n = Note(parent_chord=self.mock_chord, midi=Midi(60))
+        n.midi.accidental.show = True
         assert n.xml_accidental.value == 'natural'
-        assert n.midi.accidental.show
         n.midi.accidental.show = False
         assert n.midi.accidental.xml_object is None
         assert n.xml_object.xml_accidental is None
@@ -295,6 +301,7 @@ class TestNote(NoteTestCase):
     def test_note_midi_change_accidental_show(self):
         self.mock_chord.get_voice_number.return_value = 1
         n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=2, default_x=10)
+        n.midi.accidental.show = True
         assert n.xml_object.xml_accidental == n.midi.accidental.xml_object
         assert n.xml_object.xml_accidental.value == n.midi.accidental.xml_object.value == 'sharp'
         n.midi.value = 62
@@ -311,7 +318,6 @@ standard_note_xml = """<note>
   <duration>1</duration>
   <voice>1</voice>
   <type>quarter</type>
-  <accidental>natural</accidental>
 </note>
 """
 standard_note_xml_start_tie = """<note>
@@ -323,7 +329,6 @@ standard_note_xml_start_tie = """<note>
   <tie type="start" />
   <voice>1</voice>
   <type>quarter</type>
-  <accidental>natural</accidental>
   <notations>
     <tied type="start" />
   </notations>
@@ -339,7 +344,6 @@ standard_note_xml_stop_tie = """<note>
   <tie type="stop" />
   <voice>1</voice>
   <type>quarter</type>
-  <accidental>natural</accidental>
   <notations>
     <tied type="stop" />
   </notations>
@@ -355,7 +359,6 @@ standard_note_xml_stop_start_tie = """<note>
   <tie type="start" />
   <voice>1</voice>
   <type>quarter</type>
-  <accidental>natural</accidental>
   <notations>
     <tied type="stop" />
     <tied type="start" />

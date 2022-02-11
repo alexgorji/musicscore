@@ -42,3 +42,24 @@ class Staff(MusicTree, XMLWrapper):
         for ch in self.get_children():
             if ch.value == voice:
                 return ch
+
+    def get_previous_staff(self):
+        if self.up and self.up.previous:
+            my_index = self.up.get_children().index(self)
+            try:
+                return self.up.previous.get_children()[my_index]
+            except IndexError:
+                return None
+        return None
+
+    def get_last_steps_with_accidentals(self):
+        output = set()
+        for v in self.get_children():
+            last_chord = v.get_chords()[-1]
+            if not last_chord.is_rest:
+                for m in last_chord.midis:
+                    if m.accidental.sign != 'natural' and m.accidental.show is not False:
+                        step = m.accidental.get_pitch_parameters()[0]
+                        if step not in output:
+                            output.add(step)
+        return output

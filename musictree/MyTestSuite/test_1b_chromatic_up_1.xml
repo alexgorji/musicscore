@@ -33,7 +33,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
-        <accidental>natural</accidental>
         <notations>
           <tied type="start" />
         </notations>
@@ -152,7 +151,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
-        <accidental>natural</accidental>
         <notations>
           <tied type="start" />
         </notations>
@@ -241,7 +239,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
-        <accidental>natural</accidental>
         <notations>
           <tied type="start" />
         </notations>
@@ -284,7 +281,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
-        <accidental>natural</accidental>
         <notations>
           <tied type="start" />
         </notations>
@@ -354,7 +350,6 @@
         <voice>1</voice>
         <type>half</type>
         <dot />
-        <accidental>natural</accidental>
       </note>
     </measure>
     <measure number="9">
@@ -407,7 +402,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
       </note>
     </measure>
   </part>

@@ -1,7 +1,9 @@
 from unittest import TestCase
 from unittest.mock import patch
 
+from musictree.chord import Chord
 from musictree.measure import Measure
+from musictree.part import Part
 from musictree.staff import Staff
 from musictree.voice import Voice
 
@@ -43,3 +45,22 @@ class TestStaff(TestCase):
         assert v.value == 4
         assert len(st.get_children()) == 4
         assert [v.value for v in st.get_children()] == [1, 2, 3, 4]
+
+    def test_get_previous_staff(self):
+        p = Part('P1')
+        m1 = p.add_measure()
+        m2 = p.add_measure()
+        m1.add_staff(2)
+        m2.add_staff(2)
+        st11, st12 = m1.get_children()
+        st21, st22 = m2.get_children()
+        assert st11.get_previous_staff() is None
+        assert st12.get_previous_staff() is None
+        assert st21.get_previous_staff() == st11
+        assert st22.get_previous_staff() == st12
+
+    def test_get_last_steps_with_accidentals(self):
+        m1 = Measure(1)
+        m1.add_chord(Chord(midis=[61, 62, 63], quarter_duration=2))
+        m1.add_chord(Chord(midis=[63, 64, 66], quarter_duration=2))
+        assert m1.get_staff(1).get_last_steps_with_accidentals() == {'E', 'F'}

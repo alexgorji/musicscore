@@ -147,7 +147,7 @@ class Accidental(MusicTree, XMLWrapper):
 
     # (stem, alter, octaveAdd)
 
-    def __init__(self, mode='standard', show=True, *args, **kwargs):
+    def __init__(self, mode='standard', show=None, *args, **kwargs):
         super().__init__()
         self._xml_object = XMLAccidental(*args, **kwargs)
         self._mode = None
@@ -211,7 +211,7 @@ class Accidental(MusicTree, XMLWrapper):
 
     @show.setter
     def show(self, val):
-        if not isinstance(val, bool):
+        if val is not None and not isinstance(val, bool):
             raise TypeError
         if val != self._show:
             self._show = val

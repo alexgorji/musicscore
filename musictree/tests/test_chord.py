@@ -130,6 +130,7 @@ class TestTreeChord(TestCase):
 
     def test_chord_one_note(self):
         c = Chord(70, 4, relative_x=10)
+        c.midis[0].accidental.show = True
         c._parent = self.mock_beat
         c._update_notes()
         expected = """<note relative-x="10">
@@ -198,7 +199,6 @@ class TestTreeChord(TestCase):
     <octave>4</octave>
   </pitch>
   <voice>1</voice>
-  <accidental>natural</accidental>
 </note>
 """
         assert c.notes[0].to_string() == expected
@@ -212,7 +212,6 @@ class TestTreeChord(TestCase):
     <octave>4</octave>
   </pitch>
   <voice>1</voice>
-  <accidental>natural</accidental>
 </note>
 """
         assert c.notes[0].to_string() == expected
@@ -222,6 +221,7 @@ class TestTreeChord(TestCase):
         Test a chord with a non rest single midi
         """
         c = Chord(72, 2)
+        c.midis[0].accidental.show = True
         c._parent = self.mock_beat
         c._update_notes()
 
@@ -323,6 +323,8 @@ class TestTreeChord(TestCase):
         """
 
         chord = Chord([60, 62, 63], 2)
+        chord.midis[1].accidental.show = True
+        chord.midis[2].accidental.show = True
         chord._parent = self.mock_beat
         chord._update_notes()
         chord.xml_stem = 'up'
@@ -335,7 +337,6 @@ class TestTreeChord(TestCase):
   <duration>2</duration>
   <voice>1</voice>
   <type>half</type>
-  <accidental>natural</accidental>
   <stem>up</stem>
 </note>
 """
@@ -375,7 +376,7 @@ class TestTreeChord(TestCase):
         assert ch.midis[0].accidental != copied.midis[0].accidental
         assert ch.midis[0].accidental.mode == copied.midis[0].accidental.mode
         copied.midis[0].accidental.show = False
-        assert ch.midis[0].accidental.show is True
+        assert ch.midis[0].accidental.show is None
         assert copied.midis[0].accidental.show is False
 
     def test_split_tied_copy(self):
@@ -432,3 +433,14 @@ class TestTreeChord(TestCase):
         assert group_chords(chords, [1 / 2, 1 / 2]) == [chords[:3], chords[3:]]
         assert group_chords(chords, [1 / 3, 2 / 3]) == [chords[:2], chords[2:]]
         assert group_chords(chords, [1 / 4, 3 / 4]) is None
+
+    def test_has_same_pitches(self):
+        ch1 = Chord([60, Midi(61, accidental=Accidental(show=True)), 62], 1)
+        ch2 = Chord([60, Midi(61, accidental=Accidental(show=True))], 1)
+        assert not ch1.has_same_pitches(ch2)
+        ch2 = Chord([60, Midi(61, accidental=Accidental(show=True)), 62], 1)
+        assert ch1.has_same_pitches(ch2)
+        ch2 = Chord([60, Midi(61, accidental=Accidental(show=False)), 62], 1)
+        assert not ch1.has_same_pitches(ch2)
+        ch2 = Chord([60, Midi(61, accidental=Accidental(show=True, mode='flat')), 62], 1)
+        assert not ch1.has_same_pitches(ch2)

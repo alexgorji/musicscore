@@ -32,7 +32,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>3</actual-notes>
           <normal-notes>2</normal-notes>
@@ -51,7 +50,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>3</actual-notes>
           <normal-notes>2</normal-notes>
@@ -67,7 +65,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>3</actual-notes>
           <normal-notes>2</normal-notes>
@@ -102,7 +99,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>3</actual-notes>
           <normal-notes>2</normal-notes>
@@ -120,7 +116,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>3</actual-notes>
           <normal-notes>2</normal-notes>
@@ -154,7 +149,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>3</actual-notes>
           <normal-notes>2</normal-notes>
@@ -172,7 +166,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>3</actual-notes>
           <normal-notes>2</normal-notes>
@@ -206,7 +199,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -226,7 +218,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -243,7 +234,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -260,7 +250,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -277,7 +266,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -313,7 +301,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -333,7 +320,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -350,7 +336,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -367,7 +352,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -402,7 +386,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -422,7 +405,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -439,7 +421,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -455,7 +436,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -491,14 +471,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -511,7 +489,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -527,7 +504,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -544,7 +520,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -580,7 +555,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -599,7 +573,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -616,7 +589,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -633,7 +605,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -669,14 +640,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -689,7 +658,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -705,7 +673,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -740,7 +707,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -759,7 +725,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -776,7 +741,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -811,7 +775,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -830,7 +793,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -846,7 +808,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -882,7 +843,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -902,7 +862,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -920,7 +879,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -955,14 +913,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -976,7 +932,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -992,7 +947,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1029,7 +983,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1048,7 +1001,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1065,7 +1017,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1101,7 +1052,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1121,7 +1071,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1157,7 +1106,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1176,7 +1124,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1211,7 +1158,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1229,7 +1175,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1263,7 +1208,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1281,7 +1225,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>5</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1315,7 +1258,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1335,7 +1277,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1352,7 +1293,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1369,7 +1309,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1386,7 +1325,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1403,7 +1341,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1439,7 +1376,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1459,7 +1395,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1476,7 +1411,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1493,7 +1427,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1510,7 +1443,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1545,7 +1477,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1565,7 +1496,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1582,7 +1512,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1599,7 +1528,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1615,7 +1543,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1651,7 +1578,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1671,7 +1597,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1688,7 +1613,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1704,7 +1628,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1721,7 +1644,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1757,14 +1679,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -1777,7 +1697,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1793,7 +1712,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1810,7 +1728,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1827,7 +1744,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1863,7 +1779,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1882,7 +1797,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1899,7 +1813,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1916,7 +1829,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1933,7 +1845,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1969,7 +1880,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -1989,7 +1899,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2006,7 +1915,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2022,7 +1930,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2057,14 +1964,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -2077,7 +1982,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2093,7 +1997,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2110,7 +2013,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2145,14 +2047,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -2165,7 +2065,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2181,7 +2080,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2197,7 +2095,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2233,7 +2130,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2252,7 +2148,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2269,7 +2164,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2286,7 +2180,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2321,7 +2214,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2340,7 +2232,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2357,7 +2248,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2373,7 +2263,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2409,7 +2298,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2428,7 +2316,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2444,7 +2331,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2461,7 +2347,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2497,7 +2382,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2517,7 +2401,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2534,7 +2417,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2552,7 +2434,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2587,7 +2468,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2607,7 +2487,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2625,7 +2504,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2641,7 +2519,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2677,14 +2554,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -2698,7 +2573,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2714,7 +2588,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2731,7 +2604,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2768,7 +2640,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2787,7 +2658,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2804,7 +2674,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2821,7 +2690,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2857,14 +2725,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -2877,7 +2743,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2894,7 +2759,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2929,14 +2793,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -2950,7 +2812,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2966,7 +2827,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3001,7 +2861,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3020,7 +2879,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3038,7 +2896,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3073,7 +2930,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3093,7 +2949,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3109,7 +2964,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3146,7 +3000,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3165,7 +3018,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3182,7 +3034,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3218,7 +3069,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3237,7 +3087,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3253,7 +3102,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3289,7 +3137,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3309,7 +3156,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3326,7 +3172,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3360,7 +3205,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3378,7 +3222,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3393,7 +3236,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3427,7 +3269,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3445,7 +3286,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3462,7 +3302,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3498,14 +3337,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -3519,7 +3356,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3577,7 +3413,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3616,7 +3451,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3652,7 +3486,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3672,7 +3505,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3689,7 +3521,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3706,7 +3537,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3723,7 +3553,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3740,7 +3569,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3757,7 +3585,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3793,7 +3620,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3813,7 +3639,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3830,7 +3655,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3847,7 +3671,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3864,7 +3687,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3881,7 +3703,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3916,7 +3737,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3936,7 +3756,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3953,7 +3772,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3970,7 +3788,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3987,7 +3804,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4003,7 +3819,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4039,7 +3854,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4059,7 +3873,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4076,7 +3889,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4093,7 +3905,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4109,7 +3920,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4126,7 +3936,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4162,7 +3971,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4182,7 +3990,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4199,7 +4006,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4215,7 +4021,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4232,7 +4037,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4249,7 +4053,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4285,14 +4088,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -4305,7 +4106,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4321,7 +4121,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4338,7 +4137,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4355,7 +4153,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4372,7 +4169,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4408,7 +4204,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4427,7 +4222,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4444,7 +4238,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4461,7 +4254,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4478,7 +4270,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4495,7 +4286,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4531,7 +4321,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4551,7 +4340,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4568,7 +4356,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4585,7 +4372,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4601,7 +4387,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4636,7 +4421,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4656,7 +4440,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4673,7 +4456,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4689,7 +4471,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4706,7 +4487,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4741,7 +4521,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4761,7 +4540,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4778,7 +4556,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4794,7 +4571,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4810,7 +4586,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4846,14 +4621,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -4866,7 +4639,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4882,7 +4654,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4899,7 +4670,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4916,7 +4686,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4951,14 +4720,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -4971,7 +4738,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4987,7 +4753,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5004,7 +4769,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5020,7 +4784,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5056,14 +4819,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -5076,7 +4837,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5092,7 +4852,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5108,7 +4867,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5125,7 +4883,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5161,7 +4918,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5180,7 +4936,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5197,7 +4952,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5214,7 +4968,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5231,7 +4984,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5266,7 +5018,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5285,7 +5036,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5302,7 +5052,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5319,7 +5068,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5335,7 +5083,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5371,7 +5118,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5390,7 +5136,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5407,7 +5152,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5423,7 +5167,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5440,7 +5183,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5476,7 +5218,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5495,7 +5236,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5511,7 +5251,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5528,7 +5267,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5545,7 +5283,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5581,14 +5318,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -5601,7 +5336,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5617,7 +5351,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5633,7 +5366,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5668,7 +5400,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5687,7 +5418,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5704,7 +5434,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5720,7 +5449,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5755,7 +5483,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5774,7 +5501,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5790,7 +5516,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5807,7 +5532,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5842,7 +5566,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5861,7 +5584,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5877,7 +5599,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5893,7 +5614,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5929,7 +5649,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5949,7 +5668,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5966,7 +5684,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -5983,7 +5700,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6001,7 +5717,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6036,7 +5751,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6056,7 +5770,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6073,7 +5786,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6091,7 +5803,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6107,7 +5818,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6143,7 +5853,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6163,7 +5872,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6181,7 +5889,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6197,7 +5904,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6214,7 +5920,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6250,14 +5955,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -6271,7 +5974,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6287,7 +5989,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6304,7 +6005,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6321,7 +6021,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6358,7 +6057,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6377,7 +6075,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6394,7 +6091,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6411,7 +6107,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6428,7 +6123,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6464,7 +6158,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6484,7 +6177,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6501,7 +6193,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6518,7 +6209,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6553,7 +6243,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6573,7 +6262,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6591,7 +6279,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6607,7 +6294,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6642,14 +6328,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -6662,7 +6346,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6678,7 +6361,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6696,7 +6378,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6731,14 +6412,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -6751,7 +6430,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6768,7 +6446,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6784,7 +6461,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6820,14 +6496,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -6841,7 +6515,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6857,7 +6530,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6874,7 +6546,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6909,14 +6580,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -6930,7 +6599,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6946,7 +6614,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6962,7 +6629,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6998,7 +6664,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7017,7 +6682,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7034,7 +6698,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7052,7 +6715,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7087,7 +6749,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7106,7 +6767,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7124,7 +6784,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7140,7 +6799,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7176,7 +6834,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7196,7 +6853,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7212,7 +6868,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7229,7 +6884,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7266,7 +6920,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7285,7 +6938,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7302,7 +6954,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7319,7 +6970,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7355,7 +7005,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7374,7 +7023,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7391,7 +7039,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7407,7 +7054,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7444,7 +7090,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7463,7 +7108,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7479,7 +7123,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7496,7 +7139,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7532,14 +7174,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -7553,7 +7193,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7570,7 +7209,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7606,7 +7244,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7625,7 +7262,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7643,7 +7279,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7679,7 +7314,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7699,7 +7333,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7715,7 +7348,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7751,7 +7383,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7771,7 +7402,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7788,7 +7418,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7805,7 +7434,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7839,7 +7467,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7859,7 +7486,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7876,7 +7502,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7891,7 +7516,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7927,7 +7551,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7945,7 +7568,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7960,7 +7582,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -7977,7 +7598,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8013,7 +7633,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8031,7 +7650,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8048,7 +7666,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8065,7 +7682,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8101,14 +7717,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -8121,7 +7735,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8137,7 +7750,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8171,7 +7783,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8189,7 +7800,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8204,7 +7814,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8238,7 +7847,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8257,7 +7865,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8274,7 +7881,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8308,7 +7914,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8326,7 +7931,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8341,7 +7945,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8375,7 +7978,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8393,14 +7995,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -8410,7 +8010,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8445,7 +8044,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8463,7 +8061,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8479,7 +8076,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8516,7 +8112,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8534,7 +8129,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8568,7 +8162,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8587,7 +8180,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8621,7 +8213,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8641,7 +8232,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8660,7 +8250,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8715,14 +8304,12 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
-        <beam number="2">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -8737,7 +8324,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8775,7 +8361,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8813,7 +8398,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8852,7 +8436,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8869,7 +8452,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8905,7 +8487,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8926,7 +8507,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -8983,7 +8563,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -9022,7 +8601,6 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -9057,7 +8635,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -9076,7 +8653,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -9111,7 +8687,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <dot />
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>
@@ -9129,7 +8704,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
         <time-modification>
           <actual-notes>7</actual-notes>
           <normal-notes>4</normal-notes>

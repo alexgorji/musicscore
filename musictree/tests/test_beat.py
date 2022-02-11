@@ -189,6 +189,7 @@ class TestBeatAddChild(TestCase):
         v1 = create_voice()
         v1.update_beats(1, 1.5, 1)
         chord = Chord(midis=61, quarter_duration=7)
+        chord.midis[0].accidental.show = True
         assert chord.midis[0].accidental.xml_object.value == 'sharp'
         v1.get_current_beat().add_child(chord)
         v2 = create_voice()
@@ -206,4 +207,3 @@ class TestBeatAddChild(TestCase):
                                                                                                                                  'sharp',
                                                                                                                                  None,
                                                                                                                                  None]
-

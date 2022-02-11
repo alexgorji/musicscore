@@ -35,7 +35,32 @@ class Measure(MusicTree, XMLWrapper):
                 voice.update_beats()
 
     def _update_accidentals(self):
-        pass
+        for staff in self.get_children():
+            previous_staff = staff.get_previous_staff()
+            steps_with_accidentals = set()
+            none_rest_chords = [ch for ch in staff.get_chords() if not ch.is_rest]
+            for chord in none_rest_chords:
+                for midi in chord.midis:
+                    step = midi.accidental.get_pitch_parameters()[0]
+                    if midi.accidental.show is None:
+                        if midi.accidental.sign == 'natural':
+                            if step in steps_with_accidentals:
+                                midi.accidental.show = True
+                                steps_with_accidentals.remove(step)
+                            elif chord == none_rest_chords[0] and previous_staff and step in \
+                                    previous_staff.get_last_steps_with_accidentals():
+                                midi.accidental.show = True
+                            else:
+                                midi.accidental.show = False
+                        else:
+                            if chord.previous and chord.has_same_pitches(chord.previous):
+                                midi.accidental.show = False
+                            else:
+                                midi.accidental.show = True
+                                if step not in steps_with_accidentals:
+                                    steps_with_accidentals.add(step)
+                    elif midi.accidental.show is True and midi.accidental.sign != 'natural' and step not in steps_with_accidentals:
+                        steps_with_accidentals.add(step)
 
     @property
     def number(self):

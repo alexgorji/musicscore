@@ -145,6 +145,20 @@ class Chord(MusicTree, QuarterDurationMixin):
     def get_parent_measure(self):
         return self.up.up.up.up
 
+    def has_same_pitches(self, other):
+        if not isinstance(other, Chord):
+            raise TypeError
+        if self.is_rest or other.is_rest:
+            raise TypeError('Rest cannot use method has_same_pitches.')
+        if [m.value for m in self.midis] != [m.value for m in other.midis]:
+            return False
+        for m1, m2 in zip(self.midis, other.midis):
+            if m1.accidental.show != m2.accidental.show:
+                return False
+            if m1.accidental.get_pitch_parameters() != m2.accidental.get_pitch_parameters():
+                return False
+        return True
+
     def split_beatwise(self, beats):
         voice_set = {beat.up for beat in beats}
         if len(voice_set) != 1:

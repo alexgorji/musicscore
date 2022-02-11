@@ -7,9 +7,10 @@ from quicktions import Fraction
 from musictree.chord import Chord
 from musictree.exceptions import VoiceIsAlreadyFullError
 from musictree.measure import Measure, generate_measures
+from musictree.part import Part
 from musictree.staff import Staff
 from musictree.tests.test_beat import create_voice
-from musictree.tests.util import generate_all_quintuplets, generate_all_sextuplets, generate_all_triplets, generate_all_16ths
+from musictree.tests.util import generate_all_quintuplets, generate_all_sextuplets, generate_all_triplets, generate_all_16ths, IdTestCase
 from musictree.time import Time
 from musictree.voice import Voice
 
@@ -109,7 +110,10 @@ class TestMeasure(TestCase):
         chord = Chord(60, quarter_duration=2.5)
         chord.midis[0].accidental.show = False
         m.add_chord(chord)
-        m.add_chord(Chord(61, quarter_duration=1.5))
+        chord = Chord(61, quarter_duration=1.5)
+        chord.midis[0].accidental.show = True
+        m.add_chord(chord)
+
         m.update_xml_notes()
         for xml_note, duration in zip(m.find_children('XMLNote'), [4, 1, 1, 2]):
             assert xml_note.xml_duration.value == duration
@@ -556,3 +560,26 @@ class TestTuplets(TestCase):
             else:
                 for c in beat.get_children():
                     assert c.notes[0].find_child('XMLBeam') is None
+
+
+class TestUpdateAccidentals(IdTestCase):
+    def test_update_accidentals_simple(self):
+        m = Measure(1)
+        midis = [60, 61, 62, 60]
+        for mi in midis:
+            m.add_chord(Chord(mi, quarter_duration=1))
+        m.update_xml_notes()
+        assert [ch.midis[0].accidental.show for ch in m.get_chords()] == [False, True, False, True]
+
+    def test_update_accidentals_with_last_steps(self):
+        p = Part('P1')
+        p.add_measure()
+        p.add_measure()
+        p.add_chord(Chord(midis=60, quarter_duration=2))
+        p.add_chord(Chord(midis=61, quarter_duration=2))
+        p.add_chord(Chord(midis=60, quarter_duration=4))
+        for m in p.get_children():
+            m.update_xml_notes()
+        last_chord = p.get_children()[-1].get_children()[-1].get_chords()[0]
+        assert last_chord.midis[0].accidental.sign == 'natural'
+        assert last_chord.midis[0].accidental.show

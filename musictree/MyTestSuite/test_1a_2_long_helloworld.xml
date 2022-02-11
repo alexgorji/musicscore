@@ -33,7 +33,6 @@
         <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
-        <accidental>natural</accidental>
         <notations>
           <tied type="start" />
         </notations>
