@@ -3,7 +3,8 @@ from pathlib import Path
 from musictree.chord import Chord
 from musictree.part import Part
 from musictree.score import Score
-from musictree.tests.util import IdTestCase, generate_all_quintuplets, generate_all_sextuplets, generate_all_triplets
+from musictree.tests.util import IdTestCase, generate_all_quintuplets, generate_all_sextuplets, generate_all_triplets, \
+    generate_all_septuplets
 
 
 class TestHelloTuplets1(IdTestCase):
@@ -38,10 +39,12 @@ class TestHelloTuplets1(IdTestCase):
         All possible combinations are:
         """
         triplets = generate_all_triplets()
-        tuplets = triplets + generate_all_quintuplets() + generate_all_sextuplets()
+        tuplets = triplets + generate_all_quintuplets() + generate_all_sextuplets() + generate_all_septuplets()
         for tuplet_list in tuplets:
             for tuplet in tuplet_list:
                 p.add_chord(Chord(60, tuplet))
+        # for tuplet in tuplets[6]:
+        #     p.add_chord(Chord(60, tuplet))
         s.update_xml_notes()
         """
         ... and exports the xml

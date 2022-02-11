@@ -42,6 +42,7 @@ def generate_all_16ths():
     output = [tuple(4 * [Fraction(1, 4)])]
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 4), Fraction(1, 4), Fraction(1, 2)]))))
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 4), Fraction(3, 4)]))))
+    return output
 
 
 def generate_all_quintuplets():
@@ -64,6 +65,35 @@ def generate_all_sextuplets():
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(2, 6), Fraction(3, 6)]))))
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(1, 6), Fraction(4, 6)]))))
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(5, 6)]))))
+    return output
+
+
+def generate_all_septuplets():
+    output = [tuple(7 * [Fraction(1, 7)])]
+    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(1, 7),
+                                                             Fraction(2, 7)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(2, 7), Fraction(2, 7)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(2, 7), Fraction(2, 7), Fraction(2, 7)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(3, 7)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(2, 7), Fraction(3, 7)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(3, 7), Fraction(3, 7)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(4, 7)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(2, 7), Fraction(4, 7)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(3, 7), Fraction(4, 7)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(5, 7)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(2, 7), Fraction(5, 7)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(6, 7)]))))
     return output
 
 

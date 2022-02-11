@@ -1,3 +1,4 @@
+from pprint import pprint
 from unittest import TestCase
 
 from musicxml.xmlelement.xmlelement import *
@@ -149,6 +150,7 @@ class TestMeasure(TestCase):
     <tie type="stop" />
     <voice>1</voice>
     <type>eighth</type>
+    <beam number="1">begin</beam>
     <notations>
       <tied type="stop" />
     </notations>
@@ -164,6 +166,7 @@ class TestMeasure(TestCase):
     <voice>1</voice>
     <type>eighth</type>
     <accidental>sharp</accidental>
+    <beam number="1">end</beam>
     <notations>
       <tied type="start" />
     </notations>
@@ -553,21 +556,3 @@ class TestTuplets(TestCase):
             else:
                 for c in beat.get_children():
                     assert c.notes[0].find_child('XMLBeam') is None
-
-    def test_group_beams_16th(self):
-        v1 = create_voice()
-        print(len(generate_all_16ths()))
-        beats = v1.update_beats(1, 1, 1)
-        # for quarter_duration in [q for group in generate_all_16ths() for q in group]:
-        #     v1.add_chord(Chord(60, quarter_duration))
-        # for index, beat in enumerate(beats):
-        #     beat.update_notes()
-        #     if index == 0:
-        #         for i, c in enumerate(beat.get_children()):
-        #             beams = c.notes[0].find_children('XMLBeam')
-        #             assert len(beams) == 1
-        #             assert beams[0].number == 1
-        #             assert beams[0].value == 'begin' if i == 0 else 'continue' if i == 1 else 'end'
-        #     else:
-        #         for c in beat.get_children():
-        #             assert c.notes[0].find_child('XMLBeam') is None

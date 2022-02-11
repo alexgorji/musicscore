@@ -110,6 +110,7 @@
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
+        <beam number="1">begin</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -129,6 +130,7 @@
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
+        <beam number="1">end</beam>
         <notations>
           <tuplet number="1" type="stop" />
         </notations>
@@ -147,6 +149,8 @@
           <normal-notes>2</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -165,6 +169,8 @@
           <normal-notes>2</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
       </note>
       <note>
         <pitch>
@@ -180,6 +186,8 @@
           <normal-notes>2</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <notations>
           <tuplet number="1" type="stop" />
         </notations>
@@ -198,6 +206,9 @@
           <normal-notes>4</normal-notes>
           <normal-type>32nd</normal-type>
         </time-modification>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+        <beam number="3">forward hook</beam>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
         </notations>
@@ -217,6 +228,8 @@
           <normal-notes>4</normal-notes>
           <normal-type>32nd</normal-type>
         </time-modification>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
       </note>
       <note>
         <pitch>
@@ -232,6 +245,9 @@
           <normal-notes>4</normal-notes>
           <normal-type>32nd</normal-type>
         </time-modification>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+        <beam number="3">backward hook</beam>
         <notations>
           <tuplet number="1" type="stop" />
         </notations>
