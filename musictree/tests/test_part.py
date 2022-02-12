@@ -89,7 +89,7 @@ class TestPart(IdTestCase):
         p = Part('p1')
         m1 = p.add_measure()
         assert m1.get_staff(None) is not None
-        assert m1.get_voice(staff=None, voice=1) is not None
+        assert m1.get_voice(staff_number=None, voice_number=1) is not None
 
     def test_part_set_current_measure(self):
         p = Part('p1')
@@ -112,59 +112,59 @@ class TestPart(IdTestCase):
     def test_part_get_current_measure_simple(self):
         p = Part('p1')
         m1 = p.add_measure()
-        assert p.get_current_measure(staff=1, voice=1) == m1
+        assert p.get_current_measure(staff_number=1, voice_number=1) == m1
         m2 = p.add_measure()
         m1.add_chord(Chord(midis=60, quarter_duration=2))
-        assert p.get_current_measure(staff=1, voice=1) == m1
+        assert p.get_current_measure(staff_number=1, voice_number=1) == m1
         m1.add_chord(Chord(midis=60, quarter_duration=2))
-        assert p.get_current_measure(staff=1, voice=1) == m1
-        assert m1.get_voice(staff=1, voice=1).is_filled
+        assert p.get_current_measure(staff_number=1, voice_number=1) == m1
+        assert m1.get_voice(staff_number=1, voice_number=1).is_filled
         m2.add_chord(Chord(midis=60, quarter_duration=2))
-        assert p.get_current_measure(staff=1, voice=1) == m2
+        assert p.get_current_measure(staff_number=1, voice_number=1) == m2
         m3 = p.add_measure()
         m4 = p.add_measure()
         m4.add_chord(Chord(midis=60, quarter_duration=2))
-        assert p.get_current_measure(staff=1, voice=1) == m4
+        assert p.get_current_measure(staff_number=1, voice_number=1) == m4
 
     def test_part_get_current_measure_complex(self):
         p = Part('p1')
-        assert p.get_current_measure(staff=None, voice=1) is None
+        assert p.get_current_measure(staff_number=None, voice_number=1) is None
         m1 = p.add_measure()
-        m1.add_chord(Chord(midis=60, quarter_duration=4), staff=2, voice=2)
-        assert p.get_current_measure(staff=1, voice=1) == m1
-        assert p.get_current_measure(staff=1, voice=2) is None
-        assert p.get_current_measure(staff=2, voice=1) == m1
-        assert p.get_current_measure(staff=2, voice=1).get_voice(staff=2, voice=1).is_filled is False
-        assert p.get_current_measure(staff=2, voice=2) == m1
-        assert p.get_current_measure(staff=2, voice=2).get_voice(staff=2, voice=2).is_filled is True
-        m1.add_voice(staff=1, voice=1)
-        assert p.get_current_measure(staff=1, voice=1) == m1
+        m1.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2, voice_number=2)
+        assert p.get_current_measure(staff_number=1, voice_number=1) == m1
+        assert p.get_current_measure(staff_number=1, voice_number=2) is None
+        assert p.get_current_measure(staff_number=2, voice_number=1) == m1
+        assert p.get_current_measure(staff_number=2, voice_number=1).get_voice(staff_number=2, voice_number=1).is_filled is False
+        assert p.get_current_measure(staff_number=2, voice_number=2) == m1
+        assert p.get_current_measure(staff_number=2, voice_number=2).get_voice(staff_number=2, voice_number=2).is_filled is True
+        m1.add_voice(staff_number=1, voice_number=1)
+        assert p.get_current_measure(staff_number=1, voice_number=1) == m1
         #
         m2 = p.add_measure()
-        m2.add_chord(Chord(midis=60, quarter_duration=4), staff=2, voice=2)
-        assert p.get_current_measure(staff=1, voice=1) == m1
-        assert p.get_current_measure(staff=1, voice=2) is None
-        assert p.get_current_measure(staff=2, voice=1) == m1
-        assert p.get_current_measure(staff=2, voice=2) == m2
+        m2.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2, voice_number=2)
+        assert p.get_current_measure(staff_number=1, voice_number=1) == m1
+        assert p.get_current_measure(staff_number=1, voice_number=2) is None
+        assert p.get_current_measure(staff_number=2, voice_number=1) == m1
+        assert p.get_current_measure(staff_number=2, voice_number=2) == m2
 
         m1 = Measure(1)
         m1.add_chord(Chord(midis=60, quarter_duration=1))
         p = Part('p2')
         p.add_child(m1)
-        assert p.get_current_measure(staff=1, voice=1) == m1
+        assert p.get_current_measure(staff_number=1, voice_number=1) == m1
 
     def test_part_add_chord_different_staves_and_voices(self):
         p = Part('p1')
         p.add_chord(Chord(60, 1))
         m = p.get_children()[0]
-        assert m.get_voice(staff=1, voice=1) is not None
-        p.add_chord(Chord(61, 2), staff=2, voice=4)
+        assert m.get_voice(staff_number=1, voice_number=1) is not None
+        p.add_chord(Chord(61, 2), staff_number=2, voice_number=4)
         for i in range(1, 5):
-            assert m.get_voice(staff=2, voice=i) is not None
-        p.add_chord(Chord(62, 3), staff=1, voice=1)
-        assert [ch.quarter_duration for ch in m.get_voice(staff=1, voice=1).get_chords()] == [1, 3]
-        assert [ch.midis[0].value for ch in m.get_voice(staff=1, voice=1).get_chords()] == [60, 62]
-        assert [ch.quarter_duration for ch in m.get_voice(staff=2, voice=4).get_chords()] == [2]
+            assert m.get_voice(staff_number=2, voice_number=i) is not None
+        p.add_chord(Chord(62, 3), staff_number=1, voice_number=1)
+        assert [ch.quarter_duration for ch in m.get_voice(staff_number=1, voice_number=1).get_chords()] == [1, 3]
+        assert [ch.midis[0].value for ch in m.get_voice(staff_number=1, voice_number=1).get_chords()] == [60, 62]
+        assert [ch.quarter_duration for ch in m.get_voice(staff_number=2, voice_number=4).get_chords()] == [2]
 
     def test_part_add_chord_with_left_over(self):
         p = Part('p1')
@@ -173,8 +173,8 @@ class TestPart(IdTestCase):
         assert len(p.get_children()) == 2
         m1, m2 = p.get_children()
         assert p.get_current_measure(1, 1) == m2
-        assert m1.get_voice(staff=1, voice=1).is_filled
-        assert not m2.get_voice(staff=1, voice=1).is_filled
+        assert m1.get_voice(staff_number=1, voice_number=1).is_filled
+        assert not m2.get_voice(staff_number=1, voice_number=1).is_filled
 
     def test_part_add_chord_to_full_measure(self):
         p = Part('p1')
@@ -258,9 +258,9 @@ class TestPart(IdTestCase):
         p = Part('P1')
         ch1 = Chord(60, 1)
         ch2 = Chord(48, 1)
-        p.add_chord(ch1, staff=1)
+        p.add_chord(ch1, staff_number=1)
         assert ch1.get_staff_number() is None
-        p.add_chord(ch2, staff=2)
+        p.add_chord(ch2, staff_number=2)
         assert ch1.get_staff_number() == 1
         assert ch2.get_staff_number() == 2
         p.update_xml_notes()

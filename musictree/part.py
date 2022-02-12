@@ -99,10 +99,10 @@ class Part(MusicTree, XMLWrapper):
         self._score_part = ScorePart(part=self)
         self._current_measures = {}
 
-    def _set_first_current_measure(self, staff, voice):
+    def _set_first_current_measure(self, staff_number, voice_number):
         for m in self.get_children():
-            if m.get_voice(staff=staff, voice=voice):
-                self.set_current_measure(staff, voice, m)
+            if m.get_voice(staff_number=staff_number, voice_number=voice_number):
+                self.set_current_measure(staff_number, voice_number, m)
                 return m
 
     @property
@@ -150,18 +150,18 @@ class Part(MusicTree, XMLWrapper):
         self.xml_object.add_child(child.xml_object)
         return child
 
-    def add_chord(self, chord, *, staff=None, voice=1):
+    def add_chord(self, chord, *, staff_number=None, voice_number=1):
         def add_to_next_measure(current_measure, ch):
             if current_measure.next:
                 current_measure = current_measure.next
             else:
                 current_measure = self.add_measure()
-            current_measure.add_chord(ch, staff=staff, voice=voice)
+            current_measure.add_chord(ch, staff_number=staff_number, voice_number=voice_number)
             return current_measure
 
-        if staff is None:
-            staff = 1
-        current_measure = self.get_current_measure(staff=staff, voice=voice)
+        if staff_number is None:
+            staff_number = 1
+        current_measure = self.get_current_measure(staff_number=staff_number, voice_number=voice_number)
 
         if not current_measure:
             if self.get_children():
@@ -169,14 +169,14 @@ class Part(MusicTree, XMLWrapper):
             else:
                 current_measure = self.add_measure()
         try:
-            current_measure.add_chord(chord, staff=staff, voice=voice)
+            current_measure.add_chord(chord, staff_number=staff_number, voice_number=voice_number)
         except VoiceIsAlreadyFullError:
             current_measure = add_to_next_measure(current_measure, chord)
 
-        left_over_chord = current_measure.get_voice(staff=staff, voice=voice).left_over_chord
+        left_over_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).left_over_chord
         while left_over_chord:
             current_measure = add_to_next_measure(current_measure, left_over_chord)
-            left_over_chord = current_measure.get_voice(staff=staff, voice=voice).left_over_chord
+            left_over_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).left_over_chord
 
     def add_measure(self, time=None, number=None):
         if not time:
@@ -193,26 +193,26 @@ class Part(MusicTree, XMLWrapper):
             else:
                 number = 1
         m = Measure(number=number, time=time)
-        m.add_voice(staff=None, voice=1)
+        m.add_voice(staff_number=None, voice_number=1)
         return self.add_child(m)
 
-    def get_current_measure(self, staff=1, voice=1):
-        if staff is None:
-            staff = 1
+    def get_current_measure(self, staff_number=1, voice_number=1):
+        if staff_number is None:
+            staff_number = 1
         try:
-            return self.current_measures[staff][voice]
+            return self.current_measures[staff_number][voice_number]
         except KeyError:
-            return self._set_first_current_measure(staff=staff, voice=voice)
+            return self._set_first_current_measure(staff_number=staff_number, voice_number=voice_number)
 
-    def set_current_measure(self, staff, voice, measure):
-        if staff is None:
-            staff = 1
+    def set_current_measure(self, staff_number, voice_number, measure):
+        if staff_number is None:
+            staff_number = 1
         if not isinstance(measure, Measure):
             raise TypeError(f"{measure} must be of type 'Measure'.")
-        if self._current_measures.get(staff):
-            self._current_measures[staff][voice] = measure
+        if self._current_measures.get(staff_number):
+            self._current_measures[staff_number][voice_number] = measure
         else:
-            self._current_measures[staff] = {voice: measure}
+            self._current_measures[staff_number] = {voice_number: measure}
 
     def update_xml_notes(self):
         for m in self.get_children():

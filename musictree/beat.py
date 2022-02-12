@@ -21,7 +21,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         child._parent = self
         self._children.append(child)
         if self.up.up.up.up:
-            self.up.up.up.up.set_current_measure(staff=self.up.up.value, voice=self.up.value, measure=self.up.up.up)
+            self.up.up.up.up.set_current_measure(staff_number=self.up.up.value, voice_number=self.up.value, measure=self.up.up.up)
 
     def _check_permitted_duration(self, val):
         for d in self._PERMITTED_DURATIONS:

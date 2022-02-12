@@ -107,28 +107,28 @@ class Measure(MusicTree, XMLWrapper):
                 child.value = len(self.get_children()) + 1
         return super().add_child(child)
 
-    def add_chord(self, chord, *, staff=None, voice=1):
-        voice = self.add_voice(staff=staff, voice=voice)
+    def add_chord(self, chord, *, staff_number=None, voice_number=1):
+        voice = self.add_voice(staff_number=staff_number, voice_number=voice_number)
         return voice.add_chord(chord)
 
-    def add_staff(self, staff=1):
-        if staff is None:
-            staff = 1
-        staff_object = self.get_staff(staff=staff)
+    def add_staff(self, staff_number=1):
+        if staff_number is None:
+            staff_number = 1
+        staff_object = self.get_staff(staff_number=staff_number)
         if staff_object is None:
-            for _ in range(staff - len(self.get_children())):
+            for _ in range(staff_number - len(self.get_children())):
                 new_staff = self.add_child(Staff())
                 new_staff.add_child(Voice())
             return new_staff
         return staff_object
 
-    def add_voice(self, *, staff=1, voice=1):
-        if staff is None:
-            staff = 1
-        voice_object = self.get_voice(staff=staff, voice=voice)
+    def add_voice(self, *, staff_number=1, voice_number=1):
+        if staff_number is None:
+            staff_number = 1
+        voice_object = self.get_voice(staff_number=staff_number, voice_number=voice_number)
         if voice_object is None:
-            staff_object = self.add_staff(staff=staff)
-            return staff_object.add_voice(voice=voice)
+            staff_object = self.add_staff(staff_number=staff_number)
+            return staff_object.add_voice(voice_number=voice_number)
         return voice_object
 
     def get_chords(self):
@@ -139,19 +139,19 @@ class Measure(MusicTree, XMLWrapper):
     def get_divisions(self):
         return self.xml_object.xml_attributes.xml_divisions.value
 
-    def get_staff(self, staff=1):
-        if staff is None:
-            staff = 1
+    def get_staff(self, staff_number=1):
+        if staff_number is None:
+            staff_number = 1
         try:
-            return self.get_children()[staff - 1]
+            return self.get_children()[staff_number - 1]
         except IndexError:
             return None
 
-    def get_voice(self, *, staff=1, voice=1):
-        staff_object = self.get_staff(staff=staff)
+    def get_voice(self, *, staff_number=1, voice_number=1):
+        staff_object = self.get_staff(staff_number=staff_number)
         if staff_object:
             for child in staff_object.get_children():
-                if child.value == voice:
+                if child.value == voice_number:
                     return child
 
     def _update_xml_notes(self):

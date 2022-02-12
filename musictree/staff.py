@@ -31,20 +31,20 @@ class Staff(MusicTree, XMLWrapper):
 
         return child
 
-    def add_voice(self, voice=1):
-        voice_object = self.get_voice(voice=voice)
+    def add_voice(self, voice_number=1):
+        voice_object = self.get_voice(voice_number=voice_number)
         if voice_object is None:
-            for _ in range(voice - len(self.get_children())):
-                voice = self.add_child(Voice())
-            return voice
+            for _ in range(voice_number - len(self.get_children())):
+                voice_object = self.add_child(Voice())
+            return voice_object
         return voice_object
 
     def get_chords(self):
         return [ch for voice in self.get_children() for ch in voice.get_chords()]
 
-    def get_voice(self, voice=1):
+    def get_voice(self, voice_number=1):
         for ch in self.get_children():
-            if ch.value == voice:
+            if ch.value == voice_number:
                 return ch
 
     def get_previous_staff(self):
