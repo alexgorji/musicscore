@@ -28,17 +28,6 @@ class TestScore(IdTestCase):
     <measure number="1">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
     </measure>
   </part>
