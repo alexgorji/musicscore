@@ -34,6 +34,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self._parent_chord = parent_chord
         self._xml_object = XMLNote(*args, **kwargs)
         self._update_xml_voice()
+        self._update_xml_staff()
         self._midi = None
         self._type = None
         self._number_of_dots = None
@@ -138,6 +139,9 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
                     self.xml_object.xml_rest = None
                 self.xml_object.xml_pitch = pitch_or_rest
 
+    def _update_xml_staff(self):
+        self.xml_object.xml_staff = self.get_staff_number()
+
     def _update_xml_voice(self):
         self.xml_object.xml_voice = str(self.get_voice_number())
 
@@ -194,6 +198,9 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     def get_parent_measure(self):
         return self.parent_chord.get_parent_measure()
+
+    def get_staff_number(self):
+        return self.parent_chord.get_staff_number()
 
     def get_voice_number(self):
         return self.parent_chord.get_voice_number()

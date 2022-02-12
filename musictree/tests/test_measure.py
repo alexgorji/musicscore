@@ -114,7 +114,7 @@ class TestMeasure(TestCase):
         chord.midis[0].accidental.show = True
         m.add_chord(chord)
 
-        m.update_xml_notes()
+        m._update_xml_notes()
         for xml_note, duration in zip(m.find_children('XMLNote'), [4, 1, 1, 2]):
             assert xml_note.xml_duration.value == duration
         expected = """<measure number="1">
@@ -412,7 +412,7 @@ class TestTuplets(TestCase):
         for c in [ch1, ch2]:
             c.midis[0].accidental.show = False
             m.add_chord(c)
-        m.update_xml_notes()
+        m._update_xml_notes()
         assert ch1.notes[0].to_string() == expected_1
         assert ch2.notes[0].to_string() == expected_2
 
@@ -423,7 +423,7 @@ class TestTuplets(TestCase):
         for x in chords:
             m.add_chord(x)
 
-        m.update_xml_notes()
+        m._update_xml_notes()
 
         t1, t2 = [ch.notes[0].xml_notations.xml_tuplet for ch in chords]
         assert t1.type == 'start'
@@ -440,7 +440,7 @@ class TestTuplets(TestCase):
             m = Measure(index + 1)
             for q in quintuplet:
                 m.add_chord(Chord(midis=60, quarter_duration=q))
-            m.update_xml_notes()
+            m._update_xml_notes()
             measures.append(m)
 
         for m in measures:
@@ -461,7 +461,7 @@ class TestTuplets(TestCase):
         quarter_durations = [Fraction(1, 6), Fraction(5, 6)]
         for q in quarter_durations:
             m1.add_chord(Chord(midis=60, quarter_duration=q))
-        m1.update_xml_notes()
+        m1._update_xml_notes()
         b = m1.get_voice(staff=1, voice=1).get_children()[0]
         assert b.get_children() == m1.get_chords()
         n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()]
@@ -478,7 +478,7 @@ class TestTuplets(TestCase):
         quarter_durations = [Fraction(5, 6), Fraction(1, 6)]
         for q in quarter_durations:
             m1.add_chord(Chord(midis=60, quarter_duration=q))
-        m1.update_xml_notes()
+        m1._update_xml_notes()
         n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()]
         assert n1.xml_notations.xml_tuplet.type == 'start'
         assert n3.xml_notations.xml_tuplet.type == 'stop'
@@ -494,7 +494,7 @@ class TestTuplets(TestCase):
             m = Measure(index + 1)
             for q in sextuplet:
                 m.add_chord(Chord(midis=60, quarter_duration=q))
-            m.update_xml_notes()
+            m._update_xml_notes()
             measures.append(m)
 
         for m in measures:
@@ -516,7 +516,7 @@ class TestTuplets(TestCase):
         ch1, ch2, ch3 = chords = [Chord(60, 2 / 5), Chord(61, 2 / 5), Chord(62, 1 / 5)]
         for ch in chords:
             beats[0].add_child(ch)
-        beats[0].update_notes()
+        beats[0]._update_xml_notes()
         assert ch1.notes[0].xml_notations.xml_tuplet.type == 'start'
         assert ch1.notes[0].xml_notations.xml_tuplet.bracket == 'yes'
         assert ch1.notes[0].xml_notations.xml_tuplet.number == 1
@@ -529,7 +529,7 @@ class TestTuplets(TestCase):
         beats = v1.update_beats(1)
         for quarter_duration in [1 / 6, 1 / 6, 1 / 6, 1 / 10, 3 / 10, 1 / 10]:
             v1.add_chord(Chord(60, quarter_duration))
-        beats[0].update_notes()
+        beats[0]._update_xml_notes()
         n1, n2, n3, n4, n5, n6 = [ch.notes[0] for ch in v1.get_chords()]
         for n in [n1, n2, n3]:
             assert (n.xml_time_modification.xml_actual_notes.value, n.xml_time_modification.xml_normal_notes.value,
@@ -550,7 +550,7 @@ class TestTuplets(TestCase):
         for quarter_duration in [q for group in generate_all_triplets() for q in group]:
             v1.add_chord(Chord(60, quarter_duration))
         for index, beat in enumerate(beats):
-            beat.update_notes()
+            beat._update_xml_notes()
             if index == 0:
                 for i, c in enumerate(beat.get_children()):
                     beams = c.notes[0].find_children('XMLBeam')
@@ -568,7 +568,7 @@ class TestUpdateAccidentals(IdTestCase):
         midis = [60, 61, 62, 60]
         for mi in midis:
             m.add_chord(Chord(mi, quarter_duration=1))
-        m.update_xml_notes()
+        m._update_xml_notes()
         assert [ch.midis[0].accidental.show for ch in m.get_chords()] == [False, True, False, True]
 
     def test_update_accidentals_with_last_steps(self):
@@ -579,7 +579,7 @@ class TestUpdateAccidentals(IdTestCase):
         p.add_chord(Chord(midis=61, quarter_duration=2))
         p.add_chord(Chord(midis=60, quarter_duration=4))
         for m in p.get_children():
-            m.update_xml_notes()
+            m._update_xml_notes()
         last_chord = p.get_children()[-1].get_children()[-1].get_chords()[0]
         assert last_chord.midis[0].accidental.sign == 'natural'
         assert last_chord.midis[0].accidental.show

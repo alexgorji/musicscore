@@ -13,6 +13,7 @@ class NoteTestCase(TestCase):
     def setUp(self) -> None:
         self.mock_chord = Mock()
         self.mock_chord.get_voice_number.return_value = 1
+        self.mock_chord.get_staff_number.return_value = None
         self.mock_measure = Mock()
         self.mock_measure.get_divisions.return_value = 1
         self.mock_chord.get_parent_measure.return_value = self.mock_measure
@@ -25,6 +26,7 @@ class TestNote(NoteTestCase):
 
     def test_mock_chord(self):
         assert self.mock_chord.get_voice_number() == 1
+        assert self.mock_chord.get_staff_number() is None
         assert self.mock_chord.get_parent_measure().get_divisions() == 1
 
     def test_note_init(self):
@@ -455,3 +457,12 @@ class TestNoteTie(NoteTestCase):
         untie(n1, n2, n3, n4)
         assert n1.to_string() + n2.to_string() + n3.to_string() + n4.to_string() == standard_note_xml + standard_note_xml + \
                standard_note_xml + standard_note_xml
+
+    def test_note_staff_number(self):
+        n1 = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
+        assert n1.get_staff_number() is None
+        assert n1.xml_object.xml_staff is None
+        self.mock_chord.get_staff_number.return_value = 1
+        assert n1.get_staff_number() == 1
+        n1._update_xml_staff()
+        assert n1.xml_object.xml_staff.value == 1

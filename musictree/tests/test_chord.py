@@ -6,6 +6,7 @@ from musictree.accidental import Accidental
 from musictree.beat import Beat
 from musictree.chord import Chord, split_copy, group_chords
 from musictree.exceptions import ChordHasNoParentError, ChordQuarterDurationAlreadySetError, NoteTypeError
+from musictree.measure import Measure
 from musictree.midi import Midi
 from musictree.tests.util import check_notes
 
@@ -26,6 +27,7 @@ class TestTreeChord(TestCase):
         self.mock_voice.up = self.mock_staff
         self.mock_staff.up = self.mock_measure
         self.mock_measure.get_divisions.return_value = 1
+        self.mock_staff.value = None
 
     def tearDown(self) -> None:
         patch.stopall()
@@ -452,3 +454,10 @@ class TestTreeChord(TestCase):
         ch._update_notes()
         assert ch.notes[0].xml_lyric is not None
         assert ch.notes[0].xml_lyric.xml_text.value == 'test'
+
+    def test_get_staff_number(self):
+        ch = Chord(60, 2)
+        ch._parent = self.mock_beat
+        assert ch.get_staff_number() is None
+        self.mock_staff.value = 1
+        assert ch.get_staff_number() == 1

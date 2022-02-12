@@ -15,8 +15,10 @@ from musictree.voice import Voice
 
 class TestMusicTree(IdTestCase):
     @patch.object(Chord, 'get_voice_number')
-    def test_add_child_type(self, mock_chord_method):
-        mock_chord_method.return_value = 1
+    @patch.object(Chord, 'get_staff_number')
+    def test_add_child_type(self, mock_get_voice_number, mock_get_staff_number):
+        mock_get_voice_number.return_value = 1
+        mock_get_staff_number.return_value = None
         s = Score()
         p = Part('P1')
         m = Measure(1)

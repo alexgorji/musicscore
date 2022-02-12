@@ -254,6 +254,19 @@ class TestPart(IdTestCase):
         assert ch2._ties == ['stop', 'start']
         assert ch3._ties == ['stop']
 
+    def test_part_add_chord_with_staff_number(self):
+        p = Part('P1')
+        ch1 = Chord(60, 1)
+        ch2 = Chord(48, 1)
+        p.add_chord(ch1, staff=1)
+        assert ch1.get_staff_number() is None
+        p.add_chord(ch2, staff=2)
+        assert ch1.get_staff_number() == 1
+        assert ch2.get_staff_number() == 2
+        p.update_xml_notes()
+        assert ch1.notes[0].xml_staff.value == 1
+        assert ch2.notes[0].xml_staff.value == 2
+
 
 class TestScorePart(IdTestCase):
 

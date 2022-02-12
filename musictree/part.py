@@ -99,16 +99,6 @@ class Part(MusicTree, XMLWrapper):
         self._score_part = ScorePart(part=self)
         self._current_measures = {}
 
-    def set_current_measure(self, staff, voice, measure):
-        if staff is None:
-            staff = 1
-        if not isinstance(measure, Measure):
-            raise TypeError(f"{measure} must be of type 'Measure'.")
-        if self._current_measures.get(staff):
-            self._current_measures[staff][voice] = measure
-        else:
-            self._current_measures[staff] = {voice: measure}
-
     def _set_first_current_measure(self, staff, voice):
         for m in self.get_children():
             if m.get_voice(staff=staff, voice=voice):
@@ -213,3 +203,17 @@ class Part(MusicTree, XMLWrapper):
             return self.current_measures[staff][voice]
         except KeyError:
             return self._set_first_current_measure(staff=staff, voice=voice)
+
+    def set_current_measure(self, staff, voice, measure):
+        if staff is None:
+            staff = 1
+        if not isinstance(measure, Measure):
+            raise TypeError(f"{measure} must be of type 'Measure'.")
+        if self._current_measures.get(staff):
+            self._current_measures[staff][voice] = measure
+        else:
+            self._current_measures[staff] = {voice: measure}
+
+    def update_xml_notes(self):
+        for m in self.get_children():
+            m._update_xml_notes()

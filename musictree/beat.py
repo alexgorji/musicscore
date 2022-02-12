@@ -151,6 +151,13 @@ class Beat(MusicTree, QuarterDurationMixin):
         if self.get_children():
             beam_chord_group(chord_group=self.get_children())
 
+    def _update_xml_notes(self):
+        if self.get_children():
+            for chord in self.get_children():
+                chord._update_notes()
+            self._update_note_tuplets_dots()
+            self._update_note_beams()
+
     @property
     def is_filled(self):
         if self.filled_quarter_duration == self.quarter_duration:
@@ -210,13 +217,6 @@ class Beat(MusicTree, QuarterDurationMixin):
             else:
                 beats = self.up.get_children()[self.up.get_children().index(self):]
                 return child.split_beatwise(beats)
-
-    def update_notes(self):
-        if self.get_children():
-            for chord in self.get_children():
-                chord._update_notes()
-            self._update_note_tuplets_dots()
-            self._update_note_beams()
 
 
 def beam_chord_group(chord_group):

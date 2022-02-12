@@ -150,6 +150,9 @@ class Chord(MusicTree, QuarterDurationMixin):
     def get_voice_number(self):
         return self.up.up.value
 
+    def get_staff_number(self):
+        return self.up.up.up.value
+
     def get_parent_measure(self):
         return self.up.up.up.up
 

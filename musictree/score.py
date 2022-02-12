@@ -43,5 +43,5 @@ class Score(MusicTree, XMLWrapper):
                 staff.get_children() for beat in voice.get_children() for ch in beat.get_children()]
 
     def update_xml_notes(self):
-        for measure in [m for p in self.get_children() for m in p.get_children()]:
-            measure.update_xml_notes()
+        for p in self.get_children():
+            p.update_xml_notes()

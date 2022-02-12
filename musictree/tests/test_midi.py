@@ -74,6 +74,7 @@ class TestMidi(TestCase):
         """
         Test if a midi object which is being contained in a note can access it via its parent_note attribute.
         """
+        mock_chord.get_staff_number.return_value = None
         m = Midi(70)
         assert m.parent_note is None
         n = Note(parent_chord=mock_chord, midi=m)
@@ -134,6 +135,7 @@ class TestMidi(TestCase):
 
     @patch('musictree.chord.Chord')
     def test_midi_up_note(self, mock_chord):
+        mock_chord.get_staff_number.return_value = None
         m = Midi(70)
         n = Note(parent_chord=mock_chord, midi=m)
         assert m.up == n
