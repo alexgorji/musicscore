@@ -792,3 +792,15 @@ class TestMeasureAttributes(TestCase):
         m.clefs[0].show = False
         m.update()
         assert m.to_string() == expected
+
+
+class TestMeasureBeatGrouping(TestCase):
+    def test_measure_5_4(self):
+        m = Measure(1, time=Time(5, 4))
+        chords = m.add_chord(Chord(midis=60, quarter_duration=5))
+        assert [ch.quarter_duration for ch in chords] == [3, 2]
+
+    def test_measure_6_4(self):
+        m = Measure(1, time=Time(6, 4))
+        chords = m.add_chord(Chord(midis=60, quarter_duration=6))
+        assert [ch.quarter_duration for ch in chords] == [6]

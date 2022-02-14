@@ -89,6 +89,12 @@ class QuarterDuration(numbers.Rational):
             output = [[output[0], *output[1]], output[2]]
         else:
             output = [output[1], output[2]]
+        # Add conditions for other beat groupings
+        if offset == 0 and sum(output[0]) == 5:
+            output[0] = [QuarterDuration(3), QuarterDuration(2)]
+        elif offset == 0 and sum(output[0]) == 6:
+            output[0] = [QuarterDuration(6)]
+
         return output
 
     def __repr__(self):
