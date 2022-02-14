@@ -1,5 +1,6 @@
 from musicxml.xmlelement.xmlelement import XMLStaff
 
+from musictree.clef import TrebleClef, Clef
 from musictree.exceptions import StaffHasNoParentError
 from musictree.musictree import MusicTree
 from musictree.voice import Voice
@@ -7,9 +8,36 @@ from musictree.xmlwrapper import XMLWrapper
 
 
 class Staff(MusicTree, XMLWrapper):
-    def __init__(self, *args, **kwargs):
+    _ATTRIBUTES = {'clef', 'default_clef'}
+
+    def __init__(self, clef=None, *args, **kwargs):
         super().__init__()
         self._xml_object = XMLStaff(*args, **kwargs)
+        self._clef = None
+        self._default_clef = TrebleClef()
+        self.clef = clef
+
+    @property
+    def default_clef(self):
+        return self._default_clef
+
+    @default_clef.setter
+    def default_clef(self, val):
+        if not isinstance(val, Clef):
+            raise TypeError
+        self._default_clef = val
+
+    @property
+    def clef(self):
+        if self._clef is None:
+            return self._default_clef
+        return self._clef
+
+    @clef.setter
+    def clef(self, val):
+        if val is not None and not isinstance(val, Clef):
+            raise TypeError
+        self._clef = val
 
     def add_child(self, child):
         if not self.up:
@@ -27,7 +55,10 @@ class Staff(MusicTree, XMLWrapper):
 
         return child
 
-    def add_voice(self, voice_number=1):
+    def add_voice(self, voice_number=None):
+        if voice_number is None:
+            voice_number = len(self.get_children()) + 1
+            # voice_number = 1
         voice_object = self.get_voice(voice_number=voice_number)
         if voice_object is None:
             for _ in range(voice_number - len(self.get_children())):
@@ -55,11 +86,12 @@ class Staff(MusicTree, XMLWrapper):
     def get_last_steps_with_accidentals(self):
         output = set()
         for v in self.get_children():
-            last_chord = v.get_chords()[-1]
-            if not last_chord.is_rest:
-                for m in last_chord.midis:
-                    if m.accidental.sign != 'natural':
-                        step = m.accidental.get_pitch_parameters()[0]
-                        if step not in output:
-                            output.add(step)
+            if v.get_chords():
+                last_chord = v.get_chords()[-1]
+                if not last_chord.is_rest:
+                    for m in last_chord.midis:
+                        if m.accidental.sign != 'natural':
+                            step = m.accidental.get_pitch_parameters()[0]
+                            if step not in output:
+                                output.add(step)
         return output

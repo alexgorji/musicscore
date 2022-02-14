@@ -87,3 +87,12 @@ class TestTime(TestCase):
         times = [2 * Time(3, 8), (3, 4), 3 * [(1, 8)], Time(1, 8, 3, 4), Time(3, 4)]
         flattened_times = flatten_times(times)
         assert [t.signatures for t in flattened_times] == [(3, 8), (3, 8), (3, 4), (1, 8), (1, 8), (1, 8), (1, 8, 3, 4), (3, 4)]
+
+    def test_copy(self):
+        t = Time(3, 4, show=False)
+        t.actual_signatures = (1, 8, 2, 4)
+        copied = t.__copy__()
+        assert copied != t
+        assert copied.signatures == t.signatures
+        assert copied.actual_signatures == t.actual_signatures
+        assert copied.show == t.show

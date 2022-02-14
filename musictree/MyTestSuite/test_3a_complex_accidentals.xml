@@ -74,17 +74,6 @@
     <measure number="2">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -151,21 +140,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="3">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -182,21 +163,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="4">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -228,21 +201,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="5">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -307,21 +272,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="6">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -387,21 +344,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="7">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -454,21 +403,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="8">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -515,21 +456,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="9">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -593,21 +526,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="10">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -639,21 +564,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="11">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -685,21 +602,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="12">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -767,21 +676,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="13">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -876,21 +777,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="14">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -943,21 +836,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="15">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -973,21 +858,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="16">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1048,21 +925,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="17">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1096,21 +965,13 @@
           <text>sharp</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="18">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1175,21 +1036,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="19">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1270,21 +1123,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="20">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1352,21 +1197,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="21">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1421,21 +1258,13 @@
           <text>sharp</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="22">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1468,21 +1297,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="23">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1569,21 +1390,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="24">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1644,21 +1457,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="25">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1726,21 +1531,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="26">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1788,21 +1585,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="27">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1904,21 +1693,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="28">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -1935,21 +1716,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="29">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2046,21 +1819,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="30">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2126,21 +1891,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="31">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2158,21 +1915,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="32">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2222,21 +1971,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="33">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2300,21 +2041,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="34">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2380,21 +2113,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="35">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2412,21 +2137,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="36">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2474,21 +2191,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="37">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2540,21 +2249,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="38">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2571,21 +2272,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="39">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2652,21 +2345,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="40">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2718,21 +2403,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="41">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2785,21 +2462,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="42">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2883,21 +2552,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="43">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -2915,21 +2576,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="44">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3013,21 +2666,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="45">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3081,21 +2726,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="46">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3127,21 +2764,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="47">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3209,21 +2838,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="48">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3289,21 +2910,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="49">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3357,21 +2970,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="50">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3438,21 +3043,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="51">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3519,21 +3116,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="52">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3586,21 +3175,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="53">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3682,21 +3263,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="54">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3782,21 +3355,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="55">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3842,21 +3407,13 @@
           <text>sharp</text>
         </lyric>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="56">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -3924,21 +3481,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="57">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4002,21 +3551,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="58">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4048,21 +3589,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="59">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4157,21 +3690,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="60">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4222,21 +3747,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="61">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4254,21 +3771,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="62">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4317,21 +3826,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="63">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4388,21 +3889,13 @@
           <text>sharp</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="64">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4420,21 +3913,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="65">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4480,21 +3965,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="66">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4514,21 +3991,13 @@
           <text>sharp</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="67">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4579,21 +4048,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="68">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4643,21 +4104,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="69">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4753,21 +4206,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="70">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4800,21 +4245,13 @@
           <text>sharp</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="71">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4882,21 +4319,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="72">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -4928,21 +4357,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="73">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5010,21 +4431,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="74">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5076,21 +4489,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="75">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5155,21 +4560,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="76">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5201,21 +4598,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="77">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5249,21 +4638,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="78">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5315,21 +4696,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="79">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5383,21 +4756,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="80">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5448,21 +4813,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="81">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5545,21 +4902,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="82">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5575,21 +4924,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="83">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5609,21 +4950,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="84">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5673,21 +5006,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="85">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5750,21 +5075,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="86">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5811,21 +5128,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="87">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5876,21 +5185,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="88">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -5957,21 +5258,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="89">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6024,21 +5317,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="90">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6104,21 +5389,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="91">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6169,21 +5446,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="92">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6248,21 +5517,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="93">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6311,21 +5572,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="94">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6378,21 +5631,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="95">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6461,21 +5706,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="96">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6527,21 +5764,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="97">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6603,21 +5832,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="98">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6682,21 +5903,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="99">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6743,21 +5956,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="100">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6822,21 +6027,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="101">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6918,21 +6115,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="102">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -6950,21 +6139,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="103">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7049,21 +6230,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="104">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7080,21 +6253,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="105">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7177,21 +6342,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="106">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7222,21 +6379,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="107">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7268,21 +6417,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="108">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7361,21 +6502,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="109">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7458,21 +6591,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="110">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7487,21 +6612,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="111">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7580,21 +6697,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="112">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7646,21 +6755,13 @@
           <text>sharp</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="113">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7678,21 +6779,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="114">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7757,21 +6850,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="115">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7856,21 +6941,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="116">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7885,21 +6962,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="117">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7919,21 +6988,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="118">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -7985,21 +7046,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="119">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8051,21 +7104,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="120">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8146,21 +7191,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="121">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8243,21 +7280,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="122">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8323,21 +7352,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="123">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8403,21 +7424,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="124">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8433,21 +7446,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="125">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8465,21 +7470,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="126">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8560,21 +7557,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="127">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8594,21 +7583,13 @@
           <text>sharp</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="128">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8659,21 +7640,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="129">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8726,21 +7699,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="130">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8755,21 +7720,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="131">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8818,21 +7775,13 @@
           <text>sharp</text>
         </lyric>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="132">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8899,21 +7848,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="133">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -8962,21 +7903,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="134">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9045,21 +7978,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="135">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9112,21 +8037,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="136">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9143,21 +8060,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="137">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9219,21 +8128,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="138">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9264,21 +8165,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="139">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9309,21 +8202,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="140">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9403,21 +8288,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="141">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9434,21 +8311,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="142">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9499,21 +8368,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="143">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9580,21 +8441,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="144">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9642,21 +8495,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="145">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9739,21 +8584,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="146">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9802,21 +8639,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="147">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9866,21 +8695,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="148">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -9908,21 +8729,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="149">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10005,21 +8818,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="150">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10067,21 +8872,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="151">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10133,21 +8930,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="152">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10199,21 +8988,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="153">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10230,21 +9011,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="154">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10292,21 +9065,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="155">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10324,21 +9089,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="156">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10369,21 +9126,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="157">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10448,21 +9197,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="158">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10527,21 +9268,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="159">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10624,21 +9357,13 @@
           <text>sharp</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="160">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10706,21 +9431,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="161">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10770,21 +9487,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="162">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10818,21 +9527,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="163">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10901,21 +9602,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="164">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -10947,21 +9640,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="165">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -11037,21 +9722,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
     <measure number="166">
       <attributes>
         <divisions>2</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -11101,21 +9778,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>8</duration>
+      </backup>
     </measure>
     <measure number="167">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -11132,21 +9801,13 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="168">
       <attributes>
         <divisions>4</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -11162,6 +9823,9 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>16</duration>
+      </backup>
     </measure>
   </part>
 </score-partwise>

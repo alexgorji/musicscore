@@ -14,7 +14,7 @@ class TestStaff(TestCase):
         st = Staff()
         assert st.value is None
         assert st.xml_object.value is None
-        st = Staff(3)
+        st = Staff(value=3)
         assert st.xml_object.value == 3
         assert st.value == 3
         st.value = 2
@@ -42,10 +42,15 @@ class TestStaff(TestCase):
         assert st.get_children()[-1] == v
         assert len(st.get_children()) == 1
         assert v.value == 1
-        v = st.add_voice(4)
-        assert v.value == 4
-        assert len(st.get_children()) == 4
-        assert [v.value for v in st.get_children()] == [1, 2, 3, 4]
+        v = st.add_voice()
+        assert st.get_children()[-1] == v
+        assert len(st.get_children()) == 2
+        assert v.value == 2
+
+        v = st.add_voice(5)
+        assert v.value == 5
+        assert len(st.get_children()) == 5
+        assert [v.value for v in st.get_children()] == [1, 2, 3, 4, 5]
 
     def test_get_previous_staff(self):
         p = Part('P1')
@@ -65,3 +70,12 @@ class TestStaff(TestCase):
         m1.add_chord(Chord(midis=[61, 62, 63], quarter_duration=2))
         m1.add_chord(Chord(midis=[63, 64, 66], quarter_duration=2))
         assert m1.get_staff(1).get_last_steps_with_accidentals() == {'E', 'F'}
+
+    @patch('musictree.measure.Measure')
+    def test_staff_clef(self, mock_measure):
+        st = Staff()
+        st._parent = mock_measure
+        assert st.clef.sign == 'G'
+        assert st.clef.line == 2
+        assert st.default_clef.sign == 'G'
+        assert st.default_clef.line == 2

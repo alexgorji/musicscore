@@ -1,8 +1,10 @@
 from musictree.chord import Chord
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError
+from musictree.key import Key
 from musictree.measure import Measure
 from musictree.part import Part, ScorePart, Id
 from musictree.tests.util import IdTestCase
+from musictree.time import Time
 
 
 class TestId(IdTestCase):
@@ -82,6 +84,50 @@ class TestPart(IdTestCase):
         assert m.number == 3
         assert m.time.signatures == (4, 3, 2, 1)
 
+    def test_add_measure_show_time(self):
+        p = Part('p1')
+        m = p.add_measure()
+        assert m.time.show is True
+        m = p.add_measure()
+        assert m.time.show is False
+        m = p.add_measure(time=(3, 4))
+        assert m.time.show is True
+
+    def test_add_measure_show_key(self):
+        p = Part('p1')
+        m = p.add_measure()
+        assert m.key.show is True
+        m.update()
+        assert m.xml_object.xml_attributes.xml_key is not None
+        m = p.add_measure()
+        m.update()
+        assert m.key.show is False
+        m.key = Key(fifths=1)
+        assert m.key.show is True
+        m = p.add_measure()
+        m.update()
+        assert m.key.fifths == 1
+        assert m.key.show is False
+        assert m.xml_object.xml_attributes.xml_key is None
+
+    def test_add_measure_show_clefs(self):
+        p = Part('p1')
+        m = p.add_measure()
+        m.add_staff(1)
+        m.add_staff(2)
+        assert m.clefs[0].show is True
+        assert m.clefs[1].show is True
+        m = p.add_measure()
+        assert m.clefs[0].show is False
+        assert m.clefs[1].show is False
+        m = p.add_measure()
+        m.clefs[0].show = True
+        m.update()
+        clefs = m.xml_object.xml_attributes.find_children('XMLClef')
+        assert len(clefs) == 1
+        assert clefs[0].xml_sign.value == 'G'
+        assert clefs[0].xml_line.value == 2
+
     def test_part_add_measure_check_voice(self):
         """
         Test if Part.add_measure() adds a Measure with a Staff (value=None) and Voice (value=1)
@@ -90,6 +136,12 @@ class TestPart(IdTestCase):
         m1 = p.add_measure()
         assert m1.get_staff(None) is not None
         assert m1.get_voice(staff_number=None, voice_number=1) is not None
+        m1.add_staff(2)
+        m2 = p.add_measure()
+        m2.add_voice(staff_number=2, voice_number=2)
+
+        assert m1.get_voice(staff_number=2, voice_number=2) is None
+        assert m2.get_voice(staff_number=2, voice_number=2) is not None
 
     def test_part_set_current_measure(self):
         p = Part('p1')
@@ -142,6 +194,7 @@ class TestPart(IdTestCase):
         #
         m2 = p.add_measure()
         m2.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2, voice_number=2)
+
         assert p.get_current_measure(staff_number=1, voice_number=1) == m1
         assert p.get_current_measure(staff_number=1, voice_number=2) is None
         assert p.get_current_measure(staff_number=2, voice_number=1) == m1
@@ -263,7 +316,7 @@ class TestPart(IdTestCase):
         p.add_chord(ch2, staff_number=2)
         assert ch1.get_staff_number() == 1
         assert ch2.get_staff_number() == 2
-        p.update_xml_notes()
+        p.update()
         assert ch1.notes[0].xml_staff.value == 1
         assert ch2.notes[0].xml_staff.value == 2
 
@@ -285,3 +338,11 @@ class TestScorePart(IdTestCase):
 </score-part>
 """
         assert p.score_part.to_string() == expected
+
+    def test_add_measure_clef(self):
+        p = Part('P1')
+        m1 = p.add_measure(time=(3, 4))
+        m2 = p.add_measure(time=(2, 4))
+        p.update()
+        assert m1.clefs[0].show is True
+        assert m2.clefs[0].show is False

@@ -228,7 +228,7 @@ class Chord(MusicTree, QuarterDurationMixin):
             raise ChordNotesAreAlreadyCreatedError()
         if not self.up:
             raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
-        self.get_parent_measure().update_divisions()
+        self.get_parent_measure()._update_divisions()
         notes = [Note(parent_chord=self, midi=midi, **self._note_attributes) for midi in self._midis]
         if len(notes) > 1:
             notes[0].xml_object.add_child(XMLChord())

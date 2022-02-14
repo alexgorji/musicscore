@@ -259,9 +259,12 @@ def beam_chord_group(chord_group):
         b1, b2 = beams.get(t1), beams.get(t2)
         types = []
         if b1 and b2:
-            if next_chord.offset == QuarterDuration(1, 2) and (b1 == 3 or b2 == 3 or current_beams == 3 or chord.quarter_duration ==
-                                                               QuarterDuration(3, 8) or next_chord.quarter_duration == QuarterDuration(3,
-                                                                                                                                       8)):
+            if next_chord.offset == QuarterDuration(1, 2) \
+                    and current_beams != 0 \
+                    and (b1 == 3 or b2 == 3
+                         or current_beams == 3
+                         or chord.quarter_duration == QuarterDuration(3, 8)
+                         or next_chord.quarter_duration == QuarterDuration(3, 8)):
                 add_last_beam(chord, b1, current_beams, True)
                 current_beams = 1
             elif b2 < b1 <= current_beams:

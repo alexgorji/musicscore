@@ -733,5 +733,17 @@
         <staff>2</staff>
       </note>
     </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+        <staves>2</staves>
+      </attributes>
+      <backup>
+        <duration>4</duration>
+      </backup>
+      <backup>
+        <duration>4</duration>
+      </backup>
+    </measure>
   </part>
 </score-partwise>

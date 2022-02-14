@@ -22,9 +22,8 @@ class TestHelloWorld(IdTestCase):
         """
         Adding measures
         """
-        measures = generate_measures(times=[Time(qd, 4) for qd in reversed(quarter_durations)])
-        for m in measures:
-            p.add_child(m)
+        for qd in reversed(quarter_durations):
+            p.add_measure(time=Time(qd, 4))
         """
         Adding chords
         """
@@ -34,7 +33,7 @@ class TestHelloWorld(IdTestCase):
         """
         Updating xml_notes
         """
-        s.update_xml_notes()
+        s.update()
         """
         Exporting
         """

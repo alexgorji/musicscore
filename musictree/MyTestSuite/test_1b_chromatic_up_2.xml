@@ -41,17 +41,10 @@
     <measure number="2">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
         <time>
           <beats>2</beats>
           <beat-type>4</beat-type>
         </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -72,17 +65,10 @@
     <measure number="3">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
         <time>
           <beats>3</beats>
           <beat-type>4</beat-type>
         </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -104,17 +90,10 @@
     <measure number="4">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -133,17 +112,10 @@
     <measure number="5">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
         <time>
           <beats>5</beats>
           <beat-type>4</beat-type>
         </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -180,17 +152,10 @@
     <measure number="6">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
         <time>
           <beats>6</beats>
           <beat-type>4</beat-type>
         </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -223,17 +188,10 @@
     <measure number="7">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
         <time>
           <beats>7</beats>
           <beat-type>4</beat-type>
         </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -282,17 +240,10 @@
     <measure number="8">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
         <time>
           <beats>8</beats>
           <beat-type>4</beat-type>
         </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -341,17 +292,10 @@
     <measure number="9">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
         <time>
           <beats>9</beats>
           <beat-type>4</beat-type>
         </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -396,17 +340,10 @@
     <measure number="10">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
         <time>
           <beats>10</beats>
           <beat-type>4</beat-type>
         </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>

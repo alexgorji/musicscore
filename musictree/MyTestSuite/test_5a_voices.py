@@ -27,7 +27,7 @@ class TestHelloPianoStaves(IdTestCase):
             p.add_chord(Chord(72, qd), voice_number=2)
         for qd in 12 * [1 / 3]:
             p.add_chord(Chord(84, qd), voice_number=1)
-        s.update_xml_notes()
+        s.update()
         """
         ... and exports the xml
         """

@@ -1,6 +1,8 @@
 from pathlib import Path
 from unittest import TestCase
 
+from musicxml.xmlelement.xmlelement import XMLClef, XMLSign, XMLLine
+
 from musictree.score import Score
 from musictree.tests.util import diff_xml, _create_expected_path
 from musictree.util import isinstance_as_string, lcm
@@ -34,3 +36,21 @@ class TestUtils(TestCase):
     def test_lcm(self):
         assert lcm([3, 4, 5, 7]) == 420
         assert lcm([2, 4, 6]) == 12
+
+    # def test_update_xml_object(self):
+    #     old = XMLClef(number=3)
+    #     s1 = old.add_child(XMLSign('F'))
+    #     l1 = old.add_child(XMLLine(4))
+    #
+    #     new = XMLClef(number=2)
+    #     s2 = new.add_child(XMLSign('F'))
+    #     l2 = new.add_child(XMLLine(2))
+    #
+    #     update_xml_object(old, new)
+    #
+    #     assert old != new
+    #     assert old.xml_sign == s1 != s2
+    #     assert s1.value == 'F'
+    #     assert old.xml_line == l2 != l1
+    #     assert l1.value == l2.value == 2
+    #     assert old.number == new.number == 2

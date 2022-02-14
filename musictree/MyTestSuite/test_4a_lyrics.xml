@@ -59,17 +59,6 @@
     <measure number="2">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -101,21 +90,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="3">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -145,21 +126,13 @@
           <text>flat</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="4">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -191,21 +164,13 @@
           <text>natural</text>
         </lyric>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
     <measure number="5">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
       </attributes>
       <note>
         <pitch>
@@ -220,6 +185,9 @@
           <tied type="stop" />
         </notations>
       </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
     </measure>
   </part>
 </score-partwise>

@@ -4,6 +4,7 @@ from musicxml.xmlelement.xmlelement import *
 from quicktions import Fraction
 
 from musictree.chord import Chord
+from musictree.clef import Clef, BaseClef
 from musictree.exceptions import VoiceIsAlreadyFullError
 from musictree.measure import Measure, generate_measures
 from musictree.part import Part
@@ -15,27 +16,14 @@ from musictree.voice import Voice
 
 
 class TestMeasure(TestCase):
-
     def test_measure_default_init(self):
         expected = """<measure number="1">
   <attributes>
     <divisions>1</divisions>
-    <key>
-      <fifths>0</fifths>
-    </key>
-    <time>
-      <beats>4</beats>
-      <beat-type>4</beat-type>
-    </time>
-    <clef>
-      <sign>G</sign>
-      <line>2</line>
-    </clef>
   </attributes>
 </measure>
 """
         m = Measure(1)
-        m._update_attributes()
         assert m.to_string() == expected
 
     def test_number(self):
@@ -81,15 +69,15 @@ class TestMeasure(TestCase):
         assert m.get_children() == [st1, st2]
         assert (st1.value, st2.value) == (1, 2)
         with self.assertRaises(ValueError):
-            m.add_child(Staff(2))
+            m.add_child(Staff(value=2))
 
         m = Measure(1)
-        st1 = m.add_child(Staff(1))
+        st1 = m.add_child(Staff(value=1))
         assert st1.value == 1
 
         m = Measure(1)
         with self.assertRaises(ValueError):
-            m.add_child(Staff(2))
+            m.add_child(Staff(value=2))
 
     def test_check_divisions(self):
         m = Measure(1)
@@ -102,7 +90,7 @@ class TestMeasure(TestCase):
             v1.add_chord(Chord(60, qd))
         for qd in quarter_durations_2:
             v2.add_chord(Chord(70, qd))
-        m.update_divisions()
+        m._update_divisions()
         assert m.xml_object.xml_attributes.xml_divisions.value == 210
 
     def test_add_chord(self):
@@ -113,8 +101,7 @@ class TestMeasure(TestCase):
         chord = Chord(61, quarter_duration=1.5)
         chord.midis[0].accidental.show = True
         m.add_chord(chord)
-
-        m._update_xml_notes()
+        m.update()
         for xml_note, duration in zip(m.find_children('XMLNote'), [4, 1, 1, 2]):
             assert xml_note.xml_duration.value == duration
         expected = """<measure number="1">
@@ -205,11 +192,18 @@ class TestMeasure(TestCase):
 
     def test_add_staff(self):
         m = Measure(1)
-        st = m.add_staff()
-        assert m.get_staff(staff_number=None) == st
+        st1 = m.add_staff()
+        assert st1.value is None
+        st2 = m.add_staff()
+        assert st1.value == 1
+        assert st2.value == 2
+        st3 = m.add_staff()
+        assert st3.value == 3
 
+        m = Measure(1)
         st = m.add_staff()
         assert st.value is None
+        assert m.get_staff(staff_number=None) == st
 
         st = m.add_staff(1)
         assert m.get_staff(staff_number=1) == st
@@ -226,9 +220,15 @@ class TestMeasure(TestCase):
         assert st.get_children()[-1] == v
         assert [v.value for v in st.get_children()] == [1, 2]
 
-        v = m.add_voice(staff_number=2, voice_number=3)
+        m.add_voice(staff_number=2, voice_number=3)
         assert [st.value for st in m.get_children()] == [1, 2]
         assert [v.value for v in m.get_staff(2).get_children()] == [1, 2, 3]
+
+        m = Measure(1)
+        m.add_voice(staff_number=2, voice_number=2)
+        st1, st2 = m.get_children()
+        assert len(st2.get_children()) == 2
+        assert len(st1.get_children()) == 1
 
     def test_get_voice(self):
         m = Measure(1)
@@ -298,24 +298,12 @@ class TestMeasure(TestCase):
 
     def test_barstyle(self):
         m = Measure(number='1')
-        m._update_attributes()
         assert m.xml_barline is None
         m.xml_barline = XMLBarline()
         m.xml_barline.xml_bar_style = 'light-light'
         expected = """<measure number="1">
   <attributes>
     <divisions>1</divisions>
-    <key>
-      <fifths>0</fifths>
-    </key>
-    <time>
-      <beats>4</beats>
-      <beat-type>4</beat-type>
-    </time>
-    <clef>
-      <sign>G</sign>
-      <line>2</line>
-    </clef>
   </attributes>
   <barline>
     <bar-style>light-light</bar-style>
@@ -610,7 +598,8 @@ class TestUpdateAccidentals(IdTestCase):
         m.add_chord(Chord(60, 4), staff_number=1, voice_number=2)
         m.add_chord(Chord(48, 4), staff_number=2, voice_number=1)
         m.add_chord(Chord(36, 4), staff_number=2, voice_number=2)
-        m._update_xml_notes()
+        m.clefs[1] = BaseClef()
+        m.update()
         ch1, ch2, ch3, ch4 = m.get_chords()
         assert ch1.notes[0].xml_staff.value == 1
         assert ch2.notes[0].xml_staff.value == 1
@@ -623,6 +612,7 @@ class TestUpdateAccidentals(IdTestCase):
         backups = m.xml_object.find_children('XMLBackup')
         assert len(backups) == 3
         assert m.xml_attributes.xml_staves.value == 2
+
         cl1, cl2 = m.xml_attributes.find_children('XMLClef')
         assert cl1.number == 1
         assert cl2.number == 2
@@ -630,3 +620,152 @@ class TestUpdateAccidentals(IdTestCase):
         assert cl1.xml_line.value == 2
         assert cl2.xml_sign.value == 'F'
         assert cl2.xml_line.value == 4
+
+
+class TestMeasureAttributes(TestCase):
+    def test_measure_update_attributes(self):
+        expected = """<measure number="1">
+  <attributes>
+    <divisions>1</divisions>
+    <key>
+      <fifths>0</fifths>
+    </key>
+    <time>
+      <beats>4</beats>
+      <beat-type>4</beat-type>
+    </time>
+    <clef>
+      <sign>G</sign>
+      <line>2</line>
+    </clef>
+  </attributes>
+</measure>
+"""
+        m = Measure(1)
+        m.add_staff()
+        m._update_attributes()
+        assert m.to_string() == expected
+
+    def test_measure_clefs(self):
+        m = Measure(1)
+        m.add_staff()
+        m.update()
+        clefs = m.xml_object.xml_attributes.find_children('XMLClef')
+        assert clefs[0].xml_sign.value == 'G'
+        assert clefs[0].xml_line.value == 2
+        m.add_staff()
+        m.update()
+        clefs = m.xml_object.xml_attributes.find_children('XMLClef')
+        assert clefs[0].xml_sign.value == 'G'
+        assert clefs[0].xml_line.value == 2
+        assert clefs[1].xml_sign.value == 'F'
+        assert clefs[1].xml_line.value == 4
+        m.clefs[0].sign = 'C'
+        m.clefs[0].line = 3
+        m.update()
+        assert clefs[0].xml_sign.value == 'C'
+        assert clefs[0].xml_line.value == 3
+
+    def test_measure_add_staff_clef(self):
+        m = Measure(1)
+        assert not m.clefs
+        m.add_staff()
+        assert len(m.clefs) == 1
+        assert m.clefs[0].number is None
+        m.clefs[0].sign = 'G'
+        m.clefs[0].line = 2
+
+        m.add_staff()
+        assert len(m.clefs) == 2
+        assert [cl.number for cl in m.clefs] == [1, 2]
+        assert [cl.sign for cl in m.clefs] == ['G', 'F']
+        assert [cl.line for cl in m.clefs] == [2, 4]
+
+        m.add_staff()
+        assert len(m.clefs) == 3
+        assert [cl.number for cl in m.clefs] == [1, 2, 3]
+        assert [cl.sign for cl in m.clefs] == ['G', 'G', 'F']
+        assert [cl.line for cl in m.clefs] == [2, 2, 4]
+        assert [cl.octave_change for cl in m.clefs] == [2, None, None]
+
+        m.add_staff()
+        assert len(m.clefs) == 4
+        assert [cl.number for cl in m.clefs] == [1, 2, 3, 4]
+        assert [cl.sign for cl in m.clefs] == ['G', 'G', 'F', 'F']
+        assert [cl.line for cl in m.clefs] == [2, 2, 4, 4]
+        assert [cl.octave_change for cl in m.clefs] == [2, None, None, -2]
+
+        m.add_staff()
+        assert len(m.clefs) == 5
+        assert [cl.number for cl in m.clefs] == [1, 2, 3, 4, 5]
+        assert [cl.sign for cl in m.clefs] == ['G', 'G', 'G', 'F', 'F']
+        assert [cl.line for cl in m.clefs] == [2, 2, 2, 4, 4]
+        assert [cl.octave_change for cl in m.clefs] == [2, None, None, None, -2]
+
+        m.add_staff()
+        assert len(m.clefs) == 6
+        assert [cl.number for cl in m.clefs] == [1, 2, 3, 4, 5, 6]
+        assert [cl.sign for cl in m.clefs] == ['G', 'G', 'G', 'F', 'F', 'F']
+        assert [cl.line for cl in m.clefs] == [2, 2, 2, 4, 4, 4]
+        assert [cl.octave_change for cl in m.clefs] == [2, None, None, None, None, -2]
+
+    def test_measure_false_show_keys(self):
+        expected = """<measure number="1">
+  <attributes>
+    <divisions>1</divisions>
+    <time>
+      <beats>4</beats>
+      <beat-type>4</beat-type>
+    </time>
+    <clef>
+      <sign>G</sign>
+      <line>2</line>
+    </clef>
+  </attributes>
+</measure>
+"""
+        m = Measure(1)
+        m.add_staff()
+        m.key.show = False
+        m._update_attributes()
+        assert m.to_string() == expected
+
+    def test_measure_false_show_time(self):
+        expected = """<measure number="1">
+  <attributes>
+    <divisions>1</divisions>
+    <key>
+      <fifths>0</fifths>
+    </key>
+    <clef>
+      <sign>G</sign>
+      <line>2</line>
+    </clef>
+  </attributes>
+</measure>
+"""
+        m = Measure(1)
+        m.add_staff()
+        m.time.show = False
+        m._update_attributes()
+        assert m.to_string() == expected
+
+    def test_measure_false_show_clef(self):
+        expected = """<measure number="1">
+  <attributes>
+    <divisions>1</divisions>
+    <key>
+      <fifths>0</fifths>
+    </key>
+    <time>
+      <beats>4</beats>
+      <beat-type>4</beat-type>
+    </time>
+  </attributes>
+</measure>
+"""
+        m = Measure(1)
+        m.add_staff()
+        m.clefs[0].show = False
+        m.update()
+        assert m.to_string() == expected

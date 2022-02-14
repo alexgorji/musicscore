@@ -32,11 +32,11 @@ class TestHelloTBeams1(IdTestCase):
         for group in groups:
             for qd in group:
                 p.add_chord(Chord(60, qd))
-        # for qd in groups[13]:
+        # for qd in groups[87]:
         #     p.add_chord(Chord(60, qd))
         # for qd in groups[7]:
         #     p.add_chord(Chord(60, qd))
-        s.update_xml_notes()
+        s.update()
         """
         ... and exports the xml
         """

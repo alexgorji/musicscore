@@ -6,9 +6,9 @@ from musictree.xmlwrapper import XMLWrapper
 
 
 class Time(XMLWrapper):
-    _ATTRIBUTES = {'signatures', 'actual_signatures', '_intern_actual_signatures', 'parent_measure'}
+    _ATTRIBUTES = {'signatures', 'actual_signatures', '_intern_actual_signatures', 'parent_measure', 'show'}
 
-    def __init__(self, *signatures, **kwargs):
+    def __init__(self, *signatures, show=True, **kwargs):
         super().__init__()
         self._xml_object = XMLTime(**kwargs)
         self.parent_measure = None
@@ -17,6 +17,8 @@ class Time(XMLWrapper):
         self.signatures = signatures
         self._actual_signatures = None
         self._intern_actual_signatures = None
+        self._show = None
+        self.show = show
 
     def _calculate_actual_signatures(self):
         signatures = [self.signatures[i:i + 2] for i in range(0, len(self.signatures), 2)]
@@ -59,10 +61,15 @@ class Time(XMLWrapper):
         if self.parent_measure:
             self.parent_measure._update_voice_beats()
 
-    # def add_child(self, child):
-    #     if not self.up:
-    #         raise StaffHasNoParentError('A child Voice can only be added to a Staff if staff has a Measure parent.')
-    #     return super().add_child(child)
+    @property
+    def show(self):
+        return self._show
+
+    @show.setter
+    def show(self, val):
+        if not isinstance(val, bool):
+            raise TypeError
+        self._show = val
 
     def reset_actual_signatures(self):
         self._actual_signatures = None
@@ -88,7 +95,7 @@ class Time(XMLWrapper):
                                                                                                                                    2)]]
 
     def __copy__(self):
-        cp = self.__class__(*self.signatures)
+        cp = self.__class__(*self.signatures, show=self.show)
         cp._actual_signatures = self._actual_signatures
         return cp
 

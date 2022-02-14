@@ -33,7 +33,7 @@ class TestHelloWorld(TestCase):
         """
         Updating xml_notes
         """
-        s.update_xml_notes()
+        s.update()
         """
         Exporting
         """

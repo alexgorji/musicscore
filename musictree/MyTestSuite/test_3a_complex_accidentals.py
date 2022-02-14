@@ -28,7 +28,7 @@ class TestHelloCoplexAccidentals(IdTestCase):
             ch.add_lyric(ch.midis[0].accidental.sign)
             p.add_chord(ch)
 
-        s.update_xml_notes()
+        s.update()
         """
         ... and exports the xml
         """
