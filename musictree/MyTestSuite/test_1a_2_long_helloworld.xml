@@ -87,9 +87,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>5</duration>
-      </backup>
     </measure>
     <measure number="3">
       <attributes>
@@ -123,9 +120,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>5</duration>
-      </backup>
     </measure>
   </part>
 </score-partwise>

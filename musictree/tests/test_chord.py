@@ -1,36 +1,17 @@
 from fractions import Fraction
-from unittest import TestCase
-from unittest.mock import Mock, patch
-
 from musictree.accidental import Accidental
 from musictree.beat import Beat
 from musictree.chord import Chord, split_copy, group_chords
 from musictree.exceptions import ChordHasNoParentError, ChordQuarterDurationAlreadySetError, NoteTypeError
-from musictree.measure import Measure
 from musictree.midi import Midi
-from musictree.tests.util import check_notes
+from musictree.tests.util import check_notes, ChordTestCase
 
 
 def get_chord_midi_values(chord):
     return [m.value for m in chord._midis]
 
 
-class TestTreeChord(TestCase):
-    def setUp(self) -> None:
-        self.mock_beat = Mock()
-        self.mock_voice = Mock()
-        self.mock_staff = Mock()
-        self.mock_measure = Mock()
-
-        self.mock_voice.value = 1
-        self.mock_beat.up = self.mock_voice
-        self.mock_voice.up = self.mock_staff
-        self.mock_staff.up = self.mock_measure
-        self.mock_measure.get_divisions.return_value = 1
-        self.mock_staff.value = None
-
-    def tearDown(self) -> None:
-        patch.stopall()
+class TestTreeChord(ChordTestCase):
 
     def test_mocks(self):
         assert self.mock_voice.value == 1
@@ -461,3 +442,12 @@ class TestTreeChord(TestCase):
         assert ch.get_staff_number() is None
         self.mock_staff.value = 1
         assert ch.get_staff_number() == 1
+
+    def test_add_technicals(self):
+        pass
+
+    def test_add_articulation(self):
+        pass
+
+    def test_add_ornaments(self):
+        pass

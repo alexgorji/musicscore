@@ -741,9 +741,6 @@
       <backup>
         <duration>4</duration>
       </backup>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
   </part>
 </score-partwise>

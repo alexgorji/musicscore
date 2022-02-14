@@ -171,8 +171,11 @@ class Measure(MusicTree, XMLWrapper):
                 chords = voice.get_chords()
                 if index != 0:
                     add_backup()
-                for note in [note for chord in chords for note in chord.notes]:
-                    self.xml_object.add_child(note.xml_object)
+                for chord in chords:
+                    for xml_direction in chord.xml_directions:
+                        self.xml_object.add_child(xml_direction)
+                    for note in chord.notes:
+                        self.xml_object.add_child(note.xml_object)
 
     @property
     def clefs(self):

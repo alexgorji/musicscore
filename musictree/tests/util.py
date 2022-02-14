@@ -2,6 +2,7 @@ import itertools
 from difflib import Differ
 from pathlib import Path
 from unittest import TestCase
+from unittest.mock import Mock, patch
 
 from quicktions import Fraction
 
@@ -17,8 +18,26 @@ def check_notes(notes, midi_values, quarter_durations):
 
 
 class IdTestCase(TestCase):
-    def setUp(self) -> None:
+    def setUp(self):
         Id.__refs__.clear()
+
+
+class ChordTestCase(TestCase):
+    def setUp(self) -> None:
+        self.mock_beat = Mock()
+        self.mock_voice = Mock()
+        self.mock_staff = Mock()
+        self.mock_measure = Mock()
+
+        self.mock_voice.value = 1
+        self.mock_beat.up = self.mock_voice
+        self.mock_voice.up = self.mock_staff
+        self.mock_staff.up = self.mock_measure
+        self.mock_measure.get_divisions.return_value = 1
+        self.mock_staff.value = None
+
+    def tearDown(self) -> None:
+        patch.stopall()
 
 
 def _create_expected_path(path):

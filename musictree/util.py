@@ -64,3 +64,5 @@ def isinstance_as_string(child_class: type, parent_class_names: Union[str, List[
 
 def lcm(l):
     return math.lcm(*l)
+
+

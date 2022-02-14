@@ -90,9 +90,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="3">
       <attributes>
@@ -126,9 +123,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="4">
       <attributes>
@@ -164,9 +158,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="5">
       <attributes>
@@ -185,9 +176,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
   </part>
 </score-partwise>

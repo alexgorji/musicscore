@@ -140,9 +140,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="3">
       <attributes>
@@ -163,9 +160,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="4">
       <attributes>
@@ -201,9 +195,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="5">
       <attributes>
@@ -272,9 +263,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="6">
       <attributes>
@@ -344,9 +332,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="7">
       <attributes>
@@ -403,9 +388,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="8">
       <attributes>
@@ -456,9 +438,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="9">
       <attributes>
@@ -526,9 +505,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="10">
       <attributes>
@@ -564,9 +540,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="11">
       <attributes>
@@ -602,9 +575,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="12">
       <attributes>
@@ -676,9 +646,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="13">
       <attributes>
@@ -777,9 +744,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="14">
       <attributes>
@@ -836,9 +800,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="15">
       <attributes>
@@ -858,9 +819,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="16">
       <attributes>
@@ -925,9 +883,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="17">
       <attributes>
@@ -965,9 +920,6 @@
           <text>sharp</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="18">
       <attributes>
@@ -1036,9 +988,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="19">
       <attributes>
@@ -1123,9 +1072,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="20">
       <attributes>
@@ -1197,9 +1143,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="21">
       <attributes>
@@ -1258,9 +1201,6 @@
           <text>sharp</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="22">
       <attributes>
@@ -1297,9 +1237,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="23">
       <attributes>
@@ -1390,9 +1327,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="24">
       <attributes>
@@ -1457,9 +1391,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="25">
       <attributes>
@@ -1531,9 +1462,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="26">
       <attributes>
@@ -1585,9 +1513,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="27">
       <attributes>
@@ -1693,9 +1618,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="28">
       <attributes>
@@ -1716,9 +1638,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="29">
       <attributes>
@@ -1819,9 +1738,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="30">
       <attributes>
@@ -1891,9 +1807,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="31">
       <attributes>
@@ -1915,9 +1828,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="32">
       <attributes>
@@ -1971,9 +1881,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="33">
       <attributes>
@@ -2041,9 +1948,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="34">
       <attributes>
@@ -2113,9 +2017,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="35">
       <attributes>
@@ -2137,9 +2038,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="36">
       <attributes>
@@ -2191,9 +2089,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="37">
       <attributes>
@@ -2249,9 +2144,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="38">
       <attributes>
@@ -2272,9 +2164,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="39">
       <attributes>
@@ -2345,9 +2234,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="40">
       <attributes>
@@ -2403,9 +2289,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="41">
       <attributes>
@@ -2462,9 +2345,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="42">
       <attributes>
@@ -2552,9 +2432,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="43">
       <attributes>
@@ -2576,9 +2453,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="44">
       <attributes>
@@ -2666,9 +2540,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="45">
       <attributes>
@@ -2726,9 +2597,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="46">
       <attributes>
@@ -2764,9 +2632,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="47">
       <attributes>
@@ -2838,9 +2703,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="48">
       <attributes>
@@ -2910,9 +2772,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="49">
       <attributes>
@@ -2970,9 +2829,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="50">
       <attributes>
@@ -3043,9 +2899,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="51">
       <attributes>
@@ -3116,9 +2969,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="52">
       <attributes>
@@ -3175,9 +3025,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="53">
       <attributes>
@@ -3263,9 +3110,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="54">
       <attributes>
@@ -3355,9 +3199,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="55">
       <attributes>
@@ -3407,9 +3248,6 @@
           <text>sharp</text>
         </lyric>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="56">
       <attributes>
@@ -3481,9 +3319,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="57">
       <attributes>
@@ -3551,9 +3386,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="58">
       <attributes>
@@ -3589,9 +3421,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="59">
       <attributes>
@@ -3690,9 +3519,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="60">
       <attributes>
@@ -3747,9 +3573,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="61">
       <attributes>
@@ -3771,9 +3594,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="62">
       <attributes>
@@ -3826,9 +3646,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="63">
       <attributes>
@@ -3889,9 +3706,6 @@
           <text>sharp</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="64">
       <attributes>
@@ -3913,9 +3727,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="65">
       <attributes>
@@ -3965,9 +3776,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="66">
       <attributes>
@@ -3991,9 +3799,6 @@
           <text>sharp</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="67">
       <attributes>
@@ -4048,9 +3853,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="68">
       <attributes>
@@ -4104,9 +3906,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="69">
       <attributes>
@@ -4206,9 +4005,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="70">
       <attributes>
@@ -4245,9 +4041,6 @@
           <text>sharp</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="71">
       <attributes>
@@ -4319,9 +4112,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="72">
       <attributes>
@@ -4357,9 +4147,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="73">
       <attributes>
@@ -4431,9 +4218,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="74">
       <attributes>
@@ -4489,9 +4273,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="75">
       <attributes>
@@ -4560,9 +4341,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="76">
       <attributes>
@@ -4598,9 +4376,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="77">
       <attributes>
@@ -4638,9 +4413,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="78">
       <attributes>
@@ -4696,9 +4468,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="79">
       <attributes>
@@ -4756,9 +4525,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="80">
       <attributes>
@@ -4813,9 +4579,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="81">
       <attributes>
@@ -4902,9 +4665,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="82">
       <attributes>
@@ -4924,9 +4684,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="83">
       <attributes>
@@ -4950,9 +4707,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="84">
       <attributes>
@@ -5006,9 +4760,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="85">
       <attributes>
@@ -5075,9 +4826,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="86">
       <attributes>
@@ -5128,9 +4876,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="87">
       <attributes>
@@ -5185,9 +4930,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="88">
       <attributes>
@@ -5258,9 +5000,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="89">
       <attributes>
@@ -5317,9 +5056,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="90">
       <attributes>
@@ -5389,9 +5125,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="91">
       <attributes>
@@ -5446,9 +5179,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="92">
       <attributes>
@@ -5517,9 +5247,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="93">
       <attributes>
@@ -5572,9 +5299,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="94">
       <attributes>
@@ -5631,9 +5355,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="95">
       <attributes>
@@ -5706,9 +5427,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="96">
       <attributes>
@@ -5764,9 +5482,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="97">
       <attributes>
@@ -5832,9 +5547,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="98">
       <attributes>
@@ -5903,9 +5615,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="99">
       <attributes>
@@ -5956,9 +5665,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="100">
       <attributes>
@@ -6027,9 +5733,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="101">
       <attributes>
@@ -6115,9 +5818,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="102">
       <attributes>
@@ -6139,9 +5839,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="103">
       <attributes>
@@ -6230,9 +5927,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="104">
       <attributes>
@@ -6253,9 +5947,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="105">
       <attributes>
@@ -6342,9 +6033,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="106">
       <attributes>
@@ -6379,9 +6067,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="107">
       <attributes>
@@ -6417,9 +6102,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="108">
       <attributes>
@@ -6502,9 +6184,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="109">
       <attributes>
@@ -6591,9 +6270,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="110">
       <attributes>
@@ -6612,9 +6288,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="111">
       <attributes>
@@ -6697,9 +6370,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="112">
       <attributes>
@@ -6755,9 +6425,6 @@
           <text>sharp</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="113">
       <attributes>
@@ -6779,9 +6446,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="114">
       <attributes>
@@ -6850,9 +6514,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="115">
       <attributes>
@@ -6941,9 +6602,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="116">
       <attributes>
@@ -6962,9 +6620,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="117">
       <attributes>
@@ -6988,9 +6643,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="118">
       <attributes>
@@ -7046,9 +6698,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="119">
       <attributes>
@@ -7104,9 +6753,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="120">
       <attributes>
@@ -7191,9 +6837,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="121">
       <attributes>
@@ -7280,9 +6923,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="122">
       <attributes>
@@ -7352,9 +6992,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="123">
       <attributes>
@@ -7424,9 +7061,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="124">
       <attributes>
@@ -7446,9 +7080,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="125">
       <attributes>
@@ -7470,9 +7101,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="126">
       <attributes>
@@ -7557,9 +7185,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="127">
       <attributes>
@@ -7583,9 +7208,6 @@
           <text>sharp</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="128">
       <attributes>
@@ -7640,9 +7262,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="129">
       <attributes>
@@ -7699,9 +7318,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="130">
       <attributes>
@@ -7720,9 +7336,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="131">
       <attributes>
@@ -7775,9 +7388,6 @@
           <text>sharp</text>
         </lyric>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="132">
       <attributes>
@@ -7848,9 +7458,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="133">
       <attributes>
@@ -7903,9 +7510,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="134">
       <attributes>
@@ -7978,9 +7582,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="135">
       <attributes>
@@ -8037,9 +7638,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="136">
       <attributes>
@@ -8060,9 +7658,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="137">
       <attributes>
@@ -8128,9 +7723,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="138">
       <attributes>
@@ -8165,9 +7757,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="139">
       <attributes>
@@ -8202,9 +7791,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="140">
       <attributes>
@@ -8288,9 +7874,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="141">
       <attributes>
@@ -8311,9 +7894,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="142">
       <attributes>
@@ -8368,9 +7948,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="143">
       <attributes>
@@ -8441,9 +8018,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="144">
       <attributes>
@@ -8495,9 +8069,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="145">
       <attributes>
@@ -8584,9 +8155,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="146">
       <attributes>
@@ -8639,9 +8207,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="147">
       <attributes>
@@ -8695,9 +8260,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="148">
       <attributes>
@@ -8729,9 +8291,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="149">
       <attributes>
@@ -8818,9 +8377,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="150">
       <attributes>
@@ -8872,9 +8428,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="151">
       <attributes>
@@ -8930,9 +8483,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="152">
       <attributes>
@@ -8988,9 +8538,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="153">
       <attributes>
@@ -9011,9 +8558,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="154">
       <attributes>
@@ -9065,9 +8609,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="155">
       <attributes>
@@ -9089,9 +8630,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="156">
       <attributes>
@@ -9126,9 +8664,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="157">
       <attributes>
@@ -9197,9 +8732,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="158">
       <attributes>
@@ -9268,9 +8800,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="159">
       <attributes>
@@ -9357,9 +8886,6 @@
           <text>sharp</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="160">
       <attributes>
@@ -9431,9 +8957,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="161">
       <attributes>
@@ -9487,9 +9010,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="162">
       <attributes>
@@ -9527,9 +9047,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="163">
       <attributes>
@@ -9602,9 +9119,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="164">
       <attributes>
@@ -9640,9 +9154,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="165">
       <attributes>
@@ -9722,9 +9233,6 @@
           <text>flat</text>
         </lyric>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
     <measure number="166">
       <attributes>
@@ -9778,9 +9286,6 @@
           <text>natural</text>
         </lyric>
       </note>
-      <backup>
-        <duration>8</duration>
-      </backup>
     </measure>
     <measure number="167">
       <attributes>
@@ -9801,9 +9306,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>4</duration>
-      </backup>
     </measure>
     <measure number="168">
       <attributes>
@@ -9823,9 +9325,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <backup>
-        <duration>16</duration>
-      </backup>
     </measure>
   </part>
 </score-partwise>

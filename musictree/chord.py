@@ -1,8 +1,9 @@
 from fractions import Fraction
 from typing import Union, List, Optional
 
-from musicxml.xmlelement.xmlelement import XMLChord, XMLLyric
+from musicxml.xmlelement.xmlelement import XMLChord, XMLLyric, XMLDirection, XMLDirectionType, XMLDynamics, XMLSound
 
+from musictree.dynamics import Dynamics
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, ChordNotesAreAlreadyCreatedError
 from musictree.midi import Midi
@@ -18,7 +19,7 @@ class Chord(MusicTree, QuarterDurationMixin):
     :param quarter_duration: int or float for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
     _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', '_voice', '_lyrics', 'ties',
-                   '_notes_are_set'}
+                   '_notes_are_set', '_directions', 'xml_directions'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, offset=0, **kwargs):
@@ -26,6 +27,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._offset = None
         self._ties = []
         self._lyrics = []
+        self._directions = {'above': [], 'below': []}
+        self.xml_directions = []
 
         self._note_attributes = kwargs
         self.offset = offset
@@ -50,6 +53,41 @@ class Chord(MusicTree, QuarterDurationMixin):
             raise ValueError('A rest cannot be a grace note')
         self._midis = [Midi(v) if not isinstance(v, Midi) else v for v in midis]
         self._update_notes_pitch_or_rest()
+
+    def _update_directions(self):
+        def _add_dynamics(list_of_dynamics, xml_direction):
+            for dynamics in list_of_dynamics:
+                dt = xml_direction.add_child(XMLDirectionType())
+                dyn = dt.xml_dynamics = XMLDynamics()
+                dyn.add_child(dynamics.xml_object)
+
+        for placement in self._directions:
+            direction_types = self._directions[placement]
+            for direction_type in direction_types:
+                d = XMLDirection(placement=placement)
+                self.xml_directions.append(d)
+                if direction_type[0] == 'dynamics':
+                    _add_dynamics(list_of_dynamics=direction_type[1], xml_direction=d)
+                else:
+                    raise NotImplementedError
+
+    def _update_notes(self):
+        if self.get_children():
+            raise ChordNotesAreAlreadyCreatedError()
+        if not self.up:
+            raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
+        self.get_parent_measure()._update_divisions()
+        notes = [Note(parent_chord=self, midi=midi, **self._note_attributes) for midi in self._midis]
+        if len(notes) > 1:
+            notes[0].xml_object.add_child(XMLChord())
+        for note in notes:
+            self.add_child(note)
+        for lyric in self._lyrics:
+            notes[0].xml_object.xml_lyric = lyric
+        self._notes_are_set = True
+        self._update_notes_quarter_duration()
+        self._update_tie()
+        self._update_directions()
 
     def _update_notes_quarter_duration(self):
         for note in self.notes:
@@ -141,6 +179,11 @@ class Chord(MusicTree, QuarterDurationMixin):
             self._ties.append(val)
             self._update_tie()
 
+    def add_dynamics(self, dynamics, placement='below'):
+        dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(dynamics)
+        dynamics_object_list = [d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list]
+        self._directions[placement].append(('dynamics', dynamics_object_list))
+
     def add_lyric(self, text):
         l = XMLLyric()
         l.xml_text = str(text)
@@ -222,23 +265,6 @@ class Chord(MusicTree, QuarterDurationMixin):
 
     def to_string(self):
         raise AttributeError("object 'Chord' cannot return a string.")
-
-    def _update_notes(self):
-        if self.get_children():
-            raise ChordNotesAreAlreadyCreatedError()
-        if not self.up:
-            raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
-        self.get_parent_measure()._update_divisions()
-        notes = [Note(parent_chord=self, midi=midi, **self._note_attributes) for midi in self._midis]
-        if len(notes) > 1:
-            notes[0].xml_object.add_child(XMLChord())
-        for note in notes:
-            self.add_child(note)
-        for lyric in self._lyrics:
-            notes[0].xml_object.xml_lyric = lyric
-        self._notes_are_set = True
-        self._update_notes_quarter_duration()
-        self._update_tie()
 
     def __setattr__(self, key, value):
         if key not in self._ATTRIBUTES.union(self.TREE_ATTRIBUTES) and key not in [f'_{attr}' for attr in

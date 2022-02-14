@@ -355,6 +355,29 @@ class TestMeasure(TestCase):
         assert m.get_voice(staff_number=4, voice_number=4) is not None
         assert m.get_voice(staff_number=4, voice_number=5) is not None
 
+    def test_update_dynamics(self):
+        m = Measure(1)
+        chord = Chord(60, quarter_duration=2.5)
+        chord.add_dynamics(["ppp", 'fff'])
+        m.add_chord(chord)
+        m.update()
+        assert m.xml_direction is not None
+        expected = """<direction placement="below">
+    <direction-type>
+      <dynamics>
+        <ppp />
+      </dynamics>
+    </direction-type>
+    <direction-type>
+      <dynamics>
+        <fff />
+      </dynamics>
+    </direction-type>
+  </direction>
+"""
+
+        assert m.xml_direction.to_string() == expected
+
 
 class TestTuplets(TestCase):
 
