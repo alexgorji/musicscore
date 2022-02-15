@@ -21,7 +21,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         child._parent = self
         self._children.append(child)
         if self.up.up.up.up:
-            self.up.up.up.up.set_current_measure(staff_number=self.up.up.value, voice_number=self.up.value, measure=self.up.up.up)
+            self.up.up.up.up.set_current_measure(staff_number=self.up.up.number, voice_number=self.up.number, measure=self.up.up.up)
 
     def _check_permitted_duration(self, val):
         for d in self._PERMITTED_DURATIONS:
@@ -227,7 +227,7 @@ def beam_chord_group(chord_group):
             else:
                 value = 'forward hook'
         for note in chord.notes:
-            note.xml_object.add_child(XMLBeam(number=number, value=value))
+            note.xml_object.add_child(XMLBeam(number=number, value_=value))
 
     def add_last_beam(chord, last_beam, current_beams, cont=False):
         if last_beam <= current_beams:
@@ -255,7 +255,7 @@ def beam_chord_group(chord_group):
     for index in range(len(chord_group) - 1):
         chord = chord_group[index]
         next_chord = chord_group[index + 1]
-        t1, t2 = chord.notes[0].xml_type.value, next_chord.notes[0].xml_type.value
+        t1, t2 = chord.notes[0].xml_type.value_, next_chord.notes[0].xml_type.value_
         b1, b2 = beams.get(t1), beams.get(t2)
         types = []
         if b1 and b2:

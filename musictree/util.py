@@ -1,5 +1,6 @@
 import math
 from typing import Union, List
+from musicxml.xmlelement.xmlelement import *
 
 note_types = {(1, 12): '32nd',
               (1, 11): '32nd',
@@ -66,3 +67,11 @@ def lcm(l):
     return math.lcm(*l)
 
 
+XML_ARTICULATION_CLASSES = [XMLAccent, XMLStrongAccent, XMLStaccato, XMLTenuto, XMLDetachedLegato, XMLStaccatissimo,
+                            XMLSpiccato, XMLScoop, XMLPlop, XMLDoit, XMLFalloff, XMLBreathMark, XMLCaesura, XMLStress,
+                            XMLUnstress]
+
+XML_TECHNICAL_CLASSES = [XMLUpBow, XMLDownBow, XMLHarmonic, XMLOpenString, XMLThumbPosition, XMLFingering, XMLPluck, XMLDoubleTongue,
+                         XMLTripleTongue, XMLStopped, XMLSnapPizzicato, XMLFret, XMLString, XMLHammerOn, XMLPullOff, XMLBend, XMLTap,
+                         XMLHeel, XMLToe, XMLFingernails, XMLHole, XMLArrow, XMLHandbell, XMLBrassBend, XMLFlip, XMLSmear, XMLOpen,
+                         XMLHalfMuted, XMLHarmonMute, XMLGolpe, XMLOtherTechnical]

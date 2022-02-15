@@ -8,14 +8,16 @@ from musictree.xmlwrapper import XMLWrapper
 
 
 class Staff(MusicTree, XMLWrapper):
-    _ATTRIBUTES = {'clef', 'default_clef'}
+    _ATTRIBUTES = {'clef', 'default_clef', 'number'}
 
-    def __init__(self, clef=None, *args, **kwargs):
+    def __init__(self, number=None, clef=None, **kwargs):
         super().__init__()
-        self._xml_object = XMLStaff(*args, **kwargs)
+        self._xml_object = XMLStaff(value_=1, **kwargs)
+        self._number = None
         self._clef = None
         self._default_clef = TrebleClef()
         self.clef = clef
+        self.number = number
 
     @property
     def default_clef(self):
@@ -39,18 +41,36 @@ class Staff(MusicTree, XMLWrapper):
             raise TypeError
         self._clef = val
 
+    @property
+    def number(self):
+        if self._number is not None:
+            return self.xml_object.value_
+        else:
+            return self._number
+
+    @number.setter
+    def number(self, val):
+        self._number = val
+        if val is None:
+            self.xml_object.value_ = 1
+        else:
+            self.xml_object.value_ = val
+
     def add_child(self, child):
+        self._check_child_to_be_added(child)
+
         if not self.up:
             raise StaffHasNoParentError('A child Voice can only be added to a Staff if staff has a Measure parent.')
 
-        if child.value is not None and child.value != len(self.get_children()) + 1:
+        if child.number is not None and child.number != len(self.get_children()) + 1:
             raise ValueError(f'Voice number must be None or {len(self.get_children()) + 1}')
-        if child.value is None:
-            child.value = len(self.get_children()) + 1
+        if child.number is None:
+            child.number = len(self.get_children()) + 1
         else:
-            child.value = len(self.get_children()) + 1
+            child.number = len(self.get_children()) + 1
 
-        super().add_child(child)
+        child._parent = self
+        self._children.append(child)
         child.update_beats()
 
         return child
@@ -71,7 +91,7 @@ class Staff(MusicTree, XMLWrapper):
 
     def get_voice(self, voice_number=1):
         for ch in self.get_children():
-            if ch.value == voice_number:
+            if ch.number == voice_number:
                 return ch
 
     def get_previous_staff(self):

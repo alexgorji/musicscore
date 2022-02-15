@@ -218,17 +218,21 @@ class Measure(MusicTree, XMLWrapper):
         return sum(self.time.get_beats_quarter_durations())
 
     def add_child(self, child):
-        if child.value is not None and child.value != len(self.get_children()) + 1:
+        self._check_child_to_be_added(child)
+
+        if child.number is not None and child.number != len(self.get_children()) + 1:
             raise ValueError(f'Staff number must be None or {len(self.get_children()) + 1}')
-        if child.value is None:
+        if child.number is None:
             if not self.get_children():
                 pass
             elif len(self.get_children()) == 1:
-                self.get_children()[0].value = 1
-                child.value = len(self.get_children()) + 1
+                self.get_children()[0].number = 1
+                child.number = len(self.get_children()) + 1
             else:
-                child.value = len(self.get_children()) + 1
-        super().add_child(child)
+                child.number = len(self.get_children()) + 1
+
+        child._parent = self
+        self._children.append(child)
 
         self._update_default_clefs()
         self._update_clef_numbers()
@@ -264,7 +268,7 @@ class Measure(MusicTree, XMLWrapper):
         return chords
 
     def get_divisions(self):
-        return self.xml_object.xml_attributes.xml_divisions.value
+        return self.xml_object.xml_attributes.xml_divisions.value_
 
     def get_staff(self, staff_number=1):
         if staff_number is None:
@@ -278,7 +282,7 @@ class Measure(MusicTree, XMLWrapper):
         staff_object = self.get_staff(staff_number=staff_number)
         if staff_object:
             for child in staff_object.get_children():
-                if child.value == voice_number:
+                if child.number == voice_number:
                     return child
 
     def remove(self, child) -> None:

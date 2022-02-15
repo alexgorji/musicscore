@@ -1,7 +1,8 @@
 from fractions import Fraction
 from typing import Union, List, Optional
 
-from musicxml.xmlelement.xmlelement import XMLChord, XMLLyric, XMLDirection, XMLDirectionType, XMLDynamics, XMLSound
+from musicxml.xmlelement.xmlelement import XMLChord, XMLLyric, XMLDirection, XMLDirectionType, XMLDynamics, XMLSound, XMLNotations, \
+    XMLArticulations, XMLTechnical
 
 from musictree.dynamics import Dynamics
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
@@ -10,6 +11,7 @@ from musictree.midi import Midi
 from musictree.musictree import MusicTree
 from musictree.note import Note
 from musictree.quarterduration import QuarterDurationMixin, QuarterDuration, _check_quarter_duration
+from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES
 
 
 class Chord(MusicTree, QuarterDurationMixin):
@@ -18,8 +20,8 @@ class Chord(MusicTree, QuarterDurationMixin):
     :param midis: midi, midis, midi value or midi values. 0 or [0] for a rest.
     :param quarter_duration: int or float for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', '_voice', '_lyrics', 'ties',
-                   '_notes_are_set', '_directions', 'xml_directions'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', 'voice', '_lyrics', 'ties',
+                   '_notes_are_set', '_directions', 'xml_directions', 'xml_articulations', 'xml_technicals'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, offset=0, **kwargs):
@@ -29,6 +31,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._lyrics = []
         self._directions = {'above': [], 'below': []}
         self.xml_directions = []
+        self.xml_articulations = []
+        self.xml_technicals = []
 
         self._note_attributes = kwargs
         self.offset = offset
@@ -71,6 +75,33 @@ class Chord(MusicTree, QuarterDurationMixin):
                 else:
                     raise NotImplementedError
 
+    def _check_xml_notations(self, note):
+        if not note.xml_notations:
+            note.xml_notations = XMLNotations()
+
+    def _update_articulations(self):
+        n = self.notes[0]
+        if self.xml_articulations:
+            self._check_xml_notations(note=n)
+            if not n.xml_notations.xml_articulations:
+                a = n.xml_notations.xml_articulations = XMLArticulations()
+            else:
+                a = n.xml_notations.xml_articulations
+            for xml_articulation in self.xml_articulations:
+                a.add_child(xml_articulation)
+
+    def _update_technicals(self):
+        n = self.notes[0]
+
+        if self.xml_technicals:
+            self._check_xml_notations(note=n)
+            if not n.xml_notations.xml_technical:
+                t = n.xml_notations.xml_technical = XMLTechnical()
+            else:
+                t = n.xml_notations.xml_technical
+            for xml_technical in self.xml_technicals:
+                t.add_child(xml_technical)
+
     def _update_notes(self):
         if self.get_children():
             raise ChordNotesAreAlreadyCreatedError()
@@ -88,6 +119,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._update_notes_quarter_duration()
         self._update_tie()
         self._update_directions()
+        self._update_articulations()
+        self._update_technicals()
 
     def _update_notes_quarter_duration(self):
         for note in self.notes:
@@ -168,7 +201,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         if not self.up:
             raise ChordHasNoParentError()
         if self.up and self.up.up:
-            return self.up.up.value
+            return self.up.up.number
         else:
             return 1
 
@@ -178,6 +211,16 @@ class Chord(MusicTree, QuarterDurationMixin):
         if val not in self._ties:
             self._ties.append(val)
             self._update_tie()
+
+    def add_articulation(self, xml_articulation_object):
+        if xml_articulation_object.__class__ not in XML_ARTICULATION_CLASSES:
+            raise TypeError
+        self.xml_articulations.append(xml_articulation_object)
+
+    def add_technical(self, xml_technical_object):
+        if xml_technical_object.__class__ not in XML_TECHNICAL_CLASSES:
+            raise TypeError
+        self.xml_technicals.append(xml_technical_object)
 
     def add_dynamics(self, dynamics, placement='below'):
         dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(dynamics)
@@ -191,10 +234,10 @@ class Chord(MusicTree, QuarterDurationMixin):
         return l
 
     def get_voice_number(self):
-        return self.up.up.value
+        return self.up.up.number
 
     def get_staff_number(self):
-        return self.up.up.up.value
+        return self.up.up.up.number
 
     def get_parent_measure(self):
         return self.up.up.up.up

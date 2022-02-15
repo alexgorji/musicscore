@@ -80,8 +80,8 @@ class Time(XMLWrapper):
         for beats, beat_type in zip(self._xml_object.find_children('XMLBeats'), self._xml_object.find_children('XMLBeatType')):
             if signatures:
                 signature = signatures.pop(0)
-                beats.value = str(signature[0])
-                beat_type.value = str(signature[1])
+                beats.value_ = str(signature[0])
+                beat_type.value_ = str(signature[1])
             else:
                 beats.up.remove(beats)
                 beat_type.up.remove(beat_type)

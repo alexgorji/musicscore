@@ -69,16 +69,16 @@ class TestAccidental(TestCase):
         assert midi.accidental.show is None
         assert midi.accidental.sign == 'natural'
         midi.accidental.show = True
-        assert midi.accidental.xml_object.value == 'natural'
+        assert midi.accidental.xml_object.value_ == 'natural'
         midi.accidental.show = False
         assert midi.accidental.xml_object is None
 
         midi.accidental.show = True
         midi.value = 61
         assert midi.accidental.sign == 'sharp'
-        assert midi.accidental.xml_object.value == 'sharp'
+        assert midi.accidental.xml_object.value_ == 'sharp'
         midi.accidental.mode = 'flat'
-        assert midi.accidental.xml_object.value == 'flat'
+        assert midi.accidental.xml_object.value_ == 'flat'
         midi.accidental.show = False
         assert midi.accidental.xml_object is None
 
@@ -86,7 +86,7 @@ class TestAccidental(TestCase):
         midi = Midi(61)
         assert midi.accidental.sign == 'sharp'
         midi.accidental.show = True
-        assert midi.accidental.xml_object.value == 'sharp'
+        assert midi.accidental.xml_object.value_ == 'sharp'
 
     def test_accidental_up_midi(self):
         m = Midi(70)
@@ -97,6 +97,6 @@ class TestAccidental(TestCase):
         copied = a.__copy__()
         assert a != copied
         assert a.xml_object != copied.xml_object
-        assert a.xml_object.value == copied.xml_object.value
+        assert a.xml_object.value_ == copied.xml_object.value_
         assert a.mode == copied.mode
         assert a.show == copied.show

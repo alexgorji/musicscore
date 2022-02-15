@@ -4,6 +4,7 @@ from pathlib import Path
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
+from musicxml.xmlelement.xmlelement import XMLBendAlter, XMLHoleClosed, XMLArrowDirection, XMLHarmonClosed
 from quicktions import Fraction
 
 from musictree.part import Id
@@ -29,12 +30,12 @@ class ChordTestCase(TestCase):
         self.mock_staff = Mock()
         self.mock_measure = Mock()
 
-        self.mock_voice.value = 1
+        self.mock_voice.number = 1
         self.mock_beat.up = self.mock_voice
         self.mock_voice.up = self.mock_staff
         self.mock_staff.up = self.mock_measure
         self.mock_measure.get_divisions.return_value = 1
-        self.mock_staff.value = None
+        self.mock_staff.number = None
 
     def tearDown(self) -> None:
         patch.stopall()
@@ -146,3 +147,48 @@ def generate_all_triplets():
     output = [tuple(3 * [Fraction(1, 3)])]
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 3), Fraction(2, 3)]))))
     return output
+
+
+def create_technical(class_):
+    if class_.__name__ == 'XMLFingering':
+        technical = class_('2')
+    elif class_.__name__ == 'XMLPluck':
+        technical = class_('something')
+    elif class_.__name__ == 'XMLFret':
+        technical = class_(2)
+    elif class_.__name__ == 'XMLString':
+        technical = class_(2)
+    elif class_.__name__ == 'XMLHammerOn':
+        technical = class_('2', type='start')
+    elif class_.__name__ == 'XMLPullOff':
+        technical = class_('2', type='start')
+    elif class_.__name__ == 'XMLTap':
+        technical = class_('2')
+    elif class_.__name__ == 'XMLHandbell':
+        technical = class_('damp')
+    elif class_.__name__ == 'XMLHarmonClosed':
+        technical = class_('yes')
+    elif class_.__name__ == 'XMLOtherTechnical':
+        technical = class_('bla')
+    else:
+        technical = class_()
+    if class_.__name__ == 'XMLBend':
+        technical.add_child(XMLBendAlter(2))
+    elif class_.__name__ == 'XMLHole':
+        technical.add_child(XMLHoleClosed('yes'))
+    elif class_.__name__ == 'XMLArrow':
+        technical.add_child(XMLArrowDirection('up'))
+    elif class_.__name__ == 'XMLHarmonMute':
+        technical.add_child(XMLHarmonClosed('yes'))
+
+    return technical
+
+
+def create_articulation(class_):
+    if class_.__name__ == 'XMLBreathMark':
+        articulation = class_('comma')
+    elif class_.__name__ == 'XMLCaesura':
+        articulation = class_('normal')
+    else:
+        articulation = class_()
+    return articulation

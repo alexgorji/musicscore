@@ -1,10 +1,12 @@
 from fractions import Fraction
+
 from musictree.accidental import Accidental
 from musictree.beat import Beat
 from musictree.chord import Chord, split_copy, group_chords
 from musictree.exceptions import ChordHasNoParentError, ChordQuarterDurationAlreadySetError, NoteTypeError
 from musictree.midi import Midi
-from musictree.tests.util import check_notes, ChordTestCase
+from musictree.tests.util import check_notes, ChordTestCase, create_articulation, create_technical
+from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES
 
 
 def get_chord_midi_values(chord):
@@ -14,8 +16,8 @@ def get_chord_midi_values(chord):
 class TestTreeChord(ChordTestCase):
 
     def test_mocks(self):
-        assert self.mock_voice.value == 1
-        assert self.mock_beat.up.value == 1
+        assert self.mock_voice.number == 1
+        assert self.mock_beat.up.number == 1
         ch = Chord()
         ch._parent = self.mock_beat
         assert ch.up == self.mock_beat
@@ -434,20 +436,48 @@ class TestTreeChord(ChordTestCase):
         ch.add_lyric('test')
         ch._update_notes()
         assert ch.notes[0].xml_lyric is not None
-        assert ch.notes[0].xml_lyric.xml_text.value == 'test'
+        assert ch.notes[0].xml_lyric.xml_text.value_ == 'test'
 
     def test_get_staff_number(self):
         ch = Chord(60, 2)
         ch._parent = self.mock_beat
         assert ch.get_staff_number() is None
-        self.mock_staff.value = 1
+        self.mock_staff.number = 1
         assert ch.get_staff_number() == 1
 
     def test_add_technicals(self):
-        pass
+        for technical_class in XML_TECHNICAL_CLASSES:
+            ch = Chord(60, 1)
+            ch._parent = self.mock_beat
+            ch.add_technical(create_technical(technical_class))
+            ch._update_notes()
+            assert ch.notes[0].xml_notations.xml_technical.get_children()[0].__class__ == technical_class
 
-    def test_add_articulation(self):
-        pass
+    #
+    # def test_technical_fret(self):
+    #     ch = Chord(60, 1)
+    #     ch._parent = self.mock_beat
+    #     ch.add_technical(XMLFret())
+
+    def test_add_articulations(self):
+        for articulation_class in XML_ARTICULATION_CLASSES:
+            ch = Chord(60, 1)
+            ch._parent = self.mock_beat
+            ch.add_articulation(create_articulation(articulation_class))
+            ch._update_notes()
+            assert ch.notes[0].xml_notations.xml_articulations.get_children()[0].__class__ == articulation_class
+
+    def test_add_multiple_articulations(self):
+        articulation_classes = XML_ARTICULATION_CLASSES[:3]
+        ch = Chord(60, 1)
+        ch._parent = self.mock_beat
+        for a in articulation_classes:
+            ch.add_articulation(a())
+        assert len(ch.xml_articulations) == 3
+        ch._update_notes()
+        n = ch.notes[0]
+        assert n.xml_notations.xml_articulations is not None
+        assert [type(a) for a in n.xml_notations.xml_articulations.get_children()] == articulation_classes
 
     def test_add_ornaments(self):
         pass

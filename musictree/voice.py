@@ -7,12 +7,13 @@ from musictree.xmlwrapper import XMLWrapper
 
 
 class Voice(MusicTree, XMLWrapper):
-    _ATTRIBUTES = {'value', '_chords', '_current_beat', 'left_over_chord', 'is_filled'}
+    _ATTRIBUTES = {'number', '_chords', '_current_beat', 'left_over_chord', 'is_filled'}
 
-    def __init__(self, value=None, *args, **kwargs):
+    def __init__(self, number=None, *args, **kwargs):
         super().__init__()
-        self._xml_object = XMLVoice(*args, **kwargs)
-        self.value = value
+        self._xml_object = XMLVoice(value_='1', *args, **kwargs)
+        self._number = None
+        self.number = number
         self._current_beat = None
         self.left_over_chord = None
 
@@ -24,17 +25,20 @@ class Voice(MusicTree, XMLWrapper):
             return False
 
     @property
-    def value(self):
-        object_value = self.xml_object.value
+    def number(self):
+        if self._number is None:
+            return None
+        object_value = self.xml_object.value_
         if object_value is not None:
             return int(object_value)
 
-    @value.setter
-    def value(self, val):
+    @number.setter
+    def number(self, val):
+        self._number = val
         if val is not None:
-            self.xml_object.value = str(val)
+            self.xml_object.value_ = str(val)
         else:
-            self.xml_object.value = None
+            self.xml_object.value_ = '1'
 
     def add_child(self, child):
         if not self.up:
@@ -45,7 +49,7 @@ class Voice(MusicTree, XMLWrapper):
         if not self.get_children():
             raise VoiceHasNoBeatsError
         if self.get_current_beat() is None:
-            raise VoiceIsAlreadyFullError(f'Voice number {self.value} of Measure number {self.up.up.number} is full.')
+            raise VoiceIsAlreadyFullError(f'Voice number {self.value_} of Measure number {self.up.up.number} is full.')
         return self.get_current_beat().add_child(chord)
 
     def get_chords(self):

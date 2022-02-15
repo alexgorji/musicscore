@@ -190,7 +190,7 @@ class TestBeatAddChild(TestCase):
         v1.update_beats(1, 1.5, 1)
         chord = Chord(midis=61, quarter_duration=7)
         chord.midis[0].accidental.show = True
-        assert chord.midis[0].accidental.xml_object.value == 'sharp'
+        assert chord.midis[0].accidental.xml_object.value_ == 'sharp'
         v1.get_current_beat().add_child(chord)
         v2 = create_voice()
         v2.update_beats(1, 1, 1)
@@ -198,12 +198,12 @@ class TestBeatAddChild(TestCase):
         all_chords = v1.get_chords() + v2.get_chords()
         for b in v1.get_children() + v2.get_children():
             b._update_xml_notes()
-        assert [ch.midis[0].accidental.xml_object.value if ch.midis[0].accidental.xml_object else None for ch in all_chords] == ['sharp',
+        assert [ch.midis[0].accidental.xml_object.value_ if ch.midis[0].accidental.xml_object else None for ch in all_chords] == ['sharp',
                                                                                                                                  None, None,
                                                                                                                                  None]
         all_chords[1].midis[0].accidental.show = True
 
-        assert [ch.midis[0].accidental.xml_object.value if ch.midis[0].accidental.xml_object else None for ch in all_chords] == ['sharp',
+        assert [ch.midis[0].accidental.xml_object.value_ if ch.midis[0].accidental.xml_object else None for ch in all_chords] == ['sharp',
                                                                                                                                  'sharp',
                                                                                                                                  None,
                                                                                                                                  None]

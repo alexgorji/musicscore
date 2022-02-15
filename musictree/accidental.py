@@ -147,9 +147,9 @@ class Accidental(MusicTree, XMLWrapper):
 
     # (stem, alter, octaveAdd)
 
-    def __init__(self, mode='standard', show=None, *args, **kwargs):
+    def __init__(self, mode='standard', show=None, **kwargs):
         super().__init__()
-        self._xml_object = XMLAccidental(*args, **kwargs)
+        self._xml_object = XMLAccidental(value_='natural', **kwargs)
         self._mode = None
         self._parent_midi = None
         self._show = None
@@ -162,7 +162,7 @@ class Accidental(MusicTree, XMLWrapper):
 
     def _update_xml_object(self):
         if self.sign:
-            self._xml_object.value = self.sign
+            self._xml_object.value_ = self.sign
 
     @XMLWrapper.xml_object.getter
     def xml_object(self):

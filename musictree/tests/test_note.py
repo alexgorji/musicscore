@@ -70,10 +70,10 @@ class TestNote(NoteTestCase):
     def test_note_set_divisions(self):
         self.mock_measure.get_divisions.return_value = 3
         n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=Fraction(1, 3))
-        assert n.xml_duration.value == 1
+        assert n.xml_duration.value_ == 1
         self.mock_measure.get_divisions.return_value = 6
         n._update_xml_duration()
-        assert n.xml_duration.value == 2
+        assert n.xml_duration.value_ == 2
 
     def test_note_type(self):
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=2)
@@ -290,7 +290,7 @@ class TestNote(NoteTestCase):
     def test_note_hide_show_accidental(self):
         n = Note(parent_chord=self.mock_chord, midi=Midi(60))
         n.midi.accidental.show = True
-        assert n.xml_accidental.value == 'natural'
+        assert n.xml_accidental.value_ == 'natural'
         n.midi.accidental.show = False
         assert n.midi.accidental.xml_object is None
         assert n.xml_object.xml_accidental is None
@@ -305,9 +305,9 @@ class TestNote(NoteTestCase):
         n = Note(parent_chord=self.mock_chord, midi=Midi(61), quarter_duration=2, default_x=10)
         n.midi.accidental.show = True
         assert n.xml_object.xml_accidental == n.midi.accidental.xml_object
-        assert n.xml_object.xml_accidental.value == n.midi.accidental.xml_object.value == 'sharp'
+        assert n.xml_object.xml_accidental.value_ == n.midi.accidental.xml_object.value_ == 'sharp'
         n.midi.value = 62
-        assert n.xml_object.xml_accidental.value == n.midi.accidental.xml_object.value == 'natural'
+        assert n.xml_object.xml_accidental.value_ == n.midi.accidental.xml_object.value_ == 'natural'
         n.midi.accidental.show = False
         assert n.xml_object.xml_accidental == n.midi.accidental.xml_object
 
@@ -465,4 +465,4 @@ class TestNoteTie(NoteTestCase):
         self.mock_chord.get_staff_number.return_value = 1
         assert n1.get_staff_number() == 1
         n1._update_xml_staff()
-        assert n1.xml_object.xml_staff.value == 1
+        assert n1.xml_object.xml_staff.value_ == 1

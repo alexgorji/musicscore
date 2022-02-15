@@ -125,12 +125,12 @@ class TestPart(IdTestCase):
         m.update()
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
         assert len(clefs) == 1
-        assert clefs[0].xml_sign.value == 'G'
-        assert clefs[0].xml_line.value == 2
+        assert clefs[0].xml_sign.value_ == 'G'
+        assert clefs[0].xml_line.value_ == 2
 
     def test_part_add_measure_check_voice(self):
         """
-        Test if Part.add_measure() adds a Measure with a Staff (value=None) and Voice (value=1)
+        Test if Part.add_measure() adds a Measure with a Staff (number=None) and Voice (number=1)
         """
         p = Part('p1')
         m1 = p.add_measure()
@@ -253,7 +253,7 @@ class TestPart(IdTestCase):
         assert len(p.get_children()) == 1
         m = p.get_children()[-1]
         all_chords = [ch1, ch2] = m.get_chords()
-        assert [ch.quarter_duration for ch in all_chords] == [4, 1]
+        assert [ch.quarter_duration for ch in all_chords] == [3, 2]
         assert ch1._ties == ['start']
         assert ch2._ties == ['stop']
 
@@ -278,7 +278,7 @@ class TestPart(IdTestCase):
         assert len(p.get_children()) == 1
         m = p.get_children()[-1]
         all_chords = [ch1, ch2] = m.get_chords()
-        assert [ch.quarter_duration for ch in all_chords] == [4, 1]
+        assert [ch.quarter_duration for ch in all_chords] == [3, 2]
         assert ch1._ties == ['start']
         assert ch2._ties == ['stop', 'start']
 
@@ -317,19 +317,19 @@ class TestPart(IdTestCase):
         assert ch1.get_staff_number() == 1
         assert ch2.get_staff_number() == 2
         p.update()
-        assert ch1.notes[0].xml_staff.value == 1
-        assert ch2.notes[0].xml_staff.value == 2
+        assert ch1.notes[0].xml_staff.value_ == 1
+        assert ch2.notes[0].xml_staff.value_ == 2
 
 
 class TestScorePart(IdTestCase):
 
     def test_score_part_name(self):
         p = Part(id='p1')
-        assert p.score_part.xml_part_name.value == p.name == 'p1'
+        assert p.score_part.xml_part_name.value_ == p.name == 'p1'
         p.name = 'Part 1'
-        assert p.score_part.xml_part_name.value == p.name == 'Part 1'
+        assert p.score_part.xml_part_name.value_ == p.name == 'Part 1'
         p.name = None
-        assert p.score_part.xml_part_name.value == p.name == 'p1'
+        assert p.score_part.xml_part_name.value_ == p.name == 'p1'
 
     def test_score_part_to_string(self):
         p = Part(id='p1')

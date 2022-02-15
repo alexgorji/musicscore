@@ -63,21 +63,21 @@ class TestMeasure(TestCase):
         m = Measure(1)
         assert m.get_children() == []
         st1 = m.add_child(Staff())
-        assert st1.value is None
+        assert st1.number is None
         assert m.get_children() == [st1]
         st2 = m.add_child(Staff())
         assert m.get_children() == [st1, st2]
-        assert (st1.value, st2.value) == (1, 2)
+        assert (st1.number, st2.number) == (1, 2)
         with self.assertRaises(ValueError):
-            m.add_child(Staff(value=2))
+            m.add_child(Staff(number=2))
 
         m = Measure(1)
-        st1 = m.add_child(Staff(value=1))
-        assert st1.value == 1
+        st1 = m.add_child(Staff(number=1))
+        assert st1.number == 1
 
         m = Measure(1)
         with self.assertRaises(ValueError):
-            m.add_child(Staff(value=2))
+            m.add_child(Staff(number=2))
 
     def test_check_divisions(self):
         m = Measure(1)
@@ -91,7 +91,7 @@ class TestMeasure(TestCase):
         for qd in quarter_durations_2:
             v2.add_chord(Chord(70, qd))
         m._update_divisions()
-        assert m.xml_object.xml_attributes.xml_divisions.value == 210
+        assert m.xml_object.xml_attributes.xml_divisions.value_ == 210
 
     def test_add_chord(self):
         m = Measure(1)
@@ -103,7 +103,7 @@ class TestMeasure(TestCase):
         m.add_chord(chord)
         m.update()
         for xml_note, duration in zip(m.find_children('XMLNote'), [4, 1, 1, 2]):
-            assert xml_note.xml_duration.value == duration
+            assert xml_note.xml_duration.value_ == duration
         expected = """<measure number="1">
   <attributes>
     <divisions>2</divisions>
@@ -185,7 +185,7 @@ class TestMeasure(TestCase):
         assert m.get_staff(staff_number=None) is None
         st = m.add_child(Staff())
         assert m.get_staff(staff_number=None) == st
-        st.value = 1
+        st.number   = 1
         assert m.get_staff(staff_number=1) == st
         st = m.add_child(Staff())
         assert m.get_staff(staff_number=2) == st
@@ -193,16 +193,16 @@ class TestMeasure(TestCase):
     def test_add_staff(self):
         m = Measure(1)
         st1 = m.add_staff()
-        assert st1.value is None
+        assert st1.number is None
         st2 = m.add_staff()
-        assert st1.value == 1
-        assert st2.value == 2
+        assert st1.number == 1
+        assert st2.number == 2
         st3 = m.add_staff()
-        assert st3.value == 3
+        assert st3.number == 3
 
         m = Measure(1)
         st = m.add_staff()
-        assert st.value is None
+        assert st.number is None
         assert m.get_staff(staff_number=None) == st
 
         st = m.add_staff(1)
@@ -211,18 +211,18 @@ class TestMeasure(TestCase):
         st = m.add_staff(5)
         assert m.get_staff(staff_number=5) == st
         assert len(m.get_children()) == 5
-        assert [st.value for st in m.get_children()] == [1, 2, 3, 4, 5]
+        assert [st.number for st in m.get_children()] == [1, 2, 3, 4, 5]
 
     def test_add_voice(self):
         m = Measure(1)
         v = m.add_voice(staff_number=None, voice_number=2)
         st = m.get_staff(staff_number=None)
         assert st.get_children()[-1] == v
-        assert [v.value for v in st.get_children()] == [1, 2]
+        assert [v.number for v in st.get_children()] == [1, 2]
 
         m.add_voice(staff_number=2, voice_number=3)
-        assert [st.value for st in m.get_children()] == [1, 2]
-        assert [v.value for v in m.get_staff(2).get_children()] == [1, 2, 3]
+        assert [st.number for st in m.get_children()] == [1, 2]
+        assert [v.number for v in m.get_staff(2).get_children()] == [1, 2, 3]
 
         m = Measure(1)
         m.add_voice(staff_number=2, voice_number=2)
@@ -442,9 +442,9 @@ class TestTuplets(TestCase):
         assert t2.type == 'stop'
         for note in [ch.notes[0] for ch in chords]:
             assert note.xml_time_modification is not None
-            assert note.xml_time_modification.xml_actual_notes.value == 3
-            assert note.xml_time_modification.xml_normal_notes.value == 2
-            assert note.xml_time_modification.xml_normal_type.value == 'eighth'
+            assert note.xml_time_modification.xml_actual_notes.value_ == 3
+            assert note.xml_time_modification.xml_normal_notes.value_ == 2
+            assert note.xml_time_modification.xml_normal_type.value_ == 'eighth'
 
     def test_chord_quintuplet(self):
         measures = []
@@ -459,9 +459,9 @@ class TestTuplets(TestCase):
             for ch in m.get_chords():
                 note = ch.notes[0]
                 assert note.xml_time_modification is not None
-                assert note.xml_time_modification.xml_actual_notes.value == 5
-                assert note.xml_time_modification.xml_normal_notes.value == 4
-                assert note.xml_time_modification.xml_normal_type.value == '16th'
+                assert note.xml_time_modification.xml_actual_notes.value_ == 5
+                assert note.xml_time_modification.xml_normal_notes.value_ == 4
+                assert note.xml_time_modification.xml_normal_type.value_ == '16th'
             first_note = m.get_chords()[0].notes[0]
             last_note = m.get_chords()[-1].notes[0]
             t1, t2 = first_note.xml_notations.xml_tuplet, last_note.xml_notations.xml_tuplet
@@ -513,9 +513,9 @@ class TestTuplets(TestCase):
             for ch in m.get_chords():
                 note = ch.notes[0]
                 assert note.xml_time_modification is not None
-                assert note.xml_time_modification.xml_actual_notes.value == 6
-                assert note.xml_time_modification.xml_normal_notes.value == 4
-                assert note.xml_time_modification.xml_normal_type.value == '16th'
+                assert note.xml_time_modification.xml_actual_notes.value_ == 6
+                assert note.xml_time_modification.xml_normal_notes.value_ == 4
+                assert note.xml_time_modification.xml_normal_type.value_ == '16th'
             first_note = m.get_chords()[0].notes[0]
             last_note = m.get_chords()[-1].notes[0]
             t1, t2 = first_note.xml_notations.xml_tuplet, last_note.xml_notations.xml_tuplet
@@ -544,11 +544,11 @@ class TestTuplets(TestCase):
         beats[0]._update_xml_notes()
         n1, n2, n3, n4, n5, n6 = [ch.notes[0] for ch in v1.get_chords()]
         for n in [n1, n2, n3]:
-            assert (n.xml_time_modification.xml_actual_notes.value, n.xml_time_modification.xml_normal_notes.value,
-                    n.xml_time_modification.xml_normal_type.value) == (3, 2, '16th')
+            assert (n.xml_time_modification.xml_actual_notes.value_, n.xml_time_modification.xml_normal_notes.value_,
+                    n.xml_time_modification.xml_normal_type.value_) == (3, 2, '16th')
         for n in [n4, n5, n6]:
-            assert (n.xml_time_modification.xml_actual_notes.value, n.xml_time_modification.xml_normal_notes.value,
-                    n.xml_time_modification.xml_normal_type.value) == (5, 4, '32nd')
+            assert (n.xml_time_modification.xml_actual_notes.value_, n.xml_time_modification.xml_normal_notes.value_,
+                    n.xml_time_modification.xml_normal_type.value_) == (5, 4, '32nd')
         assert n1.xml_notations.xml_tuplet.type == 'start'
         assert n2.xml_notations is None
         assert n3.xml_notations.xml_tuplet.type == 'stop'
@@ -568,7 +568,7 @@ class TestTuplets(TestCase):
                     beams = c.notes[0].find_children('XMLBeam')
                     assert len(beams) == 1
                     assert beams[0].number == 1
-                    assert beams[0].value == 'begin' if i == 0 else 'continue' if i == 1 else 'end'
+                    assert beams[0].value_ == 'begin' if i == 0 else 'continue' if i == 1 else 'end'
             else:
                 for c in beat.get_children():
                     assert c.notes[0].find_child('XMLBeam') is None
@@ -610,8 +610,8 @@ class TestUpdateAccidentals(IdTestCase):
         m.add_chord(Chord(60, 4), voice_number=2)
         m._update_xml_notes()
         ch1, ch2 = m.get_chords()
-        assert ch1.notes[0].xml_voice.value == '1'
-        assert ch2.notes[0].xml_voice.value == '2'
+        assert ch1.notes[0].xml_voice.value_ == '1'
+        assert ch2.notes[0].xml_voice.value_ == '2'
         b = m.xml_object.find_child('XMLBackup')
         assert b is not None
 
@@ -624,25 +624,25 @@ class TestUpdateAccidentals(IdTestCase):
         m.clefs[1] = BaseClef()
         m.update()
         ch1, ch2, ch3, ch4 = m.get_chords()
-        assert ch1.notes[0].xml_staff.value == 1
-        assert ch2.notes[0].xml_staff.value == 1
-        assert ch3.notes[0].xml_staff.value == 2
-        assert ch4.notes[0].xml_staff.value == 2
-        assert ch1.notes[0].xml_voice.value == '1'
-        assert ch2.notes[0].xml_voice.value == '2'
-        assert ch3.notes[0].xml_voice.value == '1'
-        assert ch4.notes[0].xml_voice.value == '2'
+        assert ch1.notes[0].xml_staff.value_ == 1
+        assert ch2.notes[0].xml_staff.value_ == 1
+        assert ch3.notes[0].xml_staff.value_ == 2
+        assert ch4.notes[0].xml_staff.value_ == 2
+        assert ch1.notes[0].xml_voice.value_ == '1'
+        assert ch2.notes[0].xml_voice.value_ == '2'
+        assert ch3.notes[0].xml_voice.value_ == '1'
+        assert ch4.notes[0].xml_voice.value_ == '2'
         backups = m.xml_object.find_children('XMLBackup')
         assert len(backups) == 3
-        assert m.xml_attributes.xml_staves.value == 2
+        assert m.xml_attributes.xml_staves.value_ == 2
 
         cl1, cl2 = m.xml_attributes.find_children('XMLClef')
         assert cl1.number == 1
         assert cl2.number == 2
-        assert cl1.xml_sign.value == 'G'
-        assert cl1.xml_line.value == 2
-        assert cl2.xml_sign.value == 'F'
-        assert cl2.xml_line.value == 4
+        assert cl1.xml_sign.value_ == 'G'
+        assert cl1.xml_line.value_ == 2
+        assert cl2.xml_sign.value_ == 'F'
+        assert cl2.xml_line.value_ == 4
 
 
 class TestMeasureAttributes(TestCase):
@@ -674,20 +674,20 @@ class TestMeasureAttributes(TestCase):
         m.add_staff()
         m.update()
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
-        assert clefs[0].xml_sign.value == 'G'
-        assert clefs[0].xml_line.value == 2
+        assert clefs[0].xml_sign.value_ == 'G'
+        assert clefs[0].xml_line.value_ == 2
         m.add_staff()
         m.update()
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
-        assert clefs[0].xml_sign.value == 'G'
-        assert clefs[0].xml_line.value == 2
-        assert clefs[1].xml_sign.value == 'F'
-        assert clefs[1].xml_line.value == 4
+        assert clefs[0].xml_sign.value_ == 'G'
+        assert clefs[0].xml_line.value_ == 2
+        assert clefs[1].xml_sign.value_ == 'F'
+        assert clefs[1].xml_line.value_ == 4
         m.clefs[0].sign = 'C'
         m.clefs[0].line = 3
         m.update()
-        assert clefs[0].xml_sign.value == 'C'
-        assert clefs[0].xml_line.value == 3
+        assert clefs[0].xml_sign.value_ == 'C'
+        assert clefs[0].xml_line.value_ == 3
 
     def test_measure_add_staff_clef(self):
         m = Measure(1)

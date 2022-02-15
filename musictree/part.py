@@ -203,7 +203,7 @@ class Part(MusicTree, XMLWrapper):
 
         if previous_measure:
             for staff in previous_measure.get_children():
-                st = m.add_staff(staff_number=staff.value)
+                st = m.add_staff(staff_number=staff.number)
                 st.clef = staff.clef.__copy__()
                 st.clef.show = False
                 if st:

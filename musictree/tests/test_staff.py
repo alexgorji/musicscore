@@ -12,27 +12,27 @@ from musictree.voice import Voice
 class TestStaff(TestCase):
     def test_staff_init(self):
         st = Staff()
-        assert st.value is None
-        assert st.xml_object.value is None
-        st = Staff(value=3)
-        assert st.xml_object.value == 3
-        assert st.value == 3
-        st.value = 2
-        assert st.xml_object.value == 2
-        st.xml_object.value = None
-        assert st.value is None
-        assert st.xml_object.value is None
+        assert st.number is None
+        assert st.xml_object.value_ == 1
+        st = Staff(number=3)
+        assert st.xml_object.value_ == 3
+        assert st.number == 3
+        st.number = 2
+        assert st.xml_object.value_ == 2
+        st.xml_object.value_ = 1
+        assert st.number is 1
+        assert st.xml_object.value_ == 1
 
     @patch('musictree.measure.Measure')
     def test_add_child(self, mock_measure):
         st = Staff()
         st._parent = mock_measure
-        assert [child.value for child in st.get_children()] == []
+        assert [child.number for child in st.get_children()] == []
         st.add_child(Voice())
-        assert [child.value for child in st.get_children()] == [1]
+        assert [child.number for child in st.get_children()] == [1]
         st.add_child(Voice())
         assert len(st.get_children()) == 2
-        assert [child.value for child in st.get_children()] == [1, 2]
+        assert [child.number for child in st.get_children()] == [1, 2]
 
     @patch('musictree.measure.Measure')
     def test_add_voice(self, mock_measure):
@@ -41,16 +41,16 @@ class TestStaff(TestCase):
         v = st.add_voice()
         assert st.get_children()[-1] == v
         assert len(st.get_children()) == 1
-        assert v.value == 1
+        assert v.number == 1
         v = st.add_voice()
         assert st.get_children()[-1] == v
         assert len(st.get_children()) == 2
-        assert v.value == 2
+        assert v.number == 2
 
         v = st.add_voice(5)
-        assert v.value == 5
+        assert v.number == 5
         assert len(st.get_children()) == 5
-        assert [v.value for v in st.get_children()] == [1, 2, 3, 4, 5]
+        assert [v.number for v in st.get_children()] == [1, 2, 3, 4, 5]
 
     def test_get_previous_staff(self):
         p = Part('P1')
