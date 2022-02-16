@@ -90,15 +90,6 @@ class Tree(ABC):
 
     def get_leaves(self, key=None):
         output = []
-        # for node in self.traverse():
-        #     if not node.is_leaf:
-        #         output.append(node.get_leaves(key=key))
-        #     else:
-        #         if key is not None:
-        #             output.append(key(node))
-        #         else:
-        #             output.append(node)
-        # return output
         for child in self.get_children():
             if not child.is_leaf:
                 output.append(child.get_leaves(key=key))

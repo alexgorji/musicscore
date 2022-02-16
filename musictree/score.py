@@ -1,6 +1,7 @@
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList
 
 from musictree.musictree import MusicTree
+from musictree.quarterduration import QuarterDuration
 from musictree.xmlwrapper import XMLWrapper
 
 
@@ -13,6 +14,8 @@ class Score(MusicTree, XMLWrapper):
         self._xml_object.add_child(XMLPartList())
         self._version = None
         self.version = version
+        self._possible_subdivisions = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [2, 3, 4, 5], QuarterDuration(1): [2, 3, 4,
+                                                                                                                                5, 6, 7, 8]}
 
     @property
     def version(self):
