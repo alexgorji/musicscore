@@ -41,10 +41,6 @@ class Score(MusicTree, XMLWrapper):
 """)
             f.write(self.to_string())
 
-    def get_chords(self):
-        return [ch for part in self.get_children() for measure in part.get_children() for staff in measure.get_children() for voice in
-                staff.get_children() for beat in voice.get_children() for ch in beat.get_children()]
-
     def update(self):
         for p in self.get_children():
             p.update()

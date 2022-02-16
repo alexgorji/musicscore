@@ -182,10 +182,10 @@ class TestMeasure(TestCase):
 
     def test_get_staff(self):
         m = Measure(1)
-        assert m.get_staff(staff_number=None) is None
+        assert m.get_staff(staff_number=1) is None
         st = m.add_child(Staff())
-        assert m.get_staff(staff_number=None) == st
-        st.number   = 1
+        assert m.get_staff(staff_number=1) == st
+        st.number = 1
         assert m.get_staff(staff_number=1) == st
         st = m.add_child(Staff())
         assert m.get_staff(staff_number=2) == st
@@ -203,7 +203,7 @@ class TestMeasure(TestCase):
         m = Measure(1)
         st = m.add_staff()
         assert st.number is None
-        assert m.get_staff(staff_number=None) == st
+        assert m.get_staff(staff_number=1) == st
 
         st = m.add_staff(1)
         assert m.get_staff(staff_number=1) == st
@@ -216,7 +216,7 @@ class TestMeasure(TestCase):
     def test_add_voice(self):
         m = Measure(1)
         v = m.add_voice(staff_number=None, voice_number=2)
-        st = m.get_staff(staff_number=None)
+        st = m.get_staff(staff_number=1)
         assert st.get_children()[-1] == v
         assert [v.number for v in st.get_children()] == [1, 2]
 
@@ -234,14 +234,14 @@ class TestMeasure(TestCase):
         m = Measure(1)
         with self.assertRaises(TypeError):
             m.get_voice(None, 1)
-        assert m.get_voice(staff_number=None, voice_number=1) is None
+        assert m.get_voice(staff_number=1, voice_number=1) is None
         st = m.add_child(Staff())
-        assert m.get_voice(staff_number=None, voice_number=1) is None
+        assert m.get_voice(staff_number=1, voice_number=1) is None
         v = st.add_child(Voice())
-        assert m.get_voice(staff_number=None, voice_number=1) == v
+        assert m.get_voice(staff_number=1, voice_number=1) == v
         assert m.get_voice(staff_number=1, voice_number=1) == v
         v = st.add_child(Voice())
-        assert m.get_voice(staff_number=None, voice_number=2) == v
+        assert m.get_voice(staff_number=1, voice_number=2) == v
 
     def test_add_chord_voice_filled(self):
         m = Measure(1)

@@ -66,3 +66,85 @@ class MusicTree(Tree):
         except TypeError:
             subdivisions = [subdivisions]
         self._possible_subdivisions[beat_quarter_duration] = subdivisions
+
+    @staticmethod
+    def _check_args_kwargs(args, kwargs, class_name, get_class_name=None):
+        def _get_default_keys():
+            default_keys = ['part_number', 'measure_number', 'staff_number', 'voice_number', 'beat_number', 'chord_number']
+            class_names = ['Score', 'Part', 'Measure', 'Staff', 'Voice', 'Beat', 'Chord']
+            class_index = class_names.index(class_name)
+            get_class_index = -1 if not get_class_name else class_names.index(get_class_name)
+            return default_keys[class_index:get_class_index]
+
+        default_keys = _get_default_keys()
+        if args and kwargs:
+            raise ValueError('Both args and kwargs cannot be set')
+        if args:
+            if len(args) != len(default_keys):
+                raise ValueError('Wrong number of args.')
+            kwargs = {key: value for key, value in zip(default_keys, args)}
+        else:
+            keys = kwargs.keys()
+            if set(keys) != set(default_keys[:len(keys)]):
+                raise ValueError('Wrong keys in kwargs.')
+        return kwargs
+
+    def get_part(self, *args, **kwargs):
+        if isinstance_as_string(self.__class__, 'Score'):
+            kwargs = self._check_args_kwargs(args, kwargs, 'Score', 'Part')
+            try:
+                return self.get_children()[kwargs['part_number'] - 1]
+            except IndexError:
+                return None
+        raise TypeError
+
+    def get_measure(self, *args, **kwargs):
+        if isinstance_as_string(self.__class__, 'Part'):
+            kwargs = self._check_args_kwargs(args, kwargs, 'Part', 'Measure')
+            try:
+                return self.get_children()[kwargs['measure_number'] - 1]
+            except IndexError:
+                return None
+        raise TypeError
+
+    def get_staff(self, *args, **kwargs):
+        if isinstance_as_string(self.__class__, 'Measure'):
+            kwargs = self._check_args_kwargs(args, kwargs, 'Measure', 'Staff')
+            try:
+                return self.get_children()[kwargs['staff_number'] - 1]
+            except IndexError:
+                return None
+        raise TypeError
+
+    def get_voice(self, *args, **kwargs):
+        if isinstance_as_string(self.__class__, 'Staff'):
+            kwargs = self._check_args_kwargs(args, kwargs, 'Staff', 'Voice')
+            try:
+                return self.get_children()[kwargs['voice_number'] - 1]
+            except IndexError:
+                return None
+        raise TypeError
+
+    def get_beat(self, *args, **kwargs):
+        if isinstance_as_string(self.__class__, 'Voice'):
+            kwargs = self._check_args_kwargs(args, kwargs, 'Voice', 'Beat')
+            try:
+                return self.get_children()[kwargs['beat_number'] - 1]
+            except IndexError:
+                return None
+        raise TypeError
+
+    def get_chord(self, *args, **kwargs):
+        if isinstance_as_string(self.__class__, 'Beat'):
+            kwargs = self._check_args_kwargs(args, kwargs, 'Beat', 'Chord')
+            try:
+                return self.get_children()[kwargs['chord_number'] - 1]
+            except IndexError:
+                return None
+        raise TypeError
+
+    def get_chords(self):
+        if isinstance_as_string(self.__class__, 'Beat'):
+            return self.get_children()
+        else:
+            return [ch for child in self.get_children() for ch in child.get_chords()]

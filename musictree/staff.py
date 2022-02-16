@@ -86,14 +86,6 @@ class Staff(MusicTree, XMLWrapper):
             return voice_object
         return voice_object
 
-    def get_chords(self):
-        return [ch for voice in self.get_children() for ch in voice.get_chords()]
-
-    def get_voice(self, voice_number=1):
-        for ch in self.get_children():
-            if ch.number == voice_number:
-                return ch
-
     def get_previous_staff(self):
         if self.up and self.up.previous:
             my_index = self.up.get_children().index(self)

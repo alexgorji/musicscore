@@ -40,6 +40,11 @@ class Voice(MusicTree, XMLWrapper):
         else:
             self.xml_object.value_ = '1'
 
+    def add_beat(self, beat_quarter_duration=1):
+        if beat_quarter_duration is None:
+            beat_quarter_duration = 1
+        return self.add_child(Beat(beat_quarter_duration))
+
     def add_child(self, child):
         if not self.up:
             raise VoiceHasNoParentError('A child Beat can only be added to a Voice if voice has a Staff parent.')
@@ -51,9 +56,6 @@ class Voice(MusicTree, XMLWrapper):
         if self.get_current_beat() is None:
             raise VoiceIsAlreadyFullError(f'Voice number {self.value_} of Measure number {self.up.up.number} is full.')
         return self.get_current_beat().add_child(chord)
-
-    def get_chords(self):
-        return [ch for b in self.get_children() for ch in b.get_children()]
 
     def get_current_beat(self):
         if not self.get_children():

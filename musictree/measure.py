@@ -262,21 +262,8 @@ class Measure(MusicTree, XMLWrapper):
             return staff_object.add_voice(voice_number=voice_number)
         return voice_object
 
-    def get_chords(self):
-        beats = [b for staff in self.get_children() for voice in staff.get_children() for b in voice.get_children()]
-        chords = [ch for b in beats for ch in b.get_children()]
-        return chords
-
     def get_divisions(self):
         return self.xml_object.xml_attributes.xml_divisions.value_
-
-    def get_staff(self, staff_number=1):
-        if staff_number is None:
-            staff_number = 1
-        try:
-            return self.get_children()[staff_number - 1]
-        except IndexError:
-            return None
 
     def get_voice(self, *, staff_number=1, voice_number=1):
         staff_object = self.get_staff(staff_number=staff_number)

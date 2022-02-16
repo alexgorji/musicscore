@@ -1,7 +1,7 @@
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
 
-from musictree.chord import split_copy, group_chords
+from musictree.chord import split_copy, group_chords, Chord
 from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError
 from musictree.musictree import MusicTree
@@ -178,6 +178,18 @@ class Beat(MusicTree, QuarterDurationMixin):
         else:
             return self.previous.offset + self.previous.quarter_duration
 
+    def _quantize_quarter_duration(self, child):
+        def _get_quantize_quarter_duration(quarter_duration):
+            # At the moment it does nothing
+            return quarter_duration
+
+        quantized_quarter_duration = _get_quantize_quarter_duration(child.quarter_duration)
+        diff = child.quarter_duration - quantized_quarter_duration
+        if diff:
+            child.quarter_duration = quantized_quarter_duration
+            child.offset += diff
+        return diff
+
     def add_child(self, child):
         self._check_child_to_be_added(child)
         if not self.up:
@@ -192,6 +204,10 @@ class Beat(MusicTree, QuarterDurationMixin):
         diff = child.quarter_duration - (self.quarter_duration - self.filled_quarter_duration)
         if diff <= 0:
             self._filled_quarter_duration += child.quarter_duration
+            if self.get_children():
+                diff = self._quantize_quarter_duration(child)
+                if diff:
+                    self.get_children()[-1].quarter_duration += diff
             children = self._split_not_writable(child)
             if children:
                 for ch in children:
@@ -217,6 +233,11 @@ class Beat(MusicTree, QuarterDurationMixin):
             else:
                 beats = self.up.get_children()[self.up.get_children().index(self):]
                 return child.split_beatwise(beats)
+
+    def add_chord(self, chord=None):
+        if chord is None:
+            chord = Chord(midis=60, quarter_duration=self.quarter_duration)
+        return self.add_child(chord)
 
 
 def beam_chord_group(chord_group):

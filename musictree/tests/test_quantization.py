@@ -1,3 +1,4 @@
+from musictree.chord import Chord
 from musictree.part import Part
 from musictree.score import Score
 from musictree.tests.util import IdTestCase
@@ -28,3 +29,10 @@ class TestQuantization(IdTestCase):
 
         with self.assertRaises(ValueError):
             beats[1].set_possible_subdivisions([2, 4], beat_quarter_duration=0.5)
+
+    def test_simple_quantization(self):
+        s = Score()
+        p = s.add_child(Part('p1'))
+        p.add_chord(Chord(60, 0.2))
+        p.add_chord(Chord(60, 3.8))
+        p.get_chords()

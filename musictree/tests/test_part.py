@@ -134,8 +134,8 @@ class TestPart(IdTestCase):
         """
         p = Part('p1')
         m1 = p.add_measure()
-        assert m1.get_staff(None) is not None
-        assert m1.get_voice(staff_number=None, voice_number=1) is not None
+        assert m1.get_staff(1) is not None
+        assert m1.get_voice(staff_number=1, voice_number=1) is not None
         m1.add_staff(2)
         m2 = p.add_measure()
         m2.add_voice(staff_number=2, voice_number=2)

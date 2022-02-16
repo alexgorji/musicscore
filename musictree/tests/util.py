@@ -18,6 +18,7 @@ def check_notes(notes, midi_values, quarter_durations):
         assert n.quarter_duration == qd
 
 
+
 class IdTestCase(TestCase):
     def setUp(self):
         Id.__refs__.clear()
