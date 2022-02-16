@@ -67,6 +67,7 @@ class MusicTree(Tree):
             subdivisions = [subdivisions]
         self._possible_subdivisions[beat_quarter_duration] = subdivisions
 
+
     @staticmethod
     def _check_args_kwargs(args, kwargs, class_name, get_class_name=None):
         def _get_default_keys():

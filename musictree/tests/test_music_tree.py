@@ -192,6 +192,7 @@ class TestMusicTree(IdTestCase):
 
     def test_beat_get_chord(self):
         b = Beat()
+        b.get_possible_subdivisions = Mock(return_value=None)
         b._parent = Mock()
         assert b.get_chord(1) is None
         ch1 = b.add_chord(Chord(midis=60, quarter_duration=0.5))
