@@ -1,5 +1,4 @@
 from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied
-from quicktions import Fraction
 
 from musictree.exceptions import NoteTypeError, NoteHasNoParentChordError
 from musictree.midi import Midi
@@ -77,7 +76,8 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             try:
                 note_types[self._quarter_duration.as_integer_ratio()]
             except KeyError:
-                msg = f"A note with quarter_duration {self._quarter_duration} is not writable and must be split."
+                msg = f"A note with quarter_duration {self._quarter_duration} and offset {self.up.offset} is not writable and must be " \
+                      f"split."
                 self._quarter_duration = old_quarter_duration
                 raise NoteTypeError(msg)
 

@@ -8,6 +8,53 @@ from musictree.musictree import MusicTree
 from musictree.quarterduration import QuarterDurationMixin, QuarterDuration
 from musictree.util import lcm
 
+# offset : {chord.quarter_duration: split quarter_durations, ...}
+SPLITTALBES = {
+    QuarterDuration(0): {
+        QuarterDuration(5, 6): [QuarterDuration(3, 6), QuarterDuration(2, 6)],
+        QuarterDuration(5, 7): [QuarterDuration(3, 7), QuarterDuration(2, 7)],
+        QuarterDuration(5, 8): [QuarterDuration(4, 8), QuarterDuration(1, 8)],
+        QuarterDuration(5, 9): [QuarterDuration(3, 9), QuarterDuration(2, 9)],
+        QuarterDuration(5, 11): [QuarterDuration(4, 11), QuarterDuration(1, 11)],
+
+        QuarterDuration(7, 8): [QuarterDuration(4, 8), QuarterDuration(3, 8)],
+        QuarterDuration(7, 9): [QuarterDuration(4, 9), QuarterDuration(3, 9)],
+        QuarterDuration(7, 10): [QuarterDuration(5, 10), QuarterDuration(2, 10)],
+        QuarterDuration(7, 11): [QuarterDuration(4, 11), QuarterDuration(3, 11)],
+    },
+    QuarterDuration(1, 8): {
+        QuarterDuration(4, 8): [QuarterDuration(3, 8), QuarterDuration(1, 8)],
+        QuarterDuration(5, 8): [QuarterDuration(3, 8), QuarterDuration(2, 8)],
+        QuarterDuration(6, 8): [QuarterDuration(3, 8), QuarterDuration(3, 8)],
+        QuarterDuration(7, 8): [QuarterDuration(3, 8), QuarterDuration(4, 8)],
+    },
+    QuarterDuration(2, 8): {
+        QuarterDuration(3, 8): [QuarterDuration(2, 8), QuarterDuration(1, 8)],
+        QuarterDuration(5, 8): [QuarterDuration(2, 8), QuarterDuration(3, 8)],
+    },
+    QuarterDuration(3, 8): {
+        QuarterDuration(2, 8): [QuarterDuration(1, 8), QuarterDuration(1, 8)],
+        QuarterDuration(3, 8): [QuarterDuration(1, 8), QuarterDuration(2, 8)],
+        QuarterDuration(4, 8): [QuarterDuration(1, 8), QuarterDuration(3, 8)],
+        QuarterDuration(5, 8): [QuarterDuration(1, 8), QuarterDuration(4, 8)],
+    },
+    QuarterDuration(1, 7): {
+        QuarterDuration(5, 7): [QuarterDuration(3, 7), QuarterDuration(2, 7)],
+        QuarterDuration(6, 7): [QuarterDuration(3, 7), QuarterDuration(3, 7)],
+    },
+    QuarterDuration(2, 7): {
+        QuarterDuration(5, 7): [QuarterDuration(3, 7), QuarterDuration(2, 7)],
+    },
+    QuarterDuration(1, 6): {
+        QuarterDuration(4, 6): [QuarterDuration(2, 6), QuarterDuration(2, 6)],
+        QuarterDuration(5, 6): [QuarterDuration(2, 6), QuarterDuration(3, 6)],
+    },
+    QuarterDuration(2, 6): {
+        QuarterDuration(3, 6): [QuarterDuration(2, 6), QuarterDuration(1, 6)],
+        QuarterDuration(5, 6): [QuarterDuration(2, 6), QuarterDuration(3, 6)],
+    },
+}
+
 
 def _find_nearest_quantized_value(quantized_values, values):
     output = []
@@ -56,7 +103,7 @@ class Beat(MusicTree, QuarterDurationMixin):
     @staticmethod
     def _split_chord(chord, quarter_durations):
         output = [chord]
-        chord.quarter_duration = quarter_durations[0]
+        chord._quarter_duration = quarter_durations[0]
         for qd in quarter_durations[1:]:
             copied = split_copy(chord, qd)
             output.append(copied)
@@ -68,27 +115,23 @@ class Beat(MusicTree, QuarterDurationMixin):
                 midi.accidental.show = False
         return output
 
-    def _split_not_writable(self, chord, offset):
-        if offset == QuarterDuration(1, 8) and chord.quarter_duration > QuarterDuration(3, 8):
-            return self._split_chord(chord, [QuarterDuration(3, 8), chord.quarter_duration - QuarterDuration(3, 8)])
-        elif offset == QuarterDuration(2, 8) and chord.quarter_duration == QuarterDuration(3, 8):
-            return self._split_chord(chord, [QuarterDuration(2, 8), QuarterDuration(1, 8)])
-        if offset == QuarterDuration(3, 8) and chord.quarter_duration > QuarterDuration(1, 8):
-            return self._split_chord(chord, [QuarterDuration(1, 8), chord.quarter_duration - QuarterDuration(1, 8)])
+    def split_not_writable_chords(self):
+        for chord in self.get_children():
+            split = self._split_not_writable(chord, chord.offset)
+            if split:
+                for ch in split:
+                    ch._parent = self
+                if chord == self.get_children()[-1]:
+                    self._children = self.get_children()[:-1] + split
+                else:
+                    index = self.get_children().index(chord)
+                    self._children = self.get_children()[:index] + split + self.get_children()[index + 1:]
 
-        elif chord.quarter_duration.numerator == 5:
-            denom = chord.quarter_duration.denominator
-            if denom == 6 and offset != 0:
-                return self._split_chord(chord, [QuarterDuration(2, 6), QuarterDuration(3, 6)])
-            elif denom == 8 and offset in [0, QuarterDuration(1, 4)]:
-                return self._split_chord(chord, [QuarterDuration(4, 8), QuarterDuration(1, 8)])
-            else:
-                return self._split_chord(chord, [QuarterDuration(3, denom), QuarterDuration(2, denom)])
-        elif chord.quarter_duration.numerator == 9:
-            denom = chord.quarter_duration.denominator
-            return self._split_chord(chord, [QuarterDuration(5, denom), QuarterDuration(4, denom)])
-        else:
-            return None
+    def _split_not_writable(self, chord, offset):
+        if SPLITTALBES.get(offset):
+            quarter_durations = SPLITTALBES.get(offset).get(chord.quarter_duration)
+            if quarter_durations:
+                return self._split_chord(chord, quarter_durations)
 
     def _update_dots(self, chord_group, actual_notes):
         for note in [n for ch in chord_group for n in ch.get_children()]:
@@ -149,6 +192,16 @@ class Beat(MusicTree, QuarterDurationMixin):
                 return l_c_m
         else:
             return next(iter(denominators))
+
+    def _remove_zero_quarter_durations(self):
+        zeros = [ch for ch in self.get_children() if ch.quarter_duration == 0]
+        for ch in zeros:
+            if 'start' in ch._ties:
+                pass
+            elif 'stop' in ch._ties:
+                ch.up.remove(ch)
+            else:
+                pass
 
     def _update_note_tuplets_dots(self):
         actual_notes = self._get_actual_notes(self.get_children())
@@ -214,17 +267,10 @@ class Beat(MusicTree, QuarterDurationMixin):
         if self.is_filled:
             raise BeatIsFullError()
         diff = child.quarter_duration - (self.quarter_duration - self.filled_quarter_duration)
-        offset = self.filled_quarter_duration
         if diff <= 0:
             self._filled_quarter_duration += child.quarter_duration
-            children = self._split_not_writable(child, offset)
-            if children:
-                for ch in children:
-                    self._add_child(ch)
-                return children
-            else:
-                self._add_child(child)
-                return child
+            self._add_child(child)
+            return child
         else:
             if child.split:
                 remaining_quarter_duration = child.quarter_duration
@@ -289,6 +335,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         quantized_positions = [f[0] for f in
                                _find_nearest_quantized_value(self.get_quantized_locations(subdivision=best_div),
                                                              positions)]
+
         quantized_durations = []
 
         for i in range(len(quarter_durations)):
@@ -296,7 +343,6 @@ class Beat(MusicTree, QuarterDurationMixin):
                 quantized_positions[i + 1] - quantized_positions[i]).limit_denominator(
                 int(best_div / self.quarter_duration))
             quantized_durations.append(QuarterDuration(fr))
-
         return quantized_durations
 
     def quantize(self):
@@ -307,9 +353,12 @@ class Beat(MusicTree, QuarterDurationMixin):
                 quarter_durations = [chord.quarter_duration for chord in self.get_children()]
                 if len([d for d in quarter_durations if d != 0]) > 1:
                     self._change_children_quarter_durations(self.get_quantized_quarter_durations(quarter_durations))
+                    self._remove_zero_quarter_durations()
 
 
 def beam_chord_group(chord_group):
+    chord_group = [ch for ch in chord_group if ch.quarter_duration != 0]
+
     def add_beam(chord, number, value):
         if value == 'hook':
             if chord.quarter_duration == QuarterDuration(1, 6) and chord.offset == QuarterDuration(1, 3):

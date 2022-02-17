@@ -4,9 +4,11 @@ from musictree.accidental import Accidental
 from musictree.beat import Beat
 from musictree.chord import Chord, split_copy, group_chords
 from musictree.exceptions import ChordHasNoParentError, ChordQuarterDurationAlreadySetError, NoteTypeError
+from musictree.measure import Measure
 from musictree.midi import Midi
 from musictree.tests.util import check_notes, ChordTestCase, create_articulation, create_technical
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES
+from musictree.voice import Voice
 
 
 def get_chord_midi_values(chord):
@@ -58,21 +60,24 @@ class TestTreeChord(ChordTestCase):
         ch._update_notes()
 
     def test_chord_update_notes(self):
+        m = Measure(1)
         ch1 = Chord()
         assert not ch1.notes
         with self.assertRaises(ChordHasNoParentError):
             ch1._update_notes()
         ch1.quarter_duration = 1
         ch1.midis = [70]
-        ch1._parent = self.mock_beat
+        m.add_chord(ch1)
         ch1._update_notes()
         check_notes(ch1.notes, [70], [1])
         with self.assertRaises(ChordQuarterDurationAlreadySetError):
             ch1.quarter_duration = 1.5
+
         ch2 = Chord(quarter_duration=2.5, midis=[71])
-        ch2._parent = self.mock_beat
-        with self.assertRaises(NoteTypeError):
-            ch2._update_notes()
+        m.add_chord(ch2)
+        for ch in m.get_chords()[1:]:
+            ch._update_notes()
+        assert [ch.notes[0].quarter_duration for ch in m.get_chords()] == [1, 2, 1/2]
 
     def test_init_quarter_durations(self):
         """

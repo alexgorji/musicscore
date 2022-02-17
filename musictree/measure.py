@@ -277,6 +277,10 @@ class Measure(MusicTree, XMLWrapper):
         super().remove(child)
         self.clefs.pop(number - 1)
 
+    def split_not_writable_chords(self):
+        for b in [beat for staff in self.get_children() for voice in staff.get_children() for beat in voice.get_children()]:
+            b.split_not_writable_chords()
+
     def update_chord_accidentals(self):
         for staff in self.get_children():
             for chord in staff.get_chords():

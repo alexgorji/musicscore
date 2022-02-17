@@ -378,11 +378,30 @@ class TestScorePart(IdTestCase):
         qds = [QuarterDuration(23, 32), QuarterDuration(178, 85), QuarterDuration(32, 171), QuarterDuration(1)]
         for qd in qds:
             p.add_chord(Chord(midis=60, quarter_duration=qd))
-        expected = [QuarterDuration(23, 32), QuarterDuration(5, 32), QuarterDuration(1, 8), QuarterDuration(1, 1),
+        expected = [QuarterDuration(23, 32), QuarterDuration(9, 32), QuarterDuration(1, 1),
                     QuarterDuration(139, 171), QuarterDuration(32, 171), QuarterDuration(1, 1)]
 
         assert [ch.quarter_duration for ch in p.get_chords()] == expected
         p.quantize()
-        expected = [QuarterDuration(5, 7), QuarterDuration(1, 7), QuarterDuration(1, 7), QuarterDuration(1, 1),
+        p.split_not_writable_chords()
+        expected = [QuarterDuration(3, 7), QuarterDuration(2, 7), QuarterDuration(2, 7), QuarterDuration(1, 1),
                     QuarterDuration(4, 5), QuarterDuration(1, 5), QuarterDuration(1, 1)]
         assert [ch.quarter_duration for ch in p.get_chords()] == expected
+
+    def test_chord_previous(self):
+        p = Part('P1')
+        for qd in [1, 2.5, 0.5]:
+            p.add_chord(Chord(midis=60, quarter_duration=qd))
+
+        for i in range(1, len(p.get_children())):
+            current = p.get_children()[i]
+            previous = p.get_children()[i - 1]
+            assert current.previous == previous
+
+    def test_chord_offsets(self):
+        p = Part('P1')
+        for qd in [1, 2.5, 0.5]:
+            p.add_chord(Chord(midis=60, quarter_duration=qd))
+
+        assert [ch.quarter_duration for ch in p.get_chords()] == [1, 2, 0.5, 0.5]
+        assert [ch.offset for ch in p.get_chords()] == [0, 0, 0, 0.5]

@@ -241,6 +241,11 @@ class Part(MusicTree, XMLWrapper):
                 raise QuantizationBeatNotFullError(
                     f"Part:{self.id_.value} Beat {b.up.up.up.number}:{b.up.up.number}:{b.up.number}:{b.number} is not filled.")
 
+    def split_not_writable_chords(self):
+        for b in [beat for measure in self.get_children() for staff in measure.get_children() for voice in staff.get_children() for beat in \
+                  voice.get_children()]:
+            b.split_not_writable_chords()
+
     def update(self):
         for m in self.get_children():
             m.update()

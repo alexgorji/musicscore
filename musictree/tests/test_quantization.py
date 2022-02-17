@@ -68,3 +68,26 @@ class TestQuantization(IdTestCase):
                 div = lcm([qd.denominator for qd in qds])
                 if div != 1:
                     assert div in [2, 3, 4, 6, 8]
+
+    # def test_zero_not_as_tied_to(self):
+    #     """
+    #     Three cases where a zero quarter_duration appears during quantization. If a chord with zero qd is tied to previous,
+    #     it must be omitted.
+    #     """
+    #     qds1 = [QuarterDuration(139, 171), QuarterDuration(134, 945), QuarterDuration(35, 772)]
+    #     qds2 = [QuarterDuration(314, 487), QuarterDuration(18, 605), QuarterDuration(235, 722)]
+    #     qds3 = [QuarterDuration(638, 643), QuarterDuration(3, 643), QuarterDuration(2, 643)]
+    #     p = Part('p1')
+    #     p.set_possible_subdivisions([2, 3, 4, 6, 8], 1)
+    #     for index, qds in enumerate([qds1, qds2, qds3]):
+    #         assert sum(qds) == 1
+    #         for qd in qds:
+    #             p.add_chord(Chord(midis=60, quarter_duration=qd))
+    #         b = p.get_measure(1).get_staff(1).get_voice(1).get_beat(index + 1)
+    #         b.quantize()
+    #         if index == 0:
+    #             assert [ch.quarter_duration for ch in b.get_chords()] == [QuarterDuration(5, 6), QuarterDuration(1, 6)]
+    #         elif index == 1:
+    #             assert [ch.quarter_duration for ch in b.get_chords()] == [QuarterDuration(5, 6), QuarterDuration(1, 6)]
+    #         else:
+    #             assert [ch.quarter_duration for ch in b.get_chords()] == [QuarterDuration(5, 6), QuarterDuration(1, 6)]
