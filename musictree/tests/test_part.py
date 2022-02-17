@@ -1,8 +1,12 @@
+import math
+
 from musictree.chord import Chord
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError
 from musictree.key import Key
 from musictree.measure import Measure
 from musictree.part import Part, ScorePart, Id
+from musictree.quarterduration import QuarterDuration
+from musictree.score import Score
 from musictree.tests.util import IdTestCase
 from musictree.time import Time
 
@@ -346,3 +350,32 @@ class TestScorePart(IdTestCase):
         p.update()
         assert m1.clefs[0].show is True
         assert m2.clefs[0].show is False
+
+    def test_add_complex_quarter_durations(self):
+        s = Score()
+        p = s.add_child(Part('p1'))
+        quarter_durations = [QuarterDuration(145, 42), QuarterDuration(1070, 737), QuarterDuration(1121, 352), QuarterDuration(960, 589),
+                             QuarterDuration(178, 85), QuarterDuration(134, 945), QuarterDuration(1733, 482), QuarterDuration(446, 227),
+                             QuarterDuration(458, 735), QuarterDuration(943, 890), QuarterDuration(650, 739), QuarterDuration(939, 338),
+                             QuarterDuration(327, 227), QuarterDuration(461, 183), QuarterDuration(1, 2), QuarterDuration(1123, 457),
+                             QuarterDuration(24, 59), QuarterDuration(1075, 397), QuarterDuration(604, 219), QuarterDuration(18, 605),
+                             QuarterDuration(2398, 999), QuarterDuration(235, 608), QuarterDuration(677, 799), QuarterDuration(136, 637),
+                             QuarterDuration(2717, 783), QuarterDuration(5, 643)]
+        # first_qd = math.ceil(sum(quarter_durations[:4])) - sum(quarter_durations[:4])
+        # qds = [first_qd] + [quarter_durations[4]]
+        # last_qd = math.ceil(sum(qds)) - sum(qds)
+        # qds += [last_qd]
+        # qds = quarter_durations[:5]
+        # last_qd = math.ceil(sum(qds)) - sum(qds)
+        # qds += [last_qd]
+        # qds = [QuarterDuration(145, 42), QuarterDuration(1070, 737), QuarterDuration(1121, 352), QuarterDuration(960, 589),
+        #        QuarterDuration(178, 85), QuarterDuration(32, 171)]
+        # qds = qds[4:]
+        # first_qd = math.ceil(sum(qds)) - sum(qds)
+        # print(first_qd)
+        # qds = [first_qd] + qds
+        # print(qds)
+        qds = [QuarterDuration(23, 32), QuarterDuration(178, 85), QuarterDuration(32, 171)]
+        print(sum(qds))
+        for qd in qds:
+            p.add_chord(Chord(midis=60, quarter_duration=qd))

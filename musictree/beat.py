@@ -9,6 +9,30 @@ from musictree.quarterduration import QuarterDurationMixin, QuarterDuration
 from musictree.util import lcm
 
 
+def _find_nearest_quantized_value(quantized_values, values):
+    output = []
+    for value in values:
+        nearest_quantized = min(enumerate(quantized_values), key=lambda x: abs(x[1] - value))[1]
+        delta = nearest_quantized - value
+        output.append((nearest_quantized, delta))
+    return output
+
+
+def _find_q_delta(quantized_locations, values):
+    qs = _find_nearest_quantized_value(quantized_locations, values)
+    d = 0
+    for q in qs:
+        d += abs(q[1])
+    return d
+
+
+def _find_quantized_locations(duration, subdivision):
+    output = range(subdivision + 1)
+    fr = duration / subdivision
+    output = [x * fr for x in output]
+    return output
+
+
 class Beat(MusicTree, QuarterDurationMixin):
     _PERMITTED_DURATIONS = {4, 2, 1, 0.5}
 
@@ -22,6 +46,8 @@ class Beat(MusicTree, QuarterDurationMixin):
         self._children.append(child)
         if self.up.up.up.up:
             self.up.up.up.up.set_current_measure(staff_number=self.up.up.number, voice_number=self.up.number, measure=self.up.up.up)
+        if self.is_filled:
+            self.quantize()
 
     def _check_permitted_duration(self, val):
         for d in self._PERMITTED_DURATIONS:
@@ -181,7 +207,8 @@ class Beat(MusicTree, QuarterDurationMixin):
     def _quantize_quarter_duration(self, chord, previous_chord):
         def _get_quantize_quarter_duration(quarter_duration):
             # At the moment it does (almost) nothing
-            if self.get_possible_subdivisions() and max(self.get_possible_subdivisions()) == 4 and quarter_duration == QuarterDuration(4, 5):
+            if self.get_possible_subdivisions() and max(self.get_possible_subdivisions()) == 4 and quarter_duration == QuarterDuration(4,
+                                                                                                                                       5):
                 return QuarterDuration(3, 4)
             else:
                 return quarter_duration
@@ -239,6 +266,79 @@ class Beat(MusicTree, QuarterDurationMixin):
         if chord is None:
             chord = Chord(midis=60, quarter_duration=self.quarter_duration)
         return self.add_child(chord)
+
+    def _update_offsets(self):
+        offset = 0
+        for ch in self.get_children():
+            ch.offset = offset
+            offset += ch.quarter_duration
+
+    def _change_children_quarter_durations(self, quarter_durations):
+        if len(quarter_durations) != len(self.get_children()):
+            raise ValueError
+        if sum(quarter_durations) != self.quarter_duration:
+            raise ValueError
+        for qd, ch in zip(quarter_durations, self.get_children()):
+            ch._quarter_duration = qd
+
+        self._update_offsets()
+
+    def get_quantized_locations(self, subdivision):
+        return _find_quantized_locations(self.quarter_duration, subdivision)
+
+    def get_quantized_quarter_durations(self, quarter_durations):
+        diff = self.quarter_duration - sum(quarter_durations)
+        if diff != 0:
+            for index, dur in enumerate(quarter_durations):
+                pass
+                # quarter_durations[index] = dur + diff / len(quarter_durations)
+        if sum(quarter_durations) != self.quarter_duration:
+            raise ValueError(
+                f"Sum of quarter_durations '{quarter_durations}: {sum(quarter_durations)}' is not equal to beat quarter_duration "
+                f"'{self.quarter_duration}'")
+
+        def _get_positions():
+            output = [0]
+            for i, qd in enumerate(quarter_durations):
+                output.append(output[i] + qd)
+            return output
+
+        positions = _get_positions()
+        permitted_divs = self.get_possible_subdivisions()[:]
+        best_div = permitted_divs.pop(0)
+        last_q_delta = _find_q_delta(self.get_quantized_locations(subdivision=best_div), positions)
+
+        for div in permitted_divs:
+            current_q_delta = _find_q_delta(self.get_quantized_locations(subdivision=div), positions)
+
+            if current_q_delta < last_q_delta:
+                best_div = div
+                last_q_delta = current_q_delta
+
+            elif (current_q_delta == last_q_delta) and (div < best_div):
+                best_div = div
+
+        quantized_positions = [f[0] for f in
+                               _find_nearest_quantized_value(self.get_quantized_locations(subdivision=best_div),
+                                                             positions)]
+        quantized_durations = []
+
+        for i in range(len(quarter_durations)):
+            fr = Fraction(
+                quantized_positions[i + 1] - quantized_positions[i]).limit_denominator(
+                int(best_div / self.quarter_duration))
+            quantized_durations.append(QuarterDuration(fr))
+
+        return quantized_durations
+
+    def quantize(self):
+        if self.get_possible_subdivisions():
+            if self._get_actual_notes(self.get_children()) in self.get_possible_subdivisions():
+                pass
+            else:
+                quarter_durations = [chord.quarter_duration for chord in self.get_children()]
+                if len([d for d in quarter_durations if d != 0]) > 1:
+                    self._change_children_quarter_durations(self.get_quantized_quarter_durations(quarter_durations))
 
 
 def beam_chord_group(chord_group):

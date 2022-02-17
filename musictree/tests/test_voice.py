@@ -1,5 +1,5 @@
 from unittest import TestCase
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 
 from musictree.beat import Beat
 from musictree.chord import Chord
@@ -57,9 +57,11 @@ class TestVoice(TestCase):
         v.get_children()[3]._filled_quarter_duration = 1 / 4
         assert v.get_current_beat() is None
 
-    @patch('musictree.voice.Voice.up', new=Mock())
-    def test_add_chord(self):
+    @patch('musictree.staff.Staff')
+    def test_add_chord(self, mock_staff):
         v = Voice()
+        v._parent = mock_staff
+
         with self.assertRaises(VoiceHasNoBeatsError):
             v.add_chord(Chord())
         v.update_beats(1, 1, 1, 1)
@@ -72,6 +74,7 @@ class TestVoice(TestCase):
         assert v.get_chords()[2]._ties == ['stop']
 
         v = Voice()
+        v._parent = mock_staff
         v.update_beats(1, 1)
         v.add_chord(Chord(quarter_duration=3, midis=60))
         assert isinstance(v.left_over_chord, Chord)

@@ -199,11 +199,13 @@ class TestBeatAddChild(TestCase):
         for b in v1.get_children() + v2.get_children():
             b._update_xml_notes()
         assert [ch.midis[0].accidental.xml_object.value_ if ch.midis[0].accidental.xml_object else None for ch in all_chords] == ['sharp',
-                                                                                                                                 None, None,
-                                                                                                                                 None]
+                                                                                                                                  None,
+                                                                                                                                  None,
+                                                                                                                                  None]
         all_chords[1].midis[0].accidental.show = True
 
         assert [ch.midis[0].accidental.xml_object.value_ if ch.midis[0].accidental.xml_object else None for ch in all_chords] == ['sharp',
-                                                                                                                                 'sharp',
-                                                                                                                                 None,
-                                                                                                                                 None]
+                                                                                                                                  'sharp',
+                                                                                                                                None,
+                                                                                                                                  None]
+
