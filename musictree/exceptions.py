@@ -104,3 +104,8 @@ class IdHasAlreadyParentOfSameTypeError(IdException):
 
 class IdWithSameValueExistsError(IdException):
     pass
+
+class QuantizationException(Exception):
+    pass
+class QuantizationBeatNotFullError(QuantizationException):
+    pass

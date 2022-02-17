@@ -24,9 +24,9 @@ class Chord(MusicTree, QuarterDurationMixin):
                    '_notes_are_set', '_directions', 'xml_directions', 'xml_articulations', 'xml_technicals'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
-                 quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, offset=0, **kwargs):
+                 quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
         self._midis = None
-        self._offset = None
+        # self._offset = None
         self._ties = []
         self._lyrics = []
         self._directions = {'above': [], 'below': []}
@@ -35,7 +35,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         self.xml_technicals = []
 
         self._note_attributes = kwargs
-        self.offset = offset
+        # self.offset = offset
         self._notes_are_set = False
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
@@ -175,15 +175,12 @@ class Chord(MusicTree, QuarterDurationMixin):
 
     @property
     def offset(self):
-        return self._offset
-
-    @offset.setter
-    def offset(self, val):
-        _check_quarter_duration(val)
-        if isinstance(val, QuarterDuration):
-            self._offset = val
+        if not self.up:
+            return None
+        elif self.previous is None:
+            return 0
         else:
-            self._offset = QuarterDuration(val)
+            return self.previous.offset + self.previous.quarter_duration
 
     @QuarterDurationMixin.quarter_duration.setter
     def quarter_duration(self, val):
@@ -272,7 +269,6 @@ class Chord(MusicTree, QuarterDurationMixin):
             raise ChordAlreadySplitError('First beat must be the next beat in voice which can accept chords.')
         if beats[-1] != voice.get_children()[-1]:
             raise ChordAlreadySplitError('Last beat must be the last beat in voice.')
-
         quarter_durations = self.quarter_duration.get_beatwise_sections(
             offset=beats[0].filled_quarter_duration, beats=beats)
         self.quarter_duration = quarter_durations[0][0]

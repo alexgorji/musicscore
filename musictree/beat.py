@@ -46,8 +46,6 @@ class Beat(MusicTree, QuarterDurationMixin):
         self._children.append(child)
         if self.up.up.up.up:
             self.up.up.up.up.set_current_measure(staff_number=self.up.up.number, voice_number=self.up.number, measure=self.up.up.up)
-        if self.is_filled:
-            self.quantize()
 
     def _check_permitted_duration(self, val):
         for d in self._PERMITTED_DURATIONS:
@@ -59,11 +57,8 @@ class Beat(MusicTree, QuarterDurationMixin):
     def _split_chord(chord, quarter_durations):
         output = [chord]
         chord.quarter_duration = quarter_durations[0]
-        offset = chord.offset + chord.quarter_duration
         for qd in quarter_durations[1:]:
             copied = split_copy(chord, qd)
-            copied.offset = offset
-            offset += qd
             output.append(copied)
         for index, ch in enumerate(output[:-1]):
             next_ch = output[index + 1]
@@ -73,19 +68,19 @@ class Beat(MusicTree, QuarterDurationMixin):
                 midi.accidental.show = False
         return output
 
-    def _split_not_writable(self, chord):
-        if chord.offset == QuarterDuration(1, 8) and chord.quarter_duration > QuarterDuration(3, 8):
+    def _split_not_writable(self, chord, offset):
+        if offset == QuarterDuration(1, 8) and chord.quarter_duration > QuarterDuration(3, 8):
             return self._split_chord(chord, [QuarterDuration(3, 8), chord.quarter_duration - QuarterDuration(3, 8)])
-        elif chord.offset == QuarterDuration(2, 8) and chord.quarter_duration == QuarterDuration(3, 8):
+        elif offset == QuarterDuration(2, 8) and chord.quarter_duration == QuarterDuration(3, 8):
             return self._split_chord(chord, [QuarterDuration(2, 8), QuarterDuration(1, 8)])
-        if chord.offset == QuarterDuration(3, 8) and chord.quarter_duration > QuarterDuration(1, 8):
+        if offset == QuarterDuration(3, 8) and chord.quarter_duration > QuarterDuration(1, 8):
             return self._split_chord(chord, [QuarterDuration(1, 8), chord.quarter_duration - QuarterDuration(1, 8)])
 
         elif chord.quarter_duration.numerator == 5:
             denom = chord.quarter_duration.denominator
-            if denom == 6 and chord.offset != 0:
+            if denom == 6 and offset != 0:
                 return self._split_chord(chord, [QuarterDuration(2, 6), QuarterDuration(3, 6)])
-            elif denom == 8 and chord.offset in [0, QuarterDuration(1, 4)]:
+            elif denom == 8 and offset in [0, QuarterDuration(1, 4)]:
                 return self._split_chord(chord, [QuarterDuration(4, 8), QuarterDuration(1, 8)])
             else:
                 return self._split_chord(chord, [QuarterDuration(3, denom), QuarterDuration(2, denom)])
@@ -196,6 +191,10 @@ class Beat(MusicTree, QuarterDurationMixin):
         return self._filled_quarter_duration
 
     @property
+    def number(self):
+        return self.up.get_children().index(self) + 1
+
+    @property
     def offset(self):
         if not self.up:
             return None
@@ -203,22 +202,6 @@ class Beat(MusicTree, QuarterDurationMixin):
             return 0
         else:
             return self.previous.offset + self.previous.quarter_duration
-
-    def _quantize_quarter_duration(self, chord, previous_chord):
-        def _get_quantize_quarter_duration(quarter_duration):
-            # At the moment it does (almost) nothing
-            if self.get_possible_subdivisions() and max(self.get_possible_subdivisions()) == 4 and quarter_duration == QuarterDuration(4,
-                                                                                                                                       5):
-                return QuarterDuration(3, 4)
-            else:
-                return quarter_duration
-
-        quantized_quarter_duration = _get_quantize_quarter_duration(chord.quarter_duration)
-        diff = chord.quarter_duration - quantized_quarter_duration
-        if diff:
-            chord._quarter_duration -= diff
-            chord.offset += diff
-            previous_chord._quarter_duration += diff
 
     def add_child(self, child):
         self._check_child_to_be_added(child)
@@ -230,13 +213,11 @@ class Beat(MusicTree, QuarterDurationMixin):
             raise ChordHasNoMidisError('Chord with no midis cannot be added to Beat.')
         if self.is_filled:
             raise BeatIsFullError()
-        child.offset = self.filled_quarter_duration
         diff = child.quarter_duration - (self.quarter_duration - self.filled_quarter_duration)
+        offset = self.filled_quarter_duration
         if diff <= 0:
             self._filled_quarter_duration += child.quarter_duration
-            if self.get_children():
-                self._quantize_quarter_duration(chord=child, previous_chord=self.get_children()[-1])
-            children = self._split_not_writable(child)
+            children = self._split_not_writable(child, offset)
             if children:
                 for ch in children:
                     self._add_child(ch)
@@ -267,12 +248,6 @@ class Beat(MusicTree, QuarterDurationMixin):
             chord = Chord(midis=60, quarter_duration=self.quarter_duration)
         return self.add_child(chord)
 
-    def _update_offsets(self):
-        offset = 0
-        for ch in self.get_children():
-            ch.offset = offset
-            offset += ch.quarter_duration
-
     def _change_children_quarter_durations(self, quarter_durations):
         if len(quarter_durations) != len(self.get_children()):
             raise ValueError
@@ -281,17 +256,10 @@ class Beat(MusicTree, QuarterDurationMixin):
         for qd, ch in zip(quarter_durations, self.get_children()):
             ch._quarter_duration = qd
 
-        self._update_offsets()
-
     def get_quantized_locations(self, subdivision):
         return _find_quantized_locations(self.quarter_duration, subdivision)
 
     def get_quantized_quarter_durations(self, quarter_durations):
-        diff = self.quarter_duration - sum(quarter_durations)
-        if diff != 0:
-            for index, dur in enumerate(quarter_durations):
-                pass
-                # quarter_durations[index] = dur + diff / len(quarter_durations)
         if sum(quarter_durations) != self.quarter_duration:
             raise ValueError(
                 f"Sum of quarter_durations '{quarter_durations}: {sum(quarter_durations)}' is not equal to beat quarter_duration "
@@ -332,7 +300,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         return quantized_durations
 
     def quantize(self):
-        if self.get_possible_subdivisions():
+        if self.get_possible_subdivisions() and self.get_children():
             if self._get_actual_notes(self.get_children()) in self.get_possible_subdivisions():
                 pass
             else:

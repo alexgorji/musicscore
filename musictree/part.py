@@ -1,6 +1,7 @@
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
-from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError
+from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError, \
+    QuantizationBeatNotFullError
 from musictree.measure import Measure
 from musictree.musictree import MusicTree
 from musictree.time import Time
@@ -230,6 +231,15 @@ class Part(MusicTree, XMLWrapper):
             self._current_measures[staff_number][voice_number] = measure
         else:
             self._current_measures[staff_number] = {voice_number: measure}
+
+    def quantize(self):
+        for b in [beat for measure in self.get_children() for staff in measure.get_children() for voice in staff.get_children() for beat in \
+                  voice.get_children()]:
+            if b.is_filled:
+                b.quantize()
+            else:
+                raise QuantizationBeatNotFullError(
+                    f"Part:{self.id_.value} Beat {b.up.up.up.number}:{b.up.up.number}:{b.up.number}:{b.number} is not filled.")
 
     def update(self):
         for m in self.get_children():

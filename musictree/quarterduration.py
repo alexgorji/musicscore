@@ -85,10 +85,13 @@ class QuarterDuration(numbers.Rational):
                     output[1][-1] += current_value
                 else:
                     output[1].append(current_value)
+            if remaining_value == 0:
+                break
         if output[0]:
             output = [[output[0], *output[1]], output[2]]
         else:
             output = [output[1], output[2]]
+
         # Add conditions for other beat groupings
         if offset == 0 and sum(output[0]) == 5:
             output[0] = [QuarterDuration(3), QuarterDuration(2)]

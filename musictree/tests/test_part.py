@@ -375,7 +375,14 @@ class TestScorePart(IdTestCase):
         # print(first_qd)
         # qds = [first_qd] + qds
         # print(qds)
-        qds = [QuarterDuration(23, 32), QuarterDuration(178, 85), QuarterDuration(32, 171)]
-        print(sum(qds))
+        qds = [QuarterDuration(23, 32), QuarterDuration(178, 85), QuarterDuration(32, 171), QuarterDuration(1)]
         for qd in qds:
             p.add_chord(Chord(midis=60, quarter_duration=qd))
+        expected = [QuarterDuration(23, 32), QuarterDuration(5, 32), QuarterDuration(1, 8), QuarterDuration(1, 1),
+                    QuarterDuration(139, 171), QuarterDuration(32, 171), QuarterDuration(1, 1)]
+
+        assert [ch.quarter_duration for ch in p.get_chords()] == expected
+        p.quantize()
+        expected = [QuarterDuration(5, 7), QuarterDuration(1, 7), QuarterDuration(1, 7), QuarterDuration(1, 1),
+                    QuarterDuration(4, 5), QuarterDuration(1, 5), QuarterDuration(1, 1)]
+        assert [ch.quarter_duration for ch in p.get_chords()] == expected

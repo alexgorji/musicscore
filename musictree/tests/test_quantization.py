@@ -1,5 +1,3 @@
-import math
-
 from musictree.chord import Chord
 from musictree.part import Part
 from musictree.quarterduration import QuarterDuration
@@ -41,14 +39,11 @@ class TestQuantization(IdTestCase):
         p.add_chord(Chord(60, 0.2))
         p.add_chord(Chord(60, 3.8))
         assert [ch.quarter_duration for ch in p.get_chords()] == [0.2, 0.8, 3]
-        p.get_measure(1).get_staff(1).add_voice()
-
-        b = p.get_measure(1).get_staff(1).get_voice(2).get_beat(1)
+        b = p.get_measure(1).get_staff(1).get_voice(1).get_beat(1)
         b.set_possible_subdivisions(subdivisions=[2, 3, 4])
-        p.add_chord(Chord(60, 0.2), staff_number=1, voice_number=2)
-        p.add_chord(Chord(60, 3.8), staff_number=1, voice_number=2)
-        assert [ch.quarter_duration for ch in p.get_measure(1).get_staff(1).get_voice(2).get_chords()] == [0.25, 0.75, 3]
-        assert [ch.offset for ch in p.get_measure(1).get_staff(1).get_voice(2).get_chords()] == [0, 0.25, 0]
+        b.quantize()
+        assert [ch.quarter_duration for ch in p.get_measure(1).get_staff(1).get_voice(1).get_chords()] == [0.25, 0.75, 3]
+        assert [ch.offset for ch in p.get_measure(1).get_staff(1).get_voice(1).get_chords()] == [0, 0.25, 0]
 
     def test_complex_quantization(self):
         s = Score()
@@ -59,23 +54,17 @@ class TestQuantization(IdTestCase):
         quarter_durations = []
         while sum(quarter_durations) < 40:
             quarter_durations.append(QuarterDuration(random.random() + random.randint(0, 3)))
-        quarter_durations.append(math.ceil(sum(quarter_durations)) - sum(quarter_durations))
+        quarter_durations.append(44 - sum(quarter_durations))
 
-        assert int(sum(quarter_durations)) == sum(quarter_durations) > 40
-        print(quarter_durations)
         for qd in quarter_durations:
-            print(qd)
             p.add_chord(Chord(midis=60, quarter_duration=qd))
-        # for measure in p.get_children():
-        #     v = measure.get_staff(1).get_voice(1)
-        #     for beat in v.get_children():
-        #         qds = [ch.quarter_duration for ch in beat.get_children()]
-        #         print(qds)
-        #         div = lcm([qd.denominator for qd in qds])
-        #         print(div)
-        #         # if div != 1:
-        #         #     assert div in [2, 3, 4, 6, 8]
-        # assert sum([ch.quarter_duration for ch in p.get_chords()]) == sum(quarter_durations)
-        # b = p.get_measure(1).get_staff(1).get_voice(1).get_beat(1)
-        # b.set_possible_subdivisions(subdivisions=[2, 3, 4])
-        # assert [ch.quarter_duration for ch in p.get_measure(1).get_staff(1).get_voice(1).get_chords()] == [0.25, 0.75, 3]
+
+        p.quantize()
+
+        for measure in p.get_children():
+            v = measure.get_staff(1).get_voice(1)
+            for b in v.get_children():
+                qds = [ch.quarter_duration for ch in b.get_children()]
+                div = lcm([qd.denominator for qd in qds])
+                if div != 1:
+                    assert div in [2, 3, 4, 6, 8]
