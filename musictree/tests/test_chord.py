@@ -77,7 +77,7 @@ class TestTreeChord(ChordTestCase):
         m.add_chord(ch2)
         for ch in m.get_chords()[1:]:
             ch._update_notes()
-        assert [ch.notes[0].quarter_duration for ch in m.get_chords()] == [1, 2, 1/2]
+        assert [ch.notes[0].quarter_duration for ch in m.get_chords()] == [1, 2, 1 / 2]
 
     def test_init_quarter_durations(self):
         """
@@ -485,4 +485,34 @@ class TestTreeChord(ChordTestCase):
         assert [type(a) for a in n.xml_notations.xml_articulations.get_children()] == articulation_classes
 
     def test_add_ornaments(self):
-        pass
+        self.fail('Incomplete')
+
+    def test_add_wedge(self):
+        self.fail('Incomplete')
+
+    def test_add_words(self):
+        self.fail('Incomplete')
+
+    def test_add_clef(self):
+        self.fail('Incomplete')
+
+    def test_add_bracket(self):
+        self.fail('Incomplete')
+
+    def test_add_grace_chords(self):
+        self.fail('Incomplete')
+
+    def test_add_slur(self):
+        self.fail('Incomplete')
+
+    def test_add_slide(self):
+        self.fail('Incomplete')
+
+    def test_add_fermata(self):
+        self.fail('Incomplete')
+
+    def test_percussion_notation(self):
+        self.fail('Incomplete')
+
+    def test_finger_tremolo(self):
+        self.fail('Incomplete')

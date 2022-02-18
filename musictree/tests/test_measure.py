@@ -379,7 +379,6 @@ class TestMeasure(TestCase):
         assert m.xml_direction.to_string() == expected
 
 
-
 class TestUpdateAccidentals(IdTestCase):
     def test_update_accidentals_simple(self):
         m = Measure(1)
