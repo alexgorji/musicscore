@@ -3,7 +3,7 @@ from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCre
 from musictree.musictree import MusicTree
 from musictree.quarterduration import QuarterDuration
 from musictree.xmlwrapper import XMLWrapper
-from musictree.layout import Scaling, PageLayout
+from musictree.layout import Scaling, PageLayout, SystemLayout, StaffLayout
 
 TITLE = {'font_size': 24, 'default_x': {'A4': {'portrait': 616}}, 'default_y': {'A4': {'portrait': 1573}}, 'justify': 'center',
          'valign': 'top'}
@@ -13,7 +13,7 @@ SUBTITLE = {'font_size': 18, 'default_x': {'A4': {'portrait': 616}}, 'default_y'
 
 
 class Score(MusicTree, XMLWrapper):
-    _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout'}
+    _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout'}
 
     def __init__(self, version='4.0', title=None, subtitle=None, *args, **kwargs):
         super().__init__()
@@ -23,10 +23,13 @@ class Score(MusicTree, XMLWrapper):
         self._title = None
         self._subtitle = None
         self._page_layout = None
+        self._system_layout = None
+        self._staff_layout = None
         self._scaling = None
 
         self.scaling = Scaling()
-        self.page_layout = PageLayout(parent=self)
+        self.page_layout = PageLayout()
+        self.system_layout = SystemLayout()
         self.version = version
         self.title = title
         self.subtitle = subtitle
@@ -54,6 +57,7 @@ class Score(MusicTree, XMLWrapper):
         if not isinstance(val, PageLayout):
             raise TypeError
         self._page_layout = val
+        self.page_layout.parent = self
 
     @property
     def scaling(self):
@@ -65,6 +69,17 @@ class Score(MusicTree, XMLWrapper):
             raise TypeError
         val.score = self
         self._scaling = val
+
+    @property
+    def staff_layout(self):
+        return self._staff_layout
+
+    @staff_layout.setter
+    def staff_layout(self, val):
+        if not isinstance(val, StaffLayout):
+            raise TypeError
+        self._staff_layout = val
+        self.staff_layout.parent = self
 
     @property
     def subtitle(self):
@@ -86,6 +101,17 @@ class Score(MusicTree, XMLWrapper):
                 credit = self._subtitle.up
                 credit.up.remove(credit)
                 self._subtitle = None
+
+    @property
+    def system_layout(self):
+        return self._system_layout
+
+    @system_layout.setter
+    def system_layout(self, val):
+        if not isinstance(val, SystemLayout):
+            raise TypeError
+        self._system_layout = val
+        self.system_layout.parent = self
 
     @property
     def title(self):

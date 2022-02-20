@@ -23,7 +23,8 @@ class TestPageLayout(IdTestCase):
         self.score = Score()
 
     def test_page_layout_default(self):
-        pl = PageLayout(self.score)
+        pl = PageLayout()
+        self.score.page_layout = pl
         assert pl.size == 'A4'
         assert pl.orientation == 'portrait'
         assert pl.xml_page_height.value_ == 1643
@@ -63,6 +64,8 @@ class TestPageLayout(IdTestCase):
         assert pl.xml_page_margins.xml_bottom_margin.value_ == 70
 
         pl.scaling.tenths = 50
+        assert self.score.page_layout == pl
+        assert self.score.scaling.score == self.score
         assert self.score.scaling.tenths == 50
         assert pl.xml_page_height.value_ == round(1643 * 5 / 4)
 
@@ -74,8 +77,6 @@ class TestSystemLayout(IdTestCase):
         assert sl.xml_top_system_distance.value_ == 66
         assert sl.xml_system_margins.xml_left_margin.value_ == 0
         assert sl.xml_system_margins.xml_right_margin.value_ == 0
-        assert sl.xml_system_margins.xml_top_margin is None
-        assert sl.xml_system_margins.xml_bottom_margin is None
 
 
 class TestStaffLayout(IdTestCase):

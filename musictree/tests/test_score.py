@@ -1,4 +1,5 @@
 from musictree.chord import Chord
+from musictree.layout import StaffLayout
 from musictree.measure import Measure
 from musictree.part import Part
 from musictree.score import Score, TITLE, SUBTITLE
@@ -97,6 +98,7 @@ class TestScore(IdTestCase):
 
     def test_score_page_layout(self):
         s = Score()
+        assert s.page_layout.parent == s
         assert s.page_layout.scaling == s.scaling
         assert s.xml_object.xml_defaults.xml_page_layout.xml_page_height.value_ == 1643
         assert s.xml_object.xml_defaults.xml_page_layout.xml_page_margins.xml_left_margin.value_ == 140
@@ -106,4 +108,21 @@ class TestScore(IdTestCase):
         assert s.xml_object.xml_defaults.xml_page_layout.xml_page_margins.xml_left_margin.value_ == 111
 
     def test_score_system_layout(self):
-        pass
+        s = Score()
+        assert s.system_layout.parent == s
+        assert s.xml_object.xml_defaults.xml_system_layout.xml_system_margins.xml_left_margin.value_ == 0
+        assert s.xml_object.xml_defaults.xml_system_layout.xml_system_margins.xml_right_margin.value_ == 0
+        assert s.xml_object.xml_defaults.xml_system_layout.xml_system_distance.value_ == 117
+        assert s.xml_object.xml_defaults.xml_system_layout.xml_top_system_distance.value_ == 66
+        s.system_layout.margins.left = 10
+        assert s.xml_object.xml_defaults.xml_system_layout.xml_system_margins.xml_left_margin.value_ == 10
+        s.system_layout.top_system_distance = 100
+        assert s.xml_object.xml_defaults.xml_system_layout.xml_top_system_distance.value_ == 100
+
+    def test_score_staff_layout(self):
+        s = Score()
+        assert s.staff_layout is None
+        s.staff_layout = StaffLayout()
+        assert s.xml_object.xml_defaults.xml_staff_layout.xml_staff_distance.value_ == 80
+        s.staff_layout.staff_distance = 100
+        assert s.xml_object.xml_defaults.xml_staff_layout.xml_staff_distance.value_ == 100
