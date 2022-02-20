@@ -1,5 +1,7 @@
-from musicxml.xmlelement.xmlelement import XMLPageLayout, XMLPageMargins, XMLLeftMargin, XMLRightMargin, XMLTopMargin, XMLBottomMargin
+from musicxml.xmlelement.xmlelement import XMLPageLayout, XMLPageMargins, XMLLeftMargin, XMLRightMargin, XMLTopMargin, XMLBottomMargin, \
+    XMLScaling, XMLDefaults
 
+from musictree.util import isinstance_as_string
 from musictree.xmlwrapper import XMLWrapper
 
 PAGE_MARGINS = {
@@ -18,6 +20,11 @@ SYSTEM_LAYOUT = {'system_distance': 117, 'top_system_distance': 66}
 
 STAFF_LAYOUT = {'staff_distance': 80}
 
+SCALING = {
+    'millimeters': 7.2319,
+    'tenths': 40
+}
+
 
 class Margins:
     def __init__(self, parent, left=None, right=None, top=None, bottom=None):
@@ -35,11 +42,9 @@ class Margins:
         self.bottom = bottom
 
     def _update_parent(self, side):
-        if eval(f"self._parent_object.xml_{side}_margin"):
-            setattr(self._parent_object, f"xml_{side}_margin", eval(f"self.{side}"))
-        else:
-            if eval(f"self.{side}") is not None:
-                setattr(self._parent_object, f"xml_{side}_margin", eval(f"XML{side.capitalize()}Margin(self.{side})"))
+        if side not in ['left', 'right', 'top', 'bottom']:
+            raise ValueError
+        setattr(self._parent_object, f"xml_{side}_margin", eval(f"self.{side}"))
 
     @property
     def bottom(self):
@@ -90,10 +95,55 @@ class Margins:
         self._update_parent('top')
 
 
-class Scaling:
-    def __init__(self, millimeters=7.2319, tenths=40):
+class Scaling(XMLWrapper):
+    _ATTRIBUTES = {'millimeters', 'tenths', 'score'}
+
+    def __init__(self, millimeters=SCALING['millimeters'], tenths=SCALING['tenths']):
+        super().__init__()
+        self._xml_object = XMLScaling()
+        self._millimeters = None
+        self._tenths = None
+        self._score = None
+
         self.millimeters = millimeters
         self.tenths = tenths
+
+    def _update_score(self):
+        if self.score:
+            self.score.page_layout._set_page_height_and_width()
+
+    @property
+    def millimeters(self):
+        return self._millimeters
+
+    @millimeters.setter
+    def millimeters(self, val):
+        if val != self._millimeters:
+            self._millimeters = val
+            self.xml_object.xml_millimeters = val
+            self._update_score()
+
+    @property
+    def score(self):
+        return self._score
+
+    @score.setter
+    def score(self, val):
+        self._score = val
+        if not self.score.xml_object.xml_defaults:
+            self.score.xml_object.xml_defaults = XMLDefaults()
+        self.score.xml_object.xml_defaults.xml_scaling = self.xml_object
+
+    @property
+    def tenths(self):
+        return self._tenths
+
+    @tenths.setter
+    def tenths(self, val):
+        if val != self._tenths:
+            self._tenths = val
+            self.xml_object.xml_tenths = val
+            self._update_score()
 
     def millimeters_to_tenths(self, x):
         return round((x * self.tenths) / self.millimeters)
@@ -143,19 +193,18 @@ class StaffLayout:
 
 
 class PageLayout(XMLWrapper):
-    _ATTRIBUTES = {'scaling', 'size', 'orientation'}
+    _ATTRIBUTES = {'scaling', 'size', 'orientation', 'parent'}
     SIZES = {'A4': (209.991, 297.0389), 'A3': (297.0389, 419.9819)}
 
-    def __init__(self, scaling=Scaling(), size='A4', orientation='portrait'):
+    def __init__(self, parent, size='A4', orientation='portrait'):
         super().__init__()
         self._xml_object = XMLPageLayout()
         self._xml_object.xml_page_margins = XMLPageMargins(type='both')
-
-        self._scaling = None
+        self._parent = None
         self._size = None
         self._orientation = None
 
-        self.scaling = scaling
+        self.parent = parent
         self.size = size
         self.orientation = orientation
 
@@ -181,16 +230,22 @@ class PageLayout(XMLWrapper):
                 self._margins = Margins(parent=self, **PAGE_MARGINS[self.size][self.orientation])
 
     @property
-    def scaling(self):
-        return self._scaling
+    def parent(self):
+        return self._parent
 
-    @scaling.setter
-    def scaling(self, val):
-        if not isinstance(val, Scaling):
-            raise TypeError
-        self._scaling = val
-        if self.size and self.orientation:
-            self._set_page_height_and_width()
+    @parent.setter
+    def parent(self, val):
+        self._parent = val
+        self.parent.page_layout = self
+
+        if isinstance_as_string(self.parent, 'Score'):
+            self.parent.xml_object.xml_defaults.xml_page_layout = self.xml_object
+        else:
+            raise NotImplementedError
+
+    @property
+    def scaling(self):
+        return self.parent.get_root().scaling
 
     @property
     def size(self):

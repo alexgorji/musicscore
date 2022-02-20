@@ -40,6 +40,7 @@ class TestTree(TestCase):
     def test_get_root(self):
         assert self.greatgrandchild1.get_root() == self.root
         assert self.child4.get_root() == self.root
+        assert self.root.get_root() == self.root
 
     def test_is_leaf(self):
         assert self.greatgrandchild1.is_leaf is True

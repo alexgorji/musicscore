@@ -17,23 +17,9 @@ class TestScore(IdTestCase):
         p = s.add_child(Part('p1'))
         p.add_child(Measure(1))
         assert s.xml_part_list.find_child('XMLScorePart') == p.score_part.xml_object
-
-        expected = """<score-partwise version="4.0">
-  <part-list>
-    <score-part id="p1">
-      <part-name>p1</part-name>
-    </score-part>
-  </part-list>
-  <part id="p1">
-    <measure number="1">
-      <attributes>
-        <divisions>1</divisions>
-      </attributes>
-    </measure>
-  </part>
-</score-partwise>
-"""
-        assert s.to_string() == expected
+        assert s.find_child('XMLPart') == p.xml_object
+        assert s.xml_defaults is not None
+        s.xml_object._final_checks()
 
     def test_get_chords(self):
         s = Score()
@@ -97,3 +83,27 @@ class TestScore(IdTestCase):
 
     def test_score_add_other_credits(self):
         self.fail('Incomplete')
+
+    def test_score_scaling(self):
+        s = Score()
+        assert s.scaling.score == s
+        assert s.scaling.tenths == 40
+        assert s.scaling.millimeters == 7.2319
+        assert s.xml_object.xml_defaults.xml_scaling.xml_tenths.value_ == s.scaling.tenths
+        assert s.xml_object.xml_defaults.xml_scaling.xml_millimeters.value_ == s.scaling.millimeters
+        s.scaling.tenths = 50
+        assert s.xml_object.xml_defaults.xml_scaling.xml_tenths.value_ == s.scaling.tenths
+        assert s.xml_object.xml_defaults.xml_scaling.xml_millimeters.value_ == s.scaling.millimeters
+
+    def test_score_page_layout(self):
+        s = Score()
+        assert s.page_layout.scaling == s.scaling
+        assert s.xml_object.xml_defaults.xml_page_layout.xml_page_height.value_ == 1643
+        assert s.xml_object.xml_defaults.xml_page_layout.xml_page_margins.xml_left_margin.value_ == 140
+
+        s.page_layout.orientation = 'landscape'
+        assert s.xml_object.xml_defaults.xml_page_layout.xml_page_height.value_ == 1161
+        assert s.xml_object.xml_defaults.xml_page_layout.xml_page_margins.xml_left_margin.value_ == 111
+
+    def test_score_system_layout(self):
+        pass

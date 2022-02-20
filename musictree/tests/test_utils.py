@@ -10,14 +10,14 @@ from musictree.util import isinstance_as_string, lcm
 
 class TestUtils(TestCase):
     def test_isinstance_as_string(self):
-        assert isinstance_as_string(Score, 'Score')
-        assert isinstance_as_string(Score, 'MusicTree')
-        assert not isinstance_as_string(Score, 'str')
+        assert isinstance_as_string(Score(), 'Score')
+        assert isinstance_as_string(Score(), 'MusicTree')
+        assert not isinstance_as_string(Score(), 'str')
 
         class Measure:
             pass
 
-        assert not isinstance_as_string(Measure, 'MusicTree')
+        assert not isinstance_as_string(Measure(), 'MusicTree')
 
     def test_create_expected_path(self):
         path = Path(__file__).parent / 'test_util_diff_xml.xml'

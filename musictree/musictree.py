@@ -24,21 +24,21 @@ class MusicTree(Tree):
     """
 
     def _check_child_to_be_added(self, child):
-        if not isinstance_as_string(child.__class__, 'MusicTree'):
+        if not isinstance_as_string(child, 'MusicTree'):
             raise TypeError(f'MusicTree child must be of type MusicTree not {child.__class__}')
 
         parent_child = {'Score': 'Part', 'Part': 'Measure', 'Measure': 'Staff', 'Staff': 'Voice', 'Voice': 'Beat', 'Beat': 'Chord',
                         'Chord': 'Note', 'Note': 'Midi', 'Midi': 'Accidental'}
 
         try:
-            if not isinstance_as_string(child.__class__, parent_child[self.__class__.__name__]):
+            if not isinstance_as_string(child, parent_child[self.__class__.__name__]):
                 raise TypeError(f'{self.__class__.__name__} accepts only children of type {parent_child[self.__class__.__name__]} not '
                                 f'{child.__class__.__name__}')
         except KeyError:
             raise NotImplementedError(f'{self.__class__.__name__} add_child() not implemented.')
 
     def _get_beat_quarter_duration(self):
-        if isinstance_as_string(self.__class__, 'Beat'):
+        if isinstance_as_string(self, 'Beat'):
             beat_quarter_duration = self.quarter_duration
         else:
             beat_quarter_duration = QuarterDuration(1)
@@ -55,7 +55,7 @@ class MusicTree(Tree):
     def set_possible_subdivisions(self, subdivisions, beat_quarter_duration=None):
         if beat_quarter_duration is None:
             beat_quarter_duration = self._get_beat_quarter_duration()
-        elif isinstance_as_string(self.__class__, 'Beat') and beat_quarter_duration != self.quarter_duration:
+        elif isinstance_as_string(self, 'Beat') and beat_quarter_duration != self.quarter_duration:
             raise ValueError(
                 f"beat_quarter_duration '{beat_quarter_duration}' must be None or equal to the beat quarter_duration '{self.quarter_duration}'")
 
@@ -91,7 +91,7 @@ class MusicTree(Tree):
         return kwargs
 
     def get_part(self, *args, **kwargs):
-        if isinstance_as_string(self.__class__, 'Score'):
+        if isinstance_as_string(self, 'Score'):
             kwargs = self._check_args_kwargs(args, kwargs, 'Score', 'Part')
             try:
                 return self.get_children()[kwargs['part_number'] - 1]
@@ -100,7 +100,7 @@ class MusicTree(Tree):
         raise TypeError
 
     def get_measure(self, *args, **kwargs):
-        if isinstance_as_string(self.__class__, 'Part'):
+        if isinstance_as_string(self, 'Part'):
             kwargs = self._check_args_kwargs(args, kwargs, 'Part', 'Measure')
             try:
                 return self.get_children()[kwargs['measure_number'] - 1]
@@ -109,7 +109,7 @@ class MusicTree(Tree):
         raise TypeError
 
     def get_staff(self, *args, **kwargs):
-        if isinstance_as_string(self.__class__, 'Measure'):
+        if isinstance_as_string(self, 'Measure'):
             kwargs = self._check_args_kwargs(args, kwargs, 'Measure', 'Staff')
             try:
                 return self.get_children()[kwargs['staff_number'] - 1]
@@ -118,7 +118,7 @@ class MusicTree(Tree):
         raise TypeError
 
     def get_voice(self, *args, **kwargs):
-        if isinstance_as_string(self.__class__, 'Staff'):
+        if isinstance_as_string(self, 'Staff'):
             kwargs = self._check_args_kwargs(args, kwargs, 'Staff', 'Voice')
             try:
                 return self.get_children()[kwargs['voice_number'] - 1]
@@ -127,7 +127,7 @@ class MusicTree(Tree):
         raise TypeError
 
     def get_beat(self, *args, **kwargs):
-        if isinstance_as_string(self.__class__, 'Voice'):
+        if isinstance_as_string(self, 'Voice'):
             kwargs = self._check_args_kwargs(args, kwargs, 'Voice', 'Beat')
             try:
                 return self.get_children()[kwargs['beat_number'] - 1]
@@ -136,7 +136,7 @@ class MusicTree(Tree):
         raise TypeError
 
     def get_chord(self, *args, **kwargs):
-        if isinstance_as_string(self.__class__, 'Beat'):
+        if isinstance_as_string(self, 'Beat'):
             kwargs = self._check_args_kwargs(args, kwargs, 'Beat', 'Chord')
             try:
                 return self.get_children()[kwargs['chord_number'] - 1]
@@ -145,7 +145,7 @@ class MusicTree(Tree):
         raise TypeError
 
     def get_chords(self):
-        if isinstance_as_string(self.__class__, 'Beat'):
+        if isinstance_as_string(self, 'Beat'):
             return self.get_children()
         else:
             return [ch for child in self.get_children() for ch in child.get_chords()]
