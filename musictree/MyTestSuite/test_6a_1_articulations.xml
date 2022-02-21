@@ -3,6 +3,39 @@
     "-//Recordare//DTD MusicXML 4.0 Partwise//EN"
     "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="4.0">
+  <identification>
+    <encoding>
+      <supports attribute="new-system" element="print" type="yes" value="yes" />
+      <supports attribute="new-page" element="print" type="yes" value="yes" />
+      <supports element="accidental" type="yes" />
+      <supports element="beam" type="yes" />
+      <supports element="stem" type="yes" />
+    </encoding>
+  </identification>
+  <defaults>
+    <scaling>
+      <millimeters>7.2319</millimeters>
+      <tenths>40</tenths>
+    </scaling>
+    <page-layout>
+      <page-height>1643</page-height>
+      <page-width>1161</page-width>
+      <page-margins type="both">
+        <left-margin>140</left-margin>
+        <right-margin>70</right-margin>
+        <top-margin>70</top-margin>
+        <bottom-margin>70</bottom-margin>
+      </page-margins>
+    </page-layout>
+    <system-layout>
+      <system-margins>
+        <left-margin>0</left-margin>
+        <right-margin>0</right-margin>
+      </system-margins>
+      <system-distance>117</system-distance>
+      <top-system-distance>66</top-system-distance>
+    </system-layout>
+  </defaults>
   <part-list>
     <score-part id="P1">
       <part-name>P1</part-name>
@@ -364,7 +397,7 @@
         <notations>
           <articulations>
             <falloff />
-            <breath-mark />
+            <breath-mark>comma</breath-mark>
           </articulations>
         </notations>
       </note>
@@ -378,7 +411,7 @@
         <type>quarter</type>
         <notations>
           <articulations>
-            <breath-mark />
+            <breath-mark>comma</breath-mark>
           </articulations>
         </notations>
       </note>
@@ -392,8 +425,8 @@
         <type>quarter</type>
         <notations>
           <articulations>
-            <breath-mark />
-            <caesura />
+            <breath-mark>comma</breath-mark>
+            <caesura>normal</caesura>
           </articulations>
         </notations>
       </note>
@@ -412,7 +445,7 @@
         <type>quarter</type>
         <notations>
           <articulations>
-            <caesura />
+            <caesura>normal</caesura>
           </articulations>
         </notations>
       </note>
@@ -426,7 +459,7 @@
         <type>quarter</type>
         <notations>
           <articulations>
-            <caesura />
+            <caesura>normal</caesura>
             <stress />
           </articulations>
         </notations>

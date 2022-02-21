@@ -3,7 +3,7 @@ from pathlib import Path
 from musictree.chord import Chord
 from musictree.part import Part
 from musictree.score import Score
-from musictree.tests.util import IdTestCase
+from musictree.tests.util import IdTestCase, create_articulation
 from musictree.util import XML_ARTICULATION_CLASSES
 
 

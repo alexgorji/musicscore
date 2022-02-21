@@ -1,4 +1,5 @@
-from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords
+from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, XMLEncoding, \
+    XMLSupports
 
 from musictree.musictree import MusicTree
 from musictree.quarterduration import QuarterDuration
@@ -18,7 +19,7 @@ class Score(MusicTree, XMLWrapper):
     def __init__(self, version='4.0', title=None, subtitle=None, *args, **kwargs):
         super().__init__()
         self._xml_object = XMLScorePartwise(*args, **kwargs)
-        self._xml_object.add_child(XMLPartList())
+        self._update_xml_object()
         self._version = None
         self._title = None
         self._subtitle = None
@@ -35,6 +36,16 @@ class Score(MusicTree, XMLWrapper):
         self.subtitle = subtitle
         self._possible_subdivisions = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [2, 3, 4, 5], QuarterDuration(1): [2, 3, 4,
                                                                                                                                 5, 6, 7, 8]}
+
+    def _update_xml_object(self):
+        self.xml_object.xml_part_list = XMLPartList()
+        self.xml_object.xml_identification = XMLIdentification()
+        encoding = self.xml_object.xml_identification.xml_encoding = XMLEncoding()
+        encoding.add_child(XMLSupports(attribute='new-system', element='print', type='yes', value='yes'))
+        encoding.add_child(XMLSupports(attribute='new-page', element='print', type='yes', value='yes'))
+        encoding.add_child(XMLSupports(element='accidental', type='yes'))
+        encoding.add_child(XMLSupports(element='beam', type='yes'))
+        encoding.add_child(XMLSupports(element='stem', type='yes'))
 
     def _get_title_attributes(self):
         output = TITLE.copy()

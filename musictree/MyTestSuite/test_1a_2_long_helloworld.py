@@ -4,9 +4,10 @@ from unittest import TestCase
 from musictree.chord import Chord
 from musictree.part import Part
 from musictree.score import Score
+from musictree.tests.util import IdTestCase
 
 
-class TestHelloWorld(TestCase):
+class TestHelloWorld(IdTestCase):
     def test_export_hello_world(self):
         """
         Hello World as musicxml means having a C4 pitch as a whole in a 4/4 measure with treble clef.
