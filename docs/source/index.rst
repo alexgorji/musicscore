@@ -54,3 +54,4 @@ Contents
 
    usage
    musictree
+   musicxml

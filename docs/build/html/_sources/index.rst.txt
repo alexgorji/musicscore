@@ -28,6 +28,11 @@ used in a musicxml structure corresponding exactly to musicxml.xsd.
 musictree
 ---------
 
+
+.. note::
+
+   This project is under active development.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -49,3 +54,4 @@ Contents
 
    usage
    musictree
+   musicxml
