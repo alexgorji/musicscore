@@ -1,4 +1,3 @@
 Sphinx==4.4.0
 furo
-musicxml==0.1.5
 quicktions

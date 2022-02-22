@@ -1,0 +1,2 @@
+include musicxml/generate_classes/xml.xsd
+include musicxml/generate_classes/musicxml_4_0.xsd
