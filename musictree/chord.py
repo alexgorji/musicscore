@@ -203,6 +203,11 @@ class Chord(MusicTree, QuarterDurationMixin):
             return 1
 
     def add_tie(self, val):
+        """
+        :param val: 'start' or 'stop'
+        :return: None
+        :meta public:
+        """
         if val not in ['start', 'stop']:
             raise ValueError
         if val not in self._ties:
