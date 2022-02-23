@@ -72,8 +72,7 @@ class TestTree(TestCase):
             greatgrandchild1
     child3
     child4
-        grandchild3
-"""
+        grandchild3"""
         assert self.root.tree_representation(lambda x: x.name) == expected
 
     def test_level(self):

@@ -4,7 +4,7 @@ from typing import Optional, List, Callable, Union
 
 from musicxml.exceptions import XSDWrongAttribute, XSDAttributeRequiredException, XMLElementChildrenRequired
 from musicxml.generate_classes.utils import musicxml_xsd_et_root, ns
-from musicxml.tree.tree import Tree
+from tree.tree import Tree
 from musicxml.util.core import cap_first, replace_key_underline_with_hyphen
 from musicxml.xmlelement.containers import containers
 from musicxml.xmlelement.exceptions import XMLElementCannotHaveChildrenError

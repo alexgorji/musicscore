@@ -6,6 +6,7 @@ from string import Template
 
 from musicxml.generate_classes.utils import musicxml_xsd_et_root, ns
 from musicxml.util.core import convert_to_xml_class_name, convert_to_xsd_class_name
+from musicxml.xmlelement.containers import containers
 from musicxml.xsd.xsdtree import XSDTree
 from musicxml.xsd.xsdcomplextype import *
 from musicxml.xsd.xsdcomplextype import __all__ as all_complex_types
@@ -16,19 +17,15 @@ target_path = Path(__file__).parent.parent / 'xmlelement' / 'xmlelement.py'
 
 template_string = """
 class $class_name($base_classes):
+    \"\"\"
+    $doc
+    \"\"\"
     
     TYPE = $xsd_type
     XSD_TREE = XSDTree(ET.fromstring(\"\"\"
 $xsd_string
 \"\"\"
                                      ))
-
-    @property
-    def __doc__(self):
-        if self.TYPE.XSD_TREE.is_complex_type:
-            return self.TYPE.__doc__
-        else:
-            return self.XSD_TREE.get_doc()
 """
 
 typed_elements = list(
@@ -61,8 +58,34 @@ def element_class_as_string(element_):
     base_classes = ('XMLElement',)
     ET.indent(found_et_xml, space='    '),
     xsd_string = ET.tostring(found_et_xml, encoding='unicode').strip()
+    if xsd_type in all_complex_types:
+        doc = eval(xsd_type).__doc__
+        if doc.count('\n') > 1:
+            doc = doc.replace('\n', '\n    ')
+        try:
+            container = containers[xsd_type]
+            container_tree_representation = copy.copy(container).tree_representation(
+                tab=lambda x: '    ' + x.get_layer_number() * 2 * '\- ', function=lambda x: x.compact_repr + '\\n')
+            container_tree_representation = container_tree_representation.replace('@', '\@')
+            container_tree_representation = container_tree_representation[:-1]
+            if doc != "":
+
+                doc = f"{doc}\\n\n    XSD structure:\\n\n" \
+                      f"{container_tree_representation}"
+
+            else:
+                doc = f"XSD structure:\\n\n{container_tree_representation}"
+
+        except KeyError:
+            pass
+    else:
+        doc = xsd_tree.get_doc()
+
+    if doc is None:
+        doc = ""
+
     t = Template(template_string).substitute(class_name=class_name, base_classes=', '.join(base_classes), xsd_type=xsd_type,
-                                             xsd_string=xsd_string)
+                                             xsd_string=xsd_string, doc=doc)
     return t
 
 

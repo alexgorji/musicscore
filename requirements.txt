@@ -1,3 +1,3 @@
 Sphinx==4.4.0
-furo
 quicktions
+sphinx_rtd_theme

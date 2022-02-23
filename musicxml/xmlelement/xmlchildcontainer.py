@@ -314,7 +314,7 @@ class XMLChildContainer(Tree):
             output = f"{type_}@minOccurs={self.min_occurrences}@maxOccurs={self.max_occurrences}"
             if self.requirements_not_fulfilled:
                 output += '\n'
-                output += self.get_indentation() + '    '
+                output += self.get_inadentation() + '    '
                 output += '!Required!'
             return output
 

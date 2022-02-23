@@ -196,16 +196,17 @@ class Tree(ABC):
         else:
             raise NotImplementedError
 
-    def tree_representation(self, function=None):
+    def tree_representation(self, function=None, tab=None):
         if not function:
             function = lambda x: x.compact_repr
 
+        if not tab:
+            tab = lambda x: x.get_indentation()
         """
         A string representation of the tree structure
         """
         output = ''
         for node in self.traverse():
-            output += node.get_indentation() + function(node)
+            output += tab(node) + function(node)
             output += '\n'
-
         return output
