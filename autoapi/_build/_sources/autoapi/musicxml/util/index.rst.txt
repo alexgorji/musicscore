@@ -1,0 +1,17 @@
+:py:mod:`musicxml.util`
+=======================
+
+.. py:module:: musicxml.util
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   core/index.rst
+   helperclasses/index.rst
+   helprervariables/index.rst
+
+
