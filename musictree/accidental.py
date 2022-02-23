@@ -5,6 +5,7 @@ from musicxml.xmlelement.xmlelement import XMLAccidental
 from musictree.musictree import MusicTree
 from musictree.xmlwrapper import XMLWrapper
 
+#:
 STANDARD = {
     0: ('C', 0, 0),
     0.5: ('C', 0.5, 0),
@@ -32,6 +33,7 @@ STANDARD = {
     11.5: ('C', -0.5, 1)
 }
 
+#:
 FLAT = {
     0: ('C', 0, 0),
     0.5: ('D', -1.5, 0),
@@ -59,6 +61,7 @@ FLAT = {
     11.5: ('C', -0.5, 1)
 }
 
+#:
 SHARP = {
     0: ('C', 0, 0),
     0.5: ('C', 0.5, 0),
@@ -86,6 +89,7 @@ SHARP = {
     11.5: ('B', 0.5, 0)
 }
 
+#:
 ENHARMONIC1 = {
     0: ('B', 1, -1),
     0.5: ('D', -1.5, 0),
@@ -113,6 +117,7 @@ ENHARMONIC1 = {
     11.5: ('B', 0.5, 0)
 }
 
+#:
 ENHARMONIC2 = {
     0: ('D', -2, 0),
     1: ('B', 2, -1),
@@ -126,6 +131,8 @@ ENHARMONIC2 = {
     10: ('C', -2, 1),
     11: ('A', 2, 0)
 }
+
+#:
 SIGNS = {-2: 'flat-flat',
          -1.5: 'three-quarters-flat',
          -1: 'flat',
@@ -146,10 +153,11 @@ class Accidental(MusicTree, XMLWrapper):
     _ATTRIBUTES = {'mode', 'show', 'parent_midi'}
 
     # (stem, alter, octaveAdd)
+    XMLClass = XMLAccidental
 
     def __init__(self, mode='standard', show=None, **kwargs):
         super().__init__()
-        self._xml_object = XMLAccidental(value_='natural', **kwargs)
+        self._xml_object = self.XMLClass(value_='natural', **kwargs)
         self._mode = None
         self._parent_midi = None
         self._show = None

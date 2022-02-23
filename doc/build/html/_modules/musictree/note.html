@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>musictree.note &mdash; musicscore2 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> musicscore2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../musictree/musictree.html">musictree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../musicxml/musicxml.html">musicxml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tree/tree.html">tree</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">musicscore2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>musictree.note</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for musictree.note</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">musicxml.xmlelement.xmlelement</span> <span class="kn">import</span> <span class="n">XMLNote</span><span class="p">,</span> <span class="n">XMLDot</span><span class="p">,</span> <span class="n">XMLGrace</span><span class="p">,</span> <span class="n">XMLRest</span><span class="p">,</span> <span class="n">XMLTie</span><span class="p">,</span> <span class="n">XMLNotations</span><span class="p">,</span> <span class="n">XMLTied</span>
+
+<span class="kn">from</span> <span class="nn">musictree.exceptions</span> <span class="kn">import</span> <span class="n">NoteTypeError</span><span class="p">,</span> <span class="n">NoteHasNoParentChordError</span>
+<span class="kn">from</span> <span class="nn">musictree.midi</span> <span class="kn">import</span> <span class="n">Midi</span>
+<span class="kn">from</span> <span class="nn">musictree.musictree</span> <span class="kn">import</span> <span class="n">MusicTree</span>
+<span class="kn">from</span> <span class="nn">musictree.quarterduration</span> <span class="kn">import</span> <span class="n">QuarterDurationMixin</span>
+<span class="kn">from</span> <span class="nn">musictree.util</span> <span class="kn">import</span> <span class="n">note_types</span>
+<span class="kn">from</span> <span class="nn">musictree.xmlwrapper</span> <span class="kn">import</span> <span class="n">XMLWrapper</span>
+
+
+<div class="viewcode-block" id="tie"><a class="viewcode-back" href="../../musictree/musictree.note.html#musictree.note.tie">[docs]</a><span class="k">def</span> <span class="nf">tie</span><span class="p">(</span><span class="o">*</span><span class="n">notes</span><span class="p">):</span>
+    <span class="n">notes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">start_tie</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">notes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">notes</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">note</span><span class="o">.</span><span class="n">stop_tie</span><span class="p">()</span>
+            <span class="n">note</span><span class="o">.</span><span class="n">start_tie</span><span class="p">()</span>
+        <span class="n">notes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">stop_tie</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="untie"><a class="viewcode-back" href="../../musictree/musictree.note.html#musictree.note.untie">[docs]</a><span class="k">def</span> <span class="nf">untie</span><span class="p">(</span><span class="o">*</span><span class="n">notes</span><span class="p">):</span>
+    <span class="n">notes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">remove_tie</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">notes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">notes</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">note</span><span class="o">.</span><span class="n">remove_tie</span><span class="p">(</span><span class="s1">&#39;stop&#39;</span><span class="p">)</span>
+            <span class="n">note</span><span class="o">.</span><span class="n">remove_tie</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">)</span>
+        <span class="n">notes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">remove_tie</span><span class="p">(</span><span class="s1">&#39;stop&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Note"><a class="viewcode-back" href="../../musictree/musictree.note.html#musictree.note.Note">[docs]</a><span class="k">class</span> <span class="nc">Note</span><span class="p">(</span><span class="n">MusicTree</span><span class="p">,</span> <span class="n">XMLWrapper</span><span class="p">,</span> <span class="n">QuarterDurationMixin</span><span class="p">):</span>
+    <span class="n">_ATTRIBUTES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;midi&#39;</span><span class="p">,</span> <span class="s1">&#39;quarter_duration&#39;</span><span class="p">,</span> <span class="s1">&#39;parent_chord&#39;</span><span class="p">,</span> <span class="s1">&#39;_type&#39;</span><span class="p">,</span> <span class="s1">&#39;number_of_dots&#39;</span><span class="p">,</span> <span class="s1">&#39;is_tied&#39;</span><span class="p">,</span> <span class="s1">&#39;is_tied_to_previous&#39;</span><span class="p">,</span> <span class="s1">&#39;_parent&#39;</span><span class="p">}</span>
+
+    <span class="n">XMLClass</span> <span class="o">=</span> <span class="n">XMLNote</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent_chord</span><span class="p">,</span> <span class="n">midi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quarter_duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent_chord</span> <span class="o">=</span> <span class="n">parent_chord</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xml_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">XMLClass</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_xml_voice</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_xml_staff</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_midi</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_of_dots</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">quarter_duration</span><span class="o">=</span><span class="n">quarter_duration</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">midi</span> <span class="o">=</span> <span class="n">midi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_chord</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_check_xml_duration_value</span><span class="p">(</span><span class="n">duration</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span> <span class="o">!=</span> <span class="n">duration</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;product of quarter_duration and divisions </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s1"> must be an integer&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">number_of_dots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_of_dots</span>
+
+    <span class="nd">@number_of_dots</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">number_of_dots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_of_dots</span> <span class="o">=</span> <span class="n">val</span>
+
+    <span class="k">def</span> <span class="nf">_check_dots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_dots</span><span class="p">):</span>
+        <span class="n">dots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">find_children</span><span class="p">(</span><span class="s1">&#39;XMLDot&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">number_of_dots</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">dots</span><span class="p">):</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">number_of_dots</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">dots</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">diff</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">XMLDot</span><span class="p">())</span>
+                <span class="n">diff</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">number_of_dots</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">dots</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">dot</span> <span class="ow">in</span> <span class="n">dots</span><span class="p">[</span><span class="n">number_of_dots</span><span class="p">:]:</span>
+                <span class="n">dot</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dot</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_set_quarter_duration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="n">old_quarter_duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quarter_duration</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_set_quarter_duration</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quarter_duration</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">note_types</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_quarter_duration</span><span class="o">.</span><span class="n">as_integer_ratio</span><span class="p">()]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;A note with quarter_duration </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_quarter_duration</span><span class="si">}</span><span class="s2"> and offset </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="o">.</span><span class="n">offset</span><span class="si">}</span><span class="s2"> is not writable and must be &quot;</span> \
+                      <span class="sa">f</span><span class="s2">&quot;split.&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_quarter_duration</span> <span class="o">=</span> <span class="n">old_quarter_duration</span>
+                <span class="k">raise</span> <span class="n">NoteTypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_xml_tied</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">xml_notations</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_notations</span> <span class="o">=</span> <span class="n">XMLNotations</span><span class="p">()</span>
+        <span class="n">tied_xml_objects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xml_notations</span><span class="o">.</span><span class="n">find_children</span><span class="p">(</span><span class="s1">&#39;XMLTied&#39;</span><span class="p">)</span>
+        <span class="n">tied_xml_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">type</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tied_xml_objects</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">tied_xml_types</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">val</span> <span class="o">==</span> <span class="s1">&#39;stop&#39;</span> <span class="ow">and</span> <span class="s1">&#39;start&#39;</span> <span class="ow">in</span> <span class="n">tied_xml_types</span><span class="p">:</span>
+            <span class="n">tied_xml_objects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;stop&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_notations</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">XMLTied</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_notations</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">XMLTied</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">val</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_update_xml_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quarter_duration</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">xml_type</span> <span class="o">=</span> <span class="n">note_types</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">quarter_duration</span><span class="o">.</span><span class="n">as_integer_ratio</span><span class="p">()]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">xml_type</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_update_xml_accidental</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_accidental</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">midi</span><span class="o">.</span><span class="n">accidental</span><span class="o">.</span><span class="n">xml_object</span>
+
+    <span class="k">def</span> <span class="nf">_update_xml_duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quarter_duration</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent_measure</span><span class="p">()</span><span class="o">.</span><span class="n">get_divisions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_xml_duration_value</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">duration</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">midi</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">midi</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;A rest cannot be a grace note.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_duration</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_grace</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_grace</span> <span class="o">=</span> <span class="n">XMLGrace</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_grace</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_duration</span> <span class="o">=</span> <span class="n">duration</span>
+
+    <span class="k">def</span> <span class="nf">_update_xml_pitch_or_rest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">midi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">midi</span>
+        <span class="k">if</span> <span class="n">midi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_pitch</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_rest</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">midi</span><span class="p">,</span> <span class="n">Midi</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">midi</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">quarter_duration</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;A rest cannot be a grace note.&#39;</span><span class="p">)</span>
+            <span class="n">pitch_or_rest</span> <span class="o">=</span> <span class="n">midi</span><span class="o">.</span><span class="n">get_pitch_or_rest</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pitch_or_rest</span><span class="p">,</span> <span class="n">XMLRest</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_pitch</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_pitch</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_rest</span> <span class="o">=</span> <span class="n">pitch_or_rest</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_notehead</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_rest</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_rest</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_pitch</span> <span class="o">=</span> <span class="n">pitch_or_rest</span>
+
+    <span class="k">def</span> <span class="nf">_update_xml_staff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_staff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_staff_number</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_update_xml_voice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_voice</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_voice_number</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_tied</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">type_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">type</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_children</span><span class="p">(</span><span class="s1">&#39;XMLTie&#39;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="s1">&#39;start&#39;</span> <span class="ow">in</span> <span class="n">type_types</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_tied_to_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_tied</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_tied_to_previous</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">type_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">type</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_children</span><span class="p">(</span><span class="s1">&#39;XMLTie&#39;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="s1">&#39;stop&#39;</span> <span class="ow">in</span> <span class="n">type_types</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">midi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_midi</span>
+
+    <span class="nd">@midi</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">midi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_midi</span> <span class="o">=</span> <span class="n">value</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Midi</span><span class="p">)</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Midi</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_xml_pitch_or_rest</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">midi</span><span class="o">.</span><span class="n">parent_note</span> <span class="o">=</span> <span class="bp">self</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_xml_accidental</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parent_chord</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent_chord</span>
+
+    <span class="nd">@QuarterDurationMixin</span><span class="o">.</span><span class="n">quarter_duration</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">quarter_duration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_chord</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">NoteHasNoParentChordError</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_quarter_duration</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_xml_duration</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_xml_type</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_duration</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">voice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voice</span>
+
+<div class="viewcode-block" id="Note.get_parent_measure"><a class="viewcode-back" href="../../musictree/musictree.note.html#musictree.note.Note.get_parent_measure">[docs]</a>    <span class="k">def</span> <span class="nf">get_parent_measure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_chord</span><span class="o">.</span><span class="n">get_parent_measure</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Note.get_staff_number"><a class="viewcode-back" href="../../musictree/musictree.note.html#musictree.note.Note.get_staff_number">[docs]</a>    <span class="k">def</span> <span class="nf">get_staff_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_chord</span><span class="o">.</span><span class="n">get_staff_number</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Note.get_voice_number"><a class="viewcode-back" href="../../musictree/musictree.note.html#musictree.note.Note.get_voice_number">[docs]</a>    <span class="k">def</span> <span class="nf">get_voice_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_chord</span><span class="o">.</span><span class="n">get_voice_number</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Note.set_dots"><a class="viewcode-back" href="../../musictree/musictree.note.html#musictree.note.Note.set_dots">[docs]</a>    <span class="k">def</span> <span class="nf">set_dots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_dots</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_of_dots</span> <span class="o">=</span> <span class="n">number_of_dots</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_dots</span><span class="p">(</span><span class="n">number_of_dots</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Note.set_type"><a class="viewcode-back" href="../../musictree/musictree.note.html#musictree.note.Note.set_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_xml_type</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">xml_type</span> <span class="o">=</span> <span class="n">val</span></div>
+
+<div class="viewcode-block" id="Note.start_tie"><a class="viewcode-back" href="../../musictree/musictree.note.html#musictree.note.Note.start_tie">[docs]</a>    <span class="k">def</span> <span class="nf">start_tie</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_tied</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">XMLTie</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_xml_tied</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Note.stop_tie"><a class="viewcode-back" href="../../musictree/musictree.note.html#musictree.note.Note.stop_tie">[docs]</a>    <span class="k">def</span> <span class="nf">stop_tie</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_tied_to_previous</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_tied</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">find_children</span><span class="p">(</span><span class="s1">&#39;XMLTie&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;stop&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">XMLTie</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_xml_tied</span><span class="p">(</span><span class="s1">&#39;stop&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xml_object</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">XMLTie</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;stop&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_xml_tied</span><span class="p">(</span><span class="s1">&#39;stop&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Note.remove_tie"><a class="viewcode-back" href="../../musictree/musictree.note.html#musictree.note.Note.remove_tie">[docs]</a>    <span class="k">def</span> <span class="nf">remove_tie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">ties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_children</span><span class="p">(</span><span class="s1">&#39;XMLTie&#39;</span><span class="p">)</span>
+        <span class="n">tie_to_be_removed</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ties</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">ties</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">type_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tie_to_be_removed</span> <span class="o">=</span> <span class="n">ties</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tie_to_be_removed</span> <span class="o">=</span> <span class="n">ties</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">ties</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">type_</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">ties</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">type_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Note has stop and start ties. Specify type_=start or type_=stop to decide which one should be removed&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tie_to_be_removed</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ties</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">type_</span><span class="p">]</span>
+                <span class="n">tie_to_be_removed</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">tie_to_be_removed</span> <span class="k">else</span> <span class="n">tie_to_be_removed</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">if</span> <span class="n">tie_to_be_removed</span><span class="p">:</span>
+            <span class="n">tied_to_be_removed</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">xml_notations</span><span class="o">.</span><span class="n">find_children</span><span class="p">(</span><span class="s1">&#39;XMLTied&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">tie_to_be_removed</span><span class="o">.</span><span class="n">type</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">tie_to_be_removed</span><span class="o">.</span><span class="n">up</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tie_to_be_removed</span><span class="p">)</span>
+            <span class="n">xml_notations</span> <span class="o">=</span> <span class="n">tied_to_be_removed</span><span class="o">.</span><span class="n">up</span>
+            <span class="n">xml_notations</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tied_to_be_removed</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">xml_notations</span><span class="o">.</span><span class="n">get_children</span><span class="p">():</span>
+                <span class="n">xml_notations</span><span class="o">.</span><span class="n">up</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">xml_notations</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Alex Gorji.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

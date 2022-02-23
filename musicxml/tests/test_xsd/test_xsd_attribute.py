@@ -5,7 +5,7 @@ from musicxml.xsd.xsdsimpletype import *
 from musicxml.xsd.xsdtree import XSDTree
 from xml.etree import ElementTree as ET
 
-from musicxml.util.helperclasses import MusicXmlTestCase
+from musicxml.tests.util import MusicXmlTestCase
 
 
 class TestXSDAttribute(TestCase):

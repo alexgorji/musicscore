@@ -1,6 +1,6 @@
 import importlib
 
-from musicxml.util.helperclasses import MusicXmlTestCase
+from musicxml.tests.util import MusicXmlTestCase
 from musicxml.xsd.xsdindicator import XSDSequence, XSDChoice
 
 from musicxml.xsd.xsdcomplextype import *

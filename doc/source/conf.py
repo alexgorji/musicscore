@@ -13,7 +13,7 @@
 from pathlib import Path
 import sys
 
-sys.path.insert(0, (Path(__file__).parents[2]).resolve().as_posix())
+sys.path.insert(0, Path(__file__).parents[2].resolve().as_posix())
 
 # -- Project information -----------------------------------------------------
 
@@ -29,7 +29,11 @@ release = '0.1'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode'
+extensions = ['sphinx.ext.autodoc',
+              'sphinx.ext.viewcode',
+              'sphinx.ext.intersphinx',
+              'sphinx.ext.autosummary',
+              'sphinx.ext.autosectionlabel',
               ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -46,8 +50,14 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+# html_theme = 'haiku'
+
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+autodoc_default_options = {
+    'member-order': 'bysource',
+}

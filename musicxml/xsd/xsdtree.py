@@ -4,6 +4,8 @@ import xml.etree.ElementTree as ET
 from contextlib import redirect_stdout
 from typing import Optional
 
+from musicxml.util.helprervariables import xml_name_first_character_without_colon, name_character_without_colon, name_character, \
+    xml_name_first_character
 from tree.tree import Tree
 from musicxml.util.core import cap_first, convert_to_xsd_class_name
 
@@ -158,16 +160,58 @@ class XSDTree(Tree):
             return self.get_complex_content().get_children()[0]
 
     def get_doc(self):
+        output = ''
         for node in self.traverse():
             if node.tag == 'documentation':
                 output = node.text.strip()
                 output.replace('\t', '    ')
-                return output
+                break
+        permitted = self.get_permitted()
+        pattern = self.get_pattern()
+        if permitted:
+            output += '\n\n'
+            output += f"    Permitted Values: {permitted}"
+        if pattern:
+            output += '\n\n'
+            output += f"    Pattern: {pattern}"
+
+        return output
 
     def get_restriction(self):
         for node in self.get_children():
             if node.tag == 'restriction':
                 return node
+
+    def get_pattern(self, parent_xsd_tree=None):
+        def get_xsd_pattern(restriction_):
+            if restriction_ and restriction_.get_children() and restriction_.get_children()[0].tag == 'pattern':
+                return rf"{restriction.get_children()[0].get_attributes()['value']}"
+            else:
+                if parent_xsd_tree:
+                    parent_restriction = parent_xsd_tree.get_restriction()
+                    if parent_restriction and parent_restriction.get_children() and parent_restriction.get_children()[0].tag == 'pattern':
+                        return rf"{parent_restriction.get_children()[0].get_attributes()['value']}"
+
+        def translate_pattern(pattern_):
+            if pattern_ == "[\i-[:]][\c-[:]]*":
+                return rf"{xml_name_first_character_without_colon}{name_character_without_colon}*"
+            pattern_ = pattern_.replace('\c', name_character)
+            pattern_ = pattern_.replace('\i', xml_name_first_character)
+            return pattern_
+
+        restriction = self.get_restriction()
+        pattern = get_xsd_pattern(restriction)
+        if pattern:
+            return translate_pattern(pattern)
+        else:
+            return None
+
+    def get_permitted(self):
+        restriction = self.get_restriction()
+        if restriction:
+            enumerations = [child for child in restriction.get_children() if
+                            child.tag == 'enumeration']
+            return [enumeration.get_attributes()['value'] for enumeration in enumerations]
 
     def get_simple_content(self):
         for node in self.get_children():

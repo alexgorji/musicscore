@@ -7,10 +7,11 @@ from musictree.xmlwrapper import XMLWrapper
 
 class Time(XMLWrapper):
     _ATTRIBUTES = {'signatures', 'actual_signatures', '_intern_actual_signatures', 'parent_measure', 'show'}
+    XMLClass = XMLTime
 
     def __init__(self, *signatures, show=True, **kwargs):
         super().__init__()
-        self._xml_object = XMLTime(**kwargs)
+        self._xml_object = self.XMLClass(**kwargs)
         self.parent_measure = None
 
         self._signatures = None

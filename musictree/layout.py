@@ -135,10 +135,11 @@ class Margins:
 
 class Scaling(XMLWrapper):
     _ATTRIBUTES = {'millimeters', 'tenths', 'score'}
+    XMLClass = XMLScaling
 
     def __init__(self, millimeters=SCALING['millimeters'], tenths=SCALING['tenths']):
         super().__init__()
-        self._xml_object = XMLScaling()
+        self._xml_object = self.XMLClass()
         self._millimeters = None
         self._tenths = None
         self._score = None

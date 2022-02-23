@@ -18,12 +18,13 @@ class XMLElement(Tree):
     """
     Parent class of all xml elements.
     """
-    PROPERTIES = {'compact_repr', 'is_leaf', 'level', 'attributes', 'child_container_tree', 'possible_children_names',
+    PROPERTIES = {'XSD_TREE', 'compact_repr', 'is_leaf', 'level', 'attributes', 'child_container_tree', 'possible_children_names',
                   'et_xml_element', 'name', 'type_', 'value_', 'parent_xsd_element'}
     TYPE = None
-    XSD_TREE: Optional[XSDTree] = None
+    _SEARCH_FOR_ELEMENT = ''
 
     def __init__(self, value_=None, **kwargs):
+        self.XSD_TREE = XSDTree(musicxml_xsd_et_root.find(self._SEARCH_FOR_ELEMENT))
         self._type = None
         super().__init__()
         self._value_ = None
@@ -359,44 +360,32 @@ class XMLElement(Tree):
 
 
 class XMLScorePartwise(XMLElement):
+    """
+    The score-partwise element is the root element for a partwise MusicXML score. It includes a score-header group followed by a series of parts with measures inside. The document-attributes attribute group includes the version attribute.
+"""
     TYPE = XSDComplexTypeScorePartwise
-    XSD_TREE = XSDTree(musicxml_xsd_et_root.find(f".//{ns}element[@name='score-partwise']"))
+    _SEARCH_FOR_ELEMENT = f".//{ns}element[@name='score-partwise']"
 
     def write(self, path, intelligent_choice=False):
         with open(path, 'w') as file:
             file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
             file.write(self.to_string(intelligent_choice=intelligent_choice))
 
-    @property
-    def __doc__(self):
-        return self.XSD_TREE.get_doc()
-
 
 class XMLPart(XMLElement):
     TYPE = XSDComplexTypePart
-    XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(f".//{ns}element[@name='score-partwise']//{ns}element")[0])
-
-    @property
-    def __doc__(self):
-        return self.XSD_TREE.get_doc()
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-partwise']//{*}element[@name='part']"
 
 
 class XMLMeasure(XMLElement):
     TYPE = XSDComplexTypeMeasure
-    XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(f".//{ns}element[@name='score-partwise']//{ns}element")[1])
-
-    @property
-    def __doc__(self):
-        return self.XSD_TREE.get_doc()
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-partwise']//{*}element[@name='measure']"
 
 
 class XMLDirective(XMLElement):
     TYPE = XSDComplexTypeDirective
-    XSD_TREE = XSDTree(musicxml_xsd_et_root.find(".//{*}complexType[@name='attributes']//{*}element[@name='directive']"))
+    _SEARCH_FOR_ELEMENT = ".//{*}complexType[@name='attributes']//{*}element[@name='directive']"
 
-    @property
-    def __doc__(self):
-        return self.XSD_TREE.get_doc()
 # -----------------------------------------------------
 # AUTOMATICALLY GENERATED WITH generate_xml_elements.py
 # -----------------------------------------------------

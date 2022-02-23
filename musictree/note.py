@@ -29,9 +29,11 @@ def untie(*notes):
 class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     _ATTRIBUTES = {'midi', 'quarter_duration', 'parent_chord', '_type', 'number_of_dots', 'is_tied', 'is_tied_to_previous', '_parent'}
 
+    XMLClass = XMLNote
+
     def __init__(self, parent_chord, midi=None, quarter_duration=None, *args, **kwargs):
         self._parent_chord = parent_chord
-        self._xml_object = XMLNote(*args, **kwargs)
+        self._xml_object = self.XMLClass(*args, **kwargs)
         self._update_xml_voice()
         self._update_xml_staff()
         self._midi = None

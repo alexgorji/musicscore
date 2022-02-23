@@ -1,5 +1,5 @@
 import importlib
-from musicxml.util.helperclasses import MusicXmlTestCase
+from musicxml.tests.util import MusicXmlTestCase
 # from musicxml.xsd.xsdsimpletype import XSDSimpleType, xml_simple_type_class_names
 #
 # from musicxml.xsd.xsdsimpletype import *
@@ -35,8 +35,9 @@ class TestSimpleTypes(MusicXmlTestCase):
         matching its xsd annotation
         """
 
-        assert XSDSimpleTypeAboveBelow.__doc__ == 'The above-below type is used to indicate whether one element appears ' \
-                                                  'above or below another element.'
+        assert XSDSimpleTypeAboveBelow.__doc__ == """The above-below type is used to indicate whether one element appears above or below another element.
+
+    Permitted Values: ['above', 'below']"""
 
     # Test Basic XSDSimpleType classes which are created manually
 

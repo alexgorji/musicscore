@@ -110,19 +110,23 @@ class TestXMLElements(TestCase):
 
         el.value_ = 170
         assert el.to_string() == '<elevation>170</elevation>\n'
-        print(el.__doc__)
-        assert el.__doc__ == 'The elevation and pan elements allow placing of sound in a 3-D space relative to the listener. Both are expressed in degrees ranging from -180 to 180. For elevation, 0 is level with the listener, 90 is directly above, and -90 is directly below.'
+        assert el.__doc__ == """
+    The elevation and pan elements allow placing of sound in a 3-D space relative to the listener. Both are expressed in degrees ranging from -180 to 180. For elevation, 0 is level with the listener, 90 is directly above, and -90 is directly below.
+    """
 
     def test_element_doc(self):
         """
         Test if an element with complex type returns its type's __doc__ as its __doc__
         Test if an element with simple type returns its xsd tree documentation as its __doc__
         """
-        assert XMLOffset(10).__doc__ == """An offset is represented in terms of divisions, and indicates where the direction will appear relative to the current musical location. The current musical location is always within the current measure, even at the end of a measure.
-
-The offset affects the visual appearance of the direction. If the sound attribute is "yes", then the offset affects playback and listening too. If the sound attribute is "no", then any sound or listening associated with the direction takes effect at the current location. The sound attribute is "no" by default for compatibility with earlier versions of the MusicXML format. If an element within a direction includes a default-x attribute, the offset value will be ignored when determining the appearance of that element."""
-        assert XMLElevation(10).__doc__ == 'The elevation and pan elements allow placing of sound in a 3-D space relative to the ' \
-                                           'listener. Both are expressed in degrees ranging from -180 to 180. For elevation, 0 is level with the listener, 90 is directly above, and -90 is directly below.'
+        assert XMLOffset(10).__doc__ == """
+    An offset is represented in terms of divisions, and indicates where the direction will appear relative to the current musical location. The current musical location is always within the current measure, even at the end of a measure.
+    
+    The offset affects the visual appearance of the direction. If the sound attribute is "yes", then the offset affects playback and listening too. If the sound attribute is "no", then any sound or listening associated with the direction takes effect at the current location. The sound attribute is "no" by default for compatibility with earlier versions of the MusicXML format. If an element within a direction includes a default-x attribute, the offset value will be ignored when determining the appearance of that element.
+    """
+        assert XMLElevation(10).__doc__ == """
+    The elevation and pan elements allow placing of sound in a 3-D space relative to the listener. Both are expressed in degrees ranging from -180 to 180. For elevation, 0 is level with the listener, 90 is directly above, and -90 is directly below.
+    """
 
     def test_element_empty(self):
         """

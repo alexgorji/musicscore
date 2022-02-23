@@ -12,10 +12,11 @@ from musictree.xmlwrapper import XMLWrapper
 
 class Measure(MusicTree, XMLWrapper):
     _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration'}
+    XMLClass = XMLMeasure
 
     def __init__(self, number, time=None, *args, **kwargs):
         super().__init__()
-        self._xml_object = XMLMeasure(*args, **kwargs)
+        self._xml_object = self.XMLClass(*args, **kwargs)
         self.number = number
         self._time = None
         self._key = Key()

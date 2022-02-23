@@ -1,17 +1,17 @@
-from musicxml.xmlelement.xmlelement import XMLVoice
-
 from musictree.beat import Beat
-from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, ChordHasNoQuarterDurationError, VoiceIsAlreadyFullError
+from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsAlreadyFullError
 from musictree.musictree import MusicTree
 from musictree.xmlwrapper import XMLWrapper
+from musicxml.xmlelement.xmlelement import XMLVoice
 
 
 class Voice(MusicTree, XMLWrapper):
     _ATTRIBUTES = {'number', '_chords', '_current_beat', 'left_over_chord', 'is_filled'}
+    XMLClass = XMLVoice
 
     def __init__(self, number=None, *args, **kwargs):
         super().__init__()
-        self._xml_object = XMLVoice(value_='1', *args, **kwargs)
+        self._xml_object = self.XMLClass(value_='1', *args, **kwargs)
         self._number = None
         self.number = number
         self._current_beat = None

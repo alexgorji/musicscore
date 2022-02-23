@@ -16,9 +16,11 @@ SUBTITLE = {'font_size': 18, 'default_x': {'A4': {'portrait': 616}}, 'default_y'
 class Score(MusicTree, XMLWrapper):
     _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout'}
 
+    XMLClass = XMLScorePartwise
+
     def __init__(self, version='4.0', title=None, subtitle=None, *args, **kwargs):
         super().__init__()
-        self._xml_object = XMLScorePartwise(*args, **kwargs)
+        self._xml_object = self.XMLClass(*args, **kwargs)
         self._update_xml_object()
         self._version = None
         self._title = None

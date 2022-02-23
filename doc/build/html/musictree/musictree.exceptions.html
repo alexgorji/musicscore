@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>musictree.exceptions &mdash; musicscore2 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="musictree.key" href="musictree.key.html" />
+    <link rel="prev" title="musictree.dynamics" href="musictree.dynamics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> musicscore2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="musictree.html">musictree</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="musictree.accidental.html">musictree.accidental</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.beat.html">musictree.beat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.chord.html">musictree.chord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.clef.html">musictree.clef</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.dynamics.html">musictree.dynamics</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">musictree.exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.key.html">musictree.key</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.layout.html">musictree.layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.measure.html">musictree.measure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.midi.html">musictree.midi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.musictree.html">musictree.musictree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.note.html">musictree.note</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.part.html">musictree.part</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.quarterduration.html">musictree.quarterduration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.score.html">musictree.score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.staff.html">musictree.staff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.time.html">musictree.time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.util.html">musictree.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.voice.html">musictree.voice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.xmlwrapper.html">musictree.xmlwrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../musicxml/musicxml.html">musicxml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tree/tree.html">tree</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">musicscore2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="musictree.html">musictree</a> &raquo;</li>
+      <li>musictree.exceptions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/musictree/musictree.exceptions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-musictree.exceptions">
+<span id="musictree-exceptions"></span><h1>musictree.exceptions<a class="headerlink" href="#module-musictree.exceptions" title="Permalink to this headline"></a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.MusicTreeException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">MusicTreeException</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#MusicTreeException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.MusicTreeException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.NoteException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">NoteException</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#NoteException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.NoteException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.MusicTreeException" title="musictree.exceptions.MusicTreeException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.MusicTreeException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.NoteHasNoParentChordError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">NoteHasNoParentChordError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#NoteHasNoParentChordError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.NoteHasNoParentChordError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.NoteException" title="musictree.exceptions.NoteException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.NoteException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.NoteTypeError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">NoteTypeError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#NoteTypeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.NoteTypeError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.NoteException" title="musictree.exceptions.NoteException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.NoteException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.ChordException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">ChordException</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#ChordException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.ChordException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.MusicTreeException" title="musictree.exceptions.MusicTreeException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.MusicTreeException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.ChordAlreadySplitError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">ChordAlreadySplitError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#ChordAlreadySplitError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.ChordAlreadySplitError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.ChordException" title="musictree.exceptions.ChordException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.ChordException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.ChordCannotSplitError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">ChordCannotSplitError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#ChordCannotSplitError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.ChordCannotSplitError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.ChordException" title="musictree.exceptions.ChordException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.ChordException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.ChordHasNoParentError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">ChordHasNoParentError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#ChordHasNoParentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.ChordHasNoParentError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.ChordException" title="musictree.exceptions.ChordException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.ChordException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.ChordHasNoQuarterDurationError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">ChordHasNoQuarterDurationError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#ChordHasNoQuarterDurationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.ChordHasNoQuarterDurationError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.ChordException" title="musictree.exceptions.ChordException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.ChordException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.ChordNotesAreAlreadyCreatedError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">ChordNotesAreAlreadyCreatedError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#ChordNotesAreAlreadyCreatedError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.ChordNotesAreAlreadyCreatedError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.ChordException" title="musictree.exceptions.ChordException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.ChordException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.ChordQuarterDurationAlreadySetError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">ChordQuarterDurationAlreadySetError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#ChordQuarterDurationAlreadySetError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.ChordQuarterDurationAlreadySetError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.ChordException" title="musictree.exceptions.ChordException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.ChordException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.ChordHasNoMidisError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">ChordHasNoMidisError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#ChordHasNoMidisError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.ChordHasNoMidisError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.ChordException" title="musictree.exceptions.ChordException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.ChordException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.BeatException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">BeatException</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#BeatException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.BeatException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.MusicTreeException" title="musictree.exceptions.MusicTreeException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.MusicTreeException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.BeatWrongDurationError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">BeatWrongDurationError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#BeatWrongDurationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.BeatWrongDurationError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.BeatException" title="musictree.exceptions.BeatException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.BeatException</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.BeatIsFullError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">BeatIsFullError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#BeatIsFullError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.BeatIsFullError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.BeatException" title="musictree.exceptions.BeatException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.BeatException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.BeatHasNoParentError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">BeatHasNoParentError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#BeatHasNoParentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.BeatHasNoParentError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.BeatException" title="musictree.exceptions.BeatException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.BeatException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.BeatHasWrongTupletError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">BeatHasWrongTupletError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#BeatHasWrongTupletError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.BeatHasWrongTupletError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.BeatException" title="musictree.exceptions.BeatException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.BeatException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.VoiceException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">VoiceException</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#VoiceException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.VoiceException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.MusicTreeException" title="musictree.exceptions.MusicTreeException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.MusicTreeException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.VoiceHasNoBeatsError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">VoiceHasNoBeatsError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#VoiceHasNoBeatsError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.VoiceHasNoBeatsError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.VoiceException" title="musictree.exceptions.VoiceException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.VoiceException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.VoiceHasNoParentError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">VoiceHasNoParentError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#VoiceHasNoParentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.VoiceHasNoParentError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.VoiceException" title="musictree.exceptions.VoiceException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.VoiceException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.VoiceIsAlreadyFullError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">VoiceIsAlreadyFullError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#VoiceIsAlreadyFullError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.VoiceIsAlreadyFullError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.VoiceException" title="musictree.exceptions.VoiceException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.VoiceException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.StaffException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">StaffException</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#StaffException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.StaffException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.MusicTreeException" title="musictree.exceptions.MusicTreeException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.MusicTreeException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.StaffHasNoParentError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">StaffHasNoParentError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#StaffHasNoParentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.StaffHasNoParentError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.StaffException" title="musictree.exceptions.StaffException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.StaffException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.MeasureException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">MeasureException</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#MeasureException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.MeasureException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.MusicTreeException" title="musictree.exceptions.MusicTreeException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.MusicTreeException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.IdException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">IdException</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#IdException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.IdException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.MusicTreeException" title="musictree.exceptions.MusicTreeException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.MusicTreeException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.IdHasAlreadyParentOfSameTypeError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">IdHasAlreadyParentOfSameTypeError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#IdHasAlreadyParentOfSameTypeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.IdHasAlreadyParentOfSameTypeError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.IdException" title="musictree.exceptions.IdException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.IdException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.IdWithSameValueExistsError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">IdWithSameValueExistsError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#IdWithSameValueExistsError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.IdWithSameValueExistsError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.IdException" title="musictree.exceptions.IdException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.IdException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.QuantizationException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">QuantizationException</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#QuantizationException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.QuantizationException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="musictree.exceptions.QuantizationBeatNotFullError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.exceptions.</span></span><span class="sig-name descname"><span class="pre">QuantizationBeatNotFullError</span></span><a class="reference internal" href="../_modules/musictree/exceptions.html#QuantizationBeatNotFullError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.exceptions.QuantizationBeatNotFullError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#musictree.exceptions.QuantizationException" title="musictree.exceptions.QuantizationException"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.exceptions.QuantizationException</span></code></a></p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="musictree.dynamics.html" class="btn btn-neutral float-left" title="musictree.dynamics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="musictree.key.html" class="btn btn-neutral float-right" title="musictree.key" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Alex Gorji.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

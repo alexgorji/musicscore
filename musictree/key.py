@@ -5,10 +5,11 @@ from musictree.xmlwrapper import XMLWrapper
 
 class Key(XMLWrapper):
     _ATTRIBUTES = {'fifths', 'show'}
+    XMLClass = XMLKey
 
     def __init__(self, fifths=0, show=True, *args, **kwargs):
         super().__init__()
-        self._xml_object = XMLKey(*args, **kwargs)
+        self._xml_object = self.XMLClass(*args, **kwargs)
         self._fifths = None
         self.fifths = fifths
         self._show = None

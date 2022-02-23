@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>musictree.layout &mdash; musicscore2 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="musictree.measure" href="musictree.measure.html" />
+    <link rel="prev" title="musictree.key" href="musictree.key.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> musicscore2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="musictree.html">musictree</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="musictree.accidental.html">musictree.accidental</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.beat.html">musictree.beat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.chord.html">musictree.chord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.clef.html">musictree.clef</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.dynamics.html">musictree.dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.exceptions.html">musictree.exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.key.html">musictree.key</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">musictree.layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.measure.html">musictree.measure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.midi.html">musictree.midi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.musictree.html">musictree.musictree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.note.html">musictree.note</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.part.html">musictree.part</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.quarterduration.html">musictree.quarterduration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.score.html">musictree.score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.staff.html">musictree.staff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.time.html">musictree.time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.util.html">musictree.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.voice.html">musictree.voice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.xmlwrapper.html">musictree.xmlwrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../musicxml/musicxml.html">musicxml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tree/tree.html">tree</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">musicscore2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="musictree.html">musictree</a> &raquo;</li>
+      <li>musictree.layout</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/musictree/musictree.layout.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-musictree.layout">
+<span id="musictree-layout"></span><h1>musictree.layout<a class="headerlink" href="#module-musictree.layout" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="musictree.layout.LayoutMixin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.layout.</span></span><span class="sig-name descname"><span class="pre">LayoutMixin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/layout.html#LayoutMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.layout.LayoutMixin" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.LayoutMixin.parent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent</span></span><a class="headerlink" href="#musictree.layout.LayoutMixin.parent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="musictree.layout.Margins">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.layout.</span></span><span class="sig-name descname"><span class="pre">Margins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/layout.html#Margins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.layout.Margins" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.Margins.bottom">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bottom</span></span><a class="headerlink" href="#musictree.layout.Margins.bottom" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.Margins.left">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">left</span></span><a class="headerlink" href="#musictree.layout.Margins.left" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.Margins.parent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent</span></span><a class="headerlink" href="#musictree.layout.Margins.parent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.Margins.right">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">right</span></span><a class="headerlink" href="#musictree.layout.Margins.right" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.Margins.top">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">top</span></span><a class="headerlink" href="#musictree.layout.Margins.top" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="musictree.layout.Scaling">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.layout.</span></span><span class="sig-name descname"><span class="pre">Scaling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">millimeters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7.2319</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tenths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/layout.html#Scaling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.layout.Scaling" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="musictree.xmlwrapper.html#musictree.xmlwrapper.XMLWrapper" title="musictree.xmlwrapper.XMLWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.xmlwrapper.XMLWrapper</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="musictree.layout.Scaling.XMLClass">
+<span class="sig-name descname"><span class="pre">XMLClass</span></span><a class="headerlink" href="#musictree.layout.Scaling.XMLClass" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="../musicxml/musicxml.xmlelement.xmlelement.html#musicxml.xmlelement.xmlelement.XMLScaling" title="musicxml.xmlelement.xmlelement.XMLScaling"><code class="xref py py-class docutils literal notranslate"><span class="pre">musicxml.xmlelement.xmlelement.XMLScaling</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.Scaling.millimeters">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">millimeters</span></span><a class="headerlink" href="#musictree.layout.Scaling.millimeters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.Scaling.score">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#musictree.layout.Scaling.score" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.Scaling.tenths">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tenths</span></span><a class="headerlink" href="#musictree.layout.Scaling.tenths" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="musictree.layout.Scaling.millimeters_to_tenths">
+<span class="sig-name descname"><span class="pre">millimeters_to_tenths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/layout.html#Scaling.millimeters_to_tenths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.layout.Scaling.millimeters_to_tenths" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="musictree.layout.PageLayout">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.layout.</span></span><span class="sig-name descname"><span class="pre">PageLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'A4'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'portrait'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/layout.html#PageLayout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.layout.PageLayout" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="musictree.xmlwrapper.html#musictree.xmlwrapper.XMLWrapper" title="musictree.xmlwrapper.XMLWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.xmlwrapper.XMLWrapper</span></code></a>, <a class="reference internal" href="#musictree.layout.LayoutMixin" title="musictree.layout.LayoutMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.layout.LayoutMixin</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="musictree.layout.PageLayout.SIZES">
+<span class="sig-name descname"><span class="pre">SIZES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'A3':</span> <span class="pre">(297.0389,</span> <span class="pre">419.9819),</span> <span class="pre">'A4':</span> <span class="pre">(209.991,</span> <span class="pre">297.0389)}</span></em><a class="headerlink" href="#musictree.layout.PageLayout.SIZES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.PageLayout.margins">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">margins</span></span><a class="headerlink" href="#musictree.layout.PageLayout.margins" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.PageLayout.orientation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">orientation</span></span><a class="headerlink" href="#musictree.layout.PageLayout.orientation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.PageLayout.scaling">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scaling</span></span><a class="headerlink" href="#musictree.layout.PageLayout.scaling" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.PageLayout.size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#musictree.layout.PageLayout.size" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="musictree.layout.SystemLayout">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.layout.</span></span><span class="sig-name descname"><span class="pre">SystemLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">117</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_system_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">66</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/layout.html#SystemLayout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.layout.SystemLayout" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="musictree.xmlwrapper.html#musictree.xmlwrapper.XMLWrapper" title="musictree.xmlwrapper.XMLWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.xmlwrapper.XMLWrapper</span></code></a>, <a class="reference internal" href="#musictree.layout.LayoutMixin" title="musictree.layout.LayoutMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.layout.LayoutMixin</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.SystemLayout.margins">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">margins</span></span><a class="headerlink" href="#musictree.layout.SystemLayout.margins" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.SystemLayout.system_distance">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">system_distance</span></span><a class="headerlink" href="#musictree.layout.SystemLayout.system_distance" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.SystemLayout.top_system_distance">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">top_system_distance</span></span><a class="headerlink" href="#musictree.layout.SystemLayout.top_system_distance" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="musictree.layout.StaffLayout">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.layout.</span></span><span class="sig-name descname"><span class="pre">StaffLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">staff_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">80</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/layout.html#StaffLayout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.layout.StaffLayout" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="musictree.xmlwrapper.html#musictree.xmlwrapper.XMLWrapper" title="musictree.xmlwrapper.XMLWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.xmlwrapper.XMLWrapper</span></code></a>, <a class="reference internal" href="#musictree.layout.LayoutMixin" title="musictree.layout.LayoutMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.layout.LayoutMixin</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.layout.StaffLayout.staff_distance">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">staff_distance</span></span><a class="headerlink" href="#musictree.layout.StaffLayout.staff_distance" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="musictree.key.html" class="btn btn-neutral float-left" title="musictree.key" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="musictree.measure.html" class="btn btn-neutral float-right" title="musictree.measure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Alex Gorji.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

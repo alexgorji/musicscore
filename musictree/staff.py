@@ -9,10 +9,11 @@ from musictree.xmlwrapper import XMLWrapper
 
 class Staff(MusicTree, XMLWrapper):
     _ATTRIBUTES = {'clef', 'default_clef', 'number'}
+    XMLClass = XMLStaff
 
     def __init__(self, number=None, clef=None, **kwargs):
         super().__init__()
-        self._xml_object = XMLStaff(value_=1, **kwargs)
+        self._xml_object = self.XMLClass(value_=1, **kwargs)
         self._number = None
         self._clef = None
         self._default_clef = TrebleClef()

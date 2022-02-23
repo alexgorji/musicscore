@@ -11,7 +11,9 @@ class TestScore(TestCase):
 
     def test_score_partwise_doc(self):
         score = XMLScorePartwise()
-        assert score.__doc__ == 'The score-partwise element is the root element for a partwise MusicXML score. It includes a score-header group followed by a series of parts with measures inside. The document-attributes attribute group includes the version attribute.'
+        assert score.__doc__ == """
+    The score-partwise element is the root element for a partwise MusicXML score. It includes a score-header group followed by a series of parts with measures inside. The document-attributes attribute group includes the version attribute.
+"""
 
     def test_score_partwise_type(self):
         score = XMLScorePartwise()
@@ -27,6 +29,10 @@ class TestScore(TestCase):
     def test_score_partwise_indicator(self):
         score = XMLScorePartwise()
         assert isinstance(score.TYPE.get_xsd_indicator()[0], XSDSequence)
+
+    def test_xsd_tree(self):
+        score = XMLScorePartwise()
+        print(score.XSD_TREE)
 
     def test_minimum_score(self):
         score = XMLScorePartwise()

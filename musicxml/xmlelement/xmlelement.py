@@ -18,12 +18,13 @@ class XMLElement(Tree):
     """
     Parent class of all xml elements.
     """
-    PROPERTIES = {'compact_repr', 'is_leaf', 'level', 'attributes', 'child_container_tree', 'possible_children_names',
+    PROPERTIES = {'XSD_TREE', 'compact_repr', 'is_leaf', 'level', 'attributes', 'child_container_tree', 'possible_children_names',
                   'et_xml_element', 'name', 'type_', 'value_', 'parent_xsd_element'}
     TYPE = None
-    XSD_TREE: Optional[XSDTree] = None
+    _SEARCH_FOR_ELEMENT = ''
 
     def __init__(self, value_=None, **kwargs):
+        self.XSD_TREE = XSDTree(musicxml_xsd_et_root.find(self._SEARCH_FOR_ELEMENT))
         self._type = None
         super().__init__()
         self._value_ = None
@@ -359,45 +360,31 @@ class XMLElement(Tree):
 
 
 class XMLScorePartwise(XMLElement):
+    """
+    The score-partwise element is the root element for a partwise MusicXML score. It includes a score-header group followed by a series of parts with measures inside. The document-attributes attribute group includes the version attribute.
+"""
     TYPE = XSDComplexTypeScorePartwise
-    XSD_TREE = XSDTree(musicxml_xsd_et_root.find(f".//{ns}element[@name='score-partwise']"))
+    _SEARCH_FOR_ELEMENT = f".//{ns}element[@name='score-partwise']"
 
     def write(self, path, intelligent_choice=False):
         with open(path, 'w') as file:
             file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
             file.write(self.to_string(intelligent_choice=intelligent_choice))
 
-    @property
-    def __doc__(self):
-        return self.XSD_TREE.get_doc()
-
 
 class XMLPart(XMLElement):
     TYPE = XSDComplexTypePart
-    XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(f".//{ns}element[@name='score-partwise']//{ns}element")[0])
-
-    @property
-    def __doc__(self):
-        return self.XSD_TREE.get_doc()
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-partwise']//{*}element[@name='part']"
 
 
 class XMLMeasure(XMLElement):
     TYPE = XSDComplexTypeMeasure
-    XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(f".//{ns}element[@name='score-partwise']//{ns}element")[1])
-
-    @property
-    def __doc__(self):
-        return self.XSD_TREE.get_doc()
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-partwise']//{*}element[@name='measure']"
 
 
 class XMLDirective(XMLElement):
     TYPE = XSDComplexTypeDirective
-    XSD_TREE = XSDTree(musicxml_xsd_et_root.find(".//{*}complexType[@name='attributes']//{*}element[@name='directive']"))
-
-    @property
-    def __doc__(self):
-        return self.XSD_TREE.get_doc()
-
+    _SEARCH_FOR_ELEMENT = ".//{*}complexType[@name='attributes']//{*}element[@name='directive']"
 
 # -----------------------------------------------------
 # AUTOMATICALLY GENERATED WITH generate_xml_elements.py
@@ -408,856 +395,513 @@ class XMLP(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="p" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='p'][@type='empty']"
 
 
 class XMLPp(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pp" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pp'][@type='empty']"
 
 
 class XMLPpp(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ppp" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='ppp'][@type='empty']"
 
 
 class XMLPppp(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pppp" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pppp'][@type='empty']"
 
 
 class XMLPpppp(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ppppp" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='ppppp'][@type='empty']"
 
 
 class XMLPppppp(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pppppp" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pppppp'][@type='empty']"
 
 
 class XMLF(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="f" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='f'][@type='empty']"
 
 
 class XMLFf(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ff" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='ff'][@type='empty']"
 
 
 class XMLFff(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fff" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='fff'][@type='empty']"
 
 
 class XMLFfff(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ffff" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='ffff'][@type='empty']"
 
 
 class XMLFffff(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fffff" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='fffff'][@type='empty']"
 
 
 class XMLFfffff(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ffffff" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='ffffff'][@type='empty']"
 
 
 class XMLMp(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="mp" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='mp'][@type='empty']"
 
 
 class XMLMf(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="mf" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='mf'][@type='empty']"
 
 
 class XMLSf(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="sf" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='sf'][@type='empty']"
 
 
 class XMLSfp(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="sfp" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='sfp'][@type='empty']"
 
 
 class XMLSfpp(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="sfpp" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='sfpp'][@type='empty']"
 
 
 class XMLFp(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fp" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='fp'][@type='empty']"
 
 
 class XMLRf(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rf" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='rf'][@type='empty']"
 
 
 class XMLRfz(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rfz" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='rfz'][@type='empty']"
 
 
 class XMLSfz(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="sfz" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='sfz'][@type='empty']"
 
 
 class XMLSffz(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="sffz" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='sffz'][@type='empty']"
 
 
 class XMLFz(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fz" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='fz'][@type='empty']"
 
 
 class XMLN(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="n" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='n'][@type='empty']"
 
 
 class XMLPf(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pf" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pf'][@type='empty']"
 
 
 class XMLSfzp(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="sfzp" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='sfzp'][@type='empty']"
 
 
 class XMLOtherDynamics(XMLElement):
     """
     The other-text type represents a text element with a smufl attribute group. This type is used by MusicXML direction extension elements to allow specification of specific SMuFL glyphs without needed to add every glyph as a MusicXML element.
     """
-
+    
     TYPE = XSDComplexTypeOtherText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="other-dynamics" type="other-text" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='other-dynamics'][@type='other-text']"
 
 
 class XMLMidiChannel(XMLElement):
     """
     The midi-channel element specifies a MIDI 1.0 channel numbers ranging from 1 to 16.
     """
-
+    
     TYPE = XSDSimpleTypeMidi16
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="midi-channel" type="midi-16" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The midi-channel element specifies a MIDI 1.0 channel numbers ranging from 1 to 16.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='midi-channel'][@type='midi-16']"
 
 
 class XMLMidiName(XMLElement):
     """
     The midi-name element corresponds to a ProgramName meta-event within a Standard MIDI File.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="midi-name" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The midi-name element corresponds to a ProgramName meta-event within a Standard MIDI File.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='midi-name'][@type='xs:string']"
 
 
 class XMLMidiBank(XMLElement):
     """
     The midi-bank element specifies a MIDI 1.0 bank number ranging from 1 to 16,384.
     """
-
+    
     TYPE = XSDSimpleTypeMidi16384
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="midi-bank" type="midi-16384" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The midi-bank element specifies a MIDI 1.0 bank number ranging from 1 to 16,384.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='midi-bank'][@type='midi-16384']"
 
 
 class XMLMidiProgram(XMLElement):
     """
     The midi-program element specifies a MIDI 1.0 program number ranging from 1 to 128.
     """
-
+    
     TYPE = XSDSimpleTypeMidi128
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="midi-program" type="midi-128" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The midi-program element specifies a MIDI 1.0 program number ranging from 1 to 128.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='midi-program'][@type='midi-128']"
 
 
 class XMLMidiUnpitched(XMLElement):
     """
     For unpitched instruments, the midi-unpitched element specifies a MIDI 1.0 note number ranging from 1 to 128. It is usually used with MIDI banks for percussion. Note that MIDI 1.0 note numbers are generally specified from 0 to 127 rather than the 1 to 128 numbering used in this element.
     """
-
+    
     TYPE = XSDSimpleTypeMidi128
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="midi-unpitched" type="midi-128" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>For unpitched instruments, the midi-unpitched element specifies a MIDI 1.0 note number ranging from 1 to 128. It is usually used with MIDI banks for percussion. Note that MIDI 1.0 note numbers are generally specified from 0 to 127 rather than the 1 to 128 numbering used in this element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='midi-unpitched'][@type='midi-128']"
 
 
 class XMLVolume(XMLElement):
     """
     The volume element value is a percentage of the maximum ranging from 0 to 100, with decimal values allowed. This corresponds to a scaling value for the MIDI 1.0 channel volume controller.
     """
-
+    
     TYPE = XSDSimpleTypePercent
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="volume" type="percent" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The volume element value is a percentage of the maximum ranging from 0 to 100, with decimal values allowed. This corresponds to a scaling value for the MIDI 1.0 channel volume controller.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='volume'][@type='percent']"
 
 
 class XMLPan(XMLElement):
     """
     The pan and elevation elements allow placing of sound in a 3-D space relative to the listener. Both are expressed in degrees ranging from -180 to 180. For pan, 0 is straight ahead, -90 is hard left, 90 is hard right, and -180 and 180 are directly behind the listener.
     """
-
+    
     TYPE = XSDSimpleTypeRotationDegrees
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pan" type="rotation-degrees" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The pan and elevation elements allow placing of sound in a 3-D space relative to the listener. Both are expressed in degrees ranging from -180 to 180. For pan, 0 is straight ahead, -90 is hard left, 90 is hard right, and -180 and 180 are directly behind the listener.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pan'][@type='rotation-degrees']"
 
 
 class XMLElevation(XMLElement):
     """
     The elevation and pan elements allow placing of sound in a 3-D space relative to the listener. Both are expressed in degrees ranging from -180 to 180. For elevation, 0 is level with the listener, 90 is directly above, and -90 is directly below.
     """
-
+    
     TYPE = XSDSimpleTypeRotationDegrees
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="elevation" type="rotation-degrees" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The elevation and pan elements allow placing of sound in a 3-D space relative to the listener. Both are expressed in degrees ranging from -180 to 180. For elevation, 0 is level with the listener, 90 is directly above, and -90 is directly below.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='elevation'][@type='rotation-degrees']"
 
 
 class XMLDisplayText(XMLElement):
     """
     The formatted-text type represents a text element with text-formatting attributes.
     """
-
+    
     TYPE = XSDComplexTypeFormattedText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="display-text" type="formatted-text" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='display-text'][@type='formatted-text']"
 
 
 class XMLAccidentalText(XMLElement):
     """
     The accidental-text type represents an element with an accidental value and text-formatting attributes.
     """
-
+    
     TYPE = XSDComplexTypeAccidentalText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="accidental-text" type="accidental-text" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='accidental-text'][@type='accidental-text']"
 
 
 class XMLIpa(XMLElement):
     """
     The ipa element represents International Phonetic Alphabet (IPA) sounds for vocal music. String content is limited to IPA 2015 symbols represented in Unicode 13.0.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ipa" type="xs:string">
-    <xs:annotation>
-        <xs:documentation>The ipa element represents International Phonetic Alphabet (IPA) sounds for vocal music. String content is limited to IPA 2015 symbols represented in Unicode 13.0.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='ipa'][@type='xs:string']"
 
 
 class XMLMute(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeMute
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="mute" type="mute" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='mute'][@type='mute']"
 
 
 class XMLSemiPitched(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeSemiPitched
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="semi-pitched" type="semi-pitched" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='semi-pitched'][@type='semi-pitched']"
 
 
 class XMLOtherPlay(XMLElement):
     """
     The other-play element represents other types of playback. The required type attribute indicates the type of playback to which the element content applies.
     """
-
+    
     TYPE = XSDComplexTypeOtherPlay
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="other-play" type="other-play" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='other-play'][@type='other-play']"
 
 
 class XMLDivisions(XMLElement):
     """
     Musical notation duration is commonly represented as fractions. The divisions element indicates how many divisions per quarter note are used to indicate a note's duration. For example, if duration = 1 and divisions = 2, this is an eighth note duration. Duration and divisions are used directly for generating sound output, so they must be chosen to take tuplets into account. Using a divisions element lets us use just one number to represent a duration for each note in the score, while retaining the full power of a fractional representation. If maximum compatibility with Standard MIDI 1.0 files is important, do not have the divisions value exceed 16383.
     """
-
+    
     TYPE = XSDSimpleTypePositiveDivisions
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="divisions" type="positive-divisions" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>Musical notation duration is commonly represented as fractions. The divisions element indicates how many divisions per quarter note are used to indicate a note's duration. For example, if duration = 1 and divisions = 2, this is an eighth note duration. Duration and divisions are used directly for generating sound output, so they must be chosen to take tuplets into account. Using a divisions element lets us use just one number to represent a duration for each note in the score, while retaining the full power of a fractional representation. If maximum compatibility with Standard MIDI 1.0 files is important, do not have the divisions value exceed 16383.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='divisions'][@type='positive-divisions']"
 
 
 class XMLKey(XMLElement):
     """
-    The key type represents a key signature. Both traditional and non-traditional key signatures are supported. The optional number attribute refers to staff numbers. If absent, the key signature applies to all staves in the part. Key signatures appear at the start of each system unless the print-object attribute has been set to "no".\n
-    XSD structure:\n
-    Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- Choice\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Group\@name=traditional-key\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- \- \- \- \- Element\@name=cancel\@minOccurs=0\@maxOccurs=1\n
-    \- \- \- \- \- \- \- \- Element\@name=fifths\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- \- \- \- \- Element\@name=mode\@minOccurs=0\@maxOccurs=1\n
-    \- \- \- \- Group\@name=non-traditional-key\@minOccurs=0\@maxOccurs=unbounded\n
-    \- \- \- \- \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- \- \- \- \- Element\@name=key-step\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- \- \- \- \- Element\@name=key-alter\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- \- \- \- \- Element\@name=key-accidental\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=key-octave\@minOccurs=0\@maxOccurs=unbounded\n
+    The key element represents a key signature. Both traditional and non-traditional key signatures are supported. The optional number attribute refers to staff numbers. If absent, the key signature applies to all staves in the part.
     """
-
+    
     TYPE = XSDComplexTypeKey
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="key" type="key" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The key element represents a key signature. Both traditional and non-traditional key signatures are supported. The optional number attribute refers to staff numbers. If absent, the key signature applies to all staves in the part.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='key'][@type='key']"
 
 
 class XMLTime(XMLElement):
     """
-    Time signatures are represented by the beats element for the numerator and the beat-type element for the denominator. The symbol attribute is used to indicate common and cut time symbols as well as a single number display. Multiple pairs of beat and beat-type elements are used for composite time signatures with multiple denominators, such as 2/4 + 3/8. A composite such as 3+2/8 requires only one beat/beat-type pair.
-    
-    The print-object attribute allows a time signature to be specified but not printed, as is the case for excerpts from the middle of a score. The value is "yes" if not present. The optional number attribute refers to staff numbers within the part. If absent, the time signature applies to all staves in the part.\n
-    XSD structure:\n
-    Choice\@minOccurs=1\@maxOccurs=1\n
-    \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Group\@name=time-signature\@minOccurs=1\@maxOccurs=unbounded\n
-    \- \- \- \- \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- \- \- \- \- Element\@name=beats\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- \- \- \- \- Element\@name=beat-type\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=interchangeable\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=senza-misura\@minOccurs=1\@maxOccurs=1\n
+    Time signatures are represented by the beats element for the numerator and the beat-type element for the denominator.
     """
-
+    
     TYPE = XSDComplexTypeTime
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="time" type="time" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>Time signatures are represented by the beats element for the numerator and the beat-type element for the denominator.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='time'][@type='time']"
 
 
 class XMLStaves(XMLElement):
     """
     The staves element is used if there is more than one staff represented in the given part (e.g., 2 staves for typical piano parts). If absent, a value of 1 is assumed. Staves are ordered from top to bottom in a part in numerical order, with staff 1 above staff 2.
     """
-
+    
     TYPE = XSDSimpleTypeNonNegativeInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staves" type="xs:nonNegativeInteger" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The staves element is used if there is more than one staff represented in the given part (e.g., 2 staves for typical piano parts). If absent, a value of 1 is assumed. Staves are ordered from top to bottom in a part in numerical order, with staff 1 above staff 2.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staves'][@type='xs:nonNegativeInteger']"
 
 
 class XMLPartSymbol(XMLElement):
     """
-    The part-symbol type indicates how a symbol for a multi-staff part is indicated in the score; brace is the default value. The top-staff and bottom-staff attributes are used when the brace does not extend across the entire part. For example, in a 3-staff organ part, the top-staff will typically be 1 for the right hand, while the bottom-staff will typically be 2 for the left hand. Staff 3 for the pedals is usually outside the brace. By default, the presence of a part-symbol element that does not extend across the entire part also indicates a corresponding change in the common barlines within a part.
+    The part-symbol element indicates how a symbol for a multi-staff part is indicated in the score.
     """
-
+    
     TYPE = XSDComplexTypePartSymbol
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-symbol" type="part-symbol" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The part-symbol element indicates how a symbol for a multi-staff part is indicated in the score.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='part-symbol'][@type='part-symbol']"
 
 
 class XMLInstruments(XMLElement):
     """
     The instruments element is only used if more than one instrument is represented in the part (e.g., oboe I and II where they play together most of the time). If absent, a value of 1 is assumed.
     """
-
+    
     TYPE = XSDSimpleTypeNonNegativeInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="instruments" type="xs:nonNegativeInteger" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The instruments element is only used if more than one instrument is represented in the part (e.g., oboe I and II where they play together most of the time). If absent, a value of 1 is assumed.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='instruments'][@type='xs:nonNegativeInteger']"
 
 
 class XMLClef(XMLElement):
     """
-    Clefs are represented by a combination of sign, line, and clef-octave-change elements. The optional number attribute refers to staff numbers within the part. A value of 1 is assumed if not present.
-    
-    Sometimes clefs are added to the staff in non-standard line positions, either to indicate cue passages, or when there are multiple clefs present simultaneously on one staff. In this situation, the additional attribute is set to "yes" and the line value is ignored. The size attribute is used for clefs where the additional attribute is "yes". It is typically used to indicate cue clefs.
-    
-    Sometimes clefs at the start of a measure need to appear after the barline rather than before, as for cues or for use after a repeated section. The after-barline attribute is set to "yes" in this situation. The attribute is ignored for mid-measure clefs.
-    
-    Clefs appear at the start of each system unless the print-object attribute has been set to "no" or the additional attribute has been set to "yes".\n
-    XSD structure:\n
-    Group\@name=clef\@minOccurs=1\@maxOccurs=1\n
-    \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=sign\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=line\@minOccurs=0\@maxOccurs=1\n
-    \- \- \- \- Element\@name=clef-octave-change\@minOccurs=0\@maxOccurs=1\n
+    Clefs are represented by a combination of sign, line, and clef-octave-change elements.
     """
-
+    
     TYPE = XSDComplexTypeClef
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="clef" type="clef" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>Clefs are represented by a combination of sign, line, and clef-octave-change elements.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='clef'][@type='clef']"
 
 
 class XMLStaffDetails(XMLElement):
     """
-    The staff-details element is used to indicate different types of staves. The optional number attribute specifies the staff number from top to bottom on the system, as with clef. The print-object attribute is used to indicate when a staff is not printed in a part, usually in large scores where empty parts are omitted. It is yes by default. If print-spacing is yes while print-object is no, the score is printed in cutaway format where vertical space is left for the empty part.\n
-    XSD structure:\n
-    Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- Element\@name=staff-type\@minOccurs=0\@maxOccurs=1\n
-    \- \- Sequence\@minOccurs=0\@maxOccurs=1\n
-    \- \- \- \- Element\@name=staff-lines\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=line-detail\@minOccurs=0\@maxOccurs=unbounded\n
-    \- \- Element\@name=staff-tuning\@minOccurs=0\@maxOccurs=unbounded\n
-    \- \- Element\@name=capo\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=staff-size\@minOccurs=0\@maxOccurs=1\n
+    The staff-details element is used to indicate different types of staves.
     """
-
+    
     TYPE = XSDComplexTypeStaffDetails
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-details" type="staff-details" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The staff-details element is used to indicate different types of staves.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staff-details'][@type='staff-details']"
 
 
 class XMLTranspose(XMLElement):
     """
-    The transpose type represents what must be added to a written pitch to get a correct sounding pitch. The optional number attribute refers to staff numbers, from top to bottom on the system. If absent, the transposition applies to all staves in the part. Per-staff transposition is most often used in parts that represent multiple instruments.\n
-    XSD structure:\n
-    Group\@name=transpose\@minOccurs=1\@maxOccurs=1\n
-    \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=diatonic\@minOccurs=0\@maxOccurs=1\n
-    \- \- \- \- Element\@name=chromatic\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=octave-change\@minOccurs=0\@maxOccurs=1\n
-    \- \- \- \- Element\@name=double\@minOccurs=0\@maxOccurs=1\n
+    If the part is being encoded for a transposing instrument in written vs. concert pitch, the transposition must be encoded in the transpose element using the transpose type.
     """
-
+    
     TYPE = XSDComplexTypeTranspose
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="transpose" type="transpose" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>If the part is being encoded for a transposing instrument in written vs. concert pitch, the transposition must be encoded in the transpose element using the transpose type.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='transpose'][@type='transpose']"
 
 
 class XMLForPart(XMLElement):
     """
-    The for-part type is used in a concert score to indicate the transposition for a transposed part created from that score. It is only used in score files that contain a concert-score element in the defaults. This allows concert scores with transposed parts to be represented in a single uncompressed MusicXML file.
-    
-    The optional number attribute refers to staff numbers, from top to bottom on the system. If absent, the child elements apply to all staves in the created part.\n
-    XSD structure:\n
-    Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- Element\@name=part-clef\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=part-transpose\@minOccurs=1\@maxOccurs=1\n
+    The for-part element is used in a concert score to indicate the transposition for a transposed part created from that score. It is only used in score files that contain a concert-score element in the defaults. This allows concert scores with transposed parts to be represented in a single uncompressed MusicXML file.
     """
-
+    
     TYPE = XSDComplexTypeForPart
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="for-part" type="for-part" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The for-part element is used in a concert score to indicate the transposition for a transposed part created from that score. It is only used in score files that contain a concert-score element in the defaults. This allows concert scores with transposed parts to be represented in a single uncompressed MusicXML file.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='for-part'][@type='for-part']"
 
 
 class XMLMeasureStyle(XMLElement):
     """
     A measure-style indicates a special way to print partial to multiple measures within a part. This includes multiple rests over several measures, repeats of beats, single, or multiple measures, and use of slash notation.
-    
-    The multiple-rest and measure-repeat elements indicate the number of measures covered in the element content. The beat-repeat and slash elements can cover partial measures. All but the multiple-rest element use a type attribute to indicate starting and stopping the use of the style. The optional number attribute specifies the staff number from top to bottom on the system, as with clef.\n
-    XSD structure:\n
-    Choice\@minOccurs=1\@maxOccurs=1\n
-    \- \- Element\@name=multiple-rest\@minOccurs=1\@maxOccurs=1\n
-    \- \- Element\@name=measure-repeat\@minOccurs=1\@maxOccurs=1\n
-    \- \- Element\@name=beat-repeat\@minOccurs=1\@maxOccurs=1\n
-    \- \- Element\@name=slash\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeMeasureStyle
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="measure-style" type="measure-style" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>A measure-style indicates a special way to print partial to multiple measures within a part. This includes multiple rests over several measures, repeats of beats, single, or multiple measures, and use of slash notation.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='measure-style'][@type='measure-style']"
 
 
 class XMLPartClef(XMLElement):
     """
-    The child elements of the part-clef type have the same meaning as for the clef type. However that meaning applies to a transposed part created from the existing score file.\n
-    XSD structure:\n
-    Group\@name=clef\@minOccurs=1\@maxOccurs=1\n
-    \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=sign\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=line\@minOccurs=0\@maxOccurs=1\n
-    \- \- \- \- Element\@name=clef-octave-change\@minOccurs=0\@maxOccurs=1\n
+    The part-clef element is used for transpositions that also include a change of clef, as for instruments such as bass clarinet.
     """
-
+    
     TYPE = XSDComplexTypePartClef
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-clef" type="part-clef" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The part-clef element is used for transpositions that also include a change of clef, as for instruments such as bass clarinet.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='part-clef'][@type='part-clef']"
 
 
 class XMLPartTranspose(XMLElement):
     """
-    The child elements of the part-transpose type have the same meaning as for the transpose type. However that meaning applies to a transposed part created from the existing score file.\n
-    XSD structure:\n
-    Group\@name=transpose\@minOccurs=1\@maxOccurs=1\n
-    \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=diatonic\@minOccurs=0\@maxOccurs=1\n
-    \- \- \- \- Element\@name=chromatic\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=octave-change\@minOccurs=0\@maxOccurs=1\n
-    \- \- \- \- Element\@name=double\@minOccurs=0\@maxOccurs=1\n
+    The chromatic element in a part-transpose element will usually have a non-zero value, since octave transpositions can be represented in concert scores using the transpose element.
     """
-
+    
     TYPE = XSDComplexTypePartTranspose
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-transpose" type="part-transpose">
-    <xs:annotation>
-        <xs:documentation>The chromatic element in a part-transpose element will usually have a non-zero value, since octave transpositions can be represented in concert scores using the transpose element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='part-transpose'][@type='part-transpose']"
 
 
 class XMLTimeRelation(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeTimeRelation
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="time-relation" type="time-relation" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='time-relation'][@type='time-relation']"
 
 
 class XMLKeyOctave(XMLElement):
     """
-    The key-octave type specifies in which octave an element of a key signature appears. The content specifies the octave value using the same values as the display-octave element. The number attribute is a positive integer that refers to the key signature element in left-to-right order. If the cancel attribute is set to yes, then this number refers to the canceling key signature specified by the cancel element in the parent key element. The cancel attribute cannot be set to yes if there is no corresponding cancel element within the parent key element. It is no by default.
+    The optional list of key-octave elements is used to specify in which octave each element of the key signature appears.
     """
-
+    
     TYPE = XSDComplexTypeKeyOctave
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="key-octave" type="key-octave" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The optional list of key-octave elements is used to specify in which octave each element of the key signature appears.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='key-octave'][@type='key-octave']"
 
 
 class XMLMultipleRest(XMLElement):
     """
     The text of the multiple-rest type indicates the number of measures in the multiple rest. Multiple rests may use the 1-bar / 2-bar / 4-bar rest symbols, or a single shape. The use-symbols attribute indicates which to use; it is no if not specified.
     """
-
+    
     TYPE = XSDComplexTypeMultipleRest
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="multiple-rest" type="multiple-rest" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='multiple-rest'][@type='multiple-rest']"
 
 
 class XMLMeasureRepeat(XMLElement):
@@ -1268,12 +912,9 @@ class XMLMeasureRepeat(XMLElement):
     
     The measure-repeat element specifies a notation style for repetitions. The actual music being repeated needs to be repeated within each measure of the MusicXML file. This element specifies the notation that indicates the repeat.
     """
-
+    
     TYPE = XSDComplexTypeMeasureRepeat
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="measure-repeat" type="measure-repeat" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='measure-repeat'][@type='measure-repeat']"
 
 
 class XMLBeatRepeat(XMLElement):
@@ -1291,12 +932,9 @@ class XMLBeatRepeat(XMLElement):
     \- \- \- \- \- \- Element\@name=slash-dot\@minOccurs=0\@maxOccurs=unbounded\n
     \- \- \- \- Element\@name=except-voice\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeBeatRepeat
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beat-repeat" type="beat-repeat" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='beat-repeat'][@type='beat-repeat']"
 
 
 class XMLSlash(XMLElement):
@@ -1310,52 +948,36 @@ class XMLSlash(XMLElement):
     \- \- \- \- \- \- Element\@name=slash-dot\@minOccurs=0\@maxOccurs=unbounded\n
     \- \- \- \- Element\@name=except-voice\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeSlash
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="slash" type="slash" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='slash'][@type='slash']"
 
 
 class XMLStaffType(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeStaffType
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-type" type="staff-type" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staff-type'][@type='staff-type']"
 
 
 class XMLStaffLines(XMLElement):
     """
     The staff-lines element specifies the number of lines and is usually used for a non 5-line staff. If the staff-lines element is present, the appearance of each line may be individually specified with a line-detail element.
     """
-
+    
     TYPE = XSDSimpleTypeNonNegativeInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-lines" type="xs:nonNegativeInteger">
-    <xs:annotation>
-        <xs:documentation>The staff-lines element specifies the number of lines and is usually used for a non 5-line staff. If the staff-lines element is present, the appearance of each line may be individually specified with a line-detail element. </xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staff-lines'][@type='xs:nonNegativeInteger']"
 
 
 class XMLLineDetail(XMLElement):
     """
     If the staff-lines element is present, the appearance of each line may be individually specified with a line-detail type. Staff lines are numbered from bottom to top. The print-object attribute allows lines to be hidden within a staff. This is used in special situations such as a widely-spaced percussion staff where a note placed below the higher line is distinct from a note placed above the lower line. Hidden staff lines are included when specifying clef lines and determining display-step / display-octave values, but are not counted as lines for the purposes of the system-layout and staff-layout elements.
     """
-
+    
     TYPE = XSDComplexTypeLineDetail
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line-detail" type="line-detail" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='line-detail'][@type='line-detail']"
 
 
 class XMLStaffTuning(XMLElement):
@@ -1368,28 +990,18 @@ class XMLStaffTuning(XMLElement):
     \- \- \- \- Element\@name=tuning-alter\@minOccurs=0\@maxOccurs=1\n
     \- \- \- \- Element\@name=tuning-octave\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeStaffTuning
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-tuning" type="staff-tuning" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staff-tuning'][@type='staff-tuning']"
 
 
 class XMLCapo(XMLElement):
     """
     The capo element indicates at which fret a capo should be placed on a fretted instrument. This changes the open tuning of the strings specified by staff-tuning by the specified number of half-steps.
     """
-
+    
     TYPE = XSDSimpleTypeNonNegativeInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="capo" type="xs:nonNegativeInteger" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The capo element indicates at which fret a capo should be placed on a fretted instrument. This changes the open tuning of the strings specified by staff-tuning by the specified number of half-steps.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='capo'][@type='xs:nonNegativeInteger']"
 
 
 class XMLStaffSize(XMLElement):
@@ -1398,12 +1010,9 @@ class XMLStaffSize(XMLElement):
     
     In some cases, a staff-size different than 100 also scales the notation on the staff, such as with a cue staff. In other cases, such as percussion staves, the lines may be more widely spaced without scaling the notation on the staff. The scaling attribute allows these two cases to be distinguished. It specifies the percentage scaling that applies to the notation. Values less that 100 make the notation smaller while values over 100 make the notation larger. The staff-size content and scaling attribute are both non-negative decimal values.
     """
-
+    
     TYPE = XSDComplexTypeStaffSize
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-size" type="staff-size" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staff-size'][@type='staff-size']"
 
 
 class XMLInterchangeable(XMLElement):
@@ -1417,88 +1026,63 @@ class XMLInterchangeable(XMLElement):
     \- \- \- \- \- \- Element\@name=beats\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- Element\@name=beat-type\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeInterchangeable
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="interchangeable" type="interchangeable" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='interchangeable'][@type='interchangeable']"
 
 
 class XMLSenzaMisura(XMLElement):
     """
     A senza-misura element explicitly indicates that no time signature is present. The optional element content indicates the symbol to be used, if any, such as an X. The time element's symbol attribute is not used when a senza-misura element is present.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="senza-misura" type="xs:string">
-    <xs:annotation>
-        <xs:documentation>A senza-misura element explicitly indicates that no time signature is present. The optional element content indicates the symbol to be used, if any, such as an X. The time element's symbol attribute is not used when a senza-misura element is present.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='senza-misura'][@type='xs:string']"
 
 
 class XMLBarStyle(XMLElement):
     """
     The bar-style-color type contains barline style and color information.
     """
-
+    
     TYPE = XSDComplexTypeBarStyleColor
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bar-style" type="bar-style-color" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='bar-style'][@type='bar-style-color']"
 
 
 class XMLWavyLine(XMLElement):
     """
     Wavy lines are one way to indicate trills and vibrato. When used with a barline element, they should always have type="continue" set. The smufl attribute specifies a particular wavy line glyph from the SMuFL Multi-segment lines range.
     """
-
+    
     TYPE = XSDComplexTypeWavyLine
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="wavy-line" type="wavy-line" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='wavy-line'][@type='wavy-line']"
 
 
 class XMLSegno(XMLElement):
     """
     The segno type is the visual indicator of a segno sign. The exact glyph can be specified with the smufl attribute. A sound element is also needed to guide playback applications reliably.
     """
-
+    
     TYPE = XSDComplexTypeSegno
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="segno" type="segno" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='segno'][@type='segno']"
 
 
 class XMLCoda(XMLElement):
     """
     The coda type is the visual indicator of a coda sign. The exact glyph can be specified with the smufl attribute. A sound element is also needed to guide playback applications reliably.
     """
-
+    
     TYPE = XSDComplexTypeCoda
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="coda" type="coda" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='coda'][@type='coda']"
 
 
 class XMLFermata(XMLElement):
     """
     The fermata text content represents the shape of the fermata sign. An empty fermata element represents a normal fermata. The fermata type is upright if not specified.
     """
-
+    
     TYPE = XSDComplexTypeFermata
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fermata" type="fermata" minOccurs="0" maxOccurs="2" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='fermata'][@type='fermata']"
 
 
 class XMLEnding(XMLElement):
@@ -1507,152 +1091,99 @@ class XMLEnding(XMLElement):
     
     The number attribute indicates which times the ending is played, similar to the time-only attribute used by other elements. While this often represents the numeric values for what is under the ending line, it can also indicate whether an ending is played during a larger dal segno or da capo repeat. Single endings such as "1" or comma-separated multiple endings such as "1,2" may be used. The ending element text is used when the text displayed in the ending is different than what appears in the number attribute. The print-object attribute is used to indicate when an ending is present but not printed, as is often the case for many parts in a full score.
     """
-
+    
     TYPE = XSDComplexTypeEnding
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ending" type="ending" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='ending'][@type='ending']"
 
 
 class XMLRepeat(XMLElement):
     """
     The repeat type represents repeat marks. The start of the repeat has a forward direction while the end of the repeat has a backward direction. The times and after-jump attributes are only used with backward repeats that are not part of an ending. The times attribute indicates the number of times the repeated section is played. The after-jump attribute indicates if the repeats are played after a jump due to a da capo or dal segno.
     """
-
+    
     TYPE = XSDComplexTypeRepeat
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="repeat" type="repeat" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='repeat'][@type='repeat']"
 
 
 class XMLAccordionHigh(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The accordion-high element indicates the presence of a dot in the high (4') section of the registration symbol. This element is omitted if no dot is present.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="accordion-high" type="empty" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The accordion-high element indicates the presence of a dot in the high (4') section of the registration symbol. This element is omitted if no dot is present.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='accordion-high'][@type='empty']"
 
 
 class XMLAccordionMiddle(XMLElement):
     """
     The accordion-middle element indicates the presence of 1 to 3 dots in the middle (8') section of the registration symbol. This element is omitted if no dots are present.
     """
-
+    
     TYPE = XSDSimpleTypeAccordionMiddle
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="accordion-middle" type="accordion-middle" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The accordion-middle element indicates the presence of 1 to 3 dots in the middle (8') section of the registration symbol. This element is omitted if no dots are present.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='accordion-middle'][@type='accordion-middle']"
 
 
 class XMLAccordionLow(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The accordion-low element indicates the presence of a dot in the low (16') section of the registration symbol. This element is omitted if no dot is present.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="accordion-low" type="empty" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The accordion-low element indicates the presence of a dot in the low (16') section of the registration symbol. This element is omitted if no dot is present.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='accordion-low'][@type='empty']"
 
 
 class XMLBassSeparator(XMLElement):
     """
-    The style-text type represents a text element with a print-style attribute group.
+    The optional bass-separator element indicates that text, rather than a line or slash, separates the bass from what precedes it.
     """
-
+    
     TYPE = XSDComplexTypeStyleText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bass-separator" type="style-text" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The optional bass-separator element indicates that text, rather than a line or slash, separates the bass from what precedes it.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='bass-separator'][@type='style-text']"
 
 
 class XMLBassStep(XMLElement):
     """
     The bass-step type represents the pitch step of the bass of the current chord within the harmony element. The text attribute indicates how the bass should appear in a score if not using the element contents.
     """
-
+    
     TYPE = XSDComplexTypeBassStep
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bass-step" type="bass-step" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='bass-step'][@type='bass-step']"
 
 
 class XMLBassAlter(XMLElement):
     """
-    The harmony-alter type represents the chromatic alteration of the root, numeral, or bass of the current harmony-chord group within the harmony element. In some chord styles, the text of the preceding element may include alteration information. In that case, the print-object attribute of this type can be set to no. The location attribute indicates whether the alteration should appear to the left or the right of the preceding element. Its default value varies by element.
+    The bass-alter element represents the chromatic alteration of the bass of the current chord within the harmony element. In some chord styles, the text for the bass-step element may include bass-alter information. In that case, the print-object attribute of the bass-alter element can be set to no. The location attribute indicates whether the alteration should appear to the left or the right of the bass-step; it is right if not specified.
     """
-
+    
     TYPE = XSDComplexTypeHarmonyAlter
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bass-alter" type="harmony-alter" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The bass-alter element represents the chromatic alteration of the bass of the current chord within the harmony element. In some chord styles, the text for the bass-step element may include bass-alter information. In that case, the print-object attribute of the bass-alter element can be set to no. The location attribute indicates whether the alteration should appear to the left or the right of the bass-step; it is right if not specified.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='bass-alter'][@type='harmony-alter']"
 
 
 class XMLDegreeValue(XMLElement):
     """
     The content of the degree-value type is a number indicating the degree of the chord (1 for the root, 3 for third, etc). The text attribute specifies how the value of the degree should be displayed. The symbol attribute indicates that a symbol should be used in specifying the degree. If the symbol attribute is present, the value of the text attribute follows the symbol.
     """
-
+    
     TYPE = XSDComplexTypeDegreeValue
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="degree-value" type="degree-value" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='degree-value'][@type='degree-value']"
 
 
 class XMLDegreeAlter(XMLElement):
     """
     The degree-alter type represents the chromatic alteration for the current degree. If the degree-type value is alter or subtract, the degree-alter value is relative to the degree already in the chord based on its kind element. If the degree-type value is add, the degree-alter is relative to a dominant chord (major and perfect intervals except for a minor seventh). The plus-minus attribute is used to indicate if plus and minus symbols should be used instead of sharp and flat symbols to display the degree alteration. It is no if not specified.
     """
-
+    
     TYPE = XSDComplexTypeDegreeAlter
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="degree-alter" type="degree-alter" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='degree-alter'][@type='degree-alter']"
 
 
 class XMLDegreeType(XMLElement):
     """
     The degree-type type indicates if this degree is an addition, alteration, or subtraction relative to the kind of the current chord. The value of the degree-type element affects the interpretation of the value of the degree-alter element. The text attribute specifies how the type of the degree should be displayed.
     """
-
+    
     TYPE = XSDComplexTypeDegreeType
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="degree-type" type="degree-type" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='degree-type'][@type='degree-type']"
 
 
 class XMLDirectionType(XMLElement):
@@ -1686,12 +1217,9 @@ class XMLDirectionType(XMLElement):
     \- \- Element\@name=staff-divide\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=other-direction\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeDirectionType
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="direction-type" type="direction-type" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='direction-type'][@type='direction-type']"
 
 
 class XMLOffset(XMLElement):
@@ -1700,12 +1228,9 @@ class XMLOffset(XMLElement):
     
     The offset affects the visual appearance of the direction. If the sound attribute is "yes", then the offset affects playback and listening too. If the sound attribute is "no", then any sound or listening associated with the direction takes effect at the current location. The sound attribute is "no" by default for compatibility with earlier versions of the MusicXML format. If an element within a direction includes a default-x attribute, the offset value will be ignored when determining the appearance of that element.
     """
-
+    
     TYPE = XSDComplexTypeOffset
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="offset" type="offset" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='offset'][@type='offset']"
 
 
 class XMLSound(XMLElement):
@@ -1747,12 +1272,9 @@ class XMLSound(XMLElement):
     \- \- Element\@name=swing\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=offset\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeSound
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="sound" type="sound" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='sound'][@type='sound']"
 
 
 class XMLListening(XMLElement):
@@ -1767,72 +1289,45 @@ class XMLListening(XMLElement):
     \- \- \- \- Element\@name=other-listening\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=offset\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeListening
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="listening" type="listening" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='listening'][@type='listening']"
 
 
 class XMLRehearsal(XMLElement):
     """
-    The formatted-text-id type represents a text element with text-formatting and id attributes.
+    The rehearsal element specifies letters, numbers, and section names that are notated in the score for reference during rehearsal. The enclosure is square if not specified. The language is Italian ("it") if not specified. Left justification is used if not specified.
     """
-
+    
     TYPE = XSDComplexTypeFormattedTextId
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rehearsal" type="formatted-text-id" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The rehearsal element specifies letters, numbers, and section names that are notated in the score for reference during rehearsal. The enclosure is square if not specified. The language is Italian ("it") if not specified. Left justification is used if not specified.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='rehearsal'][@type='formatted-text-id']"
 
 
 class XMLWords(XMLElement):
     """
-    The formatted-text-id type represents a text element with text-formatting and id attributes.
+    The words element specifies a standard text direction. The enclosure is none if not specified. The language is Italian ("it") if not specified. Left justification is used if not specified.
     """
-
+    
     TYPE = XSDComplexTypeFormattedTextId
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="words" type="formatted-text-id">
-    <xs:annotation>
-        <xs:documentation>The words element specifies a standard text direction. The enclosure is none if not specified. The language is Italian ("it") if not specified. Left justification is used if not specified.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='words'][@type='formatted-text-id']"
 
 
 class XMLSymbol(XMLElement):
     """
-    The formatted-symbol-id type represents a SMuFL musical symbol element with formatting and id attributes.
+    The symbol element specifies a musical symbol using a canonical SMuFL glyph name. It is used when an occasional musical symbol is interspersed into text. It should not be used in place of semantic markup, such as metronome marks that mix text and symbols. Left justification is used if not specified. Enclosure is none if not specified.
     """
-
+    
     TYPE = XSDComplexTypeFormattedSymbolId
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="symbol" type="formatted-symbol-id">
-    <xs:annotation>
-        <xs:documentation>The symbol element specifies a musical symbol using a canonical SMuFL glyph name. It is used when an occasional musical symbol is interspersed into text. It should not be used in place of semantic markup, such as metronome marks that mix text and symbols. Left justification is used if not specified. Enclosure is none if not specified.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='symbol'][@type='formatted-symbol-id']"
 
 
 class XMLWedge(XMLElement):
     """
     The wedge type represents crescendo and diminuendo wedge symbols. The type attribute is crescendo for the start of a wedge that is closed at the left side, and diminuendo for the start of a wedge that is closed on the right side. Spread values are measured in tenths; those at the start of a crescendo wedge or end of a diminuendo wedge are ignored. The niente attribute is yes if a circle appears at the point of the wedge, indicating a crescendo from nothing or diminuendo to nothing. It is no by default, and used only when the type is crescendo, or the type is stop for a wedge that began with a diminuendo type. The line-type is solid if not specified.
     """
-
+    
     TYPE = XSDComplexTypeWedge
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="wedge" type="wedge" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='wedge'][@type='wedge']"
 
 
 class XMLDynamics(XMLElement):
@@ -1872,48 +1367,36 @@ class XMLDynamics(XMLElement):
     \- \- Element\@name=sfzp\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=other-dynamics\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeDynamics
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="dynamics" type="dynamics" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='dynamics'][@type='dynamics']"
 
 
 class XMLDashes(XMLElement):
     """
     The dashes type represents dashes, used for instance with cresc. and dim. marks.
     """
-
+    
     TYPE = XSDComplexTypeDashes
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="dashes" type="dashes" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='dashes'][@type='dashes']"
 
 
 class XMLBracket(XMLElement):
     """
     Brackets are combined with words in a variety of modern directions. The line-end attribute specifies if there is a jog up or down (or both), an arrow, or nothing at the start or end of the bracket. If the line-end is up or down, the length of the jog can be specified using the end-length attribute. The line-type is solid if not specified.
     """
-
+    
     TYPE = XSDComplexTypeBracket
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bracket" type="bracket" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='bracket'][@type='bracket']"
 
 
 class XMLPedal(XMLElement):
     """
     The pedal type represents piano pedal marks, including damper and sostenuto pedal marks. The line attribute is yes if pedal lines are used. The sign attribute is yes if Ped, Sost, and * signs are used. For compatibility with older versions, the sign attribute is yes by default if the line attribute is no, and is no by default if the line attribute is yes. If the sign attribute is set to yes and the type is start or sostenuto, the abbreviated attribute is yes if the short P and S signs are used, and no if the full Ped and Sost signs are used. It is no by default. Otherwise the abbreviated attribute is ignored. The alignment attributes are ignored if the sign attribute is no.
     """
-
+    
     TYPE = XSDComplexTypePedal
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pedal" type="pedal" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pedal'][@type='pedal']"
 
 
 class XMLMetronome(XMLElement):
@@ -1942,24 +1425,18 @@ class XMLMetronome(XMLElement):
     \- \- \- \- \- \- Element\@name=metronome-relation\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- Element\@name=metronome-note\@minOccurs=1\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeMetronome
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="metronome" type="metronome" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='metronome'][@type='metronome']"
 
 
 class XMLOctaveShift(XMLElement):
     """
     The octave shift type indicates where notes are shifted up or down from their true pitched values because of printing difficulty. Thus a treble clef line noted with 8va will be indicated with an octave-shift down from the pitch data indicated in the notes. A size of 8 indicates one octave; a size of 15 indicates two octaves.
     """
-
+    
     TYPE = XSDComplexTypeOctaveShift
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="octave-shift" type="octave-shift" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='octave-shift'][@type='octave-shift']"
 
 
 class XMLHarpPedals(XMLElement):
@@ -1969,72 +1446,45 @@ class XMLHarpPedals(XMLElement):
     Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=pedal-tuning\@minOccurs=1\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeHarpPedals
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="harp-pedals" type="harp-pedals" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='harp-pedals'][@type='harp-pedals']"
 
 
 class XMLDamp(XMLElement):
     """
-    The empty-print-style-align-id type represents an empty element with print-style-align and optional-unique-id attribute groups.
+    The damp element specifies a harp damping mark.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPrintStyleAlignId
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="damp" type="empty-print-style-align-id">
-    <xs:annotation>
-        <xs:documentation>The damp element specifies a harp damping mark.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='damp'][@type='empty-print-style-align-id']"
 
 
 class XMLDampAll(XMLElement):
     """
-    The empty-print-style-align-id type represents an empty element with print-style-align and optional-unique-id attribute groups.
+    The damp-all element specifies a harp damping mark for all strings.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPrintStyleAlignId
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="damp-all" type="empty-print-style-align-id">
-    <xs:annotation>
-        <xs:documentation>The damp-all element specifies a harp damping mark for all strings.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='damp-all'][@type='empty-print-style-align-id']"
 
 
 class XMLEyeglasses(XMLElement):
     """
-    The empty-print-style-align-id type represents an empty element with print-style-align and optional-unique-id attribute groups.
+    The eyeglasses element represents the eyeglasses symbol, common in commercial music.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPrintStyleAlignId
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="eyeglasses" type="empty-print-style-align-id">
-    <xs:annotation>
-        <xs:documentation>The eyeglasses element represents the eyeglasses symbol, common in commercial music.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='eyeglasses'][@type='empty-print-style-align-id']"
 
 
 class XMLStringMute(XMLElement):
     """
     The string-mute type represents string mute on and mute off symbols.
     """
-
+    
     TYPE = XSDComplexTypeStringMute
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="string-mute" type="string-mute" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='string-mute'][@type='string-mute']"
 
 
 class XMLScordatura(XMLElement):
@@ -2044,36 +1494,27 @@ class XMLScordatura(XMLElement):
     Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=accord\@minOccurs=1\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeScordatura
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="scordatura" type="scordatura" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='scordatura'][@type='scordatura']"
 
 
 class XMLImage(XMLElement):
     """
     The image type is used to include graphical images in a score.
     """
-
+    
     TYPE = XSDComplexTypeImage
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="image" type="image" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='image'][@type='image']"
 
 
 class XMLPrincipalVoice(XMLElement):
     """
     The principal-voice type represents principal and secondary voices in a score, either for analysis or for square bracket symbols that appear in a score. The element content is used for analysis and may be any text value. The symbol attribute indicates the type of symbol used. When used for analysis separate from any printed score markings, it should be set to none. Otherwise if the type is stop it should be set to plain.
     """
-
+    
     TYPE = XSDComplexTypePrincipalVoice
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="principal-voice" type="principal-voice" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='principal-voice'][@type='principal-voice']"
 
 
 class XMLPercussion(XMLElement):
@@ -2093,12 +1534,9 @@ class XMLPercussion(XMLElement):
     \- \- Element\@name=stick-location\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=other-percussion\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypePercussion
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="percussion" type="percussion" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='percussion'][@type='percussion']"
 
 
 class XMLAccordionRegistration(XMLElement):
@@ -2110,80 +1548,54 @@ class XMLAccordionRegistration(XMLElement):
     \- \- Element\@name=accordion-middle\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=accordion-low\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeAccordionRegistration
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="accordion-registration" type="accordion-registration" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='accordion-registration'][@type='accordion-registration']"
 
 
 class XMLStaffDivide(XMLElement):
     """
     The staff-divide element represents the staff division arrow symbols found at SMuFL code points U+E00B, U+E00C, and U+E00D.
     """
-
+    
     TYPE = XSDComplexTypeStaffDivide
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-divide" type="staff-divide" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staff-divide'][@type='staff-divide']"
 
 
 class XMLOtherDirection(XMLElement):
     """
     The other-direction type is used to define any direction symbols not yet in the MusicXML format. The smufl attribute can be used to specify a particular direction symbol, allowing application interoperability without requiring every SMuFL glyph to have a MusicXML element equivalent. Using the other-direction type without the smufl attribute allows for extended representation, though without application interoperability.
     """
-
+    
     TYPE = XSDComplexTypeOtherDirection
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="other-direction" type="other-direction" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='other-direction'][@type='other-direction']"
 
 
 class XMLFrameStrings(XMLElement):
     """
     The frame-strings element gives the overall size of the frame in vertical lines (strings).
     """
-
+    
     TYPE = XSDSimpleTypePositiveInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="frame-strings" type="xs:positiveInteger">
-    <xs:annotation>
-        <xs:documentation>The frame-strings element gives the overall size of the frame in vertical lines (strings).</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='frame-strings'][@type='xs:positiveInteger']"
 
 
 class XMLFrameFrets(XMLElement):
     """
     The frame-frets element gives the overall size of the frame in horizontal spaces (frets).
     """
-
+    
     TYPE = XSDSimpleTypePositiveInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="frame-frets" type="xs:positiveInteger">
-    <xs:annotation>
-        <xs:documentation>The frame-frets element gives the overall size of the frame in horizontal spaces (frets).</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='frame-frets'][@type='xs:positiveInteger']"
 
 
 class XMLFirstFret(XMLElement):
     """
     The first-fret type indicates which fret is shown in the top space of the frame; it is fret 1 if the element is not present. The optional text attribute indicates how this is represented in the fret diagram, while the location attribute indicates whether the text appears to the left or right of the frame.
     """
-
+    
     TYPE = XSDComplexTypeFirstFret
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="first-fret" type="first-fret" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='first-fret'][@type='first-fret']"
 
 
 class XMLFrameNote(XMLElement):
@@ -2196,72 +1608,54 @@ class XMLFrameNote(XMLElement):
     \- \- Element\@name=fingering\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=barre\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeFrameNote
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="frame-note" type="frame-note" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='frame-note'][@type='frame-note']"
 
 
 class XMLString(XMLElement):
     """
     The string type is used with tablature notation, regular notation (where it is often circled), and chord diagrams. String numbers start with 1 for the highest pitched full-length string.
     """
-
+    
     TYPE = XSDComplexTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="string" type="string" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='string'][@type='string']"
 
 
 class XMLFret(XMLElement):
     """
     The fret element is used with tablature notation and chord diagrams. Fret numbers start with 0 for an open string and 1 for the first fret.
     """
-
+    
     TYPE = XSDComplexTypeFret
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fret" type="fret" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='fret'][@type='fret']"
 
 
 class XMLFingering(XMLElement):
     """
     Fingering is typically indicated 1,2,3,4,5. Multiple fingerings may be given, typically to substitute fingerings in the middle of a note. The substitution and alternate values are "no" if the attribute is not present. For guitar and other fretted instruments, the fingering element represents the fretting finger; the pluck element represents the plucking finger.
     """
-
+    
     TYPE = XSDComplexTypeFingering
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fingering" type="fingering" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='fingering'][@type='fingering']"
 
 
 class XMLBarre(XMLElement):
     """
     The barre element indicates placing a finger over multiple strings on a single fret. The type is "start" for the lowest pitched string (e.g., the string with the highest MusicXML number) and is "stop" for the highest pitched string.
     """
-
+    
     TYPE = XSDComplexTypeBarre
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="barre" type="barre" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='barre'][@type='barre']"
 
 
 class XMLFeature(XMLElement):
     """
     The feature type is a part of the grouping element used for musical analysis. The type attribute represents the type of the feature and the element content represents its value. This type is flexible to allow for different analyses.
     """
-
+    
     TYPE = XSDComplexTypeFeature
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="feature" type="feature" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='feature'][@type='feature']"
 
 
 class XMLFrame(XMLElement):
@@ -2274,12 +1668,9 @@ class XMLFrame(XMLElement):
     \- \- Element\@name=first-fret\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=frame-note\@minOccurs=1\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeFrame
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="frame" type="frame" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='frame'][@type='frame']"
 
 
 class XMLPedalTuning(XMLElement):
@@ -2290,12 +1681,9 @@ class XMLPedalTuning(XMLElement):
     \- \- Element\@name=pedal-step\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=pedal-alter\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypePedalTuning
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pedal-tuning" type="pedal-tuning" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pedal-tuning'][@type='pedal-tuning']"
 
 
 class XMLSync(XMLElement):
@@ -2304,24 +1692,18 @@ class XMLSync(XMLElement):
     
     The optional latency attribute specifies a time in milliseconds that the listening application should expect from the performer. The optional player and time-only attributes restrict the element to apply to a single player or set of times through a repeated section, respectively.
     """
-
+    
     TYPE = XSDComplexTypeSync
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="sync" type="sync" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='sync'][@type='sync']"
 
 
 class XMLOtherListening(XMLElement):
     """
     The other-listening type represents other types of listening control and interaction. The required type attribute indicates the type of listening to which the element content applies. The optional player and time-only attributes restrict the element to apply to a single player or set of times through a repeated section, respectively.
     """
-
+    
     TYPE = XSDComplexTypeOtherListening
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="other-listening" type="other-listening" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='other-listening'][@type='other-listening']"
 
 
 class XMLBeatUnitTied(XMLElement):
@@ -2333,40 +1715,27 @@ class XMLBeatUnitTied(XMLElement):
     \- \- \- \- Element\@name=beat-unit\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=beat-unit-dot\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeBeatUnitTied
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beat-unit-tied" type="beat-unit-tied" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='beat-unit-tied'][@type='beat-unit-tied']"
 
 
 class XMLPerMinute(XMLElement):
     """
     The per-minute type can be a number, or a text description including numbers. If a font is specified, it overrides the font specified for the overall metronome element. This allows separate specification of a music font for the beat-unit and a text font for the numeric value, in cases where a single metronome font is not used.
     """
-
+    
     TYPE = XSDComplexTypePerMinute
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="per-minute" type="per-minute" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='per-minute'][@type='per-minute']"
 
 
 class XMLMetronomeArrows(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    If the metronome-arrows element is present, it indicates that metric modulation arrows are displayed on both sides of the metronome mark.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="metronome-arrows" type="empty" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>If the metronome-arrows element is present, it indicates that metric modulation arrows are displayed on both sides of the metronome mark.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='metronome-arrows'][@type='empty']"
 
 
 class XMLMetronomeNote(XMLElement):
@@ -2380,84 +1749,54 @@ class XMLMetronomeNote(XMLElement):
     \- \- Element\@name=metronome-tied\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=metronome-tuplet\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeMetronomeNote
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="metronome-note" type="metronome-note" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='metronome-note'][@type='metronome-note']"
 
 
 class XMLMetronomeRelation(XMLElement):
     """
     The metronome-relation element describes the relationship symbol that goes between the two sets of metronome-note elements. The currently allowed value is equals, but this may expand in future versions. If the element is empty, the equals value is used.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="metronome-relation" type="xs:string">
-    <xs:annotation>
-        <xs:documentation>The metronome-relation element describes the relationship symbol that goes between the two sets of metronome-note elements. The currently allowed value is equals, but this may expand in future versions. If the element is empty, the equals value is used.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='metronome-relation'][@type='xs:string']"
 
 
 class XMLMetronomeType(XMLElement):
     """
     The metronome-type element works like the type element in defining metric relationships.
     """
-
+    
     TYPE = XSDSimpleTypeNoteTypeValue
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="metronome-type" type="note-type-value">
-    <xs:annotation>
-        <xs:documentation>The metronome-type element works like the type element in defining metric relationships.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='metronome-type'][@type='note-type-value']"
 
 
 class XMLMetronomeDot(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The metronome-dot element works like the dot element in defining metric relationships.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="metronome-dot" type="empty" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The metronome-dot element works like the dot element in defining metric relationships.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='metronome-dot'][@type='empty']"
 
 
 class XMLMetronomeBeam(XMLElement):
     """
     The metronome-beam type works like the beam type in defining metric relationships, but does not include all the attributes available in the beam type.
     """
-
+    
     TYPE = XSDComplexTypeMetronomeBeam
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="metronome-beam" type="metronome-beam" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='metronome-beam'][@type='metronome-beam']"
 
 
 class XMLMetronomeTied(XMLElement):
     """
     The metronome-tied indicates the presence of a tie within a metric relationship mark. As with the tied element, both the start and stop of the tie should be specified, in this case within separate metronome-note elements.
     """
-
+    
     TYPE = XSDComplexTypeMetronomeTied
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="metronome-tied" type="metronome-tied" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='metronome-tied'][@type='metronome-tied']"
 
 
 class XMLMetronomeTuplet(XMLElement):
@@ -2471,40 +1810,27 @@ class XMLMetronomeTuplet(XMLElement):
     \- \- \- \- Element\@name=normal-type\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=normal-dot\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeMetronomeTuplet
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="metronome-tuplet" type="metronome-tuplet" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='metronome-tuplet'][@type='metronome-tuplet']"
 
 
 class XMLNumeralRoot(XMLElement):
     """
     The numeral-root type represents the Roman numeral or Nashville number as a positive integer from 1 to 7. The text attribute indicates how the numeral should appear in the score. A numeral-root value of 5 with a kind of major would have a text attribute of "V" if displayed as a Roman numeral, and "5" if displayed as a Nashville number. If the text attribute is not specified, the display is application-dependent.
     """
-
+    
     TYPE = XSDComplexTypeNumeralRoot
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="numeral-root" type="numeral-root" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='numeral-root'][@type='numeral-root']"
 
 
 class XMLNumeralAlter(XMLElement):
     """
-    The harmony-alter type represents the chromatic alteration of the root, numeral, or bass of the current harmony-chord group within the harmony element. In some chord styles, the text of the preceding element may include alteration information. In that case, the print-object attribute of this type can be set to no. The location attribute indicates whether the alteration should appear to the left or the right of the preceding element. Its default value varies by element.
+    The numeral-alter element represents an alteration to the numeral-root, similar to the alter element for a pitch. The print-object attribute can be used to hide an alteration in cases such as when the MusicXML encoding of a 6 or 7 numeral-root in a minor key requires an alteration that is not displayed. The location attribute indicates whether the alteration should appear to the left or the right of the numeral-root. It is left by default.
     """
-
+    
     TYPE = XSDComplexTypeHarmonyAlter
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="numeral-alter" type="harmony-alter" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The numeral-alter element represents an alteration to the numeral-root, similar to the alter element for a pitch. The print-object attribute can be used to hide an alteration in cases such as when the MusicXML encoding of a 6 or 7 numeral-root in a minor key requires an alteration that is not displayed. The location attribute indicates whether the alteration should appear to the left or the right of the numeral-root. It is left by default.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='numeral-alter'][@type='harmony-alter']"
 
 
 class XMLNumeralKey(XMLElement):
@@ -2515,164 +1841,117 @@ class XMLNumeralKey(XMLElement):
     \- \- Element\@name=numeral-fifths\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=numeral-mode\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeNumeralKey
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="numeral-key" type="numeral-key" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='numeral-key'][@type='numeral-key']"
 
 
 class XMLNumeralFifths(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeFifths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="numeral-fifths" type="fifths" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='numeral-fifths'][@type='fifths']"
 
 
 class XMLNumeralMode(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeNumeralMode
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="numeral-mode" type="numeral-mode" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='numeral-mode'][@type='numeral-mode']"
 
 
 class XMLPedalStep(XMLElement):
     """
     The pedal-step element defines the pitch step for a single harp pedal.
     """
-
+    
     TYPE = XSDSimpleTypeStep
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pedal-step" type="step">
-    <xs:annotation>
-        <xs:documentation>The pedal-step element defines the pitch step for a single harp pedal.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pedal-step'][@type='step']"
 
 
 class XMLPedalAlter(XMLElement):
     """
     The pedal-alter element defines the chromatic alteration for a single harp pedal.
     """
-
+    
     TYPE = XSDSimpleTypeSemitones
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pedal-alter" type="semitones">
-    <xs:annotation>
-        <xs:documentation>The pedal-alter element defines the chromatic alteration for a single harp pedal.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pedal-alter'][@type='semitones']"
 
 
 class XMLGlass(XMLElement):
     """
     The glass type represents pictograms for glass percussion instruments. The smufl attribute is used to distinguish different SMuFL glyphs for wind chimes in the Chimes pictograms range, including those made of materials other than glass.
     """
-
+    
     TYPE = XSDComplexTypeGlass
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="glass" type="glass" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='glass'][@type='glass']"
 
 
 class XMLMetal(XMLElement):
     """
     The metal type represents pictograms for metal percussion instruments. The smufl attribute is used to distinguish different SMuFL stylistic alternates.
     """
-
+    
     TYPE = XSDComplexTypeMetal
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="metal" type="metal" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='metal'][@type='metal']"
 
 
 class XMLWood(XMLElement):
     """
     The wood type represents pictograms for wood percussion instruments. The smufl attribute is used to distinguish different SMuFL stylistic alternates.
     """
-
+    
     TYPE = XSDComplexTypeWood
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="wood" type="wood" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='wood'][@type='wood']"
 
 
 class XMLPitched(XMLElement):
     """
     The pitched-value type represents pictograms for pitched percussion instruments. The smufl attribute is used to distinguish different SMuFL glyphs for a particular pictogram within the Tuned mallet percussion pictograms range.
     """
-
+    
     TYPE = XSDComplexTypePitched
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pitched" type="pitched" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pitched'][@type='pitched']"
 
 
 class XMLMembrane(XMLElement):
     """
     The membrane type represents pictograms for membrane percussion instruments. The smufl attribute is used to distinguish different SMuFL stylistic alternates.
     """
-
+    
     TYPE = XSDComplexTypeMembrane
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="membrane" type="membrane" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='membrane'][@type='membrane']"
 
 
 class XMLEffect(XMLElement):
     """
     The effect type represents pictograms for sound effect percussion instruments. The smufl attribute is used to distinguish different SMuFL stylistic alternates.
     """
-
+    
     TYPE = XSDComplexTypeEffect
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="effect" type="effect" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='effect'][@type='effect']"
 
 
 class XMLTimpani(XMLElement):
     """
     The timpani type represents the timpani pictogram. The smufl attribute is used to distinguish different SMuFL stylistic alternates.
     """
-
+    
     TYPE = XSDComplexTypeTimpani
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="timpani" type="timpani" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='timpani'][@type='timpani']"
 
 
 class XMLBeater(XMLElement):
     """
     The beater type represents pictograms for beaters, mallets, and sticks that do not have different materials represented in the pictogram.
     """
-
+    
     TYPE = XSDComplexTypeBeater
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beater" type="beater" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='beater'][@type='beater']"
 
 
 class XMLStick(XMLElement):
@@ -2683,40 +1962,27 @@ class XMLStick(XMLElement):
     \- \- Element\@name=stick-type\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=stick-material\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeStick
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stick" type="stick" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='stick'][@type='stick']"
 
 
 class XMLStickLocation(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeStickLocation
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stick-location" type="stick-location" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='stick-location'][@type='stick-location']"
 
 
 class XMLOtherPercussion(XMLElement):
     """
-    The other-text type represents a text element with a smufl attribute group. This type is used by MusicXML direction extension elements to allow specification of specific SMuFL glyphs without needed to add every glyph as a MusicXML element.
+    The other-percussion element represents percussion pictograms not defined elsewhere.
     """
-
+    
     TYPE = XSDComplexTypeOtherText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="other-percussion" type="other-text">
-    <xs:annotation>
-        <xs:documentation>The other-percussion element represents percussion pictograms not defined elsewhere.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='other-percussion'][@type='other-text']"
 
 
 class XMLMeasureLayout(XMLElement):
@@ -2726,12 +1992,9 @@ class XMLMeasureLayout(XMLElement):
     Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=measure-distance\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeMeasureLayout
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="measure-layout" type="measure-layout" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='measure-layout'][@type='measure-layout']"
 
 
 class XMLMeasureNumbering(XMLElement):
@@ -2742,12 +2005,9 @@ class XMLMeasureNumbering(XMLElement):
     
     The optional multiple-rest-always and multiple-rest-range attributes describe how measure numbers are shown on multiple rests when the measure-numbering value is not set to none. The multiple-rest-always attribute is set to yes when the measure number should always be shown, even if the multiple rest starts midway through a system when measure numbering is set to system level. The multiple-rest-range attribute is set to yes when measure numbers on multiple rests display the range of numbers for the first and last measure, rather than just the number of the first measure.
     """
-
+    
     TYPE = XSDComplexTypeMeasureNumbering
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="measure-numbering" type="measure-numbering" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='measure-numbering'][@type='measure-numbering']"
 
 
 class XMLPartNameDisplay(XMLElement):
@@ -2759,12 +2019,9 @@ class XMLPartNameDisplay(XMLElement):
     \- \- \- \- Element\@name=display-text\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=accidental-text\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeNameDisplay
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-name-display" type="name-display" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='part-name-display'][@type='name-display']"
 
 
 class XMLPartAbbreviationDisplay(XMLElement):
@@ -2776,40 +2033,27 @@ class XMLPartAbbreviationDisplay(XMLElement):
     \- \- \- \- Element\@name=display-text\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=accidental-text\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeNameDisplay
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-abbreviation-display" type="name-display" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='part-abbreviation-display'][@type='name-display']"
 
 
 class XMLRootStep(XMLElement):
     """
     The root-step type represents the pitch step of the root of the current chord within the harmony element. The text attribute indicates how the root should appear in a score if not using the element contents.
     """
-
+    
     TYPE = XSDComplexTypeRootStep
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root-step" type="root-step" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='root-step'][@type='root-step']"
 
 
 class XMLRootAlter(XMLElement):
     """
-    The harmony-alter type represents the chromatic alteration of the root, numeral, or bass of the current harmony-chord group within the harmony element. In some chord styles, the text of the preceding element may include alteration information. In that case, the print-object attribute of this type can be set to no. The location attribute indicates whether the alteration should appear to the left or the right of the preceding element. Its default value varies by element.
+    The root-alter element represents the chromatic alteration of the root of the current chord within the harmony element. In some chord styles, the text for the root-step element may include root-alter information. In that case, the print-object attribute of the root-alter element can be set to no. The location attribute indicates whether the alteration should appear to the left or the right of the root-step; it is right by default.
     """
-
+    
     TYPE = XSDComplexTypeHarmonyAlter
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root-alter" type="harmony-alter" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The root-alter element represents the chromatic alteration of the root of the current chord within the harmony element. In some chord styles, the text for the root-step element may include root-alter information. In that case, the print-object attribute of the root-alter element can be set to no. The location attribute indicates whether the alteration should appear to the left or the right of the root-step; it is right by default.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='root-alter'][@type='harmony-alter']"
 
 
 class XMLAccord(XMLElement):
@@ -2822,12 +2066,9 @@ class XMLAccord(XMLElement):
     \- \- \- \- Element\@name=tuning-alter\@minOccurs=0\@maxOccurs=1\n
     \- \- \- \- Element\@name=tuning-octave\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeAccord
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="accord" type="accord" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='accord'][@type='accord']"
 
 
 class XMLInstrumentChange(XMLElement):
@@ -2842,24 +2083,18 @@ class XMLInstrumentChange(XMLElement):
     \- \- \- \- \- \- Element\@name=ensemble\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=virtual-instrument\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeInstrumentChange
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="instrument-change" type="instrument-change" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='instrument-change'][@type='instrument-change']"
 
 
 class XMLMidiDevice(XMLElement):
     """
     The midi-device type corresponds to the DeviceName meta event in Standard MIDI Files. The optional port attribute is a number from 1 to 16 that can be used with the unofficial MIDI 1.0 port (or cable) meta event. Unlike the DeviceName meta event, there can be multiple midi-device elements per MusicXML part. The optional id attribute refers to the score-instrument assigned to this device. If missing, the device assignment affects all score-instrument elements in the score-part.
     """
-
+    
     TYPE = XSDComplexTypeMidiDevice
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="midi-device" type="midi-device" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='midi-device'][@type='midi-device']"
 
 
 class XMLMidiInstrument(XMLElement):
@@ -2876,12 +2111,9 @@ class XMLMidiInstrument(XMLElement):
     \- \- Element\@name=pan\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=elevation\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeMidiInstrument
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="midi-instrument" type="midi-instrument" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='midi-instrument'][@type='midi-instrument']"
 
 
 class XMLPlay(XMLElement):
@@ -2895,12 +2127,9 @@ class XMLPlay(XMLElement):
     \- \- \- \- Element\@name=semi-pitched\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=other-play\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypePlay
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="play" type="play" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='play'][@type='play']"
 
 
 class XMLSwing(XMLElement):
@@ -2926,188 +2155,135 @@ class XMLSwing(XMLElement):
     \- \- \- \- \- \- Element\@name=swing-type\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=swing-style\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeSwing
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="swing" type="swing" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='swing'][@type='swing']"
 
 
 class XMLStickType(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeStickType
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stick-type" type="stick-type" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='stick-type'][@type='stick-type']"
 
 
 class XMLStickMaterial(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeStickMaterial
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stick-material" type="stick-material" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='stick-material'][@type='stick-material']"
 
 
 class XMLStraight(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="straight" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='straight'][@type='empty']"
 
 
 class XMLFirst(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypePositiveInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="first" type="xs:positiveInteger" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='first'][@type='xs:positiveInteger']"
 
 
 class XMLSecond(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypePositiveInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="second" type="xs:positiveInteger" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='second'][@type='xs:positiveInteger']"
 
 
 class XMLSwingType(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeSwingTypeValue
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="swing-type" type="swing-type-value" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='swing-type'][@type='swing-type-value']"
 
 
 class XMLSwingStyle(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="swing-style" type="xs:string" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='swing-style'][@type='xs:string']"
 
 
 class XMLEncodingDate(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeYyyyMmDd
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="encoding-date" type="yyyy-mm-dd" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='encoding-date'][@type='yyyy-mm-dd']"
 
 
 class XMLEncoder(XMLElement):
     """
     The typed-text type represents a text element with a type attribute.
     """
-
+    
     TYPE = XSDComplexTypeTypedText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="encoder" type="typed-text" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='encoder'][@type='typed-text']"
 
 
 class XMLSoftware(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="software" type="xs:string" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='software'][@type='xs:string']"
 
 
 class XMLEncodingDescription(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="encoding-description" type="xs:string" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='encoding-description'][@type='xs:string']"
 
 
 class XMLSupports(XMLElement):
     """
     The supports type indicates if a MusicXML encoding supports a particular MusicXML element. This is recommended for elements like beam, stem, and accidental, where the absence of an element is ambiguous if you do not know if the encoding supports that element. For Version 2.0, the supports element is expanded to allow programs to indicate support for particular attributes or particular values. This lets applications communicate, for example, that all system and/or page breaks are contained in the MusicXML file.
     """
-
+    
     TYPE = XSDComplexTypeSupports
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="supports" type="supports" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='supports'][@type='supports']"
 
 
 class XMLCreator(XMLElement):
     """
-    The typed-text type represents a text element with a type attribute.
+    The creator element is borrowed from Dublin Core. It is used for the creators of the score. The type attribute is used to distinguish different creative contributions. Thus, there can be multiple creators within an identification. Standard type values are composer, lyricist, and arranger. Other type values may be used for different types of creative roles. The type attribute should usually be used even if there is just a single creator element. The MusicXML format does not use the creator / contributor distinction from Dublin Core.
     """
-
+    
     TYPE = XSDComplexTypeTypedText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="creator" type="typed-text" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The creator element is borrowed from Dublin Core. It is used for the creators of the score. The type attribute is used to distinguish different creative contributions. Thus, there can be multiple creators within an identification. Standard type values are composer, lyricist, and arranger. Other type values may be used for different types of creative roles. The type attribute should usually be used even if there is just a single creator element. The MusicXML format does not use the creator / contributor distinction from Dublin Core.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='creator'][@type='typed-text']"
 
 
 class XMLRights(XMLElement):
     """
-    The typed-text type represents a text element with a type attribute.
+    The rights element is borrowed from Dublin Core. It contains copyright and other intellectual property notices. Words, music, and derivatives can have different types, so multiple rights elements with different type attributes are supported. Standard type values are music, words, and arrangement, but other types may be used. The type attribute is only needed when there are multiple rights elements.
     """
-
+    
     TYPE = XSDComplexTypeTypedText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rights" type="typed-text" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The rights element is borrowed from Dublin Core. It contains copyright and other intellectual property notices. Words, music, and derivatives can have different types, so multiple rights elements with different type attributes are supported. Standard type values are music, words, and arrangement, but other types may be used. The type attribute is only needed when there are multiple rights elements.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='rights'][@type='typed-text']"
 
 
 class XMLEncoding(XMLElement):
@@ -3121,44 +2297,27 @@ class XMLEncoding(XMLElement):
     \- \- Element\@name=encoding-description\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=supports\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeEncoding
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="encoding" type="encoding" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='encoding'][@type='encoding']"
 
 
 class XMLSource(XMLElement):
     """
     The source for the music that is encoded. This is similar to the Dublin Core source element.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="source" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The source for the music that is encoded. This is similar to the Dublin Core source element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='source'][@type='xs:string']"
 
 
 class XMLRelation(XMLElement):
     """
-    The typed-text type represents a text element with a type attribute.
+    A related resource for the music that is encoded. This is similar to the Dublin Core relation element. Standard type values are music, words, and arrangement, but other types may be used.
     """
-
+    
     TYPE = XSDComplexTypeTypedText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="relation" type="typed-text" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>A related resource for the music that is encoded. This is similar to the Dublin Core relation element. Standard type values are music, words, and arrangement, but other types may be used.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='relation'][@type='typed-text']"
 
 
 class XMLMiscellaneous(XMLElement):
@@ -3168,124 +2327,90 @@ class XMLMiscellaneous(XMLElement):
     Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=miscellaneous-field\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeMiscellaneous
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="miscellaneous" type="miscellaneous" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='miscellaneous'][@type='miscellaneous']"
 
 
 class XMLMiscellaneousField(XMLElement):
     """
     If a program has other metadata not yet supported in the MusicXML format, each type of metadata can go in a miscellaneous-field element. The required name attribute indicates the type of metadata the element content represents.
     """
-
+    
     TYPE = XSDComplexTypeMiscellaneousField
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="miscellaneous-field" type="miscellaneous-field" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='miscellaneous-field'][@type='miscellaneous-field']"
 
 
 class XMLLineWidth(XMLElement):
     """
     The line-width type indicates the width of a line type in tenths. The type attribute defines what type of line is being defined. Values include beam, bracket, dashes, enclosure, ending, extend, heavy barline, leger, light barline, octave shift, pedal, slur middle, slur tip, staff, stem, tie middle, tie tip, tuplet bracket, and wedge. The text content is expressed in tenths.
     """
-
+    
     TYPE = XSDComplexTypeLineWidth
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line-width" type="line-width" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='line-width'][@type='line-width']"
 
 
 class XMLNoteSize(XMLElement):
     """
     The note-size type indicates the percentage of the regular note size to use for notes with a cue and large size as defined in the type element. The grace type is used for notes of cue size that that include a grace element. The cue type is used for all other notes with cue size, whether defined explicitly or implicitly via a cue element. The large type is used for notes of large size. The text content represent the numeric percentage. A value of 100 would be identical to the size of a regular note as defined by the music font.
     """
-
+    
     TYPE = XSDComplexTypeNoteSize
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="note-size" type="note-size" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='note-size'][@type='note-size']"
 
 
 class XMLDistance(XMLElement):
     """
     The distance element represents standard distances between notation elements in tenths. The type attribute defines what type of distance is being defined. Valid values include hyphen (for hyphens in lyrics) and beam.
     """
-
+    
     TYPE = XSDComplexTypeDistance
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="distance" type="distance" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='distance'][@type='distance']"
 
 
 class XMLGlyph(XMLElement):
     """
     The glyph element represents what SMuFL glyph should be used for different variations of symbols that are semantically identical. The type attribute specifies what type of glyph is being defined. The element value specifies what SMuFL glyph to use, including recommended stylistic alternates. The SMuFL glyph name should match the type. For instance, a type of quarter-rest would use values restQuarter, restQuarterOld, or restQuarterZ. A type of g-clef-ottava-bassa would use values gClef8vb, gClef8vbOld, or gClef8vbCClef. A type of octave-shift-up-8 would use values ottava, ottavaBassa, ottavaBassaBa, ottavaBassaVb, or octaveBassa.
     """
-
+    
     TYPE = XSDComplexTypeGlyph
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="glyph" type="glyph" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='glyph'][@type='glyph']"
 
 
 class XMLOtherAppearance(XMLElement):
     """
     The other-appearance type is used to define any graphical settings not yet in the current version of the MusicXML format. This allows extended representation, though without application interoperability.
     """
-
+    
     TYPE = XSDComplexTypeOtherAppearance
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="other-appearance" type="other-appearance" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='other-appearance'][@type='other-appearance']"
 
 
 class XMLMeasureDistance(XMLElement):
     """
     The measure-distance element specifies the horizontal distance from the previous measure. This value is only used for systems where there is horizontal whitespace in the middle of a system, as in systems with codas. To specify the measure width, use the width attribute of the measure element.
     """
-
+    
     TYPE = XSDSimpleTypeTenths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="measure-distance" type="tenths" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The measure-distance element specifies the horizontal distance from the previous measure. This value is only used for systems where there is horizontal whitespace in the middle of a system, as in systems with codas. To specify the measure width, use the width attribute of the measure element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='measure-distance'][@type='tenths']"
 
 
 class XMLPageHeight(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeTenths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="page-height" type="tenths" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='page-height'][@type='tenths']"
 
 
 class XMLPageWidth(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeTenths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="page-width" type="tenths" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='page-width'][@type='tenths']"
 
 
 class XMLPageMargins(XMLElement):
@@ -3301,72 +2426,54 @@ class XMLPageMargins(XMLElement):
     \- \- \- \- Element\@name=top-margin\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=bottom-margin\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypePageMargins
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="page-margins" type="page-margins" minOccurs="0" maxOccurs="2" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='page-margins'][@type='page-margins']"
 
 
 class XMLMillimeters(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeMillimeters
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="millimeters" type="millimeters" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='millimeters'][@type='millimeters']"
 
 
 class XMLTenths(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeTenths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tenths" type="tenths" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tenths'][@type='tenths']"
 
 
 class XMLStaffDistance(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeTenths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-distance" type="tenths" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staff-distance'][@type='tenths']"
 
 
 class XMLLeftDivider(XMLElement):
     """
     The empty-print-style-align-object type represents an empty element with print-object and print-style-align attribute groups.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPrintObjectStyleAlign
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="left-divider" type="empty-print-object-style-align" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='left-divider'][@type='empty-print-object-style-align']"
 
 
 class XMLRightDivider(XMLElement):
     """
     The empty-print-style-align-object type represents an empty element with print-object and print-style-align attribute groups.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPrintObjectStyleAlign
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="right-divider" type="empty-print-object-style-align" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='right-divider'][@type='empty-print-object-style-align']"
 
 
 class XMLSystemMargins(XMLElement):
@@ -3378,36 +2485,27 @@ class XMLSystemMargins(XMLElement):
     \- \- \- \- Element\@name=left-margin\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=right-margin\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeSystemMargins
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="system-margins" type="system-margins" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='system-margins'][@type='system-margins']"
 
 
 class XMLSystemDistance(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeTenths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="system-distance" type="tenths" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='system-distance'][@type='tenths']"
 
 
 class XMLTopSystemDistance(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeTenths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="top-system-distance" type="tenths" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='top-system-distance'][@type='tenths']"
 
 
 class XMLSystemDividers(XMLElement):
@@ -3420,444 +2518,270 @@ class XMLSystemDividers(XMLElement):
     \- \- Element\@name=left-divider\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=right-divider\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeSystemDividers
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="system-dividers" type="system-dividers" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='system-dividers'][@type='system-dividers']"
 
 
 class XMLAccent(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The accent element indicates a regular horizontal accent mark.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="accent" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The accent element indicates a regular horizontal accent mark.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='accent'][@type='empty-placement']"
 
 
 class XMLStrongAccent(XMLElement):
     """
-    The strong-accent type indicates a vertical accent mark. The type attribute indicates if the point of the accent is down or up.
+    The strong-accent element indicates a vertical accent mark.
     """
-
+    
     TYPE = XSDComplexTypeStrongAccent
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="strong-accent" type="strong-accent">
-    <xs:annotation>
-        <xs:documentation>The strong-accent element indicates a vertical accent mark.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='strong-accent'][@type='strong-accent']"
 
 
 class XMLStaccato(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The staccato element is used for a dot articulation, as opposed to a stroke or a wedge.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staccato" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The staccato element is used for a dot articulation, as opposed to a stroke or a wedge.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staccato'][@type='empty-placement']"
 
 
 class XMLTenuto(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The tenuto element indicates a tenuto line symbol.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tenuto" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The tenuto element indicates a tenuto line symbol.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tenuto'][@type='empty-placement']"
 
 
 class XMLDetachedLegato(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The detached-legato element indicates the combination of a tenuto line and staccato dot symbol.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="detached-legato" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The detached-legato element indicates the combination of a tenuto line and staccato dot symbol.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='detached-legato'][@type='empty-placement']"
 
 
 class XMLStaccatissimo(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The staccatissimo element is used for a wedge articulation, as opposed to a dot or a stroke.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staccatissimo" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The staccatissimo element is used for a wedge articulation, as opposed to a dot or a stroke.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staccatissimo'][@type='empty-placement']"
 
 
 class XMLSpiccato(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The spiccato element is used for a stroke articulation, as opposed to a dot or a wedge.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="spiccato" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The spiccato element is used for a stroke articulation, as opposed to a dot or a wedge.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='spiccato'][@type='empty-placement']"
 
 
 class XMLScoop(XMLElement):
     """
-    The empty-line type represents an empty element with line-shape, line-type, line-length, dashed-formatting, print-style and placement attributes.
+    The scoop element is an indeterminate slide attached to a single note. The scoop appears before the main note and comes from below the main pitch.
     """
-
+    
     TYPE = XSDComplexTypeEmptyLine
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="scoop" type="empty-line">
-    <xs:annotation>
-        <xs:documentation>The scoop element is an indeterminate slide attached to a single note. The scoop appears before the main note and comes from below the main pitch.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='scoop'][@type='empty-line']"
 
 
 class XMLPlop(XMLElement):
     """
-    The empty-line type represents an empty element with line-shape, line-type, line-length, dashed-formatting, print-style and placement attributes.
+    The plop element is an indeterminate slide attached to a single note. The plop appears before the main note and comes from above the main pitch.
     """
-
+    
     TYPE = XSDComplexTypeEmptyLine
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="plop" type="empty-line">
-    <xs:annotation>
-        <xs:documentation>The plop element is an indeterminate slide attached to a single note. The plop appears before the main note and comes from above the main pitch.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='plop'][@type='empty-line']"
 
 
 class XMLDoit(XMLElement):
     """
-    The empty-line type represents an empty element with line-shape, line-type, line-length, dashed-formatting, print-style and placement attributes.
+    The doit element is an indeterminate slide attached to a single note. The doit appears after the main note and goes above the main pitch.
     """
-
+    
     TYPE = XSDComplexTypeEmptyLine
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="doit" type="empty-line">
-    <xs:annotation>
-        <xs:documentation>The doit element is an indeterminate slide attached to a single note. The doit appears after the main note and goes above the main pitch.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='doit'][@type='empty-line']"
 
 
 class XMLFalloff(XMLElement):
     """
-    The empty-line type represents an empty element with line-shape, line-type, line-length, dashed-formatting, print-style and placement attributes.
+    The falloff element is an indeterminate slide attached to a single note. The falloff appears after the main note and goes below the main pitch.
     """
-
+    
     TYPE = XSDComplexTypeEmptyLine
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="falloff" type="empty-line">
-    <xs:annotation>
-        <xs:documentation>The falloff element is an indeterminate slide attached to a single note. The falloff appears after the main note and goes below the main pitch.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='falloff'][@type='empty-line']"
 
 
 class XMLBreathMark(XMLElement):
     """
     The breath-mark element indicates a place to take a breath.
     """
-
+    
     TYPE = XSDComplexTypeBreathMark
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="breath-mark" type="breath-mark" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='breath-mark'][@type='breath-mark']"
 
 
 class XMLCaesura(XMLElement):
     """
     The caesura element indicates a slight pause. It is notated using a "railroad tracks" symbol or other variations specified in the element content.
     """
-
+    
     TYPE = XSDComplexTypeCaesura
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="caesura" type="caesura" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='caesura'][@type='caesura']"
 
 
 class XMLStress(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The stress element indicates a stressed note.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stress" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The stress element indicates a stressed note.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='stress'][@type='empty-placement']"
 
 
 class XMLUnstress(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The unstress element indicates an unstressed note. It is often notated using a u-shaped symbol.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="unstress" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The unstress element indicates an unstressed note. It is often notated using a u-shaped symbol.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='unstress'][@type='empty-placement']"
 
 
 class XMLSoftAccent(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The soft-accent element indicates a soft accent that is not as heavy as a normal accent. It is often notated as <>. It can be combined with other articulations to implement the first eight symbols in the SMuFL Articulation supplement range.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="soft-accent" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The soft-accent element indicates a soft accent that is not as heavy as a normal accent. It is often notated as &lt;&gt;. It can be combined with other articulations to implement the first eight symbols in the SMuFL Articulation supplement range.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='soft-accent'][@type='empty-placement']"
 
 
 class XMLOtherArticulation(XMLElement):
     """
-    The other-placement-text type represents a text element with print-style, placement, and smufl attribute groups. This type is used by MusicXML notation extension elements to allow specification of specific SMuFL glyphs without needed to add every glyph as a MusicXML element.
+    The other-articulation element is used to define any articulations not yet in the MusicXML format. The smufl attribute can be used to specify a particular articulation, allowing application interoperability without requiring every SMuFL articulation to have a MusicXML element equivalent. Using the other-articulation element without the smufl attribute allows for extended representation, though without application interoperability.
     """
-
+    
     TYPE = XSDComplexTypeOtherPlacementText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="other-articulation" type="other-placement-text">
-    <xs:annotation>
-        <xs:documentation>The other-articulation element is used to define any articulations not yet in the MusicXML format. The smufl attribute can be used to specify a particular articulation, allowing application interoperability without requiring every SMuFL articulation to have a MusicXML element equivalent. Using the other-articulation element without the smufl attribute allows for extended representation, though without application interoperability.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='other-articulation'][@type='other-placement-text']"
 
 
 class XMLArrowDirection(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeArrowDirection
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="arrow-direction" type="arrow-direction" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='arrow-direction'][@type='arrow-direction']"
 
 
 class XMLArrowStyle(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeArrowStyle
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="arrow-style" type="arrow-style" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='arrow-style'][@type='arrow-style']"
 
 
 class XMLArrowhead(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="arrowhead" type="empty" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='arrowhead'][@type='empty']"
 
 
 class XMLCircularArrow(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeCircularArrow
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="circular-arrow" type="circular-arrow" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='circular-arrow'][@type='circular-arrow']"
 
 
 class XMLBendAlter(XMLElement):
     """
     The bend-alter element indicates the number of semitones in the bend, similar to the alter element. As with the alter element, numbers like 0.5 can be used to indicate microtones. Negative values indicate pre-bends or releases. The pre-bend and release elements are used to distinguish what is intended. Because the bend-alter element represents the number of steps in the bend, a release after a bend has a negative bend-alter value, not a zero value.
     """
-
+    
     TYPE = XSDSimpleTypeSemitones
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bend-alter" type="semitones">
-    <xs:annotation>
-        <xs:documentation>The bend-alter element indicates the number of semitones in the bend, similar to the alter element. As with the alter element, numbers like 0.5 can be used to indicate microtones. Negative values indicate pre-bends or releases. The pre-bend and release elements are used to distinguish what is intended. Because the bend-alter element represents the number of steps in the bend, a release after a bend has a negative bend-alter value, not a zero value.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='bend-alter'][@type='semitones']"
 
 
 class XMLPreBend(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The pre-bend element indicates that a bend is a pre-bend rather than a normal bend or a release.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pre-bend" type="empty">
-    <xs:annotation>
-        <xs:documentation>The pre-bend element indicates that a bend is a pre-bend rather than a normal bend or a release.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pre-bend'][@type='empty']"
 
 
 class XMLRelease(XMLElement):
     """
     The release type indicates that a bend is a release rather than a normal bend or pre-bend. The offset attribute specifies where the release starts in terms of divisions relative to the current note. The first-beat and last-beat attributes of the parent bend element are relative to the original note position, not this offset value.
     """
-
+    
     TYPE = XSDComplexTypeRelease
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="release" type="release" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='release'][@type='release']"
 
 
 class XMLWithBar(XMLElement):
     """
-    The placement-text type represents a text element with print-style and placement attribute groups.
+    The with-bar element indicates that the bend is to be done at the bridge with a whammy or vibrato bar. The content of the element indicates how this should be notated. Content values of "scoop" and "dip" refer to the SMuFL guitarVibratoBarScoop and guitarVibratoBarDip glyphs.
     """
-
+    
     TYPE = XSDComplexTypePlacementText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="with-bar" type="placement-text" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The with-bar element indicates that the bend is to be done at the bridge with a whammy or vibrato bar. The content of the element indicates how this should be notated. Content values of "scoop" and "dip" refer to the SMuFL guitarVibratoBarScoop and guitarVibratoBarDip glyphs.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='with-bar'][@type='placement-text']"
 
 
 class XMLPrefix(XMLElement):
     """
-    The style-text type represents a text element with a print-style attribute group.
+    Values for the prefix element include plus and the accidental values sharp, flat, natural, double-sharp, flat-flat, and sharp-sharp. The prefix element may contain additional values for symbols specific to particular figured bass styles.
     """
-
+    
     TYPE = XSDComplexTypeStyleText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="prefix" type="style-text" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>Values for the prefix element include plus and the accidental values sharp, flat, natural, double-sharp, flat-flat, and sharp-sharp. The prefix element may contain additional values for symbols specific to particular figured bass styles.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='prefix'][@type='style-text']"
 
 
 class XMLFigureNumber(XMLElement):
     """
-    The style-text type represents a text element with a print-style attribute group.
+    A figure-number is a number. Overstrikes of the figure number are represented in the suffix element.
     """
-
+    
     TYPE = XSDComplexTypeStyleText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="figure-number" type="style-text" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>A figure-number is a number. Overstrikes of the figure number are represented in the suffix element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='figure-number'][@type='style-text']"
 
 
 class XMLSuffix(XMLElement):
     """
-    The style-text type represents a text element with a print-style attribute group.
+    Values for the suffix element include plus and the accidental values sharp, flat, natural, double-sharp, flat-flat, and sharp-sharp. Suffixes include both symbols that come after the figure number and those that overstrike the figure number. The suffix values slash, back-slash, and vertical are used for slashed numbers indicating chromatic alteration. The orientation and display of the slash usually depends on the figure number. The suffix element may contain additional values for symbols specific to particular figured bass styles.
     """
-
+    
     TYPE = XSDComplexTypeStyleText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="suffix" type="style-text" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>Values for the suffix element include plus and the accidental values sharp, flat, natural, double-sharp, flat-flat, and sharp-sharp. Suffixes include both symbols that come after the figure number and those that overstrike the figure number. The suffix values slash, back-slash, and vertical are used for slashed numbers indicating chromatic alteration. The orientation and display of the slash usually depends on the figure number. The suffix element may contain additional values for symbols specific to particular figured bass styles.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='suffix'][@type='style-text']"
 
 
 class XMLExtend(XMLElement):
     """
     The extend type represents lyric word extension / melisma lines as well as figured bass extensions. The optional type and position attributes are added in Version 3.0 to provide better formatting control.
     """
-
+    
     TYPE = XSDComplexTypeExtend
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="extend" type="extend" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='extend'][@type='extend']"
 
 
 class XMLFigure(XMLElement):
@@ -3878,284 +2802,180 @@ class XMLFigure(XMLElement):
     \- \- \- \- \- \- \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- \- \- \- \- Element\@name=level\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeFigure
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="figure" type="figure" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='figure'][@type='figure']"
 
 
 class XMLHarmonClosed(XMLElement):
     """
     The harmon-closed type represents whether the harmon mute is closed, open, or half-open. The optional location attribute indicates which portion of the symbol is filled in when the element value is half.
     """
-
+    
     TYPE = XSDComplexTypeHarmonClosed
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="harmon-closed" type="harmon-closed" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='harmon-closed'][@type='harmon-closed']"
 
 
 class XMLNatural(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The natural element indicates that this is a natural harmonic. These are usually notated at base pitch rather than sounding pitch.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="natural" type="empty">
-    <xs:annotation>
-        <xs:documentation>The natural element indicates that this is a natural harmonic. These are usually notated at base pitch rather than sounding pitch.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='natural'][@type='empty']"
 
 
 class XMLArtificial(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The artificial element indicates that this is an artificial harmonic.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="artificial" type="empty">
-    <xs:annotation>
-        <xs:documentation>The artificial element indicates that this is an artificial harmonic.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='artificial'][@type='empty']"
 
 
 class XMLBasePitch(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The base pitch is the pitch at which the string is played before touching to create the harmonic.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="base-pitch" type="empty">
-    <xs:annotation>
-        <xs:documentation>The base pitch is the pitch at which the string is played before touching to create the harmonic.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='base-pitch'][@type='empty']"
 
 
 class XMLTouchingPitch(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The touching-pitch is the pitch at which the string is touched lightly to produce the harmonic.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="touching-pitch" type="empty">
-    <xs:annotation>
-        <xs:documentation>The touching-pitch is the pitch at which the string is touched lightly to produce the harmonic.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='touching-pitch'][@type='empty']"
 
 
 class XMLSoundingPitch(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The sounding-pitch is the pitch which is heard when playing the harmonic.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="sounding-pitch" type="empty">
-    <xs:annotation>
-        <xs:documentation>The sounding-pitch is the pitch which is heard when playing the harmonic.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='sounding-pitch'][@type='empty']"
 
 
 class XMLHoleType(XMLElement):
     """
     The content of the optional hole-type element indicates what the hole symbol represents in terms of instrument fingering or other techniques.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="hole-type" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The content of the optional hole-type element indicates what the hole symbol represents in terms of instrument fingering or other techniques.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='hole-type'][@type='xs:string']"
 
 
 class XMLHoleClosed(XMLElement):
     """
     The hole-closed type represents whether the hole is closed, open, or half-open. The optional location attribute indicates which portion of the hole is filled in when the element value is half.
     """
-
+    
     TYPE = XSDComplexTypeHoleClosed
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="hole-closed" type="hole-closed" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='hole-closed'][@type='hole-closed']"
 
 
 class XMLHoleShape(XMLElement):
     """
     The optional hole-shape element indicates the shape of the hole symbol; the default is a circle.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="hole-shape" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The optional hole-shape element indicates the shape of the hole symbol; the default is a circle.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='hole-shape'][@type='xs:string']"
 
 
 class XMLAssess(XMLElement):
     """
     By default, an assessment application should assess all notes without a cue child element, and not assess any note with a cue child element. The assess type allows this default assessment to be overridden for individual notes. The optional player and time-only attributes restrict the type to apply to a single player or set of times through a repeated section, respectively. If missing, the type applies to all players or all times through the repeated section, respectively. The player attribute references the id attribute of a player element defined within the matching score-part.
     """
-
+    
     TYPE = XSDComplexTypeAssess
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="assess" type="assess" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='assess'][@type='assess']"
 
 
 class XMLWait(XMLElement):
     """
     The wait type specifies a point where the accompaniment should wait for a performer event before continuing. This typically happens at the start of new sections or after a held note or indeterminate music. These waiting points cannot always be inferred reliably from the contents of the displayed score. The optional player and time-only attributes restrict the type to apply to a single player or set of times through a repeated section, respectively.
     """
-
+    
     TYPE = XSDComplexTypeWait
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="wait" type="wait" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='wait'][@type='wait']"
 
 
 class XMLOtherListen(XMLElement):
     """
     The other-listening type represents other types of listening control and interaction. The required type attribute indicates the type of listening to which the element content applies. The optional player and time-only attributes restrict the element to apply to a single player or set of times through a repeated section, respectively.
     """
-
+    
     TYPE = XSDComplexTypeOtherListening
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="other-listen" type="other-listening" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='other-listen'][@type='other-listening']"
 
 
 class XMLSyllabic(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeSyllabic
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="syllabic" type="syllabic" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='syllabic'][@type='syllabic']"
 
 
 class XMLText(XMLElement):
     """
     The text-element-data type represents a syllable or portion of a syllable for lyric text underlay. A hyphen in the string content should only be used for an actual hyphenated word. Language names for text elements come from ISO 639, with optional country subcodes from ISO 3166.
     """
-
+    
     TYPE = XSDComplexTypeTextElementData
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="text" type="text-element-data" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='text'][@type='text-element-data']"
 
 
 class XMLElision(XMLElement):
     """
     The elision type represents an elision between lyric syllables. The text content specifies the symbol used to display the elision. Common values are a no-break space (Unicode 00A0), an underscore (Unicode 005F), or an undertie (Unicode 203F). If the text content is empty, the smufl attribute is used to specify the symbol to use. Its value is a SMuFL canonical glyph name that starts with lyrics. The SMuFL attribute is ignored if the elision glyph is already specified by the text content. If neither text content nor a smufl attribute are present, the elision glyph is application-specific.
     """
-
+    
     TYPE = XSDComplexTypeElision
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="elision" type="elision" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='elision'][@type='elision']"
 
 
 class XMLLaughing(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The laughing element represents a laughing voice.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="laughing" type="empty">
-    <xs:annotation>
-        <xs:documentation>The laughing element represents a laughing voice.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='laughing'][@type='empty']"
 
 
 class XMLHumming(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The humming element represents a humming voice.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="humming" type="empty">
-    <xs:annotation>
-        <xs:documentation>The humming element represents a humming voice.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='humming'][@type='empty']"
 
 
 class XMLEndLine(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The end-line element comes from RP-017 for Standard MIDI File Lyric meta-events. It facilitates lyric display for Karaoke and similar applications.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="end-line" type="empty" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The end-line element comes from RP-017 for Standard MIDI File Lyric meta-events. It facilitates lyric display for Karaoke and similar applications.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='end-line'][@type='empty']"
 
 
 class XMLEndParagraph(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The end-paragraph element comes from RP-017 for Standard MIDI File Lyric meta-events. It facilitates lyric display for Karaoke and similar applications.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="end-paragraph" type="empty" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The end-paragraph element comes from RP-017 for Standard MIDI File Lyric meta-events. It facilitates lyric display for Karaoke and similar applications.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='end-paragraph'][@type='empty']"
 
 
 class XMLTied(XMLElement):
@@ -4170,24 +2990,18 @@ class XMLTied(XMLElement):
     
     Ties that are visually attached to only one note, other than undamped ties, should be specified with two tied elements on the same note, first type="start" then type="stop". This can be used to represent ties into or out of repeated sections or codas.
     """
-
+    
     TYPE = XSDComplexTypeTied
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tied" type="tied" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tied'][@type='tied']"
 
 
 class XMLSlur(XMLElement):
     """
     Slur types are empty. Most slurs are represented with two elements: one with a start type, and one with a stop type. Slurs can add more elements using a continue type. This is typically used to specify the formatting of cross-system slurs, or to specify the shape of very complex slurs.
     """
-
+    
     TYPE = XSDComplexTypeSlur
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="slur" type="slur" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='slur'][@type='slur']"
 
 
 class XMLTuplet(XMLElement):
@@ -4202,36 +3016,27 @@ class XMLTuplet(XMLElement):
     \- \- Element\@name=tuplet-actual\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=tuplet-normal\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeTuplet
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tuplet" type="tuplet" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tuplet'][@type='tuplet']"
 
 
 class XMLGlissando(XMLElement):
     """
     Glissando and slide types both indicate rapidly moving from one pitch to the other so that individual notes are not discerned. A glissando sounds the distinct notes in between the two pitches and defaults to a wavy line. The optional text is printed alongside the line.
     """
-
+    
     TYPE = XSDComplexTypeGlissando
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="glissando" type="glissando" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='glissando'][@type='glissando']"
 
 
 class XMLSlide(XMLElement):
     """
     Glissando and slide types both indicate rapidly moving from one pitch to the other so that individual notes are not discerned. A slide is continuous between the two pitches and defaults to a solid line. The optional text for a is printed alongside the line.
     """
-
+    
     TYPE = XSDComplexTypeSlide
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="slide" type="slide" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='slide'][@type='slide']"
 
 
 class XMLOrnaments(XMLElement):
@@ -4257,12 +3062,9 @@ class XMLOrnaments(XMLElement):
     \- \- \- \- Element\@name=other-ornament\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=accidental-mark\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeOrnaments
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ornaments" type="ornaments" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='ornaments'][@type='ornaments']"
 
 
 class XMLTechnical(XMLElement):
@@ -4302,12 +3104,9 @@ class XMLTechnical(XMLElement):
     \- \- Element\@name=golpe\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=other-technical\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeTechnical
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="technical" type="technical" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='technical'][@type='technical']"
 
 
 class XMLArticulations(XMLElement):
@@ -4333,148 +3132,108 @@ class XMLArticulations(XMLElement):
     \- \- Element\@name=soft-accent\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=other-articulation\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeArticulations
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="articulations" type="articulations" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='articulations'][@type='articulations']"
 
 
 class XMLArpeggiate(XMLElement):
     """
     The arpeggiate type indicates that this note is part of an arpeggiated chord. The number attribute can be used to distinguish between two simultaneous chords arpeggiated separately (different numbers) or together (same number). The direction attribute is used if there is an arrow on the arpeggio sign. By default, arpeggios go from the lowest to highest note.  The length of the sign can be determined from the position attributes for the arpeggiate elements used with the top and bottom notes of the arpeggiated chord. If the unbroken attribute is set to yes, it indicates that the arpeggio continues onto another staff within the part. This serves as a hint to applications and is not required for cross-staff arpeggios.
     """
-
+    
     TYPE = XSDComplexTypeArpeggiate
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="arpeggiate" type="arpeggiate" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='arpeggiate'][@type='arpeggiate']"
 
 
 class XMLNonArpeggiate(XMLElement):
     """
     The non-arpeggiate type indicates that this note is at the top or bottom of a bracket indicating to not arpeggiate these notes. Since this does not involve playback, it is only used on the top or bottom notes, not on each note as for the arpeggiate type.
     """
-
+    
     TYPE = XSDComplexTypeNonArpeggiate
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="non-arpeggiate" type="non-arpeggiate" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='non-arpeggiate'][@type='non-arpeggiate']"
 
 
 class XMLAccidentalMark(XMLElement):
     """
     An accidental-mark can be used as a separate notation or as part of an ornament. When used in an ornament, position and placement are relative to the ornament, not relative to the note.
     """
-
+    
     TYPE = XSDComplexTypeAccidentalMark
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="accidental-mark" type="accidental-mark" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='accidental-mark'][@type='accidental-mark']"
 
 
 class XMLOtherNotation(XMLElement):
     """
     The other-notation type is used to define any notations not yet in the MusicXML format. It handles notations where more specific extension elements such as other-dynamics and other-technical are not appropriate. The smufl attribute can be used to specify a particular notation, allowing application interoperability without requiring every SMuFL glyph to have a MusicXML element equivalent. Using the other-notation type without the smufl attribute allows for extended representation, though without application interoperability.
     """
-
+    
     TYPE = XSDComplexTypeOtherNotation
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="other-notation" type="other-notation" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='other-notation'][@type='other-notation']"
 
 
 class XMLGrace(XMLElement):
     """
     The grace type indicates the presence of a grace note. The slash attribute for a grace note is yes for slashed grace notes. The steal-time-previous attribute indicates the percentage of time to steal from the previous note for the grace note. The steal-time-following attribute indicates the percentage of time to steal from the following note for the grace note, as for appoggiaturas. The make-time attribute indicates to make time, not steal time; the units are in real-time divisions for the grace note.
     """
-
+    
     TYPE = XSDComplexTypeGrace
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="grace" type="grace" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='grace'][@type='grace']"
 
 
 class XMLTie(XMLElement):
     """
     The tie element indicates that a tie begins or ends with this note. If the tie element applies only particular times through a repeat, the time-only attribute indicates which times to apply it. The tie element indicates sound; the tied element indicates notation.
     """
-
+    
     TYPE = XSDComplexTypeTie
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tie" type="tie" minOccurs="0" maxOccurs="2" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tie'][@type='tie']"
 
 
 class XMLCue(XMLElement):
     """
     The empty type represents an empty element with no attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="cue" type="empty" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='cue'][@type='empty']"
 
 
 class XMLInstrument(XMLElement):
     """
     The instrument type distinguishes between score-instrument elements in a score-part. The id attribute is an IDREF back to the score-instrument ID. If multiple score-instruments are specified in a score-part, there should be an instrument element for each note in the part. Notes that are shared between multiple score-instruments can have more than one instrument element.
     """
-
+    
     TYPE = XSDComplexTypeInstrument
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="instrument" type="instrument" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='instrument'][@type='instrument']"
 
 
 class XMLType(XMLElement):
     """
     The note-type type indicates the graphic note type. Values range from 1024th to maxima. The size attribute indicates full, cue, grace-cue, or large size. The default is full for regular notes, grace-cue for notes that contain both grace and cue elements, and cue for notes that contain either a cue or a grace element, but not both.
     """
-
+    
     TYPE = XSDComplexTypeNoteType
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="type" type="note-type" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='type'][@type='note-type']"
 
 
 class XMLDot(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    One dot element is used for each dot of prolongation. The placement attribute is used to specify whether the dot should appear above or below the staff line. It is ignored for notes that appear on a staff space.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="dot" type="empty-placement" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>One dot element is used for each dot of prolongation. The placement attribute is used to specify whether the dot should appear above or below the staff line. It is ignored for notes that appear on a staff space.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='dot'][@type='empty-placement']"
 
 
 class XMLAccidental(XMLElement):
     """
     The accidental type represents actual notated accidentals. Editorial and cautionary indications are indicated by attributes. Values for these attributes are "no" if not present. Specific graphic display such as parentheses, brackets, and size are controlled by the level-display attribute group.
     """
-
+    
     TYPE = XSDComplexTypeAccidental
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="accidental" type="accidental" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='accidental'][@type='accidental']"
 
 
 class XMLTimeModification(XMLElement):
@@ -4488,24 +3247,18 @@ class XMLTimeModification(XMLElement):
     \- \- \- \- Element\@name=normal-type\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=normal-dot\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeTimeModification
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="time-modification" type="time-modification" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='time-modification'][@type='time-modification']"
 
 
 class XMLStem(XMLElement):
     """
     Stems can be down, up, none, or double. For down and up stems, the position attributes can be used to specify stem length. The relative values specify the end of the stem relative to the program default. Default values specify an absolute end stem position. Negative values of relative-y that would flip a stem instead of shortening it are ignored. A stem element associated with a rest refers to a stemlet.
     """
-
+    
     TYPE = XSDComplexTypeStem
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stem" type="stem" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='stem'][@type='stem']"
 
 
 class XMLNotehead(XMLElement):
@@ -4518,12 +3271,9 @@ class XMLNotehead(XMLElement):
     
     If the parentheses attribute is set to yes, the notehead is parenthesized. It is no by default.
     """
-
+    
     TYPE = XSDComplexTypeNotehead
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="notehead" type="notehead" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='notehead'][@type='notehead']"
 
 
 class XMLNoteheadText(XMLElement):
@@ -4535,12 +3285,9 @@ class XMLNoteheadText(XMLElement):
     \- \- \- \- Element\@name=display-text\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=accidental-text\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeNoteheadText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="notehead-text" type="notehead-text" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='notehead-text'][@type='notehead-text']"
 
 
 class XMLBeam(XMLElement):
@@ -4553,12 +3300,9 @@ class XMLBeam(XMLElement):
     
     The repeater attribute has been deprecated in MusicXML 3.0. Formerly used for tremolos, it needs to be specified with a "yes" value for each beam using it.
     """
-
+    
     TYPE = XSDComplexTypeBeam
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beam" type="beam" minOccurs="0" maxOccurs="8" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='beam'][@type='beam']"
 
 
 class XMLNotations(XMLElement):
@@ -4590,12 +3334,9 @@ class XMLNotations(XMLElement):
     \- \- \- \- Element\@name=accidental-mark\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=other-notation\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeNotations
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="notations" type="notations" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='notations'][@type='notations']"
 
 
 class XMLLyric(XMLElement):
@@ -4629,12 +3370,9 @@ class XMLLyric(XMLElement):
     \- \- \- \- \- \- \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- \- \- \- \- Element\@name=level\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeLyric
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="lyric" type="lyric" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='lyric'][@type='lyric']"
 
 
 class XMLListen(XMLElement):
@@ -4646,188 +3384,108 @@ class XMLListen(XMLElement):
     \- \- Element\@name=wait\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=other-listen\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeListen
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="listen" type="listen" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='listen'][@type='listen']"
 
 
 class XMLTrillMark(XMLElement):
     """
-    The empty-trill-sound type represents an empty element with print-style, placement, and trill-sound attributes.
+    The trill-mark element represents the trill-mark symbol.
     """
-
+    
     TYPE = XSDComplexTypeEmptyTrillSound
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="trill-mark" type="empty-trill-sound">
-    <xs:annotation>
-        <xs:documentation>The trill-mark element represents the trill-mark symbol.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='trill-mark'][@type='empty-trill-sound']"
 
 
 class XMLTurn(XMLElement):
     """
-    The horizontal-turn type represents turn elements that are horizontal rather than vertical. These are empty elements with print-style, placement, trill-sound, and slash attributes. If the slash attribute is yes, then a vertical line is used to slash the turn. It is no if not specified.
+    The turn element is the normal turn shape which goes up then down.
     """
-
+    
     TYPE = XSDComplexTypeHorizontalTurn
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="turn" type="horizontal-turn">
-    <xs:annotation>
-        <xs:documentation>The turn element is the normal turn shape which goes up then down.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='turn'][@type='horizontal-turn']"
 
 
 class XMLDelayedTurn(XMLElement):
     """
-    The horizontal-turn type represents turn elements that are horizontal rather than vertical. These are empty elements with print-style, placement, trill-sound, and slash attributes. If the slash attribute is yes, then a vertical line is used to slash the turn. It is no if not specified.
+    The delayed-turn element indicates a normal turn that is delayed until the end of the current note.
     """
-
+    
     TYPE = XSDComplexTypeHorizontalTurn
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="delayed-turn" type="horizontal-turn">
-    <xs:annotation>
-        <xs:documentation>The delayed-turn element indicates a normal turn that is delayed until the end of the current note.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='delayed-turn'][@type='horizontal-turn']"
 
 
 class XMLInvertedTurn(XMLElement):
     """
-    The horizontal-turn type represents turn elements that are horizontal rather than vertical. These are empty elements with print-style, placement, trill-sound, and slash attributes. If the slash attribute is yes, then a vertical line is used to slash the turn. It is no if not specified.
+    The inverted-turn element has the shape which goes down and then up.
     """
-
+    
     TYPE = XSDComplexTypeHorizontalTurn
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="inverted-turn" type="horizontal-turn">
-    <xs:annotation>
-        <xs:documentation>The inverted-turn element has the shape which goes down and then up.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='inverted-turn'][@type='horizontal-turn']"
 
 
 class XMLDelayedInvertedTurn(XMLElement):
     """
-    The horizontal-turn type represents turn elements that are horizontal rather than vertical. These are empty elements with print-style, placement, trill-sound, and slash attributes. If the slash attribute is yes, then a vertical line is used to slash the turn. It is no if not specified.
+    The delayed-inverted-turn element indicates an inverted turn that is delayed until the end of the current note.
     """
-
+    
     TYPE = XSDComplexTypeHorizontalTurn
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="delayed-inverted-turn" type="horizontal-turn">
-    <xs:annotation>
-        <xs:documentation>The delayed-inverted-turn element indicates an inverted turn that is delayed until the end of the current note.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='delayed-inverted-turn'][@type='horizontal-turn']"
 
 
 class XMLVerticalTurn(XMLElement):
     """
-    The empty-trill-sound type represents an empty element with print-style, placement, and trill-sound attributes.
+    The vertical-turn element has the turn symbol shape arranged vertically going from upper left to lower right.
     """
-
+    
     TYPE = XSDComplexTypeEmptyTrillSound
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="vertical-turn" type="empty-trill-sound">
-    <xs:annotation>
-        <xs:documentation>The vertical-turn element has the turn symbol shape arranged vertically going from upper left to lower right.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='vertical-turn'][@type='empty-trill-sound']"
 
 
 class XMLInvertedVerticalTurn(XMLElement):
     """
-    The empty-trill-sound type represents an empty element with print-style, placement, and trill-sound attributes.
+    The inverted-vertical-turn element has the turn symbol shape arranged vertically going from upper right to lower left.
     """
-
+    
     TYPE = XSDComplexTypeEmptyTrillSound
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="inverted-vertical-turn" type="empty-trill-sound">
-    <xs:annotation>
-        <xs:documentation>The inverted-vertical-turn element has the turn symbol shape arranged vertically going from upper right to lower left.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='inverted-vertical-turn'][@type='empty-trill-sound']"
 
 
 class XMLShake(XMLElement):
     """
-    The empty-trill-sound type represents an empty element with print-style, placement, and trill-sound attributes.
+    The shake element has a similar appearance to an inverted-mordent element.
     """
-
+    
     TYPE = XSDComplexTypeEmptyTrillSound
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="shake" type="empty-trill-sound">
-    <xs:annotation>
-        <xs:documentation>The shake element has a similar appearance to an inverted-mordent element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='shake'][@type='empty-trill-sound']"
 
 
 class XMLMordent(XMLElement):
     """
-    The mordent type is used for both represents the mordent sign with the vertical line and the inverted-mordent sign without the line. The long attribute is "no" by default. The approach and departure attributes are used for compound ornaments, indicating how the beginning and ending of the ornament look relative to the main part of the mordent.
+    The mordent element represents the sign with the vertical line. The choice of which mordent sign is inverted differs between MusicXML and SMuFL. The long attribute is "no" by default.
     """
-
+    
     TYPE = XSDComplexTypeMordent
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="mordent" type="mordent">
-    <xs:annotation>
-        <xs:documentation>The mordent element represents the sign with the vertical line. The choice of which mordent sign is inverted differs between MusicXML and SMuFL. The long attribute is "no" by default.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='mordent'][@type='mordent']"
 
 
 class XMLInvertedMordent(XMLElement):
     """
-    The mordent type is used for both represents the mordent sign with the vertical line and the inverted-mordent sign without the line. The long attribute is "no" by default. The approach and departure attributes are used for compound ornaments, indicating how the beginning and ending of the ornament look relative to the main part of the mordent.
+    The inverted-mordent element represents the sign without the vertical line. The choice of which mordent is inverted differs between MusicXML and SMuFL. The long attribute is "no" by default.
     """
-
+    
     TYPE = XSDComplexTypeMordent
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="inverted-mordent" type="mordent">
-    <xs:annotation>
-        <xs:documentation>The inverted-mordent element represents the sign without the vertical line. The choice of which mordent is inverted differs between MusicXML and SMuFL. The long attribute is "no" by default.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='inverted-mordent'][@type='mordent']"
 
 
 class XMLSchleifer(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The name for this ornament is based on the German, to avoid confusion with the more common slide element defined earlier.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="schleifer" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The name for this ornament is based on the German, to avoid confusion with the more common slide element defined earlier.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='schleifer'][@type='empty-placement']"
 
 
 class XMLTremolo(XMLElement):
@@ -4840,112 +3498,72 @@ class XMLTremolo(XMLElement):
     
     Using repeater beams for indicating tremolos is deprecated as of MusicXML 3.0.
     """
-
+    
     TYPE = XSDComplexTypeTremolo
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tremolo" type="tremolo" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tremolo'][@type='tremolo']"
 
 
 class XMLHaydn(XMLElement):
     """
-    The empty-trill-sound type represents an empty element with print-style, placement, and trill-sound attributes.
+    The haydn element represents the Haydn ornament. This is defined in SMuFL as ornamentHaydn.
     """
-
+    
     TYPE = XSDComplexTypeEmptyTrillSound
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="haydn" type="empty-trill-sound">
-    <xs:annotation>
-        <xs:documentation>The haydn element represents the Haydn ornament. This is defined in SMuFL as ornamentHaydn.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='haydn'][@type='empty-trill-sound']"
 
 
 class XMLOtherOrnament(XMLElement):
     """
-    The other-placement-text type represents a text element with print-style, placement, and smufl attribute groups. This type is used by MusicXML notation extension elements to allow specification of specific SMuFL glyphs without needed to add every glyph as a MusicXML element.
+    The other-ornament element is used to define any ornaments not yet in the MusicXML format. The smufl attribute can be used to specify a particular ornament, allowing application interoperability without requiring every SMuFL ornament to have a MusicXML element equivalent. Using the other-ornament element without the smufl attribute allows for extended representation, though without application interoperability.
     """
-
+    
     TYPE = XSDComplexTypeOtherPlacementText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="other-ornament" type="other-placement-text">
-    <xs:annotation>
-        <xs:documentation>The other-ornament element is used to define any ornaments not yet in the MusicXML format. The smufl attribute can be used to specify a particular ornament, allowing application interoperability without requiring every SMuFL ornament to have a MusicXML element equivalent. Using the other-ornament element without the smufl attribute allows for extended representation, though without application interoperability.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='other-ornament'][@type='other-placement-text']"
 
 
 class XMLStep(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeStep
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="step" type="step" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='step'][@type='step']"
 
 
 class XMLAlter(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeSemitones
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="alter" type="semitones" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='alter'][@type='semitones']"
 
 
 class XMLOctave(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeOctave
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="octave" type="octave" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='octave'][@type='octave']"
 
 
 class XMLUpBow(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The up-bow element represents the symbol that is used both for up-bowing on bowed instruments, and up-stroke on plucked instruments.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="up-bow" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The up-bow element represents the symbol that is used both for up-bowing on bowed instruments, and up-stroke on plucked instruments.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='up-bow'][@type='empty-placement']"
 
 
 class XMLDownBow(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The down-bow element represents the symbol that is used both for down-bowing on bowed instruments, and down-stroke on plucked instruments.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="down-bow" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The down-bow element represents the symbol that is used both for down-bowing on bowed instruments, and down-stroke on plucked instruments.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='down-bow'][@type='empty-placement']"
 
 
 class XMLHarmonic(XMLElement):
@@ -4961,148 +3579,90 @@ class XMLHarmonic(XMLElement):
     \- \- \- \- Element\@name=touching-pitch\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- Element\@name=sounding-pitch\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeHarmonic
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="harmonic" type="harmonic" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='harmonic'][@type='harmonic']"
 
 
 class XMLOpenString(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The open-string element represents the zero-shaped open string symbol.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="open-string" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The open-string element represents the zero-shaped open string symbol.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='open-string'][@type='empty-placement']"
 
 
 class XMLThumbPosition(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The thumb-position element represents the thumb position symbol. This is a circle with a line, where the line does not come within the circle. It is distinct from the snap pizzicato symbol, where the line comes inside the circle.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="thumb-position" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The thumb-position element represents the thumb position symbol. This is a circle with a line, where the line does not come within the circle. It is distinct from the snap pizzicato symbol, where the line comes inside the circle.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='thumb-position'][@type='empty-placement']"
 
 
 class XMLPluck(XMLElement):
     """
-    The placement-text type represents a text element with print-style and placement attribute groups.
+    The pluck element is used to specify the plucking fingering on a fretted instrument, where the fingering element refers to the fretting fingering. Typical values are p, i, m, a for pulgar/thumb, indicio/index, medio/middle, and anular/ring fingers.
     """
-
+    
     TYPE = XSDComplexTypePlacementText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pluck" type="placement-text">
-    <xs:annotation>
-        <xs:documentation>The pluck element is used to specify the plucking fingering on a fretted instrument, where the fingering element refers to the fretting fingering. Typical values are p, i, m, a for pulgar/thumb, indicio/index, medio/middle, and anular/ring fingers.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pluck'][@type='placement-text']"
 
 
 class XMLDoubleTongue(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The double-tongue element represents the double tongue symbol (two dots arranged horizontally).
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="double-tongue" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The double-tongue element represents the double tongue symbol (two dots arranged horizontally).</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='double-tongue'][@type='empty-placement']"
 
 
 class XMLTripleTongue(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The triple-tongue element represents the triple tongue symbol (three dots arranged horizontally).
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="triple-tongue" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The triple-tongue element represents the triple tongue symbol (three dots arranged horizontally).</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='triple-tongue'][@type='empty-placement']"
 
 
 class XMLStopped(XMLElement):
     """
-    The empty-placement-smufl type represents an empty element with print-style, placement, and smufl attributes.
+    The stopped element represents the stopped symbol, which looks like a plus sign. The smufl attribute distinguishes different SMuFL glyphs that have a similar appearance such as handbellsMalletBellSuspended and guitarClosePedal. If not present, the default glyph is brassMuteClosed.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacementSmufl
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stopped" type="empty-placement-smufl">
-    <xs:annotation>
-        <xs:documentation>The stopped element represents the stopped symbol, which looks like a plus sign. The smufl attribute distinguishes different SMuFL glyphs that have a similar appearance such as handbellsMalletBellSuspended and guitarClosePedal. If not present, the default glyph is brassMuteClosed.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='stopped'][@type='empty-placement-smufl']"
 
 
 class XMLSnapPizzicato(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The snap-pizzicato element represents the snap pizzicato symbol. This is a circle with a line, where the line comes inside the circle. It is distinct from the thumb-position symbol, where the line does not come inside the circle.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="snap-pizzicato" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The snap-pizzicato element represents the snap pizzicato symbol. This is a circle with a line, where the line comes inside the circle. It is distinct from the thumb-position symbol, where the line does not come inside the circle.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='snap-pizzicato'][@type='empty-placement']"
 
 
 class XMLHammerOn(XMLElement):
     """
     The hammer-on and pull-off elements are used in guitar and fretted instrument notation. Since a single slur can be marked over many notes, the hammer-on and pull-off elements are separate so the individual pair of notes can be specified. The element content can be used to specify how the hammer-on or pull-off should be notated. An empty element leaves this choice up to the application.
     """
-
+    
     TYPE = XSDComplexTypeHammerOnPullOff
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="hammer-on" type="hammer-on-pull-off" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='hammer-on'][@type='hammer-on-pull-off']"
 
 
 class XMLPullOff(XMLElement):
     """
     The hammer-on and pull-off elements are used in guitar and fretted instrument notation. Since a single slur can be marked over many notes, the hammer-on and pull-off elements are separate so the individual pair of notes can be specified. The element content can be used to specify how the hammer-on or pull-off should be notated. An empty element leaves this choice up to the application.
     """
-
+    
     TYPE = XSDComplexTypeHammerOnPullOff
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pull-off" type="hammer-on-pull-off" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pull-off'][@type='hammer-on-pull-off']"
 
 
 class XMLBend(XMLElement):
@@ -5116,64 +3676,45 @@ class XMLBend(XMLElement):
     \- \- \- \- Element\@name=release\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=with-bar\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeBend
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bend" type="bend" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='bend'][@type='bend']"
 
 
 class XMLTap(XMLElement):
     """
     The tap type indicates a tap on the fretboard. The text content allows specification of the notation; + and T are common choices. If the element is empty, the hand attribute is used to specify the symbol to use. The hand attribute is ignored if the tap glyph is already specified by the text content. If neither text content nor the hand attribute are present, the display is application-specific.
     """
-
+    
     TYPE = XSDComplexTypeTap
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tap" type="tap" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tap'][@type='tap']"
 
 
 class XMLHeel(XMLElement):
     """
     The heel and toe elements are used with organ pedals. The substitution value is "no" if the attribute is not present.
     """
-
+    
     TYPE = XSDComplexTypeHeelToe
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="heel" type="heel-toe" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='heel'][@type='heel-toe']"
 
 
 class XMLToe(XMLElement):
     """
     The heel and toe elements are used with organ pedals. The substitution value is "no" if the attribute is not present.
     """
-
+    
     TYPE = XSDComplexTypeHeelToe
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="toe" type="heel-toe" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='toe'][@type='heel-toe']"
 
 
 class XMLFingernails(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The fingernails element is used in notation for harp and other plucked string instruments.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fingernails" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The fingernails element is used in notation for harp and other plucked string instruments.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='fingernails'][@type='empty-placement']"
 
 
 class XMLHole(XMLElement):
@@ -5185,12 +3726,9 @@ class XMLHole(XMLElement):
     \- \- Element\@name=hole-closed\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=hole-shape\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeHole
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="hole" type="hole" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='hole'][@type='hole']"
 
 
 class XMLArrow(XMLElement):
@@ -5204,104 +3742,63 @@ class XMLArrow(XMLElement):
     \- \- \- \- Element\@name=arrowhead\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=circular-arrow\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeArrow
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="arrow" type="arrow" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='arrow'][@type='arrow']"
 
 
 class XMLHandbell(XMLElement):
     """
     The handbell element represents notation for various techniques used in handbell and handchime music.
     """
-
+    
     TYPE = XSDComplexTypeHandbell
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="handbell" type="handbell" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='handbell'][@type='handbell']"
 
 
 class XMLBrassBend(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The brass-bend element represents the u-shaped bend symbol used in brass notation, distinct from the bend element used in guitar music.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="brass-bend" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The brass-bend element represents the u-shaped bend symbol used in brass notation, distinct from the bend element used in guitar music.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='brass-bend'][@type='empty-placement']"
 
 
 class XMLFlip(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The flip element represents the flip symbol used in brass notation.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="flip" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The flip element represents the flip symbol used in brass notation.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='flip'][@type='empty-placement']"
 
 
 class XMLSmear(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The smear element represents the tilde-shaped smear symbol used in brass notation.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="smear" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The smear element represents the tilde-shaped smear symbol used in brass notation.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='smear'][@type='empty-placement']"
 
 
 class XMLOpen(XMLElement):
     """
-    The empty-placement-smufl type represents an empty element with print-style, placement, and smufl attributes.
+    The open element represents the open symbol, which looks like a circle. The smufl attribute can be used to distinguish different SMuFL glyphs that have a similar appearance such as brassMuteOpen and guitarOpenPedal. If not present, the default glyph is brassMuteOpen.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacementSmufl
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="open" type="empty-placement-smufl">
-    <xs:annotation>
-        <xs:documentation>The open element represents the open symbol, which looks like a circle. The smufl attribute can be used to distinguish different SMuFL glyphs that have a similar appearance such as brassMuteOpen and guitarOpenPedal. If not present, the default glyph is brassMuteOpen.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='open'][@type='empty-placement-smufl']"
 
 
 class XMLHalfMuted(XMLElement):
     """
-    The empty-placement-smufl type represents an empty element with print-style, placement, and smufl attributes.
+    The half-muted element represents the half-muted symbol, which looks like a circle with a plus sign inside. The smufl attribute can be used to distinguish different SMuFL glyphs that have a similar appearance such as brassMuteHalfClosed and guitarHalfOpenPedal. If not present, the default glyph is brassMuteHalfClosed.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacementSmufl
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="half-muted" type="empty-placement-smufl">
-    <xs:annotation>
-        <xs:documentation>The half-muted element represents the half-muted symbol, which looks like a circle with a plus sign inside. The smufl attribute can be used to distinguish different SMuFL glyphs that have a similar appearance such as brassMuteHalfClosed and guitarHalfOpenPedal. If not present, the default glyph is brassMuteHalfClosed.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='half-muted'][@type='empty-placement-smufl']"
 
 
 class XMLHarmonMute(XMLElement):
@@ -5311,258 +3808,162 @@ class XMLHarmonMute(XMLElement):
     Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=harmon-closed\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeHarmonMute
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="harmon-mute" type="harmon-mute" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='harmon-mute'][@type='harmon-mute']"
 
 
 class XMLGolpe(XMLElement):
     """
-    The empty-placement type represents an empty element with print-style and placement attributes.
+    The golpe element represents the golpe symbol that is used for tapping the pick guard in guitar music.
     """
-
+    
     TYPE = XSDComplexTypeEmptyPlacement
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="golpe" type="empty-placement">
-    <xs:annotation>
-        <xs:documentation>The golpe element represents the golpe symbol that is used for tapping the pick guard in guitar music.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='golpe'][@type='empty-placement']"
 
 
 class XMLOtherTechnical(XMLElement):
     """
-    The other-placement-text type represents a text element with print-style, placement, and smufl attribute groups. This type is used by MusicXML notation extension elements to allow specification of specific SMuFL glyphs without needed to add every glyph as a MusicXML element.
+    The other-technical element is used to define any technical indications not yet in the MusicXML format. The smufl attribute can be used to specify a particular glyph, allowing application interoperability without requiring every SMuFL technical indication to have a MusicXML element equivalent. Using the other-technical element without the smufl attribute allows for extended representation, though without application interoperability.
     """
-
+    
     TYPE = XSDComplexTypeOtherPlacementText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="other-technical" type="other-placement-text">
-    <xs:annotation>
-        <xs:documentation>The other-technical element is used to define any technical indications not yet in the MusicXML format. The smufl attribute can be used to specify a particular glyph, allowing application interoperability without requiring every SMuFL technical indication to have a MusicXML element equivalent. Using the other-technical element without the smufl attribute allows for extended representation, though without application interoperability.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='other-technical'][@type='other-placement-text']"
 
 
 class XMLActualNotes(XMLElement):
     """
     The actual-notes element describes how many notes are played in the time usually occupied by the number in the normal-notes element.
     """
-
+    
     TYPE = XSDSimpleTypeNonNegativeInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="actual-notes" type="xs:nonNegativeInteger">
-    <xs:annotation>
-        <xs:documentation>The actual-notes element describes how many notes are played in the time usually occupied by the number in the normal-notes element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='actual-notes'][@type='xs:nonNegativeInteger']"
 
 
 class XMLNormalNotes(XMLElement):
     """
     The normal-notes element describes how many notes are usually played in the time occupied by the number in the actual-notes element.
     """
-
+    
     TYPE = XSDSimpleTypeNonNegativeInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="normal-notes" type="xs:nonNegativeInteger">
-    <xs:annotation>
-        <xs:documentation>The normal-notes element describes how many notes are usually played in the time occupied by the number in the actual-notes element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='normal-notes'][@type='xs:nonNegativeInteger']"
 
 
 class XMLNormalType(XMLElement):
     """
     If the type associated with the number in the normal-notes element is different than the current note type (e.g., a quarter note within an eighth note triplet), then the normal-notes type (e.g. eighth) is specified in the normal-type and normal-dot elements.
     """
-
+    
     TYPE = XSDSimpleTypeNoteTypeValue
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="normal-type" type="note-type-value">
-    <xs:annotation>
-        <xs:documentation>If the type associated with the number in the normal-notes element is different than the current note type (e.g., a quarter note within an eighth note triplet), then the normal-notes type (e.g. eighth) is specified in the normal-type and normal-dot elements.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='normal-type'][@type='note-type-value']"
 
 
 class XMLNormalDot(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The normal-dot element is used to specify dotted normal tuplet types.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="normal-dot" type="empty" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The normal-dot element is used to specify dotted normal tuplet types.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='normal-dot'][@type='empty']"
 
 
 class XMLTupletActual(XMLElement):
     """
-    The tuplet-portion type provides optional full control over tuplet specifications. It allows the number and note type (including dots) to be set for the actual and normal portions of a single tuplet. If any of these elements are absent, their values are based on the time-modification element.\n
-    XSD structure:\n
-    Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- Element\@name=tuplet-number\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=tuplet-type\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=tuplet-dot\@minOccurs=0\@maxOccurs=unbounded\n
+    The tuplet-actual element provide optional full control over how the actual part of the tuplet is displayed, including number and note type (with dots). If any of these elements are absent, their values are based on the time-modification element.
     """
-
+    
     TYPE = XSDComplexTypeTupletPortion
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tuplet-actual" type="tuplet-portion" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The tuplet-actual element provide optional full control over how the actual part of the tuplet is displayed, including number and note type (with dots). If any of these elements are absent, their values are based on the time-modification element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tuplet-actual'][@type='tuplet-portion']"
 
 
 class XMLTupletNormal(XMLElement):
     """
-    The tuplet-portion type provides optional full control over tuplet specifications. It allows the number and note type (including dots) to be set for the actual and normal portions of a single tuplet. If any of these elements are absent, their values are based on the time-modification element.\n
-    XSD structure:\n
-    Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- Element\@name=tuplet-number\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=tuplet-type\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=tuplet-dot\@minOccurs=0\@maxOccurs=unbounded\n
+    The tuplet-normal element provide optional full control over how the normal part of the tuplet is displayed, including number and note type (with dots). If any of these elements are absent, their values are based on the time-modification element.
     """
-
+    
     TYPE = XSDComplexTypeTupletPortion
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tuplet-normal" type="tuplet-portion" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The tuplet-normal element provide optional full control over how the normal part of the tuplet is displayed, including number and note type (with dots). If any of these elements are absent, their values are based on the time-modification element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tuplet-normal'][@type='tuplet-portion']"
 
 
 class XMLTupletNumber(XMLElement):
     """
     The tuplet-number type indicates the number of notes for this portion of the tuplet.
     """
-
+    
     TYPE = XSDComplexTypeTupletNumber
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tuplet-number" type="tuplet-number" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tuplet-number'][@type='tuplet-number']"
 
 
 class XMLTupletType(XMLElement):
     """
     The tuplet-type type indicates the graphical note type of the notes for this portion of the tuplet.
     """
-
+    
     TYPE = XSDComplexTypeTupletType
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tuplet-type" type="tuplet-type" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tuplet-type'][@type='tuplet-type']"
 
 
 class XMLTupletDot(XMLElement):
     """
     The tuplet-dot type is used to specify dotted tuplet types.
     """
-
+    
     TYPE = XSDComplexTypeTupletDot
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tuplet-dot" type="tuplet-dot" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tuplet-dot'][@type='tuplet-dot']"
 
 
 class XMLCreditType(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="credit-type" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='credit-type'][@type='xs:string']"
 
 
 class XMLLink(XMLElement):
     """
     The link type serves as an outgoing simple XLink. If a relative link is used within a document that is part of a compressed MusicXML file, the link is relative to the root folder of the zip file.
     """
-
+    
     TYPE = XSDComplexTypeLink
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="link" type="link" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='link'][@type='link']"
 
 
 class XMLBookmark(XMLElement):
     """
     The bookmark type serves as a well-defined target for an incoming simple XLink.
     """
-
+    
     TYPE = XSDComplexTypeBookmark
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bookmark" type="bookmark" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='bookmark'][@type='bookmark']"
 
 
 class XMLCreditImage(XMLElement):
     """
     The image type is used to include graphical images in a score.
     """
-
+    
     TYPE = XSDComplexTypeImage
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="credit-image" type="image" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='credit-image'][@type='image']"
 
 
 class XMLCreditWords(XMLElement):
     """
     The formatted-text-id type represents a text element with text-formatting and id attributes.
     """
-
+    
     TYPE = XSDComplexTypeFormattedTextId
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="credit-words" type="formatted-text-id" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='credit-words'][@type='formatted-text-id']"
 
 
 class XMLCreditSymbol(XMLElement):
     """
     The formatted-symbol-id type represents a SMuFL musical symbol element with formatting and id attributes.
     """
-
+    
     TYPE = XSDComplexTypeFormattedSymbolId
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="credit-symbol" type="formatted-symbol-id" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='credit-symbol'][@type='formatted-symbol-id']"
 
 
 class XMLScaling(XMLElement):
@@ -5573,30 +3974,20 @@ class XMLScaling(XMLElement):
     \- \- Element\@name=millimeters\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=tenths\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeScaling
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="scaling" type="scaling" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='scaling'][@type='scaling']"
 
 
 class XMLConcertScore(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The presence of a concert-score element indicates that a score is displayed in concert pitch. It is used for scores that contain parts for transposing instruments.
+
+A document with a concert-score element may not contain any transpose elements that have non-zero values for either the diatonic or chromatic elements. Concert scores may include octave transpositions, so transpose elements with a double element or a non-zero octave-change element value are permitted.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="concert-score" type="empty" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The presence of a concert-score element indicates that a score is displayed in concert pitch. It is used for scores that contain parts for transposing instruments.
-
-A document with a concert-score element may not contain any transpose elements that have non-zero values for either the diatonic or chromatic elements. Concert scores may include octave transpositions, so transpose elements with a double element or a non-zero octave-change element value are permitted.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='concert-score'][@type='empty']"
 
 
 class XMLAppearance(XMLElement):
@@ -5610,242 +4001,153 @@ class XMLAppearance(XMLElement):
     \- \- Element\@name=glyph\@minOccurs=0\@maxOccurs=unbounded\n
     \- \- Element\@name=other-appearance\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeAppearance
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="appearance" type="appearance" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='appearance'][@type='appearance']"
 
 
 class XMLMusicFont(XMLElement):
     """
     The empty-font type represents an empty element with font attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmptyFont
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="music-font" type="empty-font" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='music-font'][@type='empty-font']"
 
 
 class XMLWordFont(XMLElement):
     """
     The empty-font type represents an empty element with font attributes.
     """
-
+    
     TYPE = XSDComplexTypeEmptyFont
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="word-font" type="empty-font" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='word-font'][@type='empty-font']"
 
 
 class XMLLyricFont(XMLElement):
     """
     The lyric-font type specifies the default font for a particular name and number of lyric.
     """
-
+    
     TYPE = XSDComplexTypeLyricFont
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="lyric-font" type="lyric-font" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='lyric-font'][@type='lyric-font']"
 
 
 class XMLLyricLanguage(XMLElement):
     """
     The lyric-language type specifies the default language for a particular name and number of lyric.
     """
-
+    
     TYPE = XSDComplexTypeLyricLanguage
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="lyric-language" type="lyric-language" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='lyric-language'][@type='lyric-language']"
 
 
 class XMLGroupName(XMLElement):
     """
     The group-name type describes the name or abbreviation of a part-group element. Formatting attributes in the group-name type are deprecated in Version 2.0 in favor of the new group-name-display and group-abbreviation-display elements.
     """
-
+    
     TYPE = XSDComplexTypeGroupName
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group-name" type="group-name" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='group-name'][@type='group-name']"
 
 
 class XMLGroupNameDisplay(XMLElement):
     """
-    The name-display type is used for exact formatting of multi-font text in part and group names to the left of the system. The print-object attribute can be used to determine what, if anything, is printed at the start of each system. Enclosure for the display-text element is none by default. Language for the display-text element is Italian ("it") by default.\n
-    XSD structure:\n
-    Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- Choice\@minOccurs=0\@maxOccurs=unbounded\n
-    \- \- \- \- Element\@name=display-text\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=accidental-text\@minOccurs=1\@maxOccurs=1\n
+    Formatting specified in the group-name-display element overrides formatting specified in the group-name element.
     """
-
+    
     TYPE = XSDComplexTypeNameDisplay
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group-name-display" type="name-display" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>Formatting specified in the group-name-display element overrides formatting specified in the group-name element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='group-name-display'][@type='name-display']"
 
 
 class XMLGroupAbbreviation(XMLElement):
     """
     The group-name type describes the name or abbreviation of a part-group element. Formatting attributes in the group-name type are deprecated in Version 2.0 in favor of the new group-name-display and group-abbreviation-display elements.
     """
-
+    
     TYPE = XSDComplexTypeGroupName
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group-abbreviation" type="group-name" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='group-abbreviation'][@type='group-name']"
 
 
 class XMLGroupAbbreviationDisplay(XMLElement):
     """
-    The name-display type is used for exact formatting of multi-font text in part and group names to the left of the system. The print-object attribute can be used to determine what, if anything, is printed at the start of each system. Enclosure for the display-text element is none by default. Language for the display-text element is Italian ("it") by default.\n
-    XSD structure:\n
-    Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- Choice\@minOccurs=0\@maxOccurs=unbounded\n
-    \- \- \- \- Element\@name=display-text\@minOccurs=1\@maxOccurs=1\n
-    \- \- \- \- Element\@name=accidental-text\@minOccurs=1\@maxOccurs=1\n
+    Formatting specified in the group-abbreviation-display element overrides formatting specified in the group-abbreviation element.
     """
-
+    
     TYPE = XSDComplexTypeNameDisplay
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group-abbreviation-display" type="name-display" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>Formatting specified in the group-abbreviation-display element overrides formatting specified in the group-abbreviation element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='group-abbreviation-display'][@type='name-display']"
 
 
 class XMLGroupSymbol(XMLElement):
     """
     The group-symbol type indicates how the symbol for a group is indicated in the score. It is none if not specified.
     """
-
+    
     TYPE = XSDComplexTypeGroupSymbol
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group-symbol" type="group-symbol" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='group-symbol'][@type='group-symbol']"
 
 
 class XMLGroupBarline(XMLElement):
     """
     The group-barline type indicates if the group should have common barlines.
     """
-
+    
     TYPE = XSDComplexTypeGroupBarline
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group-barline" type="group-barline" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='group-barline'][@type='group-barline']"
 
 
 class XMLGroupTime(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The group-time element indicates that the displayed time signatures should stretch across all parts and staves in the group.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group-time" type="empty" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The group-time element indicates that the displayed time signatures should stretch across all parts and staves in the group.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='group-time'][@type='empty']"
 
 
 class XMLInstrumentLink(XMLElement):
     """
     Multiple part-link elements can link a condensed part within a score file to multiple MusicXML parts files. For example, a "Clarinet 1 and 2" part in a score file could link to separate "Clarinet 1" and "Clarinet 2" part files. The instrument-link type distinguish which of the score-instruments within a score-part are in which part file. The instrument-link id attribute refers to a score-instrument id attribute.
     """
-
+    
     TYPE = XSDComplexTypeInstrumentLink
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="instrument-link" type="instrument-link" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='instrument-link'][@type='instrument-link']"
 
 
 class XMLGroupLink(XMLElement):
     """
     Multiple part-link elements can reference different types of linked documents, such as parts and condensed score. The optional group-link elements identify the groups used in the linked document. The content of a group-link element should match the content of a group element in the linked document.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group-link" type="xs:string" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>Multiple part-link elements can reference different types of linked documents, such as parts and condensed score. The optional group-link elements identify the groups used in the linked document. The content of a group-link element should match the content of a group element in the linked document.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='group-link'][@type='xs:string']"
 
 
 class XMLPlayerName(XMLElement):
     """
     The player-name element is typically used within a software application, rather than appearing on the printed page of a score.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="player-name" type="xs:string">
-    <xs:annotation>
-        <xs:documentation>The player-name element is typically used within a software application, rather than appearing on the printed page of a score.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='player-name'][@type='xs:string']"
 
 
 class XMLInstrumentName(XMLElement):
     """
     The instrument-name element is typically used within a software application, rather than appearing on the printed page of a score.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="instrument-name" type="xs:string">
-    <xs:annotation>
-        <xs:documentation>The instrument-name element is typically used within a software application, rather than appearing on the printed page of a score.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='instrument-name'][@type='xs:string']"
 
 
 class XMLInstrumentAbbreviation(XMLElement):
     """
     The optional instrument-abbreviation element is typically used within a software application, rather than appearing on the printed page of a score.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="instrument-abbreviation" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The optional instrument-abbreviation element is typically used within a software application, rather than appearing on the printed page of a score.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='instrument-abbreviation'][@type='xs:string']"
 
 
 class XMLIdentification(XMLElement):
@@ -5860,12 +4162,9 @@ class XMLIdentification(XMLElement):
     \- \- Element\@name=relation\@minOccurs=0\@maxOccurs=unbounded\n
     \- \- Element\@name=miscellaneous\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeIdentification
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="identification" type="identification" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='identification'][@type='identification']"
 
 
 class XMLPartLink(XMLElement):
@@ -5876,52 +4175,36 @@ class XMLPartLink(XMLElement):
     \- \- Element\@name=instrument-link\@minOccurs=0\@maxOccurs=unbounded\n
     \- \- Element\@name=group-link\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypePartLink
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-link" type="part-link" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='part-link'][@type='part-link']"
 
 
 class XMLPartName(XMLElement):
     """
     The part-name type describes the name or abbreviation of a score-part element. Formatting attributes for the part-name element are deprecated in Version 2.0 in favor of the new part-name-display and part-abbreviation-display elements.
     """
-
+    
     TYPE = XSDComplexTypePartName
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-name" type="part-name" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='part-name'][@type='part-name']"
 
 
 class XMLPartAbbreviation(XMLElement):
     """
     The part-name type describes the name or abbreviation of a score-part element. Formatting attributes for the part-name element are deprecated in Version 2.0 in favor of the new part-name-display and part-abbreviation-display elements.
     """
-
+    
     TYPE = XSDComplexTypePartName
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-abbreviation" type="part-name" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='part-abbreviation'][@type='part-name']"
 
 
 class XMLGroup(XMLElement):
     """
     The group element allows the use of different versions of the part for different purposes. Typical values include score, parts, sound, and data. Ordering information can be derived from the ordering within a MusicXML score or opus.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group" type="xs:string" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The group element allows the use of different versions of the part for different purposes. Typical values include score, parts, sound, and data. Ordering information can be derived from the ordering within a MusicXML score or opus.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='group'][@type='xs:string']"
 
 
 class XMLScoreInstrument(XMLElement):
@@ -5943,12 +4226,9 @@ class XMLScoreInstrument(XMLElement):
     \- \- \- \- \- \- \- \- Element\@name=ensemble\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- Element\@name=virtual-instrument\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeScoreInstrument
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="score-instrument" type="score-instrument" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-instrument'][@type='score-instrument']"
 
 
 class XMLPlayer(XMLElement):
@@ -5958,100 +4238,63 @@ class XMLPlayer(XMLElement):
     Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=player-name\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypePlayer
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="player" type="player" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='player'][@type='player']"
 
 
 class XMLVirtualLibrary(XMLElement):
     """
     The virtual-library element indicates the virtual instrument library name.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="virtual-library" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The virtual-library element indicates the virtual instrument library name.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='virtual-library'][@type='xs:string']"
 
 
 class XMLVirtualName(XMLElement):
     """
     The virtual-name element indicates the library-specific name for the virtual instrument.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="virtual-name" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The virtual-name element indicates the library-specific name for the virtual instrument.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='virtual-name'][@type='xs:string']"
 
 
 class XMLWorkNumber(XMLElement):
     """
     The work-number element specifies the number of a work, such as its opus number.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="work-number" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The work-number element specifies the number of a work, such as its opus number.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='work-number'][@type='xs:string']"
 
 
 class XMLWorkTitle(XMLElement):
     """
     The work-title element specifies the title of a work, not including its opus or other work number.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="work-title" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The work-title element specifies the title of a work, not including its opus or other work number.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='work-title'][@type='xs:string']"
 
 
 class XMLOpus(XMLElement):
     """
     The opus type represents a link to a MusicXML opus document that composes multiple MusicXML scores into a collection.
     """
-
+    
     TYPE = XSDComplexTypeOpus
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="opus" type="opus" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='opus'][@type='opus']"
 
 
 class XMLFootnote(XMLElement):
     """
     The formatted-text type represents a text element with text-formatting attributes.
     """
-
+    
     TYPE = XSDComplexTypeFormattedText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="footnote" type="formatted-text" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='footnote'][@type='formatted-text']"
 
 
 class XMLLevel(XMLElement):
@@ -6062,124 +4305,72 @@ class XMLLevel(XMLElement):
     
     The type attribute indicates whether the editorial information applies to the start of a series of symbols, the end of a series of symbols, or a single symbol. It is single if not specified for compatibility with earlier MusicXML versions.
     """
-
+    
     TYPE = XSDComplexTypeLevel
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="level" type="level" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='level'][@type='level']"
 
 
 class XMLStaff(XMLElement):
     """
     Staff assignment is only needed for music notated on multiple staves. Used by both notes and directions. Staff values are numbers, with 1 referring to the top-most staff in a part.
     """
-
+    
     TYPE = XSDSimpleTypePositiveInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff" type="xs:positiveInteger">
-    <xs:annotation>
-        <xs:documentation>Staff assignment is only needed for music notated on multiple staves. Used by both notes and directions. Staff values are numbers, with 1 referring to the top-most staff in a part.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staff'][@type='xs:positiveInteger']"
 
 
 class XMLTuningStep(XMLElement):
     """
     The tuning-step element is represented like the step element, with a different name to reflect its different function in string tuning.
     """
-
+    
     TYPE = XSDSimpleTypeStep
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tuning-step" type="step">
-    <xs:annotation>
-        <xs:documentation>The tuning-step element is represented like the step element, with a different name to reflect its different function in string tuning.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tuning-step'][@type='step']"
 
 
 class XMLTuningAlter(XMLElement):
     """
     The tuning-alter element is represented like the alter element, with a different name to reflect its different function in string tuning.
     """
-
+    
     TYPE = XSDSimpleTypeSemitones
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tuning-alter" type="semitones" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The tuning-alter element is represented like the alter element, with a different name to reflect its different function in string tuning.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tuning-alter'][@type='semitones']"
 
 
 class XMLTuningOctave(XMLElement):
     """
     The tuning-octave element is represented like the octave element, with a different name to reflect its different function in string tuning.
     """
-
+    
     TYPE = XSDSimpleTypeOctave
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tuning-octave" type="octave">
-    <xs:annotation>
-        <xs:documentation>The tuning-octave element is represented like the octave element, with a different name to reflect its different function in string tuning.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='tuning-octave'][@type='octave']"
 
 
 class XMLInstrumentSound(XMLElement):
     """
     The instrument-sound element describes the default timbre of the score-instrument. This description is independent of a particular virtual or MIDI instrument specification and allows playback to be shared more easily between applications and libraries.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="instrument-sound" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The instrument-sound element describes the default timbre of the score-instrument. This description is independent of a particular virtual or MIDI instrument specification and allows playback to be shared more easily between applications and libraries.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='instrument-sound'][@type='xs:string']"
 
 
 class XMLSolo(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The solo element is present if performance is intended by a solo instrument.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="solo" type="empty">
-    <xs:annotation>
-        <xs:documentation>The solo element is present if performance is intended by a solo instrument.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='solo'][@type='empty']"
 
 
 class XMLEnsemble(XMLElement):
     """
     The ensemble element is present if performance is intended by an ensemble such as an orchestral section. The text of the ensemble element contains the size of the section, or is empty if the ensemble size is not specified.
     """
-
+    
     TYPE = XSDSimpleTypePositiveIntegerOrEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ensemble" type="positive-integer-or-empty">
-    <xs:annotation>
-        <xs:documentation>The ensemble element is present if performance is intended by an ensemble such as an orchestral section. The text of the ensemble element contains the size of the section, or is empty if the ensemble size is not specified.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='ensemble'][@type='positive-integer-or-empty']"
 
 
 class XMLVirtualInstrument(XMLElement):
@@ -6190,332 +4381,198 @@ class XMLVirtualInstrument(XMLElement):
     \- \- Element\@name=virtual-library\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=virtual-name\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeVirtualInstrument
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="virtual-instrument" type="virtual-instrument" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='virtual-instrument'][@type='virtual-instrument']"
 
 
 class XMLVoice(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="voice" type="xs:string" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='voice'][@type='xs:string']"
 
 
 class XMLSign(XMLElement):
     """
     The sign element represents the clef symbol.
     """
-
+    
     TYPE = XSDSimpleTypeClefSign
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="sign" type="clef-sign">
-    <xs:annotation>
-        <xs:documentation>The sign element represents the clef symbol.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='sign'][@type='clef-sign']"
 
 
 class XMLLine(XMLElement):
     """
     Line numbers are counted from the bottom of the staff. They are only needed with the G, F, and C signs in order to position a pitch correctly on the staff. Standard values are 2 for the G sign (treble clef), 4 for the F sign (bass clef), and 3 for the C sign (alto clef). Line values can be used to specify positions outside the staff, such as a C clef positioned in the middle of a grand staff.
     """
-
+    
     TYPE = XSDSimpleTypeStaffLinePosition
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line" type="staff-line-position" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>Line numbers are counted from the bottom of the staff. They are only needed with the G, F, and C signs in order to position a pitch correctly on the staff. Standard values are 2 for the G sign (treble clef), 4 for the F sign (bass clef), and 3 for the C sign (alto clef). Line values can be used to specify positions outside the staff, such as a C clef positioned in the middle of a grand staff.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='line'][@type='staff-line-position']"
 
 
 class XMLClefOctaveChange(XMLElement):
     """
     The clef-octave-change element is used for transposing clefs. A treble clef for tenors would have a value of -1.
     """
-
+    
     TYPE = XSDSimpleTypeInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="clef-octave-change" type="xs:integer" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The clef-octave-change element is used for transposing clefs. A treble clef for tenors would have a value of -1.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='clef-octave-change'][@type='xs:integer']"
 
 
 class XMLKeyStep(XMLElement):
     """
     Non-traditional key signatures are represented using a list of altered tones. The key-step element indicates the pitch step to be altered, represented using the same names as in the step element.
     """
-
+    
     TYPE = XSDSimpleTypeStep
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="key-step" type="step">
-    <xs:annotation>
-        <xs:documentation>Non-traditional key signatures are represented using a list of altered tones. The key-step element indicates the pitch step to be altered, represented using the same names as in the step element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='key-step'][@type='step']"
 
 
 class XMLKeyAlter(XMLElement):
     """
     Non-traditional key signatures are represented using a list of altered tones. The key-alter element represents the alteration for a given pitch step, represented with semitones in the same manner as the alter element.
     """
-
+    
     TYPE = XSDSimpleTypeSemitones
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="key-alter" type="semitones">
-    <xs:annotation>
-        <xs:documentation>Non-traditional key signatures are represented using a list of altered tones. The key-alter element represents the alteration for a given pitch step, represented with semitones in the same manner as the alter element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='key-alter'][@type='semitones']"
 
 
 class XMLKeyAccidental(XMLElement):
     """
-    The key-accidental type indicates the accidental to be displayed in a non-traditional key signature, represented in the same manner as the accidental type without the formatting attributes.
+    Non-traditional key signatures are represented using a list of altered tones. The key-accidental element indicates the accidental to be displayed in the key signature, represented in the same manner as the accidental element. It is used for disambiguating microtonal accidentals.
     """
-
+    
     TYPE = XSDComplexTypeKeyAccidental
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="key-accidental" type="key-accidental" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>Non-traditional key signatures are represented using a list of altered tones. The key-accidental element indicates the accidental to be displayed in the key signature, represented in the same manner as the accidental element. It is used for disambiguating microtonal accidentals.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='key-accidental'][@type='key-accidental']"
 
 
 class XMLSlashType(XMLElement):
     """
     The slash-type element indicates the graphical note type to use for the display of repetition marks.
     """
-
+    
     TYPE = XSDSimpleTypeNoteTypeValue
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="slash-type" type="note-type-value">
-    <xs:annotation>
-        <xs:documentation>The slash-type element indicates the graphical note type to use for the display of repetition marks.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='slash-type'][@type='note-type-value']"
 
 
 class XMLSlashDot(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The slash-dot element is used to specify any augmentation dots in the note type used to display repetition marks.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="slash-dot" type="empty" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The slash-dot element is used to specify any augmentation dots in the note type used to display repetition marks.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='slash-dot'][@type='empty']"
 
 
 class XMLExceptVoice(XMLElement):
     """
     The except-voice element is used to specify a combination of slash notation and regular notation. Any note elements that are in voices specified by the except-voice elements are displayed in normal notation, in addition to the slash notation that is always displayed.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="except-voice" type="xs:string" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The except-voice element is used to specify a combination of slash notation and regular notation. Any note elements that are in voices specified by the except-voice elements are displayed in normal notation, in addition to the slash notation that is always displayed.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='except-voice'][@type='xs:string']"
 
 
 class XMLBeats(XMLElement):
     """
     The beats element indicates the number of beats, as found in the numerator of a time signature.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beats" type="xs:string">
-    <xs:annotation>
-        <xs:documentation>The beats element indicates the number of beats, as found in the numerator of a time signature.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='beats'][@type='xs:string']"
 
 
 class XMLBeatType(XMLElement):
     """
     The beat-type element indicates the beat unit, as found in the denominator of a time signature.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beat-type" type="xs:string">
-    <xs:annotation>
-        <xs:documentation>The beat-type element indicates the beat unit, as found in the denominator of a time signature.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='beat-type'][@type='xs:string']"
 
 
 class XMLCancel(XMLElement):
     """
     A cancel element indicates that the old key signature should be cancelled before the new one appears. This will always happen when changing to C major or A minor and need not be specified then. The cancel value matches the fifths value of the cancelled key signature (e.g., a cancel of -2 will provide an explicit cancellation for changing from B flat major to F major). The optional location attribute indicates where the cancellation appears relative to the new key signature.
     """
-
+    
     TYPE = XSDComplexTypeCancel
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="cancel" type="cancel" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='cancel'][@type='cancel']"
 
 
 class XMLFifths(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeFifths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fifths" type="fifths" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='fifths'][@type='fifths']"
 
 
 class XMLMode(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeMode
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="mode" type="mode" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='mode'][@type='mode']"
 
 
 class XMLDiatonic(XMLElement):
     """
     The diatonic element specifies the number of pitch steps needed to go from written to sounding pitch. This allows for correct spelling of enharmonic transpositions. This value does not include octave-change values; the values for both elements need to be added to the written pitch to get the correct sounding pitch.
     """
-
+    
     TYPE = XSDSimpleTypeInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="diatonic" type="xs:integer" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The diatonic element specifies the number of pitch steps needed to go from written to sounding pitch. This allows for correct spelling of enharmonic transpositions. This value does not include octave-change values; the values for both elements need to be added to the written pitch to get the correct sounding pitch.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='diatonic'][@type='xs:integer']"
 
 
 class XMLChromatic(XMLElement):
     """
     The chromatic element represents the number of semitones needed to get from written to sounding pitch. This value does not include octave-change values; the values for both elements need to be added to the written pitch to get the correct sounding pitch.
     """
-
+    
     TYPE = XSDSimpleTypeSemitones
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="chromatic" type="semitones">
-    <xs:annotation>
-        <xs:documentation>The chromatic element represents the number of semitones needed to get from written to sounding pitch. This value does not include octave-change values; the values for both elements need to be added to the written pitch to get the correct sounding pitch.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='chromatic'][@type='semitones']"
 
 
 class XMLOctaveChange(XMLElement):
     """
     The octave-change element indicates how many octaves to add to get from written pitch to sounding pitch. The octave-change element should be included when using transposition intervals of an octave or more, and should not be present for intervals of less than an octave.
     """
-
+    
     TYPE = XSDSimpleTypeInteger
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="octave-change" type="xs:integer" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The octave-change element indicates how many octaves to add to get from written pitch to sounding pitch. The octave-change element should be included when using transposition intervals of an octave or more, and should not be present for intervals of less than an octave.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='octave-change'][@type='xs:integer']"
 
 
 class XMLDouble(XMLElement):
     """
-    The double type indicates that the music is doubled one octave from what is currently written. If the above attribute is set to yes, the doubling is one octave above what is written, as for mixed flute / piccolo parts in band literature. Otherwise the doubling is one octave below what is written, as for mixed cello / bass parts in orchestral literature.
+    If the double element is present, it indicates that the music is doubled one octave from what is currently written.
     """
-
+    
     TYPE = XSDComplexTypeDouble
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="double" type="double" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>If the double element is present, it indicates that the music is doubled one octave from what is currently written.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='double'][@type='double']"
 
 
 class XMLBeatUnit(XMLElement):
     """
     The beat-unit element indicates the graphical note type to use in a metronome mark.
     """
-
+    
     TYPE = XSDSimpleTypeNoteTypeValue
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beat-unit" type="note-type-value">
-    <xs:annotation>
-        <xs:documentation>The beat-unit element indicates the graphical note type to use in a metronome mark.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='beat-unit'][@type='note-type-value']"
 
 
 class XMLBeatUnitDot(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
+    The beat-unit-dot element is used to specify any augmentation dots for a metronome mark note.
     """
-
+    
     TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beat-unit-dot" type="empty" minOccurs="0" maxOccurs="unbounded">
-    <xs:annotation>
-        <xs:documentation>The beat-unit-dot element is used to specify any augmentation dots for a metronome mark note.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='beat-unit-dot'][@type='empty']"
 
 
 class XMLRoot(XMLElement):
@@ -6526,12 +4583,9 @@ class XMLRoot(XMLElement):
     \- \- Element\@name=root-step\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=root-alter\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeRoot
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root" type="root" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='root'][@type='root']"
 
 
 class XMLNumeral(XMLElement):
@@ -6543,28 +4597,18 @@ class XMLNumeral(XMLElement):
     \- \- Element\@name=numeral-alter\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=numeral-key\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeNumeral
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="numeral" type="numeral" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='numeral'][@type='numeral']"
 
 
 class XMLFunction(XMLElement):
     """
-    The style-text type represents a text element with a print-style attribute group.
+    The function element represents classical functional harmony with an indication like I, II, III rather than C, D, E. It represents the Roman numeral part of a functional harmony rather than the complete function itself. It has been deprecated as of MusicXML 4.0 in favor of the numeral element.
     """
-
+    
     TYPE = XSDComplexTypeStyleText
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="function" type="style-text">
-    <xs:annotation>
-        <xs:documentation>The function element represents classical functional harmony with an indication like I, II, III rather than C, D, E. It represents the Roman numeral part of a functional harmony rather than the complete function itself. It has been deprecated as of MusicXML 4.0 in favor of the numeral element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='function'][@type='style-text']"
 
 
 class XMLKind(XMLElement):
@@ -6587,24 +4631,18 @@ class XMLKind(XMLElement):
     
     The text attribute may use strings such as "13sus" that refer to both the kind and one or more degree elements. In this case, the corresponding degree elements should have the print-object attribute set to "no" to keep redundant alterations from being displayed.
     """
-
+    
     TYPE = XSDComplexTypeKind
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="kind" type="kind" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='kind'][@type='kind']"
 
 
 class XMLInversion(XMLElement):
     """
     The inversion type represents harmony inversions. The value is a number indicating which inversion is used: 0 for root position, 1 for first inversion, etc.  The text attribute indicates how the inversion should be displayed in a score.
     """
-
+    
     TYPE = XSDComplexTypeInversion
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="inversion" type="inversion" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='inversion'][@type='inversion']"
 
 
 class XMLBass(XMLElement):
@@ -6616,12 +4654,9 @@ class XMLBass(XMLElement):
     \- \- Element\@name=bass-step\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=bass-alter\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeBass
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bass" type="bass" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='bass'][@type='bass']"
 
 
 class XMLDegree(XMLElement):
@@ -6635,36 +4670,27 @@ class XMLDegree(XMLElement):
     \- \- Element\@name=degree-alter\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=degree-type\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeDegree
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="degree" type="degree" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='degree'][@type='degree']"
 
 
 class XMLTopMargin(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeTenths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="top-margin" type="tenths" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='top-margin'][@type='tenths']"
 
 
 class XMLBottomMargin(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeTenths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bottom-margin" type="tenths" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='bottom-margin'][@type='tenths']"
 
 
 class XMLPageLayout(XMLElement):
@@ -6681,12 +4707,9 @@ class XMLPageLayout(XMLElement):
     \- \- \- \- Element\@name=page-width\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=page-margins\@minOccurs=0\@maxOccurs=2\n
     """
-
+    
     TYPE = XSDComplexTypePageLayout
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="page-layout" type="page-layout" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='page-layout'][@type='page-layout']"
 
 
 class XMLSystemLayout(XMLElement):
@@ -6705,12 +4728,9 @@ class XMLSystemLayout(XMLElement):
     \- \- Element\@name=top-system-distance\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=system-dividers\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeSystemLayout
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="system-layout" type="system-layout" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='system-layout'][@type='system-layout']"
 
 
 class XMLStaffLayout(XMLElement):
@@ -6722,36 +4742,27 @@ class XMLStaffLayout(XMLElement):
     Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=staff-distance\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeStaffLayout
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-layout" type="staff-layout" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='staff-layout'][@type='staff-layout']"
 
 
 class XMLLeftMargin(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeTenths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="left-margin" type="tenths" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='left-margin'][@type='tenths']"
 
 
 class XMLRightMargin(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeTenths
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="right-margin" type="tenths" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='right-margin'][@type='tenths']"
 
 
 class XMLDuration(XMLElement):
@@ -6760,62 +4771,40 @@ class XMLDuration(XMLElement):
 
 The duration element moves the musical position when used in backup elements, forward elements, and note elements that do not contain a chord child element.
     """
-
+    
     TYPE = XSDSimpleTypePositiveDivisions
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="duration" type="positive-divisions">
-    <xs:annotation>
-        <xs:documentation>Duration is a positive number specified in division units. This is the intended duration vs. notated duration (for instance, differences in dotted notes in Baroque-era music). Differences in duration specific to an interpretation or performance should be represented using the note element's attack and release attributes.
-
-The duration element moves the musical position when used in backup elements, forward elements, and note elements that do not contain a chord child element.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='duration'][@type='positive-divisions']"
 
 
 class XMLDisplayStep(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeStep
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="display-step" type="step" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='display-step'][@type='step']"
 
 
 class XMLDisplayOctave(XMLElement):
     """
     
     """
-
+    
     TYPE = XSDSimpleTypeOctave
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="display-octave" type="octave" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='display-octave'][@type='octave']"
 
 
 class XMLChord(XMLElement):
     """
-    The empty type represents an empty element with no attributes.
-    """
-
-    TYPE = XSDComplexTypeEmpty
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="chord" type="empty" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The chord element indicates that this note is an additional chord tone with the preceding note.
+    The chord element indicates that this note is an additional chord tone with the preceding note.
 
 The duration of a chord note does not move the musical position within a measure. That is done by the duration of the first preceding note without a chord element. Thus the duration of a chord note cannot be longer than the preceding note.
 							
-In most cases the duration will be the same as the preceding note. However it can be shorter in situations such as multiple stops for string instruments.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+In most cases the duration will be the same as the preceding note. However it can be shorter in situations such as multiple stops for string instruments.
+    """
+    
+    TYPE = XSDComplexTypeEmpty
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='chord'][@type='empty']"
 
 
 class XMLPitch(XMLElement):
@@ -6827,12 +4816,9 @@ class XMLPitch(XMLElement):
     \- \- Element\@name=alter\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=octave\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypePitch
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pitch" type="pitch" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='pitch'][@type='pitch']"
 
 
 class XMLUnpitched(XMLElement):
@@ -6845,12 +4831,9 @@ class XMLUnpitched(XMLElement):
     \- \- \- \- \- \- Element\@name=display-step\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- Element\@name=display-octave\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeUnpitched
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="unpitched" type="unpitched" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='unpitched'][@type='unpitched']"
 
 
 class XMLRest(XMLElement):
@@ -6863,12 +4846,9 @@ class XMLRest(XMLElement):
     \- \- \- \- \- \- Element\@name=display-step\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- Element\@name=display-octave\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeRest
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rest" type="rest" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='rest'][@type='rest']"
 
 
 class XMLNote(XMLElement):
@@ -6960,12 +4940,9 @@ class XMLNote(XMLElement):
     \- \- Element\@name=play\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=listen\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeNote
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="note" type="note" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='note'][@type='note']"
 
 
 class XMLBackup(XMLElement):
@@ -6985,12 +4962,9 @@ class XMLBackup(XMLElement):
     \- \- \- \- \- \- \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- \- \- \- \- Element\@name=level\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeBackup
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="backup" type="backup" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='backup'][@type='backup']"
 
 
 class XMLForward(XMLElement):
@@ -7016,12 +4990,9 @@ class XMLForward(XMLElement):
     \- \- \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- Element\@name=staff\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeForward
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="forward" type="forward" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='forward'][@type='forward']"
 
 
 class XMLDirection(XMLElement):
@@ -7050,12 +5021,9 @@ class XMLDirection(XMLElement):
     \- \- Element\@name=sound\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=listening\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeDirection
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="direction" type="direction" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='direction'][@type='direction']"
 
 
 class XMLAttributes(XMLElement):
@@ -7085,12 +5053,9 @@ class XMLAttributes(XMLElement):
     \- \- Element\@name=directive\@minOccurs=0\@maxOccurs=unbounded\n
     \- \- Element\@name=measure-style\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeAttributes
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="attributes" type="attributes" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='attributes'][@type='attributes']"
 
 
 class XMLHarmony(XMLElement):
@@ -7126,12 +5091,9 @@ class XMLHarmony(XMLElement):
     \- \- \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- Element\@name=staff\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeHarmony
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="harmony" type="harmony" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='harmony'][@type='harmony']"
 
 
 class XMLFiguredBass(XMLElement):
@@ -7154,12 +5116,9 @@ class XMLFiguredBass(XMLElement):
     \- \- \- \- \- \- \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- \- \- \- \- Element\@name=level\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeFiguredBass
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="figured-bass" type="figured-bass" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='figured-bass'][@type='figured-bass']"
 
 
 class XMLPrint(XMLElement):
@@ -7179,12 +5138,9 @@ class XMLPrint(XMLElement):
     \- \- Element\@name=part-name-display\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=part-abbreviation-display\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypePrint
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="print" type="print" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='print'][@type='print']"
 
 
 class XMLBarline(XMLElement):
@@ -7210,12 +5166,9 @@ class XMLBarline(XMLElement):
     \- \- Element\@name=ending\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=repeat\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeBarline
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="barline" type="barline" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='barline'][@type='barline']"
 
 
 class XMLGrouping(XMLElement):
@@ -7227,12 +5180,9 @@ class XMLGrouping(XMLElement):
     Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- Element\@name=feature\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeGrouping
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="grouping" type="grouping" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='grouping'][@type='grouping']"
 
 
 class XMLPartGroup(XMLElement):
@@ -7260,12 +5210,9 @@ class XMLPartGroup(XMLElement):
     \- \- \- \- \- \- \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- \- \- \- \- Element\@name=level\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypePartGroup
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-group" type="part-group" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='part-group'][@type='part-group']"
 
 
 class XMLWork(XMLElement):
@@ -7277,44 +5224,27 @@ class XMLWork(XMLElement):
     \- \- Element\@name=work-title\@minOccurs=0\@maxOccurs=1\n
     \- \- Element\@name=opus\@minOccurs=0\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeWork
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="work" type="work" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='work'][@type='work']"
 
 
 class XMLMovementNumber(XMLElement):
     """
     The movement-number element specifies the number of a movement.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="movement-number" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The movement-number element specifies the number of a movement.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='movement-number'][@type='xs:string']"
 
 
 class XMLMovementTitle(XMLElement):
     """
     The movement-title element specifies the title of a movement, not including its number.
     """
-
+    
     TYPE = XSDSimpleTypeString
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="movement-title" type="xs:string" minOccurs="0">
-    <xs:annotation>
-        <xs:documentation>The movement-title element specifies the title of a movement, not including its number.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='movement-title'][@type='xs:string']"
 
 
 class XMLDefaults(XMLElement):
@@ -7335,12 +5265,9 @@ class XMLDefaults(XMLElement):
     \- \- Element\@name=lyric-font\@minOccurs=0\@maxOccurs=unbounded\n
     \- \- Element\@name=lyric-language\@minOccurs=0\@maxOccurs=unbounded\n
     """
-
+    
     TYPE = XSDComplexTypeDefaults
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="defaults" type="defaults" minOccurs="0" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='defaults'][@type='defaults']"
 
 
 class XMLCredit(XMLElement):
@@ -7370,12 +5297,9 @@ class XMLCredit(XMLElement):
     \- \- \- \- \- \- \- \- \- \- Element\@name=credit-words\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- \- \- \- \- Element\@name=credit-symbol\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypeCredit
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="credit" type="credit" minOccurs="0" maxOccurs="unbounded" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='credit'][@type='credit']"
 
 
 class XMLPartList(XMLElement):
@@ -7397,98 +5321,17 @@ class XMLPartList(XMLElement):
     \- \- \- \- \- \- Sequence\@minOccurs=1\@maxOccurs=1\n
     \- \- \- \- \- \- \- \- Element\@name=score-part\@minOccurs=1\@maxOccurs=1\n
     """
-
+    
     TYPE = XSDComplexTypePartList
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-list" type="part-list" />
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='part-list'][@type='part-list']"
 
 
 class XMLScorePart(XMLElement):
     """
-    The score-part type collects part-wide information for each part in a score. Often, each MusicXML part corresponds to a track in a Standard MIDI Format 1 file. In this case, the midi-device element is used to make a MIDI device or port assignment for the given track or specific MIDI instruments. Initial midi-instrument assignments may be made here as well. The score-instrument elements are used when there are multiple instruments per track.\n
-    XSD structure:\n
-    Sequence\@minOccurs=1\@maxOccurs=1\n
-    \- \- Element\@name=identification\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=part-link\@minOccurs=0\@maxOccurs=unbounded\n
-    \- \- Element\@name=part-name\@minOccurs=1\@maxOccurs=1\n
-    \- \- Element\@name=part-name-display\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=part-abbreviation\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=part-abbreviation-display\@minOccurs=0\@maxOccurs=1\n
-    \- \- Element\@name=group\@minOccurs=0\@maxOccurs=unbounded\n
-    \- \- Element\@name=score-instrument\@minOccurs=0\@maxOccurs=unbounded\n
-    \- \- Element\@name=player\@minOccurs=0\@maxOccurs=unbounded\n
-    \- \- Sequence\@minOccurs=0\@maxOccurs=unbounded\n
-    \- \- \- \- Element\@name=midi-device\@minOccurs=0\@maxOccurs=1\n
-    \- \- \- \- Element\@name=midi-instrument\@minOccurs=0\@maxOccurs=1\n
+    Each MusicXML part corresponds to a track in a Standard MIDI Format 1 file. The score-instrument elements are used when there are multiple instruments per track. The midi-device element is used to make a MIDI device or port assignment for the given track. Initial midi-instrument assignments may be made here as well.
     """
-
+    
     TYPE = XSDComplexTypeScorePart
-    XSD_TREE = XSDTree(ET.fromstring("""
-<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="score-part" type="score-part">
-    <xs:annotation>
-        <xs:documentation>Each MusicXML part corresponds to a track in a Standard MIDI Format 1 file. The score-instrument elements are used when there are multiple instruments per track. The midi-device element is used to make a MIDI device or port assignment for the given track. Initial midi-instrument assignments may be made here as well.</xs:documentation>
-    </xs:annotation>
-</xs:element>
-"""
-                                     ))
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-part'][@type='score-part']"
 
-
-__all__ = ['XMLScorePartwise', 'XMLPart', 'XMLMeasure', 'XMLDirective', 'XMLP', 'XMLPp', 'XMLPpp', 'XMLPppp', 'XMLPpppp', 'XMLPppppp',
-           'XMLF', 'XMLFf', 'XMLFff', 'XMLFfff', 'XMLFffff', 'XMLFfffff', 'XMLMp', 'XMLMf', 'XMLSf', 'XMLSfp', 'XMLSfpp', 'XMLFp', 'XMLRf',
-           'XMLRfz', 'XMLSfz', 'XMLSffz', 'XMLFz', 'XMLN', 'XMLPf', 'XMLSfzp', 'XMLOtherDynamics', 'XMLMidiChannel', 'XMLMidiName',
-           'XMLMidiBank', 'XMLMidiProgram', 'XMLMidiUnpitched', 'XMLVolume', 'XMLPan', 'XMLElevation', 'XMLDisplayText',
-           'XMLAccidentalText', 'XMLIpa', 'XMLMute', 'XMLSemiPitched', 'XMLOtherPlay', 'XMLDivisions', 'XMLKey', 'XMLTime', 'XMLStaves',
-           'XMLPartSymbol', 'XMLInstruments', 'XMLClef', 'XMLStaffDetails', 'XMLTranspose', 'XMLForPart', 'XMLMeasureStyle', 'XMLPartClef',
-           'XMLPartTranspose', 'XMLTimeRelation', 'XMLKeyOctave', 'XMLMultipleRest', 'XMLMeasureRepeat', 'XMLBeatRepeat', 'XMLSlash',
-           'XMLStaffType', 'XMLStaffLines', 'XMLLineDetail', 'XMLStaffTuning', 'XMLCapo', 'XMLStaffSize', 'XMLInterchangeable',
-           'XMLSenzaMisura', 'XMLBarStyle', 'XMLWavyLine', 'XMLSegno', 'XMLCoda', 'XMLFermata', 'XMLEnding', 'XMLRepeat',
-           'XMLAccordionHigh', 'XMLAccordionMiddle', 'XMLAccordionLow', 'XMLBassSeparator', 'XMLBassStep', 'XMLBassAlter', 'XMLDegreeValue',
-           'XMLDegreeAlter', 'XMLDegreeType', 'XMLDirectionType', 'XMLOffset', 'XMLSound', 'XMLListening', 'XMLRehearsal', 'XMLWords',
-           'XMLSymbol', 'XMLWedge', 'XMLDynamics', 'XMLDashes', 'XMLBracket', 'XMLPedal', 'XMLMetronome', 'XMLOctaveShift', 'XMLHarpPedals',
-           'XMLDamp', 'XMLDampAll', 'XMLEyeglasses', 'XMLStringMute', 'XMLScordatura', 'XMLImage', 'XMLPrincipalVoice', 'XMLPercussion',
-           'XMLAccordionRegistration', 'XMLStaffDivide', 'XMLOtherDirection', 'XMLFrameStrings', 'XMLFrameFrets', 'XMLFirstFret',
-           'XMLFrameNote', 'XMLString', 'XMLFret', 'XMLFingering', 'XMLBarre', 'XMLFeature', 'XMLFrame', 'XMLPedalTuning', 'XMLSync',
-           'XMLOtherListening', 'XMLBeatUnitTied', 'XMLPerMinute', 'XMLMetronomeArrows', 'XMLMetronomeNote', 'XMLMetronomeRelation',
-           'XMLMetronomeType', 'XMLMetronomeDot', 'XMLMetronomeBeam', 'XMLMetronomeTied', 'XMLMetronomeTuplet', 'XMLNumeralRoot',
-           'XMLNumeralAlter', 'XMLNumeralKey', 'XMLNumeralFifths', 'XMLNumeralMode', 'XMLPedalStep', 'XMLPedalAlter', 'XMLGlass',
-           'XMLMetal', 'XMLWood', 'XMLPitched', 'XMLMembrane', 'XMLEffect', 'XMLTimpani', 'XMLBeater', 'XMLStick', 'XMLStickLocation',
-           'XMLOtherPercussion', 'XMLMeasureLayout', 'XMLMeasureNumbering', 'XMLPartNameDisplay', 'XMLPartAbbreviationDisplay',
-           'XMLRootStep', 'XMLRootAlter', 'XMLAccord', 'XMLInstrumentChange', 'XMLMidiDevice', 'XMLMidiInstrument', 'XMLPlay', 'XMLSwing',
-           'XMLStickType', 'XMLStickMaterial', 'XMLStraight', 'XMLFirst', 'XMLSecond', 'XMLSwingType', 'XMLSwingStyle', 'XMLEncodingDate',
-           'XMLEncoder', 'XMLSoftware', 'XMLEncodingDescription', 'XMLSupports', 'XMLCreator', 'XMLRights', 'XMLEncoding', 'XMLSource',
-           'XMLRelation', 'XMLMiscellaneous', 'XMLMiscellaneousField', 'XMLLineWidth', 'XMLNoteSize', 'XMLDistance', 'XMLGlyph',
-           'XMLOtherAppearance', 'XMLMeasureDistance', 'XMLPageHeight', 'XMLPageWidth', 'XMLPageMargins', 'XMLMillimeters', 'XMLTenths',
-           'XMLStaffDistance', 'XMLLeftDivider', 'XMLRightDivider', 'XMLSystemMargins', 'XMLSystemDistance', 'XMLTopSystemDistance',
-           'XMLSystemDividers', 'XMLAccent', 'XMLStrongAccent', 'XMLStaccato', 'XMLTenuto', 'XMLDetachedLegato', 'XMLStaccatissimo',
-           'XMLSpiccato', 'XMLScoop', 'XMLPlop', 'XMLDoit', 'XMLFalloff', 'XMLBreathMark', 'XMLCaesura', 'XMLStress', 'XMLUnstress',
-           'XMLSoftAccent', 'XMLOtherArticulation', 'XMLArrowDirection', 'XMLArrowStyle', 'XMLArrowhead', 'XMLCircularArrow',
-           'XMLBendAlter', 'XMLPreBend', 'XMLRelease', 'XMLWithBar', 'XMLPrefix', 'XMLFigureNumber', 'XMLSuffix', 'XMLExtend', 'XMLFigure',
-           'XMLHarmonClosed', 'XMLNatural', 'XMLArtificial', 'XMLBasePitch', 'XMLTouchingPitch', 'XMLSoundingPitch', 'XMLHoleType',
-           'XMLHoleClosed', 'XMLHoleShape', 'XMLAssess', 'XMLWait', 'XMLOtherListen', 'XMLSyllabic', 'XMLText', 'XMLElision', 'XMLLaughing',
-           'XMLHumming', 'XMLEndLine', 'XMLEndParagraph', 'XMLTied', 'XMLSlur', 'XMLTuplet', 'XMLGlissando', 'XMLSlide', 'XMLOrnaments',
-           'XMLTechnical', 'XMLArticulations', 'XMLArpeggiate', 'XMLNonArpeggiate', 'XMLAccidentalMark', 'XMLOtherNotation', 'XMLGrace',
-           'XMLTie', 'XMLCue', 'XMLInstrument', 'XMLType', 'XMLDot', 'XMLAccidental', 'XMLTimeModification', 'XMLStem', 'XMLNotehead',
-           'XMLNoteheadText', 'XMLBeam', 'XMLNotations', 'XMLLyric', 'XMLListen', 'XMLTrillMark', 'XMLTurn', 'XMLDelayedTurn',
-           'XMLInvertedTurn', 'XMLDelayedInvertedTurn', 'XMLVerticalTurn', 'XMLInvertedVerticalTurn', 'XMLShake', 'XMLMordent',
-           'XMLInvertedMordent', 'XMLSchleifer', 'XMLTremolo', 'XMLHaydn', 'XMLOtherOrnament', 'XMLStep', 'XMLAlter', 'XMLOctave',
-           'XMLUpBow', 'XMLDownBow', 'XMLHarmonic', 'XMLOpenString', 'XMLThumbPosition', 'XMLPluck', 'XMLDoubleTongue', 'XMLTripleTongue',
-           'XMLStopped', 'XMLSnapPizzicato', 'XMLHammerOn', 'XMLPullOff', 'XMLBend', 'XMLTap', 'XMLHeel', 'XMLToe', 'XMLFingernails',
-           'XMLHole', 'XMLArrow', 'XMLHandbell', 'XMLBrassBend', 'XMLFlip', 'XMLSmear', 'XMLOpen', 'XMLHalfMuted', 'XMLHarmonMute',
-           'XMLGolpe', 'XMLOtherTechnical', 'XMLActualNotes', 'XMLNormalNotes', 'XMLNormalType', 'XMLNormalDot', 'XMLTupletActual',
-           'XMLTupletNormal', 'XMLTupletNumber', 'XMLTupletType', 'XMLTupletDot', 'XMLCreditType', 'XMLLink', 'XMLBookmark',
-           'XMLCreditImage', 'XMLCreditWords', 'XMLCreditSymbol', 'XMLScaling', 'XMLConcertScore', 'XMLAppearance', 'XMLMusicFont',
-           'XMLWordFont', 'XMLLyricFont', 'XMLLyricLanguage', 'XMLGroupName', 'XMLGroupNameDisplay', 'XMLGroupAbbreviation',
-           'XMLGroupAbbreviationDisplay', 'XMLGroupSymbol', 'XMLGroupBarline', 'XMLGroupTime', 'XMLInstrumentLink', 'XMLGroupLink',
-           'XMLPlayerName', 'XMLInstrumentName', 'XMLInstrumentAbbreviation', 'XMLIdentification', 'XMLPartLink', 'XMLPartName',
-           'XMLPartAbbreviation', 'XMLGroup', 'XMLScoreInstrument', 'XMLPlayer', 'XMLVirtualLibrary', 'XMLVirtualName', 'XMLWorkNumber',
-           'XMLWorkTitle', 'XMLOpus', 'XMLFootnote', 'XMLLevel', 'XMLStaff', 'XMLTuningStep', 'XMLTuningAlter', 'XMLTuningOctave',
-           'XMLInstrumentSound', 'XMLSolo', 'XMLEnsemble', 'XMLVirtualInstrument', 'XMLVoice', 'XMLSign', 'XMLLine', 'XMLClefOctaveChange',
-           'XMLKeyStep', 'XMLKeyAlter', 'XMLKeyAccidental', 'XMLSlashType', 'XMLSlashDot', 'XMLExceptVoice', 'XMLBeats', 'XMLBeatType',
-           'XMLCancel', 'XMLFifths', 'XMLMode', 'XMLDiatonic', 'XMLChromatic', 'XMLOctaveChange', 'XMLDouble', 'XMLBeatUnit',
-           'XMLBeatUnitDot', 'XMLRoot', 'XMLNumeral', 'XMLFunction', 'XMLKind', 'XMLInversion', 'XMLBass', 'XMLDegree', 'XMLTopMargin',
-           'XMLBottomMargin', 'XMLPageLayout', 'XMLSystemLayout', 'XMLStaffLayout', 'XMLLeftMargin', 'XMLRightMargin', 'XMLDuration',
-           'XMLDisplayStep', 'XMLDisplayOctave', 'XMLChord', 'XMLPitch', 'XMLUnpitched', 'XMLRest', 'XMLNote', 'XMLBackup', 'XMLForward',
-           'XMLDirection', 'XMLAttributes', 'XMLHarmony', 'XMLFiguredBass', 'XMLPrint', 'XMLBarline', 'XMLGrouping', 'XMLPartGroup',
-           'XMLWork', 'XMLMovementNumber', 'XMLMovementTitle', 'XMLDefaults', 'XMLCredit', 'XMLPartList', 'XMLScorePart']
+__all__=['XMLScorePartwise', 'XMLPart', 'XMLMeasure', 'XMLDirective', 'XMLP', 'XMLPp', 'XMLPpp', 'XMLPppp', 'XMLPpppp', 'XMLPppppp', 'XMLF', 'XMLFf', 'XMLFff', 'XMLFfff', 'XMLFffff', 'XMLFfffff', 'XMLMp', 'XMLMf', 'XMLSf', 'XMLSfp', 'XMLSfpp', 'XMLFp', 'XMLRf', 'XMLRfz', 'XMLSfz', 'XMLSffz', 'XMLFz', 'XMLN', 'XMLPf', 'XMLSfzp', 'XMLOtherDynamics', 'XMLMidiChannel', 'XMLMidiName', 'XMLMidiBank', 'XMLMidiProgram', 'XMLMidiUnpitched', 'XMLVolume', 'XMLPan', 'XMLElevation', 'XMLDisplayText', 'XMLAccidentalText', 'XMLIpa', 'XMLMute', 'XMLSemiPitched', 'XMLOtherPlay', 'XMLDivisions', 'XMLKey', 'XMLTime', 'XMLStaves', 'XMLPartSymbol', 'XMLInstruments', 'XMLClef', 'XMLStaffDetails', 'XMLTranspose', 'XMLForPart', 'XMLMeasureStyle', 'XMLPartClef', 'XMLPartTranspose', 'XMLTimeRelation', 'XMLKeyOctave', 'XMLMultipleRest', 'XMLMeasureRepeat', 'XMLBeatRepeat', 'XMLSlash', 'XMLStaffType', 'XMLStaffLines', 'XMLLineDetail', 'XMLStaffTuning', 'XMLCapo', 'XMLStaffSize', 'XMLInterchangeable', 'XMLSenzaMisura', 'XMLBarStyle', 'XMLWavyLine', 'XMLSegno', 'XMLCoda', 'XMLFermata', 'XMLEnding', 'XMLRepeat', 'XMLAccordionHigh', 'XMLAccordionMiddle', 'XMLAccordionLow', 'XMLBassSeparator', 'XMLBassStep', 'XMLBassAlter', 'XMLDegreeValue', 'XMLDegreeAlter', 'XMLDegreeType', 'XMLDirectionType', 'XMLOffset', 'XMLSound', 'XMLListening', 'XMLRehearsal', 'XMLWords', 'XMLSymbol', 'XMLWedge', 'XMLDynamics', 'XMLDashes', 'XMLBracket', 'XMLPedal', 'XMLMetronome', 'XMLOctaveShift', 'XMLHarpPedals', 'XMLDamp', 'XMLDampAll', 'XMLEyeglasses', 'XMLStringMute', 'XMLScordatura', 'XMLImage', 'XMLPrincipalVoice', 'XMLPercussion', 'XMLAccordionRegistration', 'XMLStaffDivide', 'XMLOtherDirection', 'XMLFrameStrings', 'XMLFrameFrets', 'XMLFirstFret', 'XMLFrameNote', 'XMLString', 'XMLFret', 'XMLFingering', 'XMLBarre', 'XMLFeature', 'XMLFrame', 'XMLPedalTuning', 'XMLSync', 'XMLOtherListening', 'XMLBeatUnitTied', 'XMLPerMinute', 'XMLMetronomeArrows', 'XMLMetronomeNote', 'XMLMetronomeRelation', 'XMLMetronomeType', 'XMLMetronomeDot', 'XMLMetronomeBeam', 'XMLMetronomeTied', 'XMLMetronomeTuplet', 'XMLNumeralRoot', 'XMLNumeralAlter', 'XMLNumeralKey', 'XMLNumeralFifths', 'XMLNumeralMode', 'XMLPedalStep', 'XMLPedalAlter', 'XMLGlass', 'XMLMetal', 'XMLWood', 'XMLPitched', 'XMLMembrane', 'XMLEffect', 'XMLTimpani', 'XMLBeater', 'XMLStick', 'XMLStickLocation', 'XMLOtherPercussion', 'XMLMeasureLayout', 'XMLMeasureNumbering', 'XMLPartNameDisplay', 'XMLPartAbbreviationDisplay', 'XMLRootStep', 'XMLRootAlter', 'XMLAccord', 'XMLInstrumentChange', 'XMLMidiDevice', 'XMLMidiInstrument', 'XMLPlay', 'XMLSwing', 'XMLStickType', 'XMLStickMaterial', 'XMLStraight', 'XMLFirst', 'XMLSecond', 'XMLSwingType', 'XMLSwingStyle', 'XMLEncodingDate', 'XMLEncoder', 'XMLSoftware', 'XMLEncodingDescription', 'XMLSupports', 'XMLCreator', 'XMLRights', 'XMLEncoding', 'XMLSource', 'XMLRelation', 'XMLMiscellaneous', 'XMLMiscellaneousField', 'XMLLineWidth', 'XMLNoteSize', 'XMLDistance', 'XMLGlyph', 'XMLOtherAppearance', 'XMLMeasureDistance', 'XMLPageHeight', 'XMLPageWidth', 'XMLPageMargins', 'XMLMillimeters', 'XMLTenths', 'XMLStaffDistance', 'XMLLeftDivider', 'XMLRightDivider', 'XMLSystemMargins', 'XMLSystemDistance', 'XMLTopSystemDistance', 'XMLSystemDividers', 'XMLAccent', 'XMLStrongAccent', 'XMLStaccato', 'XMLTenuto', 'XMLDetachedLegato', 'XMLStaccatissimo', 'XMLSpiccato', 'XMLScoop', 'XMLPlop', 'XMLDoit', 'XMLFalloff', 'XMLBreathMark', 'XMLCaesura', 'XMLStress', 'XMLUnstress', 'XMLSoftAccent', 'XMLOtherArticulation', 'XMLArrowDirection', 'XMLArrowStyle', 'XMLArrowhead', 'XMLCircularArrow', 'XMLBendAlter', 'XMLPreBend', 'XMLRelease', 'XMLWithBar', 'XMLPrefix', 'XMLFigureNumber', 'XMLSuffix', 'XMLExtend', 'XMLFigure', 'XMLHarmonClosed', 'XMLNatural', 'XMLArtificial', 'XMLBasePitch', 'XMLTouchingPitch', 'XMLSoundingPitch', 'XMLHoleType', 'XMLHoleClosed', 'XMLHoleShape', 'XMLAssess', 'XMLWait', 'XMLOtherListen', 'XMLSyllabic', 'XMLText', 'XMLElision', 'XMLLaughing', 'XMLHumming', 'XMLEndLine', 'XMLEndParagraph', 'XMLTied', 'XMLSlur', 'XMLTuplet', 'XMLGlissando', 'XMLSlide', 'XMLOrnaments', 'XMLTechnical', 'XMLArticulations', 'XMLArpeggiate', 'XMLNonArpeggiate', 'XMLAccidentalMark', 'XMLOtherNotation', 'XMLGrace', 'XMLTie', 'XMLCue', 'XMLInstrument', 'XMLType', 'XMLDot', 'XMLAccidental', 'XMLTimeModification', 'XMLStem', 'XMLNotehead', 'XMLNoteheadText', 'XMLBeam', 'XMLNotations', 'XMLLyric', 'XMLListen', 'XMLTrillMark', 'XMLTurn', 'XMLDelayedTurn', 'XMLInvertedTurn', 'XMLDelayedInvertedTurn', 'XMLVerticalTurn', 'XMLInvertedVerticalTurn', 'XMLShake', 'XMLMordent', 'XMLInvertedMordent', 'XMLSchleifer', 'XMLTremolo', 'XMLHaydn', 'XMLOtherOrnament', 'XMLStep', 'XMLAlter', 'XMLOctave', 'XMLUpBow', 'XMLDownBow', 'XMLHarmonic', 'XMLOpenString', 'XMLThumbPosition', 'XMLPluck', 'XMLDoubleTongue', 'XMLTripleTongue', 'XMLStopped', 'XMLSnapPizzicato', 'XMLHammerOn', 'XMLPullOff', 'XMLBend', 'XMLTap', 'XMLHeel', 'XMLToe', 'XMLFingernails', 'XMLHole', 'XMLArrow', 'XMLHandbell', 'XMLBrassBend', 'XMLFlip', 'XMLSmear', 'XMLOpen', 'XMLHalfMuted', 'XMLHarmonMute', 'XMLGolpe', 'XMLOtherTechnical', 'XMLActualNotes', 'XMLNormalNotes', 'XMLNormalType', 'XMLNormalDot', 'XMLTupletActual', 'XMLTupletNormal', 'XMLTupletNumber', 'XMLTupletType', 'XMLTupletDot', 'XMLCreditType', 'XMLLink', 'XMLBookmark', 'XMLCreditImage', 'XMLCreditWords', 'XMLCreditSymbol', 'XMLScaling', 'XMLConcertScore', 'XMLAppearance', 'XMLMusicFont', 'XMLWordFont', 'XMLLyricFont', 'XMLLyricLanguage', 'XMLGroupName', 'XMLGroupNameDisplay', 'XMLGroupAbbreviation', 'XMLGroupAbbreviationDisplay', 'XMLGroupSymbol', 'XMLGroupBarline', 'XMLGroupTime', 'XMLInstrumentLink', 'XMLGroupLink', 'XMLPlayerName', 'XMLInstrumentName', 'XMLInstrumentAbbreviation', 'XMLIdentification', 'XMLPartLink', 'XMLPartName', 'XMLPartAbbreviation', 'XMLGroup', 'XMLScoreInstrument', 'XMLPlayer', 'XMLVirtualLibrary', 'XMLVirtualName', 'XMLWorkNumber', 'XMLWorkTitle', 'XMLOpus', 'XMLFootnote', 'XMLLevel', 'XMLStaff', 'XMLTuningStep', 'XMLTuningAlter', 'XMLTuningOctave', 'XMLInstrumentSound', 'XMLSolo', 'XMLEnsemble', 'XMLVirtualInstrument', 'XMLVoice', 'XMLSign', 'XMLLine', 'XMLClefOctaveChange', 'XMLKeyStep', 'XMLKeyAlter', 'XMLKeyAccidental', 'XMLSlashType', 'XMLSlashDot', 'XMLExceptVoice', 'XMLBeats', 'XMLBeatType', 'XMLCancel', 'XMLFifths', 'XMLMode', 'XMLDiatonic', 'XMLChromatic', 'XMLOctaveChange', 'XMLDouble', 'XMLBeatUnit', 'XMLBeatUnitDot', 'XMLRoot', 'XMLNumeral', 'XMLFunction', 'XMLKind', 'XMLInversion', 'XMLBass', 'XMLDegree', 'XMLTopMargin', 'XMLBottomMargin', 'XMLPageLayout', 'XMLSystemLayout', 'XMLStaffLayout', 'XMLLeftMargin', 'XMLRightMargin', 'XMLDuration', 'XMLDisplayStep', 'XMLDisplayOctave', 'XMLChord', 'XMLPitch', 'XMLUnpitched', 'XMLRest', 'XMLNote', 'XMLBackup', 'XMLForward', 'XMLDirection', 'XMLAttributes', 'XMLHarmony', 'XMLFiguredBass', 'XMLPrint', 'XMLBarline', 'XMLGrouping', 'XMLPartGroup', 'XMLWork', 'XMLMovementNumber', 'XMLMovementTitle', 'XMLDefaults', 'XMLCredit', 'XMLPartList', 'XMLScorePart']

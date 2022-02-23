@@ -62,9 +62,11 @@ class Id:
 class ScorePart(XMLWrapper):
     _ATTRIBUTES = {'part'}
 
+    XMLClass = XMLScorePart
+
     def __init__(self, part, *args, **kwargs):
         super().__init__()
-        self._xml_object = XMLScorePart(*args, **kwargs)
+        self._xml_object = self.XMLClass(*args, **kwargs)
         self._part = None
         self.part = part
 
@@ -89,10 +91,11 @@ class ScorePart(XMLWrapper):
 
 class Part(MusicTree, XMLWrapper):
     _ATTRIBUTES = {'id_', 'name', '_score_part', '_current_measures'}
+    XMLClass = XMLPart
 
     def __init__(self, id, name=None, *args, **kwargs):
         super().__init__()
-        self._xml_object = XMLPart(*args, **kwargs)
+        self._xml_object = self.XMLClass(*args, **kwargs)
         self._id = None
         self.id_ = id
         self._name = None

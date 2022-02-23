@@ -5,10 +5,11 @@ from musictree.xmlwrapper import XMLWrapper
 
 class Clef(XMLWrapper):
     _ATTRIBUTES = {'show', 'sign', 'line', 'octave_change'}
-
+    XMLClass = XMLClef
+    
     def __init__(self, sign='G', line=2, octave_change=None, show=True, *args, **kwargs):
         super().__init__()
-        self._xml_object = XMLClef(*args, **kwargs)
+        self._xml_object = self.XMLClass(*args, **kwargs)
         self._show = None
         self._sign = None
         self._line = None

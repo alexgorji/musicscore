@@ -1,7 +1,7 @@
 import re
 from unittest import TestCase
 
-from musicxml.util.helperclasses import MusicXmlTestCase
+from musicxml.tests.util import MusicXmlTestCase
 from musicxml.util.core import get_cleaned_token, convert_to_xml_class_name, \
     replace_key_underline_with_hyphen
 from musicxml.generate_classes.utils import get_simple_type_all_base_classes

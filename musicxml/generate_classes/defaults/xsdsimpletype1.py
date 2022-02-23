@@ -3,8 +3,6 @@ import xml.etree.ElementTree as ET
 from typing import Any, Optional
 
 from musicxml.util.core import get_cleaned_token
-from musicxml.util.helprervariables import name_character, xml_name_first_character, xml_name_first_character_without_colon, \
-    name_character_without_colon
 from musicxml.xsd.xsdtree import XSDTree, XSDTreeElement
 
 
@@ -109,11 +107,7 @@ class XSDSimpleType(XSDTreeElement):
             return self.__class__.__name__
 
     def _populate_permitted(self):
-        restriction = self.XSD_TREE.get_restriction()
-        if restriction:
-            enumerations = [child for child in restriction.get_children() if
-                            child.tag == 'enumeration']
-            self._PERMITTED = [enumeration.get_attributes()['value'] for enumeration in enumerations]
+        self._PERMITTED = self.XSD_TREE.get_permitted()
 
     def _populate_forced_permitted(self):
         union = self.XSD_TREE.get_union()
@@ -124,26 +118,9 @@ class XSDSimpleType(XSDTreeElement):
             self._FORCED_PERMITTED = [enumeration.get_attributes()['value'] for enumeration in enumerations]
 
     def _populate_pattern(self):
-        def get_xsd_pattern(restriction_):
-            if restriction_ and restriction_.get_children() and restriction_.get_children()[0].tag == 'pattern':
-                return rf"{restriction.get_children()[0].get_attributes()['value']}"
-            else:
-                if self.__class__.__mro__[1].XSD_TREE:
-                    parent_restriction = self.__class__.__mro__[1].XSD_TREE.get_restriction()
-                    if parent_restriction and parent_restriction.get_children() and parent_restriction.get_children()[0].tag == 'pattern':
-                        return rf"{parent_restriction.get_children()[0].get_attributes()['value']}"
-
-        def translate_pattern(pattern_):
-            if pattern_ == "[\i-[:]][\c-[:]]*":
-                return rf"{xml_name_first_character_without_colon}{name_character_without_colon}*"
-            pattern_ = pattern_.replace('\c', name_character)
-            pattern_ = pattern_.replace('\i', xml_name_first_character)
-            return pattern_
-
-        restriction = self.XSD_TREE.get_restriction()
-        pattern = get_xsd_pattern(restriction)
+        pattern = self.XSD_TREE.get_pattern(self.__class__.__mro__[1].XSD_TREE)
         if pattern:
-            self._PATTERN = translate_pattern(pattern)
+            self._PATTERN = pattern
 
     @property
     def value(self):

@@ -22,10 +22,7 @@ class $class_name($base_classes):
     \"\"\"
     
     TYPE = $xsd_type
-    XSD_TREE = XSDTree(ET.fromstring(\"\"\"
-$xsd_string
-\"\"\"
-                                     ))
+    _SEARCH_FOR_ELEMENT = "$search_for"
 """
 
 typed_elements = list(
@@ -57,8 +54,10 @@ def element_class_as_string(element_):
         xsd_type = convert_to_xsd_class_name(xsd_tree.get_attributes()['type'], 'simple_type')
     base_classes = ('XMLElement',)
     ET.indent(found_et_xml, space='    '),
-    xsd_string = ET.tostring(found_et_xml, encoding='unicode').strip()
-    if xsd_type in all_complex_types:
+    search_for = f".//{{*}}element[@name='{element_[0]}'][@type='{element_[1]}']"
+    doc = xsd_tree.get_doc()
+    if not doc and xsd_type in all_complex_types:
+
         doc = eval(xsd_type).__doc__
         if doc.count('\n') > 1:
             doc = doc.replace('\n', '\n    ')
@@ -78,14 +77,12 @@ def element_class_as_string(element_):
 
         except KeyError:
             pass
-    else:
-        doc = xsd_tree.get_doc()
 
     if doc is None:
         doc = ""
 
     t = Template(template_string).substitute(class_name=class_name, base_classes=', '.join(base_classes), xsd_type=xsd_type,
-                                             xsd_string=xsd_string, doc=doc)
+                                             search_for=search_for, doc=doc)
     return t
 
 

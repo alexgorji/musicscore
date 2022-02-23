@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 from contextlib import redirect_stdout
 from pathlib import Path
 
-from musicxml.util.helperclasses import MusicXmlTestCase
+from musicxml.tests.util import MusicXmlTestCase
 from musicxml.xsd.xsdtree import XSDTree
 
 
@@ -65,7 +65,9 @@ class TestXSDTree(MusicXmlTestCase):
         """
         Test get_doc methode which returns the doc string to be added to the XML class.
         """
-        assert self.above_below_simple_type_xsd_element.get_doc() == 'The above-below type is used to indicate whether one element appears above or below another element.'
+        assert self.above_below_simple_type_xsd_element.get_doc() == """The above-below type is used to indicate whether one element appears above or below another element.
+
+    Permitted Values: ['above', 'below']"""
 
     def test_name(self):
         """

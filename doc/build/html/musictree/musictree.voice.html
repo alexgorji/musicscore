@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>musictree.voice &mdash; musicscore2 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="musictree.xmlwrapper" href="musictree.xmlwrapper.html" />
+    <link rel="prev" title="musictree.util" href="musictree.util.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> musicscore2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="musictree.html">musictree</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="musictree.accidental.html">musictree.accidental</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.beat.html">musictree.beat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.chord.html">musictree.chord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.clef.html">musictree.clef</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.dynamics.html">musictree.dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.exceptions.html">musictree.exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.key.html">musictree.key</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.layout.html">musictree.layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.measure.html">musictree.measure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.midi.html">musictree.midi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.musictree.html">musictree.musictree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.note.html">musictree.note</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.part.html">musictree.part</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.quarterduration.html">musictree.quarterduration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.score.html">musictree.score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.staff.html">musictree.staff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.time.html">musictree.time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.util.html">musictree.util</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">musictree.voice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.xmlwrapper.html">musictree.xmlwrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../musicxml/musicxml.html">musicxml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tree/tree.html">tree</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">musicscore2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="musictree.html">musictree</a> &raquo;</li>
+      <li>musictree.voice</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/musictree/musictree.voice.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-musictree.voice">
+<span id="musictree-voice"></span><h1>musictree.voice<a class="headerlink" href="#module-musictree.voice" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="musictree.voice.Voice">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.voice.</span></span><span class="sig-name descname"><span class="pre">Voice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/voice.html#Voice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.voice.Voice" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="musictree.musictree.html#musictree.musictree.MusicTree" title="musictree.musictree.MusicTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.musictree.MusicTree</span></code></a>, <a class="reference internal" href="musictree.xmlwrapper.html#musictree.xmlwrapper.XMLWrapper" title="musictree.xmlwrapper.XMLWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.xmlwrapper.XMLWrapper</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="musictree.voice.Voice.XMLClass">
+<span class="sig-name descname"><span class="pre">XMLClass</span></span><a class="headerlink" href="#musictree.voice.Voice.XMLClass" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="../musicxml/musicxml.xmlelement.xmlelement.html#musicxml.xmlelement.xmlelement.XMLVoice" title="musicxml.xmlelement.xmlelement.XMLVoice"><code class="xref py py-class docutils literal notranslate"><span class="pre">musicxml.xmlelement.xmlelement.XMLVoice</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.voice.Voice.is_filled">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_filled</span></span><a class="headerlink" href="#musictree.voice.Voice.is_filled" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="musictree.voice.Voice.number">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">number</span></span><a class="headerlink" href="#musictree.voice.Voice.number" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="musictree.voice.Voice.add_beat">
+<span class="sig-name descname"><span class="pre">add_beat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beat_quarter_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/voice.html#Voice.add_beat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.voice.Voice.add_beat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="musictree.voice.Voice.add_child">
+<span class="sig-name descname"><span class="pre">add_child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/voice.html#Voice.add_child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.voice.Voice.add_child" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="musictree.voice.Voice.add_chord">
+<span class="sig-name descname"><span class="pre">add_chord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chord</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/voice.html#Voice.add_chord"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.voice.Voice.add_chord" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="musictree.voice.Voice.get_current_beat">
+<span class="sig-name descname"><span class="pre">get_current_beat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/voice.html#Voice.get_current_beat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.voice.Voice.get_current_beat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="musictree.voice.Voice.update_beats">
+<span class="sig-name descname"><span class="pre">update_beats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">quarter_durations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/voice.html#Voice.update_beats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.voice.Voice.update_beats" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="musictree.util.html" class="btn btn-neutral float-left" title="musictree.util" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="musictree.xmlwrapper.html" class="btn btn-neutral float-right" title="musictree.xmlwrapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Alex Gorji.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
