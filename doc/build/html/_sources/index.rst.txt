@@ -1,33 +1,12 @@
-Welcome to musicscore2's documentation!
-=======================================
-
 .. include:: ../../README.rst
-
-.. note::
-
-   This project is under active development.
-
-Check out the :doc:`usage` section for further information, including how to :ref:`install <installation>` the project.
-
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
 
 Content
 =======
 
 .. toctree::
+   :maxdepth: 1
+
+   intro
    usage
    musictree/musictree
    musicxml/musicxml

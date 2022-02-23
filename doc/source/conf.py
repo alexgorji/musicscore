@@ -61,3 +61,7 @@ html_static_path = ['_static']
 autodoc_default_options = {
     'member-order': 'bysource',
 }
+
+html_theme_options = {
+    "collapse_navigation": True
+}
