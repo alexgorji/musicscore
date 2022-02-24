@@ -44,13 +44,13 @@
 <li class="toctree-l2"><a class="reference internal" href="musictree.beat.html">musictree.beat</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">musictree.chord</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.clef.html">musictree.clef</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.core.html">musictree.core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.dynamics.html">musictree.dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.exceptions.html">musictree.exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.key.html">musictree.key</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.layout.html">musictree.layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.measure.html">musictree.measure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.midi.html">musictree.midi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="musictree.musictree.html">musictree.musictree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.note.html">musictree.note</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.part.html">musictree.part</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.quarterduration.html">musictree.quarterduration</a></li>
@@ -96,29 +96,67 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="musictree.chord.Chord">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.chord.</span></span><span class="sig-name descname"><span class="pre">Chord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">midis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="musictree.midi.html#musictree.midi.Midi" title="musictree.midi.Midi"><span class="pre">musictree.midi.Midi</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="musictree.midi.html#musictree.midi.Midi" title="musictree.midi.Midi"><span class="pre">musictree.midi.Midi</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quarter_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">fractions.Fraction</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="musictree.quarterduration.html#musictree.quarterduration.QuarterDuration" title="musictree.quarterduration.QuarterDuration"><span class="pre">musictree.quarterduration.QuarterDuration</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/chord.html#Chord"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.chord.Chord" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="musictree.musictree.html#musictree.musictree.MusicTree" title="musictree.musictree.MusicTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.musictree.MusicTree</span></code></a>, <a class="reference internal" href="musictree.quarterduration.html#musictree.quarterduration.QuarterDurationMixin" title="musictree.quarterduration.QuarterDurationMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.quarterduration.QuarterDurationMixin</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="musictree.core.html#musictree.core.MusicTree" title="musictree.core.MusicTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.core.MusicTree</span></code></a>, <a class="reference internal" href="musictree.quarterduration.html#musictree.quarterduration.QuarterDurationMixin" title="musictree.quarterduration.QuarterDurationMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.quarterduration.QuarterDurationMixin</span></code></a></p>
 <p>Chord is a sequence of one or more XMLNotes which occur at the same time in a XMLMeasure of a XMLPart.
-:param midis: midi, midis, midi value or midi values. 0 or [0] for a rest.
-:param quarter_duration: int or float for duration counted in quarters (crotchets). 0 for grace note (or chord).</p>
+:param midis: Midi, Midi.value, [Midi, Midi.value] 0 or [0] for a rest.
+:param quarter_duration: int, float, Fraction, QuarterDuration for duration counted in quarters (crotchets). 0 for grace note (or
+chord).</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="musictree.chord.Chord.is_rest">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_rest</span></span><a class="headerlink" href="#musictree.chord.Chord.is_rest" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return bool</dt>
+<dd class="field-odd"><p>True if Chord represents a rest, False if otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="musictree.chord.Chord.midis">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">midis</span></span><a class="headerlink" href="#musictree.chord.Chord.midis" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">Chord</span><span class="p">(</span><span class="n">midis</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">midis</span><span class="p">]</span>
+<span class="go">[&lt;class &#39;musictree.midi.Midi&#39;&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">midis</span><span class="p">]</span>
+<span class="go">[60]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">Chord</span><span class="p">(</span><span class="n">midis</span><span class="o">=</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="n">Midi</span><span class="p">(</span><span class="mi">40</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">midis</span><span class="p">]</span>
+<span class="go">[60, 40]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Chord</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">60</span><span class="p">])</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">Chord cannot accept a mixed list of midis of rests and pitches or a list of more than one rests.</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of midis</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="musictree.chord.Chord.notes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">notes</span></span><a class="headerlink" href="#musictree.chord.Chord.notes" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Chord.get_children() which are of type Note.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="musictree.chord.Chord.offset">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">offset</span></span><a class="headerlink" href="#musictree.chord.Chord.offset" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Offset in Chord’s parent Beat</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="musictree.quarterduration.html#musictree.quarterduration.QuarterDuration" title="musictree.quarterduration.QuarterDuration">QuarterDuration</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="musictree.chord.Chord.quarter_duration">

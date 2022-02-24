@@ -5,7 +5,7 @@ from musicxml.xmlelement.xmlelement import *  # type: ignore
 from musicxml.xsd.xsdsimpletype import XSDSimpleTypeNoteheadValue  # type: ignore
 
 from musictree.accidental import Accidental
-from musictree.musictree import MusicTree
+from musictree.core import MusicTree
 
 
 class Midi(MusicTree):

@@ -2,7 +2,7 @@ from typing import Optional
 
 from musicxml.xmlelement.xmlelement import XMLAccidental
 
-from musictree.musictree import MusicTree
+from musictree.core import MusicTree
 from musictree.xmlwrapper import XMLWrapper
 
 #:

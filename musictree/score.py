@@ -1,7 +1,7 @@
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, XMLEncoding, \
     XMLSupports
 
-from musictree.musictree import MusicTree
+from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDuration
 from musictree.xmlwrapper import XMLWrapper
 from musictree.layout import Scaling, PageLayout, SystemLayout, StaffLayout

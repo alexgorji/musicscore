@@ -2,7 +2,7 @@ from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, X
 
 from musictree.exceptions import NoteTypeError, NoteHasNoParentChordError
 from musictree.midi import Midi
-from musictree.musictree import MusicTree
+from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDurationMixin
 from musictree.util import note_types
 from musictree.xmlwrapper import XMLWrapper

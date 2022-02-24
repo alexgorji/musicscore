@@ -1,5 +1,10 @@
+from typing import List, Union
+
 from quicktions import Fraction
 import numbers
+
+#: {offset: {quarter_duration: return value(s), ... }, ...}
+BEATWISE_EXCEPTIONS = {0: {5: (3, 2), 6: (6,)}}
 
 
 def _check_quarter_duration(val):
@@ -10,8 +15,39 @@ def _check_quarter_duration(val):
         raise ValueError()
 
 
-def is_writable(quarter_duration):
-    if quarter_duration in [1 / 64, 1 / 32, 3 / 64, 1 / 16, 3 / 32, 1 / 8, 3 / 16, 1 / 4, 3 / 8, 1 / 2, 3 / 4, 1, 3 / 2, 2, 3, 4, 6, 8, 12]:
+def is_writable(quarter_duration: Union[float, int, Fraction, 'QuarterDuration']):
+    """
+    Function to check if a quarter duration is writable or must be split into two durations.
+
+    :param quarter_duration:
+    :return: boolean
+
+    >>> is_writable(5)
+    False
+    >>> is_writable(7/8)
+    False
+    >>> is_writable(3/8)
+    True
+    """
+    if quarter_duration in [QuarterDuration(1, 64),
+                            QuarterDuration(1, 32),
+                            QuarterDuration(3, 64),
+                            QuarterDuration(1, 16),
+                            QuarterDuration(3, 32),
+                            QuarterDuration(1, 8),
+                            QuarterDuration(3, 16),
+                            QuarterDuration(1, 4),
+                            QuarterDuration(3, 8),
+                            QuarterDuration(1, 2),
+                            QuarterDuration(3, 4),
+                            QuarterDuration(1),
+                            QuarterDuration(3, 2),
+                            QuarterDuration(2),
+                            QuarterDuration(3),
+                            QuarterDuration(4),
+                            QuarterDuration(6),
+                            QuarterDuration(8),
+                            QuarterDuration(12)]:
         return True
     else:
         return False
@@ -25,6 +61,12 @@ def _convert_other(other):
 
 
 class QuarterDuration(numbers.Rational):
+    """
+    A Class specifically designed for durations measured in quarters. The core of this class is a value of type quicktions.Fraction with a
+    denominator limit of 1000, thus it can manage conversion of floats to fractions without usual inaccuracies of quintuples etc. See
+    value property for more information.
+    QuarterDuration has all needed magic methods for numeral comparison and conversion.
+    """
 
     def __init__(self, *value):
         self._value = None
@@ -32,14 +74,41 @@ class QuarterDuration(numbers.Rational):
 
     @property
     def numerator(self):
+        """
+        :return: Fraction's numerator.
+        :rtype: int
+
+        >>> QuarterDuration(1, 6).numerator
+        1
+        """
         return self.value.numerator
 
     @property
     def denominator(self):
+        """
+        :return: Fraction's denominator.
+        :rtype: int
+
+        >>> QuarterDuration(1, 6).denominator
+        6
+        """
         return self.value.denominator
 
     @property
     def value(self):
+        """
+        :return: QuarterDuration's value
+        :rtype: quicktions.Fraction() with limit_denominator(1000)
+
+        >>> QuarterDuration(3, 7).value
+        Fraction(3, 7)
+        >>> QuarterDuration(0.2).value
+        Fraction(1, 5)
+        >>> QuarterDuration(Fraction(1, 5)).value
+        Fraction(1, 5)
+        >>> QuarterDuration(1/5).value
+        Fraction(1, 5)
+        """
         return self._value
 
     @value.setter
@@ -59,25 +128,49 @@ class QuarterDuration(numbers.Rational):
                 raise ValueError
 
     def as_integer_ratio(self):
+        """
+        :return: (numinator, denominator)
+        :rtype: tuple
+
+        >>> QuarterDuration(1, 5).as_integer_ratio()
+        (1, 5)
+        """
         return self.value.as_integer_ratio()
 
-    def get_beatwise_sections(self, beats, offset=0):
+    def get_beatwise_sections(self, beats: List['Beat'], offset: Union[int, float, 'QuarterDuration', 'Fraction'] = 0):
+        """
+        :param beats:
+        :param offset: offset in the first beat
+        :return: [sections as list of QuarterDurations, left_over as QuarterDruation] left_over is the remaining quarter_duration which
+                 exceeds the sum of all beats quarter durations. If there is no left over the second value in the list is None.
+                 offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)] => [[0.5, 3], None]
+                 See tests for more examples. In BEATWISE_EXCEPTIONS exceptions can be declared.
+        """
+
+        def _check_for_exception():
+            exception = BEATWISE_EXCEPTIONS.get(offset)
+            if exception:
+                out = exception.get(sum(output[0]))
+                if out:
+                    output[0] = [QuarterDuration(value) for value in out]
+                return output
+
         output = [None, [], None]
         if offset:
             output[0] = beats[0].quarter_duration - offset
             beats.pop(0)
-        remaining_value = self - output[0] if output[0] is not None else self
-        out_of_reach = remaining_value - sum([b.quarter_duration for b in beats])
+        left_over = self - output[0] if output[0] is not None else self
+        out_of_reach = left_over - sum(b.quarter_duration for b in beats)
         if out_of_reach > 0:
-            remaining_value -= out_of_reach
+            left_over -= out_of_reach
             output[2] = out_of_reach
         for beat in beats:
-            if remaining_value >= beat.quarter_duration:
+            if left_over >= beat.quarter_duration:
                 current_value = beat.quarter_duration
-                remaining_value -= current_value
+                left_over -= current_value
             else:
-                current_value = remaining_value
-                remaining_value = 0
+                current_value = left_over
+                left_over = 0
             if not output[1]:
                 output[1] = [current_value]
             else:
@@ -85,23 +178,21 @@ class QuarterDuration(numbers.Rational):
                     output[1][-1] += current_value
                 else:
                     output[1].append(current_value)
-            if remaining_value == 0:
+            if left_over == 0:
                 break
         if output[0]:
             output = [[output[0], *output[1]], output[2]]
         else:
             output = [output[1], output[2]]
 
-        # Add conditions for other beat groupings
-        if offset == 0 and sum(output[0]) == 5:
-            output[0] = [QuarterDuration(3), QuarterDuration(2)]
-        elif offset == 0 and sum(output[0]) == 6:
-            output[0] = [QuarterDuration(6)]
+        exception = _check_for_exception()
+        if exception:
+            return exception
 
         return output
 
     def __repr__(self):
-        return f'QuarterDuration: {repr(self.value)} {id(self)}'
+        return f'{self.value.numerator}/{self.value.denominator}'
 
     def __str__(self):
         return f'QuarterDuration: {str(self.value)}'
@@ -186,6 +277,11 @@ class QuarterDuration(numbers.Rational):
 
 
 class QuarterDurationMixin:
+    """
+    Mixin for all Classes with a quarter_duration. Used in :obj:`~musictree.note.Note`, :obj:`~musictree.chord.Chord` and
+    :obj:`~musictree.beat.Beat`
+    """
+
     def __init__(self, quarter_duration=None):
         self._quarter_duration = None
         self.quarter_duration = quarter_duration

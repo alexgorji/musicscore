@@ -17,7 +17,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="musictree.musictree" href="musictree.musictree.html" />
+    <link rel="next" title="musictree.note" href="musictree.note.html" />
     <link rel="prev" title="musictree.measure" href="musictree.measure.html" /> 
 </head>
 
@@ -44,13 +44,13 @@
 <li class="toctree-l2"><a class="reference internal" href="musictree.beat.html">musictree.beat</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.chord.html">musictree.chord</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.clef.html">musictree.clef</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.core.html">musictree.core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.dynamics.html">musictree.dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.exceptions.html">musictree.exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.key.html">musictree.key</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.layout.html">musictree.layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.measure.html">musictree.measure</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">musictree.midi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="musictree.musictree.html">musictree.musictree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.note.html">musictree.note</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.part.html">musictree.part</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.quarterduration.html">musictree.quarterduration</a></li>
@@ -96,7 +96,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="musictree.midi.Midi">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.midi.</span></span><span class="sig-name descname"><span class="pre">Midi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accidental</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="musictree.accidental.html#musictree.accidental.Accidental" title="musictree.accidental.Accidental"><span class="pre">musictree.accidental.Accidental</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/midi.html#Midi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.midi.Midi" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="musictree.musictree.html#musictree.musictree.MusicTree" title="musictree.musictree.MusicTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.musictree.MusicTree</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="musictree.core.html#musictree.core.MusicTree" title="musictree.core.MusicTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.core.MusicTree</span></code></a></p>
 <p>Midi is the representation of a Pitch with its midi value, and accidental sign. This object is used to create a Chord
 consisting of one or more pitches. The midi representation of a rest is a Midi object with value 0.</p>
 <dl class="py method">
@@ -220,7 +220,7 @@ Example C(4, ‘#’) = C(4, ‘sharp’) = C(4, sharp)</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="musictree.measure.html" class="btn btn-neutral float-left" title="musictree.measure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="musictree.musictree.html" class="btn btn-neutral float-right" title="musictree.musictree" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="musictree.note.html" class="btn btn-neutral float-right" title="musictree.note" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -2,7 +2,7 @@ from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLDivisio
 
 from musictree.clef import Clef, BaseClef, TrebleClef
 from musictree.key import Key
-from musictree.musictree import MusicTree
+from musictree.core import MusicTree
 from musictree.staff import Staff
 from musictree.time import Time, flatten_times
 from musictree.util import lcm

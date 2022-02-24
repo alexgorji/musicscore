@@ -3,12 +3,11 @@ from fractions import Fraction
 from musictree.accidental import Accidental
 from musictree.beat import Beat
 from musictree.chord import Chord, split_copy, group_chords
-from musictree.exceptions import ChordHasNoParentError, ChordQuarterDurationAlreadySetError, NoteTypeError
+from musictree.exceptions import ChordHasNoParentError, ChordQuarterDurationAlreadySetError
 from musictree.measure import Measure
 from musictree.midi import Midi
 from musictree.tests.util import check_notes, ChordTestCase, create_articulation, create_technical
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES
-from musictree.voice import Voice
 
 
 def get_chord_midi_values(chord):

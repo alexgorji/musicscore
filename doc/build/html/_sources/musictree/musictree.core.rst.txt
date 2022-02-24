@@ -1,7 +1,7 @@
-musicxml.exceptions
+musictree.core
 ===================
 
-.. automodule:: musicxml.exceptions
+.. automodule:: musictree.core
    :members:
    :undoc-members:
    :show-inheritance:

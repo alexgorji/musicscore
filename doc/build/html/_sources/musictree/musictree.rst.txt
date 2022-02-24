@@ -8,13 +8,13 @@ musictree
    musictree.beat
    musictree.chord
    musictree.clef
+   musictree.core
    musictree.dynamics
    musictree.exceptions
    musictree.key
    musictree.layout
    musictree.measure
    musictree.midi
-   musictree.musictree
    musictree.note
    musictree.part
    musictree.quarterduration

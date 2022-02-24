@@ -2,7 +2,7 @@ from musicxml.xmlelement.xmlelement import XMLStaff
 
 from musictree.clef import TrebleClef, Clef
 from musictree.exceptions import StaffHasNoParentError
-from musictree.musictree import MusicTree
+from musictree.core import MusicTree
 from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
 

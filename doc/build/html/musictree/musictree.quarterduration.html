@@ -44,13 +44,13 @@
 <li class="toctree-l2"><a class="reference internal" href="musictree.beat.html">musictree.beat</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.chord.html">musictree.chord</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.clef.html">musictree.clef</a></li>
+<li class="toctree-l2"><a class="reference internal" href="musictree.core.html">musictree.core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.dynamics.html">musictree.dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.exceptions.html">musictree.exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.key.html">musictree.key</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.layout.html">musictree.layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.measure.html">musictree.measure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.midi.html">musictree.midi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="musictree.musictree.html">musictree.musictree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.note.html">musictree.note</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.part.html">musictree.part</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">musictree.quarterduration</a></li>
@@ -93,39 +93,134 @@
              
   <div class="section" id="module-musictree.quarterduration">
 <span id="musictree-quarterduration"></span><h1>musictree.quarterduration<a class="headerlink" href="#module-musictree.quarterduration" title="Permalink to this headline"></a></h1>
+<dl class="py data">
+<dt class="sig sig-object py" id="musictree.quarterduration.BEATWISE_EXCEPTIONS">
+<span class="sig-prename descclassname"><span class="pre">musictree.quarterduration.</span></span><span class="sig-name descname"><span class="pre">BEATWISE_EXCEPTIONS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{0:</span> <span class="pre">{5:</span> <span class="pre">(3,</span> <span class="pre">2),</span> <span class="pre">6:</span> <span class="pre">(6,)}}</span></em><a class="headerlink" href="#musictree.quarterduration.BEATWISE_EXCEPTIONS" title="Permalink to this definition"></a></dt>
+<dd><p>{offset: {quarter_duration: return value(s), … }, …}</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="musictree.quarterduration.is_writable">
-<span class="sig-prename descclassname"><span class="pre">musictree.quarterduration.</span></span><span class="sig-name descname"><span class="pre">is_writable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quarter_duration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/quarterduration.html#is_writable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.quarterduration.is_writable" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">musictree.quarterduration.</span></span><span class="sig-name descname"><span class="pre">is_writable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quarter_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">quicktions.Fraction</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#musictree.quarterduration.QuarterDuration" title="musictree.quarterduration.QuarterDuration"><span class="pre">musictree.quarterduration.QuarterDuration</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/quarterduration.html#is_writable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.quarterduration.is_writable" title="Permalink to this definition"></a></dt>
+<dd><p>Function to check if a quarter duration is writable or must be split into two durations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>quarter_duration</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>boolean</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">is_writable</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_writable</span><span class="p">(</span><span class="mi">7</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_writable</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="musictree.quarterduration.QuarterDuration">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.quarterduration.</span></span><span class="sig-name descname"><span class="pre">QuarterDuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/quarterduration.html#QuarterDuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.quarterduration.QuarterDuration" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">numbers.Rational</span></code></p>
+<p>A Class specifically designed for durations measured in quarters. The core of this class is a value of type quicktions.Fraction with a
+denominator limit of 1000, thus it can manage conversion of floats to fractions without usual inaccuracies of quintuples etc. See
+value property for more information.
+QuarterDuration has all needed magic methods for numeral comparison and conversion.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="musictree.quarterduration.QuarterDuration.numerator">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">numerator</span></span><a class="headerlink" href="#musictree.quarterduration.QuarterDuration.numerator" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Fraction’s numerator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">numerator</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="musictree.quarterduration.QuarterDuration.denominator">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">denominator</span></span><a class="headerlink" href="#musictree.quarterduration.QuarterDuration.denominator" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Fraction’s denominator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">denominator</span>
+<span class="go">6</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="musictree.quarterduration.QuarterDuration.value">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#musictree.quarterduration.QuarterDuration.value" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>QuarterDuration’s value</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>quicktions.Fraction() with limit_denominator(1000)</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+<span class="go">Fraction(3, 7)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">QuarterDuration</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+<span class="go">Fraction(1, 5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">QuarterDuration</span><span class="p">(</span><span class="n">Fraction</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span><span class="o">.</span><span class="n">value</span>
+<span class="go">Fraction(1, 5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+<span class="go">Fraction(1, 5)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="musictree.quarterduration.QuarterDuration.as_integer_ratio">
 <span class="sig-name descname"><span class="pre">as_integer_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/quarterduration.html#QuarterDuration.as_integer_ratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.quarterduration.QuarterDuration.as_integer_ratio" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(numinator, denominator)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">as_integer_ratio</span><span class="p">()</span>
+<span class="go">(1, 5)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="musictree.quarterduration.QuarterDuration.get_beatwise_sections">
-<span class="sig-name descname"><span class="pre">get_beatwise_sections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/quarterduration.html#QuarterDuration.get_beatwise_sections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.quarterduration.QuarterDuration.get_beatwise_sections" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">get_beatwise_sections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="musictree.beat.html#musictree.beat.Beat" title="musictree.beat.Beat"><span class="pre">Beat</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#musictree.quarterduration.QuarterDuration" title="musictree.quarterduration.QuarterDuration"><span class="pre">QuarterDuration</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Fraction</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/quarterduration.html#QuarterDuration.get_beatwise_sections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.quarterduration.QuarterDuration.get_beatwise_sections" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beats</strong> – </p></li>
+<li><p><strong>offset</strong> – offset in the first beat</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[sections as list of QuarterDurations, left_over as QuarterDruation] left_over is the remaining quarter_duration which
+exceeds the sum of all beats quarter durations. If there is no left over the second value in the list is None.
+offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)] =&gt; [[0.5, 3], None]
+See tests for more examples. In BEATWISE_EXCEPTIONS exceptions can be declared.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -133,6 +228,8 @@
 <dt class="sig sig-object py" id="musictree.quarterduration.QuarterDurationMixin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.quarterduration.</span></span><span class="sig-name descname"><span class="pre">QuarterDurationMixin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quarter_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/quarterduration.html#QuarterDurationMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.quarterduration.QuarterDurationMixin" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Mixin for all Classes with a quarter_duration. Used in <a class="reference internal" href="musictree.note.html#musictree.note.Note" title="musictree.note.Note"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Note</span></code></a>, <a class="reference internal" href="musictree.chord.html#musictree.chord.Chord" title="musictree.chord.Chord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Chord</span></code></a> and
+<a class="reference internal" href="musictree.beat.html#musictree.beat.Beat" title="musictree.beat.Beat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beat</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="musictree.quarterduration.QuarterDurationMixin.quarter_duration">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">quarter_duration</span></span><a class="headerlink" href="#musictree.quarterduration.QuarterDurationMixin.quarter_duration" title="Permalink to this definition"></a></dt>

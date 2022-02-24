@@ -1,24 +1,25 @@
 from fractions import Fraction
 from typing import Union, List, Optional
 
-from musicxml.xmlelement.xmlelement import XMLChord, XMLLyric, XMLDirection, XMLDirectionType, XMLDynamics, XMLSound, XMLNotations, \
+from musicxml.xmlelement.xmlelement import XMLChord, XMLLyric, XMLDirection, XMLDirectionType, XMLDynamics, XMLNotations, \
     XMLArticulations, XMLTechnical
 
 from musictree.dynamics import Dynamics
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, ChordNotesAreAlreadyCreatedError
 from musictree.midi import Midi
-from musictree.musictree import MusicTree
+from musictree.core import MusicTree
 from musictree.note import Note
-from musictree.quarterduration import QuarterDurationMixin, QuarterDuration, _check_quarter_duration
+from musictree.quarterduration import QuarterDurationMixin, QuarterDuration
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES
 
 
 class Chord(MusicTree, QuarterDurationMixin):
     """
     Chord is a sequence of one or more XMLNotes which occur at the same time in a XMLMeasure of a XMLPart.
-    :param midis: midi, midis, midi value or midi values. 0 or [0] for a rest.
-    :param quarter_duration: int or float for duration counted in quarters (crotchets). 0 for grace note (or chord).
+    :param midis: Midi, Midi.value, [Midi, Midi.value] 0 or [0] for a rest.
+    :param quarter_duration: int, float, Fraction, QuarterDuration for duration counted in quarters (crotchets). 0 for grace note (or
+    chord).
     """
     _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', 'voice', '_lyrics', 'ties',
                    '_notes_are_set', '_directions', 'xml_directions', 'xml_articulations', 'xml_technicals'}
@@ -26,7 +27,6 @@ class Chord(MusicTree, QuarterDurationMixin):
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
         self._midis = None
-        # self._offset = None
         self._ties = []
         self._lyrics = []
         self._directions = {'above': [], 'below': []}
@@ -35,7 +35,6 @@ class Chord(MusicTree, QuarterDurationMixin):
         self.xml_technicals = []
 
         self._note_attributes = kwargs
-        # self.offset = offset
         self._notes_are_set = False
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
@@ -156,6 +155,9 @@ class Chord(MusicTree, QuarterDurationMixin):
 
     @property
     def is_rest(self):
+        """
+        :return bool: True if Chord represents a rest, False if otherwise.
+        """
         if self._midis[0].value == 0:
             return True
         else:
@@ -163,6 +165,22 @@ class Chord(MusicTree, QuarterDurationMixin):
 
     @property
     def midis(self):
+        """
+        >>> ch = Chord(midis=60)
+        >>> [type(m) for m in ch.midis]
+        [<class 'musictree.midi.Midi'>]
+        >>> [m.value for m in ch.midis]
+        [60]
+        >>> ch = Chord(midis=[60, Midi(40)])
+        >>> [m.value for m in ch.midis]
+        [60, 40]
+        >>> Chord([0, 60])
+        Traceback (most recent call last):
+        ...
+        ValueError: Chord cannot accept a mixed list of midis of rests and pitches or a list of more than one rests.
+
+        :return: list of midis
+        """
         return self._midis
 
     @midis.setter
@@ -171,10 +189,17 @@ class Chord(MusicTree, QuarterDurationMixin):
 
     @property
     def notes(self):
+        """
+        :return: Chord.get_children() which are of type Note.
+        """
         return self.get_children()
 
     @property
     def offset(self):
+        """
+        :return: Offset in Chord's parent Beat
+        :rtype: QuarterDuration
+        """
         if not self.up:
             return None
         elif self.previous is None:
@@ -339,7 +364,7 @@ def split_copy(chord, new_quarter_duration=None):
 
 
 def group_chords(chords, quarter_durations):
-    if sum([c.quarter_duration for c in chords]) != sum(quarter_durations):
+    if sum(c.quarter_duration for c in chords) != sum(quarter_durations):
         raise ValueError
     output = []
     for _ in quarter_durations:
@@ -348,7 +373,7 @@ def group_chords(chords, quarter_durations):
     current_quarter_duration = quarter_durations[0]
     for ch in chords:
         output[index].append(ch)
-        current_sum = sum([c.quarter_duration for c in output[index]])
+        current_sum = sum(c.quarter_duration for c in output[index])
         if current_sum < current_quarter_duration:
             pass
         elif current_sum == current_quarter_duration:

@@ -3,7 +3,7 @@ from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError, \
     QuantizationBeatNotFullError
 from musictree.measure import Measure
-from musictree.musictree import MusicTree
+from musictree.core import MusicTree
 from musictree.time import Time
 from musictree.xmlwrapper import XMLWrapper
 

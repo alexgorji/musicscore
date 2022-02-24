@@ -1,6 +1,6 @@
 from musictree.beat import Beat
 from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsAlreadyFullError
-from musictree.musictree import MusicTree
+from musictree.core import MusicTree
 from musictree.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLVoice
 

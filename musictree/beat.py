@@ -4,11 +4,11 @@ from quicktions import Fraction
 from musictree.chord import split_copy, group_chords, Chord
 from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError
-from musictree.musictree import MusicTree
+from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDurationMixin, QuarterDuration
 from musictree.util import lcm
 
-# offset : {chord.quarter_duration: split quarter_durations, ...}
+#: offset : {chord.quarter_duration: split quarter_durations, ...}
 SPLITTALBES = {
     QuarterDuration(0): {
         QuarterDuration(5, 6): [QuarterDuration(3, 6), QuarterDuration(2, 6)],

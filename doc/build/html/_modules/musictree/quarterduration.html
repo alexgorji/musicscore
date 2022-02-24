@@ -67,8 +67,13 @@
            <div itemprop="articleBody">
              
   <h1>Source code for musictree.quarterduration</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">quicktions</span> <span class="kn">import</span> <span class="n">Fraction</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">quicktions</span> <span class="kn">import</span> <span class="n">Fraction</span>
 <span class="kn">import</span> <span class="nn">numbers</span>
+
+<span class="c1">#: {offset: {quarter_duration: return value(s), ... }, ...}</span>
+<span class="n">BEATWISE_EXCEPTIONS</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="p">{</span><span class="mi">5</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">6</span><span class="p">:</span> <span class="p">(</span><span class="mi">6</span><span class="p">,)}}</span>
 
 
 <span class="k">def</span> <span class="nf">_check_quarter_duration</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
@@ -79,8 +84,39 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="is_writable"><a class="viewcode-back" href="../../musictree/musictree.quarterduration.html#musictree.quarterduration.is_writable">[docs]</a><span class="k">def</span> <span class="nf">is_writable</span><span class="p">(</span><span class="n">quarter_duration</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">quarter_duration</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span> <span class="o">/</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">3</span> <span class="o">/</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span> <span class="o">/</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span> <span class="o">/</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">]:</span>
+<div class="viewcode-block" id="is_writable"><a class="viewcode-back" href="../../musictree/musictree.quarterduration.html#musictree.quarterduration.is_writable">[docs]</a><span class="k">def</span> <span class="nf">is_writable</span><span class="p">(</span><span class="n">quarter_duration</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Fraction</span><span class="p">,</span> <span class="s1">&#39;QuarterDuration&#39;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to check if a quarter duration is writable or must be split into two durations.</span>
+
+<span class="sd">    :param quarter_duration:</span>
+<span class="sd">    :return: boolean</span>
+
+<span class="sd">    &gt;&gt;&gt; is_writable(5)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; is_writable(7/8)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; is_writable(3/8)</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">quarter_duration</span> <span class="ow">in</span> <span class="p">[</span><span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+                            <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">12</span><span class="p">)]:</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span></div>
@@ -94,6 +130,12 @@
 
 
 <div class="viewcode-block" id="QuarterDuration"><a class="viewcode-back" href="../../musictree/musictree.quarterduration.html#musictree.quarterduration.QuarterDuration">[docs]</a><span class="k">class</span> <span class="nc">QuarterDuration</span><span class="p">(</span><span class="n">numbers</span><span class="o">.</span><span class="n">Rational</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Class specifically designed for durations measured in quarters. The core of this class is a value of type quicktions.Fraction with a</span>
+<span class="sd">    denominator limit of 1000, thus it can manage conversion of floats to fractions without usual inaccuracies of quintuples etc. See</span>
+<span class="sd">    value property for more information.</span>
+<span class="sd">    QuarterDuration has all needed magic methods for numeral comparison and conversion.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="kc">None</span>
@@ -101,14 +143,41 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">numerator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Fraction&#39;s numerator.</span>
+<span class="sd">        :rtype: int</span>
+
+<span class="sd">        &gt;&gt;&gt; QuarterDuration(1, 6).numerator</span>
+<span class="sd">        1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">numerator</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">denominator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Fraction&#39;s denominator.</span>
+<span class="sd">        :rtype: int</span>
+
+<span class="sd">        &gt;&gt;&gt; QuarterDuration(1, 6).denominator</span>
+<span class="sd">        6</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">denominator</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: QuarterDuration&#39;s value</span>
+<span class="sd">        :rtype: quicktions.Fraction() with limit_denominator(1000)</span>
+
+<span class="sd">        &gt;&gt;&gt; QuarterDuration(3, 7).value</span>
+<span class="sd">        Fraction(3, 7)</span>
+<span class="sd">        &gt;&gt;&gt; QuarterDuration(0.2).value</span>
+<span class="sd">        Fraction(1, 5)</span>
+<span class="sd">        &gt;&gt;&gt; QuarterDuration(Fraction(1, 5)).value</span>
+<span class="sd">        Fraction(1, 5)</span>
+<span class="sd">        &gt;&gt;&gt; QuarterDuration(1/5).value</span>
+<span class="sd">        Fraction(1, 5)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 
     <span class="nd">@value</span><span class="o">.</span><span class="n">setter</span>
@@ -128,25 +197,49 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span>
 
 <div class="viewcode-block" id="QuarterDuration.as_integer_ratio"><a class="viewcode-back" href="../../musictree/musictree.quarterduration.html#musictree.quarterduration.QuarterDuration.as_integer_ratio">[docs]</a>    <span class="k">def</span> <span class="nf">as_integer_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: (numinator, denominator)</span>
+<span class="sd">        :rtype: tuple</span>
+
+<span class="sd">        &gt;&gt;&gt; QuarterDuration(1, 5).as_integer_ratio()</span>
+<span class="sd">        (1, 5)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">as_integer_ratio</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="QuarterDuration.get_beatwise_sections"><a class="viewcode-back" href="../../musictree/musictree.quarterduration.html#musictree.quarterduration.QuarterDuration.get_beatwise_sections">[docs]</a>    <span class="k">def</span> <span class="nf">get_beatwise_sections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beats</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_check_for_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="n">BEATWISE_EXCEPTIONS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">exception</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
+                <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">QuarterDuration</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">out</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">output</span>
+
+<div class="viewcode-block" id="QuarterDuration.get_beatwise_sections"><a class="viewcode-back" href="../../musictree/musictree.quarterduration.html#musictree.quarterduration.QuarterDuration.get_beatwise_sections">[docs]</a>    <span class="k">def</span> <span class="nf">get_beatwise_sections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beats</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;Beat&#39;</span><span class="p">],</span> <span class="n">offset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s1">&#39;QuarterDuration&#39;</span><span class="p">,</span> <span class="s1">&#39;Fraction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param beats:</span>
+<span class="sd">        :param offset: offset in the first beat</span>
+<span class="sd">        :return: [sections as list of QuarterDurations, left_over as QuarterDruation] left_over is the remaining quarter_duration which</span>
+<span class="sd">                 exceeds the sum of all beats quarter durations. If there is no left over the second value in the list is None.</span>
+<span class="sd">                 offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)] =&gt; [[0.5, 3], None]</span>
+<span class="sd">                 See tests for more examples. In BEATWISE_EXCEPTIONS exceptions can be declared.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">[],</span> <span class="kc">None</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">offset</span><span class="p">:</span>
             <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">beats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">quarter_duration</span> <span class="o">-</span> <span class="n">offset</span>
             <span class="n">beats</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">remaining_value</span> <span class="o">=</span> <span class="bp">self</span> <span class="o">-</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span>
-        <span class="n">out_of_reach</span> <span class="o">=</span> <span class="n">remaining_value</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">([</span><span class="n">b</span><span class="o">.</span><span class="n">quarter_duration</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">beats</span><span class="p">])</span>
+        <span class="n">left_over</span> <span class="o">=</span> <span class="bp">self</span> <span class="o">-</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span>
+        <span class="n">out_of_reach</span> <span class="o">=</span> <span class="n">left_over</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">quarter_duration</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">beats</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">out_of_reach</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">remaining_value</span> <span class="o">-=</span> <span class="n">out_of_reach</span>
+            <span class="n">left_over</span> <span class="o">-=</span> <span class="n">out_of_reach</span>
             <span class="n">output</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_of_reach</span>
         <span class="k">for</span> <span class="n">beat</span> <span class="ow">in</span> <span class="n">beats</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">remaining_value</span> <span class="o">&gt;=</span> <span class="n">beat</span><span class="o">.</span><span class="n">quarter_duration</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">left_over</span> <span class="o">&gt;=</span> <span class="n">beat</span><span class="o">.</span><span class="n">quarter_duration</span><span class="p">:</span>
                 <span class="n">current_value</span> <span class="o">=</span> <span class="n">beat</span><span class="o">.</span><span class="n">quarter_duration</span>
-                <span class="n">remaining_value</span> <span class="o">-=</span> <span class="n">current_value</span>
+                <span class="n">left_over</span> <span class="o">-=</span> <span class="n">current_value</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">current_value</span> <span class="o">=</span> <span class="n">remaining_value</span>
-                <span class="n">remaining_value</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">current_value</span> <span class="o">=</span> <span class="n">left_over</span>
+                <span class="n">left_over</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">output</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="n">output</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">current_value</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
@@ -154,23 +247,21 @@
                     <span class="n">output</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">current_value</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">output</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_value</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">remaining_value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">left_over</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">break</span>
         <span class="k">if</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="n">output</span> <span class="o">=</span> <span class="p">[[</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">*</span><span class="n">output</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">output</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="n">output</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">output</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
 
-        <span class="c1"># Add conditions for other beat groupings</span>
-        <span class="k">if</span> <span class="n">offset</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">sum</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
-            <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
-        <span class="k">elif</span> <span class="n">offset</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">sum</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
-            <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">QuarterDuration</span><span class="p">(</span><span class="mi">6</span><span class="p">)]</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_for_exception</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">exception</span>
 
         <span class="k">return</span> <span class="n">output</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;QuarterDuration: </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">numerator</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">denominator</span><span class="si">}</span><span class="s1">&#39;</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;QuarterDuration: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
@@ -255,6 +346,11 @@
 
 
 <div class="viewcode-block" id="QuarterDurationMixin"><a class="viewcode-back" href="../../musictree/musictree.quarterduration.html#musictree.quarterduration.QuarterDurationMixin">[docs]</a><span class="k">class</span> <span class="nc">QuarterDurationMixin</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mixin for all Classes with a quarter_duration. Used in :obj:`~musictree.note.Note`, :obj:`~musictree.chord.Chord` and</span>
+<span class="sd">    :obj:`~musictree.beat.Beat`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quarter_duration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_quarter_duration</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">quarter_duration</span> <span class="o">=</span> <span class="n">quarter_duration</span>
