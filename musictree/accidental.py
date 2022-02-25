@@ -147,7 +147,7 @@ SIGNS = {-2: 'flat-flat',
 
 class Accidental(MusicTree, XMLWrapper):
     """
-    Accidental is the class for managing Midi's accidental sign and its pitch parameters: stem, alter, octave
+    Accidental is the class for managing :obj:`musictree.midi.Midi`'s accidental sign and its pitch parameters: stem, alter, octave.
     The parameter mode (standard, flat, sharp, enharmonic_1 or enharmonic_2) can be used to set different enharmonic variants of the same
     pitch.
     """
@@ -183,8 +183,21 @@ class Accidental(MusicTree, XMLWrapper):
     @property
     def mode(self):
         """
-        permitted modes: ('standard', 'flat', 'sharp', 'enharmonic_1', 'enharmonic_2')
-        :return: accidental mode which correspond to global variables STANDARD, FLAT, SHARP, ENHARMONIC_1, ENHARMONIC_@
+        permitted modes: ``standard``, ``flat``, ``sharp``, ``enharmonic_1``, ``enharmonic_2``
+
+        :return: accidental mode which corresponds to global variables :obj:`~musictree.accidental.STANDARD`, :obj:`~musictree.accidental.FLAT`, :obj:`~musictree.accidental.SHARP`,
+                 :obj:`~musictree.accidental.ENHARMONIC_1`, :obj:`~musictree.accidental.ENHARMONIC_2`
+
+        >>> Accidental(mode='standard').get_pitch_parameters(midi_value=61) # C4# (stem='C', alter='1', octave='4')
+        ('C', 1, 4)
+        >>> Accidental(mode='flat').get_pitch_parameters(midi_value=61) # D4b
+        ('D', -1, 4)
+        >>> Accidental(mode='sharp').get_pitch_parameters(midi_value=61) # C4#
+        ('C', 1, 4)
+        >>> Accidental(mode='enharmonic_1').get_pitch_parameters(midi_value=61) # D4b
+        ('D', -1, 4)
+        >>> Accidental(mode='enharmonic_2').get_pitch_parameters(midi_value=61) # B3#
+        ('B', 2, 3)
         """
         return self._mode
 
@@ -200,8 +213,8 @@ class Accidental(MusicTree, XMLWrapper):
     @property
     def parent_midi(self):
         """
-        :return: the midi parent in ``musictree``. It is equivalent to ``self.up`` or s``elf.get_parent()``
-        :rtype: `Midi`
+        :return: The midi parent in ``musictree``. It is equivalent to ``self.up`` or ``self.get_parent()``
+        :rtype: :obj:`musictree.midi.Midi`
         """
         return self.up
 
@@ -211,6 +224,12 @@ class Accidental(MusicTree, XMLWrapper):
 
     @property
     def sign(self):
+        """
+        Converts `alter` into sign depending on mode. `parent_midi` must be set first.
+
+        :return: Possible values: ``flat-flat``, ``three-quarters-flat``, ``flat``, ``quarter-flat``, ``natural``,
+                 ``quarter-sharp``, ``sharp``, ``three-quarters-sharp``, ``double-sharp``
+        """
         try:
             alter = self.get_pitch_parameters()[1]
             return SIGNS[alter]
@@ -219,6 +238,10 @@ class Accidental(MusicTree, XMLWrapper):
 
     @property
     def show(self):
+        """
+        If ``False`` ``xml_object`` will be ``None`` and no accidental is shown in the :obj:`~musictree.score.Score`.
+        If ``True`` the accidental is shown.
+        """
         return self._show
 
     @show.setter
@@ -234,9 +257,11 @@ class Accidental(MusicTree, XMLWrapper):
 
     def get_pitch_parameters(self, midi_value: Optional[float] = None) -> Optional[tuple]:
         """
-        :return: a tuple consisting of pitch stem name, alter value and octave value (stem, alter, octave).
-                A midi_value 0 returns None.
-                If midi_value is None and a parent_midi exists, parent_midi's value will be used.
+        :return: A tuple consisting of pitch stem name, alter value and octave value: ``(stem, alter, octave)``
+
+                If ``midi_value == 0`` (for a rest) return value is ``None``.
+
+                If ``midi_value is None`` and a parent_midi exists, parent_midi's value will be used.
         """
 
         if midi_value is None:
