@@ -336,9 +336,9 @@ class Chord(MusicTree, QuarterDurationMixin):
         raise AttributeError("object 'Chord' cannot return a string.")
 
     def __setattr__(self, key, value):
-        if key not in self._ATTRIBUTES.union(self.TREE_ATTRIBUTES) and key not in [f'_{attr}' for attr in
-                                                                                   self._ATTRIBUTES.union(
-                                                                                       self.TREE_ATTRIBUTES)] and key not in self.__dict__:
+        if key not in self._ATTRIBUTES.union(self._TREE_ATTRIBUTES) and key not in [f'_{attr}' for attr in
+                                                                                    self._ATTRIBUTES.union(
+                                                                                       self._TREE_ATTRIBUTES)] and key not in self.__dict__:
             if self.notes:
                 if isinstance(value, str) or not hasattr(value, '__iter__'):
                     value = [value] * len(self.notes)

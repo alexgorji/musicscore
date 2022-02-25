@@ -37,9 +37,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">INTRO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../musictree/musictree.html">musictree</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../musicxml/musicxml.html">musicxml</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tree/tree.html">tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../musictree/musictree.html">musictree API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../musicxml/musicxml.html">musicxml API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tree/tree.html">tree API</a></li>
 </ul>
 
         </div>
@@ -79,7 +79,7 @@
 
 
 <div class="viewcode-block" id="Tree"><a class="viewcode-back" href="../../tree/tree.html#tree.tree.Tree">[docs]</a><span class="k">class</span> <span class="nc">Tree</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="n">TREE_ATTRIBUTES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;compact_repr&#39;</span><span class="p">,</span> <span class="s1">&#39;is_leaf&#39;</span><span class="p">,</span> <span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;_parent&#39;</span><span class="p">,</span> <span class="s1">&#39;_children&#39;</span><span class="p">,</span> <span class="s1">&#39;up&#39;</span><span class="p">}</span>
+    <span class="n">_TREE_ATTRIBUTES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;compact_repr&#39;</span><span class="p">,</span> <span class="s1">&#39;is_leaf&#39;</span><span class="p">,</span> <span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;_parent&#39;</span><span class="p">,</span> <span class="s1">&#39;_children&#39;</span><span class="p">,</span> <span class="s1">&#39;up&#39;</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>

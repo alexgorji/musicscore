@@ -37,9 +37,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">INTRO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../musictree/musictree.html">musictree</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../musicxml/musicxml.html">musicxml</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tree/tree.html">tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../musictree/musictree.html">musictree API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../musicxml/musicxml.html">musicxml API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tree/tree.html">tree API</a></li>
 </ul>
 
         </div>
@@ -270,11 +270,11 @@
                 <span class="n">number</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="n">m</span> <span class="o">=</span> <span class="n">Measure</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">previous_measure</span><span class="p">:</span>
             <span class="n">m</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">previous_measure</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">__copy__</span><span class="p">()</span>
             <span class="n">m</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">show</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="k">if</span> <span class="n">previous_measure</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">staff</span> <span class="ow">in</span> <span class="n">previous_measure</span><span class="o">.</span><span class="n">get_children</span><span class="p">():</span>
                 <span class="n">st</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">add_staff</span><span class="p">(</span><span class="n">staff_number</span><span class="o">=</span><span class="n">staff</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
                 <span class="n">st</span><span class="o">.</span><span class="n">clef</span> <span class="o">=</span> <span class="n">staff</span><span class="o">.</span><span class="n">clef</span><span class="o">.</span><span class="n">__copy__</span><span class="p">()</span>
@@ -284,7 +284,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">m</span><span class="o">.</span><span class="n">add_voice</span><span class="p">(</span><span class="n">staff_number</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">voice_number</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">m</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">child</span></div>
 
 <div class="viewcode-block" id="Part.get_current_measure"><a class="viewcode-back" href="../../musictree/musictree.part.html#musictree.part.Part.get_current_measure">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_measure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">staff_number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">voice_number</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">staff_number</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

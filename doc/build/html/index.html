@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>INTRO &mdash; musicscore2 0.1 documentation</title>
+  <title>Content &mdash; musicscore2 0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -38,9 +38,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">INTRO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="musictree/musictree.html">musictree</a></li>
-<li class="toctree-l1"><a class="reference internal" href="musicxml/musicxml.html">musicxml</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tree/tree.html">tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="musictree/musictree.html">musictree API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="musicxml/musicxml.html">musicxml API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tree/tree.html">tree API</a></li>
 </ul>
 
         </div>
@@ -57,7 +57,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>INTRO</li>
+      <li>Content</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -67,186 +67,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="intro">
-<h1>INTRO<a class="headerlink" href="#intro" title="Permalink to this headline"></a></h1>
-<div class="section" id="musicscore2">
-<h2>musicscore2<a class="headerlink" href="#musicscore2" title="Permalink to this headline"></a></h2>
-<p><strong>musicscore2</strong> is a python library to generate musicxml data in an intuitive and easy but nevertheless comprehensive way. The generated
-files can be imported in several music notation programs and be processed further if necessary. The preferred software is Finale which
-seems at the moment to have the best implementation of musicxml format files and supports the newest version 4.0.</p>
-<p><strong>musicscore2</strong> consists of two main packages: <strong>musicxml</strong> and <strong>musictree</strong>:</p>
-</div>
-<div class="section" id="musicxml">
-<h2>musicxml<a class="headerlink" href="#musicxml" title="Permalink to this headline"></a></h2>
-<p>The central class of this package is the <a class="reference internal" href="musicxml/musicxml.xmlelement.xmlelement.html#musicxml.xmlelement.xmlelement.XMLElement" title="musicxml.xmlelement.xmlelement.XMLElement"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XMLElement</span></code></a> class. Each <code class="xref py py-obj docutils literal notranslate"><span class="pre">XMLElement</span></code> class must set its <cite>type_</cite> to a <cite>XSDComplexType</cite> which corresponds to xml scheme element complexType and controls the behavior of <a class="reference internal" href="musicxml/musicxml.xmlelement.xmlelement.html#musicxml.xmlelement.xmlelement.XMLElement" title="musicxml.xmlelement.xmlelement.XMLElement"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XMLElement</span></code></a> in a comprehensive way. To be able to make full use of
-OOP, all xsd information nodes (simpleType, complexType, group, attributeGroup) are wrapped automatically into XSDTreeElement classes (
-XSDComplexType, XSDSimpleType, XSDGroup, XSDAttributeGroup) which themselves have a class attribute named XSD_TREE. XSD_TREE of type XSDTree
-is only a small step away from the raw xsd information specified for each xml element in the musicxml.xsd file. XSDTree is a convenient
-TreeRepresentation of each xsd element node which needs to receive the corresponding xsd information as a xml.tree.ElementTree.Element,
-easily extracted after reading musicxml.xsd file into a root element of the same type.</p>
-<div class="section" id="how-does-it-work">
-<h3>How does it work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this headline"></a></h3>
-<p>Each xml element can be used in a musicxml structure corresponding exactly to musicxml.xsd. For doing so the XMLElement is initiated
-using a corresponding XSDComplexType or XSDSimpleType as its TYPE.</p>
-</div>
-</div>
-<div class="section" id="musictree">
-<h2>musictree<a class="headerlink" href="#musictree" title="Permalink to this headline"></a></h2>
-<p>The goal of this package is to simplify the use of musicxml elements. The tree structure of a score plays a very important role
-and is being controlled via <code class="xref py py-obj docutils literal notranslate"><span class="pre">MusicTree</span></code> class. Some of the objects in this hierarchy are closely connected to the
-corresponding objects in musicxml package and are descendents of  <code class="xref py py-obj docutils literal notranslate"><span class="pre">XMLWrapper</span></code> class with an <a href="#id1"><span class="problematic" id="id2">``</span></a>~musictree
-.xmlwarpper.XMLWrapper.xml_object`
-attribute. There are although some fundamental differences between these two packages:</p>
-<ol class="arabic simple">
-<li><dl class="simple">
-<dt><a class="reference internal" href="musictree/musictree.score.html#musictree.score.Score" title="musictree.score.Score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.score.Score</span></code></a> is the root of a musictree.</dt><dd><ul class="simple">
-<li><p>It is the parent of <a class="reference internal" href="musictree/musictree.part.html#musictree.part.Part" title="musictree.part.Part"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.part.Part</span></code></a></p></li>
-<li><dl class="simple">
-<dt>It creates all necessary defaults:</dt><dd><ul>
-<li><dl class="simple">
-<dt>Default layout objects inside the default can be changed directly via following properties:</dt><dd><ul>
-<li><p>scaling <a class="reference internal" href="musictree/musictree.layout.html#musictree.layout.Scaling" title="musictree.layout.Scaling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.layout.Scaling</span></code></a></p></li>
-<li><p>page_layout <a class="reference internal" href="musictree/musictree.layout.html#musictree.layout.PageLayout" title="musictree.layout.PageLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.layout.PageLayout</span></code></a></p></li>
-<li><p>system_layout <a class="reference internal" href="musictree/musictree.layout.html#musictree.layout.StaffLayout" title="musictree.layout.StaffLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.layout.StaffLayout</span></code></a></p></li>
-<li><p>staff_layout’ <a class="reference internal" href="musictree/musictree.layout.html#musictree.layout.StaffLayout" title="musictree.layout.StaffLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.layout.StaffLayout</span></code></a></p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p><a class="reference internal" href="musictree/musictree.score.html#musictree.score.Score.export_xml" title="musictree.score.Score.export_xml"><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_xml</span></code></a> method can be used to create the “end product” as a xml file.</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="musictree/musictree.part.html#musictree.part.Part" title="musictree.part.Part"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.part.Part</span></code></a> is the first layer of a musictree.</dt><dd><ul class="simple">
-<li><p>It is the parent of <a class="reference internal" href="musictree/musictree.measure.html#musictree.measure.Measure" title="musictree.measure.Measure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.measure.Measure</span></code></a></p></li>
-<li><p>It must have a unique <cite>id</cite> during initialization. If no name is associated with the part its id will be used as its name.</p></li>
-<li><dl class="simple">
-<dt>Its method <a class="reference internal" href="musictree/musictree.part.html#musictree.part.Part.add_measure" title="musictree.part.Part.add_measure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_measure()</span></code></a> can be used to conveniently add measures. It accepts two arguments:</dt><dd><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">number</span></code> can be used to set the measure number. If <code class="docutils literal notranslate"><span class="pre">None</span></code> measure’s number will be added automatically as one number higher
-than the previous measure (or 1 for the first measure).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">time</span></code> can be used to set the time signature. If <code class="docutils literal notranslate"><span class="pre">None</span></code> the previous time signature is adopted and set to hidden. The
-time signature of the first measure with time <code class="docutils literal notranslate"><span class="pre">None</span></code> is set to 4/4.</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="musictree/musictree.measure.html#musictree.measure.Measure" title="musictree.measure.Measure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.measure.Measure</span></code></a> is the second layer of a musictree.</dt><dd><ul class="simple">
-<li><dl class="simple">
-<dt>It is the parent of <a class="reference internal" href="musictree/musictree.staff.html#musictree.staff.Staff" title="musictree.staff.Staff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.staff.Staff</span></code></a></dt><dd><ul>
-<li><p><a class="reference internal" href="musictree/musictree.time.html#musictree.time.Time" title="musictree.time.Time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.time.Time</span></code></a></p></li>
-<li><p><a class="reference internal" href="musictree/musictree.clef.html#musictree.clef.Clef" title="musictree.clef.Clef"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.clef.Clef</span></code></a></p></li>
-<li><p><a class="reference internal" href="musictree/musictree.key.html#musictree.key.Key" title="musictree.key.Key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.key.Key</span></code></a></p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="musictree/musictree.staff.html#musictree.staff.Staff" title="musictree.staff.Staff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.staff.Staff</span></code></a> is the third layer of a musictree.</dt><dd><ul class="simple">
-<li><p>It is the parent of <a class="reference internal" href="musictree/musictree.voice.html#musictree.voice.Voice" title="musictree.voice.Voice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.voice.Voice</span></code></a></p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="musictree/musictree.voice.html#musictree.voice.Voice" title="musictree.voice.Voice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.voice.Voice</span></code></a> is the fourth layer of a musictree.</dt><dd><ul class="simple">
-<li><p>It is the parent of <a class="reference internal" href="musictree/musictree.beat.html#musictree.beat.Beat" title="musictree.beat.Beat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.beat.Beat</span></code></a></p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="musictree/musictree.beat.html#musictree.beat.Beat" title="musictree.beat.Beat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.beat.Beat</span></code></a> is the fifth layer of a musictree.</dt><dd><ul class="simple">
-<li><p>It is the parent of <a class="reference internal" href="musictree/musictree.chord.html#musictree.chord.Chord" title="musictree.chord.Chord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.chord.Chord</span></code></a></p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="musictree/musictree.chord.html#musictree.chord.Chord" title="musictree.chord.Chord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.chord.Chord</span></code></a> is the sixth layer of a musictree.</dt><dd><ul class="simple">
-<li><dl class="simple">
-<dt>It is the parent of <a class="reference internal" href="musictree/musictree.note.html#musictree.note.Note" title="musictree.note.Note"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.note.Note</span></code></a></dt><dd><ul>
-<li><p><a class="reference internal" href="musictree/musictree.dynamics.html#musictree.dynamics.Dynamics" title="musictree.dynamics.Dynamics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.dynamics.Dynamics</span></code></a></p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="musictree/musictree.note.html#musictree.note.Note" title="musictree.note.Note"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.note.Note</span></code></a> is the seventh layer of a musictree.</dt><dd><ul class="simple">
-<li><p>It is the parent of <a class="reference internal" href="musictree/musictree.midi.html#musictree.midi.Midi" title="musictree.midi.Midi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.midi.Midi</span></code></a></p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="musictree/musictree.midi.html#musictree.midi.Midi" title="musictree.midi.Midi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.midi.Midi</span></code></a> is the eighth layer of a musictree.</dt><dd><ul class="simple">
-<li><p>It is the parent of <a class="reference internal" href="musictree/musictree.accidental.html#musictree.accidental.Accidental" title="musictree.accidental.Accidental"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.accidental.Accidental</span></code></a></p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p><a class="reference internal" href="musictree/musictree.accidental.html#musictree.accidental.Accidental" title="musictree.accidental.Accidental"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.accidental.Accidental</span></code></a> is the ninth layer of a musictree.</p></li>
-</ol>
-<div class="section" id="quarterduration-non-writables-and-quantizing">
-<h3>QuarterDuration non-writables and quantizing<a class="headerlink" href="#quarterduration-non-writables-and-quantizing" title="Permalink to this headline"></a></h3>
-<ul class="simple">
-<li><p><a class="reference internal" href="musictree/musictree.quarterduration.html#musictree.quarterduration.QuarterDuration" title="musictree.quarterduration.QuarterDuration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.quarterduration.QuarterDuration</span></code></a></p></li>
-</ul>
-</div>
-<div class="section" id="layout">
-<h3>Layout<a class="headerlink" href="#layout" title="Permalink to this headline"></a></h3>
-<ul class="simple">
-<li><p><a class="reference internal" href="musictree/musictree.layout.html#musictree.layout.Scaling" title="musictree.layout.Scaling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.layout.Scaling</span></code></a></p></li>
-<li><p><a class="reference internal" href="musictree/musictree.layout.html#musictree.layout.PageLayout" title="musictree.layout.PageLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.layout.PageLayout</span></code></a></p></li>
-<li><p><a class="reference internal" href="musictree/musictree.layout.html#musictree.layout.StaffLayout" title="musictree.layout.StaffLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.layout.StaffLayout</span></code></a></p></li>
-<li><p><a class="reference internal" href="musictree/musictree.layout.html#musictree.layout.StaffLayout" title="musictree.layout.StaffLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">musictree.layout.StaffLayout</span></code></a></p></li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This project is under active development.</p>
-</div>
-<p>Check out the <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> section for further information, including how to <a class="reference internal" href="usage.html#installation"><span class="std std-ref">install</span></a> the project.</p>
-<div class="toctree-wrapper compound">
-</div>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline"></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
-</div>
-<div class="section" id="content">
-<h2>Content<a class="headerlink" href="#content" title="Permalink to this headline"></a></h2>
+  <div class="section" id="content">
+<h1>Content<a class="headerlink" href="#content" title="Permalink to this headline"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">INTRO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="musictree/musictree.html">musictree</a></li>
-<li class="toctree-l1"><a class="reference internal" href="musicxml/musicxml.html">musicxml</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tree/tree.html">tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="musictree/musictree.html">musictree API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="musicxml/musicxml.html">musicxml API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tree/tree.html">tree API</a></li>
 </ul>
-</div>
 </div>
 </div>
 

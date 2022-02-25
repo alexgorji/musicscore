@@ -37,9 +37,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">INTRO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../musictree/musictree.html">musictree</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../musicxml/musicxml.html">musicxml</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tree/tree.html">tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../musictree/musictree.html">musictree API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../musicxml/musicxml.html">musicxml API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tree/tree.html">tree API</a></li>
 </ul>
 
         </div>
@@ -405,9 +405,9 @@
         <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;object &#39;Chord&#39; cannot return a string.&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ATTRIBUTES</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TREE_ATTRIBUTES</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;_</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span>
-                                                                                   <span class="bp">self</span><span class="o">.</span><span class="n">_ATTRIBUTES</span><span class="o">.</span><span class="n">union</span><span class="p">(</span>
-                                                                                       <span class="bp">self</span><span class="o">.</span><span class="n">TREE_ATTRIBUTES</span><span class="p">)]</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ATTRIBUTES</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_TREE_ATTRIBUTES</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;_</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span>
+                                                                                    <span class="bp">self</span><span class="o">.</span><span class="n">_ATTRIBUTES</span><span class="o">.</span><span class="n">union</span><span class="p">(</span>
+                                                                                       <span class="bp">self</span><span class="o">.</span><span class="n">_TREE_ATTRIBUTES</span><span class="p">)]</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">notes</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
                     <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">notes</span><span class="p">)</span>

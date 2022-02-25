@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tree &mdash; musicscore2 0.1 documentation</title>
+  <title>tree API &mdash; musicscore2 0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,7 +17,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="musicxml.util.core" href="../musicxml/musicxml.util.core.html" /> 
+    <link rel="prev" title="musicxml.xsd.xsdtree" href="../musicxml/musicxml.xsd.xsdtree.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -38,9 +38,9 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../intro.html">INTRO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../musictree/musictree.html">musictree</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../musicxml/musicxml.html">musicxml</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../musictree/musictree.html">musictree API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../musicxml/musicxml.html">musicxml API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">tree API</a></li>
 </ul>
 
         </div>
@@ -57,7 +57,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>tree</li>
+      <li>tree API</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/tree/tree.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -68,7 +68,7 @@
            <div itemprop="articleBody">
              
   <div class="section" id="module-tree.tree">
-<span id="tree"></span><h1>tree<a class="headerlink" href="#module-tree.tree" title="Permalink to this headline"></a></h1>
+<span id="tree-api"></span><h1>tree API<a class="headerlink" href="#module-tree.tree" title="Permalink to this headline"></a></h1>
 <dl class="py exception">
 <dt class="sig sig-object py" id="tree.tree.TreeException">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tree.tree.</span></span><span class="sig-name descname"><span class="pre">TreeException</span></span><a class="reference internal" href="../_modules/tree/tree.html#TreeException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tree.tree.TreeException" title="Permalink to this definition"></a></dt>
@@ -85,11 +85,6 @@
 <dt class="sig sig-object py" id="tree.tree.Tree">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tree.tree.</span></span><span class="sig-name descname"><span class="pre">Tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tree/tree.html#Tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tree.tree.Tree" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tree.tree.Tree.TREE_ATTRIBUTES">
-<span class="sig-name descname"><span class="pre">TREE_ATTRIBUTES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'_children',</span> <span class="pre">'_parent',</span> <span class="pre">'compact_repr',</span> <span class="pre">'is_leaf',</span> <span class="pre">'level',</span> <span class="pre">'up'}</span></em><a class="headerlink" href="#tree.tree.Tree.TREE_ATTRIBUTES" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py property">
 <dt class="sig sig-object py" id="tree.tree.Tree.compact_repr">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compact_repr</span></span><a class="headerlink" href="#tree.tree.Tree.compact_repr" title="Permalink to this definition"></a></dt>
@@ -233,7 +228,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../musicxml/musicxml.util.core.html" class="btn btn-neutral float-left" title="musicxml.util.core" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../musicxml/musicxml.xsd.xsdtree.html" class="btn btn-neutral float-left" title="musicxml.xsd.xsdtree" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

@@ -1,5 +1,5 @@
-musictree
-=========
+musictree API
+=============
 
 .. toctree::
    :maxdepth: 4

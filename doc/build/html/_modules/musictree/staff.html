@@ -37,9 +37,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">INTRO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../musictree/musictree.html">musictree</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../musicxml/musicxml.html">musicxml</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tree/tree.html">tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../musictree/musictree.html">musictree API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../musicxml/musicxml.html">musicxml API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tree/tree.html">tree API</a></li>
 </ul>
 
         </div>
@@ -80,29 +80,16 @@
     <span class="n">_ATTRIBUTES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;clef&#39;</span><span class="p">,</span> <span class="s1">&#39;default_clef&#39;</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">}</span>
     <span class="n">XMLClass</span> <span class="o">=</span> <span class="n">XMLStaff</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clef</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clef</span><span class="o">=</span><span class="n">TrebleClef</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_xml_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">XMLClass</span><span class="p">(</span><span class="n">value_</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_number</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_clef</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_default_clef</span> <span class="o">=</span> <span class="n">TrebleClef</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clef</span> <span class="o">=</span> <span class="n">clef</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">number</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">default_clef</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_clef</span>
-
-    <span class="nd">@default_clef</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">default_clef</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">Clef</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_default_clef</span> <span class="o">=</span> <span class="n">val</span>
-
-    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">clef</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clef</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_clef</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clef</span>
 
     <span class="nd">@clef</span><span class="o">.</span><span class="n">setter</span>

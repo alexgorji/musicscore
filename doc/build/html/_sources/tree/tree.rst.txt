@@ -1,5 +1,5 @@
-tree
-=====
+tree API
+========
 
 .. automodule:: tree.tree
    :members:

@@ -39,7 +39,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../intro.html">INTRO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="musictree.html">musictree</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="musictree.html">musictree API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="musictree.accidental.html">musictree.accidental</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.beat.html">musictree.beat</a></li>
 <li class="toctree-l2"><a class="reference internal" href="musictree.chord.html">musictree.chord</a></li>
@@ -61,8 +61,8 @@
 <li class="toctree-l2"><a class="reference internal" href="musictree.xmlwrapper.html">musictree.xmlwrapper</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../musicxml/musicxml.html">musicxml</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tree/tree.html">tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../musicxml/musicxml.html">musicxml API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tree/tree.html">tree API</a></li>
 </ul>
 
         </div>
@@ -79,7 +79,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="musictree.html">musictree</a> &raquo;</li>
+          <li><a href="musictree.html">musictree API</a> &raquo;</li>
       <li>musictree.staff</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/musictree/musictree.staff.rst.txt" rel="nofollow"> View page source</a>
@@ -94,18 +94,13 @@
 <span id="musictree-staff"></span><h1>musictree.staff<a class="headerlink" href="#module-musictree.staff" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="musictree.staff.Staff">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.staff.</span></span><span class="sig-name descname"><span class="pre">Staff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/staff.html#Staff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.staff.Staff" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">musictree.staff.</span></span><span class="sig-name descname"><span class="pre">Staff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clef=&lt;musictree.clef.TrebleClef</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/musictree/staff.html#Staff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#musictree.staff.Staff" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="musictree.core.html#musictree.core.MusicTree" title="musictree.core.MusicTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.core.MusicTree</span></code></a>, <a class="reference internal" href="musictree.xmlwrapper.html#musictree.xmlwrapper.XMLWrapper" title="musictree.xmlwrapper.XMLWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">musictree.xmlwrapper.XMLWrapper</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="musictree.staff.Staff.XMLClass">
 <span class="sig-name descname"><span class="pre">XMLClass</span></span><a class="headerlink" href="#musictree.staff.Staff.XMLClass" title="Permalink to this definition"></a></dt>
 <dd><p>alias of <a class="reference internal" href="../musicxml/musicxml.xmlelement.xmlelement.html#musicxml.xmlelement.xmlelement.XMLStaff" title="musicxml.xmlelement.xmlelement.XMLStaff"><code class="xref py py-class docutils literal notranslate"><span class="pre">musicxml.xmlelement.xmlelement.XMLStaff</span></code></a></p>
 </dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="musictree.staff.Staff.default_clef">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_clef</span></span><a class="headerlink" href="#musictree.staff.Staff.default_clef" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="musictree.staff.Staff.clef">
