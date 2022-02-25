@@ -600,7 +600,7 @@ class TestChildContainer(TestCase):
     Element@name=listen@minOccurs=0@maxOccurs=1
 """
         container.check_required_elements()
-        assert container.tree_representation(function=show_force_valid) == expected
+        assert container.tree_representation(key=show_force_valid) == expected
         with self.assertRaises(XMLChildContainerChoiceHasAnotherChosenChild):
             container.add_element(XMLUnpitched())
         container.add_element(XMLChord())
@@ -621,7 +621,7 @@ class TestChildContainer(TestCase):
                         !Required!
             Element@name=tie@minOccurs=0@maxOccurs=2
 """
-        assert choice.chosen_child.tree_representation(function=show_force_valid) == expected
+        assert choice.chosen_child.tree_representation(key=show_force_valid) == expected
         with self.assertRaises(XMLChildContainerChoiceHasAnotherChosenChild):
             container.add_element(XMLRest())
         container.add_element(XMLDuration(2))
@@ -642,7 +642,7 @@ class TestChildContainer(TestCase):
                         XMLDuration
             Element@name=tie@minOccurs=0@maxOccurs=2
 """
-        assert choice.chosen_child.tree_representation(function=show_force_valid) == expected
+        assert choice.chosen_child.tree_representation(key=show_force_valid) == expected
         assert container.get_children()[0].requirements_not_fulfilled is False
         container.add_element(XMLVoice('1'))
         assert container.get_children()[0].requirements_not_fulfilled is False

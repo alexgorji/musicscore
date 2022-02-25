@@ -64,7 +64,7 @@ def element_class_as_string(element_):
         try:
             container = containers[xsd_type]
             container_tree_representation = copy.copy(container).tree_representation(
-                tab=lambda x: '    ' + x.get_layer_number() * 2 * '\- ', function=lambda x: x.compact_repr + '\\n')
+                tab=lambda x: '    ' + x.get_layer_number() * 2 * '\- ', key=lambda x: x.compact_repr + '\\n')
             container_tree_representation = container_tree_representation.replace('@', '\@')
             container_tree_representation = container_tree_representation[:-1]
             if doc != "":
