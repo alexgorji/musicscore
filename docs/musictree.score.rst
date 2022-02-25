@@ -5,3 +5,4 @@ musictree.score
    :members:
    :undoc-members:
    :show-inheritance:
+   :inherited-members:

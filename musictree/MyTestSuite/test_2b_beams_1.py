@@ -11,7 +11,7 @@ from musictree.tests.util import IdTestCase, generate_all_16ths, generate_all_32
 class TestHelloTBeams1(IdTestCase):
     def test_export_hello_world_tuplets_1(self):
         """
-        Wright all possible combinations of 16ths and 32nds in a beat
+        Write all possible combinations of 16ths and 32nds in a beat
         """
         """
         Tester creates a timewise score

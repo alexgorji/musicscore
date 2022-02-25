@@ -18,7 +18,7 @@ class XMLElement(Tree):
     """
     Parent class of all xml elements.
     """
-    PROPERTIES = {'XSD_TREE', 'compact_repr', 'is_leaf', 'level', 'attributes', 'child_container_tree', 'possible_children_names',
+    _PROPERTIES = {'XSD_TREE', 'compact_repr', 'is_leaf', 'level', 'attributes', 'child_container_tree', 'possible_children_names',
                   'et_xml_element', 'name', 'type_', 'value_', 'parent_xsd_element'}
     TYPE = None
     _SEARCH_FOR_ELEMENT = ''
@@ -334,7 +334,7 @@ class XMLElement(Tree):
         return ET.tostring(self.et_xml_element, encoding='unicode') + '\n'
 
     def __setattr__(self, key, value):
-        if key[0] == '_' or key in self.PROPERTIES:
+        if key[0] == '_' or key in self._PROPERTIES:
             super().__setattr__(key, value)
         elif key.startswith('xml_'):
             try:

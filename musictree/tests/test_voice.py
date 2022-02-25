@@ -68,7 +68,7 @@ class TestVoice(TestCase):
         v.add_chord(Chord(quarter_duration=1.5, midis=60))
         v.add_chord(Chord(quarter_duration=2, midis=60))
         v.add_chord(Chord(quarter_duration=0.5, midis=60))
-        assert v.left_over_chord is None
+        assert v.leftover_chord is None
         assert [ch.quarter_duration for ch in v.get_chords()] == [1.5, 0.5, 1.5, 0.5]
         assert v.get_chords()[1]._ties == ['start']
         assert v.get_chords()[2]._ties == ['stop']
@@ -77,5 +77,5 @@ class TestVoice(TestCase):
         v._parent = mock_staff
         v.update_beats(1, 1)
         v.add_chord(Chord(quarter_duration=3, midis=60))
-        assert isinstance(v.left_over_chord, Chord)
-        assert v.left_over_chord.quarter_duration == 1
+        assert isinstance(v.leftover_chord, Chord)
+        assert v.leftover_chord.quarter_duration == 1

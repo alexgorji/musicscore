@@ -177,10 +177,10 @@ class Part(MusicTree, XMLWrapper):
         except VoiceIsAlreadyFullError:
             current_measure = add_to_next_measure(current_measure, chord)
 
-        left_over_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).left_over_chord
-        while left_over_chord:
-            current_measure = add_to_next_measure(current_measure, left_over_chord)
-            left_over_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).left_over_chord
+        leftover_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).leftover_chord
+        while leftover_chord:
+            current_measure = add_to_next_measure(current_measure, leftover_chord)
+            leftover_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).leftover_chord
 
     def add_measure(self, time=None, number=None):
         previous_measure = self.get_children()[-1] if self.get_children() else None

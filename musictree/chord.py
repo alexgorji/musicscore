@@ -317,15 +317,15 @@ class Chord(MusicTree, QuarterDurationMixin):
             current_chord = copied
             output.append(current_chord)
         if quarter_durations[1]:
-            left_over_chord = split_copy(self, quarter_durations[1])
+            leftover_chord = split_copy(self, quarter_durations[1])
             current_chord.add_tie('start')
-            left_over_chord.add_tie('stop')
-            for midi in left_over_chord.midis:
+            leftover_chord.add_tie('stop')
+            for midi in leftover_chord.midis:
                 midi.accidental.show = False
         else:
-            left_over_chord = None
-        self.up.left_over_chord = left_over_chord
-        self.up.up.left_over_chord = left_over_chord
+            leftover_chord = None
+        self.up.leftover_chord = leftover_chord
+        self.up.up.leftover_chord = leftover_chord
 
         return output
 

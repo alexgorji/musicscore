@@ -141,7 +141,7 @@ class QuarterDuration(numbers.Rational):
         """
         :param beats:
         :param offset: offset in the first beat
-        :return: [sections as list of QuarterDurations, left_over as QuarterDruation] left_over is the remaining quarter_duration which
+        :return: [sections as list of QuarterDurations, leftover as QuarterDruation] leftover is the remaining quarter_duration which
                  exceeds the sum of all beats quarter durations. If there is no left over the second value in the list is None.
                  offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)] => [[0.5, 3], None]
                  See tests for more examples. In BEATWISE_EXCEPTIONS exceptions can be declared.
@@ -159,18 +159,18 @@ class QuarterDuration(numbers.Rational):
         if offset:
             output[0] = beats[0].quarter_duration - offset
             beats.pop(0)
-        left_over = self - output[0] if output[0] is not None else self
-        out_of_reach = left_over - sum(b.quarter_duration for b in beats)
+        leftover = self - output[0] if output[0] is not None else self
+        out_of_reach = leftover - sum(b.quarter_duration for b in beats)
         if out_of_reach > 0:
-            left_over -= out_of_reach
+            leftover -= out_of_reach
             output[2] = out_of_reach
         for beat in beats:
-            if left_over >= beat.quarter_duration:
+            if leftover >= beat.quarter_duration:
                 current_value = beat.quarter_duration
-                left_over -= current_value
+                leftover -= current_value
             else:
-                current_value = left_over
-                left_over = 0
+                current_value = leftover
+                leftover = 0
             if not output[1]:
                 output[1] = [current_value]
             else:
@@ -178,7 +178,7 @@ class QuarterDuration(numbers.Rational):
                     output[1][-1] += current_value
                 else:
                     output[1].append(current_value)
-            if left_over == 0:
+            if leftover == 0:
                 break
         if output[0]:
             output = [[output[0], *output[1]], output[2]]

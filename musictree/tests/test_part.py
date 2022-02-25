@@ -223,7 +223,7 @@ class TestPart(IdTestCase):
         assert [ch.midis[0].value for ch in m.get_voice(staff_number=1, voice_number=1).get_chords()] == [60, 62]
         assert [ch.quarter_duration for ch in m.get_voice(staff_number=2, voice_number=4).get_chords()] == [2]
 
-    def test_part_add_chord_with_left_over(self):
+    def test_part_add_chord_with_leftover(self):
         p = Part('p1')
         ch = Chord(60, 5)
         p.add_chord(ch)
@@ -249,7 +249,7 @@ class TestPart(IdTestCase):
         p.add_chord(Chord(60, 5))
         assert p.get_current_measure() == m2
 
-    def test_part_add_split_chord_without_left_over(self):
+    def test_part_add_split_chord_without_leftover(self):
         chord = Chord(midis=60, quarter_duration=5)
         p = Part('p1')
         p.add_measure((5, 4))

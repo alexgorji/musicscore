@@ -6,7 +6,7 @@ from musicxml.xmlelement.xmlelement import XMLVoice
 
 
 class Voice(MusicTree, XMLWrapper):
-    _ATTRIBUTES = {'number', '_chords', '_current_beat', 'left_over_chord', 'is_filled'}
+    _ATTRIBUTES = {'number', '_chords', '_current_beat', 'leftover_chord', 'is_filled'}
     XMLClass = XMLVoice
 
     def __init__(self, number=None, *args, **kwargs):
@@ -15,7 +15,7 @@ class Voice(MusicTree, XMLWrapper):
         self._number = None
         self.number = number
         self._current_beat = None
-        self.left_over_chord = None
+        self.leftover_chord = None
 
     @property
     def is_filled(self):

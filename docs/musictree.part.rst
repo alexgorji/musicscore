@@ -5,3 +5,4 @@ musictree.part
    :members:
    :undoc-members:
    :show-inheritance:
+   :inherited-members:

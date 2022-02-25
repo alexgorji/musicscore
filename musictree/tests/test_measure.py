@@ -250,13 +250,13 @@ class TestMeasure(TestCase):
         assert len(returned_chords) == 1
         assert returned_chords[0] == ch
         assert returned_chords[0].quarter_duration == 2
-        assert m.get_children()[0].get_children()[0].left_over_chord is None
+        assert m.get_children()[0].get_children()[0].leftover_chord is None
         ch = Chord(quarter_duration=2, midis=60)
         returned_chords = m.add_chord(ch)
         assert len(returned_chords) == 1
         assert returned_chords[0] == ch
         assert returned_chords[0].quarter_duration == 2
-        assert m.get_children()[0].get_children()[0].left_over_chord is None
+        assert m.get_children()[0].get_children()[0].leftover_chord is None
         with self.assertRaises(VoiceIsAlreadyFullError):
             m.add_chord(Chord(quarter_duration=2, midis=60))
         ch = Chord(quarter_duration=2, midis=60)
@@ -264,14 +264,14 @@ class TestMeasure(TestCase):
         assert len(returned_chords) == 1
         assert [ch.voice for ch in m.get_chords()] == [1, 1, 2]
 
-    def test_add_chord_left_over(self):
+    def test_add_chord_leftover(self):
         m = Measure(1)
         ch = Chord(quarter_duration=5, midis=60)
         returned_chords = m.add_chord(ch)
         assert len(returned_chords) == 1
         assert returned_chords[0] == ch
         assert returned_chords[0].quarter_duration == 4
-        assert m.get_voice(staff_number=1, voice_number=1).left_over_chord.quarter_duration == 1
+        assert m.get_voice(staff_number=1, voice_number=1).leftover_chord.quarter_duration == 1
 
     def test_attributes(self):
         """

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
 
@@ -8,7 +10,7 @@ from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDurationMixin, QuarterDuration
 from musictree.util import lcm
 
-#: offset : {chord.quarter_duration: split quarter_durations, ...}
+#: {offset : {chord.quarter_duration: split quarter_durations, ...}, ...}
 SPLITTALBES = {
     QuarterDuration(0): {
         QuarterDuration(5, 6): [QuarterDuration(3, 6), QuarterDuration(2, 6)],
@@ -81,12 +83,26 @@ def _find_quantized_locations(duration, subdivision):
 
 
 class Beat(MusicTree, QuarterDurationMixin):
+    """
+    Beat is the direct ancestor of chords. Each :obj:`~musictree.chord.Chord` is placed with an offset between 0 and beat's
+    quarter duration inside the beat as its child .
+
+    :obj:`~musictree.chord.Chord`'s quarter duration can exceed beat's duration until the end of its parent :obj:`~musictree.voice.Voice`. If a :obj:`~musictree.chord.Chord` is longer
+    than that a leftover :obj:`~musictree.chord.Chord` will be added to the appropriate :obj:`~musictree.voice.Voice` in the next :obj:`~musictree.measure.Measure`.
+
+    Beat manages splitting of each child :obj:`~musictree.chord.Chord` into appropriate tied :obj:`~musictree.chord.Chord` s if needed.
+    The dots and tuplets are also added here to
+    :obj:`~musictree.chord.Chord` or directly to their :obj:`~musictree.note.Note` children.
+
+    Beaming and quantization are also further important tasks of a beat.
+    """
+
     _PERMITTED_DURATIONS = {4, 2, 1, 0.5}
 
     def __init__(self, quarter_duration=1):
         super().__init__(quarter_duration=quarter_duration)
         self._filled_quarter_duration = 0
-        self.left_over_chord = None
+        self.leftover_chord = None
 
     def _add_child(self, child):
         child._parent = self
@@ -94,11 +110,62 @@ class Beat(MusicTree, QuarterDurationMixin):
         if self.up.up.up.up:
             self.up.up.up.up.set_current_measure(staff_number=self.up.up.number, voice_number=self.up.number, measure=self.up.up.up)
 
+    def _change_children_quarter_durations(self, quarter_durations):
+        if len(quarter_durations) != len(self.get_children()):
+            raise ValueError
+        if sum(quarter_durations) != self.quarter_duration:
+            raise ValueError
+        for qd, ch in zip(quarter_durations, self.get_children()):
+            ch._quarter_duration = qd
+
     def _check_permitted_duration(self, val):
         for d in self._PERMITTED_DURATIONS:
             if val == d:
                 return
         raise BeatWrongDurationError(f"Beat's quarter duration {val} is not allowed.")
+
+    def _get_quantized_locations(self, subdivision):
+        return _find_quantized_locations(self.quarter_duration, subdivision)
+
+    def _get_quantized_quarter_durations(self, quarter_durations):
+        if sum(quarter_durations) != self.quarter_duration:
+            raise ValueError(
+                f"Sum of quarter_durations '{quarter_durations}: {sum(quarter_durations)}' is not equal to beat quarter_duration "
+                f"'{self.quarter_duration}'")
+
+        def _get_positions():
+            output = [0]
+            for i, qd in enumerate(quarter_durations):
+                output.append(output[i] + qd)
+            return output
+
+        positions = _get_positions()
+        permitted_divs = self.get_possible_subdivisions()[:]
+        best_div = permitted_divs.pop(0)
+        last_q_delta = _find_q_delta(self._get_quantized_locations(subdivision=best_div), positions)
+
+        for div in permitted_divs:
+            current_q_delta = _find_q_delta(self._get_quantized_locations(subdivision=div), positions)
+
+            if current_q_delta < last_q_delta:
+                best_div = div
+                last_q_delta = current_q_delta
+
+            elif (current_q_delta == last_q_delta) and (div < best_div):
+                best_div = div
+
+        quantized_positions = [f[0] for f in
+                               _find_nearest_quantized_value(self._get_quantized_locations(subdivision=best_div),
+                                                             positions)]
+
+        quantized_durations = []
+
+        for i in range(len(quarter_durations)):
+            fr = Fraction(
+                quantized_positions[i + 1] - quantized_positions[i]).limit_denominator(
+                int(best_div / self.quarter_duration))
+            quantized_durations.append(QuarterDuration(fr))
+        return quantized_durations
 
     @staticmethod
     def _split_chord(chord, quarter_durations):
@@ -114,18 +181,6 @@ class Beat(MusicTree, QuarterDurationMixin):
             for midi in next_ch.midis:
                 midi.accidental.show = False
         return output
-
-    def split_not_writable_chords(self):
-        for chord in self.get_children():
-            split = self._split_not_writable(chord, chord.offset)
-            if split:
-                for ch in split:
-                    ch._parent = self
-                if chord == self.get_children()[-1]:
-                    self._children = self.get_children()[:-1] + split
-                else:
-                    index = self.get_children().index(chord)
-                    self._children = self.get_children()[:index] + split + self.get_children()[index + 1:]
 
     def _split_not_writable(self, chord, offset):
         if SPLITTALBES.get(offset):
@@ -234,6 +289,9 @@ class Beat(MusicTree, QuarterDurationMixin):
 
     @property
     def is_filled(self):
+        """
+        ``True`` if no children can be added anymore. If ``False`` there is still room for further child or children.
+        """
         if self.filled_quarter_duration == self.quarter_duration:
             return True
         else:
@@ -241,14 +299,26 @@ class Beat(MusicTree, QuarterDurationMixin):
 
     @property
     def filled_quarter_duration(self):
+        """
+        :return: How much of beat's quarter duration is already filled.
+        :rtype: QuarterDuration
+        """
         return self._filled_quarter_duration
 
     @property
     def number(self):
+        """
+        :return: Beat's number inside its parent's :obj:`musictree.voice.Voice`
+        :rtype: int
+        """
         return self.up.get_children().index(self) + 1
 
     @property
     def offset(self):
+        """
+        :return: Offset in Beat's parent :obj:`musictree.voice.Voice`
+        :rtype: QuarterDuration
+        """
         if not self.up:
             return None
         elif self.previous is None:
@@ -256,7 +326,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         else:
             return self.previous.offset + self.previous.quarter_duration
 
-    def add_child(self, child):
+    def add_child(self, child: Chord):
         self._check_child_to_be_added(child)
         if not self.up:
             raise BeatHasNoParentError('A child Chord can only be added to a beat if it has a voice parent.')
@@ -289,70 +359,40 @@ class Beat(MusicTree, QuarterDurationMixin):
                 beats = self.up.get_children()[self.up.get_children().index(self):]
                 return child.split_beatwise(beats)
 
-    def add_chord(self, chord=None):
+    def add_chord(self, chord: Optional[Chord] = None):
         if chord is None:
             chord = Chord(midis=60, quarter_duration=self.quarter_duration)
         return self.add_child(chord)
 
-    def _change_children_quarter_durations(self, quarter_durations):
-        if len(quarter_durations) != len(self.get_children()):
-            raise ValueError
-        if sum(quarter_durations) != self.quarter_duration:
-            raise ValueError
-        for qd, ch in zip(quarter_durations, self.get_children()):
-            ch._quarter_duration = qd
-
-    def get_quantized_locations(self, subdivision):
-        return _find_quantized_locations(self.quarter_duration, subdivision)
-
-    def get_quantized_quarter_durations(self, quarter_durations):
-        if sum(quarter_durations) != self.quarter_duration:
-            raise ValueError(
-                f"Sum of quarter_durations '{quarter_durations}: {sum(quarter_durations)}' is not equal to beat quarter_duration "
-                f"'{self.quarter_duration}'")
-
-        def _get_positions():
-            output = [0]
-            for i, qd in enumerate(quarter_durations):
-                output.append(output[i] + qd)
-            return output
-
-        positions = _get_positions()
-        permitted_divs = self.get_possible_subdivisions()[:]
-        best_div = permitted_divs.pop(0)
-        last_q_delta = _find_q_delta(self.get_quantized_locations(subdivision=best_div), positions)
-
-        for div in permitted_divs:
-            current_q_delta = _find_q_delta(self.get_quantized_locations(subdivision=div), positions)
-
-            if current_q_delta < last_q_delta:
-                best_div = div
-                last_q_delta = current_q_delta
-
-            elif (current_q_delta == last_q_delta) and (div < best_div):
-                best_div = div
-
-        quantized_positions = [f[0] for f in
-                               _find_nearest_quantized_value(self.get_quantized_locations(subdivision=best_div),
-                                                             positions)]
-
-        quantized_durations = []
-
-        for i in range(len(quarter_durations)):
-            fr = Fraction(
-                quantized_positions[i + 1] - quantized_positions[i]).limit_denominator(
-                int(best_div / self.quarter_duration))
-            quantized_durations.append(QuarterDuration(fr))
-        return quantized_durations
+    def split_not_writable_chords(self):
+        """
+        This method checks if the quarter duration of all children chords must be split according to
+        :obj:`~musictree.beat.SPLITTALBES` dict with format {offset : {chord.quarter_duration: split quarter_durations, ...}, ...}
+        This dict can be manipulated by user during runtime if needed. Be careful with not writable quarter durations which have to be
+        split.
+        """
+        for chord in self.get_children():
+            split = self._split_not_writable(chord, chord.offset)
+            if split:
+                for ch in split:
+                    ch._parent = self
+                if chord == self.get_children()[-1]:
+                    self._children = self.get_children()[:-1] + split
+                else:
+                    index = self.get_children().index(chord)
+                    self._children = self.get_children()[:index] + split + self.get_children()[index + 1:]
 
     def quantize(self):
+        """
+        When called the positioning of children will be quantized according to :obj:`musictree.core.MusicTree.get_possible_subdivisions()`
+        """
         if self.get_possible_subdivisions() and self.get_children():
             if self._get_actual_notes(self.get_children()) in self.get_possible_subdivisions():
                 pass
             else:
                 quarter_durations = [chord.quarter_duration for chord in self.get_children()]
                 if len([d for d in quarter_durations if d != 0]) > 1:
-                    self._change_children_quarter_durations(self.get_quantized_quarter_durations(quarter_durations))
+                    self._change_children_quarter_durations(self._get_quantized_quarter_durations(quarter_durations))
                     self._remove_zero_quarter_durations()
 
 

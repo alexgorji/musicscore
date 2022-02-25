@@ -75,7 +75,7 @@ class TestBeatAddChild(TestCase):
         assert chord4.up == beats[2]
         assert v.get_current_beat() is None
         assert beats[3].is_filled
-        assert v.left_over_chord is None
+        assert v.leftover_chord is None
 
         v = create_voice()
         beats = v.update_beats(1 / 4, 1 / 4, 1 / 4, 1 / 4)
@@ -92,7 +92,7 @@ class TestBeatAddChild(TestCase):
         v = create_voice()
         beats = v.update_beats(1, 1, 1, 1)
         chord = v.get_current_beat().add_child(Chord(60, quarter_duration=4))
-        assert v.left_over_chord is None
+        assert v.leftover_chord is None
         for index, beat in enumerate(beats):
             if index == 0:
                 assert beat.get_children() == chord
@@ -106,7 +106,7 @@ class TestBeatAddChild(TestCase):
         beats = v.update_beats(1, 1, 1, 1)
         v.get_current_beat().add_child(Chord(midis=60, quarter_duration=1))
         v.get_current_beat().add_child(Chord(midis=61, quarter_duration=3))
-        assert v.left_over_chord is None
+        assert v.leftover_chord is None
         for index, beat in enumerate(beats):
             if index == 0:
                 assert [ch.quarter_duration for ch in beat.get_children()] == [1]
@@ -120,7 +120,7 @@ class TestBeatAddChild(TestCase):
                 assert beat.get_children() == []
                 assert beat.is_filled
 
-    def test_add_child_5_left_over(self):
+    def test_add_child_5_leftover(self):
         v = create_voice()
         beats = v.update_beats(1, 1, 1, 1)
         split_children = v.get_current_beat().add_child(Chord(midis=61, quarter_duration=5))
@@ -133,10 +133,10 @@ class TestBeatAddChild(TestCase):
                 assert beat.get_children() == []
                 assert beat.is_filled
         assert split_children[0]._ties == ['start']
-        assert v.left_over_chord.quarter_duration == 1
-        assert not v.left_over_chord.split
-        assert v.left_over_chord.midis[0].value == 61
-        assert v.left_over_chord._ties == ['stop']
+        assert v.leftover_chord.quarter_duration == 1
+        assert not v.leftover_chord.split
+        assert v.leftover_chord.midis[0].value == 61
+        assert v.leftover_chord._ties == ['stop']
 
     def test_add_child_with_fractional_quarter_duration_1(self):
         v = create_voice()
@@ -174,7 +174,7 @@ class TestBeatAddChild(TestCase):
                 assert [ch.quarter_duration for ch in beat.get_children()] == [1]
                 assert [ch.midis[0].value for ch in beat.get_children()] == [62]
                 assert beat.is_filled
-        assert v.left_over_chord.quarter_duration == 4 - 2.5 - 0.6
+        assert v.leftover_chord.quarter_duration == 4 - 2.5 - 0.6
 
     def test_split_chord_different_accidental_instances(self):
         v1 = create_voice()
@@ -194,7 +194,7 @@ class TestBeatAddChild(TestCase):
         v1.get_current_beat().add_child(chord)
         v2 = create_voice()
         v2.update_beats(1, 1, 1)
-        v2.get_current_beat().add_child(v1.left_over_chord)
+        v2.get_current_beat().add_child(v1.leftover_chord)
         all_chords = v1.get_chords() + v2.get_chords()
         for b in v1.get_children() + v2.get_children():
             b._update_xml_notes()
