@@ -28,7 +28,8 @@ class MusicTree(Tree):
             raise TypeError(f'MusicTree child must be of type MusicTree not {child.__class__}')
 
         parent_child = {'Score': 'Part', 'Part': 'Measure', 'Measure': 'Staff', 'Staff': 'Voice', 'Voice': 'Beat', 'Beat': 'Chord',
-                        'Chord': 'Note', 'Note': 'Midi', 'Midi': 'Accidental'}
+                        'Chord': 'Note', 'Note': 'Midi', 'Midi': 'Accidental', 'C': 'Accidental', 'D': 'Accidental', 'E': 'Accidental',
+                        'F': 'Accidental', 'G': 'Accidental', 'A': 'Accidental', 'B': 'Accidental'}
 
         try:
             if not isinstance_as_string(child, parent_child[self.__class__.__name__]):
@@ -66,7 +67,6 @@ class MusicTree(Tree):
         except TypeError:
             subdivisions = [subdivisions]
         self._possible_subdivisions[beat_quarter_duration] = subdivisions
-
 
     @staticmethod
     def _check_args_kwargs(args, kwargs, class_name, get_class_name=None):

@@ -137,6 +137,11 @@ class Midi(MusicTree):
         return f"{self.accidental.get_pitch_parameters()[0]}{accidental}{self.octave}"
 
     # //public methods
+    def add_child(self, child):
+        super().add_child(child)
+        child._update_xml_object()
+        child._update_parent_midi()
+        return child
 
     def get_pitch_or_rest(self) -> Union['XMLPitch', 'XMLRest']:
         """

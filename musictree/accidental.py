@@ -147,19 +147,18 @@ SIGNS = {-2: 'flat-flat',
 
 class Accidental(MusicTree, XMLWrapper):
     """
-    Accidental can be of different modes: standard, flat, sharp, enharmonic_1 or enharmonic_2. It accepts furthermore two parameters:
-    force_show and force_hide.
+    Accidental is the class for managing Midi's accidental sign and its pitch parameters: stem, alter, octave
+    The parameter mode (standard, flat, sharp, enharmonic_1 or enharmonic_2) can be used to set different enharmonic variants of the same
+    pitch.
     """
     _ATTRIBUTES = {'mode', 'show', 'parent_midi'}
 
-    # (stem, alter, octaveAdd)
     XMLClass = XMLAccidental
 
-    def __init__(self, mode='standard', show=None, **kwargs):
+    def __init__(self, mode='standard', show: Optional[bool] = None, **kwargs):
         super().__init__()
         self._xml_object = self.XMLClass(value_='natural', **kwargs)
         self._mode = None
-        self._parent_midi = None
         self._show = None
         self.show = show
         self.mode = mode
@@ -183,6 +182,10 @@ class Accidental(MusicTree, XMLWrapper):
 
     @property
     def mode(self):
+        """
+        permitted modes: ('standard', 'flat', 'sharp', 'enharmonic_1', 'enharmonic_2')
+        :return: accidental mode which correspond to global variables STANDARD, FLAT, SHARP, ENHARMONIC_1, ENHARMONIC_@
+        """
         return self._mode
 
     @mode.setter
@@ -196,14 +199,15 @@ class Accidental(MusicTree, XMLWrapper):
 
     @property
     def parent_midi(self):
-        return self._parent_midi
+        """
+        :return: the midi parent in ``musictree``. It is equivalent to ``self.up`` or s``elf.get_parent()``
+        :rtype: `Midi`
+        """
+        return self.up
 
     @parent_midi.setter
     def parent_midi(self, val):
-        self._parent_midi = val
-        self._update_xml_object()
-        self._update_parent_midi()
-        self._parent = val
+        val.add_child(self)
 
     @property
     def sign(self):

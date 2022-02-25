@@ -1,6 +1,7 @@
 from pathlib import Path
 from unittest import TestCase
 
+from musictree.midi import MidiNote, C
 from musicxml.xmlelement.xmlelement import XMLClef, XMLSign, XMLLine
 
 from musictree.score import Score
@@ -18,6 +19,11 @@ class TestUtils(TestCase):
             pass
 
         assert not isinstance_as_string(Measure(), 'MusicTree')
+
+        assert isinstance_as_string(C(4), 'MidiNote')
+        assert isinstance_as_string(C(4), 'Midi')
+        assert isinstance_as_string(C(4), 'C')
+        assert not isinstance_as_string(C(4), 'str')
 
     def test_create_expected_path(self):
         path = Path(__file__).parent / 'test_util_diff_xml.xml'
