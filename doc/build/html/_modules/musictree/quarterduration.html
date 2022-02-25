@@ -206,14 +206,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">as_integer_ratio</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">_check_for_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
-        <span class="n">exception</span> <span class="o">=</span> <span class="n">BEATWISE_EXCEPTIONS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">exception</span><span class="p">:</span>
-            <span class="n">out</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-            <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
-                <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">QuarterDuration</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">out</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">output</span>
-
 <div class="viewcode-block" id="QuarterDuration.get_beatwise_sections"><a class="viewcode-back" href="../../musictree/musictree.quarterduration.html#musictree.quarterduration.QuarterDuration.get_beatwise_sections">[docs]</a>    <span class="k">def</span> <span class="nf">get_beatwise_sections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beats</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;Beat&#39;</span><span class="p">],</span> <span class="n">offset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s1">&#39;QuarterDuration&#39;</span><span class="p">,</span> <span class="s1">&#39;Fraction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param beats:</span>
@@ -223,6 +215,14 @@
 <span class="sd">                 offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)] =&gt; [[0.5, 3], None]</span>
 <span class="sd">                 See tests for more examples. In BEATWISE_EXCEPTIONS exceptions can be declared.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_check_for_exception</span><span class="p">():</span>
+            <span class="n">exception</span> <span class="o">=</span> <span class="n">BEATWISE_EXCEPTIONS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">exception</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
+                    <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">QuarterDuration</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">out</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">output</span>
 
         <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">[],</span> <span class="kc">None</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">offset</span><span class="p">:</span>
@@ -254,7 +254,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="n">output</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">output</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
 
-        <span class="n">exception</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_for_exception</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="n">_check_for_exception</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">exception</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">exception</span>
 

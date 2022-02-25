@@ -3,7 +3,7 @@ INTRO
 
 musicscore2
 ===========
-**musicscore2** is a python library to generate musicxml data in an intuitive and easy but nevertheless comprehensive way. The generated
+**musicscore2** is a python library for generating musicxml data in an intuitive and easy but nevertheless exhaustive way. The generated
 files can be imported in several music notation programs and be processed further if necessary. The preferred software is Finale which
 seems at the moment to have the best implementation of musicxml format files and supports the newest version 4.0.
 
@@ -11,27 +11,25 @@ seems at the moment to have the best implementation of musicxml format files and
 
 musicxml
 ========
-The central class of this package is the :obj:`~musicxml.xmlelement.xmlelement.XMLElement` class. Each :obj:`~musicxml.xmlelement.xmlelement
-.XMLElement` class must set its `type_` to a `XSDComplexType` which corresponds to xml scheme element complexType and controls the behavior of :obj:`~musicxml.xmlelement.xmlelement.XMLElement` in a comprehensive way. To be able to make full use of
-OOP, all xsd information nodes (simpleType, complexType, group, attributeGroup) are wrapped automatically into XSDTreeElement classes (
-XSDComplexType, XSDSimpleType, XSDGroup, XSDAttributeGroup) which themselves have a class attribute named XSD_TREE. XSD_TREE of type XSDTree
-is only a small step away from the raw xsd information specified for each xml element in the musicxml.xsd file. XSDTree is a convenient
-TreeRepresentation of each xsd element node which needs to receive the corresponding xsd information as a xml.tree.ElementTree.Element,
-easily extracted after reading musicxml.xsd file into a root element of the same type.
-
-How does it work?
------------------
-Each xml element can be used in a musicxml structure corresponding exactly to musicxml.xsd. For doing so the XMLElement is initiated
-using a corresponding XSDComplexType or XSDSimpleType as its TYPE.
+The central class of this package is the :obj:`~musicxml.xmlelement.xmlelement.XMLElement` class which is the parent of each individual
+xml element class (like XMLScore, XMLPart etc.). The xml element classes (mainly created automatically) behave exactly as declared in the
+musicxml schema file. The ``type_`` of Each :obj:`~musicxml.xmlelement.xmlelement.XMLElement` class is set to :obj:`~musicxml.xsd
+.XSDComplexType` or :obj:`~musicxml.xsd.XSDSimpleType`which correspond to xml schema elements ``complexType`` and ``simpleType``.
+The documentation of this package covers only the information given in the musicxml schema file, including the structure of possible or
+necessary children and attributes indicated by xsd elements and and cannot replace the more comprehensive documentation of `W3C Community
+ Group <https://www.w3.org/2021/06/musicxml40/>`_.The topic of xml and xml schema goes beyond the scope of this documentation. For
+further information see `https://www.w3schools.com/xml/default.asp`_.
 
 
 musictree
 =========
-The goal of this package is to simplify the use of musicxml elements. The tree structure of a score plays a very important role
-and is being controlled via :obj:`~musictree.musictree.MusicTree` class. Some of the objects in this hierarchy are closely connected to the
-corresponding objects in musicxml package and are descendents of  :obj:`~musictree.xmlwarpper.XMLWrapper` class with an ``~musictree
-.xmlwarpper.XMLWrapper.xml_object`
-attribute. There are although some fundamental differences between these two packages:
+The goal of this package is to simplify the use of musicxml elements. The tree structure of a score plays here a fundamental role
+and is being controlled via :obj:`~musictree.musictree.MusicTree` parent class. Most of the objects in this hierarchy are closely
+connected to the corresponding objects in musicxml package and are descendents of :obj:`~musictree.xmlwarpper.XMLWrapper` class with an
+``~musictree.xmlwarpper.XMLWrapper.xml_object` attribute. There are though some other important classes like :obj:`~musictree.beat
+.Beat` or :obj:`~musictree.chord.Chord` which don't have any direct equivalents in the musicxml structure.
+
+A musictree consists of a root :obj:`~musictree.score.Score` and its 9 descending layers:
 
 #. :obj:`musictree.score.Score` is the root of a musictree.
     - It is the parent of :obj:`musictree.part.Part`
@@ -56,12 +54,16 @@ attribute. There are although some fundamental differences between these two pac
 
 #. :obj:`musictree.measure.Measure` is the second layer of a musictree.
     - It is the parent of :obj:`musictree.staff.Staff`
+    - It must set its number by initialization.
+    - It has three important properties which can be set to control measure's ``time signature``, the ``clefs`` of its staves and
+      its ``key``.
         - :obj:`musictree.time.Time`
         - :obj:`musictree.clef.Clef`
         - :obj:`musictree.key.Key`
 
 #. :obj:`musictree.staff.Staff` is the third layer of a musictree.
     - It is the parent of :obj:`musictree.voice.Voice`
+    - It
 
 #. :obj:`musictree.voice.Voice` is the fourth layer of a musictree.
     - It is the parent of :obj:`musictree.beat.Beat`

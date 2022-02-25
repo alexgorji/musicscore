@@ -21,6 +21,5 @@ musictree
    musictree.score
    musictree.staff
    musictree.time
-   musictree.util
    musictree.voice
    musictree.xmlwrapper
