@@ -230,9 +230,11 @@ class Accidental(MusicTree, XMLWrapper):
 
     def get_pitch_parameters(self, midi_value: Optional[float] = None) -> Optional[tuple]:
         """
-        :return: a tuple consisting of pitch stem name, alter value and octave value. A midi_value 0 returns None. If midi_value is None
-        and parent_midi exists, its value will be used.
+        :return: a tuple consisting of pitch stem name, alter value and octave value (stem, alter, octave).
+                A midi_value 0 returns None.
+                If midi_value is None and a parent_midi exists, parent_midi's value will be used.
         """
+
         if midi_value is None:
             if self.parent_midi:
                 midi_value = self.parent_midi.value

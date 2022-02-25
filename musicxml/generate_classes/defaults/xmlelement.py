@@ -148,20 +148,27 @@ class XMLElement(Tree):
     @property
     def attributes(self):
         """
-        :return: a dictionary of attributes like {'font-family': 'Arial'} if XMLElement.font_family is set to Arial. The attributes will
-        appear in the main xml tag: <text font-family="Arial">hello</text>.
+        :return: a dictionary of attributes like {'font-family': 'Arial'}
+
+        >>> t = XMLText(value_='hello', font_family = 'Arial')
+        >>> t.attributes
+        {'font-family': 'Arial'}
+        >>> t.to_string()
+        <text font-family="Arial">hello</text>
         """
+
         return self._attributes
 
     @property
     def child_container_tree(self):
         """
         :return: A ChildContainerTree object which is used to manage and control XMLElements children. The nodes of a ChildContainerTree
-        have a core content property of types XSDSequence, XSDChoice, XSDGroup or XSDElement. XSDElement are the content type of
-        ChildContainerTree leaves where one or more XMLElements of a single type (depending on maxOccur attribute of element) can be
-        added to its xml_elements list. An interaction of xsd indicators (sequence, choice and group) with xsd elements makes it possible to
-        add XMLElement's Children in the right order and control all xsd rules which apply to musicxml. A variety of exceptions help user to
-        control the xml structure of the exported file which they are intending to use as a musicxml format file.
+                 have a core content property of types XSDSequence, XSDChoice, XSDGroup or XSDElement. XSDElement are the content type of
+                 ChildContainerTree leaves where one or more XMLElements of a single type (depending on maxOccur attribute of element)
+                 can be added to its xml_elements list. An interaction of xsd indicators (sequence, choice and group) with xsd elements
+                 makes it possible to add XMLElement's Children in the right order and control all xsd rules which apply to musicxml. A
+                 variety of exceptions help user to control the xml structure of the exported file which they are intending to use as a
+                 musicxml format file.
         """
         return self._child_container_tree
 
@@ -210,7 +217,7 @@ class XMLElement(Tree):
         """
         :param XMLElement child: XMLElement child to be added to XMLElement's ChildContainerTree and _unordered_children.
         :param int forward: If there are more than one XSDElement leaves in self.child_container_tree, forward can be used to determine
-        manually which of these equivocal xsd elements is going to be used to attach the child.
+                            manually which of these equivocal xsd elements is going to be used to attach the child.
         :return: Added child.
         """
         if not self._child_container_tree:
@@ -224,7 +231,7 @@ class XMLElement(Tree):
         """
         :param bool ordered: True or False.
         :return: XMLElement added children. If ordered is False the _unordered_children is returned as a more light weighted way of
-        getting children instead of using the leaves of ChildContainerTree.
+                 getting children instead of using the leaves of ChildContainerTree.
         """
         if ordered is False:
             return self._unordered_children
@@ -259,7 +266,7 @@ class XMLElement(Tree):
     def remove(self, child: 'XMLElement') -> None:
         """
         :param XMLElement child: child to be removed. This method must be used to remove a child properly from ChildContainerTree and
-        reset its behaviour.
+                                 reset its behaviour.
         :return: None
         """
 
@@ -317,8 +324,8 @@ class XMLElement(Tree):
     def to_string(self, intelligent_choice: bool = False) -> str:
         """
         :param bool intelligent_choice: Set to True if you wish to use intelligent choice in final checks to be able to change the
-        attachment order of XMLElement children in self.child_container_tree if an Exception was thrown and other choices can still be
-        checked. (No GUARANTEE!)
+                                         attachment order of XMLElement children in self.child_container_tree if an Exception was thrown
+                                         and other choices can still be checked. (No GUARANTEE!)
         :return: String in xml format.
         """
         self._final_checks(intelligent_choice=intelligent_choice)

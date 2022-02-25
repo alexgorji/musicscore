@@ -2,3 +2,4 @@
 __pycach__/
 *.pyc
 venv
+docs/_build
