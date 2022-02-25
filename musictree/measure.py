@@ -108,29 +108,29 @@ class Measure(MusicTree, XMLWrapper):
     def _update_default_clefs(self):
         number_of_children = len(self.get_children())
         if number_of_children == 1:
-            self.get_children()[0].default_clef = TrebleClef()
+            self.get_children()[0].clef = TrebleClef()
         elif number_of_children == 2:
-            self.get_children()[0].default_clef = TrebleClef()
-            self.get_children()[1].default_clef = BaseClef()
+            self.get_children()[0].clef = TrebleClef()
+            self.get_children()[1].clef = BaseClef()
         elif number_of_children == 3:
-            self.get_children()[0].default_clef = TrebleClef(octave_change=2)
-            self.get_children()[1].default_clef = TrebleClef()
-            self.get_children()[2].default_clef = BaseClef()
+            self.get_children()[0].clef = TrebleClef(octave_change=2)
+            self.get_children()[1].clef = TrebleClef()
+            self.get_children()[2].clef = BaseClef()
         elif number_of_children == 4:
-            self.get_children()[0].default_clef = TrebleClef(octave_change=2)
-            self.get_children()[1].default_clef = TrebleClef()
-            self.get_children()[2].default_clef = BaseClef()
-            self.get_children()[3].default_clef = BaseClef(octave_change=-2)
+            self.get_children()[0].clef = TrebleClef(octave_change=2)
+            self.get_children()[1].clef = TrebleClef()
+            self.get_children()[2].clef = BaseClef()
+            self.get_children()[3].clef = BaseClef(octave_change=-2)
         else:
             for index, child in enumerate(self.get_children()):
                 if index == 0:
-                    child.default_clef = TrebleClef(octave_change=2)
+                    child.clef = TrebleClef(octave_change=2)
                 elif index == number_of_children - 1:
-                    child.default_clef = BaseClef(octave_change=-2)
+                    child.clef = BaseClef(octave_change=-2)
                 elif index < number_of_children / 2:
-                    child.default_clef = TrebleClef()
+                    child.clef = TrebleClef()
                 else:
-                    child.default_clef = BaseClef()
+                    child.clef = BaseClef()
 
     def _update_divisions(self):
         chord_divisions = {ch.quarter_duration.denominator for ch in self.get_chords()}
@@ -235,7 +235,8 @@ class Measure(MusicTree, XMLWrapper):
         child._parent = self
         self._children.append(child)
 
-        self._update_default_clefs()
+        if self.previous is None:
+            self._update_default_clefs()
         self._update_clef_numbers()
         return child
 

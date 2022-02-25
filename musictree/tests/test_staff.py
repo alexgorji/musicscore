@@ -77,5 +77,3 @@ class TestStaff(TestCase):
         st._parent = mock_measure
         assert st.clef.sign == 'G'
         assert st.clef.line == 2
-        assert st.default_clef.sign == 'G'
-        assert st.default_clef.line == 2

@@ -11,29 +11,16 @@ class Staff(MusicTree, XMLWrapper):
     _ATTRIBUTES = {'clef', 'default_clef', 'number'}
     XMLClass = XMLStaff
 
-    def __init__(self, number=None, clef=None, **kwargs):
+    def __init__(self, number=None, clef=TrebleClef(), **kwargs):
         super().__init__()
         self._xml_object = self.XMLClass(value_=1, **kwargs)
         self._number = None
         self._clef = None
-        self._default_clef = TrebleClef()
         self.clef = clef
         self.number = number
 
     @property
-    def default_clef(self):
-        return self._default_clef
-
-    @default_clef.setter
-    def default_clef(self, val):
-        if not isinstance(val, Clef):
-            raise TypeError
-        self._default_clef = val
-
-    @property
     def clef(self):
-        if self._clef is None:
-            return self._default_clef
         return self._clef
 
     @clef.setter

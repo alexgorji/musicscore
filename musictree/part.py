@@ -201,11 +201,11 @@ class Part(MusicTree, XMLWrapper):
                 number = 1
 
         m = Measure(number=number, time=time)
+        child = self.add_child(m)
         if previous_measure:
             m.key = previous_measure.key.__copy__()
             m.key.show = False
 
-        if previous_measure:
             for staff in previous_measure.get_children():
                 st = m.add_staff(staff_number=staff.number)
                 st.clef = staff.clef.__copy__()
@@ -215,7 +215,7 @@ class Part(MusicTree, XMLWrapper):
         else:
             m.add_voice(staff_number=None, voice_number=1)
 
-        return self.add_child(m)
+        return child
 
     def get_current_measure(self, staff_number=1, voice_number=1):
         if staff_number is None:
