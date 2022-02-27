@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Optional
 
 from quicktions import Fraction
 import numbers
@@ -294,7 +294,12 @@ class QuarterDurationMixin:
             self._quarter_duration = QuarterDuration(val)
 
     @property
-    def quarter_duration(self):
+    def quarter_duration(self) -> QuarterDuration:
+        """
+        Duration measured in quarters.
+
+        val type: Optional[int, float, Fraction, QuarterDuration]
+        """
         return self._quarter_duration
 
     @quarter_duration.setter

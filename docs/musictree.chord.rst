@@ -6,3 +6,4 @@ musictree.chord
    :undoc-members:
    :show-inheritance:
    :inherited-members:
+

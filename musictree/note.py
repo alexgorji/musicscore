@@ -1,4 +1,4 @@
-from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied
+from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied, XMLArticulations
 
 from musictree.exceptions import NoteTypeError, NoteHasNoParentChordError
 from musictree.midi import Midi
@@ -148,19 +148,30 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self.xml_object.xml_voice = str(self.get_voice_number())
 
     @property
-    def is_tied(self):
-        type_types = [t.type for t in self.find_children('XMLTie')]
+    def is_tied(self) -> bool:
+        """
+        :return: True if an element :obj:`~musicxml.xmlelement.xmlelement.XMLTie` with type 'start' is under note's xml_object children.
+        :rtype: bool
+        """
+        type_types = [t.type for t in self.xml_object.find_children('XMLTie')]
         if 'start' in type_types:
             return True
         else:
             return False
 
     @property
-    def is_tied_to_next(self):
+    def is_tied_to_next(self) -> bool:
+        """
+        :return: same as :obj:`~musictree.musictree.Note.is_tied`
+        """
         return self.is_tied
 
     @property
-    def is_tied_to_previous(self):
+    def is_tied_to_previous(self) -> bool:
+        """
+        :return: True if an element :obj:`~musicxml.xmlelement.xmlelement.XMLTie` with type 'stop' is under note's xml_object children.
+        :rtype: bool
+        """
         type_types = [t.type for t in self.find_children('XMLTie')]
         if 'stop' in type_types:
             return True
@@ -168,7 +179,12 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             return False
 
     @property
-    def midi(self):
+    def midi(self) -> Midi:
+        """
+        val can be a midi or its value. Midi with value 0 means rest.
+
+        :return: note's :obj:`~musictree.midi.Midi`.
+        """
         return self._midi
 
     @midi.setter
@@ -180,7 +196,11 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             self._update_xml_accidental()
 
     @property
-    def parent_chord(self):
+    def parent_chord(self) -> 'Chord':
+        """
+        :return: notes parent. Same as self.up
+        :rtype: :obj:`musictree.chord.Chord`
+        """
         return self._parent_chord
 
     @QuarterDurationMixin.quarter_duration.setter
@@ -194,20 +214,47 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         else:
             self.xml_object.xml_duration = None
 
-    @property
-    def voice(self):
-        return self._voice
+    def get_or_create_xml_notations(self) -> 'XMLNotations':
+        """
+        If note's ``xml_object`` has no :obj:`~musicxml.xmlelement.xmlelement.XMLNotations` as child this child will be created.
 
-    def get_parent_measure(self):
+        :return: :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
+        """
+        if not self.xml_object.xml_notations:
+            self.xml_object.xml_notations = XMLNotations()
+        return self.xml_object.xml_notations
+
+    def update_xml_notations(self):
+        """
+        If ``self.xml_object.xml_notations`` has children of type :obj:`~musicxml.xmlelement.xmlelement.XMLArticulation` oder
+        :obj:`~musicxml.xmlelement.xmlelement.XMLTechnical`
+        which have no children themselves, these will be removed.
+        ``self.xml_object.xml_notations`` will be removed itself if it has no children.
+
+        :return: None
+        """
+        if self.xml_object.xml_notations:
+            if self.xml_object.xml_notations.xml_articulations and not self.xml_object.xml_notations.xml_articulations.get_children():
+                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_articulations)
+            if self.xml_object.xml_notations.xml_technical and not self.xml_object.xml_notations.xml_technical.get_children():
+                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_technical)
+
+            if not self.xml_object.xml_notations.get_children():
+                self.xml_object.remove(self.xml_object.xml_notations)
+
+    def get_parent_measure(self) -> 'Measure':
+        """
+        :return: :obj:`~musictree.musictree.Measure` in note's ancestors
+        """
         return self.parent_chord.get_parent_measure()
 
-    def get_staff_number(self):
+    def get_staff_number(self) -> int:
         return self.parent_chord.get_staff_number()
 
-    def get_voice_number(self):
+    def get_voice_number(self) -> int:
         return self.parent_chord.get_voice_number()
 
-    def set_dots(self, number_of_dots):
+    def set_dots(self, number_of_dots: int) -> None:
         self._number_of_dots = number_of_dots
         self._check_dots(number_of_dots)
 

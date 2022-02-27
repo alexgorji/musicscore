@@ -262,7 +262,7 @@ class TestMeasure(TestCase):
         ch = Chord(quarter_duration=2, midis=60)
         returned_chords = m.add_chord(ch, voice_number=2)
         assert len(returned_chords) == 1
-        assert [ch.voice for ch in m.get_chords()] == [1, 1, 2]
+        assert [ch.voice_number for ch in m.get_chords()] == [1, 1, 2]
 
     def test_add_chord_leftover(self):
         m = Measure(1)

@@ -13,6 +13,9 @@ TITLE = {'font_size': 24, 'default_x': {'A4': {'portrait': 616}}, 'default_y': {
 #:
 SUBTITLE = {'font_size': 18, 'default_x': {'A4': {'portrait': 616}}, 'default_y': {'A4': {'portrait': 1508}}, 'halign': 'center',
             'valign': 'top'}
+#:
+POSSIBLE_SUBDIVISIONS = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [2, 3, 4, 5],
+                         QuarterDuration(1): [2, 3, 4, 5, 6, 7, 8]}
 
 
 class Score(MusicTree, XMLWrapper):
@@ -21,6 +24,7 @@ class Score(MusicTree, XMLWrapper):
     XMLClass = XMLScorePartwise
 
     def __init__(self, version='4.0', title=None, subtitle=None, *args, **kwargs):
+
         super().__init__()
         self._xml_object = self.XMLClass(*args, **kwargs)
         self._update_xml_object()
@@ -38,8 +42,7 @@ class Score(MusicTree, XMLWrapper):
         self.version = version
         self.title = title
         self.subtitle = subtitle
-        self._possible_subdivisions = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [2, 3, 4, 5], QuarterDuration(1): [2, 3, 4,
-                                                                                                                                5, 6, 7, 8]}
+        self._possible_subdivisions = POSSIBLE_SUBDIVISIONS.copy()
 
     def _update_xml_object(self):
         self.xml_object.xml_part_list = XMLPartList()

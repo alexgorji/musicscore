@@ -1,6 +1,8 @@
 from unittest import TestCase
 from unittest.mock import patch, Mock
 
+from musictree.chord import Chord
+from musictree.part import Part
 from musicxml.exceptions import XMLElementChildrenRequired
 from musicxml.xmlelement.xmlelement import *
 from quicktions import Fraction
@@ -311,6 +313,42 @@ class TestNote(NoteTestCase):
         n.midi.accidental.show = False
         assert n.xml_object.xml_accidental == n.midi.accidental.xml_object
 
+    def test_note_update_xml_notations(self):
+        n = Note(parent_chord=self.mock_chord)
+        n.get_or_create_xml_notations()
+        n.xml_notations.xml_articulations = XMLArticulations()
+        accent = n.xml_notations.xml_articulations.add_child(XMLAccent())
+        staccato = n.xml_notations.xml_articulations.add_child(XMLStaccato())
+        n.xml_notations.xml_technical = XMLTechnical()
+        string = n.xml_notations.xml_technical.add_child(XMLString(1))
+        assert len(n.xml_notations.get_children()) == 2
+        assert len(n.xml_notations.xml_articulations.get_children()) == 2
+        assert len(n.xml_notations.xml_technical.get_children()) == 1
+
+        n.xml_notations.xml_articulations.remove(accent)
+        assert len(n.xml_notations.get_children()) == 2
+        assert len(n.xml_notations.xml_articulations.get_children()) == 1
+        assert len(n.xml_notations.xml_technical.get_children()) == 1
+
+        n.xml_notations.xml_articulations.remove(staccato)
+
+        assert len(n.xml_notations.get_children()) == 2
+        assert len(n.xml_notations.xml_articulations.get_children()) == 0
+        assert len(n.xml_notations.xml_technical.get_children()) == 1
+
+        n.update_xml_notations()
+        assert len(n.xml_notations.get_children()) == 1
+        assert n.xml_notations.xml_articulations is None
+        assert len(n.xml_notations.xml_technical.get_children()) == 1
+
+        n.xml_notations.xml_technical.remove(string)
+        assert len(n.xml_notations.get_children()) == 1
+        assert n.xml_notations.xml_articulations is None
+        assert len(n.xml_notations.xml_technical.get_children()) == 0
+
+        n.update_xml_notations()
+        assert n.xml_notations is None
+
 
 standard_note_xml = """<note>
   <pitch>
@@ -466,3 +504,14 @@ class TestNoteTie(NoteTestCase):
         assert n1.get_staff_number() == 1
         n1._update_xml_staff()
         assert n1.xml_object.xml_staff.value_ == 1
+
+    def test_note_parent_chord(self):
+        """
+        Test if parent chord of a note is its parent in the musictree
+        """
+        p = Part('p1')
+        ch = Chord(60, 1)
+        p.add_chord(ch)
+        ch._update_notes()
+        n = ch.notes[0]
+        assert n.up == n.parent_chord

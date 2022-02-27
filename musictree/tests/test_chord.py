@@ -8,6 +8,7 @@ from musictree.measure import Measure
 from musictree.midi import Midi
 from musictree.tests.util import check_notes, ChordTestCase, create_articulation, create_technical
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES
+from musicxml.xmlelement.xmlelement import *
 
 
 def get_chord_midi_values(chord):
@@ -470,6 +471,15 @@ class TestTreeChord(ChordTestCase):
             ch.add_articulation(create_articulation(articulation_class))
             ch._update_notes()
             assert ch.notes[0].xml_notations.xml_articulations.get_children()[0].__class__ == articulation_class
+
+    def test_add_articulation_after_creating_notes(self):
+        ch = Chord(60, 1)
+        ch._parent = self.mock_beat
+        staccato = ch.add_articulation(create_articulation(XMLStaccato))
+        ch._update_notes()
+        assert isinstance(ch.notes[0].xml_notations.xml_articulations.get_children()[0], XMLStaccato)
+        accent = ch.add_articulation(create_articulation(XMLAccent))
+        assert ch.notes[0].xml_notations.xml_articulations.get_children() == [staccato, accent]
 
     def test_add_multiple_articulations(self):
         articulation_classes = XML_ARTICULATION_CLASSES[:3]

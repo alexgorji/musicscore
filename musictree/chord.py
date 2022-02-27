@@ -30,6 +30,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._ties = []
         self._lyrics = []
         self._directions = {'above': [], 'below': []}
+
         self.xml_directions = []
         self.xml_articulations = []
         self.xml_technicals = []
@@ -74,32 +75,57 @@ class Chord(MusicTree, QuarterDurationMixin):
                 else:
                     raise NotImplementedError
 
-    def _check_xml_notations(self, note):
-        if not note.xml_notations:
-            note.xml_notations = XMLNotations()
-
     def _update_articulations(self):
+        def _get_note_xml_articulations():
+            try:
+                return n.xml_notations.xml_articulations.get_children(ordered=False)
+            except AttributeError:
+                return []
+
         n = self.notes[0]
-        if self.xml_articulations:
-            self._check_xml_notations(note=n)
+
+        note_articulations_not_in_chord = [art for art in _get_note_xml_articulations() if art not in
+                                           self.xml_articulations]
+        chord_articulations_not_in_note = [art for art in self.xml_articulations if art not in _get_note_xml_articulations()]
+
+        if chord_articulations_not_in_note:
+            n.get_or_create_xml_notations()
             if not n.xml_notations.xml_articulations:
-                a = n.xml_notations.xml_articulations = XMLArticulations()
-            else:
-                a = n.xml_notations.xml_articulations
-            for xml_articulation in self.xml_articulations:
-                a.add_child(xml_articulation)
+                n.xml_notations.xml_articulations = XMLArticulations()
+
+            for xml_articulation in chord_articulations_not_in_note:
+                n.xml_notations.xml_articulations.add_child(xml_articulation)
+
+        for art in note_articulations_not_in_chord:
+            n.xml_notations.xml_articulations.remove(art)
+
+        n.update_xml_notations()
 
     def _update_technicals(self):
+        def get_note_xml_technical():
+            try:
+                return n.xml_notations.xml_technical.get_children(ordered=False)
+            except AttributeError:
+                return []
+
         n = self.notes[0]
 
-        if self.xml_technicals:
-            self._check_xml_notations(note=n)
+        note_technicals_not_in_chord = [tech for tech in get_note_xml_technical() if tech not in
+                                        self.xml_technicals]
+        chord_technicals_not_in_note = [tech for tech in self.xml_technicals if tech not in get_note_xml_technical()]
+
+        if chord_technicals_not_in_note:
+            n.get_or_create_xml_notations()
             if not n.xml_notations.xml_technical:
-                t = n.xml_notations.xml_technical = XMLTechnical()
-            else:
-                t = n.xml_notations.xml_technical
-            for xml_technical in self.xml_technicals:
-                t.add_child(xml_technical)
+                n.xml_notations.xml_technical = XMLTechnical()
+
+            for xml_technical in chord_technicals_not_in_note:
+                n.xml_notations.xml_technical.add_child(xml_technical)
+
+        for tech in note_technicals_not_in_chord:
+            n.xml_notations.xml_technical.remove(tech)
+
+        n.update_xml_notations()
 
     def _update_notes(self):
         if self.get_children():
@@ -154,9 +180,10 @@ class Chord(MusicTree, QuarterDurationMixin):
                     note.start_tie()
 
     @property
-    def is_rest(self):
+    def is_rest(self) -> bool:
         """
-        :return bool: True if Chord represents a rest, False if otherwise.
+        :return: ``True`` if Chord represents a rest, ``False`` if otherwise.
+        :rtype: bool
         """
         if self._midis[0].value == 0:
             return True
@@ -164,8 +191,10 @@ class Chord(MusicTree, QuarterDurationMixin):
             return False
 
     @property
-    def midis(self):
+    def midis(self) -> List['Midi']:
         """
+        :return: list of midis
+
         >>> ch = Chord(midis=60)
         >>> [type(m) for m in ch.midis]
         [<class 'musictree.midi.Midi'>]
@@ -178,8 +207,6 @@ class Chord(MusicTree, QuarterDurationMixin):
         Traceback (most recent call last):
         ...
         ValueError: Chord cannot accept a mixed list of midis of rests and pitches or a list of more than one rests.
-
-        :return: list of midis
         """
         return self._midis
 
@@ -188,16 +215,17 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._set_midis(val)
 
     @property
-    def notes(self):
+    def notes(self) -> List['Note']:
         """
-        :return: Chord.get_children() which are of type Note.
+        :return: :obj:`musictree.chord.get_children` which are of type :obj:`musictree.note.Note`.
+        :rtype: List[:obj:`~musictree.note.Note`]
         """
         return self.get_children()
 
     @property
-    def offset(self):
+    def offset(self) -> QuarterDuration:
         """
-        :return: Offset in Chord's parent Beat
+        :return: Offset in Chord's parent :obj:`~musictree.beat.Beat`
         :rtype: QuarterDuration
         """
         if not self.up:
@@ -219,7 +247,11 @@ class Chord(MusicTree, QuarterDurationMixin):
                 self._update_notes_quarter_duration()
 
     @property
-    def voice(self):
+    def voice_number(self) -> int:
+        """
+        :return: Number of parent :obj:`~musictree.voice.Voice`
+        :rtype: positive int
+        """
         if not self.up:
             raise ChordHasNoParentError()
         if self.up and self.up.up:
@@ -227,32 +259,48 @@ class Chord(MusicTree, QuarterDurationMixin):
         else:
             return 1
 
-    def add_tie(self, val):
+    def add_articulation(self, xml_articulation_object: Union[
+        'XMLAccent', 'XMLStrongAccent', 'XMLStaccato', 'XMLTenuto', 'XMLDetachedLegato', 'XMLStaccatissimo',
+        'XMLSpiccato', 'XMLScoop', 'XMLPlop', 'XMLDoit', 'XMLFalloff', 'XMLBreathMark', 'XMLCaesura', 'XMLStress',
+        'XMLUnstress']):
         """
-        :param val: 'start' or 'stop'
-        :return: None
-        :meta public:
-        """
-        if val not in ['start', 'stop']:
-            raise ValueError
-        if val not in self._ties:
-            self._ties.append(val)
-            self._update_tie()
+        This method is used to add one xml articulation object to chord's :obj:`~musictree.chord.Chord.xml_articulations` list. This list
+        is used to add articulations to or update articulations of the first :obj:`~musictree.note.Note` object of chord`s notes
+        which are to be or are already created .
 
-    def add_articulation(self, xml_articulation_object):
+        :param xml_articulation_object: musicxml articulation element
+        :return: None
+        """
         if xml_articulation_object.__class__ not in XML_ARTICULATION_CLASSES:
             raise TypeError
         self.xml_articulations.append(xml_articulation_object)
+        if self.notes:
+            self._update_articulations()
+        return xml_articulation_object
+
+    def add_dynamics(self, dynamics, placement='below'):
+        dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(dynamics)
+        dynamics_object_list = [d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list]
+        self._directions[placement].append(('dynamics', dynamics_object_list))
 
     def add_technical(self, xml_technical_object):
         if xml_technical_object.__class__ not in XML_TECHNICAL_CLASSES:
             raise TypeError
         self.xml_technicals.append(xml_technical_object)
 
-    def add_dynamics(self, dynamics, placement='below'):
-        dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(dynamics)
-        dynamics_object_list = [d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list]
-        self._directions[placement].append(('dynamics', dynamics_object_list))
+    def add_tie(self, val: str) -> None:
+        """
+        Chord's tie list is used to add ties to or update ties of :obj:`musictree.note.Note` objects which are to be or are already
+        created .
+
+        :param val: 'start' or 'stop'
+        :return: None
+        """
+        if val not in ['start', 'stop']:
+            raise ValueError
+        if val not in self._ties:
+            self._ties.append(val)
+            self._update_tie()
 
     def add_lyric(self, text):
         l = XMLLyric()
@@ -324,7 +372,6 @@ class Chord(MusicTree, QuarterDurationMixin):
                 midi.accidental.show = False
         else:
             leftover_chord = None
-        self.up.leftover_chord = leftover_chord
         self.up.up.leftover_chord = leftover_chord
 
         return output
@@ -338,7 +385,7 @@ class Chord(MusicTree, QuarterDurationMixin):
     def __setattr__(self, key, value):
         if key not in self._ATTRIBUTES.union(self._TREE_ATTRIBUTES) and key not in [f'_{attr}' for attr in
                                                                                     self._ATTRIBUTES.union(
-                                                                                       self._TREE_ATTRIBUTES)] and key not in self.__dict__:
+                                                                                        self._TREE_ATTRIBUTES)] and key not in self.__dict__:
             if self.notes:
                 if isinstance(value, str) or not hasattr(value, '__iter__'):
                     value = [value] * len(self.notes)

@@ -93,7 +93,7 @@ A musictree consists of a root :obj:`~musictree.score.Score` and its 9 descendin
     * When its last beat is filled the ``is_filled`` property is ``true``.
 
     * If a :obj:`musictree.chord.Chord` is added to its beats which has a quarter duration greater than the sum of beats' quarter
-      durations, the remaining Chord can be accessed via ``leftover`` property.
+      durations, the remaining Chord can be accessed via ``leftover`` property of the parent :obj:`musictree.voice.Voice`.
 
 #. :obj:`musictree.beat.Beat` is the fifth layer of a musictree.
 

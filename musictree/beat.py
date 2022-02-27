@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union, List
 
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
@@ -11,7 +11,7 @@ from musictree.quarterduration import QuarterDurationMixin, QuarterDuration
 from musictree.util import lcm
 
 #: {offset : {chord.quarter_duration: split quarter_durations, ...}, ...}
-SPLITTALBES = {
+SPLITTABLES = {
     QuarterDuration(0): {
         QuarterDuration(5, 6): [QuarterDuration(3, 6), QuarterDuration(2, 6)],
         QuarterDuration(5, 7): [QuarterDuration(3, 7), QuarterDuration(2, 7)],
@@ -88,7 +88,7 @@ class Beat(MusicTree, QuarterDurationMixin):
     quarter duration inside the beat as its child .
 
     :obj:`~musictree.chord.Chord`'s quarter duration can exceed beat's duration until the end of its parent :obj:`~musictree.voice.Voice`. If a :obj:`~musictree.chord.Chord` is longer
-    than that a leftover :obj:`~musictree.chord.Chord` will be added to the appropriate :obj:`~musictree.voice.Voice` in the next :obj:`~musictree.measure.Measure`.
+    than that a leftover :obj:`~musictree.chord.Chord` will be added to the parent :obj:`~musictree.voice.Voice` and can be accessed from the next measure.
 
     Beat manages splitting of each child :obj:`~musictree.chord.Chord` into appropriate tied :obj:`~musictree.chord.Chord` s if needed.
     The dots and tuplets are also added here to
@@ -183,8 +183,8 @@ class Beat(MusicTree, QuarterDurationMixin):
         return output
 
     def _split_not_writable(self, chord, offset):
-        if SPLITTALBES.get(offset):
-            quarter_durations = SPLITTALBES.get(offset).get(chord.quarter_duration)
+        if SPLITTABLES.get(offset):
+            quarter_durations = SPLITTABLES.get(offset).get(chord.quarter_duration)
             if quarter_durations:
                 return self._split_chord(chord, quarter_durations)
 
@@ -288,9 +288,10 @@ class Beat(MusicTree, QuarterDurationMixin):
             self._update_note_beams()
 
     @property
-    def is_filled(self):
+    def is_filled(self) -> bool:
         """
-        ``True`` if no children can be added anymore. If ``False`` there is still room for further child or children.
+        :return: ``True`` if no children can be added anymore. If ``False`` there is still room for further child or children.
+        :rtype: bool
         """
         if self.filled_quarter_duration == self.quarter_duration:
             return True
@@ -306,7 +307,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         return self._filled_quarter_duration
 
     @property
-    def number(self):
+    def number(self) -> int:
         """
         :return: Beat's number inside its parent's :obj:`musictree.voice.Voice`
         :rtype: int
@@ -314,7 +315,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         return self.up.get_children().index(self) + 1
 
     @property
-    def offset(self):
+    def offset(self) -> QuarterDuration:
         """
         :return: Offset in Beat's parent :obj:`musictree.voice.Voice`
         :rtype: QuarterDuration
@@ -326,7 +327,22 @@ class Beat(MusicTree, QuarterDurationMixin):
         else:
             return self.previous.offset + self.previous.quarter_duration
 
-    def add_child(self, child: Chord):
+    def add_child(self, child: Chord) -> Union['Chord', List['Chord']]:
+        """
+        If child's quarter duration is less than beat's remaining quarter duration: child is added to the beat.
+
+        If child's quarter duration is greater than beat's remaining quarter duration: :obj:`~musictree.chord.Chord.split_beatwise` is
+        called. It is possible to add a chord with a quarter duration exceeding the beat's quarter duration without splitting the chord.
+        For example if the first beat in a 4/4 measure gets a chord with quarter duration 3, the chord will be added to this first beat as a
+        child and the following two beats will be set to filled without having a child themselves and the parent
+        :obj:`~musictree.voice.Voice` return the fourth beat if its :obj:`~musictree.voice.Voice.get_current_beat` is called.
+
+        If child's quarter duration exceeds the voice's remaining quarter duration a leftover chord will be added to the voice and can be
+        accessed when the next measure is created.
+
+        :param child: Chord to be added as child
+        :return: added chord or a list of split chords
+        """
         self._check_child_to_be_added(child)
         if not self.up:
             raise BeatHasNoParentError('A child Chord can only be added to a beat if it has a voice parent.')
@@ -359,17 +375,22 @@ class Beat(MusicTree, QuarterDurationMixin):
                 beats = self.up.get_children()[self.up.get_children().index(self):]
                 return child.split_beatwise(beats)
 
-    def add_chord(self, chord: Optional[Chord] = None):
+    def add_chord(self, chord: Optional[Chord] = None) -> 'Chord':
+        """
+        :param chord: if None chord is set to a :obj:`~musictree.chord.Chord` with quarter_duration 1 and midis set to 60
+        :return: added chord.
+        """
         if chord is None:
             chord = Chord(midis=60, quarter_duration=self.quarter_duration)
         return self.add_child(chord)
 
-    def split_not_writable_chords(self):
+    def split_not_writable_chords(self) -> None:
         """
-        This method checks if the quarter duration of all children chords must be split according to
-        :obj:`~musictree.beat.SPLITTALBES` dict with format {offset : {chord.quarter_duration: split quarter_durations, ...}, ...}
-        This dict can be manipulated by user during runtime if needed. Be careful with not writable quarter durations which have to be
-        split.
+        This method checks if the quarter duration of all children chords must be split according to :obj:`~musictree.beat.SPLITTABLES`
+        dictionary. If chord's offset and its quarter duration exist in the dictionary a list of splitting quarter durations can be
+        accessed like this: ``SPLITTABLES[chord.offset[chord.quarter_duration]]`` This dictionary can be manipulated by user during runtime
+        if needed. Be careful with not writable quarter durations which have to be split (for example 5/6 must be split to 3/6,
+        2/6 or some other writable quarter durations).
         """
         for chord in self.get_children():
             split = self._split_not_writable(chord, chord.offset)
