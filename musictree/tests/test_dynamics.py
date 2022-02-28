@@ -52,3 +52,6 @@ class TestDynamics(ChordTestCase):
         assert [ds[0].placement, ds[1].placement] == ['above', 'below']
         assert ds[0].xml_direction_type.xml_dynamics.get_children()[0].__class__ == XMLPp
         assert ds[1].xml_direction_type.xml_dynamics.get_children()[0].__class__ == XMLFf
+
+    def test_add_dynamics_after_creating_notes(self):
+        pass

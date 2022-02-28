@@ -1,4 +1,4 @@
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Iterator
 
 from quicktions import Fraction
 import numbers

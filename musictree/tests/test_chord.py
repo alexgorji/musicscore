@@ -443,6 +443,14 @@ class TestTreeChord(ChordTestCase):
         assert ch.notes[0].xml_lyric is not None
         assert ch.notes[0].xml_lyric.xml_text.value_ == 'test'
 
+    def test_add_lyrics_after_creating_notes(self):
+        ch = Chord(60, 1)
+        ch._parent = self.mock_beat
+        lyrics1 = ch.add_lyric('one')
+        ch._update_notes()
+        lyrics2 = ch.add_lyric('two')
+        assert ch.notes[0].find_children('XMLLyric') == [lyrics1, lyrics2]
+
     def test_get_staff_number(self):
         ch = Chord(60, 2)
         ch._parent = self.mock_beat

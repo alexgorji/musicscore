@@ -5,16 +5,23 @@ class XMLWrapper:
     """
     _ATTRIBUTES = {}
 
+    XMLClass = None
+
     @property
     def xml_object(self):
+        """
+        :return: wrapped musicxml element
+        """
         return self._xml_object
 
-    # def _convert_attribute_to_child(self, name, value=None):
-    #     setattr(self.xml_object, name, value)
+    def to_string(self, *args, **kwargs) -> str:
+        """
+        Calls :obj:`~musicxml.xmlelement.xmlelement.XMLElement.to_string` method of self.xml_object
 
-    def to_string(self):
+        :return: musicxml snippet
+        """
         if self.xml_object:
-            return self.xml_object.to_string()
+            return self.xml_object.to_string(*args, **kwargs)
         else:
             raise ValueError(f'{self.__class__.__name__} has no xml object.')
 

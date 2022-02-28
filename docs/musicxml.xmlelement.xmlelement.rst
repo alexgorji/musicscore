@@ -452,15 +452,12 @@
       XMLWorkNumber
       XMLWorkTitle
 
-.. _XMLElement:
-
 .. autoclass:: musicxml.xmlelement.xmlelement.XMLElement
    :members:
    :undoc-members:
    :show-inheritance:
    
 .. automodule:: musicxml.xmlelement.xmlelement
-   :noindex:
    :members:
    :undoc-members:
    :show-inheritance:

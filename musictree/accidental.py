@@ -172,7 +172,7 @@ class Accidental(MusicTree, XMLWrapper):
             self._xml_object.value_ = self.sign
 
     @XMLWrapper.xml_object.getter
-    def xml_object(self):
+    def xml_object(self) -> XMLAccidental:
         if self.parent_midi and self.parent_midi.value == 0:
             return None
         if self.show is True:
@@ -254,6 +254,30 @@ class Accidental(MusicTree, XMLWrapper):
                 self.up.up._update_xml_accidental()
             except AttributeError:
                 pass
+
+    def get_beat(self):
+        raise TypeError
+
+    def get_chord(self):
+        raise TypeError
+
+    def get_measure(self):
+        raise TypeError
+
+    def get_part(self):
+        raise TypeError
+
+    def get_possible_subdivisions(self):
+        raise TypeError
+
+    def get_staff(self):
+        raise TypeError
+
+    def get_voice(self):
+        raise TypeError
+
+    def set_possible_subdivisions(self):
+        raise TypeError
 
     def get_pitch_parameters(self, midi_value: Optional[float] = None) -> Optional[tuple]:
         """

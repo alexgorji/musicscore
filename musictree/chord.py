@@ -1,5 +1,5 @@
 from fractions import Fraction
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Any, Dict
 
 from musicxml.xmlelement.xmlelement import XMLChord, XMLLyric, XMLDirection, XMLDirectionType, XMLDynamics, XMLNotations, \
     XMLArticulations, XMLTechnical
@@ -13,6 +13,17 @@ from musictree.note import Note
 from musictree.quarterduration import QuarterDurationMixin, QuarterDuration
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES
 
+_all_articulations = Union[
+    'XMLAccent', 'XMLStrongAccent', 'XMLStaccato', 'XMLTenuto', 'XMLDetachedLegato', 'XMLStaccatissimo',
+    'XMLSpiccato', 'XMLScoop', 'XMLPlop', 'XMLDoit', 'XMLFalloff', 'XMLBreathMark', 'XMLCaesura', 'XMLStress',
+    'XMLUnstress']
+
+_all_technicals = Union[
+    "XMLUpBow", "XMLDownBow", "XMLHarmonic", "XMLOpenString", "XMLThumbPosition", "XMLFingering", "XMLPluck", "XMLDoubleTongue",
+    "XMLTripleTongue", "XMLStopped", "XMLSnapPizzicato", "XMLFret", "XMLString", "XMLHammerOn", "XMLPullOff", "XMLBend", "XMLTap",
+    "XMLHeel", "XMLToe", "XMLFingernails", "XMLHole", "XMLArrow", "XMLHandbell", "XMLBrassBend", "XMLFlip", "XMLSmear", "XMLOpen",
+    "XMLHalfMuted", "XMLHarmonMute", "XMLGolpe", "XMLOtherTechnical"]
+
 
 class Chord(MusicTree, QuarterDurationMixin):
     """
@@ -21,18 +32,18 @@ class Chord(MusicTree, QuarterDurationMixin):
     :param quarter_duration: int, float, Fraction, QuarterDuration for duration counted in quarters (crotchets). 0 for grace note (or
     chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', 'voice', '_lyrics', 'ties',
-                   '_notes_are_set', '_directions', '_xml_directions', '_xml_articulations', '_xml_technicals'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', 'voice', '_xml_lyrics', 'ties',
+                   '_notes_are_set', '_xml_direction_types', '_xml_directions', '_xml_articulations', '_xml_technicals'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
         self._midis = None
         self._ties = []
-        self._lyrics = []
-        self._directions = {'above': [], 'below': []}
+        self._xml_direction_types = {'above': [], 'below': []}
 
-        self._xml_directions = []
         self._xml_articulations = []
+        self._xml_directions = []
+        self._xml_lyrics = []
         self._xml_technicals = []
 
         self._note_attributes = kwargs
@@ -65,8 +76,8 @@ class Chord(MusicTree, QuarterDurationMixin):
                 dyn = dt.xml_dynamics = XMLDynamics()
                 dyn.add_child(dynamics.xml_object)
 
-        for placement in self._directions:
-            direction_types = self._directions[placement]
+        for placement in self._xml_direction_types:
+            direction_types = self._xml_direction_types[placement]
             for direction_type in direction_types:
                 d = XMLDirection(placement=placement)
                 self._xml_directions.append(d)
@@ -127,6 +138,22 @@ class Chord(MusicTree, QuarterDurationMixin):
 
         n.update_xml_notations()
 
+    def _update_lyrics(self):
+
+        n = self.notes[0]
+
+        note_lyrics_not_in_chord = [lyric for lyric in n.xml_object.find_children('XMLLyric') if lyric not in
+                                    self._xml_lyrics]
+        chord_lyrics_not_in_note = [lyric for lyric in self._xml_lyrics if lyric not in n.xml_object.find_children('XMLLyric')]
+
+        if chord_lyrics_not_in_note:
+
+            for xml_lyric in chord_lyrics_not_in_note:
+                n.xml_object.add_child(xml_lyric)
+
+        for lyric in note_lyrics_not_in_chord:
+            n.xml_object.remove(lyric)
+
     def _update_notes(self):
         if self.get_children():
             raise ChordNotesAreAlreadyCreatedError()
@@ -138,10 +165,9 @@ class Chord(MusicTree, QuarterDurationMixin):
             notes[0].xml_object.add_child(XMLChord())
         for note in notes:
             self.add_child(note)
-        for lyric in self._lyrics:
-            notes[0].xml_object.xml_lyric = lyric
         self._notes_are_set = True
         self._update_notes_quarter_duration()
+        self._update_lyrics()
         self._update_tie()
         self._update_directions()
         self._update_articulations()
@@ -259,18 +285,44 @@ class Chord(MusicTree, QuarterDurationMixin):
         else:
             return 1
 
-    def add_articulation(self, xml_articulation_object: Union[
-        'XMLAccent', 'XMLStrongAccent', 'XMLStaccato', 'XMLTenuto', 'XMLDetachedLegato', 'XMLStaccatissimo',
-        'XMLSpiccato', 'XMLScoop', 'XMLPlop', 'XMLDoit', 'XMLFalloff', 'XMLBreathMark', 'XMLCaesura', 'XMLStress',
-        'XMLUnstress']):
+    @property
+    def xml_articulations(self) -> List[_all_articulations]:
+        """
+        :return: list of xml articulations to be added to self.notes
+        """
+        return self._xml_articulations
+
+    @property
+    def xml_direction_types(self) -> Dict:
+        """
+        :return: dict of xml direction types to be added to self.notes.
+        :todo: Better documentation. Which types can be added?  Example?
+        """
+        return self._xml_direction_types
+
+    @property
+    def xml_lyrics(self) -> List['XMLLyric']:
+        """
+        :return: list of xml lyrics to be added to self.notes
+        """
+        return self._xml_lyrics
+
+    @property
+    def xml_technicals(self) -> List[_all_articulations]:
+        """
+        :return: list of xml technicals to be added to self.notes
+        """
+        return self._xml_technicals
+
+    def add_articulation(self, xml_articulation_object: _all_articulations) -> _all_articulations:
         """
         This method is used to add one xml articulation object to chord's private __xml_articulations list.
-        This list is used to add articulations to or update articulations of the first :obj:`~musictree.note.Note` object of chord`s notes
-        which are to be or are already created .
+        This list is used to add or update articulations of the first :obj:`~musictree.note.Note` object of chord`s notes which are to be or are already created .
 
         :param xml_articulation_object: musicxml articulation element
-        :return: None
+        :return: xml_articulation_object
         """
+
         if xml_articulation_object.__class__ not in XML_ARTICULATION_CLASSES:
             raise TypeError
         self._xml_articulations.append(xml_articulation_object)
@@ -278,16 +330,35 @@ class Chord(MusicTree, QuarterDurationMixin):
             self._update_articulations()
         return xml_articulation_object
 
-    def add_dynamics(self, dynamics: Union[List['Dynamics'], 'Dynamics', str], placement: str = 'below') -> ['Dynamics']:
+    def add_dynamics(self, dynamics: Union[List['Dynamics'], 'Dynamics', str], placement: str = 'below') -> List['Dynamics']:
+        """
+        This method is used to add one or more :obj:`musictree.dynamics.Dynamics` objects to chord's private dictionary _xml_direction_types
+        This list is used to create or update directions of the first :obj:`~musictree.note.Note` object of chord`s notes
+        which are to be or are already created .
+
+        :param dynamics: str, Dynamics of a list of Dynamics to be added to directions
+        :param placement: above or below
+        :return: List[:obj:`musictree.dynamics.Dynamics`]
+        """
         dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(dynamics)
         dynamics_object_list = [d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list]
-        self._directions[placement].append(('dynamics', dynamics_object_list))
+        self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
         return dynamics_object_list
 
-    def add_technical(self, xml_technical_object):
+    def add_technical(self, xml_technical_object: _all_articulations) -> _all_articulations:
+        """
+        This method is used to add one xml technical object to chord's private __xml_technicals list.
+        This list is used to add or update technicals of the first :obj:`~musictree.note.Note` object of chord`s notes which are to be or are already created .
+
+        :param xml_technical_object: musicxml technical element
+        :return: xml_technical_object
+        """
         if xml_technical_object.__class__ not in XML_TECHNICAL_CLASSES:
             raise TypeError
         self._xml_technicals.append(xml_technical_object)
+        if self.notes:
+            self._update_technicals()
+        return xml_technical_object
 
     def add_tie(self, val: str) -> None:
         """
@@ -303,22 +374,72 @@ class Chord(MusicTree, QuarterDurationMixin):
             self._ties.append(val)
             self._update_tie()
 
-    def add_lyric(self, text):
-        l = XMLLyric()
-        l.xml_text = str(text)
-        self._lyrics.append(l)
+    def add_lyric(self, text: Union[Any, XMLLyric]):
+        """
+        This method is used to add :obj:`~musicxml.xmlelement.xmlelement.XMLLyric` to chord's private _xml_lyricx list.
+        This list is used to add lyrics to or update lyrics of the first :obj:`~musictree.note.Note` object of chord`s notes
+        which are to be or are already created .
+
+        :param text: if not of type :obj:`~musicxml.xmlelement.xmlelement.XMLLyric` a string conversion will be applied to text.
+        :return: :obj:`~musicxml.xmlelement.xmlelement.XMLLyric`
+        """
+        if isinstance(text, XMLLyric):
+            l = text
+        else:
+            l = XMLLyric()
+            l.xml_text = str(text)
+        self._xml_lyrics.append(l)
+        if self.notes:
+            self._update_lyrics()
         return l
 
-    def get_voice_number(self):
-        return self.up.up.number
+    def get_beat(self):
+        raise TypeError
+
+    def get_chord(self):
+        raise TypeError
+
+    def get_measure(self):
+        raise TypeError
+
+    def get_parent_measure(self) -> 'Measure':
+        """
+        :return: parent measure
+        """
+        return self.up.up.up.up
+
+    def get_part(self):
+        raise TypeError
+
+    def get_possible_subdivisions(self):
+        raise TypeError
+
+    def get_staff(self):
+        raise TypeError
 
     def get_staff_number(self):
         return self.up.up.up.number
 
-    def get_parent_measure(self):
-        return self.up.up.up.up
+    def get_voice(self):
+        raise TypeError
 
-    def has_same_pitches(self, other):
+    def get_voice_number(self) -> int:
+        """
+        :return: parent voice number
+        :rtype: positive int
+        """
+        return self.up.up.number
+
+    def set_possible_subdivisions(self):
+        raise TypeError
+
+    def has_same_pitches(self, other: 'Chord') -> bool:
+        """
+        Only for chords with pitches. Rest chords cannot use this method.
+
+        :param other: Other chord to which the comparison takes place
+        :return: `True` if pitches of self and other chord has the same pitch parameters and accidental values else `False`
+        """
         if not isinstance(other, Chord):
             raise TypeError
         if self.is_rest or other.is_rest:
@@ -332,7 +453,13 @@ class Chord(MusicTree, QuarterDurationMixin):
                 return False
         return True
 
-    def split_beatwise(self, beats):
+    def split_and_add_beatwise(self, beats: List['Beat']) -> List['Chord']:
+        """
+        All betas must have a voice parent
+
+        :param beats:
+        :return:
+        """
         voice_set = {beat.up for beat in beats}
         if len(voice_set) != 1:
             raise ChordCannotSplitError('Beats have must have a single Voice as common ancestor.')
@@ -377,11 +504,13 @@ class Chord(MusicTree, QuarterDurationMixin):
 
         return output
 
-    def to_rest(self):
-        self.midis = [0]
+    def to_rest(self) -> None:
+        """
+        Set self.midis to [0]
 
-    def to_string(self):
-        raise AttributeError("object 'Chord' cannot return a string.")
+        :return: None
+        """
+        self.midis = [0]
 
     def __setattr__(self, key, value):
         if key not in self._ATTRIBUTES.union(self._TREE_ATTRIBUTES) and key not in [f'_{attr}' for attr in
@@ -404,14 +533,29 @@ class Chord(MusicTree, QuarterDurationMixin):
         return output
 
 
-def split_copy(chord, new_quarter_duration=None):
+def split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fraction, int, float] = None) -> Chord:
+    """
+    This function is used when a chord needs to be split. It creates a copy of the chord with a new quarter_duration object. All midis
+    will be deepcopied. No attributes like lyrics, articulations etc. will be added to the copy.
+
+    :param chord:
+    :param new_quarter_duration: quarter_duration of copied chord. If None a shallow copy of chord.quarter_duration is created.
+    :return: copied chord
+    """
     if new_quarter_duration is None:
         new_quarter_duration = chord.quarter_duration.__copy__()
     new_chord = Chord(midis=[m.__deepcopy__() for m in chord.midis], quarter_duration=new_quarter_duration)
     return new_chord
 
 
-def group_chords(chords, quarter_durations):
+def group_chords(chords: List[Chord], quarter_durations: List[Union[QuarterDuration, Fraction, int, float]]) -> Optional[List[List[Chord]]]:
+    """
+    A creates a nested list of chords. Chords can be divided into groups. Each group has its own specific quarter duration sum.
+
+    :param chords:
+    :param quarter_durations:
+    :return: Optional[List[List[:obj:`~musictree.chord.Chord`]]]
+    """
     if sum(c.quarter_duration for c in chords) != sum(quarter_durations):
         raise ValueError
     output = []

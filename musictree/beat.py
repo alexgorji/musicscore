@@ -331,7 +331,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         """
         If child's quarter duration is less than beat's remaining quarter duration: child is added to the beat.
 
-        If child's quarter duration is greater than beat's remaining quarter duration: :obj:`~musictree.chord.Chord.split_beatwise` is
+        If child's quarter duration is greater than beat's remaining quarter duration: :obj:`~musictree.chord.Chord.split_and_add_beatwise` is
         called. It is possible to add a chord with a quarter duration exceeding the beat's quarter duration without splitting the chord.
         For example if the first beat in a 4/4 measure gets a chord with quarter duration 3, the chord will be added to this first beat as a
         child and the following two beats will be set to filled without having a child themselves and the parent
@@ -373,7 +373,7 @@ class Beat(MusicTree, QuarterDurationMixin):
                 return child
             else:
                 beats = self.up.get_children()[self.up.get_children().index(self):]
-                return child.split_beatwise(beats)
+                return child.split_and_add_beatwise(beats)
 
     def add_chord(self, chord: Optional[Chord] = None) -> 'Chord':
         """
@@ -383,6 +383,18 @@ class Beat(MusicTree, QuarterDurationMixin):
         if chord is None:
             chord = Chord(midis=60, quarter_duration=self.quarter_duration)
         return self.add_child(chord)
+
+    def get_measure(self):
+        raise TypeError
+
+    def get_part(self):
+        raise TypeError
+
+    def get_staff(self):
+        raise TypeError
+
+    def get_voice(self):
+        raise TypeError
 
     def split_not_writable_chords(self) -> None:
         """
@@ -417,7 +429,13 @@ class Beat(MusicTree, QuarterDurationMixin):
                     self._remove_zero_quarter_durations()
 
 
-def beam_chord_group(chord_group):
+def beam_chord_group(chord_group: List['Chord']) -> None:
+    """
+    Function for setting beams of a list of chords (chord_group). This function is used to create or update beams inside a beat.
+
+    :param chord_group:
+    :return: None
+    """
     chord_group = [ch for ch in chord_group if ch.quarter_duration != 0]
 
     def add_beam(chord, number, value):

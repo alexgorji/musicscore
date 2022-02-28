@@ -100,3 +100,16 @@ class TestAccidental(TestCase):
         assert a.xml_object.value_ == copied.xml_object.value_
         assert a.mode == copied.mode
         assert a.show == copied.show
+
+    def test_add_child(self):
+        a = Accidental()
+        with self.assertRaises(NotImplementedError):
+            a.add_child(Accidental())
+
+    def test_get_children(self):
+        a = Accidental()
+        assert a.get_children() == []
+
+    def test_get_leaves(self):
+        a = Accidental()
+        assert a.get_leaves() == []
