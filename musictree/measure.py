@@ -173,7 +173,7 @@ class Measure(MusicTree, XMLWrapper):
                 if index != 0:
                     add_backup()
                 for chord in chords:
-                    for xml_direction in chord.xml_directions:
+                    for xml_direction in chord._xml_directions:
                         self.xml_object.add_child(xml_direction)
                     for note in chord.notes:
                         self.xml_object.add_child(note.xml_object)

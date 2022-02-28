@@ -22,7 +22,7 @@ class Chord(MusicTree, QuarterDurationMixin):
     chord).
     """
     _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', 'voice', '_lyrics', 'ties',
-                   '_notes_are_set', '_directions', 'xml_directions', 'xml_articulations', 'xml_technicals'}
+                   '_notes_are_set', '_directions', '_xml_directions', '_xml_articulations', '_xml_technicals'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
@@ -31,9 +31,9 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._lyrics = []
         self._directions = {'above': [], 'below': []}
 
-        self.xml_directions = []
-        self.xml_articulations = []
-        self.xml_technicals = []
+        self._xml_directions = []
+        self._xml_articulations = []
+        self._xml_technicals = []
 
         self._note_attributes = kwargs
         self._notes_are_set = False
@@ -69,7 +69,7 @@ class Chord(MusicTree, QuarterDurationMixin):
             direction_types = self._directions[placement]
             for direction_type in direction_types:
                 d = XMLDirection(placement=placement)
-                self.xml_directions.append(d)
+                self._xml_directions.append(d)
                 if direction_type[0] == 'dynamics':
                     _add_dynamics(list_of_dynamics=direction_type[1], xml_direction=d)
                 else:
@@ -85,8 +85,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         n = self.notes[0]
 
         note_articulations_not_in_chord = [art for art in _get_note_xml_articulations() if art not in
-                                           self.xml_articulations]
-        chord_articulations_not_in_note = [art for art in self.xml_articulations if art not in _get_note_xml_articulations()]
+                                           self._xml_articulations]
+        chord_articulations_not_in_note = [art for art in self._xml_articulations if art not in _get_note_xml_articulations()]
 
         if chord_articulations_not_in_note:
             n.get_or_create_xml_notations()
@@ -111,8 +111,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         n = self.notes[0]
 
         note_technicals_not_in_chord = [tech for tech in get_note_xml_technical() if tech not in
-                                        self.xml_technicals]
-        chord_technicals_not_in_note = [tech for tech in self.xml_technicals if tech not in get_note_xml_technical()]
+                                        self._xml_technicals]
+        chord_technicals_not_in_note = [tech for tech in self._xml_technicals if tech not in get_note_xml_technical()]
 
         if chord_technicals_not_in_note:
             n.get_or_create_xml_notations()
@@ -264,8 +264,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         'XMLSpiccato', 'XMLScoop', 'XMLPlop', 'XMLDoit', 'XMLFalloff', 'XMLBreathMark', 'XMLCaesura', 'XMLStress',
         'XMLUnstress']):
         """
-        This method is used to add one xml articulation object to chord's :obj:`~musictree.chord.Chord.xml_articulations` list. This list
-        is used to add articulations to or update articulations of the first :obj:`~musictree.note.Note` object of chord`s notes
+        This method is used to add one xml articulation object to chord's private __xml_articulations list.
+        This list is used to add articulations to or update articulations of the first :obj:`~musictree.note.Note` object of chord`s notes
         which are to be or are already created .
 
         :param xml_articulation_object: musicxml articulation element
@@ -273,20 +273,21 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         if xml_articulation_object.__class__ not in XML_ARTICULATION_CLASSES:
             raise TypeError
-        self.xml_articulations.append(xml_articulation_object)
+        self._xml_articulations.append(xml_articulation_object)
         if self.notes:
             self._update_articulations()
         return xml_articulation_object
 
-    def add_dynamics(self, dynamics, placement='below'):
+    def add_dynamics(self, dynamics: Union[List['Dynamics'], 'Dynamics', str], placement: str = 'below') -> ['Dynamics']:
         dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(dynamics)
         dynamics_object_list = [d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list]
         self._directions[placement].append(('dynamics', dynamics_object_list))
+        return dynamics_object_list
 
     def add_technical(self, xml_technical_object):
         if xml_technical_object.__class__ not in XML_TECHNICAL_CLASSES:
             raise TypeError
-        self.xml_technicals.append(xml_technical_object)
+        self._xml_technicals.append(xml_technical_object)
 
     def add_tie(self, val: str) -> None:
         """

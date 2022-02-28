@@ -487,7 +487,7 @@ class TestTreeChord(ChordTestCase):
         ch._parent = self.mock_beat
         for a in articulation_classes:
             ch.add_articulation(a())
-        assert len(ch.xml_articulations) == 3
+        assert len(ch._xml_articulations) == 3
         ch._update_notes()
         n = ch.notes[0]
         assert n.xml_notations.xml_articulations is not None
