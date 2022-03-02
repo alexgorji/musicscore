@@ -8,9 +8,9 @@ class XMLWrapper:
     XMLClass = None
 
     @property
-    def xml_object(self):
+    def xml_object(self) -> 'XMLElement':
         """
-        :return: wrapped musicxml element of class py:property:`XMLClass`
+        :return: wrapped musicxml element
         """
         return self._xml_object
 

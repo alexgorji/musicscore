@@ -129,7 +129,7 @@ class QuarterDuration(numbers.Rational):
 
     def as_integer_ratio(self):
         """
-        :return: (numinator, denominator)
+        :return: (numerator, denominator)
         :rtype: tuple
 
         >>> QuarterDuration(1, 5).as_integer_ratio()

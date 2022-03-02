@@ -6,24 +6,24 @@ from tree.tree import Tree
 
 
 class MusicTree(Tree):
+    """
+    MusicTree is the parent class of all music tree objects:
+        - Score (root)
+        - Part (1st layer)
+        - Measure (2nd layer)
+        - Staff (3rd layer)
+        - Voice (4th layer)
+        - Beat (5th layer)
+        - Chord (6th layer)
+        - Note (7th layer)
+        - Midi (8th layer)
+          Midi can represent a pitch or a rest (value=0) and controls accidental sign of the pitch if necessary.
+        - Accidental (9th layer)
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._possible_subdivisions = {}
-
-    """
-    MusicTree is the parent class of all music tree objects:
-    Score (root)
-    Part (1st layer)
-    Measure (2nd layer)
-    Staff (3rd layer)
-    Voice (4th layer)
-    Beat (5th layer)
-    Chord (6th layer)
-    Note (7th layer)
-    Midi (8th layer)
-    Midi can represent a pitch or a rest (value=0) and controls accidental sign of the pitch if necessary.
-    Accidental (9th layer)
-    """
 
     @staticmethod
     def _check_args_kwargs(args, kwargs, class_name, get_class_name=None):

@@ -1,3 +1,5 @@
+from typing import List, Optional, Union, Iterator
+
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError, \
@@ -24,7 +26,11 @@ class Id:
                 raise IdWithSameValueExistsError
 
     @property
-    def value(self):
+    def value(self) -> str:
+        """
+        - val: a unique id. If not unique IdWithSameValueExistsError is raised.
+        - All parents ids will be updated.
+        """
         return self._value
 
     @value.setter
@@ -34,21 +40,33 @@ class Id:
         for parent in self.get_parents():
             self.update_parents_id(parent)
 
-    def delete(self):
+    def delete(self) -> None:
+        """
+        Removes Id instance from class attribute __refs__ before deleting.
+        """
         if self in self.__refs__:
             self.__refs__.remove(self)
         del self
 
-    def update_parents_id(self, parent):
+    def update_parents_id(self, parent: XMLWrapper) -> None:
+        """
+        Sets parent's xml_object.id to self.value
+        """
         parent.xml_object.id = self.value
 
-    def add_parent(self, obj):
+    def add_parent(self, obj: XMLWrapper) -> None:
+        """
+        Gets object to Id as parent. Parents id gets updated.
+        """
         if obj.__class__ in [type(parent) for parent in self.get_parents()]:
             raise IdHasAlreadyParentOfSameTypeError()
         self._parents.append(obj)
         self.update_parents_id(obj)
 
-    def get_parents(self):
+    def get_parents(self) -> List[XMLWrapper]:
+        """
+        Gets Id's parent objects
+        """
         return self._parents
 
     def __repr__(self):
@@ -71,7 +89,14 @@ class ScorePart(XMLWrapper):
         self.part = part
 
     @property
-    def part(self):
+    def part(self) -> 'Part':
+        """
+        val type: :obj:~`musictree.part.Part`
+        obj:~`musicxml.xmlelement.xmlelement.XMLPartName`will be updated
+        :obj:~`musictree.part.Id` is set or updated
+
+        :return: :obj:~`musictree.part.Part`
+        """
         return self._part
 
     @part.setter
@@ -110,11 +135,11 @@ class Part(MusicTree, XMLWrapper):
                 return m
 
     @property
-    def current_measures(self):
-        return self._current_measures
-
-    @property
-    def id_(self):
+    def id_(self) -> Id:
+        """
+        :rtype: :obj:`~musictree.part.Id`, str
+        :return: :obj:`~musictree.part.Id`
+        """
         return self._id
 
     @id_.setter
@@ -131,7 +156,12 @@ class Part(MusicTree, XMLWrapper):
             self.id_.add_parent(self)
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """
+        val: str. Tries to update name of :obj:`musictree.part.score_part`
+
+        :return: part's name. If no name is set part's :obj:`musictree.part.Part.id` is returned.
+        """
         if self._name is not None:
             return self._name
         else:
@@ -146,15 +176,41 @@ class Part(MusicTree, XMLWrapper):
             pass
 
     @property
-    def score_part(self):
+    def score_part(self) -> ScorePart:
+        """
+        :return: the  :obj:`~musictree.part.ScorePart` which is associated with this part.
+        """
         return self._score_part
 
-    def add_child(self, child):
+    def add_child(self, child: Measure) -> Measure:
+        """
+        Check and add child to list of children. Child's parent is set to self.
+
+        :param child: :obj:`~musictree.measure.Measure`
+        :return: child
+        :rtype: :obj:`~musictree.measure.Measure`
+
+        """
         super().add_child(child)
         self.xml_object.add_child(child.xml_object)
         return child
 
-    def add_chord(self, chord, *, staff_number=None, voice_number=1):
+    def add_chord(self, chord: 'Chord', *, staff_number: Optional[int] = None, voice_number: Optional[int] = 1) -> None:
+        """
+        - Adds a chord to the specified voice in current measure (see :obj:`~musictree.part.Part.get_current_measure`).
+        - If no current measure is set the first measure is selected.
+        - If part has still no measures one measure is added.
+        - If the specified voice in current measure is full chord is added to the voice with the same number in the next measure. If no
+          next measure exists one measure is added
+        - If a leftover chord remains after adding chord, it is added to voice's :obj:`~musictree.voice.Voice.leftover_chord` and is
+          added to so many next measures as needed.
+
+        :param chord: obj:`~musictree.chord.Chord` required
+        :param staff_number: positive int, None. If None is set to 1.
+        :param voice_number: positive_int
+        :return: None
+        """
+
         def add_to_next_measure(current_measure, ch):
             if current_measure.next:
                 current_measure = current_measure.next
@@ -182,7 +238,19 @@ class Part(MusicTree, XMLWrapper):
             current_measure = add_to_next_measure(current_measure, leftover_chord)
             leftover_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).leftover_chord
 
-    def add_measure(self, time=None, number=None):
+    def add_measure(self, time: Optional[Union[Time, Iterator]] = None, number: Optional[int] = None) -> Measure:
+        """
+        - Creates and adds a :obj:`~musictree.measure.Measure` to part.
+        - If time is not given last measure's :obj:`~musictree.time.Time` is copied. Its :obj:`~musictree.time.Time.show` to
+          ``False``
+        - If number is not given last measure's number is incremented.
+        - New measure's :obj:`~musictree.key.Key` is a copy of last measure's :obj:`~musictree.key.Key`. Its
+          :obj:`~musictree.key.Key.show` is set to ``False``
+
+        :param time: Time, (numerator, denominator), None
+        :param number: positive int, None
+        :return: created and added :obj:`~musictree.measure.Measure`
+        """
         previous_measure = self.get_children()[-1] if self.get_children() else None
         if not time:
             if previous_measure:
@@ -217,15 +285,45 @@ class Part(MusicTree, XMLWrapper):
 
         return child
 
-    def get_current_measure(self, staff_number=1, voice_number=1):
+    def get_current_measure(self, staff_number: Optional[int] = 1, voice_number: int = 1):
+        """
+        Gets current measure for adding :obj:`~musictree.chord.Chord` to a specific :obj:`~musictree.voice.Voice`
+
+        staff_number None is set to 1
+
+        :param staff_number: positive int, None
+        :param voice_number: positive int
+        """
         if staff_number is None:
             staff_number = 1
         try:
-            return self.current_measures[staff_number][voice_number]
+            return self._current_measures[staff_number][voice_number]
         except KeyError:
             return self._set_first_current_measure(staff_number=staff_number, voice_number=voice_number)
 
-    def set_current_measure(self, staff_number, voice_number, measure):
+    def quantize(self) -> None:
+        """
+        Calls :obj:`~musictree.beat.Beat.quantize()` method of all :obj:`~musictree.beat.Beat` descendents.
+
+        If a descendent :obj:`~musictree.beat.Beat` is not filled exception QuantizationBeatNotFullError is raised.
+        """
+        for b in [beat for measure in self.get_children() for staff in measure.get_children() for voice in staff.get_children() for beat in \
+                  voice.get_children()]:
+            if b.is_filled:
+                b.quantize()
+            else:
+                raise QuantizationBeatNotFullError(
+                    f"Part:{self.id_.value} Beat {b.up.up.up.number}:{b.up.up.number}:{b.up.number}:{b.number} is not filled.")
+
+    def set_current_measure(self, staff_number: int, voice_number: int, measure: Measure) -> None:
+        """
+        Sets current measure for adding :obj:`~musictree.chord.Chord` to a specific :obj:`~musictree.voice.Voice`
+
+        :param staff_number: positive int
+        :param voice_number: positive int
+        :param measure: :obj:`musictree.measure.Measure`
+        :return: None
+        """
         if staff_number is None:
             staff_number = 1
         if not isinstance(measure, Measure):
@@ -235,20 +333,17 @@ class Part(MusicTree, XMLWrapper):
         else:
             self._current_measures[staff_number] = {voice_number: measure}
 
-    def quantize(self):
-        for b in [beat for measure in self.get_children() for staff in measure.get_children() for voice in staff.get_children() for beat in \
-                  voice.get_children()]:
-            if b.is_filled:
-                b.quantize()
-            else:
-                raise QuantizationBeatNotFullError(
-                    f"Part:{self.id_.value} Beat {b.up.up.up.number}:{b.up.up.number}:{b.up.number}:{b.number} is not filled.")
-
-    def split_not_writable_chords(self):
+    def split_not_writable_chords(self) -> None:
+        """
+        Calls :obj:`~musictree.beat.Beat.split_not_writable_chords()` method of all :obj:`~musictree.beat.Beat` descendents.
+        """
         for b in [beat for measure in self.get_children() for staff in measure.get_children() for voice in staff.get_children() for beat in \
                   voice.get_children()]:
             b.split_not_writable_chords()
 
-    def update(self):
+    def update(self) -> None:
+        """
+        Calls :obj:`~musictree.measure.Measure.update()` method of all :obj:`~musictree.measure.Measure` children.
+        """
         for m in self.get_children():
             m.update()

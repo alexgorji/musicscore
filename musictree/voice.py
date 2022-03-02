@@ -1,3 +1,5 @@
+from typing import Optional, Union, List
+
 from musictree.beat import Beat
 from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsAlreadyFullError
 from musictree.core import MusicTree
@@ -15,17 +17,35 @@ class Voice(MusicTree, XMLWrapper):
         self._number = None
         self.number = number
         self._current_beat = None
-        self.leftover_chord = None
+        self._leftover_chord = None
 
     @property
-    def is_filled(self):
+    def is_filled(self) -> bool:
+        """
+        :return: ``True`` if voice has :obj:`~musictree.beat.Beat` children and the last child is filled, else ``False``
+        """
         if self.get_children():
             return self.get_children()[-1].is_filled
         else:
             return False
 
     @property
-    def number(self):
+    def leftover_chord(self) -> Optional['Chord']:
+        """
+        :return: None or a :obj:`~musictree.chord.Chord` which is left over after adding a chord to the voice.
+        """
+        return self._leftover_chord
+
+    @leftover_chord.setter
+    def leftover_chord(self, val):
+        self._leftover_chord = val
+
+    @property
+    def number(self) -> Optional[int]:
+        """
+        :rtype: None or int. If None number is set to 1.
+        :return: positive int or None
+        """
         if self._number is None:
             return None
         object_value = self.xml_object.value_
@@ -40,24 +60,44 @@ class Voice(MusicTree, XMLWrapper):
         else:
             self.xml_object.value_ = '1'
 
-    def add_beat(self, beat_quarter_duration=1):
+    def add_beat(self, beat_quarter_duration: Optional[Union['QuarterDuration', 'Fraction', int, float]] = 1) -> Beat:
+        """
+        Creates and adds a :obj:`~musictree.beat.Beat` to voice
+
+        :param beat_quarter_duration: if None beat_quarter_duration is set to 1.
+        :return: :obj:`~musictree.beat.Beat`
+        """
         if beat_quarter_duration is None:
             beat_quarter_duration = 1
         return self.add_child(Beat(beat_quarter_duration))
 
-    def add_child(self, child):
+    def add_child(self, child: Beat) -> Beat:
+        """
+        Check and add child to list of children. Child's parent is set to self.
+
+        :param child: :obj:`~musictree.beat.Beat`
+        :return: child
+        :rtype: :obj:`~musictree.beat.Beat`
+        """
         if not self.up:
             raise VoiceHasNoParentError('A child Beat can only be added to a Voice if voice has a Staff parent.')
         return super().add_child(child)
 
-    def add_chord(self, chord):
+    def add_chord(self, chord: 'Chord') -> Union['Chord', List['Chord']]:
+        """
+        :param chord: :obj:`~musictree.chord.Chord`, required
+        :return: added chord or a list of split chords
+        """
         if not self.get_children():
             raise VoiceHasNoBeatsError
         if self.get_current_beat() is None:
             raise VoiceIsAlreadyFullError(f'Voice number {self.value_} of Measure number {self.up.up.number} is full.')
         return self.get_current_beat().add_child(chord)
 
-    def get_current_beat(self):
+    def get_current_beat(self) -> Beat:
+        """
+        :return: First not filled child :obj:`~musictree.beat.Beat`
+        """
         if not self.get_children():
             raise ValueError('Voice has no beats.')
         else:
@@ -65,7 +105,14 @@ class Voice(MusicTree, XMLWrapper):
                 if not beat.is_filled:
                     return beat
 
-    def update_beats(self, *quarter_durations):
+    def update_beats(self, *quarter_durations) -> Optional[List[Beat]]:
+        """
+        Creates and adds or replaces Beats.
+
+        :param quarter_durations: if None and a measure as ancestor exists, this measure's
+                                  :obj:`musictree.time.Time.get_beats_quarter_durations()` method is called.
+        :return: None if quarter_durations is None and no measures as ancestor exists, else list of created beats.
+        """
         if not quarter_durations:
             if self.up and self.up.up:
                 quarter_durations = self.up.up.time.get_beats_quarter_durations()

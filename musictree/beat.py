@@ -375,10 +375,10 @@ class Beat(MusicTree, QuarterDurationMixin):
                 beats = self.up.get_children()[self.up.get_children().index(self):]
                 return child.split_and_add_beatwise(beats)
 
-    def add_chord(self, chord: Optional[Chord] = None) -> 'Chord':
+    def add_chord(self, chord: Optional[Chord] = None) -> Union['Chord', List['Chord']]:
         """
         :param chord: if None chord is set to a :obj:`~musictree.chord.Chord` with quarter_duration 1 and midis set to 60
-        :return: added chord.
+        :return: added chord or a list of split chords
         """
         if chord is None:
             chord = Chord(midis=60, quarter_duration=self.quarter_duration)

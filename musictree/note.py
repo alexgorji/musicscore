@@ -216,6 +216,16 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         else:
             self.xml_object.xml_duration = None
 
+    def add_child(self, child: Midi) -> Midi:
+        """
+        Check and add child to list of children. Child's parent is set to self.
+
+        :param child: :obj:`~musictree.midi.Midi`
+        :return: child
+        :rtype: :obj:`~musictree.midi.Midi`
+        """
+        return super().add_child(child)
+
     def get_or_create_xml_notations(self) -> 'XMLNotations':
         """
         If note's ``xml_object`` has no :obj:`~musicxml.xmlelement.xmlelement.XMLNotations` as child this child will be created.
@@ -262,46 +272,12 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         """
         return self.parent_chord.get_voice_number()
 
-    def update_dots(self, number_of_dots: int) -> None:
+    def remove_tie(self, type_: Optional[str] = None) -> None:
         """
-        Set or change number of dots
-
-        :param number_of_dots: positiv int
+        :param type_: 'start', 'stop', None: if None and note has :obj:`~musicxml.xmlelement.xmlelement.XMLTie` objects with both types
+                      ValueError is raised.
         :return: None
         """
-        self._number_of_dots = number_of_dots
-        self._update_xml_dots(number_of_dots)
-
-    def update_type(self, val: Optional[str] = None) -> None:
-        """
-        If val is None: type will be set according to note's quarter_duration.
-
-        :param val: [‘1024th’, ‘512th’, ‘256th’, ‘128th’, ‘64th’, ‘32nd’, ‘16th’, ‘eighth’, ‘quarter’, ‘half’, ‘whole’, ‘breve’, ‘long’, ‘maxima’]
-        :return: None
-        """
-        self._type = val
-        if val is None:
-            self._update_xml_type()
-        else:
-            self.xml_object.xml_type = val
-
-    def start_tie(self):
-        if not self.is_tied:
-            self.xml_object.add_child(XMLTie(type='start'))
-            self._set_xml_tied('start')
-
-    def stop_tie(self):
-        if self.is_tied_to_previous:
-            pass
-        elif self.is_tied:
-            self.find_children('XMLTie')[0].type = 'stop'
-            self.xml_object.add_child(XMLTie(type='start'))
-            self._set_xml_tied('stop')
-        else:
-            self.xml_object.add_child(XMLTie(type='stop'))
-            self._set_xml_tied('stop')
-
-    def remove_tie(self, type_=None):
         ties = self.find_children('XMLTie')
         tie_to_be_removed = None
         if len(ties) == 0:
@@ -326,3 +302,48 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             xml_notations.remove(tied_to_be_removed)
             if not xml_notations.get_children():
                 xml_notations.up.remove(xml_notations)
+
+    def start_tie(self) -> None:
+        """
+        Start a tie if not already started. Update xml_tie and xml_tied if necessary.
+        """
+        if not self.is_tied:
+            self.xml_object.add_child(XMLTie(type='start'))
+            self._set_xml_tied('start')
+
+    def stop_tie(self) -> None:
+        """
+        Stop a tie if not already stopped. Update xml_tie and xml_tied if necessary.
+        """
+        if self.is_tied_to_previous:
+            pass
+        elif self.is_tied:
+            self.find_children('XMLTie')[0].type = 'stop'
+            self.xml_object.add_child(XMLTie(type='start'))
+            self._set_xml_tied('stop')
+        else:
+            self.xml_object.add_child(XMLTie(type='stop'))
+            self._set_xml_tied('stop')
+
+    def update_dots(self, number_of_dots: int) -> None:
+        """
+        Set or change number of dots
+
+        :param number_of_dots: positiv int
+        :return: None
+        """
+        self._number_of_dots = number_of_dots
+        self._update_xml_dots(number_of_dots)
+
+    def update_type(self, val: Optional[str] = None) -> None:
+        """
+        If val is None: type will be set according to note's quarter_duration.
+
+        :param val: [‘1024th’, ‘512th’, ‘256th’, ‘128th’, ‘64th’, ‘32nd’, ‘16th’, ‘eighth’, ‘quarter’, ‘half’, ‘whole’, ‘breve’, ‘long’, ‘maxima’]
+        :return: None
+        """
+        self._type = val
+        if val is None:
+            self._update_xml_type()
+        else:
+            self.xml_object.xml_type = val

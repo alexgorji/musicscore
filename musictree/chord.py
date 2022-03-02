@@ -330,6 +330,16 @@ class Chord(MusicTree, QuarterDurationMixin):
             self._update_articulations()
         return xml_articulation_object
 
+    def add_child(self, child: Note) -> Note:
+        """
+        Check and add child to list of children. Child's parent is set to self.
+
+        :param child: :obj:`~musictree.note.Note`
+        :return: child
+        :rtype: :obj:`~musictree.note.Note`
+        """
+        return super().add_child(child)
+
     def add_dynamics(self, dynamics: Union[List['Dynamics'], 'Dynamics', str], placement: str = 'below') -> List['Dynamics']:
         """
         This method is used to add one or more :obj:`musictree.dynamics.Dynamics` objects to chord's private dictionary _xml_direction_types

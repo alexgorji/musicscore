@@ -91,7 +91,7 @@ class Time(XMLWrapper):
             self._xml_object.add_child(XMLBeatType(str(beat_type)))
 
     def get_beats_quarter_durations(self):
-        return [Fraction(nominator, denominator) * 4 for nominator, denominator in [self.actual_signatures[i:i + 2] for i in range(0,
+        return [Fraction(numerator, denominator) * 4 for numerator, denominator in [self.actual_signatures[i:i + 2] for i in range(0,
                                                                                                                                    len(self.actual_signatures),
                                                                                                                                    2)]]
 
