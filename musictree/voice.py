@@ -43,7 +43,7 @@ class Voice(MusicTree, XMLWrapper):
     @property
     def number(self) -> Optional[int]:
         """
-        :rtype: None or int. If None number is set to 1.
+        :type: None or int. If None number is set to 1.
         :return: positive int or None
         """
         if self._number is None:

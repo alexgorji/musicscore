@@ -1,7 +1,7 @@
-from musicxml.xmlelement.xmlelement import XMLTime, XMLBeats, XMLBeatType
-from quicktions import Fraction
+from typing import List
 
-from musictree.exceptions import StaffHasNoParentError
+from musictree.quarterduration import QuarterDuration
+from musicxml.xmlelement.xmlelement import XMLTime, XMLBeats, XMLBeatType
 from musictree.xmlwrapper import XMLWrapper
 
 
@@ -32,7 +32,15 @@ class Time(XMLWrapper):
         return self._intern_actual_signatures
 
     @property
-    def actual_signatures(self):
+    def actual_signatures(self) -> List[int]:
+        """
+        Set and gets actual signatures. If parent measure exists its beats inside voices will be updated.
+
+        :type: Optional[List[int]]
+        :return: A list of int representing actual time signatures. If not set manually, it is calculated internally. For example a 4/4 time
+                 signature gets automatically [1, 4, 1, 4, 1, 4, 1, 4] as actual_signatures if not set otherwise.
+        :rtype: List[int]
+        """
         if self._actual_signatures is None:
             if self._intern_actual_signatures is None:
                 self._calculate_actual_signatures()
@@ -46,7 +54,15 @@ class Time(XMLWrapper):
             self.parent_measure._update_voice_beats()
 
     @property
-    def signatures(self):
+    def signatures(self) -> List[int]:
+        """
+        Set and gets signatures. If parent measure exists, beats inside its voices will be updated. If val is None, a 4/4 signature is set.
+
+        :type: Optional[List[int]]
+        :return: A list of int representing time signature. If not set manually, it is calculated internally. For example a 4/4 time
+                 signature gets automatically [1, 4, 1, 4, 1, 4, 1, 4] as actual_signatures if not set otherwise.
+        :rtype: List[int]
+        """
         return self._signatures
 
     @signatures.setter
@@ -63,7 +79,13 @@ class Time(XMLWrapper):
             self.parent_measure._update_voice_beats()
 
     @property
-    def show(self):
+    def show(self) -> bool:
+        """
+        If time signature is shown or not.
+
+        :type: bool
+        :return: bool
+        """
         return self._show
 
     @show.setter
@@ -71,10 +93,6 @@ class Time(XMLWrapper):
         if not isinstance(val, bool):
             raise TypeError
         self._show = val
-
-    def reset_actual_signatures(self):
-        self._actual_signatures = None
-        self._intern_actual_signatures = None
 
     def _update_signature(self):
         signatures = [self.signatures[i:i + 2] for i in range(0, len(self.signatures), 2)]
@@ -90,10 +108,20 @@ class Time(XMLWrapper):
             self._xml_object.add_child(XMLBeats(str(beats)))
             self._xml_object.add_child(XMLBeatType(str(beat_type)))
 
-    def get_beats_quarter_durations(self):
-        return [Fraction(numerator, denominator) * 4 for numerator, denominator in [self.actual_signatures[i:i + 2] for i in range(0,
-                                                                                                                                   len(self.actual_signatures),
-                                                                                                                                   2)]]
+    def get_beats_quarter_durations(self) -> List[QuarterDuration]:
+        """
+        :return: List of quarter durations according to :obj:`musictree.time.Time.actual_signatures`
+        """
+        return [QuarterDuration(numerator, denominator) * 4 for numerator, denominator in [self.actual_signatures[i:i + 2] for i in range(0,
+                                                                                                                                          len(self.actual_signatures),
+                                                                                                                                          2)]]
+
+    def reset_actual_signatures(self) -> None:
+        """
+        Resets actual signatures to None.
+        """
+        self._actual_signatures = None
+        self._intern_actual_signatures = None
 
     def __copy__(self):
         cp = self.__class__(*self.signatures, show=self.show)
@@ -104,7 +132,15 @@ class Time(XMLWrapper):
         return [self.__copy__() for _ in range(other)]
 
 
-def flatten_times(times):
+def flatten_times(times) -> List[Time]:
+    """
+    :param times: an expandable list of times or tuples representing times. For example [x * Time(3, 8)] return x time intances of Time(3, 8)
+    :return: List[Time]
+
+    >>> ts = [2 * Time(3, 8), (3, 4), 3 * [(1, 8)], Time(1, 8, 3, 4), Time(3, 4)]
+    >>> [t.signatures for t in flatten_times(ts)]
+    [(3, 8), (3, 8), (3, 4), (1, 8), (1, 8), (1, 8), (1, 8, 3, 4), (3, 4)]
+    """
     output = []
     for time in times:
         if isinstance(time, Time):
