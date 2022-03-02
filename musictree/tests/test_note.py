@@ -91,7 +91,7 @@ class TestNote(NoteTestCase):
 </note>
 """
         assert n.to_string() == expected
-        n.set_type('whole')
+        n.update_type('whole')
         expected = """<note>
   <pitch>
     <step>C</step>
@@ -103,7 +103,7 @@ class TestNote(NoteTestCase):
 </note>
 """
         assert n.to_string() == expected
-        n.set_type()
+        n.update_type()
         expected = """<note>
   <pitch>
     <step>C</step>
@@ -116,12 +116,12 @@ class TestNote(NoteTestCase):
 """
         assert n.to_string() == expected
         with self.assertRaises(ValueError):
-            n.type = n.set_type('bla')
+            n.type = n.update_type('bla')
 
     def test_note_dots(self):
         self.mock_measure.get_divisions.return_value = 2
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1.5)
-        n.set_dots(1)
+        n.update_dots(1)
         n.midi.accidental.show = False
         expected = """<note>
   <pitch>
@@ -136,15 +136,15 @@ class TestNote(NoteTestCase):
 """
         assert n.to_string() == expected
         assert len(n.xml_object.find_children('XMLDot')) == 1
-        n.set_dots(0)
+        n.update_dots(0)
         assert len(n.xml_object.find_children('XMLDot')) == 0
-        n.set_dots(3)
+        n.update_dots(3)
         assert len(n.xml_object.find_children('XMLDot')) == 3
-        n.set_dots(1)
+        n.update_dots(1)
         assert len(n.xml_object.find_children('XMLDot')) == 1
         self.mock_measure.get_divisions.return_value = 4
         n.quarter_duration = 1.75
-        n.set_dots(2)
+        n.update_dots(2)
         assert len(n.xml_object.find_children('XMLDot')) == 2
 
     def test_change_midi_or_duration(self):

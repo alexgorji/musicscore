@@ -193,13 +193,13 @@ class Beat(MusicTree, QuarterDurationMixin):
             if note.number_of_dots is None:
                 if note.quarter_duration != 0:
                     if note.quarter_duration.numerator % 3 == 0:
-                        note.set_dots(number_of_dots=1)
+                        note.update_dots(number_of_dots=1)
                     elif note.quarter_duration == Fraction(1, 2) and actual_notes == 6:
-                        note.set_dots(number_of_dots=1)
+                        note.update_dots(number_of_dots=1)
                     elif True in [note.quarter_duration == x for x in [7, 7 / 2, 7 / 4, 7 / 8, 7 / 16, 7 / 32, 7 / 64]]:
-                        note.set_dots(number_of_dots=2)
+                        note.update_dots(number_of_dots=2)
                     else:
-                        note.set_dots(number_of_dots=0)
+                        note.update_dots(number_of_dots=0)
 
     def _update_tuplets(self, chord_group, actual_notes, factor=1):
         def add_bracket_to_notes(chord, type_, number=1):

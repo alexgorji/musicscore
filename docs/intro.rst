@@ -24,9 +24,9 @@ musictree
 =========
 
 The goal of this package is to simplify the use of musicxml elements. The tree structure of a score plays here a fundamental role and is
-being controlled via :obj:`~musictree.musictree.MusicTree` parent class. Most of the objects in this hierarchy are closely connected to
-the corresponding objects in musicxml package and are descendents of :obj:`~musictree.xmlwarpper.XMLWrapper` class with an :obj:`~musictree
-.xmlwarpper.XMLWrapper.xml_object` attribute. There are though some other important classes like :obj:`~musictree.beat.Beat` or
+being controlled via :obj:`~musictree.core.MusicTree` parent class. Most of the objects in this hierarchy are closely connected to
+the corresponding objects in musicxml package and are descendents of :obj:`~musictree.xmlwrapper.XMLWrapper` class with an :obj:`~musictree
+.xmlwarpper.XMLWrapper.xml_object` attribute. There are though some other important classes like :obj:`~musictr.beat.Beat` or
 :obj:`~musictree.chord.Chord` which don't have any direct equivalents in the musicxml structure.
 
 A musictree consists of a root :obj:`~musictree.score.Score` and its 9 descending layers:

@@ -314,7 +314,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         return self._xml_technicals
 
-    def add_articulation(self, xml_articulation_object: _all_articulations) -> _all_articulations:
+    def add_articulation(self, xml_articulation_object: _all_articulations) -> 'xml_articulation_object':
         """
         This method is used to add one xml articulation object to chord's private __xml_articulations list.
         This list is used to add or update articulations of the first :obj:`~musictree.note.Note` object of chord`s notes which are to be or are already created .
@@ -338,14 +338,14 @@ class Chord(MusicTree, QuarterDurationMixin):
 
         :param dynamics: str, Dynamics of a list of Dynamics to be added to directions
         :param placement: above or below
-        :return: List[:obj:`musictree.dynamics.Dynamics`]
+        :return: List[:obj:`~musictree.dynamics.Dynamics`]
         """
         dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(dynamics)
         dynamics_object_list = [d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list]
         self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
         return dynamics_object_list
 
-    def add_technical(self, xml_technical_object: _all_articulations) -> _all_articulations:
+    def add_technical(self, xml_technical_object: _all_technicals) -> 'xml_technical_object':
         """
         This method is used to add one xml technical object to chord's private __xml_technicals list.
         This list is used to add or update technicals of the first :obj:`~musictree.note.Note` object of chord`s notes which are to be or are already created .
@@ -353,6 +353,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         :param xml_technical_object: musicxml technical element
         :return: xml_technical_object
         """
+
         if xml_technical_object.__class__ not in XML_TECHNICAL_CLASSES:
             raise TypeError
         self._xml_technicals.append(xml_technical_object)

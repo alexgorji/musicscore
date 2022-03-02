@@ -250,6 +250,7 @@ class Tree(ABC):
     def remove_children(self) -> None:
         """
         Calls :obj:`~tree.tree.Tree.remove()` on all children.
+
         :return: None
         """
         for child in self.get_children()[:]:

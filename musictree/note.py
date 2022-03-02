@@ -1,3 +1,5 @@
+from typing import Optional
+
 from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied, XMLArticulations
 
 from musictree.exceptions import NoteTypeError, NoteHasNoParentChordError
@@ -50,27 +52,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         if duration < 0:
             raise ValueError
 
-    @property
-    def number_of_dots(self):
-        return self._number_of_dots
-
-    @number_of_dots.setter
-    def number_of_dots(self, val):
-        self._number_of_dots = val
-
-    def _check_dots(self, number_of_dots):
-        dots = self.xml_object.find_children('XMLDot')
-        if number_of_dots > len(dots):
-            diff = number_of_dots - len(dots)
-            while diff:
-                self.xml_object.add_child(XMLDot())
-                diff -= 1
-        elif number_of_dots < len(dots):
-            for dot in dots[number_of_dots:]:
-                dot.get_parent().remove(dot)
-        else:
-            pass
-
     def _set_quarter_duration(self, val):
         old_quarter_duration = self._quarter_duration
         super()._set_quarter_duration(val)
@@ -96,15 +77,21 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         else:
             self.xml_notations.add_child(XMLTied(type=val))
 
-    def _update_xml_type(self):
-        if self._type is None:
-            if self.quarter_duration != 0:
-                self.xml_type = note_types[self.quarter_duration.as_integer_ratio()]
-            else:
-                self.xml_type = None
-
     def _update_xml_accidental(self):
         self.xml_object.xml_accidental = self.midi.accidental.xml_object
+
+    def _update_xml_dots(self, number_of_dots):
+        dots = self.xml_object.find_children('XMLDot')
+        if number_of_dots > len(dots):
+            diff = number_of_dots - len(dots)
+            while diff:
+                self.xml_object.add_child(XMLDot())
+                diff -= 1
+        elif number_of_dots < len(dots):
+            for dot in dots[number_of_dots:]:
+                dot.get_parent().remove(dot)
+        else:
+            pass
 
     def _update_xml_duration(self):
         duration = float(self.quarter_duration) * self.get_parent_measure().get_divisions()
@@ -143,6 +130,13 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     def _update_xml_staff(self):
         self.xml_object.xml_staff = self.get_staff_number()
+
+    def _update_xml_type(self):
+        if self._type is None:
+            if self.quarter_duration != 0:
+                self.xml_type = note_types[self.quarter_duration.as_integer_ratio()]
+            else:
+                self.xml_type = None
 
     def _update_xml_voice(self):
         self.xml_object.xml_voice = str(self.get_voice_number())
@@ -196,6 +190,14 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             self._update_xml_accidental()
 
     @property
+    def number_of_dots(self) -> int:
+        """
+        :return: number of dots
+        :rtype: positive int
+        """
+        return self._number_of_dots
+
+    @property
     def parent_chord(self) -> 'Chord':
         """
         :return: notes parent. Same as self.up
@@ -244,21 +246,39 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     def get_parent_measure(self) -> 'Measure':
         """
-        :return: :obj:`~musictree.musictree.Measure` in note's ancestors
+        :return: :obj:`~musictree.measure.Measure` in note's ancestors
         """
         return self.parent_chord.get_parent_measure()
 
     def get_staff_number(self) -> int:
+        """
+        :return: number of :obj:`~musictree.staff.Staff` in note's ancestors
+        """
         return self.parent_chord.get_staff_number()
 
     def get_voice_number(self) -> int:
+        """
+        :return: number of :obj:`~musictree.voice.Voice` in note's ancestors
+        """
         return self.parent_chord.get_voice_number()
 
-    def set_dots(self, number_of_dots: int) -> None:
-        self._number_of_dots = number_of_dots
-        self._check_dots(number_of_dots)
+    def update_dots(self, number_of_dots: int) -> None:
+        """
+        Set or change number of dots
 
-    def set_type(self, val=None):
+        :param number_of_dots: positiv int
+        :return: None
+        """
+        self._number_of_dots = number_of_dots
+        self._update_xml_dots(number_of_dots)
+
+    def update_type(self, val: Optional[str] = None) -> None:
+        """
+        If val is None: type will be set according to note's quarter_duration.
+
+        :param val: [‘1024th’, ‘512th’, ‘256th’, ‘128th’, ‘64th’, ‘32nd’, ‘16th’, ‘eighth’, ‘quarter’, ‘half’, ‘whole’, ‘breve’, ‘long’, ‘maxima’]
+        :return: None
+        """
         self._type = val
         if val is None:
             self._update_xml_type()
