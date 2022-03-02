@@ -54,8 +54,8 @@ class TestSequence(TestCase):
                 </xs:sequence>
         """
         et = ET.fromstring(xsd)
-        sequence_xsd_tree = XSDTree(et)
-        self.sequence = XSDSequence(sequence_xsd_tree)
+        sequence_XSD_TREE = XSDTree(et)
+        self.sequence = XSDSequence(sequence_XSD_TREE)
 
     def test_sequence_elements(self):
         assert self.sequence.elements == [('XMLMidiChannel', '0', '1'), ('XMLMidiName', '0', '1'), ('XMLMidiBank', '0', '1'),
@@ -71,8 +71,8 @@ class TestSequence(TestCase):
                 </xs:sequence>
         """
         et = ET.fromstring(xsd)
-        sequence_xsd_tree = XSDTree(et)
-        sequence = XSDSequence(sequence_xsd_tree)
+        sequence_XSD_TREE = XSDTree(et)
+        sequence = XSDSequence(sequence_XSD_TREE)
         assert sequence.elements == [('XMLStep', '1', '1'), ('XMLAlter', '0', '1'), ('XMLOctave', '1', '1')]
 
     def test_sequence_group_elements(self):
@@ -101,8 +101,8 @@ class TestSequence(TestCase):
         </xs:sequence>
                 """
         et = ET.fromstring(xsd)
-        sequence_xsd_tree = XSDTree(et)
-        sequence = XSDSequence(sequence_xsd_tree)
+        sequence_XSD_TREE = XSDTree(et)
+        sequence = XSDSequence(sequence_XSD_TREE)
         assert sequence.elements == [('XMLGroupName', '0', '1'), ('XMLGroupNameDisplay', '0', '1'), ('XMLGroupAbbreviation', '0', '1'),
                                      ('XMLGroupAbbreviationDisplay', '0', '1'), ('XMLGroupSymbol', '0', '1'), ('XMLGroupBarline', '0', '1'),
                                      ('XMLGroupTime', '0', '1'),

@@ -18,13 +18,13 @@ class XMLElement(Tree):
     """
     Parent class of all xml elements.
     """
-    _PROPERTIES = {'XSD_TREE', 'compact_repr', 'is_leaf', 'level', 'attributes', 'child_container_tree', 'possible_children_names',
+    _PROPERTIES = {'xsd_tree', 'compact_repr', 'is_leaf', 'level', 'attributes', 'child_container_tree', 'possible_children_names',
                   'et_xml_element', 'name', 'type_', 'value_', 'parent_xsd_element'}
     TYPE = None
     _SEARCH_FOR_ELEMENT = ''
 
     def __init__(self, value_=None, **kwargs):
-        self.XSD_TREE = XSDTree(musicxml_xsd_et_root.find(self._SEARCH_FOR_ELEMENT))
+        self.xsd_tree = XSDTree(musicxml_xsd_et_root.find(self._SEARCH_FOR_ELEMENT))
         self._type = None
         super().__init__()
         self._value_ = None
@@ -182,7 +182,7 @@ class XMLElement(Tree):
 
     @property
     def name(self):
-        return self.XSD_TREE.get_attributes()['name']
+        return self.xsd_tree.get_attributes()['name']
 
     @property
     def possible_children_names(self):
@@ -211,7 +211,7 @@ class XMLElement(Tree):
         """
         :return: Snippet of musicxml xsd file which is relevant for this XMLElement.
         """
-        return cls.XSD_TREE.get_xsd()
+        return cls.xsd_tree.get_xsd()
 
     def add_child(self, child: 'XMLElement', forward: Optional[int] = None) -> 'XMLElement':
         """

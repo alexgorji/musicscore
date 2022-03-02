@@ -169,11 +169,13 @@ class XSDTree(Tree):
         permitted = self.get_permitted()
         pattern = self.get_pattern()
         if permitted:
-            output += '\n\n'
-            output += f"    Permitted Values: {permitted}"
+            output += '\n    '
+            output += '\n    '
+            output += f"Permitted Values: {permitted}\n"
         if pattern:
-            output += '\n\n'
-            output += f"    Pattern: {pattern}"
+            output += '\n    '
+            output += '\n    '
+            output += f"    \nPattern: {pattern}\n"
 
         return output
 
@@ -283,7 +285,3 @@ class XSDTreeElement:
     @classmethod
     def get_xsd(cls):
         return cls.XSD_TREE.get_xsd()
-
-    @property
-    def xsd_tree(self):
-        return self.XSD_TREE

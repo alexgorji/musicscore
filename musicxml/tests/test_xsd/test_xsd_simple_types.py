@@ -36,8 +36,9 @@ class TestSimpleTypes(MusicXmlTestCase):
         """
 
         assert XSDSimpleTypeAboveBelow.__doc__ == """The above-below type is used to indicate whether one element appears above or below another element.
-
-    Permitted Values: ['above', 'below']"""
+    
+    Permitted Values: ['above', 'below']
+"""
 
     # Test Basic XSDSimpleType classes which are created manually
 
@@ -589,3 +590,15 @@ class TestSimpleTypes(MusicXmlTestCase):
         XSDSimpleTypeLanguage('en-US')
         with self.assertRaises(ValueError):
             XSDSimpleTypeLanguage('blabla')
+
+    def test_get_doc(self):
+        """
+        get_doc must be a class method
+        :return:
+        """
+        expected = """The note-type-value type is used for the MusicXML type element and represents the graphic note type, from 1024th (shortest) to maxima (longest).
+    
+    Permitted Values: ['1024th', '512th', '256th', '128th', '64th', '32nd', '16th', 'eighth', 'quarter', 'half', 'whole', 'breve', 'long', 'maxima']
+"""
+        t = XSDSimpleTypeNoteTypeValue
+        assert t.XSD_TREE.get_doc() == expected

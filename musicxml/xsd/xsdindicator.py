@@ -93,7 +93,9 @@ class XSDGroup(XSDTreeElement):
                     self._sequence = XSDSequence(child)
         return self._sequence
 
-
+    @property
+    def xsd_tree(self):
+        return self.XSD_TREE
 # -----------------------------------------------------
 # AUTOMATICALLY GENERATED WITH generate_indicators.py
 # -----------------------------------------------------
@@ -101,7 +103,7 @@ class XSDGroup(XSDTreeElement):
 
 class XSDGroupEditorial(XSDGroup):
     """The editorial group specifies editorial information for a musical element."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="editorial">
     <xs:annotation>
@@ -118,7 +120,7 @@ class XSDGroupEditorial(XSDGroup):
 
 class XSDGroupEditorialVoice(XSDGroup):
     """The editorial-voice group supports the common combination of editorial and voice information for a musical element."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="editorial-voice">
     <xs:annotation>
@@ -136,7 +138,7 @@ class XSDGroupEditorialVoice(XSDGroup):
 
 class XSDGroupEditorialVoiceDirection(XSDGroup):
     """The editorial-voice-direction group supports the common combination of editorial and voice information for a direction element. It is separate from the editorial-voice element because extensions and restrictions might be different for directions than for the note and forward elements."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="editorial-voice-direction">
     <xs:annotation>
@@ -154,7 +156,7 @@ class XSDGroupEditorialVoiceDirection(XSDGroup):
 
 class XSDGroupFootnote(XSDGroup):
     """The footnote element specifies editorial information that appears in footnotes in the printed score. It is defined within a group due to its multiple uses within the MusicXML schema."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="footnote">
     <xs:annotation>
@@ -170,7 +172,7 @@ class XSDGroupFootnote(XSDGroup):
 
 class XSDGroupLevel(XSDGroup):
     """The level element specifies editorial information for different MusicXML elements. It is defined within a group due to its multiple uses within the MusicXML schema."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="level">
     <xs:annotation>
@@ -186,7 +188,7 @@ class XSDGroupLevel(XSDGroup):
 
 class XSDGroupStaff(XSDGroup):
     """The staff element is defined within a group due to its use by both notes and direction elements."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff">
     <xs:annotation>
@@ -206,7 +208,7 @@ class XSDGroupStaff(XSDGroup):
 
 class XSDGroupTuning(XSDGroup):
     """The tuning group contains the sequence of elements common to the staff-tuning and accord elements."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tuning">
     <xs:annotation>
@@ -236,7 +238,7 @@ class XSDGroupTuning(XSDGroup):
 
 class XSDGroupVirtualInstrumentData(XSDGroup):
     """Virtual instrument data can be part of either the score-instrument element at the start of a part, or an instrument-change element within a part."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="virtual-instrument-data">
     <xs:annotation>
@@ -269,7 +271,7 @@ class XSDGroupVirtualInstrumentData(XSDGroup):
 
 class XSDGroupVoice(XSDGroup):
     """A voice is a sequence of musical events (e.g. notes, chords, rests) that proceeds linearly in time. The voice element is used to distinguish between multiple voices in individual parts. It is defined within a group due to its multiple uses within the MusicXML schema."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="voice">
     <xs:annotation>
@@ -285,7 +287,7 @@ class XSDGroupVoice(XSDGroup):
 
 class XSDGroupClef(XSDGroup):
     """Clefs are represented by a combination of sign, line, and clef-octave-change elements."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="clef">
     <xs:annotation>
@@ -315,7 +317,7 @@ class XSDGroupClef(XSDGroup):
 
 class XSDGroupNonTraditionalKey(XSDGroup):
     """The non-traditional-key group represents a single alteration within a non-traditional key signature. A sequence of these groups makes up a non-traditional key signature"""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="non-traditional-key">
     <xs:annotation>
@@ -345,7 +347,7 @@ class XSDGroupNonTraditionalKey(XSDGroup):
 
 class XSDGroupSlash(XSDGroup):
     """The slash group combines elements used for more complete specification of the slash and beat-repeat measure-style elements. They have the same values as the type and dot elements, and define what the beat is for the display of repetition marks. If not present, the beat is based on the current time signature."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="slash">
     <xs:annotation>
@@ -377,7 +379,7 @@ class XSDGroupSlash(XSDGroup):
 
 class XSDGroupTimeSignature(XSDGroup):
     """Time signatures are represented by the beats element for the numerator and the beat-type element for the denominator."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="time-signature">
     <xs:annotation>
@@ -402,7 +404,7 @@ class XSDGroupTimeSignature(XSDGroup):
 
 class XSDGroupTraditionalKey(XSDGroup):
     """The traditional-key group represents a traditional key signature using the cycle of fifths."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="traditional-key">
     <xs:annotation>
@@ -420,7 +422,7 @@ class XSDGroupTraditionalKey(XSDGroup):
 
 class XSDGroupTranspose(XSDGroup):
     """The transpose group represents what must be added to a written pitch to get a correct sounding pitch."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="transpose">
     <xs:annotation>
@@ -455,7 +457,7 @@ class XSDGroupTranspose(XSDGroup):
 
 class XSDGroupBeatUnit(XSDGroup):
     """The beat-unit group combines elements used repeatedly in the metronome element to specify a note within a metronome mark."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beat-unit">
     <xs:annotation>
@@ -482,7 +484,7 @@ class XSDGroupHarmonyChord(XSDGroup):
     """A harmony element can contain many stacked chords (e.g. V of II). A sequence of harmony-chord groups is used for this type of secondary function, where V of II would be represented by a harmony-chord with a 5 numeral followed by a harmony-chord with a 2 numeral.
 
 A root is a pitch name like C, D, E, while a numeral is a scale degree like 1, 2, 3. The root element is generally used with pop chord symbols, while the numeral element is generally used with classical functional harmony and Nashville numbers. It is an either/or choice to avoid data inconsistency. The function element, which represents Roman numerals with roman numeral text, has been deprecated as of MusicXML 4.0."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="harmony-chord">
     <xs:annotation>
@@ -512,7 +514,7 @@ A root is a pitch name like C, D, E, while a numeral is a scale degree like 1, 2
 
 class XSDGroupAllMargins(XSDGroup):
     """The all-margins group specifies both horizontal and vertical margins in tenths."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="all-margins">
     <xs:annotation>
@@ -530,7 +532,7 @@ class XSDGroupAllMargins(XSDGroup):
 
 class XSDGroupLayout(XSDGroup):
     """The layout group specifies the sequence of page, system, and staff layout elements that is common to both the defaults and print elements."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="layout">
     <xs:annotation>
@@ -548,7 +550,7 @@ class XSDGroupLayout(XSDGroup):
 
 class XSDGroupLeftRightMargins(XSDGroup):
     """The left-right-margins group specifies horizontal margins in tenths."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="left-right-margins">
     <xs:annotation>
@@ -565,7 +567,7 @@ class XSDGroupLeftRightMargins(XSDGroup):
 
 class XSDGroupDuration(XSDGroup):
     """The duration element is defined within a group due to its uses within the note, figured-bass, backup, and forward elements."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="duration">
     <xs:annotation>
@@ -587,7 +589,7 @@ The duration element moves the musical position when used in backup elements, fo
 
 class XSDGroupDisplayStepOctave(XSDGroup):
     """The display-step-octave group contains the sequence of elements used by both the rest and unpitched elements. This group is used to place rests and unpitched elements on the staff without implying that these elements have pitch. Positioning follows the current clef. If percussion clef is used, the display-step and display-octave elements are interpreted as if in treble clef, with a G in octave 4 on line 2."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="display-step-octave">
     <xs:annotation>
@@ -604,7 +606,7 @@ class XSDGroupDisplayStepOctave(XSDGroup):
 
 class XSDGroupFullNote(XSDGroup):
     """The full-note group is a sequence of the common note elements between cue/grace notes and regular (full) notes: pitch, chord, and rest information, but not duration (cue and grace notes do not have duration encoded). Unpitched elements are used for unpitched percussion, speaking voice, and other musical elements lacking determinate pitch."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="full-note">
     <xs:annotation>
@@ -633,7 +635,7 @@ In most cases the duration will be the same as the preceding note. However it ca
 
 class XSDGroupMusicData(XSDGroup):
     """The music-data group contains the basic musical data that is either associated with a part or a measure, depending on whether the partwise or timewise hierarchy is used."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="music-data">
     <xs:annotation>
@@ -664,7 +666,7 @@ class XSDGroupMusicData(XSDGroup):
 
 class XSDGroupPartGroup(XSDGroup):
     """The part-group element is defined within a group due to its multiple uses within the part-list element."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="part-group">
     <xs:annotation>
@@ -680,7 +682,7 @@ class XSDGroupPartGroup(XSDGroup):
 
 class XSDGroupScoreHeader(XSDGroup):
     """The score-header group contains basic score metadata about the work and movement, score-wide defaults for layout and fonts, credits that appear on the first or following pages, and the part list."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="score-header">
     <xs:annotation>
@@ -710,7 +712,7 @@ class XSDGroupScoreHeader(XSDGroup):
 
 class XSDGroupScorePart(XSDGroup):
     """The score-part element is defined within a group due to its multiple uses within the part-list element."""
-
+    
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:group xmlns:xs="http://www.w3.org/2001/XMLSchema" name="score-part">
     <xs:annotation>
@@ -727,10 +729,4 @@ class XSDGroupScorePart(XSDGroup):
 """
                                      ))
 
-
-__all__ = ['XSDSequence', 'XSDChoice', 'XSDGroup', 'XSDGroupEditorial', 'XSDGroupEditorialVoice', 'XSDGroupEditorialVoiceDirection',
-           'XSDGroupFootnote', 'XSDGroupLevel', 'XSDGroupStaff', 'XSDGroupTuning', 'XSDGroupVirtualInstrumentData', 'XSDGroupVoice',
-           'XSDGroupClef', 'XSDGroupNonTraditionalKey', 'XSDGroupSlash', 'XSDGroupTimeSignature', 'XSDGroupTraditionalKey',
-           'XSDGroupTranspose', 'XSDGroupBeatUnit', 'XSDGroupHarmonyChord', 'XSDGroupAllMargins', 'XSDGroupLayout',
-           'XSDGroupLeftRightMargins', 'XSDGroupDuration', 'XSDGroupDisplayStepOctave', 'XSDGroupFullNote', 'XSDGroupMusicData',
-           'XSDGroupPartGroup', 'XSDGroupScoreHeader', 'XSDGroupScorePart']
+__all__=['XSDSequence', 'XSDChoice', 'XSDGroup', 'XSDGroupEditorial', 'XSDGroupEditorialVoice', 'XSDGroupEditorialVoiceDirection', 'XSDGroupFootnote', 'XSDGroupLevel', 'XSDGroupStaff', 'XSDGroupTuning', 'XSDGroupVirtualInstrumentData', 'XSDGroupVoice', 'XSDGroupClef', 'XSDGroupNonTraditionalKey', 'XSDGroupSlash', 'XSDGroupTimeSignature', 'XSDGroupTraditionalKey', 'XSDGroupTranspose', 'XSDGroupBeatUnit', 'XSDGroupHarmonyChord', 'XSDGroupAllMargins', 'XSDGroupLayout', 'XSDGroupLeftRightMargins', 'XSDGroupDuration', 'XSDGroupDisplayStepOctave', 'XSDGroupFullNote', 'XSDGroupMusicData', 'XSDGroupPartGroup', 'XSDGroupScoreHeader', 'XSDGroupScorePart']

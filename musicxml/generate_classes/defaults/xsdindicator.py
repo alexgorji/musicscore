@@ -2,6 +2,7 @@ from musicxml.util.core import cap_first, convert_to_xml_class_name
 from musicxml.xsd.xsdtree import XSDTree, XSDTreeElement
 import xml.etree.ElementTree as ET
 
+
 class XSDSequence:
     def __init__(self, xsd_tree):
         self._xsd_tree = None
@@ -92,6 +93,9 @@ class XSDGroup(XSDTreeElement):
                     self._sequence = XSDSequence(child)
         return self._sequence
 
+    @property
+    def xsd_tree(self):
+        return self.XSD_TREE
 # -----------------------------------------------------
 # AUTOMATICALLY GENERATED WITH generate_indicators.py
 # -----------------------------------------------------

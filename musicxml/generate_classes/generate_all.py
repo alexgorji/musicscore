@@ -1,0 +1,8 @@
+from musicxml.generate_classes import generate_attributes, generate_complex_types, generate_indicators, generate_simple_types, \
+    generate_xml_elements
+
+generate_attributes
+generate_complex_types
+generate_indicators
+generate_simple_types
+generate_xml_elements

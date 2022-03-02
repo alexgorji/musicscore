@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 
 from musicxml.generate_classes.utils import get_complex_type_all_base_classes, get_all_et_elements
 from musicxml.xsd.xsdtree import XSDTree
+from musicxml.xsd.xsdsimpletype import *
 
 sources_path = Path(__file__).parent / 'musicxml_4_0.xsd'
 default_path = Path(__file__).parent / 'defaults' / 'xsdcomplextype.py'
@@ -41,6 +42,12 @@ def complex_type_class_as_string(complex_type_):
             base_class_names.append(cls_name)
 
     doc = xsd_tree.get_doc()
+    if simple_content:
+        simple_doc = eval(simple_content).XSD_TREE.get_doc()
+        if simple_doc and doc and doc != "":
+            doc += '\n'
+            doc += '\n'
+        doc += simple_doc
     ET.indent(complex_type_, space='    '),
     xsd_string = ET.tostring(complex_type_, encoding='unicode').strip()
     if not doc:

@@ -19,7 +19,8 @@ class TestXMLElementError(TestCase):
         with self.assertRaises(ValueError) as err:
             XMLFermata('something')
         assert err.exception.args[
-                   0] == "XMLFermata: XSDSimpleTypeFermataShape.value 'something' must in ['normal', 'angled', 'square', 'double-angled', 'double-square', 'double-dot', 'half-curve', 'curlew', '']"
+                   0] == "XMLFermata: XSDSimpleTypeFermataShape.value 'something' must be in ['normal', 'angled', 'square', " \
+                         "'double-angled', 'double-square', 'double-dot', 'half-curve', 'curlew', '']"
 
     def test_simple_type_value_error_restriction_min_exclusive(self):
         with self.assertRaises(ValueError) as err:
