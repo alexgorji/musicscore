@@ -91,11 +91,11 @@ class ScorePart(XMLWrapper):
     @property
     def part(self) -> 'Part':
         """
-        val type: :obj:~`musictree.part.Part`
+        val type: :obj:~`Part`
         obj:~`musicxml.xmlelement.xmlelement.XMLPartName`will be updated
         :obj:~`musictree.part.Id` is set or updated
 
-        :return: :obj:~`musictree.part.Part`
+        :return: :obj:~`Part`
         """
         return self._part
 
@@ -158,9 +158,10 @@ class Part(MusicTree, XMLWrapper):
     @property
     def name(self) -> str:
         """
-        val: str. Tries to update name of :obj:`musictree.part.score_part`
+        Set and get name. While setting tries to update name of :obj:`musictree.part.score_part`
 
-        :return: part's name. If no name is set part's :obj:`musictree.part.Part.id` is returned.
+        :type: str
+        :return: part's name. If no name is set part's :obj:`id_` is returned.
         """
         if self._name is not None:
             return self._name
@@ -182,6 +183,10 @@ class Part(MusicTree, XMLWrapper):
         """
         return self._score_part
 
+    @XMLWrapper.xml_object.getter
+    def xml_object(self) -> XMLClass:
+        return super().xml_object
+
     def add_child(self, child: Measure) -> Measure:
         """
         Check and add child to list of children. Child's parent is set to self.
@@ -197,7 +202,7 @@ class Part(MusicTree, XMLWrapper):
 
     def add_chord(self, chord: 'Chord', *, staff_number: Optional[int] = None, voice_number: Optional[int] = 1) -> None:
         """
-        - Adds a chord to the specified voice in current measure (see :obj:`~musictree.part.Part.get_current_measure`).
+        - Adds a chord to the specified voice in current measure (see :obj:`get_current_measure()`).
         - If no current measure is set the first measure is selected.
         - If part has still no measures one measure is added.
         - If the specified voice in current measure is full chord is added to the voice with the same number in the next measure. If no
@@ -307,6 +312,13 @@ class Part(MusicTree, XMLWrapper):
             return self._current_measures[staff_number][voice_number]
         except KeyError:
             return self._set_first_current_measure(staff_number=staff_number, voice_number=voice_number)
+
+    def get_parent(self) -> 'Score':
+        """
+        :return: parent
+        :rtype: :obj:`~musictree.score.Score`
+        """
+        return super().get_parent()
 
     def quantize(self) -> None:
         """

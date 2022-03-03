@@ -391,17 +391,12 @@ class Beat(MusicTree, QuarterDurationMixin):
         """
         return super().get_children()
 
-    def get_measure(self):
-        raise TypeError
-
-    def get_part(self):
-        raise TypeError
-
-    def get_staff(self):
-        raise TypeError
-
-    def get_voice(self):
-        raise TypeError
+    def get_parent(self) -> 'Voice':
+        """
+        :return: parent
+        :rtype: :obj:`~musictree.voice.Voice`
+        """
+        return super().get_parent()
 
     def split_not_writable_chords(self) -> None:
         """

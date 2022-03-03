@@ -1,15 +1,14 @@
-from typing import List
+from typing import List, Optional, Union
 
-from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLDivisions, XMLKey, XMLClef, XMLBackup
-
-from musictree.clef import Clef, BaseClef, TrebleClef
-from musictree.key import Key
+from musictree.clef import BaseClef, TrebleClef
 from musictree.core import MusicTree
+from musictree.key import Key
 from musictree.staff import Staff
 from musictree.time import Time, flatten_times
 from musictree.util import lcm
 from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
+from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup
 
 
 class Measure(MusicTree, XMLWrapper):
@@ -181,11 +180,18 @@ class Measure(MusicTree, XMLWrapper):
                         self.xml_object.add_child(note.xml_object)
 
     @property
-    def clefs(self):
+    def clefs(self) -> List['Clef']:
+        """
+        :return: :obj:`~musictree.clef.Clef` objects of children staves.
+        """
         return [staff.clef for staff in self.get_children()]
 
     @property
-    def key(self):
+    def key(self) -> Key:
+        """
+        :type: :obj:`~musictree.key.Key`
+        :return: :obj:`~musictree.key.Key`
+        """
         return self._key
 
     @key.setter
@@ -196,6 +202,11 @@ class Measure(MusicTree, XMLWrapper):
 
     @property
     def number(self):
+        """
+        :type: positive int
+        :return: xml_object's number as integer
+        :rtype: positive int
+        """
         return int(self.xml_object.number)
 
     @number.setter
@@ -203,7 +214,14 @@ class Measure(MusicTree, XMLWrapper):
         self.xml_object.number = str(val)
 
     @property
-    def time(self):
+    def time(self) -> Time:
+        """
+        Sets and gets time. While setting times parent_measure is set to self and method :obj:`musictree.voice.Voice.update_beats()` of
+        descendent voices is called.
+
+        :type: Optional[:obj:`~musictree.time.Time`]
+        :type: :obj:`~musictree.time.Time`
+        """
         return self._time
 
     @time.setter
@@ -217,10 +235,29 @@ class Measure(MusicTree, XMLWrapper):
         self._update_voice_beats()
 
     @property
-    def quarter_duration(self):
+    def quarter_duration(self) -> 'QuarterDuration':
+        """
+        :return: sum of quarter durations defined via :obj:`time`s method :obj:`~musictree.time.Time.get_beats_quarter_durations()`
+        :rtype: :obj:`~musictree.quarterduration.QuarterDuration`
+        """
         return sum(self.time.get_beats_quarter_durations())
 
-    def add_child(self, child):
+    @XMLWrapper.xml_object.getter
+    def xml_object(self) -> XMLClass:
+        return super().xml_object
+
+    def add_child(self, child: Staff) -> Staff:
+        """
+        - Adds a :obj:`~musictree.staff.Staff` as child to measure.
+        - If staff number is ``None``, it is determined as length of children + 1.
+        - If staff number is already set an is not equal to length of children + 1 a ``ValueError`` is raised.
+        - If staff is the first child default clefs are set.
+        - :obj:`~musictree.clef.Clef`'s numbers are updated.
+
+        :param child: :obj:`~musictree.staff.Staff`, required
+        :return: child
+        :rtype: :obj:`~musictree.staff.Staff`
+        """
         self._check_child_to_be_added(child)
 
         if child.number is not None and child.number != len(self.get_children()) + 1:
@@ -242,11 +279,26 @@ class Measure(MusicTree, XMLWrapper):
         self._update_clef_numbers()
         return child
 
-    def add_chord(self, chord, *, staff_number=None, voice_number=1):
+    def add_chord(self, chord: 'Chord', *, staff_number: Optional[int] = None, voice_number: int = 1) -> Union['Chord', List['Chord']]:
+        """
+        Adds chord to selected :obj:`~musictree.voice.Voice`
+
+        :param chord: :obj:`~musictree.chord.Chord`, required
+        :param staff_number: positive int
+        :param voice_number: positive int
+        :return: added chord or a list of split chords
+        """
         voice = self.add_voice(staff_number=staff_number, voice_number=voice_number)
         return voice.add_chord(chord)
 
-    def add_staff(self, staff_number=None):
+    def add_staff(self, staff_number: Optional[int] = None) -> 'Staff':
+        """
+        - Creates and adds a new :obj:`~musictree.staff.Staff` object as child to measure if it already does not exist.
+        - If staff number is greater than length of children + 1 all missing staves are created and added first.
+
+        :param staff_number: positive int or None. If ``None`` staff number it is determined as length of children + 1.
+        :return: new :obj:`~musictree.staff.Staff`
+        """
         if staff_number is None:
             staff_number = len(self.get_children()) + 1
         staff_object = self.get_staff(staff_number=staff_number)
@@ -258,6 +310,15 @@ class Measure(MusicTree, XMLWrapper):
         return staff_object
 
     def add_voice(self, *, staff_number=None, voice_number=1):
+        """
+        - Creates and adds a new :obj:`~musictree.voice.Voice` object as child to the given :obj:`~musictree.staff.Staff` if it already
+          does not exist.
+        - :obj:`add_staff()` is called to get or create the given staff.
+        - :obj:`musictree.staff.Staff.add_voice()` is called to add voice to staff.
+
+        :param staff_number: positive int or None. If ``None`` staff number it is set to 1.
+        :return: new :obj:`~musictree.voice.Voice`
+        """
         if staff_number is None:
             staff_number = 1
         voice_object = self.get_voice(staff_number=staff_number, voice_number=voice_number)
@@ -274,14 +335,27 @@ class Measure(MusicTree, XMLWrapper):
         return super().get_children()
 
     def get_divisions(self):
+        """
+        :return: ``value_`` of existing :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions`
+        """
         return self.xml_object.xml_attributes.xml_divisions.value_
 
-    def get_voice(self, *, staff_number=1, voice_number=1):
+    def get_parent(self) -> 'Part':
+        """
+        :return: parent
+        :rtype: :obj:`~musictree.part.Part`
+        """
+        return super().get_parent()
+
+    def get_voice(self, *, staff_number: int = 1, voice_number: int = 1) -> 'Voice':
+        """
+        :param staff_number: positive int
+        :param voice_number: positive int
+        :return: :obj:`~musictree.voice.Voice` if it exists, else ``None``
+        """
         staff_object = self.get_staff(staff_number=staff_number)
         if staff_object:
-            for child in staff_object.get_children():
-                if child.number == voice_number:
-                    return child
+            return staff_object.get_voice(voice_number=voice_number)
 
     def remove(self, child) -> None:
         number = child.value
@@ -289,10 +363,18 @@ class Measure(MusicTree, XMLWrapper):
         self.clefs.pop(number - 1)
 
     def split_not_writable_chords(self):
+        """
+        Calls :obj:`~musictree.beat.Beat.split_not_writable_chords()` method of all :obj:`~musictree.beat.Beat` descendents.
+        """
         for b in [beat for staff in self.get_children() for voice in staff.get_children() for beat in voice.get_children()]:
             b.split_not_writable_chords()
 
-    def update_chord_accidentals(self):
+    def update_chord_accidentals(self) -> None:
+        """
+        Updates :obj:`~musictree.accidental.Accidental.show` attribute of descendent midis' accidentals.
+
+        :return: None
+        """
         for staff in self.get_children():
             for chord in staff.get_chords():
                 if 'stop' in chord._ties:
@@ -302,7 +384,14 @@ class Measure(MusicTree, XMLWrapper):
                     if midi.accidental.sign == 'natural':
                         midi.accidental.show = False
 
-    def update(self):
+    def update(self) -> None:
+        """
+        - Sets :obj:`~musicxml.xmlelement.xmlelement.XMLKey`, :obj:`~musicxml.xmlelement.xmlelement.XMLTime`, :obj:`~musicxml.xmlelement.xmlelement.XMLStaves` and :obj:`~musicxml.xmlelement.xmlelement.XMLClef`
+
+        - Updates :obj:`~musicxml.xmlelement.xmlelement.XMLNote` objects
+
+        :return: None
+        """
         self._update_attributes()
         self._update_xml_notes()
 

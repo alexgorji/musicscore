@@ -99,7 +99,7 @@ class Tree(ABC):
     @property
     def up(self) -> 'Tree':
         """
-        :return: :obj:`~tree.tree.Tree.get_parent()`
+        :return: :obj:`get_parent()`
         :rtype: :obj:`~tree.tree.Tree`
         """
         return self.get_parent()
@@ -249,7 +249,7 @@ class Tree(ABC):
 
     def remove_children(self) -> None:
         """
-        Calls :obj:`~tree.tree.Tree.remove()` on all children.
+        Calls :obj:`remove()` on all children.
 
         :return: None
         """

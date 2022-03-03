@@ -1,11 +1,11 @@
 from pathlib import Path
-from unittest import TestCase
 
 from musictree.chord import Chord
 from musictree.measure import Measure
 from musictree.part import Part
 from musictree.score import Score
-from musictree.tests.util import diff_xml, IdTestCase
+from musictree.tests.util import IdTestCase
+
 
 class TestHelloWorld(IdTestCase):
     def test_export_hello_world(self):

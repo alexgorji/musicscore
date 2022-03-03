@@ -404,9 +404,6 @@ class Chord(MusicTree, QuarterDurationMixin):
             self._update_lyrics()
         return l
 
-    def get_beat(self):
-        raise TypeError
-
     def get_children(self) -> List[Note]:
         """
         :return: list of added children.
@@ -414,26 +411,18 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         return super().get_children()
 
-    def get_chord(self):
-        raise TypeError
-
-    def get_measure(self):
-        raise TypeError
+    def get_parent(self) -> 'Beat':
+        """
+        :return: parent
+        :rtype: :obj:`~musictree.beat.Beat`
+        """
+        return super().get_parent()
 
     def get_parent_measure(self) -> 'Measure':
         """
         :return: parent measure
         """
         return self.up.up.up.up
-
-    def get_part(self):
-        raise TypeError
-
-    def get_possible_subdivisions(self):
-        raise TypeError
-
-    def get_staff(self):
-        raise TypeError
 
     def get_staff_number(self):
         return self.up.up.up.number
@@ -572,7 +561,7 @@ def group_chords(chords: List[Chord], quarter_durations: List[Union[QuarterDurat
 
     :param chords:
     :param quarter_durations:
-    :return: Optional[List[List[:obj:`~musictree.chord.Chord`]]]
+    :return: Optional[List[List[:obj:`Chord`]]]
     """
     if sum(c.quarter_duration for c in chords) != sum(quarter_durations):
         raise ValueError

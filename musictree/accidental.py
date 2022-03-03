@@ -172,7 +172,7 @@ class Accidental(MusicTree, XMLWrapper):
             self._xml_object.value_ = self.sign
 
     @XMLWrapper.xml_object.getter
-    def xml_object(self) -> XMLAccidental:
+    def xml_object(self) -> Optional[XMLClass]:
         if self.parent_midi and self.parent_midi.value == 0:
             return None
         if self.show is True:
@@ -211,9 +211,9 @@ class Accidental(MusicTree, XMLWrapper):
         self._update_parent_midi()
 
     @property
-    def parent_midi(self):
+    def parent_midi(self) -> 'Midi':
         """
-        :return: The midi parent in ``musictree``. It is equivalent to ``self.up`` or ``self.get_parent()``
+        :return: The midi parent in ``musictree``. It is equivalent to :obj:`up` or :obj:`get_parent()`
         :rtype: :obj:`musictree.midi.Midi`
         """
         return self.up
@@ -223,9 +223,9 @@ class Accidental(MusicTree, XMLWrapper):
         val.add_child(self)
 
     @property
-    def sign(self):
+    def sign(self) -> Optional[str]:
         """
-        Converts `alter` into sign depending on mode. `parent_midi` must be set first.
+        Converts ``alter`` into sign depending on mode. ``parent_midi`` must be set first.
 
         :return: Possible values: ``flat-flat``, ``three-quarters-flat``, ``flat``, ``quarter-flat``, ``natural``,
                  ``quarter-sharp``, ``sharp``, ``three-quarters-sharp``, ``double-sharp``
@@ -237,7 +237,7 @@ class Accidental(MusicTree, XMLWrapper):
             return None
 
     @property
-    def show(self):
+    def show(self) -> bool:
         """
         If ``False`` ``xml_object`` will be ``None`` and no accidental is shown in the :obj:`~musictree.score.Score`.
         If ``True`` the accidental is shown.
@@ -255,29 +255,12 @@ class Accidental(MusicTree, XMLWrapper):
             except AttributeError:
                 pass
 
-    def get_beat(self):
-        raise TypeError
-
-    def get_chord(self):
-        raise TypeError
-
-    def get_measure(self):
-        raise TypeError
-
-    def get_part(self):
-        raise TypeError
-
-    def get_possible_subdivisions(self):
-        raise TypeError
-
-    def get_staff(self):
-        raise TypeError
-
-    def get_voice(self):
-        raise TypeError
-
-    def set_possible_subdivisions(self):
-        raise TypeError
+    def get_parent(self) -> 'Midi':
+        """
+        :return: parent
+        :rtype: :obj:`~musictree.midi.Midi`
+        """
+        return super().get_parent()
 
     def get_pitch_parameters(self, midi_value: Optional[float] = None) -> Optional[tuple]:
         """

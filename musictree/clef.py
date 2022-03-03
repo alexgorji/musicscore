@@ -6,7 +6,7 @@ from musictree.xmlwrapper import XMLWrapper
 class Clef(XMLWrapper):
     _ATTRIBUTES = {'show', 'sign', 'line', 'octave_change'}
     XMLClass = XMLClef
-    
+
     def __init__(self, sign='G', line=2, octave_change=None, show=True, *args, **kwargs):
         super().__init__()
         self._xml_object = self.XMLClass(*args, **kwargs)
@@ -55,6 +55,10 @@ class Clef(XMLWrapper):
         if not isinstance(val, bool):
             raise TypeError
         self._show = val
+
+    @XMLWrapper.xml_object.getter
+    def xml_object(self) -> XMLClass:
+        return super().xml_object
 
     def __copy__(self):
         new_clef = self.__class__()

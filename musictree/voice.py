@@ -60,6 +60,10 @@ class Voice(MusicTree, XMLWrapper):
         else:
             self.xml_object.value_ = '1'
 
+    @XMLWrapper.xml_object.getter
+    def xml_object(self) -> XMLClass:
+        return super().xml_object
+
     def add_beat(self, beat_quarter_duration: Optional[Union['QuarterDuration', 'Fraction', int, float]] = 1) -> Beat:
         """
         Creates and adds a :obj:`~musictree.beat.Beat` to voice
@@ -100,6 +104,13 @@ class Voice(MusicTree, XMLWrapper):
         :rtype: List[:obj:`~musictree.beat.Beat`]
         """
         return super().get_children()
+
+    def get_parent(self) -> 'Staff':
+        """
+        :return: parent
+        :rtype: :obj:`~musictree.staff.Staff`
+        """
+        return super().get_parent()
 
     def get_current_beat(self) -> Beat:
         """

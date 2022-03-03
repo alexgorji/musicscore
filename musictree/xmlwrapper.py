@@ -8,9 +8,9 @@ class XMLWrapper:
     XMLClass = None
 
     @property
-    def xml_object(self) -> 'XMLElement':
+    def xml_object(self) -> 'XMLELement':
         """
-        :return: wrapped musicxml element
+        :return: wrapped musicxml element of type :obj:`XMLClass`
         """
         return self._xml_object
 

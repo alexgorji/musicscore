@@ -150,6 +150,13 @@ class Midi(MusicTree):
         """
         return super().get_children()
 
+    def get_parent(self) -> 'Note':
+        """
+        :return: parent
+        :rtype: :obj:`~musictree.note.Note`
+        """
+        return super().get_parent()
+
     def get_pitch_or_rest(self) -> Union['XMLPitch', 'XMLRest']:
         """
         :return: XMLPitch with appropriate children.

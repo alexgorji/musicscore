@@ -216,6 +216,10 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         else:
             self.xml_object.xml_duration = None
 
+    @XMLWrapper.xml_object.getter
+    def xml_object(self) -> XMLClass:
+        return super().xml_object
+
     def add_child(self, child: Midi) -> Midi:
         """
         Check and add child to list of children. Child's parent is set to self.
@@ -232,6 +236,13 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         :rtype: List[:obj:`~musictree.midi.Midi`]
         """
         return super().get_children()
+
+    def get_parent(self) -> 'Chord':
+        """
+        :return: parent
+        :rtype: :obj:`~musictree.chord.Chord`
+        """
+        return super().get_parent()
 
     def get_or_create_xml_notations(self) -> 'XMLNotations':
         """

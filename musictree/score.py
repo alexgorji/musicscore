@@ -71,7 +71,7 @@ class Score(MusicTree, XMLWrapper):
     @property
     def page_layout(self) -> PageLayout:
         """
-        Sets and gets page layout. Page layout's parent is set to self on setting.
+        Sets and gets page layout. While setting page layout's parent is set to self.
 
         :type: :obj:`~musictree.pagelayout.PageLayout`
         :return: :obj:`~musictree.pagelayout.PageLayout`
@@ -103,7 +103,7 @@ class Score(MusicTree, XMLWrapper):
     @property
     def staff_layout(self):
         """
-        Sets and gets staff layout. Staff layout's parent is set to self on setting.
+        Sets and gets staff layout. While setting staff layout's parent is set to self.
 
         :type: :obj:`~musictree.stafflayout.StaffLayout`
         :return: :obj:`~musictree.stafflayout.StaffLayout`
@@ -120,6 +120,15 @@ class Score(MusicTree, XMLWrapper):
 
     @property
     def subtitle(self):
+        """
+        - If val is ``None`` and a subtitle object as credit already exists, this object will be removed.
+        - If val is not ``None``:
+          - if a subtitle exists its ``value_`` will be replaced.
+          - else a subtitle as credit will be added.
+
+        :type: Optional[str]
+        :return: Optional[str]
+        """
         return self._subtitle
 
     @subtitle.setter
@@ -141,6 +150,12 @@ class Score(MusicTree, XMLWrapper):
 
     @property
     def system_layout(self):
+        """
+        Sets and gets system layout. While setting system layout's parent is set to self.
+
+        :type: :obj:`~musictree.systemlayout.SystemLayout`
+        :return: :obj:`~musictree.systemlayout.SystemLayout`
+        """
         return self._system_layout
 
     @system_layout.setter
@@ -152,6 +167,15 @@ class Score(MusicTree, XMLWrapper):
 
     @property
     def title(self):
+        """
+        - If val is ``None`` and a title object as credit already exists, this object will be removed.
+        - If val is not ``None``:
+          - if a title exists its ``value_`` will be replaced.
+          - else a title as credit will be added.
+
+        :type: Optional[str]
+        :return: Optional[str]
+        """
         return self._title
 
     @title.setter
@@ -172,7 +196,12 @@ class Score(MusicTree, XMLWrapper):
                 self._title = None
 
     @property
-    def version(self):
+    def version(self) -> str:
+        """
+        :type: Any
+        :return: xml_object's version
+        :rtype: str
+        """
         return self._version
 
     @version.setter
@@ -180,7 +209,20 @@ class Score(MusicTree, XMLWrapper):
         self._version = str(val)
         self.xml_object.version = self.version
 
+    @XMLWrapper.xml_object.getter
+    def xml_object(self) -> XMLClass:
+        return super().xml_object
+
     def add_child(self, child: 'Part') -> 'Part':
+        """
+        - Check and add child to list of children. Child's parent is set to self.
+        - Part's ``xml_object`` is add to score's ``xml_object`` as child
+        - Part's ``score_part.xml_object`` is added to score's ``xml_part_list``
+
+        :param child: :obj:`~musictree.part.Part`, required
+        :return: child
+        :rtype: :obj:`~musictree.part.Part`
+        """
         super().add_child(child)
         self.xml_object.add_child(child.xml_object)
         self.xml_part_list.xml_score_part = child.score_part.xml_object
@@ -193,7 +235,11 @@ class Score(MusicTree, XMLWrapper):
         """
         return super().get_children()
 
-    def export_xml(self, path) -> None:
+    def export_xml(self, path: 'pathlib.Path') -> None:
+        """
+        :param path: Output xml file
+        :return: None
+        """
         with open(path, '+w') as f:
             f.write("""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE score-partwise PUBLIC
@@ -203,5 +249,8 @@ class Score(MusicTree, XMLWrapper):
             f.write(self.to_string())
 
     def update(self) -> None:
+        """
+        Calls :obj:`~musictree.part.Part.update()` method of all :obj:`~musictree.part.Part` children.
+        """
         for p in self.get_children():
             p.update()

@@ -94,6 +94,10 @@ class Time(XMLWrapper):
             raise TypeError
         self._show = val
 
+    @XMLWrapper.xml_object.getter
+    def xml_object(self) -> XMLClass:
+        return super().xml_object
+
     def _update_signature(self):
         signatures = [self.signatures[i:i + 2] for i in range(0, len(self.signatures), 2)]
         for beats, beat_type in zip(self._xml_object.find_children('XMLBeats'), self._xml_object.find_children('XMLBeatType')):
@@ -110,7 +114,7 @@ class Time(XMLWrapper):
 
     def get_beats_quarter_durations(self) -> List[QuarterDuration]:
         """
-        :return: List of quarter durations according to :obj:`musictree.time.Time.actual_signatures`
+        :return: List of quarter durations according to :obj:`actual_signatures`
         """
         return [QuarterDuration(numerator, denominator) * 4 for numerator, denominator in [self.actual_signatures[i:i + 2] for i in range(0,
                                                                                                                                           len(self.actual_signatures),

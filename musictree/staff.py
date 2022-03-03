@@ -55,11 +55,15 @@ class Staff(MusicTree, XMLWrapper):
         else:
             self.xml_object.value_ = val
 
+    @XMLWrapper.xml_object.getter
+    def xml_object(self) -> XMLClass:
+        return super().xml_object
+
     def add_child(self, child: Voice) -> Voice:
         """
         - Adds a :obj:`~musictree.voice.Voice` as child to staff.
-        - If voice number is ``None``, it is determined as incremented last voice number.
-        - If voice number is already set an is not equal to the incremented last voice number a ``ValueError`` is raised.
+        - If voice number is ``None``, it is determined as length of children + 1.
+        - If voice number is already set an is not equal to length of children + 1. a ``ValueError`` is raised.
         - If Staff has no parent :obj:`~musictree.measure.Measure` ``StaffHasNoParentError`` is raised.
         - After adding voice its :obj:`~musictree.voice.Voice.update_beats()` is called.
 
@@ -87,9 +91,10 @@ class Staff(MusicTree, XMLWrapper):
 
     def add_voice(self, voice_number: Optional[int] = None) -> Voice:
         """
-        Creates and adds a new :obj:`~musictree.voice.Voice` object as child to staff.
+        - Creates and adds a new :obj:`~musictree.voice.Voice` object as child to staff.
+        - If voice number is greater than length of children + 1 all missing voices are created and added first.
 
-        :param voice_number: positive int or None. If ``None`` voice number is determined as incremented last voice number.
+        :param voice_number: positive int or None. If ``None`` voice number is determined as length of children + 1.
         :return: new :obj:`~musictree.voice.Voice`
         """
         if voice_number is None:
@@ -109,9 +114,16 @@ class Staff(MusicTree, XMLWrapper):
         """
         return super().get_children()
 
+    def get_parent(self) -> 'Measure':
+        """
+        :return: parent
+        :rtype: :obj:`~musictree.measure.Measure`
+        """
+        return super().get_parent()
+
     def get_previous_staff(self) -> Optional['Staff']:
         """
-        :return: :obj:`~musictree.staff.Staff` with the same number in previous :obj:`~musictree.measure.Measure` if existing else ``None``
+        :return: :obj:`Staff` with the same number in previous :obj:`~musictree.measure.Measure` if existing else ``None``
         """
         if self.up and self.up.previous:
             my_index = self.up.get_children().index(self)
