@@ -94,6 +94,13 @@ class Voice(MusicTree, XMLWrapper):
             raise VoiceIsAlreadyFullError(f'Voice number {self.value_} of Measure number {self.up.up.number} is full.')
         return self.get_current_beat().add_child(chord)
 
+    def get_children(self) -> List[Beat]:
+        """
+        :return: list of added children.
+        :rtype: List[:obj:`~musictree.beat.Beat`]
+        """
+        return super().get_children()
+
     def get_current_beat(self) -> Beat:
         """
         :return: First not filled child :obj:`~musictree.beat.Beat`

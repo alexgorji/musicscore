@@ -1,3 +1,5 @@
+from typing import List
+
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, XMLEncoding, \
     XMLSupports
 
@@ -44,16 +46,6 @@ class Score(MusicTree, XMLWrapper):
         self.subtitle = subtitle
         self._possible_subdivisions = POSSIBLE_SUBDIVISIONS.copy()
 
-    def _update_xml_object(self):
-        self.xml_object.xml_part_list = XMLPartList()
-        self.xml_object.xml_identification = XMLIdentification()
-        encoding = self.xml_object.xml_identification.xml_encoding = XMLEncoding()
-        encoding.add_child(XMLSupports(attribute='new-system', element='print', type='yes', value='yes'))
-        encoding.add_child(XMLSupports(attribute='new-page', element='print', type='yes', value='yes'))
-        encoding.add_child(XMLSupports(element='accidental', type='yes'))
-        encoding.add_child(XMLSupports(element='beam', type='yes'))
-        encoding.add_child(XMLSupports(element='stem', type='yes'))
-
     def _get_title_attributes(self):
         output = TITLE.copy()
         output['default_x'] = TITLE['default_x']['A4']['portrait']
@@ -66,8 +58,24 @@ class Score(MusicTree, XMLWrapper):
         output['default_y'] = SUBTITLE['default_y']['A4']['portrait']
         return output
 
+    def _update_xml_object(self):
+        self.xml_object.xml_part_list = XMLPartList()
+        self.xml_object.xml_identification = XMLIdentification()
+        encoding = self.xml_object.xml_identification.xml_encoding = XMLEncoding()
+        encoding.add_child(XMLSupports(attribute='new-system', element='print', type='yes', value='yes'))
+        encoding.add_child(XMLSupports(attribute='new-page', element='print', type='yes', value='yes'))
+        encoding.add_child(XMLSupports(element='accidental', type='yes'))
+        encoding.add_child(XMLSupports(element='beam', type='yes'))
+        encoding.add_child(XMLSupports(element='stem', type='yes'))
+
     @property
-    def page_layout(self):
+    def page_layout(self) -> PageLayout:
+        """
+        Sets and gets page layout. Page layout's parent is set to self on setting.
+
+        :type: :obj:`~musictree.pagelayout.PageLayout`
+        :return: :obj:`~musictree.pagelayout.PageLayout`
+        """
         return self._page_layout
 
     @page_layout.setter
@@ -78,7 +86,11 @@ class Score(MusicTree, XMLWrapper):
         self.page_layout.parent = self
 
     @property
-    def scaling(self):
+    def scaling(self) -> Scaling:
+        """
+        :type: :obj:`~musictree.scaling.Scaling`
+        :return: :obj:`~musictree.scaling.Scaling`
+        """
         return self._scaling
 
     @scaling.setter
@@ -90,6 +102,13 @@ class Score(MusicTree, XMLWrapper):
 
     @property
     def staff_layout(self):
+        """
+        Sets and gets staff layout. Staff layout's parent is set to self on setting.
+
+        :type: :obj:`~musictree.stafflayout.StaffLayout`
+        :return: :obj:`~musictree.stafflayout.StaffLayout`
+        """
+
         return self._staff_layout
 
     @staff_layout.setter
@@ -161,13 +180,20 @@ class Score(MusicTree, XMLWrapper):
         self._version = str(val)
         self.xml_object.version = self.version
 
-    def add_child(self, child):
+    def add_child(self, child: 'Part') -> 'Part':
         super().add_child(child)
         self.xml_object.add_child(child.xml_object)
         self.xml_part_list.xml_score_part = child.score_part.xml_object
         return child
 
-    def export_xml(self, path):
+    def get_children(self) -> List['Part']:
+        """
+        :return: list of added children.
+        :rtype: List[:obj:`~musictree.part.Part`]
+        """
+        return super().get_children()
+
+    def export_xml(self, path) -> None:
         with open(path, '+w') as f:
             f.write("""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE score-partwise PUBLIC
@@ -176,6 +202,6 @@ class Score(MusicTree, XMLWrapper):
 """)
             f.write(self.to_string())
 
-    def update(self):
+    def update(self) -> None:
         for p in self.get_children():
             p.update()

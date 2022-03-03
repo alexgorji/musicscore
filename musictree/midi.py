@@ -1,5 +1,5 @@
 from math import log2
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 from musicxml.xmlelement.xmlelement import *  # type: ignore
 from musicxml.xsd.xsdsimpletype import XSDSimpleTypeNoteheadValue  # type: ignore
@@ -110,7 +110,7 @@ class Midi(MusicTree):
     @property
     def name(self):
         """
-        :returns a string like C#3 consisting of stem, accidental sign (or value) and octave. Midi with value 0 returns 'rest' as its name.
+        :returns a string like C#3 consisting of step, accidental sign (or value) and octave. Midi with value 0 returns 'rest' as its name.
         """
         if self.value == 0:
             return 'rest'
@@ -142,6 +142,13 @@ class Midi(MusicTree):
         child._update_xml_object()
         child._update_parent_midi()
         return child
+
+    def get_children(self) -> List[Accidental]:
+        """
+        :return: list of added children.
+        :rtype: List[:obj:`~musictree.accidental.Accidental`]
+        """
+        return super().get_children()
 
     def get_pitch_or_rest(self) -> Union['XMLPitch', 'XMLRest']:
         """

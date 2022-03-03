@@ -147,7 +147,7 @@ SIGNS = {-2: 'flat-flat',
 
 class Accidental(MusicTree, XMLWrapper):
     """
-    Accidental is the class for managing :obj:`musictree.midi.Midi`'s accidental sign and its pitch parameters: stem, alter, octave.
+    Accidental is the class for managing :obj:`musictree.midi.Midi`'s accidental sign and its pitch parameters: step, alter, octave.
     The parameter mode (standard, flat, sharp, enharmonic_1 or enharmonic_2) can be used to set different enharmonic variants of the same
     pitch.
     """
@@ -188,7 +188,7 @@ class Accidental(MusicTree, XMLWrapper):
         :return: accidental mode which corresponds to global variables :obj:`~musictree.accidental.STANDARD`, :obj:`~musictree.accidental.FLAT`, :obj:`~musictree.accidental.SHARP`,
                  :obj:`~musictree.accidental.ENHARMONIC_1`, :obj:`~musictree.accidental.ENHARMONIC_2`
 
-        >>> Accidental(mode='standard').get_pitch_parameters(midi_value=61) # C4# (stem='C', alter='1', octave='4')
+        >>> Accidental(mode='standard').get_pitch_parameters(midi_value=61) # C4# (step='C', alter='1', octave='4')
         ('C', 1, 4)
         >>> Accidental(mode='flat').get_pitch_parameters(midi_value=61) # D4b
         ('D', -1, 4)
@@ -281,7 +281,7 @@ class Accidental(MusicTree, XMLWrapper):
 
     def get_pitch_parameters(self, midi_value: Optional[float] = None) -> Optional[tuple]:
         """
-        :return: A tuple consisting of pitch stem name, alter value and octave value: ``(stem, alter, octave)``
+        :return: A tuple consisting of pitch step name, alter value and octave value: ``(step, alter, octave)``
 
                 If ``midi_value == 0`` (for a rest) return value is ``None``.
 

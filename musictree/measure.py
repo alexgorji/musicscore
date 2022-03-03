@@ -1,3 +1,5 @@
+from typing import List
+
 from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLDivisions, XMLKey, XMLClef, XMLBackup
 
 from musictree.clef import Clef, BaseClef, TrebleClef
@@ -76,7 +78,7 @@ class Measure(MusicTree, XMLWrapper):
                                 midi.accidental.show = True
                                 steps_with_accidentals.remove(step)
                             elif chord == relevant_chords_not_tied[0] and previous_staff and step in \
-                                    previous_staff.get_last_steps_with_accidentals():
+                                    previous_staff.get_last_pitch_steps_with_accidentals():
                                 midi.accidental.show = True
                             else:
                                 midi.accidental.show = False
@@ -263,6 +265,13 @@ class Measure(MusicTree, XMLWrapper):
             staff_object = self.add_staff(staff_number=staff_number)
             return staff_object.add_voice(voice_number=voice_number)
         return voice_object
+
+    def get_children(self) -> List[Staff]:
+        """
+        :return: list of added children.
+        :rtype: List[:obj:`~musictree.staff.Staff`]
+        """
+        return super().get_children()
 
     def get_divisions(self):
         return self.xml_object.xml_attributes.xml_divisions.value_

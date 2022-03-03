@@ -69,7 +69,7 @@ class TestStaff(TestCase):
         m1 = Measure(1)
         m1.add_chord(Chord(midis=[61, 62, 63], quarter_duration=2))
         m1.add_chord(Chord(midis=[63, 64, 66], quarter_duration=2))
-        assert m1.get_staff(1).get_last_steps_with_accidentals() == {'E', 'F'}
+        assert m1.get_staff(1).get_last_pitch_steps_with_accidentals() == {'E', 'F'}
 
     @patch('musictree.measure.Measure')
     def test_staff_clef(self, mock_measure):

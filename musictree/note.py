@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied, XMLArticulations
 
@@ -225,6 +225,13 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         :rtype: :obj:`~musictree.midi.Midi`
         """
         return super().add_child(child)
+
+    def get_children(self) -> List[Midi]:
+        """
+        :return: list of added children.
+        :rtype: List[:obj:`~musictree.midi.Midi`]
+        """
+        return super().get_children()
 
     def get_or_create_xml_notations(self) -> 'XMLNotations':
         """

@@ -285,6 +285,13 @@ class Part(MusicTree, XMLWrapper):
 
         return child
 
+    def get_children(self) -> List[Measure]:
+        """
+        :return: list of added children.
+        :rtype: List[:obj:`~musictree.measure.Measure`]
+        """
+        return super().get_children()
+
     def get_current_measure(self, staff_number: Optional[int] = 1, voice_number: int = 1):
         """
         Gets current measure for adding :obj:`~musictree.chord.Chord` to a specific :obj:`~musictree.voice.Voice`

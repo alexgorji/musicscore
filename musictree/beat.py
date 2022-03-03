@@ -384,6 +384,13 @@ class Beat(MusicTree, QuarterDurationMixin):
             chord = Chord(midis=60, quarter_duration=self.quarter_duration)
         return self.add_child(chord)
 
+    def get_children(self) -> List[Chord]:
+        """
+        :return: list of added children.
+        :rtype: List[:obj:`~musictree.chord.Chord`]
+        """
+        return super().get_children()
+
     def get_measure(self):
         raise TypeError
 

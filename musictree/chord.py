@@ -407,6 +407,13 @@ class Chord(MusicTree, QuarterDurationMixin):
     def get_beat(self):
         raise TypeError
 
+    def get_children(self) -> List[Note]:
+        """
+        :return: list of added children.
+        :rtype: List[:obj:`~musictree.note.Note`]
+        """
+        return super().get_children()
+
     def get_chord(self):
         raise TypeError
 
