@@ -118,18 +118,34 @@ xsd_tree_score_partwise = XSDTree(musicxml_xsd_et_root.find(".//{*}element[@name
 
 
 class XSDComplexTypeScorePartwise(XSDComplexType):
+    """
+    .. todo::
+       documentation
+    """
     XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(".//{*}element[@name='score-partwise']//{*}complexType")[0])
 
 
 class XSDComplexTypePart(XSDComplexType):
+    """
+    .. todo::
+       documentation
+    """
     XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(".//{*}element[@name='score-partwise']//{*}complexType")[1])
 
 
 class XSDComplexTypeMeasure(XSDComplexType):
+    """
+    .. todo::
+       documentation
+    """
     XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(".//{*}element[@name='score-partwise']//{*}complexType")[2])
 
 
 class XSDComplexTypeDirective(XSDComplexType):
+    """
+    .. todo::
+       documentation
+    """
     _SIMPLE_CONTENT = XSDSimpleTypeString
 
     XSD_TREE = XSDTree(musicxml_xsd_et_root.find(".//{*}complexType[@name='attributes']//{*}complexType"))
@@ -147,7 +163,8 @@ The attack and release attributes are used to alter the starting and stopping ti
 
 If a note is played only particular times through a repeat, the time-only attribute shows which times to play the note.
 
-The pizzicato attribute is used when just this note is sounded pizzicato, vs. the pizzicato element which changes overall playback between pizzicato and arco."""
+The pizzicato attribute is used when just this note is sounded pizzicato, vs. the pizzicato element which changes overall playback between pizzicato and arco.
+"""
 
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="note">
@@ -239,7 +256,7 @@ class XSDComplexTypeAccidentalText(XSDComplexType):
 
 ``simpleContent``: The accidental-value type represents notated accidentals supported by MusicXML. In the MusicXML 2.0 DTD this was a string with values that could be included. The XSD strengthens the data typing to an enumerated list. The quarter- and three-quarters- accidentals are Tartini-style quarter-tone accidentals. The -down and -up accidentals are quarter-tone accidentals that include arrows pointing down or up. The slash- accidentals are used in Turkish classical music. The numbered sharp and flat accidentals are superscripted versions of the accidental signs, used in Turkish folk music. The sori and koron accidentals are microtonal sharp and flat accidentals used in Iranian and Persian music. The other accidental covers accidentals other than those listed here. It is usually used in combination with the smufl attribute to specify a particular SMuFL accidental. The smufl attribute may be used with any accidental value to help specify the appearance of symbols that share the same MusicXML semantics.
     
-    Permitted Values: ['sharp', 'natural', 'flat', 'double-sharp', 'sharp-sharp', 'flat-flat', 'natural-sharp', 'natural-flat', 'quarter-flat', 'quarter-sharp', 'three-quarters-flat', 'three-quarters-sharp', 'sharp-down', 'sharp-up', 'natural-down', 'natural-up', 'flat-down', 'flat-up', 'double-sharp-down', 'double-sharp-up', 'flat-flat-down', 'flat-flat-up', 'arrow-down', 'arrow-up', 'triple-sharp', 'triple-flat', 'slash-quarter-sharp', 'slash-sharp', 'slash-flat', 'double-slash-flat', 'sharp-1', 'sharp-2', 'sharp-3', 'sharp-5', 'flat-1', 'flat-2', 'flat-3', 'flat-4', 'sori', 'koron', 'other']
+    Permitted Values: ``'sharp'``, ``'natural'``, ``'flat'``, ``'double-sharp'``, ``'sharp-sharp'``, ``'flat-flat'``, ``'natural-sharp'``, ``'natural-flat'``, ``'quarter-flat'``, ``'quarter-sharp'``, ``'three-quarters-flat'``, ``'three-quarters-sharp'``, ``'sharp-down'``, ``'sharp-up'``, ``'natural-down'``, ``'natural-up'``, ``'flat-down'``, ``'flat-up'``, ``'double-sharp-down'``, ``'double-sharp-up'``, ``'flat-flat-down'``, ``'flat-flat-up'``, ``'arrow-down'``, ``'arrow-up'``, ``'triple-sharp'``, ``'triple-flat'``, ``'slash-quarter-sharp'``, ``'slash-sharp'``, ``'slash-flat'``, ``'double-slash-flat'``, ``'sharp-1'``, ``'sharp-2'``, ``'sharp-3'``, ``'sharp-5'``, ``'flat-1'``, ``'flat-2'``, ``'flat-3'``, ``'flat-4'``, ``'sori'``, ``'koron'``, ``'other'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeAccidentalValue
@@ -493,7 +510,7 @@ class XSDComplexTypeFermata(XSDComplexType):
 
 ``simpleContent``: The fermata-shape type represents the shape of the fermata sign. The empty value is equivalent to the normal value.
     
-    Permitted Values: ['normal', 'angled', 'square', 'double-angled', 'double-square', 'double-dot', 'half-curve', 'curlew', '']
+    Permitted Values: ``'normal'``, ``'angled'``, ``'square'``, ``'double-angled'``, ``'double-square'``, ``'double-dot'``, ``'half-curve'``, ``'curlew'``, ``''``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeFermataShape
@@ -1184,7 +1201,7 @@ class XSDComplexTypeKeyAccidental(XSDComplexType):
 
 ``simpleContent``: The accidental-value type represents notated accidentals supported by MusicXML. In the MusicXML 2.0 DTD this was a string with values that could be included. The XSD strengthens the data typing to an enumerated list. The quarter- and three-quarters- accidentals are Tartini-style quarter-tone accidentals. The -down and -up accidentals are quarter-tone accidentals that include arrows pointing down or up. The slash- accidentals are used in Turkish classical music. The numbered sharp and flat accidentals are superscripted versions of the accidental signs, used in Turkish folk music. The sori and koron accidentals are microtonal sharp and flat accidentals used in Iranian and Persian music. The other accidental covers accidentals other than those listed here. It is usually used in combination with the smufl attribute to specify a particular SMuFL accidental. The smufl attribute may be used with any accidental value to help specify the appearance of symbols that share the same MusicXML semantics.
     
-    Permitted Values: ['sharp', 'natural', 'flat', 'double-sharp', 'sharp-sharp', 'flat-flat', 'natural-sharp', 'natural-flat', 'quarter-flat', 'quarter-sharp', 'three-quarters-flat', 'three-quarters-sharp', 'sharp-down', 'sharp-up', 'natural-down', 'natural-up', 'flat-down', 'flat-up', 'double-sharp-down', 'double-sharp-up', 'flat-flat-down', 'flat-flat-up', 'arrow-down', 'arrow-up', 'triple-sharp', 'triple-flat', 'slash-quarter-sharp', 'slash-sharp', 'slash-flat', 'double-slash-flat', 'sharp-1', 'sharp-2', 'sharp-3', 'sharp-5', 'flat-1', 'flat-2', 'flat-3', 'flat-4', 'sori', 'koron', 'other']
+    Permitted Values: ``'sharp'``, ``'natural'``, ``'flat'``, ``'double-sharp'``, ``'sharp-sharp'``, ``'flat-flat'``, ``'natural-sharp'``, ``'natural-flat'``, ``'quarter-flat'``, ``'quarter-sharp'``, ``'three-quarters-flat'``, ``'three-quarters-sharp'``, ``'sharp-down'``, ``'sharp-up'``, ``'natural-down'``, ``'natural-up'``, ``'flat-down'``, ``'flat-up'``, ``'double-sharp-down'``, ``'double-sharp-up'``, ``'flat-flat-down'``, ``'flat-flat-up'``, ``'arrow-down'``, ``'arrow-up'``, ``'triple-sharp'``, ``'triple-flat'``, ``'slash-quarter-sharp'``, ``'slash-sharp'``, ``'slash-flat'``, ``'double-slash-flat'``, ``'sharp-1'``, ``'sharp-2'``, ``'sharp-3'``, ``'sharp-5'``, ``'flat-1'``, ``'flat-2'``, ``'flat-3'``, ``'flat-4'``, ``'sori'``, ``'koron'``, ``'other'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeAccidentalValue
@@ -1348,7 +1365,7 @@ class XSDComplexTypePartSymbol(XSDComplexType):
 
 ``simpleContent``: The group-symbol-value type indicates how the symbol for a group or multi-staff part is indicated in the score.
     
-    Permitted Values: ['none', 'brace', 'line', 'bracket', 'square']
+    Permitted Values: ``'none'``, ``'brace'``, ``'line'``, ``'bracket'``, ``'square'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeGroupSymbolValue
@@ -1545,7 +1562,7 @@ class XSDComplexTypeBarStyleColor(XSDComplexType):
 
 ``simpleContent``: The bar-style type represents barline style information. Choices are regular, dotted, dashed, heavy, light-light, light-heavy, heavy-light, heavy-heavy, tick (a short stroke through the top line), short (a partial barline between the 2nd and 4th lines), and none.
     
-    Permitted Values: ['regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy', 'heavy-light', 'heavy-heavy', 'tick', 'short', 'none']
+    Permitted Values: ``'regular'``, ``'dotted'``, ``'dashed'``, ``'heavy'``, ``'light-light'``, ``'light-heavy'``, ``'heavy-light'``, ``'heavy-heavy'``, ``'tick'``, ``'short'``, ``'none'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeBarStyle
@@ -1775,7 +1792,7 @@ class XSDComplexTypeBassStep(XSDComplexType):
 
 ``simpleContent``: The step type represents a step of the diatonic scale, represented using the English letters A through G.
     
-    Permitted Values: ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+    Permitted Values: ``'A'``, ``'B'``, ``'C'``, ``'D'``, ``'E'``, ``'F'``, ``'G'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeStep
@@ -1801,7 +1818,7 @@ class XSDComplexTypeBeater(XSDComplexType):
 
 ``simpleContent``: The beater-value type represents pictograms for beaters, mallets, and sticks that do not have different materials represented in the pictogram. The finger and hammer values are in addition to Stone's list.
     
-    Permitted Values: ['bow', 'chime hammer', 'coin', 'drum stick', 'finger', 'fingernail', 'fist', 'guiro scraper', 'hammer', 'hand', 'jazz stick', 'knitting needle', 'metal hammer', 'slide brush on gong', 'snare stick', 'spoon mallet', 'superball', 'triangle beater', 'triangle beater plain', 'wire brush']
+    Permitted Values: ``'bow'``, ``'chime hammer'``, ``'coin'``, ``'drum stick'``, ``'finger'``, ``'fingernail'``, ``'fist'``, ``'guiro scraper'``, ``'hammer'``, ``'hand'``, ``'jazz stick'``, ``'knitting needle'``, ``'metal hammer'``, ``'slide brush on gong'``, ``'snare stick'``, ``'spoon mallet'``, ``'superball'``, ``'triangle beater'``, ``'triangle beater plain'``, ``'wire brush'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeBeaterValue
@@ -1935,7 +1952,7 @@ class XSDComplexTypeDegreeType(XSDComplexType):
 
 ``simpleContent``: The degree-type-value type indicates whether the current degree element is an addition, alteration, or subtraction to the kind of the current chord in the harmony element.
     
-    Permitted Values: ['add', 'alter', 'subtract']
+    Permitted Values: ``'add'``, ``'alter'``, ``'subtract'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeDegreeTypeValue
@@ -2082,7 +2099,7 @@ class XSDComplexTypeEffect(XSDComplexType):
 
 ``simpleContent``: The effect-value type represents pictograms for sound effect percussion instruments. The cannon, lotus flute, and megaphone values are in addition to Stone's list.
     
-    Permitted Values: ['anvil', 'auto horn', 'bird whistle', 'cannon', 'duck call', 'gun shot', 'klaxon horn', 'lions roar', 'lotus flute', 'megaphone', 'police whistle', 'siren', 'slide whistle', 'thunder sheet', 'wind machine', 'wind whistle']
+    Permitted Values: ``'anvil'``, ``'auto horn'``, ``'bird whistle'``, ``'cannon'``, ``'duck call'``, ``'gun shot'``, ``'klaxon horn'``, ``'lions roar'``, ``'lotus flute'``, ``'megaphone'``, ``'police whistle'``, ``'siren'``, ``'slide whistle'``, ``'thunder sheet'``, ``'wind machine'``, ``'wind whistle'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeEffectValue
@@ -2206,7 +2223,7 @@ class XSDComplexTypeGlass(XSDComplexType):
 
 ``simpleContent``: The glass-value type represents pictograms for glass percussion instruments.
     
-    Permitted Values: ['glass harmonica', 'glass harp', 'wind chimes']
+    Permitted Values: ``'glass harmonica'``, ``'glass harp'``, ``'wind chimes'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeGlassValue
@@ -2431,7 +2448,7 @@ The "other" kind is used when the harmony is entirely composed of add elements.
 
 The "none" kind is used to explicitly encode absence of chords or functional harmony. In this case, the root, numeral, or function element has no meaning. When using the root or numeral element, the root-step or numeral-step text attribute should be set to the empty string to keep the root or numeral from being displayed.
     
-    Permitted Values: ['major', 'minor', 'augmented', 'diminished', 'dominant', 'major-seventh', 'minor-seventh', 'diminished-seventh', 'augmented-seventh', 'half-diminished', 'major-minor', 'major-sixth', 'minor-sixth', 'dominant-ninth', 'major-ninth', 'minor-ninth', 'dominant-11th', 'major-11th', 'minor-11th', 'dominant-13th', 'major-13th', 'minor-13th', 'suspended-second', 'suspended-fourth', 'Neapolitan', 'Italian', 'French', 'German', 'pedal', 'power', 'Tristan', 'other', 'none']
+    Permitted Values: ``'major'``, ``'minor'``, ``'augmented'``, ``'diminished'``, ``'dominant'``, ``'major-seventh'``, ``'minor-seventh'``, ``'diminished-seventh'``, ``'augmented-seventh'``, ``'half-diminished'``, ``'major-minor'``, ``'major-sixth'``, ``'minor-sixth'``, ``'dominant-ninth'``, ``'major-ninth'``, ``'minor-ninth'``, ``'dominant-11th'``, ``'major-11th'``, ``'minor-11th'``, ``'dominant-13th'``, ``'major-13th'``, ``'minor-13th'``, ``'suspended-second'``, ``'suspended-fourth'``, ``'Neapolitan'``, ``'Italian'``, ``'French'``, ``'German'``, ``'pedal'``, ``'power'``, ``'Tristan'``, ``'other'``, ``'none'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeKindValue
@@ -2509,7 +2526,7 @@ The optional multiple-rest-always and multiple-rest-range attributes describe ho
 
 ``simpleContent``: The measure-numbering-value type describes how measure numbers are displayed on this part: no numbers, numbers every measure, or numbers every system.
     
-    Permitted Values: ['none', 'measure', 'system']
+    Permitted Values: ``'none'``, ``'measure'``, ``'system'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeMeasureNumberingValue
@@ -2542,7 +2559,7 @@ class XSDComplexTypeMembrane(XSDComplexType):
 
 ``simpleContent``: The membrane-value type represents pictograms for membrane percussion instruments.
     
-    Permitted Values: ['bass drum', 'bass drum on side', 'bongos', 'Chinese tomtom', 'conga drum', 'cuica', 'goblet drum', 'Indo-American tomtom', 'Japanese tomtom', 'military drum', 'snare drum', 'snare drum snares off', 'tabla', 'tambourine', 'tenor drum', 'timbales', 'tomtom']
+    Permitted Values: ``'bass drum'``, ``'bass drum on side'``, ``'bongos'``, ``'Chinese tomtom'``, ``'conga drum'``, ``'cuica'``, ``'goblet drum'``, ``'Indo-American tomtom'``, ``'Japanese tomtom'``, ``'military drum'``, ``'snare drum'``, ``'snare drum snares off'``, ``'tabla'``, ``'tambourine'``, ``'tenor drum'``, ``'timbales'``, ``'tomtom'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeMembraneValue
@@ -2567,7 +2584,7 @@ class XSDComplexTypeMetal(XSDComplexType):
 
 ``simpleContent``: The metal-value type represents pictograms for metal percussion instruments. The hi-hat value refers to a pictogram like Stone's high-hat cymbals but without the long vertical line at the bottom.
     
-    Permitted Values: ['agogo', 'almglocken', 'bell', 'bell plate', 'bell tree', 'brake drum', 'cencerro', 'chain rattle', 'Chinese cymbal', 'cowbell', 'crash cymbals', 'crotale', 'cymbal tongs', 'domed gong', 'finger cymbals', 'flexatone', 'gong', 'hi-hat', 'high-hat cymbals', 'handbell', 'jaw harp', 'jingle bells', 'musical saw', 'shell bells', 'sistrum', 'sizzle cymbal', 'sleigh bells', 'suspended cymbal', 'tam tam', 'tam tam with beater', 'triangle', 'Vietnamese hat']
+    Permitted Values: ``'agogo'``, ``'almglocken'``, ``'bell'``, ``'bell plate'``, ``'bell tree'``, ``'brake drum'``, ``'cencerro'``, ``'chain rattle'``, ``'Chinese cymbal'``, ``'cowbell'``, ``'crash cymbals'``, ``'crotale'``, ``'cymbal tongs'``, ``'domed gong'``, ``'finger cymbals'``, ``'flexatone'``, ``'gong'``, ``'hi-hat'``, ``'high-hat cymbals'``, ``'handbell'``, ``'jaw harp'``, ``'jingle bells'``, ``'musical saw'``, ``'shell bells'``, ``'sistrum'``, ``'sizzle cymbal'``, ``'sleigh bells'``, ``'suspended cymbal'``, ``'tam tam'``, ``'tam tam with beater'``, ``'triangle'``, ``'Vietnamese hat'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeMetalValue
@@ -2641,7 +2658,7 @@ class XSDComplexTypeMetronomeBeam(XSDComplexType):
 
 ``simpleContent``: The beam-value type represents the type of beam associated with each of 8 beam levels (up to 1024th notes) available for each note.
     
-    Permitted Values: ['begin', 'continue', 'end', 'forward hook', 'backward hook']
+    Permitted Values: ``'begin'``, ``'continue'``, ``'end'``, ``'forward hook'``, ``'backward hook'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeBeamValue
@@ -2997,7 +3014,7 @@ class XSDComplexTypePitched(XSDComplexType):
 
 ``simpleContent``: The pitched-value type represents pictograms for pitched percussion instruments. The chimes and tubular chimes values distinguish the single-line and double-line versions of the pictogram.
     
-    Permitted Values: ['celesta', 'chimes', 'glockenspiel', 'lithophone', 'mallet', 'marimba', 'steel drums', 'tubaphone', 'tubular chimes', 'vibraphone', 'xylophone']
+    Permitted Values: ``'celesta'``, ``'chimes'``, ``'glockenspiel'``, ``'lithophone'``, ``'mallet'``, ``'marimba'``, ``'steel drums'``, ``'tubaphone'``, ``'tubular chimes'``, ``'vibraphone'``, ``'xylophone'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypePitchedValue
@@ -3096,7 +3113,7 @@ class XSDComplexTypeRootStep(XSDComplexType):
 
 ``simpleContent``: The step type represents a step of the diatonic scale, represented using the English letters A through G.
     
-    Permitted Values: ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+    Permitted Values: ``'A'``, ``'B'``, ``'C'``, ``'D'``, ``'E'``, ``'F'``, ``'G'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeStep
@@ -3403,7 +3420,7 @@ class XSDComplexTypeWood(XSDComplexType):
 
 ``simpleContent``: The wood-value type represents pictograms for wood percussion instruments. The maraca and maracas values distinguish the one- and two-maraca versions of the pictogram.
     
-    Permitted Values: ['bamboo scraper', 'board clapper', 'cabasa', 'castanets', 'castanets with handle', 'claves', 'football rattle', 'guiro', 'log drum', 'maraca', 'maracas', 'quijada', 'rainstick', 'ratchet', 'reco-reco', 'sandpaper blocks', 'slit drum', 'temple block', 'vibraslap', 'whip', 'wood block']
+    Permitted Values: ``'bamboo scraper'``, ``'board clapper'``, ``'cabasa'``, ``'castanets'``, ``'castanets with handle'``, ``'claves'``, ``'football rattle'``, ``'guiro'``, ``'log drum'``, ``'maraca'``, ``'maracas'``, ``'quijada'``, ``'rainstick'``, ``'ratchet'``, ``'reco-reco'``, ``'sandpaper blocks'``, ``'slit drum'``, ``'temple block'``, ``'vibraslap'``, ``'whip'``, ``'wood block'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeWoodValue
@@ -3900,7 +3917,7 @@ class XSDComplexTypeAccidental(XSDComplexType):
 
 ``simpleContent``: The accidental-value type represents notated accidentals supported by MusicXML. In the MusicXML 2.0 DTD this was a string with values that could be included. The XSD strengthens the data typing to an enumerated list. The quarter- and three-quarters- accidentals are Tartini-style quarter-tone accidentals. The -down and -up accidentals are quarter-tone accidentals that include arrows pointing down or up. The slash- accidentals are used in Turkish classical music. The numbered sharp and flat accidentals are superscripted versions of the accidental signs, used in Turkish folk music. The sori and koron accidentals are microtonal sharp and flat accidentals used in Iranian and Persian music. The other accidental covers accidentals other than those listed here. It is usually used in combination with the smufl attribute to specify a particular SMuFL accidental. The smufl attribute may be used with any accidental value to help specify the appearance of symbols that share the same MusicXML semantics.
     
-    Permitted Values: ['sharp', 'natural', 'flat', 'double-sharp', 'sharp-sharp', 'flat-flat', 'natural-sharp', 'natural-flat', 'quarter-flat', 'quarter-sharp', 'three-quarters-flat', 'three-quarters-sharp', 'sharp-down', 'sharp-up', 'natural-down', 'natural-up', 'flat-down', 'flat-up', 'double-sharp-down', 'double-sharp-up', 'flat-flat-down', 'flat-flat-up', 'arrow-down', 'arrow-up', 'triple-sharp', 'triple-flat', 'slash-quarter-sharp', 'slash-sharp', 'slash-flat', 'double-slash-flat', 'sharp-1', 'sharp-2', 'sharp-3', 'sharp-5', 'flat-1', 'flat-2', 'flat-3', 'flat-4', 'sori', 'koron', 'other']
+    Permitted Values: ``'sharp'``, ``'natural'``, ``'flat'``, ``'double-sharp'``, ``'sharp-sharp'``, ``'flat-flat'``, ``'natural-sharp'``, ``'natural-flat'``, ``'quarter-flat'``, ``'quarter-sharp'``, ``'three-quarters-flat'``, ``'three-quarters-sharp'``, ``'sharp-down'``, ``'sharp-up'``, ``'natural-down'``, ``'natural-up'``, ``'flat-down'``, ``'flat-up'``, ``'double-sharp-down'``, ``'double-sharp-up'``, ``'flat-flat-down'``, ``'flat-flat-up'``, ``'arrow-down'``, ``'arrow-up'``, ``'triple-sharp'``, ``'triple-flat'``, ``'slash-quarter-sharp'``, ``'slash-sharp'``, ``'slash-flat'``, ``'double-slash-flat'``, ``'sharp-1'``, ``'sharp-2'``, ``'sharp-3'``, ``'sharp-5'``, ``'flat-1'``, ``'flat-2'``, ``'flat-3'``, ``'flat-4'``, ``'sori'``, ``'koron'``, ``'other'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeAccidentalValue
@@ -3929,7 +3946,7 @@ class XSDComplexTypeAccidentalMark(XSDComplexType):
 
 ``simpleContent``: The accidental-value type represents notated accidentals supported by MusicXML. In the MusicXML 2.0 DTD this was a string with values that could be included. The XSD strengthens the data typing to an enumerated list. The quarter- and three-quarters- accidentals are Tartini-style quarter-tone accidentals. The -down and -up accidentals are quarter-tone accidentals that include arrows pointing down or up. The slash- accidentals are used in Turkish classical music. The numbered sharp and flat accidentals are superscripted versions of the accidental signs, used in Turkish folk music. The sori and koron accidentals are microtonal sharp and flat accidentals used in Iranian and Persian music. The other accidental covers accidentals other than those listed here. It is usually used in combination with the smufl attribute to specify a particular SMuFL accidental. The smufl attribute may be used with any accidental value to help specify the appearance of symbols that share the same MusicXML semantics.
     
-    Permitted Values: ['sharp', 'natural', 'flat', 'double-sharp', 'sharp-sharp', 'flat-flat', 'natural-sharp', 'natural-flat', 'quarter-flat', 'quarter-sharp', 'three-quarters-flat', 'three-quarters-sharp', 'sharp-down', 'sharp-up', 'natural-down', 'natural-up', 'flat-down', 'flat-up', 'double-sharp-down', 'double-sharp-up', 'flat-flat-down', 'flat-flat-up', 'arrow-down', 'arrow-up', 'triple-sharp', 'triple-flat', 'slash-quarter-sharp', 'slash-sharp', 'slash-flat', 'double-slash-flat', 'sharp-1', 'sharp-2', 'sharp-3', 'sharp-5', 'flat-1', 'flat-2', 'flat-3', 'flat-4', 'sori', 'koron', 'other']
+    Permitted Values: ``'sharp'``, ``'natural'``, ``'flat'``, ``'double-sharp'``, ``'sharp-sharp'``, ``'flat-flat'``, ``'natural-sharp'``, ``'natural-flat'``, ``'quarter-flat'``, ``'quarter-sharp'``, ``'three-quarters-flat'``, ``'three-quarters-sharp'``, ``'sharp-down'``, ``'sharp-up'``, ``'natural-down'``, ``'natural-up'``, ``'flat-down'``, ``'flat-up'``, ``'double-sharp-down'``, ``'double-sharp-up'``, ``'flat-flat-down'``, ``'flat-flat-up'``, ``'arrow-down'``, ``'arrow-up'``, ``'triple-sharp'``, ``'triple-flat'``, ``'slash-quarter-sharp'``, ``'slash-sharp'``, ``'slash-flat'``, ``'double-slash-flat'``, ``'sharp-1'``, ``'sharp-2'``, ``'sharp-3'``, ``'sharp-5'``, ``'flat-1'``, ``'flat-2'``, ``'flat-3'``, ``'flat-4'``, ``'sori'``, ``'koron'``, ``'other'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeAccidentalValue
@@ -4144,7 +4161,7 @@ The repeater attribute has been deprecated in MusicXML 3.0. Formerly used for tr
 
 ``simpleContent``: The beam-value type represents the type of beam associated with each of 8 beam levels (up to 1024th notes) available for each note.
     
-    Permitted Values: ['begin', 'continue', 'end', 'forward hook', 'backward hook']
+    Permitted Values: ``'begin'``, ``'continue'``, ``'end'``, ``'forward hook'``, ``'backward hook'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeBeamValue
@@ -4217,7 +4234,7 @@ class XSDComplexTypeBreathMark(XSDComplexType):
 
 ``simpleContent``: The breath-mark-value type represents the symbol used for a breath mark.
     
-    Permitted Values: ['', 'comma', 'tick', 'upbow', 'salzedo']
+    Permitted Values: ``''``, ``'comma'``, ``'tick'``, ``'upbow'``, ``'salzedo'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeBreathMarkValue
@@ -4243,7 +4260,7 @@ class XSDComplexTypeCaesura(XSDComplexType):
 
 ``simpleContent``: The caesura-value type represents the shape of the caesura sign.
     
-    Permitted Values: ['normal', 'thick', 'short', 'curved', 'single', '']
+    Permitted Values: ``'normal'``, ``'thick'``, ``'short'``, ``'curved'``, ``'single'``, ``''``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeCaesuraValue
@@ -4480,7 +4497,7 @@ class XSDComplexTypeHandbell(XSDComplexType):
 
 ``simpleContent``: The handbell-value type represents the type of handbell technique being notated.
     
-    Permitted Values: ['belltree', 'damp', 'echo', 'gyro', 'hand martellato', 'mallet lift', 'mallet table', 'martellato', 'martellato lift', 'muted martellato', 'pluck lift', 'swing']
+    Permitted Values: ``'belltree'``, ``'damp'``, ``'echo'``, ``'gyro'``, ``'hand martellato'``, ``'mallet lift'``, ``'mallet table'``, ``'martellato'``, ``'martellato lift'``, ``'muted martellato'``, ``'pluck lift'``, ``'swing'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeHandbellValue
@@ -4506,7 +4523,7 @@ class XSDComplexTypeHarmonClosed(XSDComplexType):
 
 ``simpleContent``: The harmon-closed-value type represents whether the harmon mute is closed, open, or half-open.
     
-    Permitted Values: ['yes', 'no', 'half']
+    Permitted Values: ``'yes'``, ``'no'``, ``'half'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeHarmonClosedValue
@@ -4650,7 +4667,7 @@ class XSDComplexTypeHoleClosed(XSDComplexType):
 
 ``simpleContent``: The hole-closed-value type represents whether the hole is closed, open, or half-open.
     
-    Permitted Values: ['yes', 'no', 'half']
+    Permitted Values: ``'yes'``, ``'no'``, ``'half'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeHoleClosedValue
@@ -4856,7 +4873,7 @@ class XSDComplexTypeNoteType(XSDComplexType):
 
 ``simpleContent``: The note-type-value type is used for the MusicXML type element and represents the graphic note type, from 1024th (shortest) to maxima (longest).
     
-    Permitted Values: ['1024th', '512th', '256th', '128th', '64th', '32nd', '16th', 'eighth', 'quarter', 'half', 'whole', 'breve', 'long', 'maxima']
+    Permitted Values: ``'1024th'``, ``'512th'``, ``'256th'``, ``'128th'``, ``'64th'``, ``'32nd'``, ``'16th'``, ``'eighth'``, ``'quarter'``, ``'half'``, ``'whole'``, ``'breve'``, ``'long'``, ``'maxima'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeNoteTypeValue
@@ -4893,7 +4910,7 @@ The arrow shapes differ from triangle and inverted triangle by being centered on
 
 The other notehead covers noteheads other than those listed here. It is usually used in combination with the smufl attribute to specify a particular SMuFL notehead. The smufl attribute may be used with any notehead value to help specify the appearance of symbols that share the same MusicXML semantics. Noteheads in the SMuFL Note name noteheads and Note name noteheads supplement ranges (U+E150–U+E1AF and U+EEE0–U+EEFF) should not use the smufl attribute or the "other" value, but instead use the notehead-text element.
     
-    Permitted Values: ['slash', 'triangle', 'diamond', 'square', 'cross', 'x', 'circle-x', 'inverted triangle', 'arrow down', 'arrow up', 'circled', 'slashed', 'back slashed', 'normal', 'cluster', 'circle dot', 'left triangle', 'rectangle', 'none', 'do', 're', 'mi', 'fa', 'fa up', 'so', 'la', 'ti', 'other']
+    Permitted Values: ``'slash'``, ``'triangle'``, ``'diamond'``, ``'square'``, ``'cross'``, ``'x'``, ``'circle-x'``, ``'inverted triangle'``, ``'arrow down'``, ``'arrow up'``, ``'circled'``, ``'slashed'``, ``'back slashed'``, ``'normal'``, ``'cluster'``, ``'circle dot'``, ``'left triangle'``, ``'rectangle'``, ``'none'``, ``'do'``, ``'re'``, ``'mi'``, ``'fa'``, ``'fa up'``, ``'so'``, ``'la'``, ``'ti'``, ``'other'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeNoteheadValue
@@ -5236,7 +5253,7 @@ class XSDComplexTypeStem(XSDComplexType):
 
 ``simpleContent``: The stem-value type represents the notated stem direction.
     
-    Permitted Values: ['down', 'up', 'double', 'none']
+    Permitted Values: ``'down'``, ``'up'``, ``'double'``, ``'none'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeStemValue
@@ -5703,7 +5720,7 @@ class XSDComplexTypeTupletType(XSDComplexType):
 
 ``simpleContent``: The note-type-value type is used for the MusicXML type element and represents the graphic note type, from 1024th (shortest) to maxima (longest).
     
-    Permitted Values: ['1024th', '512th', '256th', '128th', '64th', '32nd', '16th', 'eighth', 'quarter', 'half', 'whole', 'breve', 'long', 'maxima']
+    Permitted Values: ``'1024th'``, ``'512th'``, ``'256th'``, ``'128th'``, ``'64th'``, ``'32nd'``, ``'16th'``, ``'eighth'``, ``'quarter'``, ``'half'``, ``'whole'``, ``'breve'``, ``'long'``, ``'maxima'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeNoteTypeValue
@@ -5863,7 +5880,7 @@ class XSDComplexTypeGroupBarline(XSDComplexType):
 
 ``simpleContent``: The group-barline-value type indicates if the group should have common barlines.
     
-    Permitted Values: ['yes', 'no', 'Mensurstrich']
+    Permitted Values: ``'yes'``, ``'no'``, ``'Mensurstrich'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeGroupBarlineValue
@@ -5908,7 +5925,7 @@ class XSDComplexTypeGroupSymbol(XSDComplexType):
 
 ``simpleContent``: The group-symbol-value type indicates how the symbol for a group or multi-staff part is indicated in the score.
     
-    Permitted Values: ['none', 'brace', 'line', 'bracket', 'square']
+    Permitted Values: ``'none'``, ``'brace'``, ``'line'``, ``'bracket'``, ``'square'``
 """
     
     _SIMPLE_CONTENT = XSDSimpleTypeGroupSymbolValue

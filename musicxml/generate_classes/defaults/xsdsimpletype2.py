@@ -1,8 +1,10 @@
-
 class XSDSimpleTypeFontSize(XSDSimpleType):
-    _UNION = [XSDSimpleTypeCssFontSize, XSDSimpleTypeDecimal]
-    """The font-size can be one of the CSS font sizes (xx-small, x-small, small, medium, large, x-large, xx-large) or a numeric point size."""
+    """The font-size can be one of the CSS font sizes (xx-small, x-small, small, medium, large, x-large, xx-large) or a numeric point size.
 
+    .. todo::
+       Better documentation.
+    """
+    _UNION = [XSDSimpleTypeCssFontSize, XSDSimpleTypeDecimal]
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="font-size">
     <xs:annotation>
@@ -15,9 +17,12 @@ class XSDSimpleTypeFontSize(XSDSimpleType):
 
 
 class XSDSimpleTypeYesNoNumber(XSDSimpleType):
-    _UNION = [XSDSimpleTypeYesNo, XSDSimpleTypeDecimal]
-    """The yes-no-number type is used for attributes that can be either boolean or numeric values."""
+    """The yes-no-number type is used for attributes that can be either boolean or numeric values.
 
+    .. todo::
+       Better documentation.
+    """
+    _UNION = [XSDSimpleTypeYesNo, XSDSimpleTypeDecimal]
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="yes-no-number">
     <xs:annotation>
@@ -28,8 +33,13 @@ class XSDSimpleTypeYesNoNumber(XSDSimpleType):
 """
                                      ))
 
+
 class XSDSimpleTypePositiveIntegerOrEmpty(XSDSimpleTypePositiveInteger):
-    """The positive-integer-or-empty values can be either a positive integer or an empty string."""
+    """The positive-integer-or-empty values can be either a positive integer or an empty string.
+
+    .. todo::
+       Better documentation.
+    """
     _FORCED_PERMITTED = ['']
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="positive-integer-or-empty">
@@ -52,7 +62,11 @@ class XSDSimpleTypePositiveIntegerOrEmpty(XSDSimpleTypePositiveInteger):
 
 
 class XSDSimpleTypeNumberOrNormal(XSDSimpleTypeDecimal):
-    """The number-or-normal values can be either a decimal number or the string "normal". This is used by the line-height and letter-spacing attributes."""
+    """The number-or-normal values can be either a decimal number or the string "normal". This is used by the line-height and letter-spacing attributes.
+
+    .. todo::
+       Better documentation.
+    """
     _FORCED_PERMITTED = ['normal']
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="number-or-normal">

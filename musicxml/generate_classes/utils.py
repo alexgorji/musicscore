@@ -13,6 +13,8 @@ with open(musicxml_xsd_path) as file:
 xml_xsd_et_root = xml_et_tree.getroot()
 musicxml_xsd_et_root = musicxml_et_tree.getroot()
 
+parent_map = {c: p for p in musicxml_xsd_et_root.iter() for c in p}
+
 
 def get_all_et_elements(source_path, tag):
     with open(source_path) as file:

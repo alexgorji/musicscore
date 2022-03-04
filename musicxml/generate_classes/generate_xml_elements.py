@@ -40,9 +40,47 @@ xml_element_class_names = ['XMLScorePartwise', 'XMLPart', 'XMLMeasure', 'XMLDire
 
 def element_class_as_string(element_):
     def get_doc():
+        def get_attributes_doc():
+            output = ""
+            try:
+                possible_attributes = eval(xsd_type).get_xsd_attributes()
+                string_possible_attributes = []
+                for att in possible_attributes:
+                    repr_ = ''
+                    if att.name:
+                        repr_ += f"``{'_'.join(att.name.split('-'))}``"
+                    if att.type_:
+                        try:
+                            repr_ += f"\@ :obj:`~musicxml.xsd.xsdsimpletype.{att.type_.__name__}`"
+                        except AttributeError:
+                            breakpoint()
+                            pass
+                    if att.is_required:
+                        repr_ += '\@required'
+
+                    if repr_ != '':
+                        string_possible_attributes.append(repr_)
+
+                if string_possible_attributes:
+                    output += '    ``Possible attributes``: '
+                    output += f"{', '.join(sorted(string_possible_attributes))}"
+
+            except (AttributeError, KeyError, NameError):
+                pass
+            return output
+
+        def get_possible_children(container):
+            possible_children = ", ".join(sorted(set(f":obj:`~{convert_to_xml_class_name(l.content.name)}`" for l in
+                                                     container.iterate_leaves())))
+
+            output = '    ``Possible children``:'
+            output += f"    {possible_children}"
+            return output
+
         output = xsd_tree.get_doc()
         if xsd_type in all_complex_types:
             complex_type_doc = eval(xsd_type).__doc__
+
             if complex_type_doc:
                 if complex_type_doc and output and output != "":
                     output += '\n'
@@ -51,17 +89,22 @@ def element_class_as_string(element_):
                 output += complex_type_doc
                 if output.count('\n') > 1:
                     output = output.replace('\n', '\n    ')
+                if get_attributes_doc() != '':
+                    output += '\n'
+                    output += '\n'
+                    output += get_attributes_doc()
                 try:
                     container = containers[xsd_type]
-                    # container_tree_representation = copy.copy(container).tree_representation(
-                    #     tab=lambda x: '    ' + x.level * 2 * '\- ', key=lambda x: x.compact_repr + '\\n')
-                    # container_tree_representation = container_tree_representation.replace('@', '\@')
                     container_tree_representation = copy.copy(container).tree_representation(tab=lambda x: (x.level * '    ') + '       ')
                     container_tree_representation = container_tree_representation[:-1]
                     if output != "":
                         output += '\n'
                         output += '\n'
 
+                    output += get_possible_children(container)
+
+                    output += '\n'
+                    output += '\n'
                     output += "    ``XSD structure:``\n"
                     output += '\n'
                     output += "    .. code-block::\n"

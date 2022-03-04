@@ -297,7 +297,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         :return: dict of xml direction types to be added to self.notes.
 
-        :todo: Better documentation. Which types can be added?  Example?
+        .. todo::
+           Better documentation. Which types can be added?  Example?
         """
         return self._xml_direction_types
 

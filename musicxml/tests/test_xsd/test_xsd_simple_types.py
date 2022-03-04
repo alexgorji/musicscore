@@ -29,18 +29,7 @@ class TestSimpleTypes(MusicXmlTestCase):
     def test_generate_simple_type_is_descendent_of_simple_type(self):
         assert isinstance(XSDSimpleTypeAboveBelow('above'), XSDSimpleType)
 
-    def test_generated_simple_type_doc_string_from_annotation(self):
-        """
-        Test that the instance of an in module musicxml.types.simpletype generated class has a documentation string
-        matching its xsd annotation
-        """
 
-        assert XSDSimpleTypeAboveBelow.__doc__ == """The above-below type is used to indicate whether one element appears above or below another element.
-    
-    Permitted Values: ['above', 'below']
-"""
-
-    # Test Basic XSDSimpleType classes which are created manually
 
     def test_xs_integer(self):
         XSDSimpleTypeInteger(0)
@@ -590,15 +579,3 @@ class TestSimpleTypes(MusicXmlTestCase):
         XSDSimpleTypeLanguage('en-US')
         with self.assertRaises(ValueError):
             XSDSimpleTypeLanguage('blabla')
-
-    def test_get_doc(self):
-        """
-        get_doc must be a class method
-        :return:
-        """
-        expected = """The note-type-value type is used for the MusicXML type element and represents the graphic note type, from 1024th (shortest) to maxima (longest).
-    
-    Permitted Values: ['1024th', '512th', '256th', '128th', '64th', '32nd', '16th', 'eighth', 'quarter', 'half', 'whole', 'breve', 'long', 'maxima']
-"""
-        t = XSDSimpleTypeNoteTypeValue
-        assert t.XSD_TREE.get_doc() == expected

@@ -171,7 +171,8 @@ class XSDTree(Tree):
         if permitted:
             output += '\n    '
             output += '\n    '
-            output += f"Permitted Values: {permitted}\n"
+            permitted = [f"``'{perm}'``" if perm else "``''``" for perm in permitted]
+            output += f"Permitted Values: {', '.join(perm for perm in permitted)}\n"
         if pattern:
             output += '\n    '
             output += '\n    '

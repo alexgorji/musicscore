@@ -118,18 +118,34 @@ xsd_tree_score_partwise = XSDTree(musicxml_xsd_et_root.find(".//{*}element[@name
 
 
 class XSDComplexTypeScorePartwise(XSDComplexType):
+    """
+    .. todo::
+       documentation
+    """
     XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(".//{*}element[@name='score-partwise']//{*}complexType")[0])
 
 
 class XSDComplexTypePart(XSDComplexType):
+    """
+    .. todo::
+       documentation
+    """
     XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(".//{*}element[@name='score-partwise']//{*}complexType")[1])
 
 
 class XSDComplexTypeMeasure(XSDComplexType):
+    """
+    .. todo::
+       documentation
+    """
     XSD_TREE = XSDTree(musicxml_xsd_et_root.findall(".//{*}element[@name='score-partwise']//{*}complexType")[2])
 
 
 class XSDComplexTypeDirective(XSDComplexType):
+    """
+    .. todo::
+       documentation
+    """
     _SIMPLE_CONTENT = XSDSimpleTypeString
 
     XSD_TREE = XSDTree(musicxml_xsd_et_root.find(".//{*}complexType[@name='attributes']//{*}complexType"))
@@ -147,7 +163,8 @@ The attack and release attributes are used to alter the starting and stopping ti
 
 If a note is played only particular times through a repeat, the time-only attribute shows which times to play the note.
 
-The pizzicato attribute is used when just this note is sounded pizzicato, vs. the pizzicato element which changes overall playback between pizzicato and arco."""
+The pizzicato attribute is used when just this note is sounded pizzicato, vs. the pizzicato element which changes overall playback between pizzicato and arco.
+"""
 
     XSD_TREE = XSDTree(ET.fromstring("""
 <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="note">
