@@ -28,6 +28,20 @@ xsd_complex_types = ['XSDComplexType', 'XSDComplexTypeScorePartwise', 'XSDComple
 
 
 def complex_type_class_as_string(complex_type_):
+    def get_doc():
+        output = xsd_tree.get_doc()
+        if simple_content:
+            simple_doc = eval(simple_content).XSD_TREE.get_doc()
+            if simple_doc and simple_doc != "":
+                if output and output != "":
+                    output += '\n'
+                    output += '\n'
+                output += '``simpleContent``: '
+                output += simple_doc
+        if not output:
+            output = ""
+        return output
+
     xsd_tree = XSDTree(complex_type_)
     class_name = xsd_tree.xsd_element_class_name
     xsd_complex_types.append(class_name)
@@ -41,19 +55,10 @@ def complex_type_class_as_string(complex_type_):
         else:
             base_class_names.append(cls_name)
 
-    doc = xsd_tree.get_doc()
-    if simple_content:
-        simple_doc = eval(simple_content).XSD_TREE.get_doc()
-        if simple_doc and doc and doc != "":
-            doc += '\n'
-            doc += '\n'
-        doc += simple_doc
     ET.indent(complex_type_, space='    '),
     xsd_string = ET.tostring(complex_type_, encoding='unicode').strip()
-    if not doc:
-        doc = ""
     t = Template(template_string).substitute(class_name=class_name, base_classes=', '.join(base_class_names), simple_content=simple_content,
-                                             doc=doc, xsd_string=xsd_string)
+                                             doc=get_doc(), xsd_string=xsd_string)
     return t
 
 

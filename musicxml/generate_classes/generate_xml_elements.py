@@ -11,6 +11,7 @@ from musicxml.xsd.xsdtree import XSDTree
 from musicxml.xsd.xsdcomplextype import *
 from musicxml.xsd.xsdcomplextype import __all__ as all_complex_types
 from musicxml.xsd.xsdsimpletype import *
+from musicxml.xsd.xsdsimpletype import __all__ as all_simple_types
 
 default_path = Path(__file__).parent / 'defaults' / 'xmlelement.py'
 target_path = Path(__file__).parent.parent / 'xmlelement' / 'xmlelement.py'
@@ -38,6 +39,53 @@ xml_element_class_names = ['XMLScorePartwise', 'XMLPart', 'XMLMeasure', 'XMLDire
 
 
 def element_class_as_string(element_):
+    def get_doc():
+        output = xsd_tree.get_doc()
+        if xsd_type in all_complex_types:
+            complex_type_doc = eval(xsd_type).__doc__
+            if complex_type_doc:
+                if complex_type_doc and output and output != "":
+                    output += '\n'
+                    output += '\n'
+                output += '``complexType``: '
+                output += complex_type_doc
+                if output.count('\n') > 1:
+                    output = output.replace('\n', '\n    ')
+                try:
+                    container = containers[xsd_type]
+                    # container_tree_representation = copy.copy(container).tree_representation(
+                    #     tab=lambda x: '    ' + x.level * 2 * '\- ', key=lambda x: x.compact_repr + '\\n')
+                    # container_tree_representation = container_tree_representation.replace('@', '\@')
+                    container_tree_representation = copy.copy(container).tree_representation(tab=lambda x: (x.level * '    ') + '       ')
+                    container_tree_representation = container_tree_representation[:-1]
+                    if output != "":
+                        output += '\n'
+                        output += '\n'
+
+                    output += "    ``XSD structure:``\n"
+                    output += '\n'
+                    output += "    .. code-block::\n"
+                    output += '\n'
+                    output += container_tree_representation
+
+                except KeyError:
+                    pass
+        elif xsd_type in all_simple_types:
+            simple_type_doc = eval(xsd_type).__doc__
+            if simple_type_doc:
+                if simple_type_doc and output and output != "":
+                    output += '\n'
+                    output += '\n'
+                output += '``simpleType``: '
+                output += simple_type_doc
+                if output.count('\n') > 1:
+                    output = output.replace('\n', '\n    ')
+        else:
+            pass
+        if output is None:
+            output = ""
+        return output
+
     found_et_xml = musicxml_xsd_et_root.find(f".//{{*}}element[@name='{element_[0]}'][@type='{element_[1]}']")
     copied_el = copy.deepcopy(found_et_xml)
     if copied_el.attrib.get('minOccurs'):
@@ -55,34 +103,9 @@ def element_class_as_string(element_):
     base_classes = ('XMLElement',)
     ET.indent(found_et_xml, space='    '),
     search_for = f".//{{*}}element[@name='{element_[0]}'][@type='{element_[1]}']"
-    doc = xsd_tree.get_doc()
-    if not doc and xsd_type in all_complex_types:
-
-        doc = eval(xsd_type).__doc__
-        if doc.count('\n') > 1:
-            doc = doc.replace('\n', '\n    ')
-        try:
-            container = containers[xsd_type]
-            container_tree_representation = copy.copy(container).tree_representation(
-                tab=lambda x: '    ' + x.level * 2 * '\- ', key=lambda x: x.compact_repr + '\\n')
-            container_tree_representation = container_tree_representation.replace('@', '\@')
-            container_tree_representation = container_tree_representation[:-1]
-            if doc != "":
-
-                doc = f"{doc}\\n\n    XSD structure:\\n\n" \
-                      f"{container_tree_representation}"
-
-            else:
-                doc = f"XSD structure:\\n\n{container_tree_representation}"
-
-        except KeyError:
-            pass
-
-    if doc is None:
-        doc = ""
 
     t = Template(template_string).substitute(class_name=class_name, base_classes=', '.join(base_classes), xsd_type=xsd_type,
-                                             search_for=search_for, doc=doc)
+                                             search_for=search_for, doc=get_doc())
     return t
 
 

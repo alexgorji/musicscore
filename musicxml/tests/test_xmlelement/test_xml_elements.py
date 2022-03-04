@@ -110,33 +110,6 @@ class TestXMLElements(TestCase):
 
         el.value_ = 170
         assert el.to_string() == '<elevation>170</elevation>\n'
-        assert el.__doc__ == """
-    The elevation and pan elements allow placing of sound in a 3-D space relative to the listener. Both are expressed in degrees ranging from -180 to 180. For elevation, 0 is level with the listener, 90 is directly above, and -90 is directly below.
-    """
-
-    def test_element_doc(self):
-        """
-        Test if an element with complex type returns its type's __doc__ as its __doc__
-        Test if an element with simple type returns its xsd tree documentation as its __doc__
-        """
-        assert XMLOffset(10).__doc__ == """
-    An offset is represented in terms of divisions, and indicates where the direction will appear relative to the current musical location. The current musical location is always within the current measure, even at the end of a measure.
-    
-    The offset affects the visual appearance of the direction. If the sound attribute is "yes", then the offset affects playback and listening too. If the sound attribute is "no", then any sound or listening associated with the direction takes effect at the current location. The sound attribute is "no" by default for compatibility with earlier versions of the MusicXML format. If an element within a direction includes a default-x attribute, the offset value will be ignored when determining the appearance of that element.
-    
-    The divisions type is used to express values in terms of the musical divisions defined by the divisions element. It is preferred that these be integer values both for MIDI interoperability and to avoid roundoff errors.
-    """
-        assert XMLElevation(10).__doc__ == """
-    The elevation and pan elements allow placing of sound in a 3-D space relative to the listener. Both are expressed in degrees ranging from -180 to 180. For elevation, 0 is level with the listener, 90 is directly above, and -90 is directly below.
-    """
-        assert XMLType.__doc__ == """
-    The note-type type indicates the graphic note type. Values range from 1024th to maxima. The size attribute indicates full, cue, grace-cue, or large size. The default is full for regular notes, grace-cue for notes that contain both grace and cue elements, and cue for notes that contain either a cue or a grace element, but not both.
-    
-    The note-type-value type is used for the MusicXML type element and represents the graphic note type, from 1024th (shortest) to maxima (longest).
-        
-        Permitted Values: ['1024th', '512th', '256th', '128th', '64th', '32nd', '16th', 'eighth', 'quarter', 'half', 'whole', 'breve', 'long', 'maxima']
-    
-    """
 
     def test_element_empty(self):
         """
