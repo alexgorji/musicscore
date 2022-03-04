@@ -1,3 +1,5 @@
+from typing import Optional
+
 from musicxml.xmlelement.xmlelement import XMLKey
 
 from musictree.xmlwrapper import XMLWrapper
@@ -7,25 +9,33 @@ class Key(XMLWrapper):
     _ATTRIBUTES = {'fifths', 'show'}
     XMLClass = XMLKey
 
-    def __init__(self, fifths=0, show=True, *args, **kwargs):
+    def __init__(self, fifths: int = 0, show: bool = True, *args, **kwargs):
         super().__init__()
         self._xml_object = self.XMLClass(*args, **kwargs)
-        self._fifths = None
         self.fifths = fifths
         self._show = None
         self.show = show
 
     @property
-    def fifths(self):
-        return self._fifths
+    def fifths(self) -> Optional[int]:
+        """
+        Sets and gets ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLFifths`
+
+        :return: ``self.xml_object.xml_fifths.value_``
+        :rtype: int, None
+        """
+        if self.xml_object.xml_fifths:
+            return self.xml_object.xml_fifths.value_
 
     @fifths.setter
     def fifths(self, val):
-        self._fifths = val
         self.xml_object.xml_fifths = val
 
     @property
-    def show(self):
+    def show(self) -> bool:
+        """
+        Sets and gets show attribute. If ``False`` :obj:`Key` object is not shown.
+        """
         return self._show
 
     @show.setter

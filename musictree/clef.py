@@ -1,3 +1,5 @@
+from typing import Optional
+
 from musicxml.xmlelement.xmlelement import XMLClef
 
 from musictree.xmlwrapper import XMLWrapper
@@ -7,47 +9,66 @@ class Clef(XMLWrapper):
     _ATTRIBUTES = {'show', 'sign', 'line', 'octave_change'}
     XMLClass = XMLClef
 
-    def __init__(self, sign='G', line=2, octave_change=None, show=True, *args, **kwargs):
+    def __init__(self, sign: str = 'G', line: int = 2, octave_change: int = None, show: bool = True, *args, **kwargs):
         super().__init__()
         self._xml_object = self.XMLClass(*args, **kwargs)
         self._show = None
-        self._sign = None
-        self._line = None
-        self._octave_change = None
         self.show = show
         self.line = line
         self.sign = sign
         self.octave_change = octave_change
 
     @property
-    def line(self):
-        return self._line
+    def line(self) -> Optional[int]:
+        """
+        Sets and gets ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLLine`
+
+        :return: ``self.xml_object.xml_line.value_``
+        :rtype: int, None
+        """
+        if self.xml_object.xml_line:
+            return self.xml_object.xml_line.value_
 
     @line.setter
     def line(self, val):
-        self._line = val
         self.xml_object.xml_line = val
 
     @property
-    def octave_change(self):
-        return self._octave_change
+    def octave_change(self) -> Optional[int]:
+        """
+        Sets and gets ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLClefOctaveChange`
+
+        :return: ``self.xml_object.xml_clef_octave_change.value_``
+        :rtype: int, None
+        """
+
+        if self.xml_object.xml_clef_octave_change:
+            return self.xml_object.xml_clef_octave_change.value_
 
     @octave_change.setter
     def octave_change(self, val):
-        self._octave_change = val
         self.xml_object.xml_clef_octave_change = val
 
     @property
-    def sign(self):
-        return self._sign
+    def sign(self) -> Optional[str]:
+        """
+        Sets and gets ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLSign`
+
+        :return: ``self.xml_object.xml_sign.value_``
+        :rtype: str, None
+        """
+        if self.xml_object.xml_sign:
+            return self.xml_object.xml_sign.value_
 
     @sign.setter
     def sign(self, val):
-        self._sign = val
-        self.xml_sign = val
+        self.xml_object.xml_sign = val
 
     @property
-    def show(self):
+    def show(self) -> bool:
+        """
+        Sets and gets show attribute. If ``False`` :obj:`Clef` element is not shown.
+        """
         return self._show
 
     @show.setter
@@ -70,20 +91,44 @@ class Clef(XMLWrapper):
 
 
 class TrebleClef(Clef):
-    def __init__(self, show=True, octave_change=None, *kwargs):
+    """
+    Default parameters:
+      - sign='G'
+      - line=2
+    """
+
+    def __init__(self, show: bool = True, octave_change: Optional[int] = None, *kwargs):
         super().__init__(sign='G', line=2, show=show, octave_change=octave_change, *kwargs)
 
 
-class BaseClef(Clef):
-    def __init__(self, show=True, octave_change=None, *kwargs):
+class BassClef(Clef):
+    """
+    Default parameters:
+      - sign='F'
+      - line=4
+    """
+
+    def __init__(self, show: bool = True, octave_change: Optional[int] = None, *kwargs):
         super().__init__(sign='F', line=4, show=show, octave_change=octave_change, *kwargs)
 
 
 class AltoClef(Clef):
-    def __init__(self, show=True, octave_change=None, *kwargs):
+    """
+    Default parameters:
+      - sign='C'
+      - line=3
+    """
+
+    def __init__(self, show: bool = True, octave_change: Optional[int] = None, *kwargs):
         super().__init__(sign='C', line=3, show=show, octave_change=octave_change, *kwargs)
 
 
 class TenorClef(Clef):
-    def __init__(self, show=True, octave_change=None, *kwargs):
+    """
+    Default parameters:
+      - sign='C'
+      - line=4
+    """
+
+    def __init__(self, show: bool = True, octave_change: Optional[int] = None, *kwargs):
         super().__init__(sign='C', line=4, show=show, octave_change=octave_change, *kwargs)

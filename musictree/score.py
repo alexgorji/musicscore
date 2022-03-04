@@ -71,7 +71,7 @@ class Score(MusicTree, XMLWrapper):
     @property
     def page_layout(self) -> PageLayout:
         """
-        Sets and gets page layout. While setting page layout's parent is set to self.
+        Sets and gets page layout. After setting value, page layout's parent is set to self.
 
         :type: :obj:`~musictree.pagelayout.PageLayout`
         :return: :obj:`~musictree.pagelayout.PageLayout`
@@ -103,7 +103,7 @@ class Score(MusicTree, XMLWrapper):
     @property
     def staff_layout(self):
         """
-        Sets and gets staff layout. While setting staff layout's parent is set to self.
+        Sets and gets staff layout. After setting value, staff layout's parent is set to self.
 
         :type: :obj:`~musictree.stafflayout.StaffLayout`
         :return: :obj:`~musictree.stafflayout.StaffLayout`
@@ -151,7 +151,7 @@ class Score(MusicTree, XMLWrapper):
     @property
     def system_layout(self):
         """
-        Sets and gets system layout. While setting system layout's parent is set to self.
+        Sets and gets system layout. After setting value, system layout's parent is set to self.
 
         :type: :obj:`~musictree.systemlayout.SystemLayout`
         :return: :obj:`~musictree.systemlayout.SystemLayout`

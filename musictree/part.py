@@ -158,7 +158,7 @@ class Part(MusicTree, XMLWrapper):
     @property
     def name(self) -> str:
         """
-        Set and get name. While setting tries to update name of :obj:`musictree.part.score_part`
+        Set and get name. Setting tries to update name of :obj:`musictree.part.score_part`
 
         :type: str
         :return: part's name. If no name is set part's :obj:`id_` is returned.

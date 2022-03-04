@@ -3,6 +3,7 @@ from musicxml.xmlelement.xmlelement import XMLF, XMLFf, XMLFff, XMLFfff, XMLFfff
 
 from musictree.xmlwrapper import XMLWrapper
 
+#:
 DYNAMICS = {"f": XMLF,
             "ff": XMLFf,
             "fff": XMLFff,
@@ -32,8 +33,11 @@ DYNAMICS = {"f": XMLF,
 
 
 class Dynamics(XMLWrapper):
+    """
+    This is a simple wrapper for dynamics objects. Value must be a key in :obj:`DYNAMICS`.
+    """
 
-    def __init__(self, value, *args, **kwargs):
+    def __init__(self, value: str, *args, **kwargs):
         super().__init__()
-        dynamics_class = DYNAMICS[value]
-        self._xml_object = dynamics_class(*args, **kwargs)
+        self.XMLClass = DYNAMICS[value]
+        self._xml_object = self.XMLClass(*args, **kwargs)

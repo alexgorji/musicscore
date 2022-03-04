@@ -1,6 +1,6 @@
 from typing import List, Optional, Union
 
-from musictree.clef import BaseClef, TrebleClef
+from musictree.clef import BassClef, TrebleClef
 from musictree.core import MusicTree
 from musictree.key import Key
 from musictree.staff import Staff
@@ -112,26 +112,26 @@ class Measure(MusicTree, XMLWrapper):
             self.get_children()[0].clef = TrebleClef()
         elif number_of_children == 2:
             self.get_children()[0].clef = TrebleClef()
-            self.get_children()[1].clef = BaseClef()
+            self.get_children()[1].clef = BassClef()
         elif number_of_children == 3:
             self.get_children()[0].clef = TrebleClef(octave_change=2)
             self.get_children()[1].clef = TrebleClef()
-            self.get_children()[2].clef = BaseClef()
+            self.get_children()[2].clef = BassClef()
         elif number_of_children == 4:
             self.get_children()[0].clef = TrebleClef(octave_change=2)
             self.get_children()[1].clef = TrebleClef()
-            self.get_children()[2].clef = BaseClef()
-            self.get_children()[3].clef = BaseClef(octave_change=-2)
+            self.get_children()[2].clef = BassClef()
+            self.get_children()[3].clef = BassClef(octave_change=-2)
         else:
             for index, child in enumerate(self.get_children()):
                 if index == 0:
                     child.clef = TrebleClef(octave_change=2)
                 elif index == number_of_children - 1:
-                    child.clef = BaseClef(octave_change=-2)
+                    child.clef = BassClef(octave_change=-2)
                 elif index < number_of_children / 2:
                     child.clef = TrebleClef()
                 else:
-                    child.clef = BaseClef()
+                    child.clef = BassClef()
 
     def _update_divisions(self):
         chord_divisions = {ch.quarter_duration.denominator for ch in self.get_chords()}
@@ -216,8 +216,8 @@ class Measure(MusicTree, XMLWrapper):
     @property
     def time(self) -> Time:
         """
-        Sets and gets time. While setting times parent_measure is set to self and method :obj:`musictree.voice.Voice.update_beats()` of
-        descendent voices is called.
+        Sets and gets time. After setting value, parent_measure is set to self and method :obj:`musictree.voice.Voice.update_beats(
+        )` of descendent voices is called.
 
         :type: Optional[:obj:`~musictree.time.Time`]
         :type: :obj:`~musictree.time.Time`

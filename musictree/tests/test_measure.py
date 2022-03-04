@@ -4,7 +4,7 @@ from musicxml.xmlelement.xmlelement import *
 from quicktions import Fraction
 
 from musictree.chord import Chord
-from musictree.clef import Clef, BaseClef
+from musictree.clef import Clef, BassClef
 from musictree.exceptions import VoiceIsAlreadyFullError
 from musictree.measure import Measure, generate_measures
 from musictree.part import Part
@@ -426,7 +426,7 @@ class TestUpdateAccidentals(IdTestCase):
         m.add_chord(Chord(60, 4), staff_number=1, voice_number=2)
         m.add_chord(Chord(48, 4), staff_number=2, voice_number=1)
         m.add_chord(Chord(36, 4), staff_number=2, voice_number=2)
-        m.clefs[1] = BaseClef()
+        m.clefs[1] = BassClef()
         m.update()
         ch1, ch2, ch3, ch4 = m.get_chords()
         assert ch1.notes[0].xml_staff.value_ == 1

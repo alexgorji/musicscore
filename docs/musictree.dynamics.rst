@@ -6,3 +6,4 @@ musictree.dynamics
    :undoc-members:
    :show-inheritance:
    :inherited-members:
+   :exclude-members: XMLClass, xml_object

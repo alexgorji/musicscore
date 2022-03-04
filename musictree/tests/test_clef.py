@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from musictree.clef import Clef, TrebleClef, BaseClef, TenorClef, AltoClef
+from musictree.clef import Clef, TrebleClef, BassClef, TenorClef, AltoClef
 
 
 class TestClef(TestCase):
@@ -27,7 +27,7 @@ class TestClef(TestCase):
         c = TrebleClef()
         assert c.sign == 'G'
         assert c.line == 2
-        c = BaseClef()
+        c = BassClef()
         assert c.sign == 'F'
         assert c.line == 4
         c = TenorClef()

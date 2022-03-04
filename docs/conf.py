@@ -35,6 +35,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.autosummary',
               'sphinx.ext.autosectionlabel',
               'sphinx.ext.doctest',
+              'sphinx.ext.todo',
               ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -64,3 +65,7 @@ autodoc_member_order = 'groupwise'
 html_theme_options = {
     "collapse_navigation": True
 }
+
+autodoc_typehints = "description"
+
+todo_include_todos = True
