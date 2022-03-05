@@ -30,9 +30,12 @@ typed_elements = set(
     (node.attrib['name'], node.attrib['type']) for node in musicxml_xsd_et_root.iter() if node.tag == f'{ns}element' and
     node.attrib.get('type') is not None
 )
-typed_elements.add(('measure', 'measure'))
+typed_elements.add(('score-partwise', 'score-partwise'))
 typed_elements.add(('part', 'part'))
+typed_elements.add(('measure', 'measure'))
 typed_elements.add(('directive', 'directive'))
+
+typed_elements = sorted(typed_elements)
 
 
 def generate_child_parent_dict() -> dict:
@@ -63,7 +66,7 @@ def generate_child_parent_dict() -> dict:
 child_parent_dict = generate_child_parent_dict()
 
 extra_classes = {
-    'score-parwise':
+    'score-partwise':
         {'search_for': ".//{*}element[@name='score-partwise']",
          'xsd_type': 'XSDComplexTypeScorePartwise',
          },
@@ -82,6 +85,10 @@ extra_classes = {
          }
 }
 
+xml_element_class_names = []
+
+
+# xml_element_class_names = ['XMLScorePartwise']
 
 def element_class_as_string(element_name_type):
     def get_doc():
@@ -192,9 +199,10 @@ def element_class_as_string(element_name_type):
                     output = output.replace('\n', '\n    ')
         else:
             pass
-        output += '\n'
-        output += '\n'
-        output += get_possible_parents()
+        if element_name_type[0] != 'score-partwise':
+            output += '\n'
+            output += '\n'
+            output += get_possible_parents()
         return output
 
     search_for = extra_classes[element_name_type[0]]['search_for'] if extra_classes.get(
@@ -223,16 +231,15 @@ def element_class_as_string(element_name_type):
     t = Template(template_string).substitute(class_name=class_name, base_classes=', '.join(base_classes), xsd_type=xsd_type,
                                              search_for=search_for, doc=get_doc())
     if element_name_type[0] == 'score-partwise':
+        t += '\n'
         t += """    def write(self, path, intelligent_choice=False):
         with open(path, 'w') as file:
-            file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
+            file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\\n')
             file.write(self.to_string(intelligent_choice=intelligent_choice))
 """
     return t
 
 
-# xml_element_class_names = []
-xml_element_class_names = ['XMLScorePartwise']
 with open(target_path, 'w+') as f:
     with open(default_path, 'r') as default:
         with redirect_stdout(f):

@@ -90,20 +90,14 @@ class XSDComplexType(XSDTreeElement):
 
 
 class XSDComplexTypeScorePartwise(XSDComplexType):
-    """
-    .. todo::
-       documentation
-    """
     _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-partwise']//{*}complexType"
 
 
 class XSDComplexTypePart(XSDComplexType):
-
     _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-partwise']//{*}complexType//{*}complexType"
 
 
 class XSDComplexTypeMeasure(XSDComplexType):
-
     _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-partwise']//{*}complexType//{*}complexType//{*}complexType"
 
 
@@ -206,7 +200,7 @@ The pizzicato attribute is used when just this note is sounded pizzicato, vs. th
     <xs:attributeGroup ref="optional-unique-id" />
 </xs:complexType>
 """
-                                     ))
+                                      ))
 # -----------------------------------------------------
 # AUTOMATICALLY GENERATED WITH generate_complex_types.py
 # -----------------------------------------------------

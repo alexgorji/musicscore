@@ -368,22 +368,6 @@ class XMLElement(Tree):
                         return None
                 raise AttributeError(self._get_attributes_error_message(item))
 
-
-class XMLScorePartwise(XMLElement):
-    """
-    The score-partwise element is the root element for a partwise MusicXML score. It includes a score-header group followed by a series of parts with measures inside. The document-attributes attribute group includes the version attribute.
-
-    .. todo::
-       documentation
-    """
-    TYPE = XSDComplexTypeScorePartwise
-    _SEARCH_FOR_ELEMENT = f".//{ns}element[@name='score-partwise']"
-
-    def write(self, path, intelligent_choice=False):
-        with open(path, 'w') as file:
-            file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
-            file.write(self.to_string(intelligent_choice=intelligent_choice))
-
 # -----------------------------------------------------
 # AUTOMATICALLY GENERATED WITH generate_xml_elements.py
 # -----------------------------------------------------
