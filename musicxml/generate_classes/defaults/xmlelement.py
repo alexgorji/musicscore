@@ -51,14 +51,14 @@ class XMLElement(Tree):
             raise TypeError
 
     def _check_required_attributes(self):
-        if self.TYPE.XSD_TREE.is_complex_type:
+        if self.TYPE.get_xsd_tree().is_complex_type:
             required_attributes = [attribute for attribute in self.TYPE.get_xsd_attributes() if attribute.is_required]
             for required_attribute in required_attributes:
                 if required_attribute.name not in self.attributes:
                     raise XSDAttributeRequiredException(f"{self.__class__.__name__} requires attribute: {required_attribute.name}")
 
     def _check_required_value(self):
-        if self.TYPE.XSD_TREE.is_simple_type and self.value_ is None:
+        if self.TYPE.get_xsd_tree().is_simple_type and self.value_ is None:
             raise ValueError(f"{self.__class__.__name__} needs a value.")
 
     def _convert_attribute_to_child(self, name, value):
@@ -89,7 +89,7 @@ class XMLElement(Tree):
 
     def _create_child_container_tree(self):
         try:
-            if self.TYPE.XSD_TREE.is_complex_type:
+            if self.TYPE.get_xsd_tree().is_complex_type:
                 self._child_container_tree = copy.copy(containers[self.TYPE.__name__])
                 self._child_container_tree._parent_xml_element = self
         except KeyError:
@@ -126,7 +126,7 @@ class XMLElement(Tree):
         if val is None:
             return
 
-        if self.TYPE.XSD_TREE.is_simple_type:
+        if self.TYPE.get_xsd_tree().is_simple_type:
             if val:
                 raise XSDWrongAttribute(f'{self.__class__.__name__} has no attributes.')
 
@@ -464,14 +464,14 @@ class XMLElement(Tree):
             raise TypeError
 
     def _check_required_attributes(self):
-        if self.TYPE.XSD_TREE.is_complex_type:
+        if self.TYPE.get_xsd_tree().is_complex_type:
             required_attributes = [attribute for attribute in self.TYPE.get_xsd_attributes() if attribute.is_required]
             for required_attribute in required_attributes:
                 if required_attribute.name not in self.attributes:
                     raise XSDAttributeRequiredException(f"{self.__class__.__name__} requires attribute: {required_attribute.name}")
 
     def _check_required_value(self):
-        if self.TYPE.XSD_TREE.is_simple_type and self.value_ is None:
+        if self.TYPE.get_xsd_tree().is_simple_type and self.value_ is None:
             raise ValueError(f"{self.__class__.__name__} needs a value.")
 
     def _convert_attribute_to_child(self, name, value):
@@ -502,7 +502,7 @@ class XMLElement(Tree):
 
     def _create_child_container_tree(self):
         try:
-            if self.TYPE.XSD_TREE.is_complex_type:
+            if self.TYPE.get_xsd_tree().is_complex_type:
                 self._child_container_tree = copy.copy(containers[self.TYPE.__name__])
                 self._child_container_tree._parent_xml_element = self
         except KeyError:
@@ -539,7 +539,7 @@ class XMLElement(Tree):
         if val is None:
             return
 
-        if self.TYPE.XSD_TREE.is_simple_type:
+        if self.TYPE.get_xsd_tree().is_simple_type:
             if val:
                 raise XSDWrongAttribute(f'{self.__class__.__name__} has no attributes.')
 

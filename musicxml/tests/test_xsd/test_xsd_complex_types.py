@@ -17,18 +17,18 @@ class TestComplexTypes(MusicXmlTestCase):
         Test that the instance of an in module musicxml.types.complextype generated class can show corresponding xsd
         """
         expected = """<xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fingering">
-    <xs:annotation>
-        <xs:documentation>Fingering is typically indicated 1,2,3,4,5. Multiple fingerings may be given, typically to substitute fingerings in the middle of a note. The substitution and alternate values are "no" if the attribute is not present. For guitar and other fretted instruments, the fingering element represents the fretting finger; the pluck element represents the plucking finger.</xs:documentation>
-    </xs:annotation>
-    <xs:simpleContent>
-        <xs:extension base="xs:string">
-            <xs:attribute name="substitution" type="yes-no" />
-            <xs:attribute name="alternate" type="yes-no" />
-            <xs:attributeGroup ref="print-style" />
-            <xs:attributeGroup ref="placement" />
-        </xs:extension>
-    </xs:simpleContent>
-</xs:complexType>
+		<xs:annotation>
+			<xs:documentation>Fingering is typically indicated 1,2,3,4,5. Multiple fingerings may be given, typically to substitute fingerings in the middle of a note. The substitution and alternate values are "no" if the attribute is not present. For guitar and other fretted instruments, the fingering element represents the fretting finger; the pluck element represents the plucking finger.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="substitution" type="yes-no" />
+				<xs:attribute name="alternate" type="yes-no" />
+				<xs:attributeGroup ref="print-style" />
+				<xs:attributeGroup ref="placement" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 """
         assert XSDComplexTypeFingering.get_xsd() == expected
 
