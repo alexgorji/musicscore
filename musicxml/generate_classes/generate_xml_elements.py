@@ -34,20 +34,32 @@ typed_elements = set(
 )
 
 
-# def generate_child_parent_dict() -> dict:
-#     """
-#     :return: a dictionary with name of a child XMLElement as key assiciated with a tuple of possible XMLElement parent names.
-#
-#     >>> child_parent_dict = generate_child_parent_dict()
-#     >>> child_parent_dict['XMLPageLayout']
-#     ('XMLDefault', 'XMLPrint')
-#     """
-#     output = {}
-#     for name, type_ in typed_elements:
-#         print(name, type_)
-#         pass
-#     #     container = containers[type_]
-#     return output
+def generate_child_parent_dict() -> dict:
+    """
+    :return: a dictionary with name of a child XMLElement as key assiciated with a tuple of possible XMLElement parent names.
+
+    >>> child_parent_dict = generate_child_parent_dict()
+    >>> child_parent_dict['XMLStaccato']
+    {'XMLArticulations'}
+    """
+    output = {}
+    for name, type_ in typed_elements:
+        try:
+            class_name = convert_to_xml_class_name(name)
+            type_name = convert_to_xsd_class_name(type_, type_='complex_type')
+            container = containers[type_name]
+            elements = sorted(set(convert_to_xml_class_name(l.content.name) for l in container.iterate_leaves()))
+            for el in elements:
+                if output.get(el):
+                    output[el].add(class_name)
+                else:
+                    output[el] = {class_name}
+        except (KeyError, ValueError):
+            pass
+    return output
+
+
+child_parent_dict = generate_child_parent_dict()
 
 
 def element_class_as_string(element_):
@@ -85,6 +97,18 @@ def element_class_as_string(element_):
                 pass
             return output
 
+        def get_possible_parents():
+            parent_names=child_parent_dict.get(class_name)
+            if parent_names is None:
+                return """
+    .. todo::         
+       Possible parents
+"""
+            possible_parents = ", ".join(sorted(set(f":obj:`~{parent_name}`" for parent_name in parent_names)))
+            output = "``Possible parents``:"
+            output += f"{possible_parents}"
+            return output
+
         def get_possible_children(container):
             possible_children = ", ".join(sorted(set(f":obj:`~{convert_to_xml_class_name(l.content.name)}`" for l in
                                                      container.iterate_leaves())))
@@ -93,8 +117,11 @@ def element_class_as_string(element_):
             output += f"    {possible_children}"
             return output
 
-        output = xsd_tree.get_doc()
-        output += get_external_doc_link()
+        output = get_external_doc_link()
+        if xsd_tree.get_doc():
+            output += '\n'
+            output += '\n'
+            output += xsd_tree.get_doc()
         output += '\n'
         output += '\n'
         if xsd_type in all_complex_types:
@@ -121,9 +148,9 @@ def element_class_as_string(element_):
                         output += '\n'
 
                     output += get_possible_children(container)
+                    output += '\n'
+                    output += '\n'
 
-                    output += '\n'
-                    output += '\n'
                     output += "    ``XSD structure:``\n"
                     output += '\n'
                     output += "    .. code-block::\n"
@@ -144,8 +171,9 @@ def element_class_as_string(element_):
                     output = output.replace('\n', '\n    ')
         else:
             pass
-        if output is None:
-            output = ""
+        output += '\n'
+        output += '\n'
+        output += get_possible_parents()
         return output
 
     found_et_xml = musicxml_xsd_et_root.find(f".//{{*}}element[@name='{element_[0]}'][@type='{element_[1]}']")
