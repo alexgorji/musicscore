@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 
 class XSDComplexType(XSDTreeElement):
     _SIMPLE_CONTENT = None
+    _SEARCH_FOR_ELEMENT = ''
 
     def __init__(self, value=None, parent=None, *args, **kwargs):
         super().__init__(*args, **kwargs)

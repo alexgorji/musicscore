@@ -9,12 +9,6 @@ parent_folder = Path(__file__).parent
 
 class TestScore(TestCase):
 
-    def test_score_partwise_doc(self):
-        score = XMLScorePartwise()
-        assert score.__doc__ == """
-    The score-partwise element is the root element for a partwise MusicXML score. It includes a score-header group followed by a series of parts with measures inside. The document-attributes attribute group includes the version attribute.
-"""
-
     def test_score_partwise_type(self):
         score = XMLScorePartwise()
         assert score.TYPE == XSDComplexTypeScorePartwise

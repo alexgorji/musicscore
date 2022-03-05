@@ -175,8 +175,8 @@ def element_class_as_string(element_):
         output += '\n'
         output += get_possible_parents()
         return output
-
-    found_et_xml = musicxml_xsd_et_root.find(f".//{{*}}element[@name='{element_[0]}'][@type='{element_[1]}']")
+    search_for = f".//{{*}}element[@name='{element_[0]}'][@type='{element_[1]}']"
+    found_et_xml = musicxml_xsd_et_root.find(search_for)
     copied_el = copy.deepcopy(found_et_xml)
     if copied_el.attrib.get('minOccurs'):
         copied_el.attrib.pop('minOccurs')
@@ -192,8 +192,8 @@ def element_class_as_string(element_):
     except ValueError:
         xsd_type = convert_to_xsd_class_name(xsd_tree.get_attributes()['type'], 'simple_type')
     base_classes = ('XMLElement',)
-    ET.indent(found_et_xml, space='    '),
-    search_for = f".//{{*}}element[@name='{element_[0]}'][@type='{element_[1]}']"
+    # ET.indent(found_et_xml, space='    '),
+
 
     t = Template(template_string).substitute(class_name=class_name, base_classes=', '.join(base_classes), xsd_type=xsd_type,
                                              search_for=search_for, doc=get_doc())

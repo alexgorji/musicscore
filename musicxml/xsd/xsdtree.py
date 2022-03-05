@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 from contextlib import redirect_stdout
 from typing import Optional
 
+from musicxml.generate_classes.utils import musicxml_xsd_et_root
 from musicxml.util.helprervariables import xml_name_first_character_without_colon, name_character_without_colon, name_character, \
     xml_name_first_character
 from tree.tree import Tree
@@ -282,6 +283,11 @@ class XSDTreeElement:
     Abstract class of all generated XSD Classes
     """
     XSD_TREE: Optional[XSDTree] = None
+    _SEARCH_FOR_ELEMENT = ""
+
+    @classmethod
+    def get_xsd_tree(cls):
+        return XSDTree(musicxml_xsd_et_root.find(cls._SEARCH_FOR_ELEMENT))
 
     @classmethod
     def get_xsd(cls):
