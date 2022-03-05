@@ -7541,7 +7541,14 @@ The score-partwise element is the root element for a partwise MusicXML score. It
     TYPE = XSDComplexTypeScorePartwise
     _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-partwise']"
 
-    def write(self, path, intelligent_choice=False):
+    def write(self, path: 'pathlib.Path', intelligent_choice: bool=False) -> None:
+        """
+        :param path: Output xml file path, required.
+        :param intelligent_choice: Set to True if you wish to use intelligent choice in final checks to be able to change the attachment 
+                                   order of XMLElement children in self.child_container_tree if an Exception was thrown and other choices 
+                                   can still be checked. (No GUARANTEE!)
+        :return: None
+        """
         with open(path, 'w') as file:
             file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
             file.write(self.to_string(intelligent_choice=intelligent_choice))

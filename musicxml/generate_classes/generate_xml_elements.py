@@ -232,7 +232,14 @@ def element_class_as_string(element_name_type):
                                              search_for=search_for, doc=get_doc())
     if element_name_type[0] == 'score-partwise':
         t += '\n'
-        t += """    def write(self, path, intelligent_choice=False):
+        t += """    def write(self, path: 'pathlib.Path', intelligent_choice: bool=False) -> None:
+        \"\"\"
+        :param path: Output xml file path, required.
+        :param intelligent_choice: Set to True if you wish to use intelligent choice in final checks to be able to change the attachment 
+                                   order of XMLElement children in self.child_container_tree if an Exception was thrown and other choices 
+                                   can still be checked. (No GUARANTEE!)
+        :return: None
+        \"\"\"
         with open(path, 'w') as file:
             file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\\n')
             file.write(self.to_string(intelligent_choice=intelligent_choice))
