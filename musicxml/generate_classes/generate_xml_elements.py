@@ -26,8 +26,6 @@ class $class_name($base_classes):
     _SEARCH_FOR_ELEMENT = "$search_for"
 """
 
-xml_element_class_names = ['XMLScorePartwise']
-
 typed_elements = set(
     (node.attrib['name'], node.attrib['type']) for node in musicxml_xsd_et_root.iter() if node.tag == f'{ns}element' and
     node.attrib.get('type') is not None
@@ -64,20 +62,25 @@ def generate_child_parent_dict() -> dict:
 
 child_parent_dict = generate_child_parent_dict()
 
-extra_classes = {'measure':
-                     {'search_for': ".//{*}element[@name='score-partwise']//{*}element[@name='measure']",
-                      'xsd_type': 'XSDComplexTypeMeasure'
-                      },
-                 'part':
-                     {'search_for': ".//{*}element[@name='score-partwise']//{*}element[@name='part']",
-                      'xsd_type': 'XSDComplexTypePart'
-                      },
-                 'directive':
-                     {'search_for':".//{*}complexType[@name='attributes']//{*}element[@name='directive']",
-                      'xsd_type': 'XSDComplexTypeDirective'
+extra_classes = {
+    'score-parwise':
+        {'search_for': ".//{*}element[@name='score-partwise']",
+         'xsd_type': 'XSDComplexTypeScorePartwise',
+         },
+    'part':
+        {'search_for': ".//{*}element[@name='score-partwise']//{*}element[@name='part']",
+         'xsd_type': 'XSDComplexTypePart'
+         },
+    'measure':
+        {'search_for': ".//{*}element[@name='score-partwise']//{*}element[@name='measure']",
+         'xsd_type': 'XSDComplexTypeMeasure'
+         },
+    'directive':
+        {'search_for': ".//{*}complexType[@name='attributes']//{*}element[@name='directive']",
+         'xsd_type': 'XSDComplexTypeDirective'
 
-                     }
-                 }
+         }
+}
 
 
 def element_class_as_string(element_name_type):
@@ -219,9 +222,17 @@ def element_class_as_string(element_name_type):
 
     t = Template(template_string).substitute(class_name=class_name, base_classes=', '.join(base_classes), xsd_type=xsd_type,
                                              search_for=search_for, doc=get_doc())
+    if element_name_type[0] == 'score-partwise':
+        t += """    def write(self, path, intelligent_choice=False):
+        with open(path, 'w') as file:
+            file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
+            file.write(self.to_string(intelligent_choice=intelligent_choice))
+"""
     return t
 
 
+# xml_element_class_names = []
+xml_element_class_names = ['XMLScorePartwise']
 with open(target_path, 'w+') as f:
     with open(default_path, 'r') as default:
         with redirect_stdout(f):
