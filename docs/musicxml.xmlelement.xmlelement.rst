@@ -99,7 +99,6 @@
       XMLDuration
       XMLDynamics
       XMLEffect
-      XMLElement
       XMLElevation
       XMLElision
       XMLEncoder

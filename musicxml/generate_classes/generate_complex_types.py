@@ -18,10 +18,6 @@ class $class_name($base_classes):
     
     _SIMPLE_CONTENT = $simple_content
     _SEARCH_FOR_ELEMENT = "$search_for"
-    XSD_TREE = XSDTree(ET.fromstring(\"\"\"
-$xsd_string
-\"\"\"
-                                     ))
 """
 
 xsd_complex_types = ['XSDComplexType', 'XSDComplexTypeScorePartwise', 'XSDComplexTypePart', 'XSDComplexTypeMeasure',
@@ -59,10 +55,8 @@ def complex_type_class_as_string(complex_type_element_name):
         else:
             base_class_names.append(cls_name)
 
-    ET.indent(complex_type_element, space='    '),
-    xsd_string = ET.tostring(complex_type_element, encoding='unicode').strip()
     t = Template(template_string).substitute(class_name=class_name, base_classes=', '.join(base_class_names), simple_content=simple_content,
-                                             doc=get_doc(), xsd_string=xsd_string, search_for=search_for)
+                                             doc=get_doc(), search_for=search_for)
     return t
 
 
@@ -70,7 +64,9 @@ all_complex_type_et_elements = [ct for ct in get_all_et_elements(sources_path, '
 
 all_complex_type_names = [ct.attrib.get('name') for ct in musicxml_xsd_et_root.findall(
     f".//{{*}}complexType") if ct.attrib.get('name')]
+
 all_complex_type_names.remove('note')
+# all_complex_type_names.extend(['part', 'measure'])
 
 with open(target_path, 'w+') as f:
     with open(default_path, 'r') as default:

@@ -26,12 +26,15 @@ class $class_name($base_classes):
     _SEARCH_FOR_ELEMENT = "$search_for"
 """
 
-xml_element_class_names = ['XMLScorePartwise', 'XMLPart', 'XMLMeasure', 'XMLDirective']
+xml_element_class_names = ['XMLScorePartwise']
 
 typed_elements = set(
     (node.attrib['name'], node.attrib['type']) for node in musicxml_xsd_et_root.iter() if node.tag == f'{ns}element' and
     node.attrib.get('type') is not None
 )
+typed_elements.add(('measure', 'measure'))
+typed_elements.add(('part', 'part'))
+typed_elements.add(('directive', 'directive'))
 
 
 def generate_child_parent_dict() -> dict:
@@ -61,12 +64,27 @@ def generate_child_parent_dict() -> dict:
 
 child_parent_dict = generate_child_parent_dict()
 
+extra_classes = {'measure':
+                     {'search_for': ".//{*}element[@name='score-partwise']//{*}element[@name='measure']",
+                      'xsd_type': 'XSDComplexTypeMeasure'
+                      },
+                 'part':
+                     {'search_for': ".//{*}element[@name='score-partwise']//{*}element[@name='part']",
+                      'xsd_type': 'XSDComplexTypePart'
+                      },
+                 'directive':
+                     {'search_for':".//{*}complexType[@name='attributes']//{*}element[@name='directive']",
+                      'xsd_type': 'XSDComplexTypeDirective'
 
-def element_class_as_string(element_):
+                     }
+                 }
+
+
+def element_class_as_string(element_name_type):
     def get_doc():
         def get_external_doc_link():
 
-            return f"`external documentation <https://www.w3.org/2021/06/musicxml40/musicxml-reference/elements/{element_[0]}/>`_"
+            return f"`external documentation <https://www.w3.org/2021/06/musicxml40/musicxml-reference/elements/{element_name_type[0]}/>`_"
 
         def get_attributes_doc():
             output = ""
@@ -98,7 +116,7 @@ def element_class_as_string(element_):
             return output
 
         def get_possible_parents():
-            parent_names=child_parent_dict.get(class_name)
+            parent_names = child_parent_dict.get(class_name)
             if parent_names is None:
                 return """
     .. todo::         
@@ -135,30 +153,30 @@ def element_class_as_string(element_):
                 output += complex_type_doc
                 if output.count('\n') > 1:
                     output = output.replace('\n', '\n    ')
-                if get_attributes_doc() != '':
-                    output += '\n'
-                    output += '\n'
-                    output += get_attributes_doc()
-                try:
-                    container = containers[xsd_type]
-                    container_tree_representation = copy.copy(container).tree_representation(tab=lambda x: (x.level * '    ') + '       ')
-                    container_tree_representation = container_tree_representation[:-1]
-                    if output != "":
-                        output += '\n'
-                        output += '\n'
-
-                    output += get_possible_children(container)
+            if get_attributes_doc() != '':
+                output += '\n'
+                output += '\n'
+                output += get_attributes_doc()
+            try:
+                container = containers[xsd_type]
+                container_tree_representation = copy.copy(container).tree_representation(tab=lambda x: (x.level * '    ') + '       ')
+                container_tree_representation = container_tree_representation[:-1]
+                if output != "":
                     output += '\n'
                     output += '\n'
 
-                    output += "    ``XSD structure:``\n"
-                    output += '\n'
-                    output += "    .. code-block::\n"
-                    output += '\n'
-                    output += container_tree_representation
+                output += get_possible_children(container)
+                output += '\n'
+                output += '\n'
 
-                except KeyError:
-                    pass
+                output += "    ``XSD structure:``\n"
+                output += '\n'
+                output += "    .. code-block::\n"
+                output += '\n'
+                output += container_tree_representation
+
+            except KeyError:
+                pass
         elif xsd_type in all_simple_types:
             simple_type_doc = eval(xsd_type).__doc__
             if simple_type_doc:
@@ -175,7 +193,10 @@ def element_class_as_string(element_):
         output += '\n'
         output += get_possible_parents()
         return output
-    search_for = f".//{{*}}element[@name='{element_[0]}'][@type='{element_[1]}']"
+
+    search_for = extra_classes[element_name_type[0]]['search_for'] if extra_classes.get(
+        element_name_type[0]) else f".//{{*}}element[@name='{element_name_type[0]}'][@type='{element_name_type[1]}']"
+
     found_et_xml = musicxml_xsd_et_root.find(search_for)
     copied_el = copy.deepcopy(found_et_xml)
     if copied_el.attrib.get('minOccurs'):
@@ -185,15 +206,16 @@ def element_class_as_string(element_):
     xsd_tree = XSDTree(copied_el)
     class_name = convert_to_xml_class_name(xsd_tree.name)
     xml_element_class_names.append(class_name)
-    try:
-        xsd_type = convert_to_xsd_class_name(xsd_tree.get_attributes()['type'], 'complex_type')
-        if xsd_type not in all_complex_types:
-            raise ValueError
-    except ValueError:
-        xsd_type = convert_to_xsd_class_name(xsd_tree.get_attributes()['type'], 'simple_type')
-    base_classes = ('XMLElement',)
-    # ET.indent(found_et_xml, space='    '),
 
+    xsd_type = extra_classes[element_name_type[0]]['xsd_type'] if extra_classes.get(element_name_type[0]) else None
+    if not xsd_type:
+        try:
+            xsd_type = convert_to_xsd_class_name(xsd_tree.get_attributes()['type'], 'complex_type')
+            if xsd_type not in all_complex_types:
+                raise ValueError
+        except ValueError:
+            xsd_type = convert_to_xsd_class_name(xsd_tree.get_attributes()['type'], 'simple_type')
+    base_classes = ('XMLElement',)
 
     t = Template(template_string).substitute(class_name=class_name, base_classes=', '.join(base_classes), xsd_type=xsd_type,
                                              search_for=search_for, doc=get_doc())
@@ -205,6 +227,6 @@ with open(target_path, 'w+') as f:
         with redirect_stdout(f):
             print(default.read())
     with redirect_stdout(f):
-        for element in typed_elements:
-            print(element_class_as_string(element))
+        for element_name_type in typed_elements:
+            print(element_class_as_string(element_name_type))
         print(f'__all__={xml_element_class_names}')

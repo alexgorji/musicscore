@@ -98,29 +98,18 @@ class XSDComplexTypeScorePartwise(XSDComplexType):
 
 
 class XSDComplexTypePart(XSDComplexType):
-    """
-    .. todo::
-       documentation
-    """
-    XSD_TREE = XSDTree(musicxml_xsd_et_root.find(".//{*}element[@name='score-partwise']//{*}complexType//{*}complexType"))
+
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-partwise']//{*}complexType//{*}complexType"
 
 
 class XSDComplexTypeMeasure(XSDComplexType):
-    """
-    .. todo::
-       documentation
-    """
-    XSD_TREE = XSDTree(musicxml_xsd_et_root.find(".//{*}element[@name='score-partwise']//{*}complexType//{*}complexType//{*}complexType"))
+
+    _SEARCH_FOR_ELEMENT = ".//{*}element[@name='score-partwise']//{*}complexType//{*}complexType//{*}complexType"
 
 
 class XSDComplexTypeDirective(XSDComplexType):
-    """
-    .. todo::
-       documentation
-    """
     _SIMPLE_CONTENT = XSDSimpleTypeString
-
-    XSD_TREE = XSDTree(musicxml_xsd_et_root.find(".//{*}complexType[@name='attributes']//{*}complexType"))
+    _SEARCH_FOR_ELEMENT = ".//{*}complexType[@name='attributes']//{*}complexType"
 
 
 # Note's choice is being manually reordered to avoid using intelligent choice for each Note without grace.
@@ -138,7 +127,7 @@ If a note is played only particular times through a repeat, the time-only attrib
 The pizzicato attribute is used when just this note is sounded pizzicato, vs. the pizzicato element which changes overall playback between pizzicato and arco.
 """
 
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="note">
     <xs:annotation>
         <xs:documentation>Notes are the most common type of MusicXML data. The MusicXML format distinguishes between elements used for sound information and elements used for notation information (e.g., tie is used for sound, tied for notation). Thus grace notes do not have a duration element. Cue notes have a duration element, as do forward elements, but no tie elements. Having these two types of information available can make interchange easier, as some programs handle one type of information more readily than the other.
