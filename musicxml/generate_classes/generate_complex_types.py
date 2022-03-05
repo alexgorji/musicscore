@@ -32,7 +32,7 @@ def complex_type_class_as_string(complex_type_element_name):
     def get_doc():
         output = xsd_tree.get_doc()
         if simple_content:
-            simple_doc = eval(simple_content).XSD_TREE.get_doc()
+            simple_doc = eval(simple_content).get_xsd_tree().get_doc()
             if simple_doc and simple_doc != "":
                 if output and output != "":
                     output += '\n'

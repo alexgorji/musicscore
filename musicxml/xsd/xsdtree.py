@@ -284,14 +284,18 @@ class XSDTreeElement:
     """
     XSD_TREE: Optional[XSDTree] = None
     _SEARCH_FOR_ELEMENT = ""
+    _XSD_TREE = None
 
     @classmethod
     def get_xsd_tree(cls):
+        if cls._XSD_TREE:
+            return cls._XSD_TREE
         found_xsd_element = musicxml_xsd_et_root.find(cls._SEARCH_FOR_ELEMENT)
         if not found_xsd_element:
             return cls.XSD_TREE
         else:
-            return XSDTree(found_xsd_element)
+            cls._XSD_TREE = XSDTree(found_xsd_element)
+            return cls._XSD_TREE
 
     @classmethod
     def get_xsd(cls):

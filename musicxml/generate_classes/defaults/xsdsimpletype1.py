@@ -50,7 +50,7 @@ class XSDSimpleType(XSDTreeElement):
             if v not in self._PERMITTED:
                 raise ValueError(f"{self._get_error_class()}.value '{v}' must be in {self._PERMITTED}")
         elif self._PATTERN:
-            restriction = self.XSD_TREE.get_restriction()
+            restriction = self.get_xsd_tree().get_restriction()
             if restriction:
                 if restriction.get_attributes()['base'] == 'xs:date':
                     XSDSimpleTypeDate(v)
@@ -62,7 +62,7 @@ class XSDSimpleType(XSDTreeElement):
                 raise ValueError(
                     f"{self._get_error_class()}.value '{v}' must match the following pattern: {self._PATTERN}")
         else:
-            restriction = self.XSD_TREE.get_restriction()
+            restriction = self.get_xsd_tree().get_restriction()
             if restriction:
                 restriction_children = restriction.get_children()
                 for child in restriction_children:
@@ -107,10 +107,10 @@ class XSDSimpleType(XSDTreeElement):
             return self.__class__.__name__
 
     def _populate_permitted(self):
-        self._PERMITTED = self.XSD_TREE.get_permitted()
+        self._PERMITTED = self.get_xsd_tree().get_permitted()
 
     def _populate_forced_permitted(self):
-        union = self.XSD_TREE.get_union()
+        union = self.get_xsd_tree().get_union()
         if union and union.get_children() and union.get_children()[0].tag == 'simpleType':
             intern_simple_type = union.get_children()[0]
             enumerations = [child for child in intern_simple_type.get_restriction().get_children() if child.tag
@@ -118,7 +118,7 @@ class XSDSimpleType(XSDTreeElement):
             self._FORCED_PERMITTED = [enumeration.get_attributes()['value'] for enumeration in enumerations]
 
     def _populate_pattern(self):
-        pattern = self.XSD_TREE.get_pattern(self.__class__.__mro__[1].XSD_TREE)
+        pattern = self.get_xsd_tree().get_pattern(self.__class__.__mro__[1].get_xsd_tree())
         if pattern:
             self._PATTERN = pattern
 
@@ -139,7 +139,7 @@ class XSDSimpleType(XSDTreeElement):
 
 class XSDSimpleTypeInteger(XSDSimpleType):
     _TYPES = [int]
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="integer" id="integer">
             <xs:restriction base="xs:decimal">
@@ -160,7 +160,7 @@ class XSDSimpleTypeInteger(XSDSimpleType):
 
 
 class XSDSimpleTypeNonNegativeInteger(XSDSimpleTypeInteger):
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="nonNegativeInteger" id="nonNegativeInteger">
             <xs:restriction base="xs:integer">
@@ -183,7 +183,7 @@ class XSDSimpleTypeNonNegativeInteger(XSDSimpleTypeInteger):
 
 class XSDSimpleTypePositiveInteger(XSDSimpleTypeInteger):
     _TYPES = [int]
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="positiveInteger" id="positiveInteger">
             <xs:restriction base="xs:nonNegativeInteger">
@@ -210,7 +210,7 @@ class XSDSimpleTypePositiveInteger(XSDSimpleTypeInteger):
 
 class XSDSimpleTypeDecimal(XSDSimpleType):
     _TYPES = [float, int]
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="decimal" id="decimal">
             <xs:restriction base="xs:anySimpleType">
@@ -232,7 +232,7 @@ class XSDSimpleTypeDecimal(XSDSimpleType):
 
 class XSDSimpleTypeString(XSDSimpleType):
     _TYPES = [str]
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="string" id="string">
             <xs:restriction base="xs:anySimpleType">
@@ -253,7 +253,7 @@ class XSDSimpleTypeString(XSDSimpleType):
 
 
 class XSDSimpleTypeToken(XSDSimpleTypeString):
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="token" id="token">
             <xs:restriction base="xs:normalizedString">
@@ -278,7 +278,7 @@ class XSDSimpleTypeDate(XSDSimpleTypeString):
     # [-]CCYY-MM-DD[Z|(+|-)hh:mm]
     # https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s07.html
 
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="date" id="date">
             <xs:restriction base="xs:anySimpleType">

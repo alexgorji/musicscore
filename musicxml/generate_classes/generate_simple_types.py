@@ -14,7 +14,7 @@ template_string = """
 class $class_name($base_classes):
     \"\"\"$doc\"\"\"
     
-    XSD_TREE = XSDTree(ET.fromstring(\"\"\"
+    _XSD_TREE = XSDTree(ET.fromstring(\"\"\"
 $xsd_string
 \"\"\"
                                      ))

@@ -50,7 +50,7 @@ class XSDSimpleType(XSDTreeElement):
             if v not in self._PERMITTED:
                 raise ValueError(f"{self._get_error_class()}.value '{v}' must be in {self._PERMITTED}")
         elif self._PATTERN:
-            restriction = self.XSD_TREE.get_restriction()
+            restriction = self.get_xsd_tree().get_restriction()
             if restriction:
                 if restriction.get_attributes()['base'] == 'xs:date':
                     XSDSimpleTypeDate(v)
@@ -62,7 +62,7 @@ class XSDSimpleType(XSDTreeElement):
                 raise ValueError(
                     f"{self._get_error_class()}.value '{v}' must match the following pattern: {self._PATTERN}")
         else:
-            restriction = self.XSD_TREE.get_restriction()
+            restriction = self.get_xsd_tree().get_restriction()
             if restriction:
                 restriction_children = restriction.get_children()
                 for child in restriction_children:
@@ -107,10 +107,10 @@ class XSDSimpleType(XSDTreeElement):
             return self.__class__.__name__
 
     def _populate_permitted(self):
-        self._PERMITTED = self.XSD_TREE.get_permitted()
+        self._PERMITTED = self.get_xsd_tree().get_permitted()
 
     def _populate_forced_permitted(self):
-        union = self.XSD_TREE.get_union()
+        union = self.get_xsd_tree().get_union()
         if union and union.get_children() and union.get_children()[0].tag == 'simpleType':
             intern_simple_type = union.get_children()[0]
             enumerations = [child for child in intern_simple_type.get_restriction().get_children() if child.tag
@@ -118,7 +118,7 @@ class XSDSimpleType(XSDTreeElement):
             self._FORCED_PERMITTED = [enumeration.get_attributes()['value'] for enumeration in enumerations]
 
     def _populate_pattern(self):
-        pattern = self.XSD_TREE.get_pattern(self.__class__.__mro__[1].XSD_TREE)
+        pattern = self.get_xsd_tree().get_pattern(self.__class__.__mro__[1].get_xsd_tree())
         if pattern:
             self._PATTERN = pattern
 
@@ -139,7 +139,7 @@ class XSDSimpleType(XSDTreeElement):
 
 class XSDSimpleTypeInteger(XSDSimpleType):
     _TYPES = [int]
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="integer" id="integer">
             <xs:restriction base="xs:decimal">
@@ -160,7 +160,7 @@ class XSDSimpleTypeInteger(XSDSimpleType):
 
 
 class XSDSimpleTypeNonNegativeInteger(XSDSimpleTypeInteger):
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="nonNegativeInteger" id="nonNegativeInteger">
             <xs:restriction base="xs:integer">
@@ -183,7 +183,7 @@ class XSDSimpleTypeNonNegativeInteger(XSDSimpleTypeInteger):
 
 class XSDSimpleTypePositiveInteger(XSDSimpleTypeInteger):
     _TYPES = [int]
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="positiveInteger" id="positiveInteger">
             <xs:restriction base="xs:nonNegativeInteger">
@@ -210,7 +210,7 @@ class XSDSimpleTypePositiveInteger(XSDSimpleTypeInteger):
 
 class XSDSimpleTypeDecimal(XSDSimpleType):
     _TYPES = [float, int]
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="decimal" id="decimal">
             <xs:restriction base="xs:anySimpleType">
@@ -232,7 +232,7 @@ class XSDSimpleTypeDecimal(XSDSimpleType):
 
 class XSDSimpleTypeString(XSDSimpleType):
     _TYPES = [str]
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="string" id="string">
             <xs:restriction base="xs:anySimpleType">
@@ -253,7 +253,7 @@ class XSDSimpleTypeString(XSDSimpleType):
 
 
 class XSDSimpleTypeToken(XSDSimpleTypeString):
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="token" id="token">
             <xs:restriction base="xs:normalizedString">
@@ -278,7 +278,7 @@ class XSDSimpleTypeDate(XSDSimpleTypeString):
     # [-]CCYY-MM-DD[Z|(+|-)hh:mm]
     # https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s07.html
 
-    XSD_TREE = XSDTree(ET.fromstring(
+    _XSD_TREE = XSDTree(ET.fromstring(
         """
         <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="date" id="date">
             <xs:restriction base="xs:anySimpleType">
@@ -302,7 +302,7 @@ class XSDSimpleTypeNMTOKEN(XSDSimpleTypeToken):
 Pattern: [-.0-9:A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]+
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="NMTOKEN" id="NMTOKEN">
     <xs:restriction base="xs:token">
         <xs:pattern value="\c+" />
@@ -319,7 +319,7 @@ class XSDSimpleTypeName(XSDSimpleTypeToken):
 Pattern: [:A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�][-.0-9:A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]*
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="Name" id="Name">
     <xs:restriction base="xs:token">
         <xs:pattern value="\i\c*" />
@@ -336,7 +336,7 @@ class XSDSimpleTypeNCName(XSDSimpleTypeName):
 Pattern: [A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�][-.0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]*
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="NCName" id="NCName">
     <xs:restriction base="xs:Name">
         <xs:pattern value="[\i-[:]][\c-[:]]*" />
@@ -349,7 +349,7 @@ Pattern: [A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏�
 class XSDSimpleTypeID(XSDSimpleTypeNCName):
     """"""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ID" id="ID">
     <xs:restriction base="xs:NCName" />
 </xs:simpleType>
@@ -360,7 +360,7 @@ class XSDSimpleTypeID(XSDSimpleTypeNCName):
 class XSDSimpleTypeIDREF(XSDSimpleTypeNCName):
     """"""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="IDREF" id="IDREF">
     <xs:restriction base="xs:NCName" />
 </xs:simpleType>
@@ -375,7 +375,7 @@ class XSDSimpleTypeLanguage(XSDSimpleTypeToken):
 Pattern: ([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="language" id="language">
     <xs:restriction base="xs:token">
         <xs:pattern value="([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*" />
@@ -391,7 +391,7 @@ class XSDSimpleTypeAboveBelow(XSDSimpleTypeToken):
     Permitted Values: ``'above'``, ``'below'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="above-below">
     <xs:annotation>
         <xs:documentation>The above-below type is used to indicate whether one element appears above or below another element.</xs:documentation>
@@ -408,7 +408,7 @@ class XSDSimpleTypeAboveBelow(XSDSimpleTypeToken):
 class XSDSimpleTypeBeamLevel(XSDSimpleTypePositiveInteger):
     """The MusicXML format supports six levels of beaming, up to 1024th notes. Unlike the number-level type, the beam-level type identifies concurrent beams in a beam group. It does not distinguish overlapping beams such as grace notes within regular notes, or beams used in different voices."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beam-level">
     <xs:annotation>
         <xs:documentation>The MusicXML format supports six levels of beaming, up to 1024th notes. Unlike the number-level type, the beam-level type identifies concurrent beams in a beam group. It does not distinguish overlapping beams such as grace notes within regular notes, or beams used in different voices.</xs:documentation>
@@ -433,7 +433,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).
 Pattern: #[\dA-F]{6}([\dA-F][\dA-F])?
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="color">
     <xs:annotation>
         <xs:documentation>The color type indicates the color of an element. Color may be represented as hexadecimal RGB triples, as in HTML, or as hexadecimal ARGB tuples, with the A indicating alpha of transparency. An alpha value of 00 is totally transparent; FF is totally opaque. If RGB is used, the A value is assumed to be FF.
@@ -457,7 +457,7 @@ class XSDSimpleTypeCommaSeparatedText(XSDSimpleTypeToken):
 Pattern: [^,]+(, ?[^,]+)*
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="comma-separated-text">
     <xs:annotation>
         <xs:documentation>The comma-separated-text type is used to specify a comma-separated list of text elements, as is used by the font-family attribute.</xs:documentation>
@@ -476,7 +476,7 @@ class XSDSimpleTypeCssFontSize(XSDSimpleTypeToken):
     Permitted Values: ``'xx-small'``, ``'x-small'``, ``'small'``, ``'medium'``, ``'large'``, ``'x-large'``, ``'xx-large'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="css-font-size">
     <xs:annotation>
         <xs:documentation>The css-font-size type includes the CSS font sizes used as an alternative to a numeric point size.</xs:documentation>
@@ -498,7 +498,7 @@ class XSDSimpleTypeCssFontSize(XSDSimpleTypeToken):
 class XSDSimpleTypeDivisions(XSDSimpleTypeDecimal):
     """The divisions type is used to express values in terms of the musical divisions defined by the divisions element. It is preferred that these be integer values both for MIDI interoperability and to avoid roundoff errors."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="divisions">
     <xs:annotation>
         <xs:documentation>The divisions type is used to express values in terms of the musical divisions defined by the divisions element. It is preferred that these be integer values both for MIDI interoperability and to avoid roundoff errors.</xs:documentation>
@@ -515,7 +515,7 @@ class XSDSimpleTypeEnclosureShape(XSDSimpleTypeToken):
     Permitted Values: ``'rectangle'``, ``'square'``, ``'oval'``, ``'circle'``, ``'bracket'``, ``'inverted-bracket'``, ``'triangle'``, ``'diamond'``, ``'pentagon'``, ``'hexagon'``, ``'heptagon'``, ``'octagon'``, ``'nonagon'``, ``'decagon'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="enclosure-shape">
     <xs:annotation>
         <xs:documentation>The enclosure-shape type describes the shape and presence / absence of an enclosure around text or symbols. A bracket enclosure is similar to a rectangle with the bottom line missing, as is common in jazz notation. An inverted-bracket enclosure is similar to a rectangle with the top line missing.</xs:documentation>
@@ -548,7 +548,7 @@ class XSDSimpleTypeFermataShape(XSDSimpleTypeString):
     Permitted Values: ``'normal'``, ``'angled'``, ``'square'``, ``'double-angled'``, ``'double-square'``, ``'double-dot'``, ``'half-curve'``, ``'curlew'``, ``''``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fermata-shape">
     <xs:annotation>
         <xs:documentation>The fermata-shape type represents the shape of the fermata sign. The empty value is equivalent to the normal value.</xs:documentation>
@@ -572,7 +572,7 @@ class XSDSimpleTypeFermataShape(XSDSimpleTypeString):
 class XSDSimpleTypeFontFamily(XSDSimpleTypeCommaSeparatedText):
     """The font-family is a comma-separated list of font names. These can be specific font styles such as Maestro or Opus, or one of several generic font styles: music, engraved, handwritten, text, serif, sans-serif, handwritten, cursive, fantasy, and monospace. The music, engraved, and handwritten values refer to music fonts; the rest refer to text fonts. The fantasy style refers to decorative text such as found in older German-style printing."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="font-family">
     <xs:annotation>
         <xs:documentation>The font-family is a comma-separated list of font names. These can be specific font styles such as Maestro or Opus, or one of several generic font styles: music, engraved, handwritten, text, serif, sans-serif, handwritten, cursive, fantasy, and monospace. The music, engraved, and handwritten values refer to music fonts; the rest refer to text fonts. The fantasy style refers to decorative text such as found in older German-style printing.</xs:documentation>
@@ -589,7 +589,7 @@ class XSDSimpleTypeFontStyle(XSDSimpleTypeToken):
     Permitted Values: ``'normal'``, ``'italic'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="font-style">
     <xs:annotation>
         <xs:documentation>The font-style type represents a simplified version of the CSS font-style property.</xs:documentation>
@@ -609,7 +609,7 @@ class XSDSimpleTypeFontWeight(XSDSimpleTypeToken):
     Permitted Values: ``'normal'``, ``'bold'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="font-weight">
     <xs:annotation>
         <xs:documentation>The font-weight type represents a simplified version of the CSS font-weight property.</xs:documentation>
@@ -629,7 +629,7 @@ class XSDSimpleTypeLeftCenterRight(XSDSimpleTypeToken):
     Permitted Values: ``'left'``, ``'center'``, ``'right'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="left-center-right">
     <xs:annotation>
         <xs:documentation>The left-center-right type is used to define horizontal alignment and text justification.</xs:documentation>
@@ -650,7 +650,7 @@ class XSDSimpleTypeLeftRight(XSDSimpleTypeToken):
     Permitted Values: ``'left'``, ``'right'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="left-right">
     <xs:annotation>
         <xs:documentation>The left-right type is used to indicate whether one element appears to the left or the right of another element.</xs:documentation>
@@ -670,7 +670,7 @@ class XSDSimpleTypeLineLength(XSDSimpleTypeToken):
     Permitted Values: ``'short'``, ``'medium'``, ``'long'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line-length">
     <xs:annotation>
         <xs:documentation>The line-length type distinguishes between different line lengths for doit, falloff, plop, and scoop articulations.</xs:documentation>
@@ -691,7 +691,7 @@ class XSDSimpleTypeLineShape(XSDSimpleTypeToken):
     Permitted Values: ``'straight'``, ``'curved'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line-shape">
     <xs:annotation>
         <xs:documentation>The line-shape type distinguishes between straight and curved lines.</xs:documentation>
@@ -711,7 +711,7 @@ class XSDSimpleTypeLineType(XSDSimpleTypeToken):
     Permitted Values: ``'solid'``, ``'dashed'``, ``'dotted'``, ``'wavy'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line-type">
     <xs:annotation>
         <xs:documentation>The line-type type distinguishes between solid, dashed, dotted, and wavy lines.</xs:documentation>
@@ -730,7 +730,7 @@ class XSDSimpleTypeLineType(XSDSimpleTypeToken):
 class XSDSimpleTypeMidi16(XSDSimpleTypePositiveInteger):
     """The midi-16 type is used to express MIDI 1.0 values that range from 1 to 16."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="midi-16">
     <xs:annotation>
         <xs:documentation>The midi-16 type is used to express MIDI 1.0 values that range from 1 to 16.</xs:documentation>
@@ -747,7 +747,7 @@ class XSDSimpleTypeMidi16(XSDSimpleTypePositiveInteger):
 class XSDSimpleTypeMidi128(XSDSimpleTypePositiveInteger):
     """The midi-128 type is used to express MIDI 1.0 values that range from 1 to 128."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="midi-128">
     <xs:annotation>
         <xs:documentation>The midi-128 type is used to express MIDI 1.0 values that range from 1 to 128.</xs:documentation>
@@ -764,7 +764,7 @@ class XSDSimpleTypeMidi128(XSDSimpleTypePositiveInteger):
 class XSDSimpleTypeMidi16384(XSDSimpleTypePositiveInteger):
     """The midi-16384 type is used to express MIDI 1.0 values that range from 1 to 16,384."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="midi-16384">
     <xs:annotation>
         <xs:documentation>The midi-16384 type is used to express MIDI 1.0 values that range from 1 to 16,384.</xs:documentation>
@@ -784,7 +784,7 @@ class XSDSimpleTypeMute(XSDSimpleTypeString):
     Permitted Values: ``'on'``, ``'off'``, ``'straight'``, ``'cup'``, ``'harmon-no-stem'``, ``'harmon-stem'``, ``'bucket'``, ``'plunger'``, ``'hat'``, ``'solotone'``, ``'practice'``, ``'stop-mute'``, ``'stop-hand'``, ``'echo'``, ``'palm'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="mute">
     <xs:annotation>
         <xs:documentation>The mute type represents muting for different instruments, including brass, winds, and strings. The on and off values are used for undifferentiated mutes. The remaining values represent specific mutes.</xs:documentation>
@@ -814,7 +814,7 @@ class XSDSimpleTypeMute(XSDSimpleTypeString):
 class XSDSimpleTypeNonNegativeDecimal(XSDSimpleTypeDecimal):
     """The non-negative-decimal type specifies a non-negative decimal value."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="non-negative-decimal">
     <xs:annotation>
         <xs:documentation>The non-negative-decimal type specifies a non-negative decimal value.</xs:documentation>
@@ -838,7 +838,7 @@ If the cross-staff slur starts in the top staff and stops in the bottom staff, i
 
 As this example demonstrates, a reading program should be prepared to handle cases where the number-levels start and stop in an arbitrary order. Because the start and stop values refer to musical score order, a program may find the stopping point of an object earlier in the MusicXML document than it will find its starting point."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="number-level">
     <xs:annotation>
         <xs:documentation>Slurs, tuplets, and many other features can be concurrent and overlap within a single musical part. The number-level entity distinguishes up to 16 concurrent objects of the same type when the objects overlap in MusicXML document order. Values greater than 6 are usually only needed for music with a large number of divisi staves in a single part, or if there are more than 6 cross-staff arpeggios in a single measure. When a number-level value is implied, the value is 1 by default.
@@ -863,7 +863,7 @@ As this example demonstrates, a reading program should be prepared to handle cas
 class XSDSimpleTypeNumberOfLines(XSDSimpleTypeNonNegativeInteger):
     """The number-of-lines type is used to specify the number of lines in text decoration attributes."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="number-of-lines">
     <xs:annotation>
         <xs:documentation>The number-of-lines type is used to specify the number of lines in text decoration attributes.</xs:documentation>
@@ -880,7 +880,7 @@ class XSDSimpleTypeNumberOfLines(XSDSimpleTypeNonNegativeInteger):
 class XSDSimpleTypeNumeralValue(XSDSimpleTypePositiveInteger):
     """The numeral-value type represents a Roman numeral or Nashville number value as a positive integer from 1 to 7."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="numeral-value">
     <xs:annotation>
         <xs:documentation>The numeral-value type represents a Roman numeral or Nashville number value as a positive integer from 1 to 7.</xs:documentation>
@@ -900,7 +900,7 @@ class XSDSimpleTypeOverUnder(XSDSimpleTypeToken):
     Permitted Values: ``'over'``, ``'under'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="over-under">
     <xs:annotation>
         <xs:documentation>The over-under type is used to indicate whether the tips of curved lines such as slurs and ties are overhand (tips down) or underhand (tips up).</xs:documentation>
@@ -917,7 +917,7 @@ class XSDSimpleTypeOverUnder(XSDSimpleTypeToken):
 class XSDSimpleTypePercent(XSDSimpleTypeDecimal):
     """The percent type specifies a percentage from 0 to 100."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="percent">
     <xs:annotation>
         <xs:documentation>The percent type specifies a percentage from 0 to 100.</xs:documentation>
@@ -934,7 +934,7 @@ class XSDSimpleTypePercent(XSDSimpleTypeDecimal):
 class XSDSimpleTypePositiveDecimal(XSDSimpleTypeDecimal):
     """The positive-decimal type specifies a positive decimal value."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="positive-decimal">
     <xs:annotation>
         <xs:documentation>The positive-decimal type specifies a positive decimal value.</xs:documentation>
@@ -950,7 +950,7 @@ class XSDSimpleTypePositiveDecimal(XSDSimpleTypeDecimal):
 class XSDSimpleTypePositiveDivisions(XSDSimpleTypeDivisions):
     """The positive-divisions type restricts divisions values to positive numbers."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="positive-divisions">
     <xs:annotation>
         <xs:documentation>The positive-divisions type restricts divisions values to positive numbers.</xs:documentation>
@@ -966,7 +966,7 @@ class XSDSimpleTypePositiveDivisions(XSDSimpleTypeDivisions):
 class XSDSimpleTypeRotationDegrees(XSDSimpleTypeDecimal):
     """The rotation-degrees type specifies rotation, pan, and elevation values in degrees. Values range from -180 to 180."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rotation-degrees">
     <xs:annotation>
         <xs:documentation>The rotation-degrees type specifies rotation, pan, and elevation values in degrees. Values range from -180 to 180.</xs:documentation>
@@ -986,7 +986,7 @@ class XSDSimpleTypeSemiPitched(XSDSimpleTypeString):
     Permitted Values: ``'high'``, ``'medium-high'``, ``'medium'``, ``'medium-low'``, ``'low'``, ``'very-low'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="semi-pitched">
     <xs:annotation>
         <xs:documentation>The semi-pitched type represents categories of indefinite pitch for percussion instruments.</xs:documentation>
@@ -1007,7 +1007,7 @@ class XSDSimpleTypeSemiPitched(XSDSimpleTypeString):
 class XSDSimpleTypeSmuflGlyphName(XSDSimpleTypeNMTOKEN):
     """The smufl-glyph-name type is used for attributes that reference a specific Standard Music Font Layout (SMuFL) character. The value is a SMuFL canonical glyph name, not a code point. For instance, the value for a standard piano pedal mark would be keyboardPedalPed, not U+E650."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="smufl-glyph-name">
     <xs:annotation>
         <xs:documentation>The smufl-glyph-name type is used for attributes that reference a specific Standard Music Font Layout (SMuFL) character. The value is a SMuFL canonical glyph name, not a code point. For instance, the value for a standard piano pedal mark would be keyboardPedalPed, not U+E650.</xs:documentation>
@@ -1025,7 +1025,7 @@ class XSDSimpleTypeSmuflAccidentalGlyphName(XSDSimpleTypeSmuflGlyphName):
 Pattern: (acc|medRenFla|medRenNatura|medRenShar|kievanAccidental)([-.0-9:A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]+)
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="smufl-accidental-glyph-name">
     <xs:annotation>
         <xs:documentation>The smufl-accidental-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) accidental character. The value is a SMuFL canonical glyph name that starts with one of the strings used at the start of glyph names for SMuFL accidentals.</xs:documentation>
@@ -1045,7 +1045,7 @@ class XSDSimpleTypeSmuflCodaGlyphName(XSDSimpleTypeSmuflGlyphName):
 Pattern: coda[-.0-9:A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]*
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="smufl-coda-glyph-name">
     <xs:annotation>
         <xs:documentation>The smufl-coda-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) coda character. The value is a SMuFL canonical glyph name that starts with coda.</xs:documentation>
@@ -1065,7 +1065,7 @@ class XSDSimpleTypeSmuflLyricsGlyphName(XSDSimpleTypeSmuflGlyphName):
 Pattern: lyrics[-.0-9:A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]+
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="smufl-lyrics-glyph-name">
     <xs:annotation>
         <xs:documentation>The smufl-lyrics-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) lyrics elision character. The value is a SMuFL canonical glyph name that starts with lyrics.</xs:documentation>
@@ -1085,7 +1085,7 @@ class XSDSimpleTypeSmuflPictogramGlyphName(XSDSimpleTypeSmuflGlyphName):
 Pattern: pict[-.0-9:A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]+
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="smufl-pictogram-glyph-name">
     <xs:annotation>
         <xs:documentation>The smufl-pictogram-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) percussion pictogram character. The value is a SMuFL canonical glyph name that starts with pict.</xs:documentation>
@@ -1105,7 +1105,7 @@ class XSDSimpleTypeSmuflSegnoGlyphName(XSDSimpleTypeSmuflGlyphName):
 Pattern: segno[-.0-9:A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]*
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="smufl-segno-glyph-name">
     <xs:annotation>
         <xs:documentation>The smufl-segno-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) segno character. The value is a SMuFL canonical glyph name that starts with segno.</xs:documentation>
@@ -1125,7 +1125,7 @@ class XSDSimpleTypeSmuflWavyLineGlyphName(XSDSimpleTypeSmuflGlyphName):
 Pattern: (wiggle[-.0-9:A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]+)|(guitar[-.0-9:A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]*VibratoStroke)
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="smufl-wavy-line-glyph-name">
     <xs:annotation>
         <xs:documentation>The smufl-wavy-line-glyph-name type is used to reference a specific Standard Music Font Layout (SMuFL) wavy line character. The value is a SMuFL canonical glyph name that either starts with wiggle, or begins with guitar and ends with VibratoStroke. This includes all the glyphs in the Multi-segment lines range, excluding the beam glyphs.</xs:documentation>
@@ -1144,7 +1144,7 @@ class XSDSimpleTypeStartNote(XSDSimpleTypeToken):
     Permitted Values: ``'upper'``, ``'main'``, ``'below'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="start-note">
     <xs:annotation>
         <xs:documentation>The start-note type describes the starting note of trills and mordents for playback, relative to the current note.</xs:documentation>
@@ -1169,7 +1169,7 @@ When multiple elements with the same tag are used within the same note, their or
     Permitted Values: ``'start'``, ``'stop'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="start-stop">
     <xs:annotation>
         <xs:documentation>The start-stop type is used for an attribute of musical elements that can either start or stop, such as tuplets.
@@ -1197,7 +1197,7 @@ When multiple elements with the same tag are used within the same note, their or
     Permitted Values: ``'start'``, ``'stop'``, ``'continue'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="start-stop-continue">
     <xs:annotation>
         <xs:documentation>The start-stop-continue type is used for an attribute of musical elements that can either start or stop, but also need to refer to an intermediate point in the symbol, as for complex slurs or for formatting of symbols across system breaks.
@@ -1224,7 +1224,7 @@ When multiple elements with the same tag are used within the same note, their or
     Permitted Values: ``'start'``, ``'stop'``, ``'single'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="start-stop-single">
     <xs:annotation>
         <xs:documentation>The start-stop-single type is used for an attribute of musical elements that can be used for either multi-note or single-note musical elements, as for groupings.
@@ -1244,7 +1244,7 @@ When multiple elements with the same tag are used within the same note, their or
 class XSDSimpleTypeStringNumber(XSDSimpleTypePositiveInteger):
     """The string-number type indicates a string number. Strings are numbered from high to low, with 1 being the highest pitched full-length string."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="string-number">
     <xs:annotation>
         <xs:documentation>The string-number type indicates a string number. Strings are numbered from high to low, with 1 being the highest pitched full-length string.</xs:documentation>
@@ -1261,7 +1261,7 @@ class XSDSimpleTypeSymbolSize(XSDSimpleTypeToken):
     Permitted Values: ``'full'``, ``'cue'``, ``'grace-cue'``, ``'large'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="symbol-size">
     <xs:annotation>
         <xs:documentation>The symbol-size type is used to distinguish between full, cue sized, grace cue sized, and oversized symbols.</xs:documentation>
@@ -1282,7 +1282,7 @@ class XSDSimpleTypeTenths(XSDSimpleTypeDecimal):
 
 Distances in a MusicXML file are measured in tenths of staff space. Tenths are then scaled to millimeters within the scaling element, used in the defaults element at the start of a score. Individual staves can apply a scaling factor to adjust staff size. When a MusicXML element or attribute refers to tenths, it means the global tenths defined by the scaling element, not the local tenths as adjusted by the staff-size element."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tenths">
     <xs:annotation>
         <xs:documentation>The tenths type is a number representing tenths of interline staff space (positive or negative). Both integer and decimal values are allowed, such as 5 for a half space and 2.5 for a quarter space. Interline space is measured from the middle of a staff line.
@@ -1301,7 +1301,7 @@ class XSDSimpleTypeTextDirection(XSDSimpleTypeToken):
     Permitted Values: ``'ltr'``, ``'rtl'``, ``'lro'``, ``'rlo'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="text-direction">
     <xs:annotation>
         <xs:documentation>The text-direction type is used to adjust and override the Unicode bidirectional text algorithm, similar to the Directionality data category in the W3C Internationalization Tag Set recommendation. Values are ltr (left-to-right embed), rtl (right-to-left embed), lro (left-to-right bidi-override), and rlo (right-to-left bidi-override). The default value is ltr. This type is typically used by applications that store text in left-to-right visual order rather than logical order. Such applications can use the lro value to better communicate with other applications that more fully support bidirectional text.</xs:documentation>
@@ -1327,7 +1327,7 @@ When multiple elements with the same tag are used within the same note, their or
     Permitted Values: ``'start'``, ``'stop'``, ``'continue'``, ``'let-ring'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tied-type">
     <xs:annotation>
         <xs:documentation>The tied-type type is used as an attribute of the tied element to specify where the visual representation of a tie begins and ends. A tied element which joins two notes of the same pitch can be specified with tied-type start on the first note and tied-type stop on the second note. To indicate a note should be undamped, use a single tied element with tied-type let-ring. For other ties that are visually attached to a single note, such as a tie leading into or out of a repeated section or coda, use two tied elements on the same note, one start and one stop.
@@ -1354,7 +1354,7 @@ class XSDSimpleTypeTimeOnly(XSDSimpleTypeToken):
 Pattern: [1-9][0-9]*(, ?[1-9][0-9]*)*
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="time-only">
     <xs:annotation>
         <xs:documentation>The time-only type is used to indicate that a particular playback- or listening-related element only applies particular times through a repeated section. The value is a comma-separated list of positive integers arranged in ascending order, indicating which times through the repeated section that the element applies.</xs:documentation>
@@ -1373,7 +1373,7 @@ class XSDSimpleTypeTopBottom(XSDSimpleTypeToken):
     Permitted Values: ``'top'``, ``'bottom'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="top-bottom">
     <xs:annotation>
         <xs:documentation>The top-bottom type is used to indicate the top or bottom part of a vertical shape like non-arpeggiate.</xs:documentation>
@@ -1393,7 +1393,7 @@ class XSDSimpleTypeTremoloType(XSDSimpleTypeToken):
     Permitted Values: ``'start'``, ``'stop'``, ``'single'``, ``'unmeasured'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tremolo-type">
     <xs:annotation>
         <xs:documentation>The tremolo-type is used to distinguish double-note, single-note, and unmeasured tremolos.</xs:documentation>
@@ -1412,7 +1412,7 @@ class XSDSimpleTypeTremoloType(XSDSimpleTypeToken):
 class XSDSimpleTypeTrillBeats(XSDSimpleTypeDecimal):
     """The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value with a minimum value of 2."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="trill-beats">
     <xs:annotation>
         <xs:documentation>The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value with a minimum value of 2.</xs:documentation>
@@ -1431,7 +1431,7 @@ class XSDSimpleTypeTrillStep(XSDSimpleTypeToken):
     Permitted Values: ``'whole'``, ``'half'``, ``'unison'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="trill-step">
     <xs:annotation>
         <xs:documentation>The trill-step type describes the alternating note of trills and mordents for playback, relative to the current note.</xs:documentation>
@@ -1452,7 +1452,7 @@ class XSDSimpleTypeTwoNoteTurn(XSDSimpleTypeToken):
     Permitted Values: ``'whole'``, ``'half'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="two-note-turn">
     <xs:annotation>
         <xs:documentation>The two-note-turn type describes the ending notes of trills and mordents for playback, relative to the current note.</xs:documentation>
@@ -1473,7 +1473,7 @@ class XSDSimpleTypeUpDown(XSDSimpleTypeToken):
     Permitted Values: ``'up'``, ``'down'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="up-down">
     <xs:annotation>
         <xs:documentation>The up-down type is used for the direction of arrows and other pointed symbols like vertical accents, indicating which way the tip is pointing.</xs:documentation>
@@ -1493,7 +1493,7 @@ class XSDSimpleTypeUprightInverted(XSDSimpleTypeToken):
     Permitted Values: ``'upright'``, ``'inverted'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="upright-inverted">
     <xs:annotation>
         <xs:documentation>The upright-inverted type describes the appearance of a fermata element. The value is upright if not specified.</xs:documentation>
@@ -1513,7 +1513,7 @@ class XSDSimpleTypeValign(XSDSimpleTypeToken):
     Permitted Values: ``'top'``, ``'middle'``, ``'bottom'``, ``'baseline'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="valign">
     <xs:annotation>
         <xs:documentation>The valign type is used to indicate vertical alignment to the top, middle, bottom, or baseline of the text. If the text is on multiple lines, baseline alignment refers to the baseline of the lowest line of text. Defaults are implementation-dependent.</xs:documentation>
@@ -1535,7 +1535,7 @@ class XSDSimpleTypeValignImage(XSDSimpleTypeToken):
     Permitted Values: ``'top'``, ``'middle'``, ``'bottom'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="valign-image">
     <xs:annotation>
         <xs:documentation>The valign-image type is used to indicate vertical alignment for images and graphics, so it does not include a baseline value. Defaults are implementation-dependent.</xs:documentation>
@@ -1556,7 +1556,7 @@ class XSDSimpleTypeYesNo(XSDSimpleTypeToken):
     Permitted Values: ``'yes'``, ``'no'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="yes-no">
     <xs:annotation>
         <xs:documentation>The yes-no type is used for boolean-like attributes. We cannot use W3C XML Schema booleans due to their restrictions on expression of boolean values.</xs:documentation>
@@ -1577,7 +1577,7 @@ class XSDSimpleTypeYyyyMmDd(XSDSimpleTypeDate):
 Pattern: [^:Z]*
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="yyyy-mm-dd">
     <xs:annotation>
         <xs:documentation>Calendar dates are represented yyyy-mm-dd format, following ISO 8601. This is a W3C XML Schema date type, but without the optional timezone data.</xs:documentation>
@@ -1596,7 +1596,7 @@ class XSDSimpleTypeCancelLocation(XSDSimpleTypeString):
     Permitted Values: ``'left'``, ``'right'``, ``'before-barline'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="cancel-location">
     <xs:annotation>
         <xs:documentation>The cancel-location type is used to indicate where a key signature cancellation appears relative to a new key signature: to the left, to the right, or before the barline and to the left. It is left by default. For mid-measure key elements, a cancel-location of before-barline should be treated like a cancel-location of left.</xs:documentation>
@@ -1619,7 +1619,7 @@ The none sign is deprecated as of MusicXML 4.0. Use the clef element's print-obj
     Permitted Values: ``'G'``, ``'F'``, ``'C'``, ``'percussion'``, ``'TAB'``, ``'jianpu'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="clef-sign">
     <xs:annotation>
         <xs:documentation>The clef-sign type represents the different clef symbols. The jianpu sign indicates that the music that follows should be in jianpu numbered notation, just as the TAB sign indicates that the music that follows should be in tablature notation. Unlike TAB, a jianpu sign does not correspond to a visual clef notation.
@@ -1643,7 +1643,7 @@ The none sign is deprecated as of MusicXML 4.0. Use the clef element's print-obj
 class XSDSimpleTypeFifths(XSDSimpleTypeInteger):
     """The fifths type represents the number of flats or sharps in a traditional key signature. Negative numbers are used for flats and positive numbers for sharps, reflecting the key's placement within the circle of fifths (hence the type name)."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fifths">
     <xs:annotation>
         <xs:documentation>The fifths type represents the number of flats or sharps in a traditional key signature. Negative numbers are used for flats and positive numbers for sharps, reflecting the key's placement within the circle of fifths (hence the type name).</xs:documentation>
@@ -1657,7 +1657,7 @@ class XSDSimpleTypeFifths(XSDSimpleTypeInteger):
 class XSDSimpleTypeMode(XSDSimpleTypeString):
     """The mode type is used to specify major/minor and other mode distinctions. Valid mode values include major, minor, dorian, phrygian, lydian, mixolydian, aeolian, ionian, locrian, and none."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="mode">
     <xs:annotation>
         <xs:documentation>The mode type is used to specify major/minor and other mode distinctions. Valid mode values include major, minor, dorian, phrygian, lydian, mixolydian, aeolian, ionian, locrian, and none.</xs:documentation>
@@ -1674,7 +1674,7 @@ class XSDSimpleTypeShowFrets(XSDSimpleTypeToken):
     Permitted Values: ``'numbers'``, ``'letters'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="show-frets">
     <xs:annotation>
         <xs:documentation>The show-frets type indicates whether to show tablature frets as numbers (0, 1, 2) or letters (a, b, c). The default choice is numbers.</xs:documentation>
@@ -1691,7 +1691,7 @@ class XSDSimpleTypeShowFrets(XSDSimpleTypeToken):
 class XSDSimpleTypeStaffLine(XSDSimpleTypePositiveInteger):
     """The staff-line type indicates the line on a given staff. Staff lines are numbered from bottom to top, with 1 being the bottom line on a staff."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-line">
     <xs:annotation>
         <xs:documentation>The staff-line type indicates the line on a given staff. Staff lines are numbered from bottom to top, with 1 being the bottom line on a staff.</xs:documentation>
@@ -1705,7 +1705,7 @@ class XSDSimpleTypeStaffLine(XSDSimpleTypePositiveInteger):
 class XSDSimpleTypeStaffLinePosition(XSDSimpleTypeInteger):
     """The staff-line-position type indicates the line position on a given staff. Staff lines are numbered from bottom to top, with 1 being the bottom line on a staff. A staff-line-position value can extend beyond the range of the lines on the current staff."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-line-position">
     <xs:annotation>
         <xs:documentation>The staff-line-position type indicates the line position on a given staff. Staff lines are numbered from bottom to top, with 1 being the bottom line on a staff. A staff-line-position value can extend beyond the range of the lines on the current staff.</xs:documentation>
@@ -1719,7 +1719,7 @@ class XSDSimpleTypeStaffLinePosition(XSDSimpleTypeInteger):
 class XSDSimpleTypeStaffNumber(XSDSimpleTypePositiveInteger):
     """The staff-number type indicates staff numbers within a multi-staff part. Staves are numbered from top to bottom, with 1 being the top staff on a part."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-number">
     <xs:annotation>
         <xs:documentation>The staff-number type indicates staff numbers within a multi-staff part. Staves are numbered from top to bottom, with 1 being the top staff on a part.</xs:documentation>
@@ -1736,7 +1736,7 @@ class XSDSimpleTypeStaffType(XSDSimpleTypeString):
     Permitted Values: ``'ossia'``, ``'editorial'``, ``'cue'``, ``'alternate'``, ``'regular'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-type">
     <xs:annotation>
         <xs:documentation>The staff-type value can be ossia, editorial, cue, alternate, or regular. An ossia staff represents music that can be played instead of what appears on the regular staff. An editorial staff also represents musical alternatives, but is created by an editor rather than the composer. It can be used for suggested interpretations or alternatives from other sources. A cue staff represents music from another part. An alternate staff shares the same music as the prior staff, but displayed differently (e.g., treble and bass clef, standard notation and tablature). It is not included in playback. An alternate staff provides more information to an application reading a file than encoding the same music in separate parts, so its use is preferred in this situation if feasible. A regular staff is the standard default staff-type.</xs:documentation>
@@ -1759,7 +1759,7 @@ class XSDSimpleTypeTimeRelation(XSDSimpleTypeString):
     Permitted Values: ``'parentheses'``, ``'bracket'``, ``'equals'``, ``'slash'``, ``'space'``, ``'hyphen'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="time-relation">
     <xs:annotation>
         <xs:documentation>The time-relation type indicates the symbol used to represent the interchangeable aspect of dual time signatures.</xs:documentation>
@@ -1783,7 +1783,7 @@ class XSDSimpleTypeTimeSeparator(XSDSimpleTypeToken):
     Permitted Values: ``'none'``, ``'horizontal'``, ``'diagonal'``, ``'vertical'``, ``'adjacent'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="time-separator">
     <xs:annotation>
         <xs:documentation>The time-separator type indicates how to display the arrangement between the beats and beat-type values in a time signature. The default value is none. The horizontal, diagonal, and vertical values represent horizontal, diagonal lower-left to upper-right, and vertical lines respectively. For these values, the beats and beat-type values are arranged on either side of the separator line. The none value represents no separator with the beats and beat-type arranged vertically. The adjacent value represents no separator with the beats and beat-type arranged horizontally.</xs:documentation>
@@ -1806,7 +1806,7 @@ class XSDSimpleTypeTimeSymbol(XSDSimpleTypeToken):
     Permitted Values: ``'common'``, ``'cut'``, ``'single-number'``, ``'note'``, ``'dotted-note'``, ``'normal'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="time-symbol">
     <xs:annotation>
         <xs:documentation>The time-symbol type indicates how to display a time signature. The normal value is the usual fractional display, and is the implied symbol type if none is specified. Other options are the common and cut time symbols, as well as a single number with an implied denominator. The note symbol indicates that the beat-type should be represented with the corresponding downstem note rather than a number. The dotted-note symbol indicates that the beat-type should be represented with a dotted downstem note that corresponds to three times the beat-type value, and a numerator that is one third the beats value.</xs:documentation>
@@ -1830,7 +1830,7 @@ class XSDSimpleTypeBackwardForward(XSDSimpleTypeToken):
     Permitted Values: ``'backward'``, ``'forward'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="backward-forward">
     <xs:annotation>
         <xs:documentation>The backward-forward type is used to specify repeat directions. The start of the repeat has a forward direction while the end of the repeat has a backward direction.</xs:documentation>
@@ -1850,7 +1850,7 @@ class XSDSimpleTypeBarStyle(XSDSimpleTypeString):
     Permitted Values: ``'regular'``, ``'dotted'``, ``'dashed'``, ``'heavy'``, ``'light-light'``, ``'light-heavy'``, ``'heavy-light'``, ``'heavy-heavy'``, ``'tick'``, ``'short'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bar-style">
     <xs:annotation>
         <xs:documentation>The bar-style type represents barline style information. Choices are regular, dotted, dashed, heavy, light-light, light-heavy, heavy-light, heavy-heavy, tick (a short stroke through the top line), short (a partial barline between the 2nd and 4th lines), and none.</xs:documentation>
@@ -1880,7 +1880,7 @@ class XSDSimpleTypeEndingNumber(XSDSimpleTypeToken):
 Pattern: ([ ]*)|([1-9][0-9]*(, ?[1-9][0-9]*)*)
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ending-number">
     <xs:annotation>
         <xs:documentation>The ending-number type is used to specify either a comma-separated list of positive integers without leading zeros, or a string of zero or more spaces. It is used for the number attribute of the ending element. The zero or more spaces version is used when software knows that an ending is present, but cannot determine the type of the ending.</xs:documentation>
@@ -1899,7 +1899,7 @@ class XSDSimpleTypeRightLeftMiddle(XSDSimpleTypeToken):
     Permitted Values: ``'right'``, ``'left'``, ``'middle'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="right-left-middle">
     <xs:annotation>
         <xs:documentation>The right-left-middle type is used to specify barline location.</xs:documentation>
@@ -1920,7 +1920,7 @@ class XSDSimpleTypeStartStopDiscontinue(XSDSimpleTypeToken):
     Permitted Values: ``'start'``, ``'stop'``, ``'discontinue'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="start-stop-discontinue">
     <xs:annotation>
         <xs:documentation>The start-stop-discontinue type is used to specify ending types. Typically, the start type is associated with the left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline of the last measure in an ending. Stop is used when the ending mark concludes with a downward jog, as is typical for first endings. Discontinue is used when there is no downward jog, as is typical for second endings that do not conclude a piece.</xs:documentation>
@@ -1941,7 +1941,7 @@ class XSDSimpleTypeWinged(XSDSimpleTypeToken):
     Permitted Values: ``'none'``, ``'straight'``, ``'curved'``, ``'double-straight'``, ``'double-curved'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="winged">
     <xs:annotation>
         <xs:documentation>The winged attribute indicates whether the repeat has winged extensions that appear above and below the barline. The straight and curved values represent single wings, while the double-straight and double-curved values represent double wings. The none value indicates no wings and is the default.</xs:documentation>
@@ -1961,7 +1961,7 @@ class XSDSimpleTypeWinged(XSDSimpleTypeToken):
 class XSDSimpleTypeAccordionMiddle(XSDSimpleTypePositiveInteger):
     """The accordion-middle type may have values of 1, 2, or 3, corresponding to having 1 to 3 dots in the middle section of the accordion registration symbol. This type is not used if no dots are present."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="accordion-middle">
     <xs:annotation>
         <xs:documentation>The accordion-middle type may have values of 1, 2, or 3, corresponding to having 1 to 3 dots in the middle section of the accordion registration symbol. This type is not used if no dots are present.</xs:documentation>
@@ -1981,7 +1981,7 @@ class XSDSimpleTypeBeaterValue(XSDSimpleTypeString):
     Permitted Values: ``'bow'``, ``'chime hammer'``, ``'coin'``, ``'drum stick'``, ``'finger'``, ``'fingernail'``, ``'fist'``, ``'guiro scraper'``, ``'hammer'``, ``'hand'``, ``'jazz stick'``, ``'knitting needle'``, ``'metal hammer'``, ``'slide brush on gong'``, ``'snare stick'``, ``'spoon mallet'``, ``'superball'``, ``'triangle beater'``, ``'triangle beater plain'``, ``'wire brush'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beater-value">
     <xs:annotation>
         <xs:documentation>The beater-value type represents pictograms for beaters, mallets, and sticks that do not have different materials represented in the pictogram. The finger and hammer values are in addition to Stone's list.</xs:documentation>
@@ -2019,7 +2019,7 @@ class XSDSimpleTypeDegreeSymbolValue(XSDSimpleTypeToken):
     Permitted Values: ``'major'``, ``'minor'``, ``'augmented'``, ``'diminished'``, ``'half-diminished'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="degree-symbol-value">
     <xs:annotation>
         <xs:documentation>The degree-symbol-value type indicates which symbol should be used in specifying a degree.</xs:documentation>
@@ -2042,7 +2042,7 @@ class XSDSimpleTypeDegreeTypeValue(XSDSimpleTypeString):
     Permitted Values: ``'add'``, ``'alter'``, ``'subtract'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="degree-type-value">
     <xs:annotation>
         <xs:documentation>The degree-type-value type indicates whether the current degree element is an addition, alteration, or subtraction to the kind of the current chord in the harmony element.</xs:documentation>
@@ -2063,7 +2063,7 @@ class XSDSimpleTypeEffectValue(XSDSimpleTypeString):
     Permitted Values: ``'anvil'``, ``'auto horn'``, ``'bird whistle'``, ``'cannon'``, ``'duck call'``, ``'gun shot'``, ``'klaxon horn'``, ``'lions roar'``, ``'lotus flute'``, ``'megaphone'``, ``'police whistle'``, ``'siren'``, ``'slide whistle'``, ``'thunder sheet'``, ``'wind machine'``, ``'wind whistle'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="effect-value">
     <xs:annotation>
         <xs:documentation>The effect-value type represents pictograms for sound effect percussion instruments. The cannon, lotus flute, and megaphone values are in addition to Stone's list.</xs:documentation>
@@ -2097,7 +2097,7 @@ class XSDSimpleTypeGlassValue(XSDSimpleTypeString):
     Permitted Values: ``'glass harmonica'``, ``'glass harp'``, ``'wind chimes'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="glass-value">
     <xs:annotation>
         <xs:documentation>The glass-value type represents pictograms for glass percussion instruments.</xs:documentation>
@@ -2118,7 +2118,7 @@ class XSDSimpleTypeHarmonyArrangement(XSDSimpleTypeToken):
     Permitted Values: ``'vertical'``, ``'horizontal'``, ``'diagonal'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="harmony-arrangement">
     <xs:annotation>
         <xs:documentation>The harmony-arrangement type indicates how stacked chords and bass notes are displayed within a harmony element. The vertical value specifies that the second element appears below the first. The horizontal value specifies that the second element appears to the right of the first. The diagonal value specifies that the second element appears both below and to the right of the first.</xs:documentation>
@@ -2139,7 +2139,7 @@ class XSDSimpleTypeHarmonyType(XSDSimpleTypeToken):
     Permitted Values: ``'explicit'``, ``'implied'``, ``'alternate'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="harmony-type">
     <xs:annotation>
         <xs:documentation>The harmony-type type differentiates different types of harmonies when alternate harmonies are possible. Explicit harmonies have all note present in the music; implied have some notes missing but implied; alternate represents alternate analyses.</xs:documentation>
@@ -2205,7 +2205,7 @@ The "none" kind is used to explicitly encode absence of chords or functional har
     Permitted Values: ``'major'``, ``'minor'``, ``'augmented'``, ``'diminished'``, ``'dominant'``, ``'major-seventh'``, ``'minor-seventh'``, ``'diminished-seventh'``, ``'augmented-seventh'``, ``'half-diminished'``, ``'major-minor'``, ``'major-sixth'``, ``'minor-sixth'``, ``'dominant-ninth'``, ``'major-ninth'``, ``'minor-ninth'``, ``'dominant-11th'``, ``'major-11th'``, ``'minor-11th'``, ``'dominant-13th'``, ``'major-13th'``, ``'minor-13th'``, ``'suspended-second'``, ``'suspended-fourth'``, ``'Neapolitan'``, ``'Italian'``, ``'French'``, ``'German'``, ``'pedal'``, ``'power'``, ``'Tristan'``, ``'other'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="kind-value">
     <xs:annotation>
         <xs:documentation>A kind-value indicates the type of chord. Degree elements can then add, subtract, or alter from these starting points. Values include:
@@ -2301,7 +2301,7 @@ class XSDSimpleTypeLineEnd(XSDSimpleTypeToken):
     Permitted Values: ``'up'``, ``'down'``, ``'both'``, ``'arrow'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line-end">
     <xs:annotation>
         <xs:documentation>The line-end type specifies if there is a jog up or down (or both), an arrow, or nothing at the start or end of a bracket.</xs:documentation>
@@ -2324,7 +2324,7 @@ class XSDSimpleTypeMeasureNumberingValue(XSDSimpleTypeToken):
     Permitted Values: ``'none'``, ``'measure'``, ``'system'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="measure-numbering-value">
     <xs:annotation>
         <xs:documentation>The measure-numbering-value type describes how measure numbers are displayed on this part: no numbers, numbers every measure, or numbers every system.</xs:documentation>
@@ -2345,7 +2345,7 @@ class XSDSimpleTypeMembraneValue(XSDSimpleTypeString):
     Permitted Values: ``'bass drum'``, ``'bass drum on side'``, ``'bongos'``, ``'Chinese tomtom'``, ``'conga drum'``, ``'cuica'``, ``'goblet drum'``, ``'Indo-American tomtom'``, ``'Japanese tomtom'``, ``'military drum'``, ``'snare drum'``, ``'snare drum snares off'``, ``'tabla'``, ``'tambourine'``, ``'tenor drum'``, ``'timbales'``, ``'tomtom'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="membrane-value">
     <xs:annotation>
         <xs:documentation>The membrane-value type represents pictograms for membrane percussion instruments.</xs:documentation>
@@ -2380,7 +2380,7 @@ class XSDSimpleTypeMetalValue(XSDSimpleTypeString):
     Permitted Values: ``'agogo'``, ``'almglocken'``, ``'bell'``, ``'bell plate'``, ``'bell tree'``, ``'brake drum'``, ``'cencerro'``, ``'chain rattle'``, ``'Chinese cymbal'``, ``'cowbell'``, ``'crash cymbals'``, ``'crotale'``, ``'cymbal tongs'``, ``'domed gong'``, ``'finger cymbals'``, ``'flexatone'``, ``'gong'``, ``'hi-hat'``, ``'high-hat cymbals'``, ``'handbell'``, ``'jaw harp'``, ``'jingle bells'``, ``'musical saw'``, ``'shell bells'``, ``'sistrum'``, ``'sizzle cymbal'``, ``'sleigh bells'``, ``'suspended cymbal'``, ``'tam tam'``, ``'tam tam with beater'``, ``'triangle'``, ``'Vietnamese hat'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="metal-value">
     <xs:annotation>
         <xs:documentation>The metal-value type represents pictograms for metal percussion instruments. The hi-hat value refers to a pictogram like Stone's high-hat cymbals but without the long vertical line at the bottom.</xs:documentation>
@@ -2427,7 +2427,7 @@ class XSDSimpleTypeMetalValue(XSDSimpleTypeString):
 class XSDSimpleTypeMilliseconds(XSDSimpleTypeNonNegativeInteger):
     """The milliseconds type represents an integral number of milliseconds."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="milliseconds">
     <xs:annotation>
         <xs:documentation>The milliseconds type represents an integral number of milliseconds.</xs:documentation>
@@ -2444,7 +2444,7 @@ class XSDSimpleTypeNumeralMode(XSDSimpleTypeString):
     Permitted Values: ``'major'``, ``'minor'``, ``'natural minor'``, ``'melodic minor'``, ``'harmonic minor'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="numeral-mode">
     <xs:annotation>
         <xs:documentation>The numeral-mode type specifies the mode similar to the mode type, but with a restricted set of values. The different minor values are used to interpret numeral-root values of 6 and 7 when present in a minor key. The harmonic minor value sharpens the 7 and the melodic minor value sharpens both 6 and 7. If a minor mode is used without qualification, either in the mode or numeral-mode elements, natural minor is used.</xs:documentation>
@@ -2467,7 +2467,7 @@ class XSDSimpleTypeOnOff(XSDSimpleTypeToken):
     Permitted Values: ``'on'``, ``'off'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="on-off">
     <xs:annotation>
         <xs:documentation>The on-off type is used for notation elements such as string mutes.</xs:documentation>
@@ -2489,7 +2489,7 @@ The change, continue, discontinue, and resume types are used when the line attri
     Permitted Values: ``'start'``, ``'stop'``, ``'sostenuto'``, ``'change'``, ``'continue'``, ``'discontinue'``, ``'resume'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pedal-type">
     <xs:annotation>
         <xs:documentation>The pedal-type simple type is used to distinguish types of pedal directions. The start value indicates the start of a damper pedal, while the sostenuto value indicates the start of a sostenuto pedal. The other values can be used with either the damper or sostenuto pedal. The soft pedal is not included here because there is no special symbol or graphic used for it beyond what can be specified with words and bracket elements.
@@ -2516,7 +2516,7 @@ class XSDSimpleTypePitchedValue(XSDSimpleTypeString):
     Permitted Values: ``'celesta'``, ``'chimes'``, ``'glockenspiel'``, ``'lithophone'``, ``'mallet'``, ``'marimba'``, ``'steel drums'``, ``'tubaphone'``, ``'tubular chimes'``, ``'vibraphone'``, ``'xylophone'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="pitched-value">
     <xs:annotation>
         <xs:documentation>The pitched-value type represents pictograms for pitched percussion instruments. The chimes and tubular chimes values distinguish the single-line and double-line versions of the pictogram.</xs:documentation>
@@ -2545,7 +2545,7 @@ class XSDSimpleTypePrincipalVoiceSymbol(XSDSimpleTypeString):
     Permitted Values: ``'Hauptstimme'``, ``'Nebenstimme'``, ``'plain'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="principal-voice-symbol">
     <xs:annotation>
         <xs:documentation>The principal-voice-symbol type represents the type of symbol used to indicate a principal or secondary voice. The "plain" value represents a plain square bracket. The value of "none" is used for analysis markup when the principal-voice element does not have a corresponding appearance in the score.</xs:documentation>
@@ -2567,7 +2567,7 @@ class XSDSimpleTypeStaffDivideSymbol(XSDSimpleTypeToken):
     Permitted Values: ``'down'``, ``'up'``, ``'up-down'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="staff-divide-symbol">
     <xs:annotation>
         <xs:documentation>The staff-divide-symbol type is used for staff division symbols. The down, up, and up-down values correspond to SMuFL code points U+E00B, U+E00C, and U+E00D respectively.</xs:documentation>
@@ -2588,7 +2588,7 @@ class XSDSimpleTypeStartStopChangeContinue(XSDSimpleTypeToken):
     Permitted Values: ``'start'``, ``'stop'``, ``'change'``, ``'continue'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="start-stop-change-continue">
     <xs:annotation>
         <xs:documentation>The start-stop-change-continue type is used to distinguish types of pedal directions.</xs:documentation>
@@ -2610,7 +2610,7 @@ class XSDSimpleTypeSyncType(XSDSimpleTypeToken):
     Permitted Values: ``'none'``, ``'tempo'``, ``'mostly-tempo'``, ``'mostly-event'``, ``'event'``, ``'always-event'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="sync-type">
     <xs:annotation>
         <xs:documentation>The sync-type type specifies the style that a score following application should use to synchronize an accompaniment with a performer. The none type indicates no synchronization to the performer. The tempo type indicates synchronization based on the performer tempo rather than individual events in the score. The event type indicates synchronization by following the performance of individual events in the score rather than the performer tempo. The mostly-tempo and mostly-event types combine these two approaches, with mostly-tempo giving more weight to tempo and mostly-event giving more weight to performed events. The always-event type provides the strictest synchronization by not being forgiving of missing performed events.</xs:documentation>
@@ -2634,7 +2634,7 @@ class XSDSimpleTypeSystemRelationNumber(XSDSimpleTypeString):
     Permitted Values: ``'only-top'``, ``'only-bottom'``, ``'also-top'``, ``'also-bottom'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="system-relation-number">
     <xs:annotation>
         <xs:documentation>The system-relation-number type distinguishes measure numbers that are associated with a system rather than the particular part where the element appears. A value of only-top or only-bottom indicates that the number should appear only on the top or bottom part of the current system, respectively. A value of also-top or also-bottom indicates that the number should appear on both the current part and the top or bottom part of the current system, respectively. If these values appear in a score, when parts are created the number should only appear once in this part, not twice. A value of none indicates that the number is associated only with the current part, not with the system.</xs:documentation>
@@ -2657,7 +2657,7 @@ class XSDSimpleTypeSystemRelation(XSDSimpleTypeSystemRelationNumber):
     Permitted Values: ``'only-top'``, ``'also-top'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="system-relation">
     <xs:annotation>
         <xs:documentation>The system-relation type distinguishes elements that are associated with a system rather than the particular part where the element appears. A value of only-top indicates that the element should appear only on the top part of the current system. A value of also-top indicates that the element should appear on both the current part and the top part of the current system. If this value appears in a score, when parts are created the element should only appear once in this part, not twice. A value of none indicates that the element is associated only with the current part, not with the system.</xs:documentation>
@@ -2678,7 +2678,7 @@ class XSDSimpleTypeTipDirection(XSDSimpleTypeString):
     Permitted Values: ``'up'``, ``'down'``, ``'left'``, ``'right'``, ``'northwest'``, ``'northeast'``, ``'southeast'``, ``'southwest'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tip-direction">
     <xs:annotation>
         <xs:documentation>The tip-direction type represents the direction in which the tip of a stick or beater points, using Unicode arrow terminology.</xs:documentation>
@@ -2704,7 +2704,7 @@ class XSDSimpleTypeStickLocation(XSDSimpleTypeString):
     Permitted Values: ``'center'``, ``'rim'``, ``'cymbal bell'``, ``'cymbal edge'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stick-location">
     <xs:annotation>
         <xs:documentation>The stick-location type represents pictograms for the location of sticks, beaters, or mallets on cymbals, gongs, drums, and other instruments.</xs:documentation>
@@ -2726,7 +2726,7 @@ class XSDSimpleTypeStickMaterial(XSDSimpleTypeString):
     Permitted Values: ``'soft'``, ``'medium'``, ``'hard'``, ``'shaded'``, ``'x'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stick-material">
     <xs:annotation>
         <xs:documentation>The stick-material type represents the material being displayed in a stick pictogram.</xs:documentation>
@@ -2749,7 +2749,7 @@ class XSDSimpleTypeStickType(XSDSimpleTypeString):
     Permitted Values: ``'bass drum'``, ``'double bass drum'``, ``'glockenspiel'``, ``'gum'``, ``'hammer'``, ``'superball'``, ``'timpani'``, ``'wound'``, ``'xylophone'``, ``'yarn'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stick-type">
     <xs:annotation>
         <xs:documentation>The stick-type type represents the shape of pictograms where the material in the stick, mallet, or beater is represented in the pictogram.</xs:documentation>
@@ -2777,7 +2777,7 @@ class XSDSimpleTypeUpDownStopContinue(XSDSimpleTypeToken):
     Permitted Values: ``'up'``, ``'down'``, ``'stop'``, ``'continue'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="up-down-stop-continue">
     <xs:annotation>
         <xs:documentation>The up-down-stop-continue type is used for octave-shift elements, indicating the direction of the shift from their true pitched values because of printing difficulty.</xs:documentation>
@@ -2799,7 +2799,7 @@ class XSDSimpleTypeWedgeType(XSDSimpleTypeToken):
     Permitted Values: ``'crescendo'``, ``'diminuendo'``, ``'stop'``, ``'continue'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="wedge-type">
     <xs:annotation>
         <xs:documentation>The wedge type is crescendo for the start of a wedge that is closed at the left side, diminuendo for the start of a wedge that is closed on the right side, and stop for the end of a wedge. The continue type is used for formatting wedges over a system break, or for other situations where a single wedge is divided into multiple segments.</xs:documentation>
@@ -2821,7 +2821,7 @@ class XSDSimpleTypeWoodValue(XSDSimpleTypeString):
     Permitted Values: ``'bamboo scraper'``, ``'board clapper'``, ``'cabasa'``, ``'castanets'``, ``'castanets with handle'``, ``'claves'``, ``'football rattle'``, ``'guiro'``, ``'log drum'``, ``'maraca'``, ``'maracas'``, ``'quijada'``, ``'rainstick'``, ``'ratchet'``, ``'reco-reco'``, ``'sandpaper blocks'``, ``'slit drum'``, ``'temple block'``, ``'vibraslap'``, ``'whip'``, ``'wood block'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="wood-value">
     <xs:annotation>
         <xs:documentation>The wood-value type represents pictograms for wood percussion instruments. The maraca and maracas values distinguish the one- and two-maraca versions of the pictogram.</xs:documentation>
@@ -2857,7 +2857,7 @@ class XSDSimpleTypeWoodValue(XSDSimpleTypeString):
 class XSDSimpleTypeDistanceType(XSDSimpleTypeToken):
     """The distance-type defines what type of distance is being defined in a distance element. Values include beam and hyphen. This is left as a string so that other application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="distance-type">
     <xs:annotation>
         <xs:documentation>The distance-type defines what type of distance is being defined in a distance element. Values include beam and hyphen. This is left as a string so that other application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.</xs:documentation>
@@ -2873,7 +2873,7 @@ class XSDSimpleTypeGlyphType(XSDSimpleTypeToken):
 
 A quarter-rest type specifies the glyph to use when a note has a rest element and a type value of quarter. The c-clef, f-clef, and percussion-clef types specify the glyph to use when a clef sign element value is C, F, or percussion respectively. The g-clef-ottava-bassa type specifies the glyph to use when a clef sign element value is G and the clef-octave-change element value is -1. The octave-shift types specify the glyph to use when an octave-shift type attribute value is up, down, or continue and the octave-shift size attribute value is 8, 15, or 22."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="glyph-type">
     <xs:annotation>
         <xs:documentation>The glyph-type defines what type of glyph is being defined in a glyph element. Values include quarter-rest, g-clef-ottava-bassa, c-clef, f-clef, percussion-clef, octave-shift-up-8, octave-shift-down-8, octave-shift-continue-8, octave-shift-down-15, octave-shift-up-15, octave-shift-continue-15, octave-shift-down-22, octave-shift-up-22, and octave-shift-continue-22. This is left as a string so that other application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.
@@ -2889,7 +2889,7 @@ A quarter-rest type specifies the glyph to use when a note has a rest element an
 class XSDSimpleTypeLineWidthType(XSDSimpleTypeToken):
     """The line-width-type defines what type of line is being defined in a line-width element. Values include beam, bracket, dashes, enclosure, ending, extend, heavy barline, leger, light barline, octave shift, pedal, slur middle, slur tip, staff, stem, tie middle, tie tip, tuplet bracket, and wedge. This is left as a string so that other application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="line-width-type">
     <xs:annotation>
         <xs:documentation>The line-width-type defines what type of line is being defined in a line-width element. Values include beam, bracket, dashes, enclosure, ending, extend, heavy barline, leger, light barline, octave shift, pedal, slur middle, slur tip, staff, stem, tie middle, tie tip, tuplet bracket, and wedge. This is left as a string so that other application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.</xs:documentation>
@@ -2906,7 +2906,7 @@ class XSDSimpleTypeMarginType(XSDSimpleTypeToken):
     Permitted Values: ``'odd'``, ``'even'``, ``'both'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="margin-type">
     <xs:annotation>
         <xs:documentation>The margin-type type specifies whether margins apply to even page, odd pages, or both.</xs:documentation>
@@ -2924,7 +2924,7 @@ class XSDSimpleTypeMarginType(XSDSimpleTypeToken):
 class XSDSimpleTypeMillimeters(XSDSimpleTypeDecimal):
     """The millimeters type is a number representing millimeters. This is used in the scaling element to provide a default scaling from tenths to physical units."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="millimeters">
     <xs:annotation>
         <xs:documentation>The millimeters type is a number representing millimeters. This is used in the scaling element to provide a default scaling from tenths to physical units.</xs:documentation>
@@ -2941,7 +2941,7 @@ class XSDSimpleTypeNoteSizeType(XSDSimpleTypeToken):
     Permitted Values: ``'cue'``, ``'grace'``, ``'grace-cue'``, ``'large'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="note-size-type">
     <xs:annotation>
         <xs:documentation>The note-size-type type indicates the type of note being defined by a note-size element. The grace-cue type is used for notes of grace-cue size. The grace type is used for notes of cue size that include a grace element. The cue type is used for all other notes with cue size, whether defined explicitly or implicitly via a cue element. The large type is used for notes of large size.</xs:documentation>
@@ -2963,7 +2963,7 @@ class XSDSimpleTypeAccidentalValue(XSDSimpleTypeString):
     Permitted Values: ``'sharp'``, ``'natural'``, ``'flat'``, ``'double-sharp'``, ``'sharp-sharp'``, ``'flat-flat'``, ``'natural-sharp'``, ``'natural-flat'``, ``'quarter-flat'``, ``'quarter-sharp'``, ``'three-quarters-flat'``, ``'three-quarters-sharp'``, ``'sharp-down'``, ``'sharp-up'``, ``'natural-down'``, ``'natural-up'``, ``'flat-down'``, ``'flat-up'``, ``'double-sharp-down'``, ``'double-sharp-up'``, ``'flat-flat-down'``, ``'flat-flat-up'``, ``'arrow-down'``, ``'arrow-up'``, ``'triple-sharp'``, ``'triple-flat'``, ``'slash-quarter-sharp'``, ``'slash-sharp'``, ``'slash-flat'``, ``'double-slash-flat'``, ``'sharp-1'``, ``'sharp-2'``, ``'sharp-3'``, ``'sharp-5'``, ``'flat-1'``, ``'flat-2'``, ``'flat-3'``, ``'flat-4'``, ``'sori'``, ``'koron'``, ``'other'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="accidental-value">
     <xs:annotation>
         <xs:documentation>The accidental-value type represents notated accidentals supported by MusicXML. In the MusicXML 2.0 DTD this was a string with values that could be included. The XSD strengthens the data typing to an enumerated list. The quarter- and three-quarters- accidentals are Tartini-style quarter-tone accidentals. The -down and -up accidentals are quarter-tone accidentals that include arrows pointing down or up. The slash- accidentals are used in Turkish classical music. The numbered sharp and flat accidentals are superscripted versions of the accidental signs, used in Turkish folk music. The sori and koron accidentals are microtonal sharp and flat accidentals used in Iranian and Persian music. The other accidental covers accidentals other than those listed here. It is usually used in combination with the smufl attribute to specify a particular SMuFL accidental. The smufl attribute may be used with any accidental value to help specify the appearance of symbols that share the same MusicXML semantics.</xs:documentation>
@@ -3022,7 +3022,7 @@ class XSDSimpleTypeArrowDirection(XSDSimpleTypeString):
     Permitted Values: ``'left'``, ``'up'``, ``'right'``, ``'down'``, ``'northwest'``, ``'northeast'``, ``'southeast'``, ``'southwest'``, ``'left right'``, ``'up down'``, ``'northwest southeast'``, ``'northeast southwest'``, ``'other'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="arrow-direction">
     <xs:annotation>
         <xs:documentation>The arrow-direction type represents the direction in which an arrow points, using Unicode arrow terminology.</xs:documentation>
@@ -3053,7 +3053,7 @@ class XSDSimpleTypeArrowStyle(XSDSimpleTypeString):
     Permitted Values: ``'single'``, ``'double'``, ``'filled'``, ``'hollow'``, ``'paired'``, ``'combined'``, ``'other'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="arrow-style">
     <xs:annotation>
         <xs:documentation>The arrow-style type represents the style of an arrow, using Unicode arrow terminology. Filled and hollow arrows indicate polygonal single arrows. Paired arrows are duplicate single arrows in the same direction. Combined arrows apply to double direction arrows like left right, indicating that an arrow in one direction should be combined with an arrow in the other direction.</xs:documentation>
@@ -3078,7 +3078,7 @@ class XSDSimpleTypeBeamValue(XSDSimpleTypeString):
     Permitted Values: ``'begin'``, ``'continue'``, ``'end'``, ``'forward hook'``, ``'backward hook'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="beam-value">
     <xs:annotation>
         <xs:documentation>The beam-value type represents the type of beam associated with each of 8 beam levels (up to 1024th notes) available for each note.</xs:documentation>
@@ -3101,7 +3101,7 @@ class XSDSimpleTypeBendShape(XSDSimpleTypeString):
     Permitted Values: ``'angled'``, ``'curved'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="bend-shape">
     <xs:annotation>
         <xs:documentation>The bend-shape type distinguishes between the angled bend symbols commonly used in standard notation and the curved bend symbols commonly used in both tablature and standard notation.</xs:documentation>
@@ -3121,7 +3121,7 @@ class XSDSimpleTypeBreathMarkValue(XSDSimpleTypeString):
     Permitted Values: ``''``, ``'comma'``, ``'tick'``, ``'upbow'``, ``'salzedo'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="breath-mark-value">
     <xs:annotation>
         <xs:documentation>The breath-mark-value type represents the symbol used for a breath mark.</xs:documentation>
@@ -3144,7 +3144,7 @@ class XSDSimpleTypeCaesuraValue(XSDSimpleTypeString):
     Permitted Values: ``'normal'``, ``'thick'``, ``'short'``, ``'curved'``, ``'single'``, ``''``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="caesura-value">
     <xs:annotation>
         <xs:documentation>The caesura-value type represents the shape of the caesura sign.</xs:documentation>
@@ -3168,7 +3168,7 @@ class XSDSimpleTypeCircularArrow(XSDSimpleTypeString):
     Permitted Values: ``'clockwise'``, ``'anticlockwise'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="circular-arrow">
     <xs:annotation>
         <xs:documentation>The circular-arrow type represents the direction in which a circular arrow points, using Unicode arrow terminology.</xs:documentation>
@@ -3188,7 +3188,7 @@ class XSDSimpleTypeFan(XSDSimpleTypeToken):
     Permitted Values: ``'accel'``, ``'rit'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="fan">
     <xs:annotation>
         <xs:documentation>The fan type represents the type of beam fanning present on a note, used to represent accelerandos and ritardandos.</xs:documentation>
@@ -3209,7 +3209,7 @@ class XSDSimpleTypeHandbellValue(XSDSimpleTypeString):
     Permitted Values: ``'belltree'``, ``'damp'``, ``'echo'``, ``'gyro'``, ``'hand martellato'``, ``'mallet lift'``, ``'mallet table'``, ``'martellato'``, ``'martellato lift'``, ``'muted martellato'``, ``'pluck lift'``, ``'swing'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="handbell-value">
     <xs:annotation>
         <xs:documentation>The handbell-value type represents the type of handbell technique being notated.</xs:documentation>
@@ -3239,7 +3239,7 @@ class XSDSimpleTypeHarmonClosedLocation(XSDSimpleTypeString):
     Permitted Values: ``'right'``, ``'bottom'``, ``'left'``, ``'top'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="harmon-closed-location">
     <xs:annotation>
         <xs:documentation>The harmon-closed-location type indicates which portion of the symbol is filled in when the corresponding harmon-closed-value is half.</xs:documentation>
@@ -3261,7 +3261,7 @@ class XSDSimpleTypeHarmonClosedValue(XSDSimpleTypeString):
     Permitted Values: ``'yes'``, ``'no'``, ``'half'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="harmon-closed-value">
     <xs:annotation>
         <xs:documentation>The harmon-closed-value type represents whether the harmon mute is closed, open, or half-open.</xs:documentation>
@@ -3282,7 +3282,7 @@ class XSDSimpleTypeHoleClosedLocation(XSDSimpleTypeString):
     Permitted Values: ``'right'``, ``'bottom'``, ``'left'``, ``'top'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="hole-closed-location">
     <xs:annotation>
         <xs:documentation>The hole-closed-location type indicates which portion of the hole is filled in when the corresponding hole-closed-value is half.</xs:documentation>
@@ -3304,7 +3304,7 @@ class XSDSimpleTypeHoleClosedValue(XSDSimpleTypeString):
     Permitted Values: ``'yes'``, ``'no'``, ``'half'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="hole-closed-value">
     <xs:annotation>
         <xs:documentation>The hole-closed-value type represents whether the hole is closed, open, or half-open.</xs:documentation>
@@ -3325,7 +3325,7 @@ class XSDSimpleTypeNoteTypeValue(XSDSimpleTypeString):
     Permitted Values: ``'1024th'``, ``'512th'``, ``'256th'``, ``'128th'``, ``'64th'``, ``'32nd'``, ``'16th'``, ``'eighth'``, ``'quarter'``, ``'half'``, ``'whole'``, ``'breve'``, ``'long'``, ``'maxima'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="note-type-value">
     <xs:annotation>
         <xs:documentation>The note-type-value type is used for the MusicXML type element and represents the graphic note type, from 1024th (shortest) to maxima (longest).</xs:documentation>
@@ -3363,7 +3363,7 @@ The other notehead covers noteheads other than those listed here. It is usually 
     Permitted Values: ``'slash'``, ``'triangle'``, ``'diamond'``, ``'square'``, ``'cross'``, ``'x'``, ``'circle-x'``, ``'inverted triangle'``, ``'arrow down'``, ``'arrow up'``, ``'circled'``, ``'slashed'``, ``'back slashed'``, ``'normal'``, ``'cluster'``, ``'circle dot'``, ``'left triangle'``, ``'rectangle'``, ``'none'``, ``'do'``, ``'re'``, ``'mi'``, ``'fa'``, ``'fa up'``, ``'so'``, ``'la'``, ``'ti'``, ``'other'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="notehead-value">
     <xs:annotation>
         <xs:documentation>
@@ -3413,7 +3413,7 @@ The other notehead covers noteheads other than those listed here. It is usually 
 class XSDSimpleTypeOctave(XSDSimpleTypeInteger):
     """Octaves are represented by the numbers 0 to 9, where 4 indicates the octave started by middle C."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="octave">
     <xs:annotation>
         <xs:documentation>Octaves are represented by the numbers 0 to 9, where 4 indicates the octave started by middle C.</xs:documentation>
@@ -3430,7 +3430,7 @@ class XSDSimpleTypeOctave(XSDSimpleTypeInteger):
 class XSDSimpleTypeSemitones(XSDSimpleTypeDecimal):
     """The semitones type is a number representing semitones, used for chromatic alteration. A value of -1 corresponds to a flat and a value of 1 to a sharp. Decimal values like 0.5 (quarter tone sharp) are used for microtones."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="semitones">
     <xs:annotation>
         <xs:documentation>The semitones type is a number representing semitones, used for chromatic alteration. A value of -1 corresponds to a flat and a value of 1 to a sharp. Decimal values like 0.5 (quarter tone sharp) are used for microtones.</xs:documentation>
@@ -3447,7 +3447,7 @@ class XSDSimpleTypeShowTuplet(XSDSimpleTypeToken):
     Permitted Values: ``'actual'``, ``'both'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="show-tuplet">
     <xs:annotation>
         <xs:documentation>The show-tuplet type indicates whether to show a part of a tuplet relating to the tuplet-actual element, both the tuplet-actual and tuplet-normal elements, or neither.</xs:documentation>
@@ -3468,7 +3468,7 @@ class XSDSimpleTypeStemValue(XSDSimpleTypeString):
     Permitted Values: ``'down'``, ``'up'``, ``'double'``, ``'none'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stem-value">
     <xs:annotation>
         <xs:documentation>The stem-value type represents the notated stem direction.</xs:documentation>
@@ -3490,7 +3490,7 @@ class XSDSimpleTypeStep(XSDSimpleTypeString):
     Permitted Values: ``'A'``, ``'B'``, ``'C'``, ``'D'``, ``'E'``, ``'F'``, ``'G'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="step">
     <xs:annotation>
         <xs:documentation>The step type represents a step of the diatonic scale, represented using the English letters A through G.</xs:documentation>
@@ -3515,7 +3515,7 @@ class XSDSimpleTypeSyllabic(XSDSimpleTypeString):
     Permitted Values: ``'single'``, ``'begin'``, ``'end'``, ``'middle'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="syllabic">
     <xs:annotation>
         <xs:documentation>Lyric hyphenation is indicated by the syllabic type. The single, begin, end, and middle values represent single-syllable words, word-beginning syllables, word-ending syllables, and mid-word syllables, respectively.</xs:documentation>
@@ -3537,7 +3537,7 @@ class XSDSimpleTypeTapHand(XSDSimpleTypeString):
     Permitted Values: ``'left'``, ``'right'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tap-hand">
     <xs:annotation>
         <xs:documentation>The tap-hand type represents the symbol to use for a tap element. The left and right values refer to the SMuFL guitarLeftHandTapping and guitarRightHandTapping glyphs respectively.</xs:documentation>
@@ -3554,7 +3554,7 @@ class XSDSimpleTypeTapHand(XSDSimpleTypeString):
 class XSDSimpleTypeTremoloMarks(XSDSimpleTypeInteger):
     """The number of tremolo marks is represented by a number from 0 to 8: the same as beam-level with 0 added."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tremolo-marks">
     <xs:annotation>
         <xs:documentation>The number of tremolo marks is represented by a number from 0 to 8: the same as beam-level with 0 added.</xs:documentation>
@@ -3574,7 +3574,7 @@ class XSDSimpleTypeGroupBarlineValue(XSDSimpleTypeString):
     Permitted Values: ``'yes'``, ``'no'``, ``'Mensurstrich'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group-barline-value">
     <xs:annotation>
         <xs:documentation>The group-barline-value type indicates if the group should have common barlines.</xs:documentation>
@@ -3595,7 +3595,7 @@ class XSDSimpleTypeGroupSymbolValue(XSDSimpleTypeString):
     Permitted Values: ``'none'``, ``'brace'``, ``'line'``, ``'bracket'``, ``'square'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="group-symbol-value">
     <xs:annotation>
         <xs:documentation>The group-symbol-value type indicates how the symbol for a group or multi-staff part is indicated in the score.</xs:documentation>
@@ -3615,7 +3615,7 @@ class XSDSimpleTypeGroupSymbolValue(XSDSimpleTypeString):
 class XSDSimpleTypeMeasureText(XSDSimpleTypeToken):
     """The measure-text type is used for the text attribute of measure elements. It has at least one character. The implicit attribute of the measure element should be set to "yes" rather than setting the text attribute to an empty string."""
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="measure-text">
     <xs:annotation>
         <xs:documentation>The measure-text type is used for the text attribute of measure elements. It has at least one character. The implicit attribute of the measure element should be set to "yes" rather than setting the text attribute to an empty string.</xs:documentation>
@@ -3634,7 +3634,7 @@ class XSDSimpleTypeSwingTypeValue(XSDSimpleTypeNoteTypeValue):
     Permitted Values: ``'16th'``, ``'eighth'``
 """
     
-    XSD_TREE = XSDTree(ET.fromstring("""
+    _XSD_TREE = XSDTree(ET.fromstring("""
 <xs:simpleType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="swing-type-value">
     <xs:annotation>
         <xs:documentation>The swing-type-value type specifies the note type, either eighth or 16th, to which the ratio defined in the swing element is applied.</xs:documentation>
