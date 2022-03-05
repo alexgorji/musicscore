@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+
 ns = '{http://www.w3.org/2001/XMLSchema}'
 xml_xsd_path = Path(__file__).parent / 'xml.xsd'
 musicxml_xsd_path = Path(__file__).parent / 'musicxml_4_0.xsd'
@@ -12,8 +13,6 @@ with open(musicxml_xsd_path) as file:
 # -------------------------------------
 xml_xsd_et_root = xml_et_tree.getroot()
 musicxml_xsd_et_root = musicxml_et_tree.getroot()
-
-parent_map = {c: p for p in musicxml_xsd_et_root.iter() for c in p}
 
 
 def get_all_et_elements(source_path, tag):

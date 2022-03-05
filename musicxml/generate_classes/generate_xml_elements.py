@@ -26,20 +26,36 @@ class $class_name($base_classes):
     _SEARCH_FOR_ELEMENT = "$search_for"
 """
 
-typed_elements = list(
-    dict.fromkeys(
-        [
-            (node.attrib['name'], node.attrib['type']) for node in musicxml_xsd_et_root.iter() if node.tag == f'{ns}element' and
-                                                                                                  node.attrib.get('type') is not None
-        ]
-    )
+xml_element_class_names = ['XMLScorePartwise', 'XMLPart', 'XMLMeasure', 'XMLDirective']
+
+typed_elements = set(
+    (node.attrib['name'], node.attrib['type']) for node in musicxml_xsd_et_root.iter() if node.tag == f'{ns}element' and
+    node.attrib.get('type') is not None
 )
 
-xml_element_class_names = ['XMLScorePartwise', 'XMLPart', 'XMLMeasure', 'XMLDirective']
+
+# def generate_child_parent_dict() -> dict:
+#     """
+#     :return: a dictionary with name of a child XMLElement as key assiciated with a tuple of possible XMLElement parent names.
+#
+#     >>> child_parent_dict = generate_child_parent_dict()
+#     >>> child_parent_dict['XMLPageLayout']
+#     ('XMLDefault', 'XMLPrint')
+#     """
+#     output = {}
+#     for name, type_ in typed_elements:
+#         print(name, type_)
+#         pass
+#     #     container = containers[type_]
+#     return output
 
 
 def element_class_as_string(element_):
     def get_doc():
+        def get_external_doc_link():
+
+            return f"`external documentation <https://www.w3.org/2021/06/musicxml40/musicxml-reference/elements/{element_[0]}/>`_"
+
         def get_attributes_doc():
             output = ""
             try:
@@ -78,11 +94,14 @@ def element_class_as_string(element_):
             return output
 
         output = xsd_tree.get_doc()
+        output += get_external_doc_link()
+        output += '\n'
+        output += '\n'
         if xsd_type in all_complex_types:
             complex_type_doc = eval(xsd_type).__doc__
 
             if complex_type_doc:
-                if complex_type_doc and output and output != "":
+                if complex_type_doc:
                     output += '\n'
                     output += '\n'
                 output += '``complexType``: '
@@ -140,8 +159,9 @@ def element_class_as_string(element_):
     xml_element_class_names.append(class_name)
     try:
         xsd_type = convert_to_xsd_class_name(xsd_tree.get_attributes()['type'], 'complex_type')
-        assert xsd_type in all_complex_types
-    except (ValueError, AssertionError):
+        if xsd_type not in all_complex_types:
+            raise ValueError
+    except ValueError:
         xsd_type = convert_to_xsd_class_name(xsd_tree.get_attributes()['type'], 'simple_type')
     base_classes = ('XMLElement',)
     ET.indent(found_et_xml, space='    '),
