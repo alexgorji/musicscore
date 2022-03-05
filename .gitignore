@@ -3,3 +3,9 @@ __pycach__/
 *.pyc
 venv
 docs/_build
+.coverage
+.pytest_cache
+.mypy_cache
+build/
+musicscore2.egg-info/
+dist
