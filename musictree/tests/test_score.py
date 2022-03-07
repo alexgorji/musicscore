@@ -132,31 +132,19 @@ class TestScore(IdTestCase):
         assert s.xml_object.xml_identification is not None
         assert s.xml_object.xml_identification.xml_encoding is not None
         all_supports = s.xml_object.xml_identification.xml_encoding.find_children('XMLSupports')
-        assert len(all_supports) == 5
+        assert len(all_supports) == 3
 
-        assert all_supports[0].attribute == 'new-system'
-        assert all_supports[0].element == 'print'
+        assert all_supports[0].element == 'accidental'
         assert all_supports[0].type == 'yes'
-        assert all_supports[0].value == 'yes'
 
-        assert all_supports[1].attribute == 'new-page'
-        assert all_supports[1].element == 'print'
+        assert all_supports[1].element == 'beam'
         assert all_supports[1].type == 'yes'
-        assert all_supports[1].value == 'yes'
 
-        assert all_supports[2].element == 'accidental'
+        assert all_supports[2].element == 'stem'
         assert all_supports[2].type == 'yes'
-
-        assert all_supports[3].element == 'beam'
-        assert all_supports[3].type == 'yes'
-
-        assert all_supports[4].element == 'stem'
-        assert all_supports[4].type == 'yes'
 
         expected = """<identification>
     <encoding>
-      <supports attribute="new-system" element="print" type="yes" value="yes" />
-      <supports attribute="new-page" element="print" type="yes" value="yes" />
       <supports element="accidental" type="yes" />
       <supports element="beam" type="yes" />
       <supports element="stem" type="yes" />
