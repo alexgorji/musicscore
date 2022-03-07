@@ -695,3 +695,49 @@ class TestXMLElements(TestCase):
         expected = """<fret>2</fret>
 """
         assert f.to_string() == expected
+
+    def test_xml_xsd_check_false(self):
+        """
+        Test if xsd checking can be turned off.
+        """
+        p = XMLPart(id='p1', xsd_check=False)
+        p.add_child(XMLTie())
+        p.add_child(XMLKey())
+        expected = """<part id="p1">
+  <tie />
+  <key />
+</part>
+"""
+        assert p.to_string() == expected
+
+    def test_xml_xsd_check_false_remove_child(self):
+        """
+        Test if removing child can take place if xsd checking is False.
+        """
+        p = XMLPart(id='p1', xsd_check=False)
+        t = p.add_child(XMLTie())
+        p.add_child(XMLKey())
+        p.remove(t)
+        expected = """<part id="p1">
+  <key />
+</part>
+"""
+        assert p.to_string() == expected
+
+    def test_xml_xsd_check_false_replace_child(self):
+        """
+        Test if replacing child can take place if xsd checking is False.
+        """
+        p = XMLPart(id='p1', xsd_check=False)
+        t = p.add_child(XMLTie())
+        p.add_child(XMLKey())
+        time = p.replace_child(t, XMLTime())
+        time.add_child(XMLSenzaMisura())
+        expected = """<part id="p1">
+  <time>
+    <senza-misura />
+  </time>
+  <key />
+</part>
+"""
+        assert p.to_string() == expected

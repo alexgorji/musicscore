@@ -85,10 +85,8 @@ extra_classes = {
          }
 }
 
-xml_element_class_names = []
+xml_element_class_names = ['XMLSenzaMisura']
 
-
-# xml_element_class_names = ['XMLScorePartwise']
 
 def element_class_as_string(element_name_type):
     def get_doc():
@@ -246,6 +244,8 @@ def element_class_as_string(element_name_type):
 """
     return t
 
+
+typed_elements.remove(('senza-misura', 'xs:string'))
 
 with open(target_path, 'w+') as f:
     with open(default_path, 'r') as default:
