@@ -1,3 +1,4 @@
 [submodule "musicxml"]
 	path = musicxml
-	url = git@github.com:alexgorji/musicxml
+	url = https://github.com/alexgorji/musicxml
+	branch = master
