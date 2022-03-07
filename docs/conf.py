@@ -14,6 +14,7 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, Path(__file__).parents[1].resolve().as_posix())
+sys.path.insert(0, (Path(__file__).parents[1].resolve()/'musicxml').as_posix())
 
 # -- Project information -----------------------------------------------------
 
