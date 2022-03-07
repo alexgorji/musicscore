@@ -1,5 +1,5 @@
-musicxml.xsd.xsdindicator
-=========================
+xsd.xsdindicator
+================
 
 .. automodule:: musicxml.xsd.xsdindicator
    :members:

@@ -1,5 +1,5 @@
-musicxml.xsd.xsdattribute
-=========================
+xsd.xsdattribute
+================
 
 .. automodule:: musicxml.xsd.xsdattribute
    :members:

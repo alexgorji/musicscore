@@ -5,7 +5,8 @@ Content
    :maxdepth: 4
 
    intro
+   intro_musicxml
+   intro_musictree
    usage
-   musictree
-   musicxml
-   tree
+   api
+   indices

@@ -1,5 +1,5 @@
-musicxml.xsd.xsdsimpletype
-==========================
+xsd.xsdsimpletype
+=================
 
 .. automodule:: musicxml.xsd.xsdsimpletype
    :members:

@@ -1,5 +1,5 @@
-﻿musicxml.xmlelement.xmlelement
-==============================
+﻿XMLELEMENT
+==========
 
 .. automodule:: musicxml.xmlelement.xmlelement
 

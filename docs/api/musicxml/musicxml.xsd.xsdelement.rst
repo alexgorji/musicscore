@@ -1,5 +1,5 @@
-musicxml.xsd.xsdelement
-=======================
+xsd.xsdelement
+==============
 
 .. automodule:: musicxml.xsd.xsdelement
    :members:

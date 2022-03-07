@@ -1,5 +1,5 @@
-musicxml.xsd.xsdtree
-====================
+xsd.xsdtree
+===========
 
 .. automodule:: musicxml.xsd.xsdtree
    :members:

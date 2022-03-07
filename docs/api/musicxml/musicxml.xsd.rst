@@ -1,5 +1,5 @@
-musicxml.xsd
-============
+XSD
+===
 .. toctree::
    :maxdepth: 4
 
