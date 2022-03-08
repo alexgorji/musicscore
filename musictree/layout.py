@@ -24,7 +24,7 @@ PAGE_SIZES = {'A4': (209.991, 297.0389), 'A3': (297.0389, 419.9819)}
 SYSTEM_MARGINS = {'left': 0, 'right': 0}
 
 #:
-SYSTEM_LAYOUT = {'system_distance': 117, 'top_system_distance': 66}
+SYSTEM_LAYOUT = {'system_distance': 117, 'top_system_distance': 117}
 
 #:
 STAFF_LAYOUT = {'staff_distance': 80}

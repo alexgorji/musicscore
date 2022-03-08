@@ -96,7 +96,7 @@ A musictree consists of a root :obj:`~musictree.score.Score` and its 9 descendin
        its add_x methods. The corresponding XMLElement objects will be added to :obj:`~musicxml.xmlelement.xmlelement.XMLNote` or
        :obj:`~musicxml.xmlelemen.xmlelement.XMLMeasure` as necessary.
 
-    * Other useful add_x methods like :obj:`~musictree.chord.Chord.add_articulation(), :obj:`~musictree.chord.Chord.add_technical()` are
+    * Other useful add_x methods like :obj:`~musictree.chord.Chord.add_xml_articulation(), :obj:`~musictree.chord.Chord.add_xml_technical()` are
       available for adding other XMLElements to XMLNotes.
 
 

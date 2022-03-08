@@ -1,7 +1,5 @@
 from pathlib import Path
 
-from musicxml.xmlelement.xmlelement import XMLAccent
-
 from musictree.chord import Chord
 from musictree.part import Part
 from musictree.quarterduration import QuarterDuration

@@ -99,7 +99,6 @@ class Staff(MusicTree, XMLWrapper):
         """
         if voice_number is None:
             voice_number = len(self.get_children()) + 1
-            # voice_number = 1
         voice_object = self.get_voice(voice_number=voice_number)
         if voice_object is None:
             for _ in range(voice_number - len(self.get_children())):

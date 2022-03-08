@@ -17,6 +17,7 @@ class Measure(MusicTree, XMLWrapper):
 
     def __init__(self, number, time=None, *args, **kwargs):
         super().__init__()
+        self._updated = False
         self._xml_object = self.XMLClass(*args, **kwargs)
         self.number = number
         self._time = None
@@ -144,15 +145,6 @@ class Measure(MusicTree, XMLWrapper):
                 voice.update_beats()
 
     def _update_xml_notes(self):
-
-        def reset_notes():
-            current_xml_notes = self.xml_object.find_children('XMLNote')
-            current_xml_backups = self.xml_object.find_children('XMLBackup')
-            for note in current_xml_notes:
-                note.up.remove(note)
-            for backup in current_xml_backups:
-                backup.up.remove(backup)
-
         def add_backup():
             b = XMLBackup()
             d = self.quarter_duration * self.get_divisions()
@@ -161,7 +153,6 @@ class Measure(MusicTree, XMLWrapper):
             b.xml_duration = int(d)
             self.xml_object.add_child(b)
 
-        reset_notes()
         self._update_divisions()
         for beat in [b for staff in self.get_children() for voice in staff.get_children() for b in voice.get_children()]:
             beat._update_xml_notes()

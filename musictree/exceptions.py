@@ -18,6 +18,10 @@ class ChordException(MusicTreeException):
     pass
 
 
+class ChordAlreadyFinalUpdated(ChordException):
+    pass
+
+
 class ChordAlreadySplitError(ChordException):
     pass
 
@@ -105,7 +109,10 @@ class IdHasAlreadyParentOfSameTypeError(IdException):
 class IdWithSameValueExistsError(IdException):
     pass
 
+
 class QuantizationException(Exception):
     pass
+
+
 class QuantizationBeatNotFullError(QuantizationException):
     pass

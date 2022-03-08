@@ -1,63 +1,9 @@
-from typing import List, Union, Optional, Iterator
-
+from typing import List, Union
 from quicktions import Fraction
 import numbers
 
 #: {offset: {quarter_duration: return value(s), ... }, ...}
 BEATWISE_EXCEPTIONS = {0: {5: (3, 2), 6: (6,)}}
-
-
-def _check_quarter_duration(val):
-    if not isinstance(val, int) and not isinstance(val, float) and not isinstance(val, Fraction) and not isinstance(val, QuarterDuration):
-        raise TypeError(f'Wrong type for quarter duration: {type(val)}')
-
-    if val < 0:
-        raise ValueError()
-
-
-def is_writable(quarter_duration: Union[float, int, Fraction, 'QuarterDuration']):
-    """
-    Function to check if a quarter duration is writable or must be split into two durations.
-
-    :param quarter_duration:
-    :return: boolean
-
-    >>> is_writable(5)
-    False
-    >>> is_writable(7/8)
-    False
-    >>> is_writable(3/8)
-    True
-    """
-    if quarter_duration in [QuarterDuration(1, 64),
-                            QuarterDuration(1, 32),
-                            QuarterDuration(3, 64),
-                            QuarterDuration(1, 16),
-                            QuarterDuration(3, 32),
-                            QuarterDuration(1, 8),
-                            QuarterDuration(3, 16),
-                            QuarterDuration(1, 4),
-                            QuarterDuration(3, 8),
-                            QuarterDuration(1, 2),
-                            QuarterDuration(3, 4),
-                            QuarterDuration(1),
-                            QuarterDuration(3, 2),
-                            QuarterDuration(2),
-                            QuarterDuration(3),
-                            QuarterDuration(4),
-                            QuarterDuration(6),
-                            QuarterDuration(8),
-                            QuarterDuration(12)]:
-        return True
-    else:
-        return False
-
-
-def _convert_other(other):
-    if isinstance(other, QuarterDuration):
-        return other.value
-
-    return Fraction(other).limit_denominator(1000)
 
 
 class QuarterDuration(numbers.Rational):
@@ -276,6 +222,51 @@ class QuarterDuration(numbers.Rational):
         return self.__class__(self.value)
 
 
+def is_writable(quarter_duration: Union[float, int, Fraction, 'QuarterDuration']):
+    """
+    Function to check if a quarter duration is writable or must be split into two durations.
+
+    :param quarter_duration:
+    :return: boolean
+
+    >>> is_writable(5)
+    False
+    >>> is_writable(7/8)
+    False
+    >>> is_writable(3/8)
+    True
+    """
+    if quarter_duration in [QuarterDuration(1, 64),
+                            QuarterDuration(1, 32),
+                            QuarterDuration(3, 64),
+                            QuarterDuration(1, 16),
+                            QuarterDuration(3, 32),
+                            QuarterDuration(1, 8),
+                            QuarterDuration(3, 16),
+                            QuarterDuration(1, 4),
+                            QuarterDuration(3, 8),
+                            QuarterDuration(1, 2),
+                            QuarterDuration(3, 4),
+                            QuarterDuration(1),
+                            QuarterDuration(3, 2),
+                            QuarterDuration(2),
+                            QuarterDuration(3),
+                            QuarterDuration(4),
+                            QuarterDuration(6),
+                            QuarterDuration(8),
+                            QuarterDuration(12)]:
+        return True
+    else:
+        return False
+
+
+def _convert_other(other):
+    if isinstance(other, QuarterDuration):
+        return other.value
+
+    return Fraction(other).limit_denominator(1000)
+
+
 class QuarterDurationMixin:
     """
     Mixin for all Classes with a quarter_duration. Used in :obj:`~musictree.note.Note`, :obj:`~musictree.chord.Chord` and
@@ -287,10 +278,10 @@ class QuarterDurationMixin:
         self.quarter_duration = quarter_duration
 
     def _set_quarter_duration(self, val):
-        _check_quarter_duration(val)
         if isinstance(val, QuarterDuration):
             self._quarter_duration = val
         else:
+            check_quarter_duration_value(val)
             self._quarter_duration = QuarterDuration(val)
 
     @property
@@ -308,3 +299,13 @@ class QuarterDurationMixin:
             self._set_quarter_duration(val)
         else:
             self._quarter_duration = None
+
+
+def check_quarter_duration_value(val):
+    if not isinstance(val, int) and not isinstance(val, float) and not isinstance(val, Fraction) and not isinstance(val, QuarterDuration):
+        raise TypeError(f'Wrong type for quarter duration {val}: {type(val)}')
+
+    if val < 0:
+        raise ValueError()
+
+    return True

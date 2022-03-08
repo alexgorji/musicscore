@@ -248,7 +248,7 @@ class Score(MusicTree, XMLWrapper):
 
     def update(self) -> None:
         """
-        Calls :obj:`~musictree.part.Part.update()` method of all :obj:`~musictree.part.Part` children.
+        Calls :obj:`~musictree.part.Part.final_updates()` method of all :obj:`~musictree.part.Part` children.
         """
         for p in self.get_children():
-            p.update()
+            p.final_updates()

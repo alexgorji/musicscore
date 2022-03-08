@@ -1,4 +1,4 @@
-from fractions import Fraction
+from quicktions import Fraction
 
 from musictree.accidental import Accidental
 from musictree.beat import Beat
@@ -6,6 +6,7 @@ from musictree.chord import Chord, split_copy, group_chords
 from musictree.exceptions import ChordHasNoParentError, ChordQuarterDurationAlreadySetError
 from musictree.measure import Measure
 from musictree.midi import Midi
+from musictree.quarterduration import QuarterDuration
 from musictree.tests.util import check_notes, ChordTestCase, create_articulation, create_technical
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES
 from musicxml.xmlelement.xmlelement import *
@@ -55,20 +56,20 @@ class TestTreeChord(ChordTestCase):
     def test_chord_needs_parent_error(self):
         ch = Chord(70, 1)
         with self.assertRaises(ChordHasNoParentError):
-            ch._update_notes()
+            ch.final_updates()
         ch._parent = self.mock_beat
-        ch._update_notes()
+        ch.final_updates()
 
     def test_chord_update_notes(self):
         m = Measure(1)
         ch1 = Chord()
         assert not ch1.notes
         with self.assertRaises(ChordHasNoParentError):
-            ch1._update_notes()
+            ch1.final_updates()
         ch1.quarter_duration = 1
         ch1.midis = [70]
         m.add_chord(ch1)
-        ch1._update_notes()
+        ch1.final_updates()
         check_notes(ch1.notes, [70], [1])
         with self.assertRaises(ChordQuarterDurationAlreadySetError):
             ch1.quarter_duration = 1.5
@@ -76,7 +77,7 @@ class TestTreeChord(ChordTestCase):
         ch2 = Chord(quarter_duration=2.5, midis=[71])
         m.add_chord(ch2)
         for ch in m.get_chords()[1:]:
-            ch._update_notes()
+            ch.final_updates()
         assert [ch.notes[0].quarter_duration for ch in m.get_chords()] == [1, 2, 1 / 2]
 
     def test_init_quarter_durations(self):
@@ -94,6 +95,11 @@ class TestTreeChord(ChordTestCase):
         assert ch.quarter_duration == 8
         with self.assertRaises(TypeError):
             ch = Chord(80, '1.2')
+        ch = Chord(70, Fraction(1, 4))
+        assert ch.quarter_duration == 0.25
+        ch = Chord(70, QuarterDuration(1, 4))
+        assert ch.quarter_duration == 0.25
+
 
     def test_is_rest(self):
         """
@@ -108,7 +114,7 @@ class TestTreeChord(ChordTestCase):
         """
         c = Chord([60, 61, 62], 2)
         c._parent = self.mock_beat
-        c._update_notes()
+        c.final_updates()
         c.relative_x = 10
         assert c.relative_x == [10, 10, 10]
         c.relative_y = [None, 20, 10]
@@ -122,7 +128,7 @@ class TestTreeChord(ChordTestCase):
         c = Chord(70, 4, relative_x=10)
         c.midis[0].accidental.show = True
         c._parent = self.mock_beat
-        c._update_notes()
+        c.final_updates()
         expected = """<note relative-x="10">
   <pitch>
     <step>B</step>
@@ -151,7 +157,7 @@ class TestTreeChord(ChordTestCase):
         assert c.notes[0].to_string() == expected
         # change chord's midi (zero)
         c.midis[0].value = 0
-        # c._update_notes()
+        # c.final_updates()
 
         expected = """<note relative-x="10">
   <rest />
@@ -165,7 +171,7 @@ class TestTreeChord(ChordTestCase):
         # change chord's duration (not zero)
         c.quarter_duration = 1
         c._parent = self.mock_beat
-        c._update_notes()
+        c.final_updates()
         expected = """<note>
   <rest />
   <duration>1</duration>
@@ -181,7 +187,7 @@ class TestTreeChord(ChordTestCase):
         c.midis[0].value = 60
         c.quarter_duration = 0
         c._parent = self.mock_beat
-        c._update_notes()
+        c.final_updates()
         expected = """<note>
   <grace />
   <pitch>
@@ -213,7 +219,7 @@ class TestTreeChord(ChordTestCase):
         c = Chord(72, 2)
         c.midis[0].accidental.show = True
         c._parent = self.mock_beat
-        c._update_notes()
+        c.final_updates()
 
         c.xml_type = '16th'
         c.xml_stem = 'up'
@@ -242,7 +248,7 @@ class TestTreeChord(ChordTestCase):
 """
         assert c.notes[0].xml_pitch.to_string() == expected
         c.midis[0].value = 0
-        # c._update_notes()
+        # c.final_updates()
         assert c.notes[0].xml_pitch is None
         assert c.notes[0].xml_rest is not None
         assert c.is_rest
@@ -253,7 +259,7 @@ class TestTreeChord(ChordTestCase):
         """
         chord = Chord(Midi(70, accidental=Accidental(mode='sharp')), 1)
         chord._parent = self.mock_beat
-        chord._update_notes()
+        chord.final_updates()
         expected = """<pitch>
     <step>A</step>
     <alter>1</alter>
@@ -275,7 +281,7 @@ class TestTreeChord(ChordTestCase):
   <type>half</type>
 </note>
 """
-        chord._update_notes()
+        chord.final_updates()
         assert chord.notes[0].to_string() == expected
         chord.midis = [60, 61]
         expected = """<pitch>
@@ -295,7 +301,7 @@ class TestTreeChord(ChordTestCase):
     def test_chord_to_rest(self):
         chord = Chord(60, 2)
         chord._parent = self.mock_beat
-        chord._update_notes()
+        chord.final_updates()
         chord.to_rest()
         expected = """<note>
   <rest />
@@ -316,7 +322,7 @@ class TestTreeChord(ChordTestCase):
         chord.midis[1].accidental.show = True
         chord.midis[2].accidental.show = True
         chord._parent = self.mock_beat
-        chord._update_notes()
+        chord.final_updates()
         chord.xml_stem = 'up'
         expected_1 = """<note>
   <chord />
@@ -396,8 +402,8 @@ class TestTreeChord(ChordTestCase):
         ch2.add_tie('stop')
         ch1._parent = self.mock_beat
         ch2._parent = self.mock_beat
-        ch1._update_notes()
-        ch2._update_notes()
+        ch1.final_updates()
+        ch2.final_updates()
         assert [n.is_tied for n in ch1.notes] == [True, True]
         assert [n.is_tied for n in ch2.notes] == [False, False]
         assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
@@ -406,8 +412,8 @@ class TestTreeChord(ChordTestCase):
         ch2 = Chord(midis=[60, 61], quarter_duration=1)
         ch1._parent = self.mock_beat
         ch2._parent = self.mock_beat
-        ch1._update_notes()
-        ch2._update_notes()
+        ch1.final_updates()
+        ch2.final_updates()
 
         ch1.add_tie('start')
         ch2.add_tie('stop')
@@ -439,7 +445,7 @@ class TestTreeChord(ChordTestCase):
         ch = Chord(60, 2)
         ch._parent = self.mock_beat
         ch.add_lyric('test')
-        ch._update_notes()
+        ch.final_updates()
         assert ch.notes[0].xml_lyric is not None
         assert ch.notes[0].xml_lyric.xml_text.value_ == 'test'
 
@@ -447,7 +453,7 @@ class TestTreeChord(ChordTestCase):
         ch = Chord(60, 1)
         ch._parent = self.mock_beat
         lyrics1 = ch.add_lyric('one')
-        ch._update_notes()
+        ch.final_updates()
         lyrics2 = ch.add_lyric('two')
         assert ch.notes[0].find_children('XMLLyric') == [lyrics1, lyrics2]
 
@@ -462,31 +468,31 @@ class TestTreeChord(ChordTestCase):
         for technical_class in XML_TECHNICAL_CLASSES:
             ch = Chord(60, 1)
             ch._parent = self.mock_beat
-            ch.add_technical(create_technical(technical_class))
-            ch._update_notes()
+            ch.add_xml_technical(create_technical(technical_class))
+            ch.final_updates()
             assert ch.notes[0].xml_notations.xml_technical.get_children()[0].__class__ == technical_class
 
     #
     # def test_technical_fret(self):
     #     ch = Chord(60, 1)
     #     ch._parent = self.mock_beat
-    #     ch.add_technical(XMLFret())
+    #     ch.add_xml_technical(XMLFret())
 
     def test_add_articulations(self):
         for articulation_class in XML_ARTICULATION_CLASSES:
             ch = Chord(60, 1)
             ch._parent = self.mock_beat
-            ch.add_articulation(create_articulation(articulation_class))
-            ch._update_notes()
+            ch.add_xml_articulation(create_articulation(articulation_class))
+            ch.final_updates()
             assert ch.notes[0].xml_notations.xml_articulations.get_children()[0].__class__ == articulation_class
 
     def test_add_articulation_after_creating_notes(self):
         ch = Chord(60, 1)
         ch._parent = self.mock_beat
-        staccato = ch.add_articulation(create_articulation(XMLStaccato))
-        ch._update_notes()
+        staccato = ch.add_xml_articulation(create_articulation(XMLStaccato))
+        ch.final_updates()
         assert isinstance(ch.notes[0].xml_notations.xml_articulations.get_children()[0], XMLStaccato)
-        accent = ch.add_articulation(create_articulation(XMLAccent))
+        accent = ch.add_xml_articulation(create_articulation(XMLAccent))
         assert ch.notes[0].xml_notations.xml_articulations.get_children() == [staccato, accent]
 
     def test_add_multiple_articulations(self):
@@ -494,9 +500,9 @@ class TestTreeChord(ChordTestCase):
         ch = Chord(60, 1)
         ch._parent = self.mock_beat
         for a in articulation_classes:
-            ch.add_articulation(a())
+            ch.add_xml_articulation(a())
         assert len(ch._xml_articulations) == 3
-        ch._update_notes()
+        ch.final_updates()
         n = ch.notes[0]
         assert n.xml_notations.xml_articulations is not None
         assert [type(a) for a in n.xml_notations.xml_articulations.get_children()] == articulation_classes

@@ -23,13 +23,13 @@ class TestHelloWorldTechnicals(IdTestCase):
             technical_class = XML_TECHNICAL_CLASSES[index]
             next_technical_class = XML_TECHNICAL_CLASSES[index + 1] if index != len(XML_TECHNICAL_CLASSES) - 1 else None
             ch = Chord(60, 1)
-            ch.add_technical(create_technical(technical_class))
+            ch.add_xml_technical(create_technical(technical_class))
             p.add_chord(ch)
             if next_technical_class:
                 ch = Chord(60, 1)
-                ch.add_technical(create_technical(technical_class))
-                ch.add_technical(create_technical(next_technical_class))
-                ch.add_articulation(XMLAccent(placement='above'))
+                ch.add_xml_technical(create_technical(technical_class))
+                ch.add_xml_technical(create_technical(next_technical_class))
+                ch.add_xml_articulation(XMLAccent(placement='above'))
                 p.add_chord(ch)
 
         s.update()

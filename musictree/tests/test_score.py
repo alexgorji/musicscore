@@ -113,7 +113,7 @@ class TestScore(IdTestCase):
         assert s.xml_object.xml_defaults.xml_system_layout.xml_system_margins.xml_left_margin.value_ == 0
         assert s.xml_object.xml_defaults.xml_system_layout.xml_system_margins.xml_right_margin.value_ == 0
         assert s.xml_object.xml_defaults.xml_system_layout.xml_system_distance.value_ == 117
-        assert s.xml_object.xml_defaults.xml_system_layout.xml_top_system_distance.value_ == 66
+        assert s.xml_object.xml_defaults.xml_system_layout.xml_top_system_distance.value_ == 117
         s.system_layout.margins.left = 10
         assert s.xml_object.xml_defaults.xml_system_layout.xml_system_margins.xml_left_margin.value_ == 10
         s.system_layout.top_system_distance = 100

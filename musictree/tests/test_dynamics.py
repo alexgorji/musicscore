@@ -18,7 +18,7 @@ class TestDynamics(ChordTestCase):
             ch = Chord(60, 1)
             ch._parent = self.mock_beat
             ch.add_dynamics(dynamics)
-            ch._update_notes()
+            ch.final_updates()
             assert len(ch._xml_directions) == 1
             d = ch._xml_directions[0]
             assert d.placement == 'below'
@@ -28,7 +28,7 @@ class TestDynamics(ChordTestCase):
         ch = Chord(60, 1)
         ch._parent = self.mock_beat
         ch.add_dynamics('pp', placement='above')
-        ch._update_notes()
+        ch.final_updates()
         d = ch._xml_directions[0]
         assert d.placement == 'above'
 
@@ -36,7 +36,7 @@ class TestDynamics(ChordTestCase):
         ch = Chord(60, 1)
         ch._parent = self.mock_beat
         ch.add_dynamics(['pp', 'ff'], 'below')
-        ch._update_notes()
+        ch.final_updates()
         d = ch._xml_directions[0]
         dts = d.find_children('XMLDirectionType')
         assert d.placement == 'below'
@@ -47,7 +47,7 @@ class TestDynamics(ChordTestCase):
         ch._parent = self.mock_beat
         ch.add_dynamics('pp', 'above')
         ch.add_dynamics('ff', 'below')
-        ch._update_notes()
+        ch.final_updates()
         ds = ch._xml_directions
         assert [ds[0].placement, ds[1].placement] == ['above', 'below']
         assert ds[0].xml_direction_type.xml_dynamics.get_children()[0].__class__ == XMLPp

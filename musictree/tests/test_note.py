@@ -512,6 +512,6 @@ class TestNoteTie(NoteTestCase):
         p = Part('p1')
         ch = Chord(60, 1)
         p.add_chord(ch)
-        ch._update_notes()
+        ch.final_updates()
         n = ch.notes[0]
         assert n.up == n.parent_chord

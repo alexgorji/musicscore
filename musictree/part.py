@@ -158,7 +158,7 @@ class Part(MusicTree, XMLWrapper):
     @property
     def name(self) -> str:
         """
-        Set and get name. Setting tries to update name of :obj:`musictree.part.score_part`
+        Set and get name. Setting tries toupdate name of :obj:`musictree.part.score_part`
 
         :type: str
         :return: part's name. If no name is set part's :obj:`id_` is returned.
@@ -362,7 +362,7 @@ class Part(MusicTree, XMLWrapper):
 
     def update(self) -> None:
         """
-        Calls :obj:`~musictree.measure.Measure.update()` method of all :obj:`~musictree.measure.Measure` children.
+        Calls :obj:`~musictree.measure.Measure.final_updates()` method of all :obj:`~musictree.measure.Measure` children.
         """
         for m in self.get_children():
             m.update()

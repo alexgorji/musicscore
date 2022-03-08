@@ -7,7 +7,7 @@ from musictree.chord import split_copy, group_chords, Chord
 from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError
 from musictree.core import MusicTree
-from musictree.quarterduration import QuarterDurationMixin, QuarterDuration
+from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import lcm
 
 #: {offset : {chord.quarter_duration: split quarter_durations, ...}, ...}
@@ -286,7 +286,7 @@ class Beat(MusicTree, QuarterDurationMixin):
     def _update_xml_notes(self):
         if self.get_children():
             for chord in self.get_children():
-                chord._update_notes()
+                chord.final_updates()
             self._update_note_tuplets_dots()
             self._update_note_beams()
 

@@ -74,7 +74,7 @@ class TestSystemLayout(IdTestCase):
     def test_style_layout_default(self):
         sl = SystemLayout()
         assert sl.xml_system_distance.value_ == 117
-        assert sl.xml_top_system_distance.value_ == 66
+        assert sl.xml_top_system_distance.value_ == 117
         assert sl.xml_system_margins.xml_left_margin.value_ == 0
         assert sl.xml_system_margins.xml_right_margin.value_ == 0
 

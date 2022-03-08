@@ -1,8 +1,8 @@
-from fractions import Fraction
+from quicktions import Fraction
 from unittest import TestCase
 
 from musictree.beat import Beat
-from musictree.quarterduration import QuarterDuration
+from musictree.quarterduration import QuarterDuration, check_quarter_duration_value
 
 
 class TestQuarterDuration(TestCase):
@@ -74,3 +74,10 @@ class TestQuarterDuration(TestCase):
         copied = qd.__copy__()
         assert id(qd.value) != id(copied.value)
         assert qd.value == copied.value
+
+    def test_check_quarter_duration(self):
+        assert check_quarter_duration_value(1)
+        assert check_quarter_duration_value(1.2)
+        assert check_quarter_duration_value(1/3)
+        assert check_quarter_duration_value(Fraction(1, 3))
+        assert check_quarter_duration_value(QuarterDuration(1, 3))
