@@ -98,6 +98,22 @@ class MeasureException(MusicTreeException):
     pass
 
 
+class PartException(MusicTreeException):
+    pass
+
+
+class PartAlreadyFinalUpdated(PartException):
+    pass
+
+
+class ScoreException(MusicTreeException):
+    pass
+
+
+class ScoreAlreadyFinalUpdated(ScoreException):
+    pass
+
+
 class IdException(MusicTreeException):
     pass
 

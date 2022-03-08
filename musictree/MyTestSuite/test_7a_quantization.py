@@ -39,7 +39,6 @@ class TestHelloWorldQuantization(IdTestCase):
         """
         p.quantize()
         p.split_not_writable_chords()
-        s.update()
         """
         ... and exports the xm
         """

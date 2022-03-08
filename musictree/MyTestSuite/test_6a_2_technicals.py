@@ -32,7 +32,6 @@ class TestHelloWorldTechnicals(IdTestCase):
                 ch.add_xml_articulation(XMLAccent(placement='above'))
                 p.add_chord(ch)
 
-        s.update()
         """
         ... and exports the xm
         """

@@ -29,7 +29,6 @@ class TestHelloWorldArticulations(IdTestCase):
                 ch.add_xml_articulation(create_articulation(next_articulation_class))
                 p.add_chord(ch)
 
-        s.update()
         """
         ... and exports the xm
         """

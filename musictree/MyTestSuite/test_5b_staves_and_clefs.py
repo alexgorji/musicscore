@@ -30,7 +30,6 @@ class TestHelloPianoStaves(IdTestCase):
             p.add_chord(Chord(84, qd), voice_number=1, staff_number=1)
             p.add_chord(Chord(84 - 24, qd), voice_number=1, staff_number=2)
         p.add_measure()
-        s.update()
         """
         ... and exports the xml
         """

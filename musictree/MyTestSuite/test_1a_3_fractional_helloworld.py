@@ -39,7 +39,6 @@ class TestHelloWorld(IdTestCase):
         p.add_chord(Chord(60, 1 / 10))
         p.add_chord(Chord(60, 3 / 10))
         p.add_chord(Chord(60, 1 / 10))
-        s.update()
         """
         ... and exports the xml (3.1 is default)
         """

@@ -28,7 +28,6 @@ class TestHelloWorld(IdTestCase):
         He adds a loong Chord with midi 61 to Part
         """
         p.add_chord(Chord(60, 15))
-        s.update()
         """
         ... and exports the xml (3.1 is default)
         """

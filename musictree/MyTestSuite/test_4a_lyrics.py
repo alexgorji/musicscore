@@ -25,7 +25,6 @@ class TestHelloLyrics(IdTestCase):
             ch = Chord(60 + i, 3)
             ch.add_lyric(ch.midis[0].accidental.sign)
             p.add_chord(ch)
-        s.update()
         """
         ... and exports the xml
         """

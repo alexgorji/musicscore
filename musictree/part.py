@@ -3,7 +3,7 @@ from typing import List, Optional, Union, Iterator
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError, \
-    QuantizationBeatNotFullError
+    QuantizationBeatNotFullError, PartAlreadyFinalUpdated
 from musictree.measure import Measure
 from musictree.core import MusicTree
 from musictree.time import Time
@@ -115,7 +115,7 @@ class ScorePart(XMLWrapper):
 
 
 class Part(MusicTree, XMLWrapper):
-    _ATTRIBUTES = {'id_', 'name', '_score_part', '_current_measures'}
+    _ATTRIBUTES = {'id_', 'name', '_score_part', '_current_measures', '_final_updated'}
     XMLClass = XMLPart
 
     def __init__(self, id, name=None, *args, **kwargs):
@@ -127,6 +127,7 @@ class Part(MusicTree, XMLWrapper):
         self.name = name
         self._score_part = ScorePart(part=self)
         self._current_measures = {}
+        self._final_updated = False
 
     def _set_first_current_measure(self, staff_number, voice_number):
         for m in self.get_children():
@@ -360,9 +361,21 @@ class Part(MusicTree, XMLWrapper):
                   voice.get_children()]:
             b.split_not_writable_chords()
 
-    def update(self) -> None:
+    def final_updates(self) -> None:
         """
-        Calls :obj:`~musictree.measure.Measure.final_updates()` method of all :obj:`~musictree.measure.Measure` children.
+        final_updates can only be called once.
+
+        It calls :obj:`~musictree.measure.Measure.updates()` method of all :obj:`~musictree.measure.Measure` children.
         """
+        if self._final_updated:
+            raise PartAlreadyFinalUpdated()
+
         for m in self.get_children():
             m.update()
+
+        self._final_updated = True
+
+    def to_string(self, *args, **kwargs) -> str:
+        if not self._final_updated:
+            self.final_updates()
+        return super().to_string(*args, **kwargs)

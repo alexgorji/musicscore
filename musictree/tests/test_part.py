@@ -320,7 +320,7 @@ class TestPart(IdTestCase):
         p.add_chord(ch2, staff_number=2)
         assert ch1.get_staff_number() == 1
         assert ch2.get_staff_number() == 2
-        p.update()
+        p.final_updates()
         assert ch1.notes[0].xml_staff.value_ == 1
         assert ch2.notes[0].xml_staff.value_ == 2
 
@@ -347,7 +347,7 @@ class TestScorePart(IdTestCase):
         p = Part('P1')
         m1 = p.add_measure(time=(3, 4))
         m2 = p.add_measure(time=(2, 4))
-        p.update()
+        p.final_updates()
         assert m1.clefs[0].show is True
         assert m2.clefs[0].show is False
 

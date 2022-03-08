@@ -30,10 +30,7 @@ class TestHelloWorld(IdTestCase):
         min_midi = 60
         for qd in quarter_durations:
             p.add_chord(Chord(quarter_duration=qd, midis=Midi(min_midi + 10 - qd, accidental=Accidental(mode='sharp'))))
-        """
-        Updating xml_notes
-        """
-        s.update()
+
         """
         Exporting
         """

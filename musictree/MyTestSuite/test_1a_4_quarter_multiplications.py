@@ -37,7 +37,6 @@ class TestHelloRests(IdTestCase):
                 ch.add_lyric(qd)
                 p.add_chord(chord=ch, staff_number=2)
 
-        s.update()
         """
         ... and exports the xml
         """

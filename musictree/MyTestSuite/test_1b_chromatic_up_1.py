@@ -31,10 +31,6 @@ class TestHelloWorld(TestCase):
         for m, qd in zip(measures, quarter_durations):
             m.add_chord(Chord(quarter_duration=qd, midis=Midi(min_midi + 10 - qd, accidental=Accidental(mode='sharp'))))
         """
-        Updating xml_notes
-        """
-        s.update()
-        """
         Exporting
         """
         xml_path = Path(__file__).with_suffix('.xml')

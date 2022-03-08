@@ -46,7 +46,6 @@ class TestHelloTuplets1(IdTestCase):
         # for tuplet in tuplets[6]:
         #     p.add_chord(Chord(60, tuplet))
         p.split_not_writable_chords()
-        s.update()
         """
         ... and exports the xml
         """

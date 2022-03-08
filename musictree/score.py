@@ -1,5 +1,6 @@
 from typing import List
 
+from musictree.exceptions import ScoreAlreadyFinalUpdated
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, XMLEncoding, \
     XMLSupports
 
@@ -21,7 +22,7 @@ POSSIBLE_SUBDIVISIONS = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [
 
 
 class Score(MusicTree, XMLWrapper):
-    _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout'}
+    _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout', '_final_updated'}
 
     XMLClass = XMLScorePartwise
 
@@ -45,6 +46,7 @@ class Score(MusicTree, XMLWrapper):
         self.title = title
         self.subtitle = subtitle
         self._possible_subdivisions = POSSIBLE_SUBDIVISIONS.copy()
+        self._final_updated = False
 
     def _get_title_attributes(self):
         output = TITLE.copy()
@@ -246,9 +248,21 @@ class Score(MusicTree, XMLWrapper):
 """)
             f.write(self.to_string())
 
-    def update(self) -> None:
+    def final_updates(self) -> None:
         """
+        final_updates can only be called once.
+
         Calls :obj:`~musictree.part.Part.final_updates()` method of all :obj:`~musictree.part.Part` children.
         """
+        if self._final_updated:
+            raise ScoreAlreadyFinalUpdated()
+
         for p in self.get_children():
             p.final_updates()
+
+        self._final_updated = True
+
+    def to_string(self, *args, **kwargs) -> str:
+        if not self._final_updated:
+            self.final_updates()
+        return super().to_string(*args, **kwargs)

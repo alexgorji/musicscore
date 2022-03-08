@@ -26,7 +26,7 @@ class TestHelloWorld(IdTestCase):
         """
         m.add_chord(Chord(60, 4))
         m.update_chord_accidentals()
-        s.update()
+
         """
         ... and exports the xml (3.1 is default)
         """
