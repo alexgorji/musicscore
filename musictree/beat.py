@@ -1,11 +1,12 @@
 from typing import Optional, Union, List
 
+from musictree.finalupdate_mixin import FinalUpdateMixin
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
 
 from musictree.chord import split_copy, group_chords, Chord
 from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, ChordHasNoQuarterDurationError, \
-    ChordHasNoMidisError, BeatAlreadyFinalUpdated
+    ChordHasNoMidisError, AlreadyFinalUpdated
 from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import lcm
@@ -389,7 +390,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams
         """
         if self._final_updated:
-            raise BeatAlreadyFinalUpdated()
+            raise AlreadyFinalUpdated(self)
 
         if self.get_children():
             for chord in self.get_children():

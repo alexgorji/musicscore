@@ -2,6 +2,8 @@ from typing import List, Optional, Union
 
 from musictree.clef import BassClef, TrebleClef
 from musictree.core import MusicTree
+from musictree.exceptions import AlreadyFinalUpdated
+from musictree.finalupdate_mixin import FinalUpdateMixin
 from musictree.key import Key
 from musictree.staff import Staff
 from musictree.time import Time, flatten_times
@@ -11,8 +13,9 @@ from musictree.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup
 
 
-class Measure(MusicTree, XMLWrapper):
+class Measure(MusicTree, XMLWrapper, FinalUpdateMixin):
     _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration'}
+    _ATTRIBUTES.union(FinalUpdateMixin._ATTRIBUTES)
     XMLClass = XMLMeasure
 
     def __init__(self, number, time=None, *args, **kwargs):
@@ -134,17 +137,13 @@ class Measure(MusicTree, XMLWrapper):
                 else:
                     child.clef = BassClef()
 
-    def _update_divisions(self):
-        chord_divisions = {ch.quarter_duration.denominator for ch in self.get_chords()}
-        divisions = lcm(list(chord_divisions))
-        self.xml_object.xml_attributes.xml_divisions = divisions
-
     def _update_voice_beats(self):
         for staff in self.get_children():
             for voice in staff.get_children():
                 voice.update_beats()
 
-    def _update_xml_notes(self):
+    def _update_xml_backup_note_direction(self):
+
         def add_backup():
             b = XMLBackup()
             d = self.quarter_duration * self.get_divisions()
@@ -153,10 +152,6 @@ class Measure(MusicTree, XMLWrapper):
             b.xml_duration = int(d)
             self.xml_object.add_child(b)
 
-        self._update_divisions()
-        for beat in [b for staff in self.get_children() for voice in staff.get_children() for b in voice.get_children()]:
-            beat.final_updates()
-        self._update_accidentals()
         for staff in self.get_children():
             if staff != self.get_children()[0]:
                 add_backup()
@@ -169,6 +164,31 @@ class Measure(MusicTree, XMLWrapper):
                         self.xml_object.add_child(xml_direction)
                     for note in chord.notes:
                         self.xml_object.add_child(note.xml_object)
+
+    def final_updates(self):
+        """
+        final_updates can only be called once.
+
+        - It calls final_updates()` method of all children.
+        - Following updates are triggered: update_divisions, update_accidentals, update_xml_backups_notes_directions
+
+        """
+
+        if self._final_updated:
+            raise AlreadyFinalUpdated(self)
+
+        for st in self.get_children():
+            st.final_updates()
+
+        self._update_accidentals()
+        self._update_xml_backup_note_direction()
+
+        self._final_updated = True
+
+    def update_divisions(self):
+        chord_divisions = {ch.quarter_duration.denominator for ch in self.get_chords()}
+        divisions = lcm(list(chord_divisions))
+        self.xml_object.xml_attributes.xml_divisions = divisions
 
     @property
     def clefs(self) -> List['Clef']:
@@ -384,7 +404,7 @@ class Measure(MusicTree, XMLWrapper):
         :return: None
         """
         self._update_attributes()
-        self._update_xml_notes()
+        self.final_updates()
 
 
 def generate_measures(times, first_number=1):

@@ -1,5 +1,6 @@
 from typing import Optional, Set, List
 
+from musictree.finalupdate_mixin import FinalUpdateMixin
 from musicxml.xmlelement.xmlelement import XMLStaff
 
 from musictree.clef import TrebleClef, Clef
@@ -9,8 +10,9 @@ from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
 
 
-class Staff(MusicTree, XMLWrapper):
-    _ATTRIBUTES = {'clef', 'default_clef', 'number'}
+class Staff(MusicTree, XMLWrapper, FinalUpdateMixin):
+    _ATTRIBUTES = {'clef', 'default_clef', 'number', '_final_updated'}
+    _ATTRIBUTES.union(FinalUpdateMixin._ATTRIBUTES)
     XMLClass = XMLStaff
 
     def __init__(self, number=None, clef=TrebleClef(), **kwargs):

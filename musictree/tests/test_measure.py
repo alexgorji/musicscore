@@ -90,7 +90,7 @@ class TestMeasure(TestCase):
             v1.add_chord(Chord(60, qd))
         for qd in quarter_durations_2:
             v2.add_chord(Chord(70, qd))
-        m._update_divisions()
+        m.update_divisions()
         assert m.xml_object.xml_attributes.xml_divisions.value_ == 210
 
     def test_add_chord(self):
@@ -385,7 +385,7 @@ class TestUpdateAccidentals(IdTestCase):
         midis = [60, 61, 62, 60]
         for mi in midis:
             m.add_chord(Chord(mi, quarter_duration=1))
-        m._update_xml_notes()
+        m.final_updates()
         assert [ch.midis[0].accidental.show for ch in m.get_chords()] == [False, True, False, True]
 
     def test_update_accidentals_with_last_steps(self):
@@ -396,7 +396,7 @@ class TestUpdateAccidentals(IdTestCase):
         p.add_chord(Chord(midis=61, quarter_duration=2))
         p.add_chord(Chord(midis=60, quarter_duration=4))
         for m in p.get_children():
-            m._update_xml_notes()
+            m.final_updates()
         last_chord = p.get_children()[-1].get_children()[-1].get_chords()[0]
         assert last_chord.midis[0].accidental.sign == 'natural'
         assert last_chord.midis[0].accidental.show
@@ -413,7 +413,7 @@ class TestUpdateAccidentals(IdTestCase):
         m = Measure(1)
         m.add_chord(Chord(60, 4))
         m.add_chord(Chord(60, 4), voice_number=2)
-        m._update_xml_notes()
+        m.final_updates()
         ch1, ch2 = m.get_chords()
         assert ch1.notes[0].xml_voice.value_ == '1'
         assert ch2.notes[0].xml_voice.value_ == '2'

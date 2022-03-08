@@ -1,9 +1,9 @@
 from typing import List, Optional, Union, Iterator
 
+from musictree.finalupdate_mixin import FinalUpdateMixin
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
-from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError, \
-    QuantizationBeatNotFullError, PartAlreadyFinalUpdated
+from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, QuantizationBeatNotFullError, VoiceIsAlreadyFullError
 from musictree.measure import Measure
 from musictree.core import MusicTree
 from musictree.time import Time
@@ -114,8 +114,9 @@ class ScorePart(XMLWrapper):
         self.xml_object.xml_part_name = self.part.name
 
 
-class Part(MusicTree, XMLWrapper):
-    _ATTRIBUTES = {'id_', 'name', '_score_part', '_current_measures', '_final_updated'}
+class Part(MusicTree, XMLWrapper, FinalUpdateMixin):
+    _ATTRIBUTES = {'id_', 'name', '_score_part', '_current_measures'}
+    _ATTRIBUTES.union(FinalUpdateMixin._ATTRIBUTES)
     XMLClass = XMLPart
 
     def __init__(self, id, name=None, *args, **kwargs):
@@ -291,26 +292,6 @@ class Part(MusicTree, XMLWrapper):
 
         return child
 
-    def final_updates(self) -> None:
-        """
-        final_updates can only be called once.
-
-        It calls :obj:`~musictree.measure.Measure.updates()` method of all :obj:`~musictree.measure.Measure` children.
-        """
-        if self._final_updated:
-            raise PartAlreadyFinalUpdated()
-
-        for m in self.get_children():
-            m.update()
-
-        self._final_updated = True
-
-    def get_children(self) -> List[Measure]:
-        """
-        :return: list of added children.
-        :rtype: List[:obj:`~musictree.measure.Measure`]
-        """
-        return super().get_children()
 
     def get_current_measure(self, staff_number: Optional[int] = 1, voice_number: int = 1):
         """

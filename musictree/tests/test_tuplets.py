@@ -53,7 +53,7 @@ class TestTuplets(TestCase):
         for c in [ch1, ch2]:
             c.midis[0].accidental.show = False
             m.add_chord(c)
-        m._update_xml_notes()
+        m.final_updates()
         assert ch1.notes[0].to_string() == expected_1
         assert ch2.notes[0].to_string() == expected_2
 
@@ -64,7 +64,7 @@ class TestTuplets(TestCase):
         for x in chords:
             m.add_chord(x)
 
-        m._update_xml_notes()
+        m.final_updates()
 
         t1, t2 = [ch.notes[0].xml_notations.xml_tuplet for ch in chords]
         assert t1.type == 'start'
@@ -81,7 +81,7 @@ class TestTuplets(TestCase):
             m = Measure(index + 1)
             for q in quintuplet:
                 m.add_chord(Chord(midis=60, quarter_duration=q))
-            m._update_xml_notes()
+            m.final_updates()
             measures.append(m)
 
         for m in measures:
@@ -103,7 +103,7 @@ class TestTuplets(TestCase):
         for q in quarter_durations:
             m1.add_chord(Chord(midis=60, quarter_duration=q))
         m1.split_not_writable_chords()
-        m1._update_xml_notes()
+        m1.final_updates()
         b = m1.get_voice(staff_number=1, voice_number=1).get_children()[0]
         assert b.get_children() == m1.get_chords()
         n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()]
@@ -122,7 +122,7 @@ class TestTuplets(TestCase):
         for q in quarter_durations:
             m1.add_chord(Chord(midis=60, quarter_duration=q))
         m1.split_not_writable_chords()
-        m1._update_xml_notes()
+        m1.final_updates()
         n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()]
         assert n1.xml_notations.xml_tuplet.type == 'start'
         assert n3.xml_notations.xml_tuplet.type == 'stop'
@@ -139,7 +139,7 @@ class TestTuplets(TestCase):
             for q in sextuplet:
                 m.add_chord(Chord(midis=60, quarter_duration=q))
             m.split_not_writable_chords()
-            m._update_xml_notes()
+            m.final_updates()
             measures.append(m)
 
         for m in measures:

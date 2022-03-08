@@ -206,6 +206,5 @@ class TestBeatAddChild(TestCase):
 
         assert [ch.midis[0].accidental.xml_object.value_ if ch.midis[0].accidental.xml_object else None for ch in all_chords] == ['sharp',
                                                                                                                                   'sharp',
-                                                                                                                                None,
+                                                                                                                                  None,
                                                                                                                                   None]
-

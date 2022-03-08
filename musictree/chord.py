@@ -6,7 +6,7 @@ from musicxml.xmlelement.xmlelement import XMLChord, XMLLyric, XMLDirection, XML
 
 from musictree.dynamics import Dynamics
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
-    ChordQuarterDurationAlreadySetError, ChordNotesAreAlreadyCreatedError, ChordAlreadyFinalUpdated
+    ChordQuarterDurationAlreadySetError, AlreadyFinalUpdated
 from musictree.midi import Midi
 from musictree.core import MusicTree
 from musictree.note import Note
@@ -179,16 +179,17 @@ class Chord(MusicTree, QuarterDurationMixin):
         object will be prepared for returning a musicxml snippet or a whole musicxml file.
 
         - Check if parent :obj:`~musictree.beat.Beat`exists.
-        - Ancestor :obj:`~musictree.measure.Measure._update_divisions()` is called to update :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`'s :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions` attribute.
+        - Ancestor :obj:`~musictree.measure.Measure.update_divisions()` is called to update :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`'s :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions` attribute.
         - Following updates are triggered: update_notes, update_xml_chord, update_notes_quarter_durations, update_xml_lyrics,
         update_xml_directions, update_xml_articulations, update_technicals
         """
         if self._final_updated:
-            raise ChordAlreadyFinalUpdated()
+            raise AlreadyFinalUpdated(self)
 
         if not self.up:
             raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
-        self.get_parent_measure()._update_divisions()
+
+        self.get_parent_measure().update_divisions()
 
         self._update_notes()
         self._update_xml_chord()

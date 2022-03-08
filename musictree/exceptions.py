@@ -18,10 +18,6 @@ class ChordException(MusicTreeException):
     pass
 
 
-class ChordAlreadyFinalUpdated(ChordException):
-    pass
-
-
 class ChordAlreadySplitError(ChordException):
     pass
 
@@ -70,10 +66,6 @@ class BeatHasWrongTupletError(BeatException):
     pass
 
 
-class BeatAlreadyFinalUpdated(BeatException):
-    pass
-
-
 class VoiceException(MusicTreeException):
     pass
 
@@ -84,7 +76,6 @@ class VoiceHasNoBeatsError(VoiceException):
 
 class VoiceHasNoParentError(VoiceException):
     pass
-
 
 class VoiceIsAlreadyFullError(VoiceException):
     pass
@@ -106,15 +97,7 @@ class PartException(MusicTreeException):
     pass
 
 
-class PartAlreadyFinalUpdated(PartException):
-    pass
-
-
 class ScoreException(MusicTreeException):
-    pass
-
-
-class ScoreAlreadyFinalUpdated(ScoreException):
     pass
 
 
@@ -136,3 +119,9 @@ class QuantizationException(Exception):
 
 class QuantizationBeatNotFullError(QuantizationException):
     pass
+
+
+class AlreadyFinalUpdated(MusicTreeException):
+    def __init__(self, object_):
+        msg = f"final_updates method of {object_.__class__.__name__} can only be called once."
+        super().__init__(msg)

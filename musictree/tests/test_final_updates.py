@@ -1,5 +1,5 @@
 from musictree.chord import Chord
-from musictree.exceptions import ChordAlreadyFinalUpdated, ScoreAlreadyFinalUpdated, PartAlreadyFinalUpdated, BeatAlreadyFinalUpdated
+from musictree.exceptions import AlreadyFinalUpdated
 from musictree.midi import Midi
 from musictree.part import Part
 from musictree.quarterduration import QuarterDuration
@@ -43,7 +43,7 @@ class TestFinalUpdates(IdTestCase):
         self.chord_1.final_updates()
         assert len(self.chord_1.get_children()) == 2
         assert_chord_note_values(self.chord_1, [(60, 1 / 3), (70, 1 / 3)])
-        with self.assertRaises(ChordAlreadyFinalUpdated):
+        with self.assertRaises(AlreadyFinalUpdated):
             self.chord_1.final_updates()
 
         self.chords_2[0].final_updates()
@@ -56,28 +56,38 @@ class TestFinalUpdates(IdTestCase):
         self.beats[1].final_updates()
         self.check_note_values(self.beats[1].get_chords(), [2])
 
-        with self.assertRaises(BeatAlreadyFinalUpdated):
+        with self.assertRaises(AlreadyFinalUpdated):
             self.beats[0].final_updates()
-        with self.assertRaises(BeatAlreadyFinalUpdated):
+        with self.assertRaises(AlreadyFinalUpdated):
             self.beats[1].final_updates()
 
     def test_voice_final_updates(self):
-        self.fail('Incomplete')
+        self.voice.final_updates()
+        self.check_note_values(self.voice.get_chords())
+        with self.assertRaises(AlreadyFinalUpdated):
+            self.voice.final_updates()
 
     def test_staff_final_updates(self):
-        self.fail('Incomplete')
+        self.staff.final_updates()
+        self.check_note_values(self.staff.get_chords())
+        with self.assertRaises(AlreadyFinalUpdated):
+            self.staff.final_updates()
+        self.staff.to_string()
 
     def test_measure_final_updates(self):
-        self.fail('Incomplete')
+        self.measure.final_updates()
+        self.check_note_values(self.measure.get_chords())
+        with self.assertRaises(AlreadyFinalUpdated):
+            self.measure.final_updates()
 
     def test_part_final_updates(self):
         self.part.final_updates()
         self.check_note_values(self.part.get_chords())
-        with self.assertRaises(PartAlreadyFinalUpdated):
-            self.score.final_updates()
+        with self.assertRaises(AlreadyFinalUpdated):
+            self.part.final_updates()
 
     def test_update_score(self):
         self.score.final_updates()
         self.check_note_values(self.score.get_chords())
-        with self.assertRaises(ScoreAlreadyFinalUpdated):
+        with self.assertRaises(AlreadyFinalUpdated):
             self.score.final_updates()
