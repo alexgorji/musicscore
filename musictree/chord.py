@@ -27,7 +27,7 @@ _all_technicals = Union[
 
 class Chord(MusicTree, QuarterDurationMixin):
     """
-    Chord is a sequence of one or more XMLNotes which occur at the same time in a XMLMeasure of a XMLPart.
+    Chord is a sequence of one or more :obj:`~musicxml.xmlelement.xmlelement.XMLNote`s which occur at the same time in a :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` of a :obj:`~musicxml.xmlelement.xmlelement.XMLPart`.
     :param midis: Midi, Midi.value, [Midi, Midi.value] 0 or [0] for a rest.
     :param quarter_duration: int, float, Fraction, QuarterDuration for duration counted in quarters (crotchets). 0 for grace note (or
     chord).

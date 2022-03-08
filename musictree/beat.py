@@ -87,12 +87,15 @@ class Beat(MusicTree, QuarterDurationMixin):
     Beat is the direct ancestor of chords. Each :obj:`~musictree.chord.Chord` is placed with an offset between 0 and beat's
     quarter duration inside the beat as its child .
 
-    :obj:`~musictree.chord.Chord`'s quarter duration can exceed beat's duration until the end of its parent :obj:`~musictree.voice.Voice`. If a :obj:`~musictree.chord.Chord` is longer
-    than that a leftover :obj:`~musictree.chord.Chord` will be added to the parent :obj:`~musictree.voice.Voice` and can be accessed from the next measure.
+    Quarter duration of a beat's :obj:`~musictree.chord.Chord` child can exceed its own quarter duration. If a
+    :obj:`~musictree.chord.Chord` is longer than the quarter duration of beat's parent :obj:`~musictree.voice.Voice`,
+    a leftover :obj:`~musictree.chord.Chord` will be added as leftover property to the :obj:`~musictree.voice.Voice` which will be added
+    to next measure's appropriate voice .
 
-    Beat manages splitting of each child :obj:`~musictree.chord.Chord` into appropriate tied :obj:`~musictree.chord.Chord` s if needed.
-    The dots and tuplets are also added here to
-    :obj:`~musictree.chord.Chord` or directly to their :obj:`~musictree.note.Note` children.
+    Beat manages splitting of each child :obj:`~musictree.chord.Chord` into appropriate tied :obj:`~musictree.chord.Chord` s if needed,
+    for example if this chord has a non-writable quarter duration like 5/6.
+
+    The dots and tuplets are also added here to :obj:`~musictree.chord.Chord` or directly to their :obj:`~musictree.note.Note` children.
 
     Beaming and quantization are also further important tasks of a beat.
     """

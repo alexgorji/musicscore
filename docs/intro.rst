@@ -15,4 +15,11 @@ seems at the moment to have the best implementation of musicxml format files and
 
 Check out the :doc:`usage` section for further information, including how to :ref:`install <installation>` the project.
 
-.. include:: index.rst
+.. toctree::
+   :maxdepth: 4
+
+   intro_musicxml
+   intro_musictree
+   usage
+   api
+   indices
