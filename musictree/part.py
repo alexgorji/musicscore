@@ -291,6 +291,20 @@ class Part(MusicTree, XMLWrapper):
 
         return child
 
+    def final_updates(self) -> None:
+        """
+        final_updates can only be called once.
+
+        It calls :obj:`~musictree.measure.Measure.updates()` method of all :obj:`~musictree.measure.Measure` children.
+        """
+        if self._final_updated:
+            raise PartAlreadyFinalUpdated()
+
+        for m in self.get_children():
+            m.update()
+
+        self._final_updated = True
+
     def get_children(self) -> List[Measure]:
         """
         :return: list of added children.
@@ -360,20 +374,6 @@ class Part(MusicTree, XMLWrapper):
         for b in [beat for measure in self.get_children() for staff in measure.get_children() for voice in staff.get_children() for beat in \
                   voice.get_children()]:
             b.split_not_writable_chords()
-
-    def final_updates(self) -> None:
-        """
-        final_updates can only be called once.
-
-        It calls :obj:`~musictree.measure.Measure.updates()` method of all :obj:`~musictree.measure.Measure` children.
-        """
-        if self._final_updated:
-            raise PartAlreadyFinalUpdated()
-
-        for m in self.get_children():
-            m.update()
-
-        self._final_updated = True
 
     def to_string(self, *args, **kwargs) -> str:
         if not self._final_updated:

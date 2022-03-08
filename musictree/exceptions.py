@@ -70,6 +70,10 @@ class BeatHasWrongTupletError(BeatException):
     pass
 
 
+class BeatAlreadyFinalUpdated(BeatException):
+    pass
+
+
 class VoiceException(MusicTreeException):
     pass
 

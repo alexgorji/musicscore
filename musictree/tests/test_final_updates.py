@@ -1,5 +1,5 @@
 from musictree.chord import Chord
-from musictree.exceptions import ChordAlreadyFinalUpdated, ScoreAlreadyFinalUpdated, PartAlreadyFinalUpdated
+from musictree.exceptions import ChordAlreadyFinalUpdated, ScoreAlreadyFinalUpdated, PartAlreadyFinalUpdated, BeatAlreadyFinalUpdated
 from musictree.midi import Midi
 from musictree.part import Part
 from musictree.quarterduration import QuarterDuration
@@ -20,13 +20,16 @@ class TestFinalUpdates(IdTestCase):
         self.staff = self.measure.add_staff()
         self.voice = self.staff.add_voice()
         self.voice.update_beats()
-        self.beat = self.voice.get_children()[0]
+        self.beats = self.voice.get_children()
         self.chord_1 = self.voice.add_chord(Chord(60, QuarterDuration(1, 3)))[0]
         self.chords_2 = self.voice.add_chord(Chord(61, QuarterDuration(2, 3) + QuarterDuration(3)))
 
     @staticmethod
-    def check_note_values(chords):
-        for i, chord in enumerate(chords):
+    def check_note_values(chords, indices=None):
+        if indices is None:
+            indices = range(len(chords))
+
+        for i, chord in zip(indices, chords):
             if i == 0:
                 assert_chord_note_values(chord, [(60, 1 / 3)])
             elif i == 1:
@@ -47,7 +50,16 @@ class TestFinalUpdates(IdTestCase):
         assert_chord_note_values(self.chords_2[0], [(61, 2 / 3)])
 
     def test_beat_final_updates(self):
-        self.fail('Incomplete')
+        self.beats[0].final_updates()
+        self.check_note_values(self.beats[0].get_chords(), [0, 1])
+
+        self.beats[1].final_updates()
+        self.check_note_values(self.beats[1].get_chords(), [2])
+
+        with self.assertRaises(BeatAlreadyFinalUpdated):
+            self.beats[0].final_updates()
+        with self.assertRaises(BeatAlreadyFinalUpdated):
+            self.beats[1].final_updates()
 
     def test_voice_final_updates(self):
         self.fail('Incomplete')

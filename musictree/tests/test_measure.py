@@ -481,6 +481,9 @@ class TestMeasureAttributes(TestCase):
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
         assert clefs[0].xml_sign.value_ == 'G'
         assert clefs[0].xml_line.value_ == 2
+
+        m = Measure(1)
+        m.add_staff()
         m.add_staff()
         m.update()
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
@@ -488,9 +491,15 @@ class TestMeasureAttributes(TestCase):
         assert clefs[0].xml_line.value_ == 2
         assert clefs[1].xml_sign.value_ == 'F'
         assert clefs[1].xml_line.value_ == 4
+
+        m = Measure(1)
+        m.add_staff()
+        m.add_staff()
+        m.update()
         m.clefs[0].sign = 'C'
         m.clefs[0].line = 3
-        m.update()
+        
+        clefs = m.xml_object.xml_attributes.find_children('XMLClef')
         assert clefs[0].xml_sign.value_ == 'C'
         assert clefs[0].xml_line.value_ == 3
 

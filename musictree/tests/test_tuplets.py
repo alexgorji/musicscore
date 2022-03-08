@@ -161,7 +161,7 @@ class TestTuplets(TestCase):
         ch1, ch2, ch3 = chords = [Chord(60, 2 / 5), Chord(61, 2 / 5), Chord(62, 1 / 5)]
         for ch in chords:
             beats[0].add_child(ch)
-        beats[0]._update_xml_notes()
+        beats[0].final_updates()
         assert ch1.notes[0].xml_notations.xml_tuplet.type == 'start'
         assert ch1.notes[0].xml_notations.xml_tuplet.bracket == 'yes'
         assert ch1.notes[0].xml_notations.xml_tuplet.number == 1
@@ -174,7 +174,7 @@ class TestTuplets(TestCase):
         beats = v1.update_beats(1)
         for quarter_duration in [1 / 6, 1 / 6, 1 / 6, 1 / 10, 3 / 10, 1 / 10]:
             v1.add_chord(Chord(60, quarter_duration))
-        beats[0]._update_xml_notes()
+        beats[0].final_updates()
         n1, n2, n3, n4, n5, n6 = [ch.notes[0] for ch in v1.get_chords()]
         for n in [n1, n2, n3]:
             assert (n.xml_time_modification.xml_actual_notes.value_, n.xml_time_modification.xml_normal_notes.value_,
@@ -195,7 +195,7 @@ class TestTuplets(TestCase):
         for quarter_duration in [q for group in generate_all_triplets() for q in group]:
             v1.add_chord(Chord(60, quarter_duration))
         for index, beat in enumerate(beats):
-            beat._update_xml_notes()
+            beat.final_updates()
             if index == 0:
                 for i, c in enumerate(beat.get_children()):
                     beams = c.notes[0].find_children('XMLBeam')

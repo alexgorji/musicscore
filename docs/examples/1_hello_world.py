@@ -1,13 +1,13 @@
 from pathlib import Path
 
-from beat import Beat
+from musictree.beat import Beat
 from musictree.chord import Chord
 from musictree.measure import Measure
 from musictree.part import Part
 from musictree.score import Score
 from musictree.tests.util import IdTestCase
-from staff import Staff
-from voice import Voice
+from musictree.staff import Staff
+from musictree.voice import Voice
 
 
 class TestHelloWorld(IdTestCase):
@@ -49,8 +49,6 @@ class TestHelloWorld(IdTestCase):
         """
         beat.add_child(Chord(60, 4))
 
-        s.update()
-        s.update()
         """
         ... and export
         """

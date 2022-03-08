@@ -155,7 +155,7 @@ class Measure(MusicTree, XMLWrapper):
 
         self._update_divisions()
         for beat in [b for staff in self.get_children() for voice in staff.get_children() for b in voice.get_children()]:
-            beat._update_xml_notes()
+            beat.final_updates()
         self._update_accidentals()
         for staff in self.get_children():
             if staff != self.get_children()[0]:

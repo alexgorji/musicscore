@@ -5,7 +5,7 @@ from quicktions import Fraction
 
 from musictree.chord import split_copy, group_chords, Chord
 from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, ChordHasNoQuarterDurationError, \
-    ChordHasNoMidisError
+    ChordHasNoMidisError, BeatAlreadyFinalUpdated
 from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import lcm
@@ -106,6 +106,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         super().__init__(quarter_duration=quarter_duration)
         self._filled_quarter_duration = 0
         self.leftover_chord = None
+        self._final_updated = False
 
     def _add_child(self, child):
         child._parent = self
@@ -239,29 +240,7 @@ class Beat(MusicTree, QuarterDurationMixin):
                 else:
                     pass
 
-    @staticmethod
-    def _get_actual_notes(chords):
-        denominators = list(dict.fromkeys([ch.quarter_duration.denominator for ch in chords]))
-        if len(denominators) > 1:
-            l_c_m = lcm(denominators)
-            if l_c_m not in denominators:
-                return None
-            else:
-                return l_c_m
-        else:
-            return next(iter(denominators))
-
-    def _remove_zero_quarter_durations(self):
-        zeros = [ch for ch in self.get_children() if ch.quarter_duration == 0]
-        for ch in zeros:
-            if 'start' in ch._ties:
-                pass
-            elif 'stop' in ch._ties:
-                ch.up.remove(ch)
-            else:
-                pass
-
-    def _update_note_tuplets_dots(self):
+    def _update_note_tuplets_and_dots(self):
         actual_notes = self._get_actual_notes(self.get_children())
         if not actual_notes:
             if self.quarter_duration == 1:
@@ -283,12 +262,27 @@ class Beat(MusicTree, QuarterDurationMixin):
         if self.get_children():
             beam_chord_group(chord_group=self.get_children())
 
-    def _update_xml_notes(self):
-        if self.get_children():
-            for chord in self.get_children():
-                chord.final_updates()
-            self._update_note_tuplets_dots()
-            self._update_note_beams()
+    @staticmethod
+    def _get_actual_notes(chords):
+        denominators = list(dict.fromkeys([ch.quarter_duration.denominator for ch in chords]))
+        if len(denominators) > 1:
+            l_c_m = lcm(denominators)
+            if l_c_m not in denominators:
+                return None
+            else:
+                return l_c_m
+        else:
+            return next(iter(denominators))
+
+    def _remove_zero_quarter_durations(self):
+        zeros = [ch for ch in self.get_children() if ch.quarter_duration == 0]
+        for ch in zeros:
+            if 'start' in ch._ties:
+                pass
+            elif 'stop' in ch._ties:
+                ch.up.remove(ch)
+            else:
+                pass
 
     @property
     def is_filled(self) -> bool:
@@ -386,6 +380,24 @@ class Beat(MusicTree, QuarterDurationMixin):
         if chord is None:
             chord = Chord(midis=60, quarter_duration=self.quarter_duration)
         return self.add_child(chord)
+
+    def final_updates(self):
+        """
+        final_updates can only be called once.
+
+        - It calls :obj:`~musictree.chord.Chord.final_updates()` method of all :obj:`~musictree.chord.Chord` children.
+        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams
+        """
+        if self._final_updated:
+            raise BeatAlreadyFinalUpdated()
+
+        if self.get_children():
+            for chord in self.get_children():
+                chord.final_updates()
+            self._update_note_tuplets_and_dots()
+            self._update_note_beams()
+
+        self._final_updated = True
 
     def get_children(self) -> List[Chord]:
         """
