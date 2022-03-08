@@ -270,7 +270,7 @@ class Measure(MusicTree, XMLWrapper):
         self._update_clef_numbers()
         return child
 
-    def add_chord(self, chord: 'Chord', *, staff_number: Optional[int] = None, voice_number: int = 1) -> Union['Chord', List['Chord']]:
+    def add_chord(self, chord: 'Chord', *, staff_number: Optional[int] = None, voice_number: int = 1) -> List['Chord']:
         """
         Adds chord to selected :obj:`~musictree.voice.Voice`
 

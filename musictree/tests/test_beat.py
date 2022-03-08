@@ -62,13 +62,13 @@ class TestBeatAddChild(TestCase):
         v = create_voice()
         beats = v.update_beats(1 / 4, 1 / 4, 1 / 4, 1 / 4)
         assert v.get_current_beat() == beats[0]
-        chord1 = v.get_current_beat().add_child(Chord(60, quarter_duration=1 / 8))
+        chord1 = v.get_current_beat().add_child(Chord(60, quarter_duration=1 / 8))[0]
         assert chord1.up == beats[0]
         assert v.get_current_beat() == beats[0]
-        chord2 = v.get_current_beat().add_child(Chord(60, quarter_duration=1 / 8))
+        chord2 = v.get_current_beat().add_child(Chord(60, quarter_duration=1 / 8))[0]
         assert chord2.up == beats[0]
         assert v.get_current_beat() == beats[1]
-        chord3 = v.get_current_beat().add_child(Chord(60, quarter_duration=1 / 4))
+        chord3 = v.get_current_beat().add_child(Chord(60, quarter_duration=1 / 4))[0]
         assert chord3.up == beats[1]
         assert v.get_current_beat() == beats[2]
         chord4 = v.get_current_beat().add_child(Chord(60, quarter_duration=1 / 2))[0]

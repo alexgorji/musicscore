@@ -87,7 +87,7 @@ class Voice(MusicTree, XMLWrapper):
             raise VoiceHasNoParentError('A child Beat can only be added to a Voice if voice has a Staff parent.')
         return super().add_child(child)
 
-    def add_chord(self, chord: 'Chord') -> Union['Chord', List['Chord']]:
+    def add_chord(self, chord: 'Chord') -> List['Chord']:
         """
         :param chord: :obj:`~musictree.chord.Chord`, required
         :return: added chord or a list of split chords

@@ -330,7 +330,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         else:
             return self.previous.offset + self.previous.quarter_duration
 
-    def add_child(self, child: Chord) -> Union['Chord', List['Chord']]:
+    def add_child(self, child: Chord) -> List['Chord']:
         """
         If child's quarter duration is less than beat's remaining quarter duration: child is added to the beat.
 
@@ -359,7 +359,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         if diff <= 0:
             self._filled_quarter_duration += child.quarter_duration
             self._add_child(child)
-            return child
+            return [child]
         else:
             if child.split:
                 remaining_quarter_duration = child.quarter_duration
@@ -373,12 +373,12 @@ class Beat(MusicTree, QuarterDurationMixin):
                         current_beat._filled_quarter_duration += remaining_quarter_duration
                         break
                 self._add_child(child)
-                return child
+                return [child]
             else:
                 beats = self.up.get_children()[self.up.get_children().index(self):]
                 return child.split_and_add_beatwise(beats)
 
-    def add_chord(self, chord: Optional[Chord] = None) -> Union['Chord', List['Chord']]:
+    def add_chord(self, chord: Optional[Chord] = None) -> List['Chord']:
         """
         :param chord: if None chord is set to a :obj:`~musictree.chord.Chord` with quarter_duration 1 and midis set to 60
         :return: added chord or a list of split chords

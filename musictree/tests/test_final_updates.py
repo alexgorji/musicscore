@@ -17,8 +17,8 @@ class TestFinalUpdates(IdTestCase):
         self.voice = self.staff.add_voice()
         self.voice.update_beats()
         self.beat = self.voice.get_children()[0]
-        self.chord_1 = self.voice.add_chord(Chord(60, QuarterDuration(1, 3)))
-        self.chord_2 = self.voice.add_chord(Chord(61, QuarterDuration(2, 3) + QuarterDuration(3)))
+        self.chord_1 = self.voice.add_chord(Chord(60, QuarterDuration(1, 3)))[0]
+        self.chords_2 = self.voice.add_chord(Chord(61, QuarterDuration(2, 3) + QuarterDuration(3)))
 
     def test_chord_final_updates(self):
         assert self.chord_1.get_children() == []
@@ -29,7 +29,10 @@ class TestFinalUpdates(IdTestCase):
         with self.assertRaises(ChordAlreadyFinalUpdated):
             self.chord_1.final_updates()
 
-    def test_update_beat(self):
+        self.chords_2[0].final_updates()
+        assert [(note.midi.value, note.quarter_duration) for note in self.chords_2[0].get_children()] == [(61, 2 / 3)]
+
+    def test_beat_final_updates(self):
         self.fail('Incomplete')
 
     def test_update_voice(self):

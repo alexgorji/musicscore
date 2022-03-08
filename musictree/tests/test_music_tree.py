@@ -35,7 +35,7 @@ class TestMusicTree(IdTestCase):
         assert st == m.add_child(st)
         assert v == st.add_child(v)
         assert b == v.add_child(b)
-        assert c == b.add_child(c)
+        assert c == b.add_child(c)[0]
         assert n == c.add_child(n)
         assert mi == n.add_child(mi)
         assert acc == mi.add_child(acc)
@@ -195,10 +195,10 @@ class TestMusicTree(IdTestCase):
         b.get_possible_subdivisions = Mock(return_value=None)
         b._parent = Mock()
         assert b.get_chord(1) is None
-        ch1 = b.add_chord(Chord(midis=60, quarter_duration=0.5))
+        ch1 = b.add_chord(Chord(midis=60, quarter_duration=0.5))[0]
         assert b.get_chord(1) == ch1
         assert b.get_chord(2) is None
-        ch2 = b.add_chord(Chord(midis=60, quarter_duration=0.5))
+        ch2 = b.add_chord(Chord(midis=60, quarter_duration=0.5))[0]
         assert b.get_chord(1) == ch1
         assert b.get_chord(2) == ch2
         assert b.get_chord(3) is None
