@@ -387,9 +387,8 @@ class Beat(MusicTree, QuarterDurationMixin):
         final_updates can only be called once.
 
         - It calls :obj:`~musictree.chord.Chord.final_updates()` method of all :obj:`~musictree.chord.Chord` children.
-        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams, quantize_quarter_durations (if quantize_quarter_durations is
-        True),
-        split_not_writable_chords
+        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams, quantize_quarter_durations (if quantize is
+          True), split_not_writable_chords
         """
         if self._final_updated:
             raise AlreadyFinalUpdated(self)
@@ -426,6 +425,8 @@ class Beat(MusicTree, QuarterDurationMixin):
         accessed like this: ``SPLITTABLES[chord.offset[chord.quarter_duration]]`` This dictionary can be manipulated by user during runtime
         if needed. Be careful with not writable quarter durations which have to be split (for example 5/6 must be split to 3/6,
         2/6 or some other writable quarter durations).
+
+        :obj:`~musictree.measure.Measure.final_updates()` loops over all its beats calls this method.
         """
         for chord in self.get_children()[:]:
             split = self._split_not_writable(chord, chord.offset)
