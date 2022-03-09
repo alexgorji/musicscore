@@ -94,9 +94,10 @@ class MusicTree(Tree):
     def quantize(self) -> bool:
         """
         - If quantize is set to None the first quantize of ancestors which is ``False`` or ``True`` will be returned.
-        - If :obj:`:obj:`~musictree.score.Score.quantize` is set to None if will be converted to ``False``
-        - If :obj:`~musictree.beat.Beat.quantize` returns True :obj:`~musictree.beat.Beat.quantize_quarter_durations()` is called by
-        :obj:`~musictree.beat.Beat.final_updates()`
+        - If :obj:`~musictree.score.Score.quantize` is set to None it will be converted to ``False``
+        - :obj:`~musictree.measure.Measure.final_updates()` loops over all beats. If :obj:`~musictree.beat.Beat.quantize` returns True
+        :obj:`~musictree.beat.Beat.quantize_quarter_durations()` is called.
+
 
         :type: Optional[bool]
         :rtype: bool

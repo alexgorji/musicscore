@@ -426,6 +426,8 @@ class Beat(MusicTree, QuarterDurationMixin):
         accessed like this: ``SPLITTABLES[chord.offset[chord.quarter_duration]]`` This dictionary can be manipulated by user during runtime
         if needed. Be careful with not writable quarter durations which have to be split (for example 5/6 must be split to 3/6,
         2/6 or some other writable quarter durations).
+
+        :obj:`~musictree.measure.Measure.final_updates()` loops over all its beats calls this method.
         """
         for chord in self.get_children()[:]:
             split = self._split_not_writable(chord, chord.offset)
