@@ -21,15 +21,15 @@ POSSIBLE_SUBDIVISIONS = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [
                          QuarterDuration(1): [2, 3, 4, 5, 6, 7, 8]}
 
 
-class Score(MusicTree, XMLWrapper, FinalUpdateMixin):
+class Score(MusicTree, FinalUpdateMixin, XMLWrapper):
     _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout'}
-    _ATTRIBUTES.union(FinalUpdateMixin._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
 
     XMLClass = XMLScorePartwise
 
-    def __init__(self, version='4.0', title=None, subtitle=None, *args, **kwargs):
+    def __init__(self, version='4.0', title=None, subtitle=None, quantize=False, *args, **kwargs):
 
-        super().__init__()
+        super().__init__(quantize=quantize)
         self._xml_object = self.XMLClass(*args, **kwargs)
         self._update_xml_object()
         self._version = None
@@ -47,6 +47,7 @@ class Score(MusicTree, XMLWrapper, FinalUpdateMixin):
         self.title = title
         self.subtitle = subtitle
         self._possible_subdivisions = POSSIBLE_SUBDIVISIONS.copy()
+
         self._final_updated = False
 
     def _get_title_attributes(self):

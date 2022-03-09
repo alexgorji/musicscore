@@ -10,9 +10,9 @@ from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
 
 
-class Staff(MusicTree, XMLWrapper, FinalUpdateMixin):
+class Staff(MusicTree, FinalUpdateMixin, XMLWrapper):
     _ATTRIBUTES = {'clef', 'default_clef', 'number', '_final_updated'}
-    _ATTRIBUTES.union(FinalUpdateMixin._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLStaff
 
     def __init__(self, number=None, clef=TrebleClef(), **kwargs):
@@ -87,7 +87,6 @@ class Staff(MusicTree, XMLWrapper, FinalUpdateMixin):
 
         child._parent = self
         self._children.append(child)
-        child.update_beats()
 
         return child
 
@@ -101,11 +100,16 @@ class Staff(MusicTree, XMLWrapper, FinalUpdateMixin):
         """
         if voice_number is None:
             voice_number = len(self.get_children()) + 1
+
         voice_object = self.get_voice(voice_number=voice_number)
+
         if voice_object is None:
             for _ in range(voice_number - len(self.get_children())):
                 voice_object = self.add_child(Voice())
+                voice_object.update_beats()
             return voice_object
+
+        voice_object.update_beats()
         return voice_object
 
     def get_children(self) -> List[Voice]:

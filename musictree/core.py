@@ -6,6 +6,7 @@ from tree.tree import Tree
 
 
 class MusicTree(Tree):
+    _ATTRIBUTES = {'quantize'}
     """
     MusicTree is the parent class of all music tree objects:
         - Score (root)
@@ -21,9 +22,11 @@ class MusicTree(Tree):
         - Accidental (9th layer)
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, quantize=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._possible_subdivisions = {}
+        self._quantize = None
+        self.quantize = quantize
 
     @staticmethod
     def _check_args_kwargs(args, kwargs, class_name, get_class_name=None):
@@ -69,6 +72,46 @@ class MusicTree(Tree):
             beat_quarter_duration = QuarterDuration(1)
         return beat_quarter_duration
 
+    def _get_kwargs(self, args_, kwargs_, get_class_name):
+        if isinstance_as_string(self, 'Score'):
+            return self._check_args_kwargs(args_, kwargs_, 'Score', get_class_name)
+        elif isinstance_as_string(self, 'Part'):
+            return self._check_args_kwargs(args_, kwargs_, 'Part', get_class_name)
+        elif isinstance_as_string(self, 'Measure'):
+            return self._check_args_kwargs(args_, kwargs_, 'Measure', get_class_name)
+        elif isinstance_as_string(self, 'Staff'):
+            return self._check_args_kwargs(args_, kwargs_, 'Staff', get_class_name)
+        elif isinstance_as_string(self, 'Voice'):
+            return self._check_args_kwargs(args_, kwargs_, 'Voice', get_class_name)
+        elif isinstance_as_string(self, 'Beat'):
+            return self._check_args_kwargs(args_, kwargs_, 'Beat', get_class_name)
+        elif isinstance_as_string(self, 'Chord'):
+            return self._check_args_kwargs(args_, kwargs_, 'Chord', get_class_name)
+        else:
+            raise TypeError
+
+    @property
+    def quantize(self) -> bool:
+        """
+        - If quantize is set to None the first quantize of ancestors which is ``False`` or ``True`` will be returned.
+        - If :obj:`:obj:`~musictree.score.Score.quantize` is set to None if will be converted to ``False``
+        - If :obj:`~musictree.beat.Beat.quantize` returns True :obj:`~musictree.beat.Beat.quantize_quarter_durations()` is called by
+        :obj:`~musictree.beat.Beat.final_updates()`
+
+        :type: Optional[bool]
+        :rtype: bool
+        """
+        if self._quantize is None:
+            if self.up:
+                return self.up.quantize
+            else:
+                return False
+        return self._quantize
+
+    @quantize.setter
+    def quantize(self, val):
+        self._quantize = val
+
     def get_beat(self, *args, **kwargs) -> 'Beat':
         """
         This method can be used for :obj:`~musictree.score.Score` and :obj:`~musictree.part.Part`, :obj:`~musictree.measure.Measure` and
@@ -80,13 +123,7 @@ class MusicTree(Tree):
                        :obj:`~musictree.score.Score` needs all keyword arguments.
         :rtype: :obj:`~musictree.beat.Beat`
         """
-        if isinstance_as_string(self, 'Voice'):
-            kwargs = self._check_args_kwargs(args, kwargs, 'Voice', 'Beat')
-            try:
-                return self.get_children()[kwargs['beat_number'] - 1]
-            except IndexError:
-                return None
-        raise TypeError
+        return self._get_music_tree_descendent(args, kwargs, 'Beat')
 
     def get_chord(self, *args, **kwargs) -> 'Chord':
         """
@@ -99,13 +136,23 @@ class MusicTree(Tree):
                        ``chord_number`` while a :obj:`~musictree.score.Score` needs all keyword arguments.
         :rtype: :obj:`~musictree.chord.Chord`
         """
-        if isinstance_as_string(self, 'Beat'):
-            kwargs = self._check_args_kwargs(args, kwargs, 'Beat', 'Chord')
-            try:
-                return self.get_children()[kwargs['chord_number'] - 1]
-            except IndexError:
-                return None
-        raise TypeError
+
+        return self._get_music_tree_descendent(args, kwargs, 'Chord')
+
+    def get_beats(self) -> List['Beat']:
+        """
+        :return: a flat list of all beats.
+        :rtype: List[:obj:`~musictree.beat.Beat`]
+        """
+        if isinstance_as_string(self, 'Voice'):
+            return self.get_children()
+        else:
+            output = [ch for child in self.get_children() for ch in child.get_beats()]
+            if not output:
+                for cls_name in ['Beat', 'Chord', 'Note', 'Midi', 'Accidental']:
+                    if isinstance_as_string(self, cls_name):
+                        raise TypeError
+            return output
 
     def get_chords(self) -> List['Chord']:
         """
@@ -115,7 +162,32 @@ class MusicTree(Tree):
         if isinstance_as_string(self, 'Beat'):
             return self.get_children()
         else:
-            return [ch for child in self.get_children() for ch in child.get_chords()]
+            output = [ch for child in self.get_children() for ch in child.get_chords()]
+            if not output:
+                for cls_name in ['Chord', 'Note', 'Midi', 'Accidental']:
+                    if isinstance_as_string(self, cls_name):
+                        raise TypeError
+            return output
+
+    def _get_music_tree_descendent(self, args, kwargs, get_class_name):
+        kwargs = self._get_kwargs(args, kwargs, get_class_name)
+
+        if not kwargs:
+            raise TypeError
+
+        if len(kwargs) == 1:
+            try:
+                return self.get_children()[list(kwargs.values())[0] - 1]
+            except IndexError:
+                return None
+        else:
+            output = self
+            for key in kwargs:
+                string_to_eval = f"output.get_{key.split('_')[0]}(kwargs['{key}'])"
+                output = eval(string_to_eval)
+                if not output:
+                    return None
+            return output
 
     def get_measure(self, *args, **kwargs) -> 'Measure':
         """
@@ -125,13 +197,8 @@ class MusicTree(Tree):
         :param kwargs: ``part_number``, ``measure_number`` depending on musictree's class.
         :rtype: :obj:`~musictree.measure.Measure`
         """
-        if isinstance_as_string(self, 'Part'):
-            kwargs = self._check_args_kwargs(args, kwargs, 'Part', 'Measure')
-            try:
-                return self.get_children()[kwargs['measure_number'] - 1]
-            except IndexError:
-                return None
-        raise TypeError
+
+        return self._get_music_tree_descendent(args, kwargs, 'Measure')
 
     def get_part(self, *args, **kwargs) -> 'Part':
         """
@@ -141,17 +208,12 @@ class MusicTree(Tree):
         :param kwargs: ``part_number``.
         :rtype: :obj:`~musictree.part.Part`
         """
-        if isinstance_as_string(self, 'Score'):
-            kwargs = self._check_args_kwargs(args, kwargs, 'Score', 'Part')
-            try:
-                return self.get_children()[kwargs['part_number'] - 1]
-            except IndexError:
-                return None
-        raise TypeError
+
+        return self._get_music_tree_descendent(args, kwargs, 'Part')
 
     def get_possible_subdivisions(self, beat_quarter_duration: Optional[QuarterDuration] = None) -> List[int]:
         """
-        This method is used by :obj:`~musictree.beat.Beat`'s :obj:`~musictree.beat.Beat.quantize()`.
+        This method is used by :obj:`~musictree.beat.Beat`'s :obj:`~musictree.beat.Beat.quantize_quarter_durations()`.
 
         Possible subdivisions dictionary can be set with :obj:`~musictree.core.MusicTree.set_possible_subdivisions()`.
 
@@ -165,7 +227,7 @@ class MusicTree(Tree):
                If ``None`` and self is a :obj:`~musictree.beat.Beat` ``self.quarter_duration`` is used.
                If ``None`` and self is not a :obj:`~musictree.beat.Beat` it is set to 1.
         :return: A list of possible subdivisions of a :obj:`~musictree.beat.Beat`. This is used by beat's
-                 :obj:`~musictree.beat.Beat.quantize()`
+                 :obj:`~musictree.beat.Beat.quantize_quarter_durations()`
         :rtype: List[int]
         """
         if beat_quarter_duration is None:
@@ -183,13 +245,8 @@ class MusicTree(Tree):
         :param kwargs: ``part_number``, ``measure_number``, ``staff_number`` depending on musictree's class.
         :rtype: :obj:`~musictree.staff.Staff`
         """
-        if isinstance_as_string(self, 'Measure'):
-            kwargs = self._check_args_kwargs(args, kwargs, 'Measure', 'Staff')
-            try:
-                return self.get_children()[kwargs['staff_number'] - 1]
-            except IndexError:
-                return None
-        raise TypeError
+
+        return self._get_music_tree_descendent(args, kwargs, 'Staff')
 
     def get_voice(self, *args, **kwargs) -> 'Voice':
         """
@@ -200,19 +257,35 @@ class MusicTree(Tree):
         :param kwargs: ``part_number``, ``measure_number``, ``staff_number``, ``voice_number`` depending on musictree's class.
         :rtype: :obj:`~musictree.voice.Voice`
         """
-        if isinstance_as_string(self, 'Staff'):
-            kwargs = self._check_args_kwargs(args, kwargs, 'Staff', 'Voice')
-            try:
-                return self.get_children()[kwargs['voice_number'] - 1]
-            except IndexError:
-                return None
-        raise TypeError
+        return self._get_music_tree_descendent(args, kwargs, 'Voice')
+        # if isinstance_as_string(self, 'Staff'):
+        #     kwargs = self._check_args_kwargs(args, kwargs, 'Staff', 'Voice')
+        #     try:
+        #         return self.get_children()[kwargs['voice_number'] - 1]
+        #     except IndexError:
+        #         return None
+        # elif isinstance_as_string(self, 'Measure'):
+        #     kwargs = self._check_args_kwargs(args, kwargs, 'Measure', 'Voice')
+        #     return self.get_staff(kwargs['staff_number']).get_voice(kwargs['voice_number'])
+        #
+        # elif isinstance_as_string(self, 'Part'):
+        #     kwargs = self._check_args_kwargs(args, kwargs, 'Part', 'Voice')
+        #     return self.get_measure(kwargs['measure_number']).get_staff(kwargs['staff_number']).get_voice(kwargs['voice_number'])
+        #
+        # elif isinstance_as_string(self, 'Score'):
+        #     kwargs = self._check_args_kwargs(args, kwargs, 'Score', 'Voice')
+        #     return self.get_part(kwargs['part_number']).self.get_measure(kwargs['measure_number']).get_staff(kwargs[
+        #                                                                                                          'staff_number']).get_voice(
+        #         kwargs[
+        #             'voice_number'])
+        #
+        # raise TypeError
 
     def set_possible_subdivisions(self, subdivisions: list[int], beat_quarter_duration: Optional[QuarterDuration] = None) -> None:
         """
         This method is used to set or change possible subdivisions dictionary.
 
-        :param subdivisions: list of possible subdivisions to be used duration :obj:`musictree.beat.Beat.quantize()`
+        :param subdivisions: list of possible subdivisions to be used duration :obj:`musictree.beat.Beat.quantize_quarter_durations()`
         :param beat_quarter_duration: If ``None`` and self is a :obj:`~musictree.beat.Beat` ``self.quarter_duration`` is used.
                                       If ``None`` and self is not a :obj:`~musictree.beat.Beat` it is set to 1.
         :return: None

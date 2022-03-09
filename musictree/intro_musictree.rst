@@ -134,7 +134,7 @@ A musictree consists of a root :obj:`~musictree.score.Score` and its 9 descendin
 Quantization
 ------------
 
-A central feature of musictree is Beat's :obj:`~musictree.beat.Beat.quantize()` method. A list of possible
+A central feature of musictree is Beat's :obj:`~musictree.beat.Beat.quantize_quarter_durations()` method. A list of possible
 subdivisions can be set and get on different levels in the musictree structure via
 :obj:`~musictree.core.MusicTree.set_possible_subdivisions()` and
 :obj:`~musictree.core.MusicTree.get_possible_subdivisions()`. Default values are set by
@@ -144,6 +144,6 @@ dictionary. For example if beat has a 1 quarter duration length and the dictiona
 :obj:`~musictree.core.MusicTree.get_possible_subdivisions()` method of beat's ancestor
 :obj:`~musictree.measure.Measure` has a QuarterDuration(1) key with a list [2, 3, 4, 6] as its associated item, the
 quantization of the beat changes the quarter duration of its Chord children in a way that only 8ths, triplets,
-16ths and sextuplets will be used. :obj:`~musictree.beat.Beat.quantize()` calculates always the most accurate
+16ths and sextuplets will be used. :obj:`~musictree.beat.Beat.quantize_quarter_durations()` calculates always the most accurate
 results according to the given possible subdivisions in which values with the smallest deviation from original
 quarter duration values are chosen.

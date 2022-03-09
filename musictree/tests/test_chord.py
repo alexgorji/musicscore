@@ -60,26 +60,6 @@ class TestTreeChord(ChordTestCase):
         ch._parent = self.mock_beat
         ch.final_updates()
 
-    def test_chord_update_notes(self):
-        m = Measure(1)
-        ch1 = Chord()
-        assert not ch1.notes
-        with self.assertRaises(ChordHasNoParentError):
-            ch1.final_updates()
-        ch1.quarter_duration = 1
-        ch1.midis = [70]
-        m.add_chord(ch1)
-        ch1.final_updates()
-        check_notes(ch1.notes, [70], [1])
-        with self.assertRaises(ChordQuarterDurationAlreadySetError):
-            ch1.quarter_duration = 1.5
-
-        ch2 = Chord(quarter_duration=2.5, midis=[71])
-        m.add_chord(ch2)
-        for ch in m.get_chords()[1:]:
-            ch.final_updates()
-        assert [ch.notes[0].quarter_duration for ch in m.get_chords()] == [1, 2, 1 / 2]
-
     def test_init_quarter_durations(self):
         """
         Test values of quarter_duration

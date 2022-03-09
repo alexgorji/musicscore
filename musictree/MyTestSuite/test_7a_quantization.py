@@ -35,12 +35,11 @@ class TestHelloWorldQuantization(IdTestCase):
             ch.add_lyric(round(float(ch.quarter_duration), 2))
             p.add_chord(ch)
         """
-        He calls quantize method to start quantization
+        He sets part's quantize attribute to True.
         """
-        p.quantize()
-        p.split_not_writable_chords()
+        p.quantize = True
         """
-        ... and exports the xm
-        """
+        # ... and exports the xml
+        # """
         xml_path = Path(__file__).with_suffix('.xml')
         s.export_xml(xml_path)

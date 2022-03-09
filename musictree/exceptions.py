@@ -58,6 +58,10 @@ class BeatIsFullError(BeatException):
     pass
 
 
+class BeatNotFullError(BeatException):
+    pass
+
+
 class BeatHasNoParentError(BeatException):
     pass
 
@@ -76,6 +80,7 @@ class VoiceHasNoBeatsError(VoiceException):
 
 class VoiceHasNoParentError(VoiceException):
     pass
+
 
 class VoiceIsAlreadyFullError(VoiceException):
     pass
@@ -112,13 +117,6 @@ class IdHasAlreadyParentOfSameTypeError(IdException):
 class IdWithSameValueExistsError(IdException):
     pass
 
-
-class QuantizationException(Exception):
-    pass
-
-
-class QuantizationBeatNotFullError(QuantizationException):
-    pass
 
 
 class AlreadyFinalUpdated(MusicTreeException):

@@ -6,7 +6,7 @@ from quicktions import Fraction
 
 from musictree.chord import split_copy, group_chords, Chord
 from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, ChordHasNoQuarterDurationError, \
-    ChordHasNoMidisError, AlreadyFinalUpdated
+    ChordHasNoMidisError, AlreadyFinalUpdated, BeatNotFullError
 from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import lcm
@@ -387,10 +387,15 @@ class Beat(MusicTree, QuarterDurationMixin):
         final_updates can only be called once.
 
         - It calls :obj:`~musictree.chord.Chord.final_updates()` method of all :obj:`~musictree.chord.Chord` children.
-        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams
+        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams, quantize_quarter_durations (if quantize_quarter_durations is
+        True),
+        split_not_writable_chords
         """
         if self._final_updated:
             raise AlreadyFinalUpdated(self)
+
+        if self.is_filled is False:
+            BeatNotFullError()
 
         if self.get_children():
             for chord in self.get_children():
@@ -422,7 +427,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         if needed. Be careful with not writable quarter durations which have to be split (for example 5/6 must be split to 3/6,
         2/6 or some other writable quarter durations).
         """
-        for chord in self.get_children():
+        for chord in self.get_children()[:]:
             split = self._split_not_writable(chord, chord.offset)
             if split:
                 for ch in split:
@@ -433,7 +438,7 @@ class Beat(MusicTree, QuarterDurationMixin):
                     index = self.get_children().index(chord)
                     self._children = self.get_children()[:index] + split + self.get_children()[index + 1:]
 
-    def quantize(self):
+    def quantize_quarter_durations(self):
         """
         When called the positioning of children will be quantized according to :obj:`musictree.core.MusicTree.get_possible_subdivisions()`
         """

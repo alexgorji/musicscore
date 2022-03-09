@@ -189,8 +189,6 @@ class Chord(MusicTree, QuarterDurationMixin):
         if not self.up:
             raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
 
-        self.get_parent_measure().update_divisions()
-
         self._update_notes()
         self._update_xml_chord()
 

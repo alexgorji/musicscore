@@ -196,8 +196,11 @@ class TestBeatAddChild(TestCase):
         v2.update_beats(1, 1, 1)
         v2.get_current_beat().add_child(v1.leftover_chord)
         all_chords = v1.get_chords() + v2.get_chords()
+        v1.up.up.update_divisions()
+        v2.up.up.update_divisions()
         for b in v1.get_children() + v2.get_children():
             b.final_updates()
+
         assert [ch.midis[0].accidental.xml_object.value_ if ch.midis[0].accidental.xml_object else None for ch in all_chords] == ['sharp',
                                                                                                                                   None,
                                                                                                                                   None,
@@ -208,3 +211,12 @@ class TestBeatAddChild(TestCase):
                                                                                                                                   'sharp',
                                                                                                                                   None,
                                                                                                                                   None]
+
+    def test_split_not_writable_chords(self):
+        v = create_voice()
+        v.update_beats(1)
+        v.add_chord(Chord(60, 5 / 6))
+        v.add_chord(Chord(60, 1 / 6))
+        assert [ch.quarter_duration for ch in v.get_chords()] == [5 / 6, 1 / 6]
+        v.get_beat(1).split_not_writable_chords()
+        assert [ch.quarter_duration for ch in v.get_chords()] == [1 / 2, 1 / 3, 1 / 6]

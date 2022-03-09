@@ -38,6 +38,7 @@ class TestFinalUpdates(IdTestCase):
                 assert_chord_note_values(chord, [(61, 3)])
 
     def test_chord_final_updates(self):
+        self.measure.update_divisions()
         assert self.chord_1.get_children() == []
         self.chord_1.midis.append(Midi(70))
         self.chord_1.final_updates()
@@ -50,6 +51,7 @@ class TestFinalUpdates(IdTestCase):
         assert_chord_note_values(self.chords_2[0], [(61, 2 / 3)])
 
     def test_beat_final_updates(self):
+        self.measure.update_divisions()
         self.beats[0].final_updates()
         self.check_note_values(self.beats[0].get_chords(), [0, 1])
 
@@ -62,12 +64,14 @@ class TestFinalUpdates(IdTestCase):
             self.beats[1].final_updates()
 
     def test_voice_final_updates(self):
+        self.measure.update_divisions()
         self.voice.final_updates()
         self.check_note_values(self.voice.get_chords())
         with self.assertRaises(AlreadyFinalUpdated):
             self.voice.final_updates()
 
     def test_staff_final_updates(self):
+        self.measure.update_divisions()
         self.staff.final_updates()
         self.check_note_values(self.staff.get_chords())
         with self.assertRaises(AlreadyFinalUpdated):
@@ -86,8 +90,30 @@ class TestFinalUpdates(IdTestCase):
         with self.assertRaises(AlreadyFinalUpdated):
             self.part.final_updates()
 
-    def test_update_score(self):
+    def test_score_final_updates(self):
         self.score.final_updates()
         self.check_note_values(self.score.get_chords())
         with self.assertRaises(AlreadyFinalUpdated):
             self.score.final_updates()
+
+    def test_to_string_calls_final_updates_voice(self):
+        self.measure.update_divisions()
+        assert self.voice._final_updated is False
+        self.voice.to_string()
+        assert self.voice._final_updated is True
+
+    def test_to_string_calls_final_updates_staff(self):
+        self.measure.update_divisions()
+        assert self.staff._final_updated is False
+        self.staff.to_string()
+        assert self.staff._final_updated is True
+
+    def test_to_string_calls_final_updates_part(self):
+        assert self.part._final_updated is False
+        self.part.to_string()
+        assert self.part._final_updated is True
+
+    def test_to_string_calls_final_updates_score(self):
+        assert self.score._final_updated is False
+        self.score.to_string()
+        assert self.score._final_updated is True

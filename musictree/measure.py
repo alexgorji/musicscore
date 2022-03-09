@@ -13,9 +13,9 @@ from musictree.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup
 
 
-class Measure(MusicTree, XMLWrapper, FinalUpdateMixin):
+class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
     _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration'}
-    _ATTRIBUTES.union(FinalUpdateMixin._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLMeasure
 
     def __init__(self, number, time=None, *args, **kwargs):
@@ -143,7 +143,6 @@ class Measure(MusicTree, XMLWrapper, FinalUpdateMixin):
                 voice.update_beats()
 
     def _update_xml_backup_note_direction(self):
-
         def add_backup():
             b = XMLBackup()
             d = self.quarter_duration * self.get_divisions()
@@ -176,6 +175,15 @@ class Measure(MusicTree, XMLWrapper, FinalUpdateMixin):
 
         if self._final_updated:
             raise AlreadyFinalUpdated(self)
+
+        self._update_attributes()
+
+        for beat in self.get_beats():
+            if beat.quantize:
+                beat.quantize_quarter_durations()
+            beat.split_not_writable_chords()
+
+        self.update_divisions()
 
         for st in self.get_children():
             st.final_updates()
@@ -358,15 +366,15 @@ class Measure(MusicTree, XMLWrapper, FinalUpdateMixin):
         """
         return super().get_parent()
 
-    def get_voice(self, *, staff_number: int = 1, voice_number: int = 1) -> 'Voice':
-        """
-        :param staff_number: positive int
-        :param voice_number: positive int
-        :return: :obj:`~musictree.voice.Voice` if it exists, else ``None``
-        """
-        staff_object = self.get_staff(staff_number=staff_number)
-        if staff_object:
-            return staff_object.get_voice(voice_number=voice_number)
+    # def get_voice(self, *, staff_number: int = 1, voice_number: int = 1) -> 'Voice':
+    #     """
+    #     :param staff_number: positive int
+    #     :param voice_number: positive int
+    #     :return: :obj:`~musictree.voice.Voice` if it exists, else ``None``
+    #     """
+    #     staff_object = self.get_staff(staff_number=staff_number)
+    #     if staff_object:
+    #         return staff_object.get_voice(voice_number=voice_number)
 
     def remove(self, child) -> None:
         number = child.value
@@ -394,17 +402,6 @@ class Measure(MusicTree, XMLWrapper, FinalUpdateMixin):
                 for midi in chord.midis:
                     if midi.accidental.sign == 'natural':
                         midi.accidental.show = False
-
-    def update(self) -> None:
-        """
-        - Sets :obj:`~musicxml.xmlelement.xmlelement.XMLKey`, :obj:`~musicxml.xmlelement.xmlelement.XMLTime`, :obj:`~musicxml.xmlelement.xmlelement.XMLStaves` and :obj:`~musicxml.xmlelement.xmlelement.XMLClef`
-
-        - Updates :obj:`~musicxml.xmlelement.xmlelement.XMLNote` objects
-
-        :return: None
-        """
-        self._update_attributes()
-        self.final_updates()
 
 
 def generate_measures(times, first_number=1):

@@ -1,7 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from musictree.beat import Beat
 from musictree.chord import Chord
 from musictree.measure import Measure
 from musictree.part import Part

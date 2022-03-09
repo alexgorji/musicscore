@@ -36,7 +36,6 @@ class TestHelloTBeams1(IdTestCase):
         #     p.add_chord(Chord(60, qd))
         # for qd in groups[7]:
         #     p.add_chord(Chord(60, qd))
-        p.split_not_writable_chords()
         """
         ... and exports the xml
         """

@@ -101,15 +101,15 @@ class TestPart(IdTestCase):
         p = Part('p1')
         m = p.add_measure()
         assert m.key.show is True
-        m.update()
+        m.final_updates()
         assert m.xml_object.xml_attributes.xml_key is not None
         m = p.add_measure()
-        m.update()
+        m.final_updates()
         assert m.key.show is False
         m.key = Key(fifths=1)
         assert m.key.show is True
         m = p.add_measure()
-        m.update()
+        m.final_updates()
         assert m.key.fifths == 1
         assert m.key.show is False
         assert m.xml_object.xml_attributes.xml_key is None
@@ -126,7 +126,7 @@ class TestPart(IdTestCase):
         assert m.clefs[1].show is False
         m = p.add_measure()
         m.clefs[0].show = True
-        m.update()
+        m.final_updates()
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
         assert len(clefs) == 1
         assert clefs[0].xml_sign.value_ == 'G'
@@ -382,8 +382,10 @@ class TestScorePart(IdTestCase):
                     QuarterDuration(139, 171), QuarterDuration(32, 171), QuarterDuration(1, 1)]
 
         assert [ch.quarter_duration for ch in p.get_chords()] == expected
-        p.quantize()
-        p.split_not_writable_chords()
+
+        for beat in [b for m in p.get_children() for st in m.get_children() for v in st.get_children() for b in v.get_children()]:
+            beat.quantize_quarter_durations()
+            beat.split_not_writable_chords()
         expected = [QuarterDuration(3, 7), QuarterDuration(2, 7), QuarterDuration(2, 7), QuarterDuration(1, 1),
                     QuarterDuration(4, 5), QuarterDuration(1, 5), QuarterDuration(1, 1)]
         assert [ch.quarter_duration for ch in p.get_chords()] == expected

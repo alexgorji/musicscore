@@ -2,11 +2,9 @@ from musictree.exceptions import AlreadyFinalUpdated
 
 
 class FinalUpdateMixin:
-    _ATTRIBUTES = {'_final_updated'}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         self._final_updated = False
-        super().__init__(*args, **kwargs)
 
     def final_updates(self) -> None:
         """
@@ -17,8 +15,8 @@ class FinalUpdateMixin:
         if self._final_updated:
             raise AlreadyFinalUpdated(self)
 
-        for b in self.get_children():
-            b.final_updates()
+        for child in self.get_children():
+            child.final_updates()
 
         self._final_updated = True
 
@@ -26,4 +24,4 @@ class FinalUpdateMixin:
         if not self._final_updated:
             self.final_updates()
 
-        super().to_string(*args, **kwargs)
+        return super().to_string(*args, **kwargs)

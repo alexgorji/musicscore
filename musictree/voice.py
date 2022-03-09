@@ -8,9 +8,9 @@ from musictree.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLVoice
 
 
-class Voice(MusicTree, XMLWrapper, FinalUpdateMixin):
+class Voice(MusicTree, FinalUpdateMixin, XMLWrapper):
     _ATTRIBUTES = {'number', '_chords', '_current_beat', 'leftover_chord', 'is_filled', '_final_updated'}
-    _ATTRIBUTES.union(FinalUpdateMixin._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLVoice
 
     def __init__(self, number=None, *args, **kwargs):

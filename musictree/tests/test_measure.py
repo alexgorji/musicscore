@@ -20,6 +20,13 @@ class TestMeasure(TestCase):
         expected = """<measure number="1">
   <attributes>
     <divisions>1</divisions>
+    <key>
+      <fifths>0</fifths>
+    </key>
+    <time>
+      <beats>4</beats>
+      <beat-type>4</beat-type>
+    </time>
   </attributes>
 </measure>
 """
@@ -84,6 +91,8 @@ class TestMeasure(TestCase):
         st = m.add_child(Staff())
         v1 = st.add_child(Voice(1))
         v2 = st.add_child(Voice(2))
+        v1.update_beats()
+        v2.update_beats()
         quarter_durations_1 = [1 / 3, 2 / 3, 2 / 5, 3 / 5, 1, 1 / 2, 1 / 2]
         quarter_durations_2 = [1, 9 / 7, 5 / 7, 2 / 3, 1 / 3]
         for qd in quarter_durations_1:
@@ -101,7 +110,7 @@ class TestMeasure(TestCase):
         chord = Chord(61, quarter_duration=1.5)
         chord.midis[0].accidental.show = True
         m.add_chord(chord)
-        m.update()
+        m.final_updates()
         for xml_note, duration in zip(m.find_children('XMLNote'), [4, 1, 1, 2]):
             assert xml_note.xml_duration.value_ == duration
         expected = """<measure number="1">
@@ -193,12 +202,16 @@ class TestMeasure(TestCase):
     def test_add_staff(self):
         m = Measure(1)
         st1 = m.add_staff()
+        assert m.get_children()[0] == st1
+        assert m.get_staff(1) == st1
         assert st1.number is None
+
         st2 = m.add_staff()
         assert st1.number == 1
         assert st2.number == 2
         st3 = m.add_staff()
         assert st3.number == 3
+        print(m.get_children())
 
         m = Measure(1)
         st = m.add_staff()
@@ -317,11 +330,13 @@ class TestMeasure(TestCase):
         m = Measure(1)
         st = m.add_child(Staff())
         st.add_child(v)
+        v.update_beats()
         assert [child.quarter_duration.as_integer_ratio() for child in v.get_children()] == [(1, 1)] * 4
 
         m = Measure(1, time=Time(3, 4, 1, 8))
         st = m.add_child(Staff())
         st.add_child(v)
+        v.update_beats()
         assert [child.quarter_duration.as_integer_ratio() for child in v.get_children()] == [(1, 1)] * 3 + [(1, 2)]
 
         m.time = Time(2, 8)
@@ -360,7 +375,7 @@ class TestMeasure(TestCase):
         chord = Chord(60, quarter_duration=2.5)
         chord.add_dynamics(["ppp", 'fff'])
         m.add_chord(chord)
-        m.update()
+        m.final_updates()
         assert m.xml_direction is not None
         expected = """<direction placement="below">
     <direction-type>
@@ -427,7 +442,7 @@ class TestUpdateAccidentals(IdTestCase):
         m.add_chord(Chord(48, 4), staff_number=2, voice_number=1)
         m.add_chord(Chord(36, 4), staff_number=2, voice_number=2)
         m.clefs[1] = BassClef()
-        m.update()
+        m.final_updates()
         ch1, ch2, ch3, ch4 = m.get_chords()
         assert ch1.notes[0].xml_staff.value_ == 1
         assert ch2.notes[0].xml_staff.value_ == 1
@@ -477,7 +492,7 @@ class TestMeasureAttributes(TestCase):
     def test_measure_clefs(self):
         m = Measure(1)
         m.add_staff()
-        m.update()
+        m.final_updates()
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
         assert clefs[0].xml_sign.value_ == 'G'
         assert clefs[0].xml_line.value_ == 2
@@ -485,7 +500,7 @@ class TestMeasureAttributes(TestCase):
         m = Measure(1)
         m.add_staff()
         m.add_staff()
-        m.update()
+        m.final_updates()
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
         assert clefs[0].xml_sign.value_ == 'G'
         assert clefs[0].xml_line.value_ == 2
@@ -495,10 +510,10 @@ class TestMeasureAttributes(TestCase):
         m = Measure(1)
         m.add_staff()
         m.add_staff()
-        m.update()
+        m.final_updates()
         m.clefs[0].sign = 'C'
         m.clefs[0].line = 3
-        
+
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
         assert clefs[0].xml_sign.value_ == 'C'
         assert clefs[0].xml_line.value_ == 3
@@ -604,7 +619,6 @@ class TestMeasureAttributes(TestCase):
         m = Measure(1)
         m.add_staff()
         m.clefs[0].show = False
-        m.update()
         assert m.to_string() == expected
 
 

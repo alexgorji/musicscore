@@ -3,7 +3,7 @@ from typing import List, Optional, Union, Iterator
 from musictree.finalupdate_mixin import FinalUpdateMixin
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
-from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, QuantizationBeatNotFullError, VoiceIsAlreadyFullError
+from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError
 from musictree.measure import Measure
 from musictree.core import MusicTree
 from musictree.time import Time
@@ -114,9 +114,9 @@ class ScorePart(XMLWrapper):
         self.xml_object.xml_part_name = self.part.name
 
 
-class Part(MusicTree, XMLWrapper, FinalUpdateMixin):
+class Part(MusicTree, FinalUpdateMixin, XMLWrapper):
     _ATTRIBUTES = {'id_', 'name', '_score_part', '_current_measures'}
-    _ATTRIBUTES.union(FinalUpdateMixin._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLPart
 
     def __init__(self, id, name=None, *args, **kwargs):
@@ -292,7 +292,6 @@ class Part(MusicTree, XMLWrapper, FinalUpdateMixin):
 
         return child
 
-
     def get_current_measure(self, staff_number: Optional[int] = 1, voice_number: int = 1):
         """
         Gets current measure for adding :obj:`~musictree.chord.Chord` to a specific :obj:`~musictree.voice.Voice`
@@ -316,20 +315,6 @@ class Part(MusicTree, XMLWrapper, FinalUpdateMixin):
         """
         return super().get_parent()
 
-    def quantize(self) -> None:
-        """
-        Calls :obj:`~musictree.beat.Beat.quantize()` method of all :obj:`~musictree.beat.Beat` descendents.
-
-        If a descendent :obj:`~musictree.beat.Beat` is not filled exception QuantizationBeatNotFullError is raised.
-        """
-        for b in [beat for measure in self.get_children() for staff in measure.get_children() for voice in staff.get_children() for beat in \
-                  voice.get_children()]:
-            if b.is_filled:
-                b.quantize()
-            else:
-                raise QuantizationBeatNotFullError(
-                    f"Part:{self.id_.value} Beat {b.up.up.up.number}:{b.up.up.number}:{b.up.number}:{b.number} is not filled.")
-
     def set_current_measure(self, staff_number: int, voice_number: int, measure: Measure) -> None:
         """
         Sets current measure for adding :obj:`~musictree.chord.Chord` to a specific :obj:`~musictree.voice.Voice`
@@ -347,16 +332,3 @@ class Part(MusicTree, XMLWrapper, FinalUpdateMixin):
             self._current_measures[staff_number][voice_number] = measure
         else:
             self._current_measures[staff_number] = {voice_number: measure}
-
-    def split_not_writable_chords(self) -> None:
-        """
-        Calls :obj:`~musictree.beat.Beat.split_not_writable_chords()` method of all :obj:`~musictree.beat.Beat` descendents.
-        """
-        for b in [beat for measure in self.get_children() for staff in measure.get_children() for voice in staff.get_children() for beat in \
-                  voice.get_children()]:
-            b.split_not_writable_chords()
-
-    def to_string(self, *args, **kwargs) -> str:
-        if not self._final_updated:
-            self.final_updates()
-        return super().to_string(*args, **kwargs)
