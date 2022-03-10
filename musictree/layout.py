@@ -6,6 +6,8 @@ from musicxml.xmlelement.xmlelement import XMLPageLayout, XMLPageMargins, XMLLef
 from musictree.util import isinstance_as_string
 from musictree.xmlwrapper import XMLWrapper
 
+__all__ = ['PAGE_MARGINS', 'PAGE_SIZES', 'SYSTEM_MARGINS', 'SYSTEM_LAYOUT', 'STAFF_LAYOUT', 'SCALING', 'Margins', 'Scaling',
+           'PageLayout', 'SystemLayout', 'StaffLayout']
 #:
 PAGE_MARGINS = {
     'A4': {

@@ -5,6 +5,7 @@ from musicxml.xmlelement.xmlelement import XMLAccidental
 from musictree.core import MusicTree
 from musictree.xmlwrapper import XMLWrapper
 
+__all__ = ['STANDARD', 'FLAT', 'SHARP', 'ENHARMONIC1', 'ENHARMONIC2', 'SIGNS', 'Accidental']
 #:
 STANDARD = {
     0: ('C', 0, 0),

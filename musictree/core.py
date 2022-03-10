@@ -4,6 +4,8 @@ from musictree.quarterduration import QuarterDuration
 from musictree.util import isinstance_as_string
 from tree.tree import Tree
 
+__all__ = ['MusicTree']
+
 
 class MusicTree(Tree):
     _ATTRIBUTES = {'quantize'}

@@ -4,6 +4,8 @@ from musictree.quarterduration import QuarterDuration
 from musicxml.xmlelement.xmlelement import XMLTime, XMLBeats, XMLBeatType
 from musictree.xmlwrapper import XMLWrapper
 
+__all__ = ['Time', 'flatten_times']
+
 
 class Time(XMLWrapper):
     _ATTRIBUTES = {'signatures', 'actual_signatures', '_intern_actual_signatures', 'parent_measure', 'show'}

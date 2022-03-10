@@ -2,6 +2,8 @@ from typing import List, Union
 from quicktions import Fraction
 import numbers
 
+__all__ = ['BEATWISE_EXCEPTIONS', 'QuarterDuration']
+
 #: {offset: {quarter_duration: return value(s), ... }, ...}
 BEATWISE_EXCEPTIONS = {0: {5: (3, 2), 6: (6,)}}
 

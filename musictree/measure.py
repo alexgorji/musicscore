@@ -12,6 +12,8 @@ from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup
 
+__all__ = ['Measure', 'generate_measures']
+
 
 class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
     _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration'}

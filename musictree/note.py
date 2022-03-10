@@ -9,6 +9,8 @@ from musictree.quarterduration import QuarterDurationMixin
 from musictree.util import note_types
 from musictree.xmlwrapper import XMLWrapper
 
+__all__ = ['Note', 'tie', 'untie']
+
 
 def tie(*notes):
     notes[0].start_tie()

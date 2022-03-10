@@ -13,6 +13,8 @@ from musictree.note import Note
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES
 
+__all__ = ['Chord', 'group_chords']
+
 _all_articulations = Union[
     'XMLAccent', 'XMLStrongAccent', 'XMLStaccato', 'XMLTenuto', 'XMLDetachedLegato', 'XMLStaccatissimo',
     'XMLSpiccato', 'XMLScoop', 'XMLPlop', 'XMLDoit', 'XMLFalloff', 'XMLBreathMark', 'XMLCaesura', 'XMLStress',

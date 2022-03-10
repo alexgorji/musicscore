@@ -4,6 +4,8 @@ from musicxml.xmlelement.xmlelement import XMLKey
 
 from musictree.xmlwrapper import XMLWrapper
 
+__all__ = ['Key']
+
 
 class Key(XMLWrapper):
     _ATTRIBUTES = {'fifths', 'show'}

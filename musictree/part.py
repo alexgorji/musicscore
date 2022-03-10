@@ -9,6 +9,8 @@ from musictree.core import MusicTree
 from musictree.time import Time
 from musictree.xmlwrapper import XMLWrapper
 
+__all__ = ['Id', 'ScorePart', 'Part']
+
 
 class Id:
     __refs__ = []

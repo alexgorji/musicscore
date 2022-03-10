@@ -4,6 +4,8 @@ from musicxml.xmlelement.xmlelement import XMLClef
 
 from musictree.xmlwrapper import XMLWrapper
 
+__all__ = ['Clef', 'TrebleClef', 'BassClef', 'AltoClef', 'TenorClef']
+
 
 class Clef(XMLWrapper):
     _ATTRIBUTES = {'show', 'sign', 'line', 'octave_change'}

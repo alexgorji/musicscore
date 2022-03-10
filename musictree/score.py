@@ -9,6 +9,7 @@ from musictree.quarterduration import QuarterDuration
 from musictree.xmlwrapper import XMLWrapper
 from musictree.layout import Scaling, PageLayout, SystemLayout, StaffLayout
 
+__all__ = ['TITLE', 'SUBTITLE', 'POSSIBLE_SUBDIVISIONS', 'Score']
 #:
 TITLE = {'font_size': 24, 'default_x': {'A4': {'portrait': 616}}, 'default_y': {'A4': {'portrait': 1573}}, 'justify': 'center',
          'valign': 'top'}

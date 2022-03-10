@@ -9,6 +9,8 @@ from musictree.core import MusicTree
 from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
 
+__all__ = ['Staff']
+
 
 class Staff(MusicTree, FinalUpdateMixin, XMLWrapper):
     _ATTRIBUTES = {'clef', 'default_clef', 'number', '_final_updated'}

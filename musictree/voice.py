@@ -7,6 +7,8 @@ from musictree.finalupdate_mixin import FinalUpdateMixin
 from musictree.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLVoice
 
+__all__ = ['Voice']
+
 
 class Voice(MusicTree, FinalUpdateMixin, XMLWrapper):
     _ATTRIBUTES = {'number', '_chords', '_current_beat', 'leftover_chord', 'is_filled', '_final_updated'}

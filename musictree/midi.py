@@ -7,6 +7,8 @@ from musicxml.xsd.xsdsimpletype import XSDSimpleTypeNoteheadValue  # type: ignor
 from musictree.accidental import Accidental
 from musictree.core import MusicTree
 
+__all__ = ['Midi', 'MidiNote', 'C', 'D', 'E', 'F', 'G', 'A', 'B', 'midi_to_frequency', 'frequency_to_midi']
+
 
 class Midi(MusicTree):
     """

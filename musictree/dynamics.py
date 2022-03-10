@@ -3,6 +3,8 @@ from musicxml.xmlelement.xmlelement import XMLF, XMLFf, XMLFff, XMLFfff, XMLFfff
 
 from musictree.xmlwrapper import XMLWrapper
 
+__all__ = ['DYNAMICS', 'Dynamics']
+
 #:
 DYNAMICS = {"f": XMLF,
             "ff": XMLFf,

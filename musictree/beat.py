@@ -1,6 +1,5 @@
-from typing import Optional, Union, List
+from typing import Optional, List
 
-from musictree.finalupdate_mixin import FinalUpdateMixin
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
 
@@ -10,6 +9,8 @@ from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHa
 from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import lcm
+
+__all__ = ['SPLITTABLES', 'Beat', 'beam_chord_group']
 
 #: {offset : {chord.quarter_duration: split quarter_durations, ...}, ...}
 SPLITTABLES = {
