@@ -21,5 +21,6 @@ Check out the :doc:`usage` section for further information, including how to :re
    intro_musicxml
    intro_musictree
    usage
+   examples
    api
    indices

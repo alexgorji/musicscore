@@ -8,5 +8,6 @@ Content
    intro_musicxml
    intro_musictree
    usage
+   examples
    api
    indices

@@ -25,3 +25,5 @@ only be called once. If to_string(), exists it checks if final_updates is alread
   * If `Score.quantize` is set to None it will be converted to `False`
   * `Measure.final_updates()` loops over all beats. If `Beat.quantize` returns True `Beat.quantize_quarter_durations()` is called.
 
+# Version 1.2.1
+``__all__`` added to musictree modules and to ``musictree.__init__``

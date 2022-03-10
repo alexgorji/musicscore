@@ -36,7 +36,7 @@
   </defaults>
   <part-list>
     <score-part id="P1">
-      <part-name>Music</part-name>
+      <part-name>Part 1</part-name>
     </score-part>
   </part-list>
   <part id="P1">
