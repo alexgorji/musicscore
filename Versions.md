@@ -27,3 +27,7 @@ only be called once. If to_string(), exists it checks if final_updates is alread
 
 # Version 1.2.1
 ``__all__`` added to musictree modules and to ``musictree.__init__``
+
+# Version 1.3
+bugfix: ``measure.add_chord()`` adds beats to voice first if needed. 
+``tree`` folder removed. Use musicxml.tree instead for consistency.
