@@ -310,6 +310,8 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
         :return: added chord or a list of split chords
         """
         voice = self.add_voice(staff_number=staff_number, voice_number=voice_number)
+        if not voice.get_children():
+            voice.update_beats()
         return voice.add_chord(chord)
 
     def add_staff(self, staff_number: Optional[int] = None) -> 'Staff':
