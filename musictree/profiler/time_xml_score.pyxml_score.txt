@@ -1,119 +1,100 @@
-0.45213973799999996
-         773080 function calls (739079 primitive calls) in 0.478 seconds
+0.47064407
+         764038 function calls (730037 primitive calls) in 0.494 seconds
 
    Ordered by: internal time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-19000/8000    0.043    0.000    0.214    0.000 xsdtree.py:255(__deepcopy__)
-    31001    0.030    0.000    0.033    0.000 tree.py:19(__init__)
-11000/1000    0.029    0.000    0.414    0.000 xmlchildcontainer.py:583(__copy__)
-    19001    0.026    0.000    0.053    0.000 xsdtree.py:25(__init__)
-        1    0.026    0.026    0.026    0.026 {built-in method builtins.print}
-    21000    0.023    0.000    0.054    0.000 tree.py:114(add_child)
-    11000    0.020    0.000    0.049    0.000 xmlchildcontainer.py:133(__init__)
-12000/1000    0.018    0.000    0.416    0.000 copy.py:66(copy)
-     8000    0.017    0.000    0.246    0.000 copy.py:128(deepcopy)
-    10001    0.016    0.000    0.018    0.000 ElementPath.py:344(iterfind)
-    19000    0.013    0.000    0.013    0.000 xsdtree.py:256(copy_et_element)
+19000/8000    0.046    0.000    0.223    0.000 xsdtree.py:277(__deepcopy__)
+11000/1000    0.031    0.000    0.435    0.000 xmlchildcontainer.py:583(__copy__)
+    31000    0.030    0.000    0.033    0.000 tree.py:19(__init__)
+    19000    0.028    0.000    0.055    0.000 xsdtree.py:26(__init__)
+    21000    0.024    0.000    0.056    0.000 tree.py:114(add_child)
+        1    0.023    0.023    0.023    0.023 {built-in method builtins.print}
+    11000    0.021    0.000    0.051    0.000 xmlchildcontainer.py:133(__init__)
+12000/1000    0.019    0.000    0.437    0.000 copy.py:66(copy)
+     8000    0.018    0.000    0.258    0.000 copy.py:128(deepcopy)
+    10000    0.016    0.000    0.019    0.000 ElementPath.py:344(iterfind)
+    19000    0.015    0.000    0.015    0.000 xsdtree.py:278(copy_et_element)
+    10000    0.012    0.000    0.044    0.000 ElementPath.py:394(findall)
 19000/17000    0.012    0.000    0.016    0.000 xmlelement.py:366(__setattr__)
-    10000    0.011    0.000    0.042    0.000 ElementPath.py:394(findall)
-    10000    0.011    0.000    0.062    0.000 xsdtree.py:53(_populate_children)
-     8000    0.011    0.000    0.272    0.000 xsdelement.py:42(__copy__)
-    21000    0.011    0.000    0.021    0.000 tree.py:306(reset_frozen)
-    89026    0.010    0.000    0.010    0.000 {built-in method builtins.isinstance}
-    10000    0.009    0.000    0.012    0.000 ElementPath.py:172(select)
+    21000    0.011    0.000    0.022    0.000 tree.py:306(reset_frozen)
+    10000    0.011    0.000    0.064    0.000 xsdtree.py:57(_populate_children)
+     8000    0.011    0.000    0.285    0.000 xsdelement.py:42(__copy__)
+    10000    0.009    0.000    0.013    0.000 ElementPath.py:172(select)
+    85003    0.009    0.000    0.009    0.000 {built-in method builtins.isinstance}
+     8000    0.008    0.000    0.011    0.000 copy.py:242(_keep_alive)
     11000    0.008    0.000    0.012    0.000 xmlchildcontainer.py:166(_check_content_type)
-     8000    0.008    0.000    0.010    0.000 copy.py:242(_keep_alive)
-    19000    0.007    0.000    0.070    0.000 xsdtree.py:151(get_children)
+    11000    0.008    0.000    0.019    0.000 xmlchildcontainer.py:346(content)
+    23000    0.008    0.000    0.008    0.000 {built-in method builtins.getattr}
+    19000    0.007    0.000    0.072    0.000 xsdtree.py:173(get_children)
     21000    0.007    0.000    0.011    0.000 tree.py:106(up)
-    11000    0.007    0.000    0.019    0.000 xmlchildcontainer.py:346(content)
-    19001    0.007    0.000    0.009    0.000 xsdtree.py:130(xml_element_tree_element)
-    29000    0.006    0.000    0.006    0.000 xsdtree.py:116(tag)
-    23000    0.006    0.000    0.006    0.000 {built-in method builtins.getattr}
-     8000    0.006    0.000    0.014    0.000 xsdelement.py:7(__init__)
+    19000    0.007    0.000    0.009    0.000 xsdtree.py:147(xml_element_tree_element)
+     8000    0.007    0.000    0.015    0.000 xsdelement.py:7(__init__)
+    29000    0.006    0.000    0.006    0.000 xsdtree.py:122(tag)
      8000    0.006    0.000    0.008    0.000 xsdelement.py:18(xsd_tree)
-    10000    0.006    0.000    0.047    0.000 {method 'findall' of 'xml.etree.ElementTree.Element' objects}
-     1000    0.005    0.000    0.451    0.000 xmlelement.py:31(__init__)
-    29001    0.005    0.000    0.005    0.000 xsdtree.py:126(xml_element_tree_element)
-     3000    0.005    0.000    0.008    0.000 copy.py:258(_reconstruct)
-    31000    0.004    0.000    0.004    0.000 {method 'get' of 'dict' objects}
-     1000    0.004    0.000    0.007    0.000 xmlelement.py:137(_set_attributes)
-    24000    0.003    0.000    0.003    0.000 {built-in method builtins.id}
-    20002    0.003    0.000    0.003    0.000 ElementPath.py:178(select)
+    10000    0.006    0.000    0.049    0.000 {method 'findall' of 'xml.etree.ElementTree.Element' objects}
+     1000    0.005    0.000    0.469    0.000 xmlelement.py:31(__init__)
+     3000    0.005    0.000    0.009    0.000 copy.py:258(_reconstruct)
+    29001    0.005    0.000    0.005    0.000 xsdtree.py:143(xml_element_tree_element)
+    24000    0.004    0.000    0.004    0.000 {built-in method builtins.id}
+    31000    0.003    0.000    0.003    0.000 {method 'get' of 'dict' objects}
+     1000    0.003    0.000    0.007    0.000 xmlelement.py:137(_set_attributes)
+    20000    0.003    0.000    0.003    0.000 ElementPath.py:178(select)
     21000    0.003    0.000    0.003    0.000 tree.py:179(get_parent)
-    11000    0.003    0.000    0.004    0.000 xsdtree.py:57(_check_child_to_be_added)
-    10000    0.003    0.000    0.003    0.000 xmlchildcontainer.py:174(_check_child_to_be_added)
-    10001    0.003    0.000    0.003    0.000 ElementPath.py:336(__init__)
-    10000    0.003    0.000    0.003    0.000 xsdtree.py:54(<listcomp>)
-     1000    0.003    0.000    0.421    0.000 xmlelement.py:102(_create_child_container_tree)
-    20000    0.002    0.000    0.002    0.000 {built-in method builtins.issubclass}
-    21011    0.002    0.000    0.002    0.000 {method 'append' of 'list' objects}
-     3000    0.002    0.000    0.002    0.000 {method '__reduce_ex__' of 'object' objects}
+     3000    0.003    0.000    0.003    0.000 {method '__reduce_ex__' of 'object' objects}
+    11000    0.003    0.000    0.004    0.000 xsdtree.py:61(_check_child_to_be_added)
+    10000    0.003    0.000    0.003    0.000 xsdtree.py:58(<listcomp>)
+    10000    0.003    0.000    0.003    0.000 ElementPath.py:336(__init__)
+    10000    0.003    0.000    0.004    0.000 xmlchildcontainer.py:174(_check_child_to_be_added)
+    21000    0.003    0.000    0.003    0.000 {method 'append' of 'list' objects}
+    20000    0.003    0.000    0.003    0.000 {built-in method builtins.issubclass}
+     1000    0.003    0.000    0.441    0.000 xmlelement.py:102(_create_child_container_tree)
     11000    0.002    0.000    0.002    0.000 tree.py:130(get_children)
      1000    0.002    0.000    0.004    0.000 xmlelement.py:213(value_)
     11000    0.002    0.000    0.002    0.000 xmlchildcontainer.py:338(content)
-      476    0.002    0.000    0.002    0.000 ElementPath.py:133(select)
      3000    0.001    0.000    0.002    0.000 copyreg.py:94(__newobj__)
-     8000    0.001    0.000    0.001    0.000 xsdelement.py:14(xsd_tree)
      1000    0.001    0.000    0.002    0.000 xsdcomplextype.py:15(__init__)
+     8000    0.001    0.000    0.001    0.000 xsdelement.py:14(xsd_tree)
      3000    0.001    0.000    0.001    0.000 {method 'update' of 'dict' objects}
-     1000    0.001    0.000    0.452    0.000 time_xml_score.py:11(hello_xml_score)
+     1000    0.001    0.000    0.470    0.000 time_xml_score.py:11(hello_xml_score)
      1000    0.001    0.000    0.001    0.000 core.py:40(replace_key_underline_with_hyphen)
-     4023    0.001    0.000    0.001    0.000 ElementPath.py:197(select_child)
-     3000    0.001    0.000    0.001    0.000 {built-in method __new__ of type object at 0x1053b43b8}
+     3000    0.001    0.000    0.001    0.000 {built-in method __new__ of type object at 0x1038493b8}
      1000    0.001    0.000    0.001    0.000 xsdcomplextype.py:40(value)
-     1000    0.000    0.000    0.001    0.000 xsdtree.py:91(is_simple_type)
-     2000    0.000    0.000    0.000    0.000 xsdtree.py:291(get_xsd_tree)
-        1    0.000    0.000    0.452    0.452 <timeit-src>:2(inner)
-     1000    0.000    0.000    0.001    0.000 xsdtree.py:97(is_complex_type)
+     2000    0.000    0.000    0.000    0.000 xsdtree.py:313(get_xsd_tree)
+     1000    0.000    0.000    0.001    0.000 xsdtree.py:95(is_simple_type)
+     1000    0.000    0.000    0.001    0.000 xsdtree.py:101(is_complex_type)
+        1    0.000    0.000    0.471    0.471 <timeit-src>:2(inner)
      3001    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
+     1000    0.000    0.000    0.000    0.000 xmlelement.py:47(_fill_xsd_tree)
      1000    0.000    0.000    0.001    0.000 xmlelement.py:236(xsd_check)
-     2000    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
      1000    0.000    0.000    0.000    0.000 xsdcomplextype.py:27(_check_value)
-     1000    0.000    0.000    0.003    0.000 xmlelement.py:47(_fill_xsd_tree)
+     2000    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
      1000    0.000    0.000    0.000    0.000 xmlelement.py:149(<dictcomp>)
-        2    0.000    0.000    0.003    0.001 ElementPath.py:260(select)
         2    0.000    0.000    0.000    0.000 {built-in method builtins.compile}
-      475    0.000    0.000    0.000    0.000 {method 'get' of 'xml.etree.ElementTree.Element' objects}
-      2/1    0.000    0.000    0.478    0.478 {built-in method builtins.exec}
+      2/1    0.000    0.000    0.494    0.494 {built-in method builtins.exec}
         1    0.000    0.000    0.000    0.000 timeit.py:101(__init__)
-        1    0.000    0.000    0.452    0.452 timeit.py:163(timeit)
-        1    0.000    0.000    0.000    0.000 ElementPath.py:226(prepare_predicate)
-        1    0.000    0.000    0.478    0.478 time_xml_score.py:15(time_hello_xml_score)
-        1    0.000    0.000    0.000    0.000 {method 'findall' of 're.Pattern' objects}
-       10    0.000    0.000    0.000    0.000 ElementPath.py:73(xpath_tokenizer)
-        1    0.000    0.000    0.003    0.003 ElementPath.py:388(find)
-        2    0.000    0.000    0.000    0.000 codecs.py:327(reset)
-        1    0.000    0.000    0.452    0.452 timeit.py:230(timeit)
-        1    0.000    0.000    0.000    0.000 {method 'format' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 timeit.py:79(reindent)
-        1    0.000    0.000    0.000    0.000 copyreg.py:103(_slotnames)
-        1    0.000    0.000    0.000    0.000 ElementPath.py:182(prepare_descendant)
-        1    0.000    0.000    0.000    0.000 ElementPath.py:111(_prepare_tag)
-        1    0.000    0.000    0.003    0.003 {method 'find' of 'xml.etree.ElementTree.Element' objects}
-        1    0.000    0.000    0.000    0.000 re.py:188(match)
-        1    0.000    0.000    0.000    0.000 re.py:289(_compile)
-        1    0.000    0.000    0.478    0.478 <string>:1(<module>)
-        2    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
         1    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
-        2    0.000    0.000    0.000    0.000 codecs.py:276(reset)
-        1    0.000    0.000    0.000    0.000 <timeit-src>:2(<module>)
-        1    0.000    0.000    0.000    0.000 ElementPath.py:196(select)
-        1    0.000    0.000    0.000    0.000 ElementPath.py:107(_is_wildcard_tag)
-        1    0.000    0.000    0.003    0.003 {built-in method builtins.next}
-        1    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
-        2    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.471    0.471 timeit.py:163(timeit)
+        1    0.000    0.000    0.000    0.000 copyreg.py:103(_slotnames)
+        1    0.000    0.000    0.471    0.471 timeit.py:230(timeit)
+        2    0.000    0.000    0.000    0.000 codecs.py:327(reset)
+        1    0.000    0.000    0.494    0.494 time_xml_score.py:15(time_hello_xml_score)
+        1    0.000    0.000    0.000    0.000 timeit.py:79(reindent)
+        1    0.000    0.000    0.000    0.000 {method 'format' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 re.py:188(match)
+        1    0.000    0.000    0.494    0.494 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 re.py:289(_compile)
+        2    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
         1    0.000    0.000    0.000    0.000 {method 'get' of 'mappingproxy' objects}
+        1    0.000    0.000    0.000    0.000 <timeit-src>:2(<module>)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 codecs.py:276(reset)
         1    0.000    0.000    0.000    0.000 {method 'group' of 're.Match' objects}
         1    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
-        1    0.000    0.000    0.000    0.000 {built-in method gc.isenabled}
-        1    0.000    0.000    0.000    0.000 {method 'iter' of 'xml.etree.ElementTree.Element' objects}
-        1    0.000    0.000    0.000    0.000 ElementPath.py:177(prepare_self)
-        1    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
-        1    0.000    0.000    0.000    0.000 {built-in method gc.enable}
         1    0.000    0.000    0.000    0.000 {built-in method builtins.globals}
-        1    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
+        1    0.000    0.000    0.000    0.000 {built-in method gc.isenabled}
+        1    0.000    0.000    0.000    0.000 {built-in method gc.enable}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
         1    0.000    0.000    0.000    0.000 {built-in method gc.disable}
 
 
