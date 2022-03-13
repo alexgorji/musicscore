@@ -1,17 +1,9 @@
 import cProfile
 import timeit
-from xml.etree import ElementPath
+from contextlib import redirect_stdout
+from pathlib import Path
 
 from musictree import Score, Part, Chord, Id
-from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLLeftMargin
-
-
-def hello_xml_score():
-    XMLScorePartwise()
-
-
-def hello_xml_left_margin():
-    XMLLeftMargin(10)
 
 
 def hello():
@@ -22,16 +14,10 @@ def hello():
     Id.__refs__.clear()
 
 
-def time_hello_xml_score():
-    print(timeit.timeit(hello_xml_score, number=1))
-
-
-def time_hello_xml_left_margin():
-    print(timeit.timeit(hello_xml_left_margin, number=100))
-
-
 def time_hello():
-    print(timeit.timeit(hello, number=100))
+    print(timeit.timeit(hello, number=1000))
 
 
-cProfile.run('time_hello()', sort="cumtime")
+with open(Path(__file__).with_suffix('.txt'), '+w') as f:
+    with redirect_stdout(f):
+        cProfile.run('time_hello()', sort="tottime")

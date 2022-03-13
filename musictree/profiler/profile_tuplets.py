@@ -40,6 +40,7 @@ def p():
     s.export_xml(xml_path)
 
 
-with open(str(Path(__file__))+'xsd_tree_only_once.txt', '+w') as f:
+# with open(str(Path(__file__))+'xsd_tree_only_once.txt', '+w') as f:
+with open(Path(__file__).with_suffix('.txt'), '+w') as f:
     with redirect_stdout(f):
         cProfile.run('p()', sort="tottime")
