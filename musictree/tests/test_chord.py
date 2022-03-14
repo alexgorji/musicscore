@@ -80,7 +80,6 @@ class TestTreeChord(ChordTestCase):
         ch = Chord(70, QuarterDuration(1, 4))
         assert ch.quarter_duration == 0.25
 
-
     def test_is_rest(self):
         """
         Test is_rest property
@@ -448,7 +447,7 @@ class TestTreeChord(ChordTestCase):
         for technical_class in XML_TECHNICAL_CLASSES:
             ch = Chord(60, 1)
             ch._parent = self.mock_beat
-            ch.add_xml_technical(create_technical(technical_class))
+            ch.add_x(create_technical(technical_class))
             ch.final_updates()
             assert ch.notes[0].xml_notations.xml_technical.get_children()[0].__class__ == technical_class
 
@@ -456,23 +455,23 @@ class TestTreeChord(ChordTestCase):
     # def test_technical_fret(self):
     #     ch = Chord(60, 1)
     #     ch._parent = self.mock_beat
-    #     ch.add_xml_technical(XMLFret())
+    #     ch.add_x(XMLFret())
 
     def test_add_articulations(self):
         for articulation_class in XML_ARTICULATION_CLASSES:
             ch = Chord(60, 1)
             ch._parent = self.mock_beat
-            ch.add_xml_articulation(create_articulation(articulation_class))
+            ch.add_x(create_articulation(articulation_class))
             ch.final_updates()
             assert ch.notes[0].xml_notations.xml_articulations.get_children()[0].__class__ == articulation_class
 
     def test_add_articulation_after_creating_notes(self):
         ch = Chord(60, 1)
         ch._parent = self.mock_beat
-        staccato = ch.add_xml_articulation(create_articulation(XMLStaccato))
+        staccato = ch.add_x(create_articulation(XMLStaccato))
         ch.final_updates()
         assert isinstance(ch.notes[0].xml_notations.xml_articulations.get_children()[0], XMLStaccato)
-        accent = ch.add_xml_articulation(create_articulation(XMLAccent))
+        accent = ch.add_x(create_articulation(XMLAccent))
         assert ch.notes[0].xml_notations.xml_articulations.get_children() == [staccato, accent]
 
     def test_add_multiple_articulations(self):
@@ -480,15 +479,12 @@ class TestTreeChord(ChordTestCase):
         ch = Chord(60, 1)
         ch._parent = self.mock_beat
         for a in articulation_classes:
-            ch.add_xml_articulation(a())
+            ch.add_x(a())
         assert len(ch._xml_articulations) == 3
         ch.final_updates()
         n = ch.notes[0]
         assert n.xml_notations.xml_articulations is not None
         assert [type(a) for a in n.xml_notations.xml_articulations.get_children()] == articulation_classes
-
-    def test_add_ornaments(self):
-        self.fail('Incomplete')
 
     def test_add_wedge(self):
         self.fail('Incomplete')
@@ -505,17 +501,42 @@ class TestTreeChord(ChordTestCase):
     def test_add_grace_chords(self):
         self.fail('Incomplete')
 
-    def test_add_slur(self):
-        self.fail('Incomplete')
-
-    def test_add_slide(self):
-        self.fail('Incomplete')
-
-    def test_add_fermata(self):
-        self.fail('Incomplete')
-
     def test_percussion_notation(self):
         self.fail('Incomplete')
 
     def test_finger_tremolo(self):
         self.fail('Incomplete')
+
+    def test_chord_add_x_as_object_articulation(self):
+        for cls in XML_ARTICULATION_CLASSES:
+            ch = Chord(60, 1)
+            ch.add_x(create_articulation(cls))
+            ch._parent = self.mock_beat
+            ch.final_updates()
+            assert isinstance(ch.notes[0].xml_notations.xml_articulations.get_children()[0], cls)
+
+    def test_chord_add_x_as_object_technical(self):
+        for cls in XML_TECHNICAL_CLASSES:
+            ch = Chord(60, 1)
+            ch.add_x(create_technical(cls))
+            ch._parent = self.mock_beat
+            ch.final_updates()
+            assert isinstance(ch.notes[0].xml_notations.xml_technical.get_children()[0], cls)
+
+    def test_chord_add_x_as_object_dynamics(self):
+        for cls in XML_DYNAMIC_CLASSES:
+            ch = Chord(60, 1)
+            ch.add_x(cls())
+            assert isinstance(ch.notes[0].xml_notations.xml_dynamics.get_children()[0], cls)
+
+    def test_chord_add_x_as_object_ornaments(self):
+        for cls in XML_ORNAMENT_CLASSES:
+            ch = Chord(60, 1)
+            ch.add_x(cls())
+            assert isinstance(ch.notes[0].xml_notations.xml_ornaments.get_children()[0], cls)
+
+    def test_chord_add_x_as_object_other_notations(self):
+        for cls in XML_OTHER_NOTATIONS:
+            ch = Chord(60, 1)
+            ch.add_x(cls())
+            assert isinstance(ch.notes[0].xml_notations.get_children()[0], cls)

@@ -75,3 +75,13 @@ XML_TECHNICAL_CLASSES = [XMLUpBow, XMLDownBow, XMLHarmonic, XMLOpenString, XMLTh
                          XMLTripleTongue, XMLStopped, XMLSnapPizzicato, XMLFret, XMLString, XMLHammerOn, XMLPullOff, XMLBend, XMLTap,
                          XMLHeel, XMLToe, XMLFingernails, XMLHole, XMLArrow, XMLHandbell, XMLBrassBend, XMLFlip, XMLSmear, XMLOpen,
                          XMLHalfMuted, XMLHarmonMute, XMLGolpe, XMLOtherTechnical]
+
+XML_ORNAMENT_CLASSES = [XMLAccidentalMark, XMLDelayedInvertedTurn, XMLDelayedTurn, XMLHaydn, XMLInvertedMordent, XMLInvertedTurn,
+                        XMLInvertedVerticalTurn, XMLMordent, XMLOtherOrnament, XMLSchleifer, XMLShake, XMLTremolo, XMLTrillMark, XMLTurn,
+                        XMLVerticalTurn, XMLWavyLine]
+
+XML_DYNAMIC_CLASSES = [XMLF, XMLFf, XMLFff, XMLFfff, XMLFffff, XMLFfffff, XMLFp, XMLFz, XMLMf, XMLMp, XMLP, XMLPf, XMLPp, XMLPpp, XMLPppp,
+                       XMLPpppp, XMLPppppp, XMLRf, XMLRfz, XMLSf, XMLSffz, XMLSfp, XMLSfpp, XMLSfz, XMLSfzp]
+
+XML_OTHER_NOTATIONS = [XMLAccidentalMark, XMLArpeggiate, XMLFermata, XMLFootnote, XMLGlissando, XMLLevel,
+                       XMLNonArpeggiate, XMLOtherNotation, XMLSlide, XMLSlur]

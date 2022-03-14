@@ -21,12 +21,12 @@ class TestHelloWorldArticulations(IdTestCase):
             articulation_class = XML_ARTICULATION_CLASSES[index]
             next_articulation_class = XML_ARTICULATION_CLASSES[index + 1] if index != len(XML_ARTICULATION_CLASSES) - 1 else None
             ch = Chord(60, 1)
-            ch.add_xml_articulation(create_articulation(articulation_class))
+            ch.add_x(create_articulation(articulation_class))
             p.add_chord(ch)
             if next_articulation_class:
                 ch = Chord(60, 1)
-                ch.add_xml_articulation(create_articulation(articulation_class))
-                ch.add_xml_articulation(create_articulation(next_articulation_class))
+                ch.add_x(create_articulation(articulation_class))
+                ch.add_x(create_articulation(next_articulation_class))
                 p.add_chord(ch)
 
         """

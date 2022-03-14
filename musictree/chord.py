@@ -344,21 +344,16 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         return self._xml_technicals
 
-    def add_xml_articulation(self, xml_articulation_object: _all_articulations) -> 'xml_articulation_object':
-        """
-        This method is used to add one xml articulation object to chord's private __xml_articulations list.
-        This list is used to add or update articulations of the first :obj:`~musictree.note.Note` object of chord`s notes which are to be or are already created .
-
-        :param xml_articulation_object: musicxml articulation element
-        :return: xml_articulation_object
-        """
-
-        if xml_articulation_object.__class__ not in XML_ARTICULATION_CLASSES:
-            raise TypeError
-        self._xml_articulations.append(xml_articulation_object)
-        if self.notes:
-            self._update_xml_articulations()
-        return xml_articulation_object
+    def add_x(self, x):
+        if x.__class__ in XML_ARTICULATION_CLASSES:
+            self._xml_articulations.append(x)
+            if self.notes:
+                self._update_xml_articulations()
+        elif x.__class__ in XML_TECHNICAL_CLASSES:
+            self._xml_technicals.append(x)
+            if self.notes:
+                self._update_xml_technicals()
+        return x
 
     def add_child(self, child: Note) -> Note:
         """
@@ -384,22 +379,6 @@ class Chord(MusicTree, QuarterDurationMixin):
         dynamics_object_list = [d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list]
         self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
         return dynamics_object_list
-
-    def add_xml_technical(self, xml_technical_object: _all_technicals) -> 'xml_technical_object':
-        """
-        This method is used to add one xml technical object to chord's private __xml_technicals list.
-        This list is used to add or update technicals of the first :obj:`~musictree.note.Note` object of chord`s notes which are to be or are already created .
-
-        :param xml_technical_object: musicxml technical element
-        :return: xml_technical_object
-        """
-
-        if xml_technical_object.__class__ not in XML_TECHNICAL_CLASSES:
-            raise TypeError
-        self._xml_technicals.append(xml_technical_object)
-        if self.notes:
-            self._update_xml_technicals()
-        return xml_technical_object
 
     def add_tie(self, val: str) -> None:
         """
