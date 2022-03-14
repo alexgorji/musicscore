@@ -13,7 +13,7 @@ __all__ = ['Staff']
 
 
 class Staff(MusicTree, FinalUpdateMixin, XMLWrapper):
-    _ATTRIBUTES = {'clef', 'default_clef', 'number', '_final_updated'}
+    _ATTRIBUTES = {'clef', 'default_clef', 'number'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLStaff
 

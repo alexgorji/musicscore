@@ -11,7 +11,7 @@ __all__ = ['Voice']
 
 
 class Voice(MusicTree, FinalUpdateMixin, XMLWrapper):
-    _ATTRIBUTES = {'number', '_chords', '_current_beat', 'leftover_chord', 'is_filled', '_final_updated'}
+    _ATTRIBUTES = {'number', 'leftover_chord', 'is_filled'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLVoice
 

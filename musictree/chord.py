@@ -34,8 +34,7 @@ class Chord(MusicTree, QuarterDurationMixin):
     :param quarter_duration: int, float, Fraction, QuarterDuration for duration counted in quarters (crotchets). 0 for grace note (or
     chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', '_note_attributes', 'offset', 'split', 'voice', '_xml_lyrics', 'ties',
-                   '_notes_are_set', '_xml_direction_types', '_xml_directions', '_xml_articulations', '_xml_technicals', '_final_updated'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'ties'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
@@ -551,9 +550,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         self.midis = [0]
 
     def __setattr__(self, key, value):
-        if key not in self._ATTRIBUTES.union(self._TREE_ATTRIBUTES) and key not in [f'_{attr}' for attr in
-                                                                                    self._ATTRIBUTES.union(
-                                                                                        self._TREE_ATTRIBUTES)] and key not in self.__dict__:
+        if key[0] != '_' and key not in self._ATTRIBUTES.union(self._TREE_ATTRIBUTES) and key not in self.__dict__:
             if self.notes:
                 if isinstance(value, str) or not hasattr(value, '__iter__'):
                     value = [value] * len(self.notes)

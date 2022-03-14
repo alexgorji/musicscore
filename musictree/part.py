@@ -117,7 +117,7 @@ class ScorePart(XMLWrapper):
 
 
 class Part(MusicTree, FinalUpdateMixin, XMLWrapper):
-    _ATTRIBUTES = {'id_', 'name', '_score_part', '_current_measures'}
+    _ATTRIBUTES = {'id_', 'name'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLPart
 

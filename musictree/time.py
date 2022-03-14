@@ -8,7 +8,7 @@ __all__ = ['Time', 'flatten_times']
 
 
 class Time(XMLWrapper):
-    _ATTRIBUTES = {'signatures', 'actual_signatures', '_intern_actual_signatures', 'parent_measure', 'show'}
+    _ATTRIBUTES = {'signatures', 'actual_signatures', 'parent_measure', 'show'}
     XMLClass = XMLTime
 
     def __init__(self, *signatures, show=True, **kwargs):

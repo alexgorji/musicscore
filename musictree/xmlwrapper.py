@@ -32,8 +32,7 @@ class XMLWrapper:
                 attributes.union(self._TREE_ATTRIBUTES)
         except AttributeError:
             pass
-        if '_xml_object' in self.__dict__ and key not in attributes and key not in [f'_{attr}' for attr in attributes if not
-        attr.startswith('_')] and key not in self.__dict__:
+        if key[0] != '_' and ('_xml_object' in self.__dict__ and key not in attributes and key not in self.__dict__):
             setattr(self._xml_object, key, value)
         else:
             super().__setattr__(key, value)

@@ -8,7 +8,7 @@ from musictree.measure import Measure
 from musictree.midi import Midi
 from musictree.quarterduration import QuarterDuration
 from musictree.tests.util import check_notes, ChordTestCase, create_articulation, create_technical
-from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES
+from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, XML_OTHER_NOTATIONS
 from musicxml.xmlelement.xmlelement import *
 
 
