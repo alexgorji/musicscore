@@ -195,6 +195,8 @@ def create_ornament(class_):
         ornament = class_('sharp')
     elif class_.__name__ == 'XMLTremolo':
         ornament = class_(3)
+    elif class_.__name__ == 'XMLWavyLine':
+        ornament = class_(type='start')
     else:
         ornament = class_()
     return ornament

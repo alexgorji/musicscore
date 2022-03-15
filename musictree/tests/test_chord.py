@@ -303,7 +303,6 @@ class TestTreeChord(ChordTestCase):
         chord.final_updates()
         chord.xml_stem = 'up'
         expected_1 = """<note>
-  <chord />
   <pitch>
     <step>C</step>
     <octave>4</octave>
@@ -315,6 +314,7 @@ class TestTreeChord(ChordTestCase):
 </note>
 """
         expected_2 = """<note>
+  <chord />
   <pitch>
     <step>D</step>
     <octave>4</octave>
@@ -327,6 +327,7 @@ class TestTreeChord(ChordTestCase):
 </note>
 """
         expected_3 = """<note>
+  <chord />
   <pitch>
     <step>E</step>
     <alter>-1</alter>
@@ -509,12 +510,29 @@ class TestTreeChord(ChordTestCase):
             assert isinstance(ch.notes[0].xml_notations.xml_dynamics.get_children()[0], cls)
 
     def test_chord_add_x_as_object_ornaments(self):
-        for cls in XML_ORNAMENT_CLASSES:
+        for cls in XML_ORNAMENT_CLASSES[1:]:
             ch = Chord(60, 1)
             ch.add_x(create_ornament(cls))
             ch._parent = self.mock_beat
             ch.final_updates()
             assert isinstance(ch.notes[0].xml_notations.xml_ornaments.get_children()[0], cls)
+
+    def test_chord_add_x_trill_with_wavy_line_and_accidental_mark(self):
+        ch = Chord(60, 1)
+        ch.add_x(XMLTrillMark())
+        ch.add_x(XMLAccidentalMark('sharp'))
+        ch.add_x(XMLWavyLine(type='start', relative_x=0))
+        ch.add_x(XMLWavyLine(type='stop', relative_x=20))
+        ch._parent = self.mock_beat
+        ch.final_updates()
+        expected = """<ornaments>
+      <trill-mark />
+      <accidental-mark>sharp</accidental-mark>
+      <wavy-line type="start" relative-x="0" />
+      <wavy-line type="stop" relative-x="20" />
+    </ornaments>
+"""
+        assert ch.notes[0].xml_notations.xml_ornaments.to_string() == expected
 
     def test_chord_add_x_as_object_other_notations(self):
         for cls in XML_OTHER_NOTATIONS:

@@ -1,5 +1,6 @@
 from typing import List
 
+from musictree import Part
 from musictree.finalupdate_mixin import FinalUpdateMixin
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, XMLEncoding, \
     XMLSupports
@@ -230,6 +231,15 @@ class Score(MusicTree, FinalUpdateMixin, XMLWrapper):
         self.xml_object.add_child(child.xml_object)
         self.xml_part_list.xml_score_part = child.score_part.xml_object
         return child
+
+    def add_part(self, id_: str) -> 'Part':
+        """
+        Creates and adds part
+        :param id_: part's id
+        :return: part
+        """
+        p = Part(id_)
+        return self.add_child(p)
 
     def get_children(self) -> List['Part']:
         """

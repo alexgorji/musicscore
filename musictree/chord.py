@@ -57,12 +57,16 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._ties = []
         self._xml_direction_types = {'above': [], 'below': []}
 
-        self._xml_articulations = []
         self._xml_directions = []
         self._xml_lyrics = []
+        self._xml_articulations = []
         self._xml_technicals = []
         self._xml_ornaments = []
         self._xml_dynamics = []
+        self._xml_articulations_kwargs = {}
+        self._xml_technicals_kwargs = {}
+        self._xml_ornaments_kwargs = {}
+        self._xml_dynamics_kwargs = {}
         self._xml_other_notations = []
         self._note_attributes = kwargs
         self._notes_are_set = False
@@ -105,7 +109,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         if chord_articulations_not_in_note:
             n.get_or_create_xml_notations()
             if not n.xml_notations.xml_articulations:
-                n.xml_notations.xml_articulations = XMLArticulations()
+                n.xml_notations.xml_articulations = XMLArticulations(**self._xml_articulations_kwargs)
 
             for xml_articulation in chord_articulations_not_in_note:
                 n.xml_notations.xml_articulations.add_child(xml_articulation)
@@ -148,7 +152,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         if chord_dynamics_not_in_note:
             n.get_or_create_xml_notations()
             if not n.xml_notations.xml_dynamics:
-                n.xml_notations.xml_dynamics = XMLDynamics()
+                n.xml_notations.xml_dynamics = XMLDynamics(**self._xml_dynamics_kwargs)
 
             for xml_dynamic in chord_dynamics_not_in_note:
                 n.xml_notations.xml_dynamics.add_child(xml_dynamic)
@@ -174,7 +178,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         if chord_ornaments_not_in_note:
             n.get_or_create_xml_notations()
             if not n.xml_notations.xml_ornaments:
-                n.xml_notations.xml_ornaments = XMLOrnaments
+                n.xml_notations.xml_ornaments = XMLOrnaments(**self._xml_ornaments_kwargs)
 
             for xml_ornament in chord_ornaments_not_in_note:
                 n.xml_notations.xml_ornaments.add_child(xml_ornament)
@@ -223,7 +227,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         if chord_technicals_not_in_note:
             n.get_or_create_xml_notations()
             if not n.xml_notations.xml_technical:
-                n.xml_notations.xml_technical = XMLTechnical()
+                n.xml_notations.xml_technical = XMLTechnical(**self._xml_technicals_kwargs)
 
             for xml_technical in chord_technicals_not_in_note:
                 n.xml_notations.xml_technical.add_child(xml_technical)
@@ -260,11 +264,9 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._notes_are_set = True
 
     def _update_xml_chord(self):
-        if len(self.notes) > 1:
-            if not self.notes[0].xml_object.xml_chord:
-                self.notes[0].xml_object.add_child(XMLChord())
-        else:
-            self.notes[0].xml_object.xml_chord = None
+        for n in self.notes[1:]:
+            if not n.xml_object.xml_chord:
+                n.xml_object.add_child(XMLChord())
 
     def final_updates(self):
         """
@@ -439,7 +441,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         return self._xml_technicals
 
-    def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations]):
+    def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations], **kwargs):
         """
         This method is used to add one xml object to a chord's private xml object lists (like _xml_articulations, xml_technicals
         etc.). These lists are used to add or update articulations, technicals etc. of the first :obj:`~musictree.note.Note` object of
@@ -451,18 +453,22 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         if x.__class__ in XML_ARTICULATION_CLASSES:
             self._xml_articulations.append(x)
+            self._xml_articulations_kwargs = kwargs
             if self.notes:
                 self._update_xml_articulations()
         elif x.__class__ in XML_TECHNICAL_CLASSES:
             self._xml_technicals.append(x)
+            self._xml_technicals_kwargs = kwargs
             if self.notes:
                 self._update_xml_technicals()
         elif x.__class__ in XML_ORNAMENT_CLASSES:
             self._xml_ornaments.append(x)
+            self._xml_ornaments_kwargs = kwargs
             if self.notes:
                 self._update_xml_ornaments()
         elif x.__class__ in XML_DYNAMIC_CLASSES:
             self._xml_dynamics.append(x)
+            self._xml_dynamics_kwargs = kwargs
             if self.notes:
                 self._update_xml_dynamics()
         elif x.__class__ in XML_OTHER_NOTATIONS:
