@@ -258,8 +258,9 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     def update_xml_notations(self):
         """
-        If ``self.xml_object.xml_notations`` has children of type :obj:`~musicxml.xmlelement.xmlelement.XMLArticulation` oder
-        :obj:`~musicxml.xmlelement.xmlelement.XMLTechnical`
+        If ``self.xml_object.xml_notations`` has children of types :obj:`~musicxml.xmlelement.xmlelement.XMLArticulation` oder
+        :obj:`~musicxml.xmlelement.xmlelement.XMLTechnical`, :obj:`~musicxml.xmlelement.xmlelement.XMLOrnaments`,
+        :obj:`~musicxml.xmlelement.xmlelement.XMLDynamics`
         which have no children themselves, these will be removed.
         ``self.xml_object.xml_notations`` will be removed itself if it has no children.
 
@@ -268,8 +269,15 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         if self.xml_object.xml_notations:
             if self.xml_object.xml_notations.xml_articulations and not self.xml_object.xml_notations.xml_articulations.get_children():
                 self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_articulations)
+
             if self.xml_object.xml_notations.xml_technical and not self.xml_object.xml_notations.xml_technical.get_children():
                 self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_technical)
+
+            if self.xml_object.xml_notations.xml_ornaments and not self.xml_object.xml_notations.xml_ornaments.get_children():
+                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_ornaments)
+
+            if self.xml_object.xml_notations.xml_dynamics and not self.xml_object.xml_notations.xml_dynamics.get_children():
+                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_dynamics)
 
             if not self.xml_object.xml_notations.get_children():
                 self.xml_object.remove(self.xml_object.xml_notations)

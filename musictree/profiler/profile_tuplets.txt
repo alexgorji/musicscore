@@ -69,7 +69,7 @@
    166895    0.035    0.000    0.035    0.000 {method 'startswith' of 'str' objects}
    220938    0.034    0.000    0.034    0.000 xsdelement.py:38(xml_elements)
      4391    0.034    0.000    0.092    0.000 xmlchildcontainer.py:566(set_force_validate)
-     2316    0.033    0.000    0.233    0.000 xmlchildcontainer.py:284(_set_requirement_not_fulfilled)
+     2316    0.033    0.000    0.233    0.000 xmlchildcontainer.py:284(_set_requirements_fulfilled)
     54986    0.032    0.000    0.032    0.000 {method 'union' of 'set' objects}
 12825/12412    0.030    0.000    0.083    0.000 chord.py:553(__setattr__)
    134916    0.030    0.000    0.030    0.000 xsdattribute.py:54(name)

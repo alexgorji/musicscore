@@ -59,7 +59,7 @@
      6632    0.046    0.000    0.114    0.000 xmlchildcontainer.py:400(select_valid_leaves)
    169751    0.046    0.000    0.046    0.000 {method 'split' of 'str' objects}
     28629    0.042    0.000    1.039    0.000 xsdelement.py:39(__copy__)
-     2316    0.042    0.000    0.362    0.000 xmlchildcontainer.py:284(_set_requirement_not_fulfilled)
+     2316    0.042    0.000    0.362    0.000 xmlchildcontainer.py:284(_set_requirements_fulfilled)
      7672    0.042    0.000    2.514    0.000 xmlelement.py:30(__init__)
 38731/4005    0.042    0.000    0.487    0.000 xmlchildcontainer.py:42(_check_if_container_requires_elements)
     55415    0.040    0.000    0.059    0.000 xmlchildcontainer.py:166(_check_content_type)

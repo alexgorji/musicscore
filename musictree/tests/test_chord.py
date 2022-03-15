@@ -3,11 +3,10 @@ from quicktions import Fraction
 from musictree.accidental import Accidental
 from musictree.beat import Beat
 from musictree.chord import Chord, split_copy, group_chords
-from musictree.exceptions import ChordHasNoParentError, ChordQuarterDurationAlreadySetError
-from musictree.measure import Measure
+from musictree.exceptions import ChordHasNoParentError
 from musictree.midi import Midi
 from musictree.quarterduration import QuarterDuration
-from musictree.tests.util import check_notes, ChordTestCase, create_articulation, create_technical
+from musictree.tests.util import ChordTestCase, create_articulation, create_technical, create_ornament
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, XML_OTHER_NOTATIONS
 from musicxml.xmlelement.xmlelement import *
 
@@ -443,28 +442,6 @@ class TestTreeChord(ChordTestCase):
         self.mock_staff.number = 1
         assert ch.get_staff_number() == 1
 
-    def test_add_technicals(self):
-        for technical_class in XML_TECHNICAL_CLASSES:
-            ch = Chord(60, 1)
-            ch._parent = self.mock_beat
-            ch.add_x(create_technical(technical_class))
-            ch.final_updates()
-            assert ch.notes[0].xml_notations.xml_technical.get_children()[0].__class__ == technical_class
-
-    #
-    # def test_technical_fret(self):
-    #     ch = Chord(60, 1)
-    #     ch._parent = self.mock_beat
-    #     ch.add_x(XMLFret())
-
-    def test_add_articulations(self):
-        for articulation_class in XML_ARTICULATION_CLASSES:
-            ch = Chord(60, 1)
-            ch._parent = self.mock_beat
-            ch.add_x(create_articulation(articulation_class))
-            ch.final_updates()
-            assert ch.notes[0].xml_notations.xml_articulations.get_children()[0].__class__ == articulation_class
-
     def test_add_articulation_after_creating_notes(self):
         ch = Chord(60, 1)
         ch._parent = self.mock_beat
@@ -527,16 +504,22 @@ class TestTreeChord(ChordTestCase):
         for cls in XML_DYNAMIC_CLASSES:
             ch = Chord(60, 1)
             ch.add_x(cls())
+            ch._parent = self.mock_beat
+            ch.final_updates()
             assert isinstance(ch.notes[0].xml_notations.xml_dynamics.get_children()[0], cls)
 
     def test_chord_add_x_as_object_ornaments(self):
         for cls in XML_ORNAMENT_CLASSES:
             ch = Chord(60, 1)
-            ch.add_x(cls())
+            ch.add_x(create_ornament(cls))
+            ch._parent = self.mock_beat
+            ch.final_updates()
             assert isinstance(ch.notes[0].xml_notations.xml_ornaments.get_children()[0], cls)
 
     def test_chord_add_x_as_object_other_notations(self):
         for cls in XML_OTHER_NOTATIONS:
             ch = Chord(60, 1)
             ch.add_x(cls())
+            ch._parent = self.mock_beat
+            ch.final_updates()
             assert isinstance(ch.notes[0].xml_notations.get_children()[0], cls)

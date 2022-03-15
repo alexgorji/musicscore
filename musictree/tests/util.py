@@ -18,7 +18,6 @@ def check_notes(notes, midi_values, quarter_durations):
         assert n.quarter_duration == qd
 
 
-
 class IdTestCase(TestCase):
     def setUp(self):
         Id.__refs__.clear()
@@ -159,10 +158,6 @@ def create_technical(class_):
         technical = class_(2)
     elif class_.__name__ == 'XMLString':
         technical = class_(2)
-    elif class_.__name__ == 'XMLHammerOn':
-        technical = class_('2', type='start')
-    elif class_.__name__ == 'XMLPullOff':
-        technical = class_('2', type='start')
     elif class_.__name__ == 'XMLTap':
         technical = class_('2')
     elif class_.__name__ == 'XMLHandbell':
@@ -193,3 +188,14 @@ def create_articulation(class_):
     else:
         articulation = class_()
     return articulation
+
+
+def create_ornament(class_):
+    if class_.__name__ == 'XMLAccidentalMark':
+        ornament = class_('sharp')
+    elif class_.__name__ == 'XMLTremolo':
+        ornament = class_(3)
+    else:
+        ornament = class_()
+    return ornament
+

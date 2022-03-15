@@ -83,5 +83,5 @@ XML_ORNAMENT_CLASSES = [XMLAccidentalMark, XMLDelayedInvertedTurn, XMLDelayedTur
 XML_DYNAMIC_CLASSES = [XMLF, XMLFf, XMLFff, XMLFfff, XMLFffff, XMLFfffff, XMLFp, XMLFz, XMLMf, XMLMp, XMLP, XMLPf, XMLPp, XMLPpp, XMLPppp,
                        XMLPpppp, XMLPppppp, XMLRf, XMLRfz, XMLSf, XMLSffz, XMLSfp, XMLSfpp, XMLSfz, XMLSfzp]
 
-XML_OTHER_NOTATIONS = [XMLAccidentalMark, XMLArpeggiate, XMLFermata, XMLFootnote, XMLGlissando, XMLLevel,
-                       XMLNonArpeggiate, XMLOtherNotation, XMLSlide, XMLSlur]
+XML_OTHER_NOTATIONS = [XMLArpeggiate, XMLFermata, XMLFootnote, XMLGlissando, XMLLevel, XMLNonArpeggiate, XMLOtherNotation, XMLSlide,
+                       XMLSlur]

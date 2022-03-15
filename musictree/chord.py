@@ -1,8 +1,7 @@
 from fractions import Fraction
 from typing import Union, List, Optional, Any, Dict
 
-from musicxml.xmlelement.xmlelement import XMLChord, XMLLyric, XMLDirection, XMLDirectionType, XMLDynamics, XMLNotations, \
-    XMLArticulations, XMLTechnical
+from musicxml.xmlelement.xmlelement import *
 
 from musictree.dynamics import Dynamics
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
@@ -11,7 +10,7 @@ from musictree.midi import Midi
 from musictree.core import MusicTree
 from musictree.note import Note
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
-from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES
+from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_ORNAMENT_CLASSES, XML_DYNAMIC_CLASSES, XML_OTHER_NOTATIONS
 
 __all__ = ['Chord', 'group_chords']
 
@@ -25,6 +24,22 @@ _all_technicals = Union[
     "XMLTripleTongue", "XMLStopped", "XMLSnapPizzicato", "XMLFret", "XMLString", "XMLHammerOn", "XMLPullOff", "XMLBend", "XMLTap",
     "XMLHeel", "XMLToe", "XMLFingernails", "XMLHole", "XMLArrow", "XMLHandbell", "XMLBrassBend", "XMLFlip", "XMLSmear", "XMLOpen",
     "XMLHalfMuted", "XMLHarmonMute", "XMLGolpe", "XMLOtherTechnical"]
+
+_all_ornaments = Union[
+    "XMLAccidentalMark", "XMLDelayedInvertedTurn", "XMLDelayedTurn", "XMLHaydn", "XMLInvertedMordent", "XMLInvertedTurn",
+    "XMLInvertedVerticalTurn", "XMLMordent", "XMLOtherOrnament", "XMLSchleifer", "XMLShake", "XMLTremolo", "XMLTrillMark", "XMLTurn",
+    "XMLVerticalTurn", "XMLWavyLine"
+]
+
+_all_dynamics = Union[
+    "XMLF", "XMLFf", "XMLFff", "XMLFfff", "XMLFffff", "XMLFfffff", "XMLFp", "XMLFz", "XMLMf", "XMLMp", "XMLP", "XMLPf", "XMLPp", "XMLPpp", "XMLPppp",
+    "XMLPpppp", "XMLPppppp", "XMLRf", "XMLRfz", "XMLSf", "XMLSffz", "XMLSfp", "XMLSfpp", "XMLSfz", "XMLSfzp"
+]
+
+_all_other_notations = Union[
+    "XMLArpeggiate", "XMLFermata", "XMLFootnote", "XMLGlissando", "XMLLevel", "XMLNonArpeggiate", "XMLOtherNotation", "XMLSlide",
+    "XMLSlur"
+]
 
 
 class Chord(MusicTree, QuarterDurationMixin):
@@ -46,7 +61,9 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._xml_directions = []
         self._xml_lyrics = []
         self._xml_technicals = []
-
+        self._xml_ornaments = []
+        self._xml_dynamics = []
+        self._xml_other_notations = []
         self._note_attributes = kwargs
         self._notes_are_set = False
 
@@ -72,23 +89,6 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._midis = [Midi(v) if not isinstance(v, Midi) else v for v in midis]
         self._update_notes_pitch_or_rest()
 
-    def _update_xml_directions(self):
-        def _add_dynamics(list_of_dynamics, xml_direction):
-            for dynamics in list_of_dynamics:
-                dt = xml_direction.add_child(XMLDirectionType())
-                dyn = dt.xml_dynamics = XMLDynamics()
-                dyn.add_child(dynamics.xml_object)
-
-        for placement in self._xml_direction_types:
-            direction_types = self._xml_direction_types[placement]
-            for direction_type in direction_types:
-                d = XMLDirection(placement=placement)
-                self._xml_directions.append(d)
-                if direction_type[0] == 'dynamics':
-                    _add_dynamics(list_of_dynamics=direction_type[1], xml_direction=d)
-                else:
-                    raise NotImplementedError
-
     def _update_xml_articulations(self):
         def _get_note_xml_articulations():
             try:
@@ -112,6 +112,98 @@ class Chord(MusicTree, QuarterDurationMixin):
 
         for art in note_articulations_not_in_chord:
             n.xml_notations.xml_articulations.remove(art)
+
+        n.update_xml_notations()
+
+    def _update_xml_directions(self):
+        def _add_dynamics(list_of_dynamics, xml_direction):
+            for dynamics in list_of_dynamics:
+                dt = xml_direction.add_child(XMLDirectionType())
+                dyn = dt.xml_dynamics = XMLDynamics()
+                dyn.add_child(dynamics.xml_object)
+
+        for placement in self._xml_direction_types:
+            direction_types = self._xml_direction_types[placement]
+            for direction_type in direction_types:
+                d = XMLDirection(placement=placement)
+                self._xml_directions.append(d)
+                if direction_type[0] == 'dynamics':
+                    _add_dynamics(list_of_dynamics=direction_type[1], xml_direction=d)
+                else:
+                    raise NotImplementedError
+
+    def _update_xml_dynamics(self):
+        def _get_note_xml_dynamics():
+            try:
+                return n.xml_notations.xml_dynamics.get_children(ordered=False)
+            except AttributeError:
+                return []
+
+        n = self.notes[0]
+
+        note_dynamics_not_in_chord = [art for art in _get_note_xml_dynamics() if art not in
+                                      self._xml_dynamics]
+        chord_dynamics_not_in_note = [art for art in self._xml_dynamics if art not in _get_note_xml_dynamics()]
+
+        if chord_dynamics_not_in_note:
+            n.get_or_create_xml_notations()
+            if not n.xml_notations.xml_dynamics:
+                n.xml_notations.xml_dynamics = XMLDynamics()
+
+            for xml_dynamic in chord_dynamics_not_in_note:
+                n.xml_notations.xml_dynamics.add_child(xml_dynamic)
+
+        for d in note_dynamics_not_in_chord:
+            n.xml_notations.xml_dynamics.remove(d)
+
+        n.update_xml_notations()
+
+    def _update_xml_ornaments(self):
+        def _get_note_xml_ornaments():
+            try:
+                return n.xml_notations.xml_ornaments.get_children(ordered=False)
+            except AttributeError:
+                return []
+
+        n = self.notes[0]
+
+        note_ornaments_not_in_chord = [o for o in _get_note_xml_ornaments() if o not in
+                                       self._xml_ornaments]
+        chord_ornaments_not_in_note = [o for o in self._xml_ornaments if o not in _get_note_xml_ornaments()]
+
+        if chord_ornaments_not_in_note:
+            n.get_or_create_xml_notations()
+            if not n.xml_notations.xml_ornaments:
+                n.xml_notations.xml_ornaments = XMLOrnaments
+
+            for xml_ornament in chord_ornaments_not_in_note:
+                n.xml_notations.xml_ornaments.add_child(xml_ornament)
+
+        for o in note_ornaments_not_in_chord:
+            n.xml_notations.xml_ornaments.remove(o)
+
+        n.update_xml_notations()
+
+    def _update_xml_other_notations(self):
+        def _get_note_xml_other_notations():
+            try:
+                return [ch for ch in n.xml_notations.get_children(ordered=False) if ch.__class__ in XML_OTHER_NOTATIONS]
+            except AttributeError:
+                return []
+
+        n = self.notes[0]
+
+        note_other_notations_not_in_chord = [on for on in _get_note_xml_other_notations() if on not in
+                                             self._xml_other_notations]
+        chord_other_notations_not_in_note = [on for on in self._xml_other_notations if on not in _get_note_xml_other_notations()]
+
+        if chord_other_notations_not_in_note:
+            n.get_or_create_xml_notations()
+            for xml_other_notation in chord_other_notations_not_in_note:
+                n.xml_notations.add_child(xml_other_notation)
+
+        for on in note_other_notations_not_in_chord:
+            n.xml_notations.remove(on)
 
         n.update_xml_notations()
 
@@ -199,6 +291,9 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._update_xml_directions()
         self._update_xml_articulations()
         self._update_xml_technicals()
+        self._update_xml_ornaments()
+        self._update_xml_dynamics()
+        self._update_xml_other_notations()
         self._final_updated = True
 
     def _update_notes_quarter_duration(self):
@@ -344,7 +439,16 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         return self._xml_technicals
 
-    def add_x(self, x):
+    def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations]):
+        """
+        This method is used to add one xml object to a chord's private xml object lists (like _xml_articulations, xml_technicals
+        etc.). These lists are used to add or update articulations, technicals etc. of the first :obj:`~musictree.note.Note` object of
+        chord`s notes which are to be or are already created .
+
+        :param x: musicxml articulation element, musicxml technical element, musicxml ornament element, musicxml dynamic element,
+        musicxml other notations
+        :return: x
+        """
         if x.__class__ in XML_ARTICULATION_CLASSES:
             self._xml_articulations.append(x)
             if self.notes:
@@ -353,6 +457,20 @@ class Chord(MusicTree, QuarterDurationMixin):
             self._xml_technicals.append(x)
             if self.notes:
                 self._update_xml_technicals()
+        elif x.__class__ in XML_ORNAMENT_CLASSES:
+            self._xml_ornaments.append(x)
+            if self.notes:
+                self._update_xml_ornaments()
+        elif x.__class__ in XML_DYNAMIC_CLASSES:
+            self._xml_dynamics.append(x)
+            if self.notes:
+                self._update_xml_dynamics()
+        elif x.__class__ in XML_OTHER_NOTATIONS:
+            self._xml_other_notations.append(x)
+            if self.notes:
+                self._update_xml_other_notations()
+        else:
+            raise TypeError
         return x
 
     def add_child(self, child: Note) -> Note:

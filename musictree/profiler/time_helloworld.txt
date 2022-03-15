@@ -66,7 +66,7 @@
    100000    0.156    0.000    0.260    0.000 xsdsimpletype.py:85(_check_value_type)
   1167000    0.152    0.000    0.152    0.000 xsdelement.py:38(xml_elements)
    261051    0.151    0.000    1.284    0.000 {method 'findall' of 'xml.etree.ElementTree.Element' objects}
-    20000    0.148    0.000    0.883    0.000 xmlchildcontainer.py:284(_set_requirement_not_fulfilled)
+    20000    0.148    0.000    0.883    0.000 xmlchildcontainer.py:284(_set_requirements_fulfilled)
     39000    0.145    0.000    3.062    0.000 xmlchildcontainer.py:482(check_required_elements)
    217000    0.143    0.000    0.694    0.000 xmlelement.py:255(get_children)
    306000    0.139    0.000    0.139    0.000 {method 'union' of 'set' objects}
