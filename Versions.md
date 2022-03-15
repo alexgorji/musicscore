@@ -18,6 +18,7 @@ only be called once. If to_string(), exists it checks if final_updates is alread
 `Measure._update_divisions` rename to `update_divisions()` and is only called by `Measure.finale_updates()`
 
 `MusicTree.get_beats()` added
+
 `MusicTree.get_part()`, get_staff() etc. refactored.
 
 `MusicTree.quantize` attribute: Default is False, if quantization is necessary it must be set to True. 
@@ -30,4 +31,19 @@ only be called once. If to_string(), exists it checks if final_updates is alread
 
 # Version 1.3
 bugfix: ``measure.add_chord()`` adds beats to voice first if needed. 
+
 ``tree`` folder removed. Use musicxml.tree instead for consistency.
+
+# Version 1.3.1
+``__set__setattr__`` ignores all private attributes starting with _. No need to add them to ``_ATTRIBUTES`` anymore.
+
+``Chord.add_x()`` added: This method can be used for adding xml_articulation, xml_technical, xml_ornaments, xml_dynamics, 
+xml_other_notations objects.
+
+``Chord.add_xml_articulation`` and ``Chord.add_xml_technicals`` removed
+
+``Chord.add_x()`` accepts kwargs for ``XMLDynamics``, ``XMLOrnaments``, ``XMLArticulation``, ``XMLTechnicals``
+
+``Score.add_part()`` added
+
+important bug fix: ``XMLChord`` is added now correctly to all midis except the first one.
