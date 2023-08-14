@@ -1,3 +1,5 @@
+from unittest import skip
+
 from quicktions import Fraction
 
 from musictree.accidental import Accidental
@@ -7,7 +9,8 @@ from musictree.exceptions import ChordHasNoParentError
 from musictree.midi import Midi
 from musictree.quarterduration import QuarterDuration
 from musictree.tests.util import ChordTestCase, create_articulation, create_technical, create_ornament
-from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, XML_OTHER_NOTATIONS
+from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, \
+    XML_OTHER_NOTATIONS
 from musicxml.xmlelement.xmlelement import *
 
 
@@ -464,24 +467,31 @@ class TestTreeChord(ChordTestCase):
         assert n.xml_notations.xml_articulations is not None
         assert [type(a) for a in n.xml_notations.xml_articulations.get_children()] == articulation_classes
 
+    @skip
     def test_add_wedge(self):
         self.fail('Incomplete')
 
+    @skip
     def test_add_words(self):
         self.fail('Incomplete')
 
+    @skip
     def test_add_clef(self):
         self.fail('Incomplete')
 
+    @skip
     def test_add_bracket(self):
         self.fail('Incomplete')
 
+    @skip
     def test_add_grace_chords(self):
         self.fail('Incomplete')
 
+    @skip
     def test_percussion_notation(self):
         self.fail('Incomplete')
 
+    @skip
     def test_finger_tremolo(self):
         self.fail('Incomplete')
 

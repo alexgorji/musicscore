@@ -1,3 +1,5 @@
+from unittest import skip
+
 from musictree.chord import Chord
 from musictree.layout import StaffLayout
 from musictree.measure import Measure
@@ -79,9 +81,11 @@ class TestScore(IdTestCase):
         s.subtitle = 'New Subtitle'
         assert len(s.xml_object.find_children('XMLCredit')) == 2
 
+    @skip
     def test_score_composer(self):
         self.fail('Incomplete')
 
+    @skip
     def test_score_add_other_credits(self):
         self.fail('Incomplete')
 
