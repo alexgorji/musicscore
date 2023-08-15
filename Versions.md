@@ -51,3 +51,6 @@ important bug fix: ``XMLChord`` is added now correctly to all midis except the f
 # Version 1.3.2
 Problem with packaging of v1.3.1> In the last version there got an old tree folder of musicxml wrongly in dist folder. During pip installation of musicscore2 this old folder has been substituting the needed newer version of musicxml package.
 
+
+# Version 1.3.3
+Add `musictree.testing` to `musictree` package
