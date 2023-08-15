@@ -47,3 +47,7 @@ xml_other_notations objects.
 ``Score.add_part()`` added
 
 important bug fix: ``XMLChord`` is added now correctly to all midis except the first one.
+
+# Version 1.3.2
+Problem with packaging of v1.3.1> In the last version there got an old tree folder of musicxml wrongly in dist folder. During pip installation of musicscore2 this old folder has been substituting the needed newer version of musicxml package.
+
