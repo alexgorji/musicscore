@@ -10,7 +10,7 @@ from musictree.score import Score
 from musictree.time import Time
 
 
-class TestHelloWorld(TestCase):
+class TestHelloChromatics(TestCase):
     def test_chromatic_up_quarter_grid(self):
         """
         Scale chromatically up with different quarter_durations and time signatures
@@ -35,4 +35,3 @@ class TestHelloWorld(TestCase):
         """
         xml_path = Path(__file__).with_suffix('.xml')
         s.export_xml(xml_path)
-        # assert diff_xml(xml_path) == []

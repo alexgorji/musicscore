@@ -28,7 +28,7 @@ class TestHelloWorld(IdTestCase):
         m.update_chord_accidentals()
 
         """
-        ... and exports the xml (3.1 is default)
+        ... and exports the xml
         """
         xml_path = Path(__file__).with_suffix('.xml')
         s.export_xml(xml_path)

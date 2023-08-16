@@ -10,7 +10,7 @@ from musictree.tests.util import IdTestCase
 class TestHelloWorld(IdTestCase):
     def test_export_hello_world(self):
         """
-        Hello World as musicxml means having a C4 pitch as a whole in a 4/4 measure with treble clef.
+        Hello World, Variation I: C4 pitch, 20 beats long, in three 5/4 measures with treble clef.
         """
         """
         Tester creates a timewise score
@@ -29,7 +29,7 @@ class TestHelloWorld(IdTestCase):
         """
         p.add_chord(Chord(60, 15))
         """
-        ... and exports the xml (3.1 is default)
+        ... and exports the xml
         """
         xml_path = Path(__file__).with_suffix('.xml')
         s.export_xml(xml_path)

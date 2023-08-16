@@ -10,7 +10,7 @@ class FinalUpdateMixin:
         """
         final_updates can only be called once.
 
-        It calls final_updates()` method of all  children.
+        It calls final_updates()` method of all children.
         """
         if self._final_updated:
             raise AlreadyFinalUpdated(self)
