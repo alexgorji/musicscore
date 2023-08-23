@@ -37,7 +37,8 @@ class Midi(MusicTree):
             if not self.accidental.get_pitch_parameters()[1]:
                 if pitch.xml_alter:
                     pitch.remove(pitch.xml_alter)
-                pitch.xml_step, pitch.xml_octave = self.accidental.get_pitch_parameters()[0], self.accidental.get_pitch_parameters()[2]
+                pitch.xml_step, pitch.xml_octave = self.accidental.get_pitch_parameters()[0], \
+                    self.accidental.get_pitch_parameters()[2]
             else:
                 pitch.xml_step, pitch.xml_alter, pitch.xml_octave = self.accidental.get_pitch_parameters()
         else:
@@ -105,7 +106,8 @@ class Midi(MusicTree):
         if not isinstance(v, float) and not isinstance(v, int):
             raise TypeError(f'Midi.value must be of type float or int not{type(v)}')
         if v != 0 and (v < 12 or v > 127):
-            raise ValueError(f'Midi.value {v} can be zero for a rest or must be in a range between 12 and 127 inclusively')
+            raise ValueError(
+                f'Midi.value {v} can be zero for a rest or must be in a range between 12 and 127 inclusively')
         self._value = v
         self.update_pitch_or_rest()
 
@@ -188,7 +190,7 @@ class Midi(MusicTree):
     def __copy__(self):
         return self.__class__(value=self.value, accidental=self.accidental)
 
-    def __deepcopy__(self):
+    def __deepcopy__(self, memodict={}):
         copied_accidental = self.accidental.__copy__()
         copied = self.__class__(value=self.value, accidental=copied_accidental)
         return copied

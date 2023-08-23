@@ -68,6 +68,3 @@ XML_DYNAMIC_CLASSES = [XMLF, XMLFf, XMLFff, XMLFfff, XMLFffff, XMLFfffff, XMLFp,
 XML_OTHER_NOTATIONS = [XMLArpeggiate, XMLFermata, XMLFootnote, XMLGlissando, XMLLevel, XMLNonArpeggiate,
                        XMLOtherNotation, XMLSlide,
                        XMLSlur]
-
-
-
