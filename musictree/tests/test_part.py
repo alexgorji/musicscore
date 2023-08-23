@@ -508,4 +508,3 @@ class TestAddChordToPart(IdTestCase):
         for measure_number in range(2, math.ceil(sum(quarter_durations) / 4)):
             print(measure_number, self._get_clefs_of_measure(part, measure_number))
             assert self._get_clefs_of_measure(part, measure_number) is None
-

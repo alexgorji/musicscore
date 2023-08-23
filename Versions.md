@@ -56,12 +56,11 @@ Problem with packaging of v1.3.1> In the last version there got an old tree fold
 Add `musictree.testing` to `musictree` package
 
 # Version 1.4
+``SimpleFormat`` added. It is useful tool to generate list of chords and also do some simple algorithmic changes to it if needed. 
 ``Chord.add_midi(), Chord.sort_midis()`` added
 ``Chord.__deepcopy__()`` added. Only midi and quarter_duration are deepcopied. _ties are copied.
-``Score: Inherited methode Score.write will throw an Exception (.export_xml should be used instead)``
-``Clef: argument default and property _default added (this will be True if Measure._update_default_clefs() set the clef, otherwise it will be False)``
-```
-Staff: default clef argument is changed to None. If no clef is set, it will automatically be set to clef of staff in previous measure. If clef is changed the new clef will have the same number as the old one.
-Bug Fix: adding staff to a measure will only set default clefs automatically if the new or old staves does not have a from user manully set clef. It means that the manually set clefs won't be overwritten any more.
-```
+``Score`` Inherited methode ``Score.write`` will throw an Exception (.export_xml should be used instead)``
+``Clef`` argument default and property _default added (this will be True if Measure._update_default_clefs() set the clef, otherwise it will be False)
+``Staff`` default clef argument is changed to None. If no clef is set, it will automatically be set to clef of staff in previous measure. If clef is changed the new clef will have the same number as the old one.
+Bug Fix: adding staff to a measure will only set default clefs automatically if the new or old staves does not have a from user manully set clef. It means that the manually set clefs won't be overwritten any more.``
 

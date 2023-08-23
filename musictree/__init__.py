@@ -15,3 +15,4 @@ from musictree.score import *
 from musictree.staff import *
 from musictree.time import *
 from musictree.voice import *
+from musictree.simpleformat import *
