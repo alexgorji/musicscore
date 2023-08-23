@@ -4,7 +4,7 @@ from musicxml.xmlelement.xmlelement import *
 from quicktions import Fraction
 
 from musictree.chord import Chord
-from musictree.clef import Clef, BassClef
+from musictree.clef import Clef, BassClef, TrebleClef
 from musictree.exceptions import VoiceIsAlreadyFullError
 from musictree.measure import Measure, generate_measures
 from musictree.part import Part
@@ -352,7 +352,8 @@ class TestMeasure(TestCase):
         times = [2 * Time(3, 8), (3, 4), 3 * [(1, 8)], Time(1, 8, 3, 4), Time(3, 4)]
         measures = generate_measures(times, 3)
         assert len(measures) == 8
-        assert [m.time.signatures for m in measures] == [(3, 8), (3, 8), (3, 4), (1, 8), (1, 8), (1, 8), (1, 8, 3, 4), (3, 4)]
+        assert [m.time.signatures for m in measures] == [(3, 8), (3, 8), (3, 4), (1, 8), (1, 8), (1, 8), (1, 8, 3, 4),
+                                                         (3, 4)]
         assert [m.number for m in measures] == list(range(3, 11))
 
     def test_add_chord_staff_and_voice(self):
@@ -560,6 +561,30 @@ class TestMeasureAttributes(TestCase):
         assert [cl.sign for cl in m.clefs] == ['G', 'G', 'G', 'F', 'F', 'F']
         assert [cl.line for cl in m.clefs] == [2, 2, 2, 4, 4, 4]
         assert [cl.octave_change for cl in m.clefs] == [2, None, None, None, None, -2]
+
+    def test_measure_add_staff_and_change_clef_manually(self):
+        m = Measure(1)
+        m.add_staff()
+        assert m.get_staff(1).clef.number is None
+        bass_clef = BassClef()
+        m.get_children()[0].clef = bass_clef
+        assert m.get_staff(1).clef.number is None
+        assert m.get_staff(1).clef == bass_clef
+
+
+        m.add_staff()
+        assert m.get_staff(1).clef.number == 1
+        assert m.get_staff(2).clef.number == 2
+        m.get_staff(2).clef = TrebleClef()
+        assert m.get_staff(2).clef.number == 2
+
+        assert m.get_staff(1).clef == bass_clef
+
+        treble_clef = TrebleClef()
+        m.add_child(Staff(number=3, clef=treble_clef))
+        assert m.get_staff(3).clef.number == 3
+        assert m.get_staff(3).clef == treble_clef
+
 
     def test_measure_false_show_keys(self):
         expected = """<measure number="1">

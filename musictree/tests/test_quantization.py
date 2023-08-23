@@ -3,7 +3,7 @@ from musictree.part import Part
 from musictree.quarterduration import QuarterDuration
 from musictree.score import Score
 from musictree.tests.util import IdTestCase
-from musictree.util import lcm
+from util import lcm
 
 
 class TestQuantization(IdTestCase):

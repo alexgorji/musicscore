@@ -17,7 +17,7 @@ class Staff(MusicTree, FinalUpdateMixin, XMLWrapper):
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLStaff
 
-    def __init__(self, number=None, clef=TrebleClef(), **kwargs):
+    def __init__(self, number=None, clef=None, **kwargs):
         super().__init__()
         self._xml_object = self.XMLClass(value_=1, **kwargs)
         self._number = None
@@ -32,12 +32,18 @@ class Staff(MusicTree, FinalUpdateMixin, XMLWrapper):
         :return: Clef associated with the staff.
         :rtype: :obj:`~musictree.clef.Clef`
         """
+        if not self._clef:
+            if self.get_previous_staff():
+                self._clef = self.get_previous_staff().clef.__copy__()
+                self._clef.show = False
         return self._clef
 
     @clef.setter
     def clef(self, val):
         if val is not None and not isinstance(val, Clef):
             raise TypeError
+        if val and not val.number and self.clef:
+            val.number = self.clef.number
         self._clef = val
 
     @property

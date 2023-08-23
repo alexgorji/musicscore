@@ -3,7 +3,7 @@ from typing import Union, Optional
 from musicxml.xmlelement.xmlelement import XMLPageLayout, XMLPageMargins, XMLLeftMargin, XMLRightMargin, XMLTopMargin, XMLBottomMargin, \
     XMLScaling, XMLDefaults, XMLSystemLayout, XMLSystemMargins, XMLStaffLayout
 
-from musictree.util import isinstance_as_string
+from util import isinstance_as_string
 from musictree.xmlwrapper import XMLWrapper
 
 __all__ = ['PAGE_MARGINS', 'PAGE_SIZES', 'SYSTEM_MARGINS', 'SYSTEM_LAYOUT', 'STAFF_LAYOUT', 'SCALING', 'Margins', 'Scaling',

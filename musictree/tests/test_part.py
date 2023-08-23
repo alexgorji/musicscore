@@ -1,5 +1,8 @@
 import math
+from pathlib import Path
 from unittest import skip
+
+import xmltodict
 
 from musictree.chord import Chord
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError
@@ -9,7 +12,7 @@ from musictree.part import Part, ScorePart, Id
 from musictree.quarterduration import QuarterDuration
 from musictree.score import Score
 from musictree.tests.util import IdTestCase
-from musictree.time import Time
+import xml.etree.ElementTree as ET
 
 
 class TestId(IdTestCase):
@@ -418,3 +421,91 @@ class TestScorePart(IdTestCase):
 
         assert [ch.quarter_duration for ch in p.get_chords()] == [1, 2, 0.5, 0.5]
         assert [ch.offset for ch in p.get_chords()] == [0, 0, 0, 0.5]
+
+
+class TestAddChordToPart(IdTestCase):
+    def setUp(self):
+        self.score = Score()
+        super().setUp()
+
+    @staticmethod
+    def _get_clefs_of_measure(part, measure_number=1):
+        return xmltodict.parse(part.get_children()[measure_number - 1].to_string())['measure']['attributes'].get('clef',
+                                                                                                                 None)
+
+    def test_add_one_chord_quarter_duration_4(self):
+        xml_file = Path(__file__).stem + '_add_quarter_duration_4.xml'
+        p = self.score.add_part(id_='part1')
+        chord = Chord(60, 4)
+        p.add_chord(chord)
+        self.score.export_xml(xml_file)
+        output_score = ET.parse(xml_file)
+        output_part_xml = output_score.find('part')
+        output_part_xml_dict = xmltodict.parse(ET.tostring(output_part_xml))
+        expected = {'part': {'@id': 'part1', 'measure': {'@number': '1',
+                                                         'attributes': {'divisions': '1', 'key': {'fifths': '0'},
+                                                                        'time': {'beats': '4', 'beat-type': '4'},
+                                                                        'clef': {'sign': 'G', 'line': '2'}},
+                                                         'note': {'pitch': {'step': 'C', 'octave': '4'},
+                                                                  'duration': '4', 'voice': '1', 'type': 'whole'}}}}
+        assert output_part_xml_dict == expected
+
+    def test_add_chord_to_staff_with_bass_clef(self):
+        part = Part(id='part-1')
+        part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2)
+        part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2)
+        assert self._get_clefs_of_measure(part, 1)[1] == {'@number': '2', 'sign': 'F', 'line': '4'}
+        assert self._get_clefs_of_measure(part, 2) is None
+
+    def test_add_chord_to_both_staves(self):
+        part = Part(id='part-1')
+        part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=1)
+        part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2)
+        part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=1)
+        part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2)
+        assert self._get_clefs_of_measure(part, 1)[1] == {'@number': '2', 'sign': 'F', 'line': '4'}
+        assert self._get_clefs_of_measure(part, 2) is None
+
+    def test_add_chord_to_both_staves_other_order(self):
+        part = Part(id='part-1')
+        part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=1)
+        part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=1)
+
+        part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2)
+        chord = Chord(midis=60, quarter_duration=4)
+        part.add_chord(chord, staff_number=2)
+        print([staff.clef for staff in part.get_measure(2).get_children()])
+        #
+        # assert self._get_clefs_of_measure(part, 1)[1] == {'@number': '2', 'sign': 'F', 'line': '4'}
+        # assert self._get_clefs_of_measure(part, 2) is None
+
+    def test_add_long_chord_to_staff_with_bass_clef(self):
+        part = Part(id='part-1')
+        part.add_chord(Chord(midis=60, quarter_duration=11), staff_number=2)
+        assert self._get_clefs_of_measure(part, 1)[1] == {'@number': '2', 'sign': 'F', 'line': '4'}
+        assert self._get_clefs_of_measure(part, 2) is None
+        assert self._get_clefs_of_measure(part, 3) is None
+
+    def test_different_long_chords_to_staff_with_bass_clef(self):
+        part = Part(id='part-1')
+        midis = list(range(60, 65))
+        quarter_durations = list(range(1, 6))
+        for m, q in zip(midis, quarter_durations):
+            part.add_chord(Chord(m, q), staff_number=2)
+        assert self._get_clefs_of_measure(part, 1)[1] == {'@number': '2', 'sign': 'F', 'line': '4'}
+        for measure_number in range(2, math.ceil(sum(quarter_durations) / 4)):
+            assert self._get_clefs_of_measure(part, measure_number) is None
+
+    def test_add_chord_to_two_staves_same_length(self):
+        part = Part(id='part-1')
+        midis = list(range(60, 65))
+        quarter_durations = list(range(1, 6))
+        for m, q in zip(midis, quarter_durations):
+            part.add_chord(Chord(m, q), staff_number=1)
+        for m, q in zip(reversed(midis), reversed(quarter_durations)):
+            part.add_chord(Chord(m, q), staff_number=2)
+        assert self._get_clefs_of_measure(part, 1)[1] == {'@number': '2', 'sign': 'F', 'line': '4'}
+        for measure_number in range(2, math.ceil(sum(quarter_durations) / 4)):
+            print(measure_number, self._get_clefs_of_measure(part, measure_number))
+            assert self._get_clefs_of_measure(part, measure_number) is None
+

@@ -2,7 +2,8 @@ from typing import List
 
 from musictree import Part
 from musictree.finalupdate_mixin import FinalUpdateMixin
-from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, XMLEncoding, \
+from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, \
+    XMLEncoding, \
     XMLSupports
 
 from musictree.core import MusicTree
@@ -12,11 +13,13 @@ from musictree.layout import Scaling, PageLayout, SystemLayout, StaffLayout
 
 __all__ = ['TITLE', 'SUBTITLE', 'POSSIBLE_SUBDIVISIONS', 'Score']
 #:
-TITLE = {'font_size': 24, 'default_x': {'A4': {'portrait': 616}}, 'default_y': {'A4': {'portrait': 1573}}, 'justify': 'center',
+TITLE = {'font_size': 24, 'default_x': {'A4': {'portrait': 616}}, 'default_y': {'A4': {'portrait': 1573}},
+         'justify': 'center',
          'valign': 'top'}
 
 #:
-SUBTITLE = {'font_size': 18, 'default_x': {'A4': {'portrait': 616}}, 'default_y': {'A4': {'portrait': 1508}}, 'halign': 'center',
+SUBTITLE = {'font_size': 18, 'default_x': {'A4': {'portrait': 616}}, 'default_y': {'A4': {'portrait': 1508}},
+            'halign': 'center',
             'valign': 'top'}
 #:
 POSSIBLE_SUBDIVISIONS = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [2, 3, 4, 5],
@@ -260,3 +263,6 @@ class Score(MusicTree, FinalUpdateMixin, XMLWrapper):
     "http://www.musicxml.org/dtds/partwise.dtd">
 """)
             f.write(self.to_string())
+
+    def write(self, *args, **kwargs):
+        raise NotImplementedError('Use Score.export_xml instead!')

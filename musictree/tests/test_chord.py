@@ -1,3 +1,4 @@
+import copy
 from unittest import skip
 
 from quicktions import Fraction
@@ -5,7 +6,7 @@ from quicktions import Fraction
 from musictree.accidental import Accidental
 from musictree.beat import Beat
 from musictree.chord import Chord, split_copy, group_chords
-from musictree.exceptions import ChordHasNoParentError
+from musictree.exceptions import ChordHasNoParentError, DeepCopyException, ChordNotesAreAlreadyCreatedError
 from musictree.midi import Midi
 from musictree.quarterduration import QuarterDuration
 from musictree.tests.util import ChordTestCase, create_articulation, create_technical, create_ornament
@@ -551,3 +552,51 @@ class TestTreeChord(ChordTestCase):
             ch._parent = self.mock_beat
             ch.final_updates()
             assert isinstance(ch.notes[0].xml_notations.get_children()[0], cls)
+
+    def test_deepcopy_chord(self):
+        chord = Chord([60, 62], 2)
+        chord.add_tie('start')
+        copied = copy.deepcopy(chord)
+        assert [midi.value for midi in copied.midis] == [midi.value for midi in chord.midis]
+        assert [id(midi) for midi in copied.midis] != [id(midi) for midi in chord.midis]
+        assert chord.quarter_duration.value == copied.quarter_duration.value
+        assert id(chord.quarter_duration) != id(copied.quarter_duration)
+        assert chord._ties == copied._ties
+        chord._parent = self.mock_beat
+        chord.final_updates()
+        with self.assertRaises(DeepCopyException):
+            copy.deepcopy(chord)
+        # chord.add_dynamics('p')
+        # chord.add_lyric('something')
+        # chord.add_x(XMLAccent())
+        # chord.add_x(XMLUpBow())
+        # chord.add_x(XMLAccidentalMark())
+        # chord.add_x(XMLFf())
+
+    def test_order_midis(self):
+        midis = [68, 60, 80, 53, 62]
+        chord = Chord(midis)
+        assert [midi.value for midi in chord.midis] == midis
+        chord.sort_midis()
+        assert [midi.value for midi in chord.midis] == sorted(midis)
+        chord = Chord(midis)
+        chord.sort_midis(key=lambda m: -m.value)
+        assert [midi.value for midi in chord.midis] == list(reversed(sorted(midis)))
+
+    def test_add_midi(self):
+        chord = Chord([60, 62], 2)
+        m = Midi(63)
+        chord.add_midi(m)
+        assert [midi.value for midi in chord.midis] == [60, 62, 63]
+        assert chord.midis[-1] == m
+        chord.add_midi(58)
+        assert [midi.value for midi in chord.midis] == [60, 62, 63, 58]
+        chord.add_midi(60)
+        assert [midi.value for midi in chord.midis] == [60, 62, 63, 58, 60]
+        chord.sort_midis()
+        assert [midi.value for midi in chord.midis] == [58, 60, 60, 62, 63]
+
+        chord._parent = self.mock_beat
+        chord.final_updates()
+        with self.assertRaises(ChordNotesAreAlreadyCreatedError):
+            chord.add_midi(80)

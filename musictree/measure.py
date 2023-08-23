@@ -7,7 +7,7 @@ from musictree.finalupdate_mixin import FinalUpdateMixin
 from musictree.key import Key
 from musictree.staff import Staff
 from musictree.time import Time, flatten_times
-from musictree.util import lcm
+from util import lcm
 from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup
@@ -114,30 +114,36 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
 
     def _update_default_clefs(self):
         number_of_children = len(self.get_children())
+
+        def _set_default_clef(staff_number, clef):
+            staff = self.get_staff(staff_number)
+            if staff.clef is None or staff.clef._default is True:
+                staff.clef = clef
+
         if number_of_children == 1:
-            self.get_children()[0].clef = TrebleClef()
+            _set_default_clef(1, TrebleClef(default=True))
         elif number_of_children == 2:
-            self.get_children()[0].clef = TrebleClef()
-            self.get_children()[1].clef = BassClef()
+            _set_default_clef(1, TrebleClef(default=True))
+            _set_default_clef(2, BassClef(default=True))
         elif number_of_children == 3:
-            self.get_children()[0].clef = TrebleClef(octave_change=2)
-            self.get_children()[1].clef = TrebleClef()
-            self.get_children()[2].clef = BassClef()
+            _set_default_clef(1, TrebleClef(octave_change=2, default=True))
+            _set_default_clef(2, TrebleClef(default=True))
+            _set_default_clef(3, BassClef(default=True))
         elif number_of_children == 4:
-            self.get_children()[0].clef = TrebleClef(octave_change=2)
-            self.get_children()[1].clef = TrebleClef()
-            self.get_children()[2].clef = BassClef()
-            self.get_children()[3].clef = BassClef(octave_change=-2)
+            _set_default_clef(1, TrebleClef(octave_change=2, default=True))
+            _set_default_clef(2, TrebleClef(default=True))
+            _set_default_clef(3, BassClef(default=True))
+            _set_default_clef(4, BassClef(octave_change=-2, default=True))
         else:
-            for index, child in enumerate(self.get_children()):
+            for index in range(number_of_children):
                 if index == 0:
-                    child.clef = TrebleClef(octave_change=2)
+                    _set_default_clef(index + 1, TrebleClef(octave_change=2, default=True))
                 elif index == number_of_children - 1:
-                    child.clef = BassClef(octave_change=-2)
+                    _set_default_clef(index + 1, BassClef(octave_change=-2, default=True))
                 elif index < number_of_children / 2:
-                    child.clef = TrebleClef()
+                    _set_default_clef(index + 1, TrebleClef(default=True))
                 else:
-                    child.clef = BassClef()
+                    _set_default_clef(index + 1, BassClef(default=True))
 
     def _update_voice_beats(self):
         for staff in self.get_children():
@@ -389,7 +395,8 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
         """
         Calls :obj:`~musictree.beat.Beat.split_not_writable_chords()` method of all :obj:`~musictree.beat.Beat` descendents.
         """
-        for b in [beat for staff in self.get_children() for voice in staff.get_children() for beat in voice.get_children()]:
+        for b in [beat for staff in self.get_children() for voice in staff.get_children() for beat in
+                  voice.get_children()]:
             b.split_not_writable_chords()
 
     def update_chord_accidentals(self) -> None:

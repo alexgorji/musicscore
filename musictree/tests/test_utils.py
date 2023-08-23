@@ -6,7 +6,7 @@ from musicxml.xmlelement.xmlelement import XMLClef, XMLSign, XMLLine
 
 from musictree.score import Score
 from musictree.tests.util import diff_xml, _create_expected_path
-from musictree.util import isinstance_as_string, lcm
+from util import isinstance_as_string, lcm
 
 
 class TestUtils(TestCase):

@@ -223,6 +223,9 @@ class QuarterDuration(numbers.Rational):
     def __copy__(self):
         return self.__class__(self.value)
 
+    def __deepcopy__(self, memodict={}):
+        return self.__class__(self.value)
+
 
 def is_writable(quarter_duration: Union[float, int, Fraction, 'QuarterDuration']):
     """
@@ -304,7 +307,8 @@ class QuarterDurationMixin:
 
 
 def check_quarter_duration_value(val):
-    if not isinstance(val, int) and not isinstance(val, float) and not isinstance(val, Fraction) and not isinstance(val, QuarterDuration):
+    if not isinstance(val, int) and not isinstance(val, float) and not isinstance(val, Fraction) and not isinstance(val,
+                                                                                                                    QuarterDuration):
         raise TypeError(f'Wrong type for quarter duration {val}: {type(val)}')
 
     if val < 0:
