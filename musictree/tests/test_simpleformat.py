@@ -213,6 +213,7 @@ class Test(TestCase):
         for chord in sf_3.chords:
             part.add_chord(chord=chord, staff_number=3)
         self.score.export_xml(xml_file)
+        self.fail()
     #
     # def test_2(self):
     #     xml_path = path + '_test_2.xml'
