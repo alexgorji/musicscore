@@ -118,8 +118,11 @@ class IdWithSameValueExistsError(IdException):
     pass
 
 
-
 class AlreadyFinalUpdated(MusicTreeException):
     def __init__(self, object_):
         msg = f"final_updates method of {object_.__class__.__name__} can only be called once."
         super().__init__(msg)
+
+
+class DeepCopyException(MusicTreeException):
+    pass

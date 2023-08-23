@@ -5,12 +5,13 @@ from musicxml.xmlelement.xmlelement import *
 
 from musictree.dynamics import Dynamics
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
-    ChordQuarterDurationAlreadySetError, AlreadyFinalUpdated
+    ChordQuarterDurationAlreadySetError, AlreadyFinalUpdated, DeepCopyException, ChordNotesAreAlreadyCreatedError
 from musictree.midi import Midi
 from musictree.core import MusicTree
 from musictree.note import Note
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
-from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_ORNAMENT_CLASSES, XML_DYNAMIC_CLASSES, XML_OTHER_NOTATIONS
+from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_ORNAMENT_CLASSES, XML_DYNAMIC_CLASSES, \
+    XML_OTHER_NOTATIONS
 
 __all__ = ['Chord', 'group_chords']
 
@@ -86,7 +87,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         else:
             midis = [midis]
         if len(midis) > 1 and 0 in midis:
-            raise ValueError('Chord cannot accept a mixed list of midis of rests and pitches or a list of more than one rests.')
+            raise ValueError(
+                'Chord cannot accept a mixed list of midis of rests and pitches or a list of more than one rests.')
 
         if 0 in midis and self.quarter_duration == 0:
             raise ValueError('A rest cannot be a grace note')
@@ -104,7 +106,8 @@ class Chord(MusicTree, QuarterDurationMixin):
 
         note_articulations_not_in_chord = [art for art in _get_note_xml_articulations() if art not in
                                            self._xml_articulations]
-        chord_articulations_not_in_note = [art for art in self._xml_articulations if art not in _get_note_xml_articulations()]
+        chord_articulations_not_in_note = [art for art in self._xml_articulations if
+                                           art not in _get_note_xml_articulations()]
 
         if chord_articulations_not_in_note:
             n.get_or_create_xml_notations()
@@ -199,7 +202,8 @@ class Chord(MusicTree, QuarterDurationMixin):
 
         note_other_notations_not_in_chord = [on for on in _get_note_xml_other_notations() if on not in
                                              self._xml_other_notations]
-        chord_other_notations_not_in_note = [on for on in self._xml_other_notations if on not in _get_note_xml_other_notations()]
+        chord_other_notations_not_in_note = [on for on in self._xml_other_notations if
+                                             on not in _get_note_xml_other_notations()]
 
         if chord_other_notations_not_in_note:
             n.get_or_create_xml_notations()
@@ -243,7 +247,8 @@ class Chord(MusicTree, QuarterDurationMixin):
 
         note_lyrics_not_in_chord = [lyric for lyric in n.xml_object.find_children('XMLLyric') if lyric not in
                                     self._xml_lyrics]
-        chord_lyrics_not_in_note = [lyric for lyric in self._xml_lyrics if lyric not in n.xml_object.find_children('XMLLyric')]
+        chord_lyrics_not_in_note = [lyric for lyric in self._xml_lyrics if
+                                    lyric not in n.xml_object.find_children('XMLLyric')]
 
         if chord_lyrics_not_in_note:
 
@@ -389,7 +394,8 @@ class Chord(MusicTree, QuarterDurationMixin):
     @QuarterDurationMixin.quarter_duration.setter
     def quarter_duration(self, val):
         if self._quarter_duration is not None and self.up:
-            raise ChordQuarterDurationAlreadySetError('Chord is already attached to a Beat. Quarter Duration cannot be changed any more.')
+            raise ChordQuarterDurationAlreadySetError(
+                'Chord is already attached to a Beat. Quarter Duration cannot be changed any more.')
         if val is not None:
             if self.midis and self.is_rest and val == 0:
                 raise ValueError('A rest cannot be a grace note')
@@ -441,7 +447,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         return self._xml_technicals
 
-    def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations], **kwargs):
+    def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations],
+              **kwargs):
         """
         This method is used to add one xml object to a chord's private xml object lists (like _xml_articulations, xml_technicals
         etc.). These lists are used to add or update articulations, technicals etc. of the first :obj:`~musictree.note.Note` object of
@@ -489,7 +496,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         return super().add_child(child)
 
-    def add_dynamics(self, dynamics: Union[List['Dynamics'], 'Dynamics', str], placement: str = 'below') -> List['Dynamics']:
+    def add_dynamics(self, dynamics: Union[List['Dynamics'], 'Dynamics', str], placement: str = 'below') -> List[
+        'Dynamics']:
         """
         This method is used to add one or more :obj:`musictree.dynamics.Dynamics` objects to chord's private dictionary _xml_direction_types
         This list is used to create or update directions of the first :obj:`~musictree.note.Note` object of chord`s notes
@@ -536,6 +544,14 @@ class Chord(MusicTree, QuarterDurationMixin):
         if self.notes:
             self._update_xml_lyrics()
         return l
+
+    def add_midi(self, midi):
+        if self._notes_are_set:
+            raise ChordNotesAreAlreadyCreatedError('Chord.add_midi cannot be used after creation of notes.')
+        if isinstance(midi, Midi):
+            self._midis.append(midi)
+        else:
+            self._midis.append(Midi(midi))
 
     def get_children(self) -> List[Note]:
         """
@@ -608,7 +624,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         if voice is None:
             raise ChordCannotSplitError('Beats have no parent.')
 
-        if voice.get_children()[voice.get_children().index(beats[0]): voice.get_children().index(beats[-1]) + 1] != beats:
+        if voice.get_children()[
+           voice.get_children().index(beats[0]): voice.get_children().index(beats[-1]) + 1] != beats:
             raise ChordCannotSplitError("Beats as Voice's children has another order as input list of beats")
 
         if beats[0] != voice.get_current_beat():
@@ -644,6 +661,15 @@ class Chord(MusicTree, QuarterDurationMixin):
 
         return output
 
+    def sort_midis(self, key=None):
+        """
+        This method sorts Chord.midis. If no key is provided midis are sorted based on their values.
+        """
+        if not key:
+            self._midis = sorted(self._midis, key=lambda m: m.value)
+        else:
+            self._midis = sorted(self._midis, key=key)
+
     def to_rest(self) -> None:
         """
         Set self.midis to [0]
@@ -670,6 +696,32 @@ class Chord(MusicTree, QuarterDurationMixin):
             raise AttributeError(f"Chord cannot call Note method {item}. Call this method on each note separately")
         return output
 
+    def __deepcopy__(self, memodict={}):
+        '''
+        Only midi and quarter_duration are deepcopied. _ties are copied.
+        Not included in deepcopy at the moment:
+        self._xml_direction_types
+        self._xml_directions = []
+        self._xml_lyrics = []
+        self._xml_articulations = []
+        self._xml_technicals = []
+        self._xml_ornaments = []
+        self._xml_dynamics = []
+        self._xml_articulations_kwargs = {}
+        self._xml_technicals_kwargs = {}
+        self._xml_ornaments_kwargs = {}
+        self._xml_dynamics_kwargs = {}
+        self._xml_other_notations = []
+        self._note_attributes = kwargs
+        self.split
+        '''
+        if self._notes_are_set:
+            raise DeepCopyException("After setting notes, Midi cannot be deepcopied anymore. ")
+        copied = self.__class__(midis=[midi.__deepcopy__() for midi in self.midis],
+                                quarter_duration=self.quarter_duration.__deepcopy__())
+        copied._ties = self._ties
+        return copied
+
 
 def split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fraction, int, float] = None) -> Chord:
     """
@@ -686,7 +738,8 @@ def split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fracti
     return new_chord
 
 
-def group_chords(chords: List[Chord], quarter_durations: List[Union[QuarterDuration, Fraction, int, float]]) -> Optional[List[List[Chord]]]:
+def group_chords(chords: List[Chord], quarter_durations: List[Union[QuarterDuration, Fraction, int, float]]) -> \
+        Optional[List[List[Chord]]]:
     """
     A creates a nested list of chords. Chords can be divided into groups. Each group has its own specific quarter duration sum.
 

@@ -54,3 +54,7 @@ Problem with packaging of v1.3.1> In the last version there got an old tree fold
 
 # Version 1.3.3
 Add `musictree.testing` to `musictree` package
+
+# Version 1.4
+``Chord.add_midi(), Chord.sort_midis()`` added
+``Chord.__deepcopy__()`` added. Only midi and quarter_duration are deepcopied. _ties are copied.
