@@ -1,11 +1,10 @@
 from pathlib import Path
 from unittest import TestCase
 
-from musictree.midi import MidiNote, C
-from musicxml.xmlelement.xmlelement import XMLClef, XMLSign, XMLLine
+from musictree.midi import C
 
 from musictree.score import Score
-from musictree.tests.util import diff_xml, _create_expected_path
+from musictree.tests.util import diff_xml, _create_expected_path, find_key
 from util import isinstance_as_string, lcm
 
 
@@ -43,20 +42,140 @@ class TestUtils(TestCase):
         assert lcm([3, 4, 5, 7]) == 420
         assert lcm([2, 4, 6]) == 12
 
-    # def test_update_xml_object(self):
-    #     old = XMLClef(number=3)
-    #     s1 = old.add_child(XMLSign('F'))
-    #     l1 = old.add_child(XMLLine(4))
-    #
-    #     new = XMLClef(number=2)
-    #     s2 = new.add_child(XMLSign('F'))
-    #     l2 = new.add_child(XMLLine(2))
-    #
-    #     update_xml_object(old, new)
-    #
-    #     assert old != new
-    #     assert old.xml_sign == s1 != s2
-    #     assert s1.value == 'F'
-    #     assert old.xml_line == l2 != l1
-    #     assert l1.value == l2.value == 2
-    #     assert old.number == new.number == 2
+
+class TestFindKey(TestCase):
+    def setUp(self):
+        self.dict = {'part': {'@id': 'part-1',
+                              'measure': [{'@number': '1',
+                                           'attributes': {'clef': [{'@number': '1',
+                                                                    'clef-octave-change': '2',
+                                                                    'line': '2',
+                                                                    'sign': 'G'},
+                                                                   {'@number': '2',
+                                                                    'line': '2',
+                                                                    'sign': 'G'},
+                                                                   {'@number': '3',
+                                                                    'line': '4',
+                                                                    'sign': 'F'}],
+                                                          'divisions': '1',
+                                                          'key': {'fifths': '0'},
+                                                          'staves': '3',
+                                                          'time': {'beat-type': '4', 'beats': '4'}},
+                                           'backup': [{'duration': '4'}, {'duration': '4'}],
+                                           'note': [{'duration': '1',
+                                                     'pitch': {'octave': '4', 'step': 'C'},
+                                                     'staff': '1',
+                                                     'type': 'quarter',
+                                                     'voice': '1'},
+                                                    {'accidental': 'sharp',
+                                                     'duration': '2',
+                                                     'pitch': {'alter': '1',
+                                                               'octave': '4',
+                                                               'step': 'C'},
+                                                     'staff': '1',
+                                                     'type': 'half',
+                                                     'voice': '1'},
+                                                    {'duration': '1',
+                                                     'notations': {'tied': {'@type': 'start'}},
+                                                     'pitch': {'octave': '4', 'step': 'D'},
+                                                     'staff': '1',
+                                                     'tie': {'@type': 'start'},
+                                                     'type': 'quarter',
+                                                     'voice': '1'},
+                                                    {'accidental': 'flat',
+                                                     'dot': None,
+                                                     'duration': '3',
+                                                     'pitch': {'alter': '-1',
+                                                               'octave': '4',
+                                                               'step': 'E'},
+                                                     'staff': '2',
+                                                     'type': 'half',
+                                                     'voice': '1'},
+                                                    {'accidental': 'natural',
+                                                     'duration': '1',
+                                                     'notations': {'tied': {'@type': 'start'}},
+                                                     'pitch': {'octave': '4', 'step': 'E'},
+                                                     'staff': '2',
+                                                     'tie': {'@type': 'start'},
+                                                     'type': 'quarter',
+                                                     'voice': '1'},
+                                                    {'duration': '1',
+                                                     'pitch': {'octave': '4', 'step': 'C'},
+                                                     'staff': '3',
+                                                     'type': 'quarter',
+                                                     'voice': '1'},
+                                                    {'accidental': 'flat',
+                                                     'chord': None,
+                                                     'duration': '1',
+                                                     'pitch': {'alter': '-1',
+                                                               'octave': '4',
+                                                               'step': 'E'},
+                                                     'staff': '3',
+                                                     'type': 'quarter',
+                                                     'voice': '1'},
+                                                    {'accidental': 'sharp',
+                                                     'duration': '2',
+                                                     'pitch': {'alter': '1',
+                                                               'octave': '4',
+                                                               'step': 'C'},
+                                                     'staff': '3',
+                                                     'type': 'half',
+                                                     'voice': '1'},
+                                                    {'duration': '1',
+                                                     'notations': {'tied': {'@type': 'start'}},
+                                                     'pitch': {'octave': '4', 'step': 'D'},
+                                                     'staff': '3',
+                                                     'tie': {'@type': 'start'},
+                                                     'type': 'quarter',
+                                                     'voice': '1'},
+                                                    {'accidental': 'natural',
+                                                     'chord': None,
+                                                     'duration': '1',
+                                                     'notations': {'tied': {'@type': 'start'}},
+                                                     'pitch': {'octave': '4', 'step': 'E'},
+                                                     'staff': '3',
+                                                     'tie': {'@type': 'start'},
+                                                     'type': 'quarter',
+                                                     'voice': '1'}]},
+                                          {'@number': '2',
+                                           'attributes': {'divisions': '1', 'staves': '3'},
+                                           'backup': [{'duration': '4'}, {'duration': '4'}],
+                                           'note': [{'duration': '2',
+                                                     'notations': {'tied': {'@type': 'stop'}},
+                                                     'pitch': {'octave': '4', 'step': 'D'},
+                                                     'staff': '1',
+                                                     'tie': {'@type': 'stop'},
+                                                     'type': 'half',
+                                                     'voice': '1'},
+                                                    {'duration': '1',
+                                                     'notations': {'tied': {'@type': 'stop'}},
+                                                     'pitch': {'octave': '4', 'step': 'E'},
+                                                     'staff': '2',
+                                                     'tie': {'@type': 'stop'},
+                                                     'type': 'quarter',
+                                                     'voice': '1'},
+                                                    {'duration': '1',
+                                                     'pitch': {'octave': '4', 'step': 'F'},
+                                                     'staff': '2',
+                                                     'type': 'quarter',
+                                                     'voice': '1'},
+                                                    {'duration': '1',
+                                                     'notations': {'tied': {'@type': 'stop'}},
+                                                     'pitch': {'octave': '4', 'step': 'D'},
+                                                     'staff': '3',
+                                                     'tie': {'@type': 'stop'},
+                                                     'type': 'quarter',
+                                                     'voice': '1'},
+                                                    {'chord': None,
+                                                     'duration': '1',
+                                                     'notations': {'tied': {'@type': 'stop'}},
+                                                     'pitch': {'octave': '4', 'step': 'E'},
+                                                     'staff': '3',
+                                                     'tie': {'@type': 'stop'},
+                                                     'type': 'quarter',
+                                                     'voice': '1'},
+                                                    {'duration': '1',
+                                                     'pitch': {'octave': '4', 'step': 'F'},
+                                                     'staff': '3',
+                                                     'type': 'quarter',
+                                                     'voice': '1'}]}]}}

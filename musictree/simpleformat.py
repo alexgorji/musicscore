@@ -137,6 +137,15 @@ class SimpleFormat(object):
 
     # get
 
+    def get_chord_at_position(self, position):
+        chord_index = None
+        for index, (qp, qd) in enumerate(zip(self.get_quarter_positions(), self.get_quarter_durations())):
+            if qp <= position < qd + qp:
+                chord_index = index
+        if chord_index is None:
+            return None
+        return self.chords[chord_index]
+
     def get_midis(self):
         return [chord.midis for chord in self.chords]
 
@@ -181,51 +190,75 @@ class SimpleFormat(object):
         for chord in self.chords:
             chord.quarter_duration *= factor
 
+    # @staticmethod
+    # def sum(*simple_formats, no_doubles=False):
+    #     """
+    #     A static method for combining two SimpleFormats.
+    #     """
+    #     def _copied_position_dict(sf):
+    #         output = {}
+    #         for chord, position in zip(sf.chords, sf.get_quarter_positions()):
+    #             output[position] = chord.__deepcopy__()
+    #         return output
+    #
+    #     def _key_sorted_dict(dict):
+    #         output = {}
+    #         for key in sorted(dict.keys()):
+    #             output[key] = dict[key]
+    #         return output
+    #
+    #     def _trim_quarter_durations():
+    #         quarter_durations = xToD(list(all_positioned_chords.keys()))
+    #         chords = all_positioned_chords.values()
+    #         for quarter_duration, chord in zip(quarter_durations, chords):
+    #             chord.quarter_duration = quarter_duration
+    #
+    #     all_positioned_chords = _copied_position_dict(simple_formats[0])
+    #     for sf in simple_formats[1:]:
+    #         other_positioned_chords = _copied_position_dict(sf)
+    #         for other_position, other_chord in other_positioned_chords.items():
+    #             if other_position in all_positioned_chords.keys():
+    #                 chord = all_positioned_chords[other_position]
+    #                 if chord.is_rest:
+    #                     all_positioned_chords[other_position] = chord
+    #                 elif not other_chord.is_rest:
+    #                     for midi in other_chord.midis:
+    #                         if not no_doubles or midi.value not in [m.value for m in chord.midis]:
+    #                             chord.add_midi(midi)
+    #                 else:
+    #                     pass
+    #             else:
+    #                 all_positioned_chords[other_position] = other_chord
+    #     all_positioned_chords = _key_sorted_dict(all_positioned_chords)
+    #     _trim_quarter_durations()
+    #     output = SimpleFormat()
+    #     for chord in all_positioned_chords.values():
+    #         output.add_chord(chord)
+    #     return output
     @staticmethod
     def sum(*simple_formats, no_doubles=False):
-        """
-        A static method for combining two SimpleFormats.
-        """
-        def _copied_position_dict(sf):
-            output = {}
-            for chord, position in zip(sf.chords, sf.get_quarter_positions()):
-                output[position] = chord.__deepcopy__()
-            return output
+        sum_chords = []
+        combined_positions_and_chords = {}
+        for simple_format in simple_formats:
+            for qp in simple_format.get_quarter_positions():
+                combined_positions_and_chords[qp] = []
+        for key in combined_positions_and_chords.keys():
+            for simple_format in simple_formats:
+                chord = simple_format.get_chord_at_position(key)
+                if chord is not None:
+                    combined_positions_and_chords[key] += [chord]
+        sum_positions = sorted(combined_positions_and_chords.keys())
+        sum_quarter_durations = xToD(sum_positions)
+        ordered_chords = [combined_positions_and_chords[position] for position in sum_positions[:-1]]
+        for index in range(len(sum_positions)):
+            chord = Chord()
+            pass
 
-        def _key_sorted_dict(dict):
-            output = {}
-            for key in sorted(dict.keys()):
-                output[key] = dict[key]
-            return output
-
-        def _trim_quarter_durations():
-            quarter_durations = xToD(list(all_positioned_chords.keys()))
-            chords = all_positioned_chords.values()
-            for quarter_duration, chord in zip(quarter_durations, chords):
-                chord.quarter_duration = quarter_duration
-
-        all_positioned_chords = _copied_position_dict(simple_formats[0])
-        for sf in simple_formats[1:]:
-            other_positioned_chords = _copied_position_dict(sf)
-            for other_position, other_chord in other_positioned_chords.items():
-                if other_position in all_positioned_chords.keys():
-                    chord = all_positioned_chords[other_position]
-                    if chord.is_rest:
-                        all_positioned_chords[other_position] = chord
-                    elif not other_chord.is_rest:
-                        for midi in other_chord.midis:
-                            if not no_doubles or midi.value not in [m.value for m in chord.midis]:
-                                chord.add_midi(midi)
-                    else:
-                        pass
-                else:
-                    all_positioned_chords[other_position] = other_chord
-        all_positioned_chords = _key_sorted_dict(all_positioned_chords)
-        _trim_quarter_durations()
-        output = SimpleFormat()
-        for chord in all_positioned_chords.values():
-            output.add_chord(chord)
-        return output
+        # for key in sorted(combined_positions_and_chords.keys()):
+        #     if key == 0:
+        #         chord = Chord()
+        #
+        # print(combined_positions_and_midi_values)
 
     def retrograde(self):
         self._chords = list(reversed(self.chords))

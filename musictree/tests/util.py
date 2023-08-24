@@ -72,17 +72,22 @@ def generate_all_32nds():
     output.extend(list(dict.fromkeys(itertools.permutations(3 * [Fraction(2, 8)] + 2 * [Fraction(1, 8)]))))
 
     output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(3, 8)] + 5 * [Fraction(1, 8)]))))
-    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(3, 8)] + 1 * [Fraction(2, 8)] + 3 * [Fraction(1, 8)]))))
-    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(3, 8)] + 2 * [Fraction(2, 8)] + 1 * [Fraction(1, 8)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations(1 * [Fraction(3, 8)] + 1 * [Fraction(2, 8)] + 3 * [Fraction(1, 8)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations(1 * [Fraction(3, 8)] + 2 * [Fraction(2, 8)] + 1 * [Fraction(1, 8)]))))
     output.extend(list(dict.fromkeys(itertools.permutations(2 * [Fraction(3, 8)] + 2 * [Fraction(1, 8)]))))
     output.extend(list(dict.fromkeys(itertools.permutations(2 * [Fraction(3, 8)] + 1 * [Fraction(2, 8)]))))
 
     output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(4, 8)] + 4 * [Fraction(1, 8)]))))
-    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(4, 8)] + 1 * [Fraction(2, 8)] + 2 * [Fraction(1, 8)]))))
-    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(4, 8)] + 1 * [Fraction(3, 8)] + 1 * [Fraction(1, 8)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations(1 * [Fraction(4, 8)] + 1 * [Fraction(2, 8)] + 2 * [Fraction(1, 8)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations(1 * [Fraction(4, 8)] + 1 * [Fraction(3, 8)] + 1 * [Fraction(1, 8)]))))
 
     output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(5, 8)] + 3 * [Fraction(1, 8)]))))
-    output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(5, 8)] + 1 * [Fraction(2, 8)] + 1 * [Fraction(1, 8)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations(1 * [Fraction(5, 8)] + 1 * [Fraction(2, 8)] + 1 * [Fraction(1, 8)]))))
     output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(5, 8)] + 1 * [Fraction(3, 8)]))))
 
     output.extend(list(dict.fromkeys(itertools.permutations(1 * [Fraction(6, 8)] + 2 * [Fraction(1, 8)]))))
@@ -93,7 +98,8 @@ def generate_all_32nds():
 
 def generate_all_quintuplets():
     output = [tuple(5 * [Fraction(1, 5)])]
-    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 5), Fraction(1, 5), Fraction(1, 5), Fraction(2, 5)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 5), Fraction(1, 5), Fraction(1, 5), Fraction(2, 5)]))))
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 5), Fraction(2, 5), Fraction(2, 5)]))))
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 5), Fraction(1, 5), Fraction(3, 5)]))))
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(2, 5), Fraction(3, 5)]))))
@@ -103,11 +109,13 @@ def generate_all_quintuplets():
 
 def generate_all_sextuplets():
     output = [tuple(6 * [Fraction(1, 6)])]
-    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6),
-                                                             Fraction(2, 6)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 6),
+                                                   Fraction(2, 6)]))))
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(1, 6), Fraction(2, 6),
                                                              Fraction(2, 6)]))))
-    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(3, 6)]))))
+    output.extend(
+        list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(3, 6)]))))
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(2, 6), Fraction(3, 6)]))))
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(1, 6), Fraction(4, 6)]))))
     output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 6), Fraction(5, 6)]))))
@@ -116,14 +124,17 @@ def generate_all_sextuplets():
 
 def generate_all_septuplets():
     output = [tuple(7 * [Fraction(1, 7)])]
-    output.extend(list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(1, 7),
-                                                             Fraction(2, 7)]))))
+    output.extend(list(dict.fromkeys(
+        itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(1, 7),
+                                Fraction(2, 7)]))))
     output.extend(
-        list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(2, 7), Fraction(2, 7)]))))
+        list(dict.fromkeys(
+            itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(2, 7), Fraction(2, 7)]))))
     output.extend(
         list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(2, 7), Fraction(2, 7), Fraction(2, 7)]))))
     output.extend(
-        list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(3, 7)]))))
+        list(dict.fromkeys(
+            itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(1, 7), Fraction(3, 7)]))))
     output.extend(
         list(dict.fromkeys(itertools.permutations([Fraction(1, 7), Fraction(1, 7), Fraction(2, 7), Fraction(3, 7)]))))
     output.extend(
@@ -201,3 +212,21 @@ def create_ornament(class_):
         ornament = class_()
     return ornament
 
+
+def _find_key(dict_, key, output=None):
+    if output is None:
+        output = []
+    for k in dict_:
+        if k == key:
+            output.append({k: dict_[k]})
+        if isinstance(dict_[k], dict):
+            o = _find_key(dict_[k], key, output=output)
+            if o:
+                output.append(o)
+    if not output:
+        return None
+    return output
+
+
+def find_key(dict_, key):
+    return _find_key(dict_, key)

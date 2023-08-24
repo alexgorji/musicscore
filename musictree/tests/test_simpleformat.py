@@ -1,12 +1,34 @@
 from pathlib import Path
-from unittest import TestCase, skip
+from pprint import pprint
+from unittest import skip
+
+import deepdiff
+import xmltodict
+from deepdiff import DeepDiff
 
 from musictree import Score, Midi, QuarterDuration, Chord, SimpleFormat
+from musictree.tests.util import IdTestCase, find_key
+import xml.etree.ElementTree as ET
 
 
-class Test(TestCase):
+class TestSimpleFormat(IdTestCase):
     def setUp(self) -> None:
         self.score = Score()
+        super().setUp()
+
+    def generate_xml_file(self, *simpleformats, path):
+        part = self.score.add_part(id_='part-1')
+        for index, simpleformat in enumerate(simpleformats):
+            for chord in simpleformat.chords:
+                part.add_chord(chord, staff_number=index + 1)
+        self.score.export_xml(path)
+
+    def get_diff_xml_file_elements(self, path_1, path_2, element_tag):
+        if path_2 is None:
+            path_2 = path_1.split('.')[0] + '_expected.xml'
+        xml_element_1 = ET.parse(path_1).getroot().find(element_tag)
+        xml_element_2 = ET.parse(path_2).getroot().find(element_tag)
+        return DeepDiff(xml_element_1, xml_element_2)
 
     def _check_distinctive_quarter_durations_and_values(self, quarter_durations, sf):
         for qd in sf.get_quarter_durations():
@@ -159,6 +181,23 @@ class Test(TestCase):
         sf = SimpleFormat(quarter_duration_values)
         assert sf.get_quarter_positions() == [0, 1, 3, 6, 10, 15]
 
+    def test_get_chord_at_position(self):
+        quarter_duration_values = [1, 2, 3, 4]
+        sf = SimpleFormat(quarter_duration_values)
+        assert sf.get_chord_at_position(0) == sf.chords[0]
+        assert sf.get_chord_at_position(0.5) == sf.chords[0]
+        assert sf.get_chord_at_position(0.99) == sf.chords[0]
+        assert sf.get_chord_at_position(1) == sf.chords[1]
+        assert sf.get_chord_at_position(2) == sf.chords[1]
+        assert sf.get_chord_at_position(2.99) == sf.chords[1]
+        assert sf.get_chord_at_position(3) == sf.chords[2]
+        assert sf.get_chord_at_position(5) == sf.chords[2]
+        assert sf.get_chord_at_position(6) == sf.chords[3]
+        assert sf.get_chord_at_position(8) == sf.chords[3]
+        assert sf.get_chord_at_position(9.99) == sf.chords[3]
+        assert sf.get_chord_at_position(10) is None
+        assert sf.get_chord_at_position(14) is None
+
     @skip
     def test_auto_clef(self):
         self.fail()
@@ -188,17 +227,35 @@ class Test(TestCase):
         sf.multiply_quarter_durations(2)
         assert [qd.value for qd in sf.get_quarter_durations()] == [2, 4, 6]
 
-    def test_sum(self):
-        sf1 = SimpleFormat(quarter_durations=[1, 2, 3], midis=[60, 61, 62])
-        sf2 = SimpleFormat(quarter_durations=[1, 3, 2], midis=[(60, 65), 67, (50, 54)])
-        sf3 = SimpleFormat(quarter_durations=[3, 4, 5], midis=[69, 68, 67])
-        sf = SimpleFormat.sum(sf1, sf2, sf3)
-
     def test_retrograde(self):
         sf = SimpleFormat(quarter_durations=[1, 2, 3], midis=[60, 61, 62])
         sf.retrograde()
         assert [qd.value for qd in sf.get_quarter_durations()] == [3, 2, 1]
         assert [[midi.value for midi in chord.midis] for chord in sf.chords] == [[62], [61], [60]]
+
+    def test_sum_1(self):
+        path = Path(__file__).stem + '_sum_1.xml'
+        sf1 = SimpleFormat(quarter_durations=[1, 2, 3], midis=[60, 61, 62])
+        sf2 = SimpleFormat(quarter_durations=[3, 2, 1], midis=[63, 64, 65])
+        sf = SimpleFormat.sum(sf1, sf2)
+        assert [[m.value for m in midi] for midi in sf.midis] == [[60, 63], [61], [62, 64], [65]]
+        assert sf.get_quarter_durations() == [1, 2, 2, 1]
+        self.generate_xml_file(sf1, sf2, sf, path=path)
+
+    def test_sum_2(self):
+        path = Path(__file__).stem + '_sum_2.xml'
+        sf1 = SimpleFormat(quarter_durations=[1, 2, 3], midis=[60, 61, 62])
+        sf2 = SimpleFormat(quarter_durations=[1, 3, 2], midis=[(60, 65), 67, (50, 54)])
+        sf = SimpleFormat.sum(sf1, sf2)
+        # self.generate_xml_file(sf1, sf2, sf, path=path)
+
+    def test_sum_3(self):
+        xml_file = Path(__file__).stem + '_sum_2.xml'
+        score = Score()
+        sf1 = SimpleFormat(quarter_durations=[1, 2, 3], midis=[60, 61, 62])
+        sf2 = SimpleFormat(quarter_durations=[1, 3, 2], midis=[(60, 65), 67, (50, 54)])
+        sf3 = SimpleFormat(quarter_durations=[3, 4, 5], midis=[69, 68, 67])
+        sf = SimpleFormat.sum(sf1, sf2, sf3)
 
     def test_complex_sum(self):
         xml_file = Path(__file__).stem + '_add_to_score.xml'

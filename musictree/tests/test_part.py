@@ -472,12 +472,10 @@ class TestAddChordToPart(IdTestCase):
         part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=1)
 
         part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2)
-        chord = Chord(midis=60, quarter_duration=4)
-        part.add_chord(chord, staff_number=2)
-        print([staff.clef for staff in part.get_measure(2).get_children()])
-        #
-        # assert self._get_clefs_of_measure(part, 1)[1] == {'@number': '2', 'sign': 'F', 'line': '4'}
-        # assert self._get_clefs_of_measure(part, 2) is None
+        part.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2)
+
+        assert self._get_clefs_of_measure(part, 1)[1] == {'@number': '2', 'sign': 'F', 'line': '4'}
+        assert self._get_clefs_of_measure(part, 2) is None
 
     def test_add_long_chord_to_staff_with_bass_clef(self):
         part = Part(id='part-1')
@@ -506,5 +504,4 @@ class TestAddChordToPart(IdTestCase):
             part.add_chord(Chord(m, q), staff_number=2)
         assert self._get_clefs_of_measure(part, 1)[1] == {'@number': '2', 'sign': 'F', 'line': '4'}
         for measure_number in range(2, math.ceil(sum(quarter_durations) / 4)):
-            print(measure_number, self._get_clefs_of_measure(part, measure_number))
             assert self._get_clefs_of_measure(part, measure_number) is None
