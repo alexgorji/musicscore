@@ -1,3 +1,4 @@
+import copy
 from math import log2
 from typing import Optional, Union, List
 
@@ -198,8 +199,9 @@ class Midi(MusicTree):
         return self.__class__(value=self.value, accidental=self.accidental)
 
     def __deepcopy__(self, memodict={}):
-        copied_accidental = self.accidental.__copy__()
+        copied_accidental = copy.copy(self.accidental)
         copied = self.__class__(value=self.value, accidental=copied_accidental)
+        copied._ties = copy.copy(self._ties)
         return copied
 
 

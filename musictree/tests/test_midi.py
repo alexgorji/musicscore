@@ -152,3 +152,8 @@ class TestMidi(TestCase):
         assert m2._ties == {'stop'}
         with self.assertRaises(KeyError):
             m2.remove_tie('start')
+        m3 = m2.__deepcopy__()
+        assert m3.value == m2.value
+        assert m3._ties == m2._ties
+        m3.add_tie('start')
+        assert m3._ties != m2._ties
