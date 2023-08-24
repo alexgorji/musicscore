@@ -22,6 +22,7 @@ class Midi(MusicTree):
         self._accidental = None
         self._pitch_or_rest = None
         self._parent_note = None
+        self._ties = set()
 
         self.value = value
         self.accidental = accidental
@@ -146,6 +147,12 @@ class Midi(MusicTree):
         child._update_xml_object()
         child._update_parent_midi()
         return child
+
+    def add_tie(self, type_):
+        self._ties.add(type_)
+
+    def remove_tie(self, type_):
+        self._ties.remove(type_)
 
     def get_children(self) -> List[Accidental]:
         """

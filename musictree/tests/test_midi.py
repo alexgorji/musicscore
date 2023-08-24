@@ -139,3 +139,16 @@ class TestMidi(TestCase):
         m = Midi(70)
         n = Note(parent_chord=mock_chord, midi=m)
         assert m.up == n
+
+    def test_midi_tie(self):
+        m1 = Midi(60)
+        m2 = Midi(60)
+        m1.add_tie('start')
+        m2.add_tie('stop')
+        m2.add_tie('start')
+        assert m1._ties == {'start'}
+        assert m2._ties == {'start', 'stop'}
+        m2.remove_tie('start')
+        assert m2._ties == {'stop'}
+        with self.assertRaises(KeyError):
+            m2.remove_tie('start')
