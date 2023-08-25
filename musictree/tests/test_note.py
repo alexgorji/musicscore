@@ -9,6 +9,7 @@ from quicktions import Fraction
 
 from musictree.midi import Midi
 from musictree.note import Note, tie, untie
+from musictree.exceptions import MidiHasNoParentChordError
 
 
 class NoteTestCase(TestCase):
@@ -30,6 +31,13 @@ class TestNote(NoteTestCase):
         assert self.mock_chord.get_voice_number() == 1
         assert self.mock_chord.get_staff_number() is None
         assert self.mock_chord.get_parent_measure().get_divisions() == 1
+
+    def test_note_init_with_midi(self):
+        with self.assertRaises(TypeError):
+            Note()
+
+        with self.assertRaises(MidiHasNoParentChordError):
+            Note(midi=Midi(60))
 
     def test_note_init(self):
         n = Note(parent_chord=self.mock_chord)

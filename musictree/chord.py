@@ -95,6 +95,8 @@ class Chord(MusicTree, QuarterDurationMixin):
             raise ValueError('A rest cannot be a grace note')
         self._midis = [Midi(v) if not isinstance(v, Midi) else v for v in midis]
         self._sort_midis()
+        for midi in self._midis:
+            midi.parent_chord = self
         self._update_notes_pitch_or_rest()
 
     def _sort_midis(self):

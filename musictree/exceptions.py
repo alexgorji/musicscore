@@ -126,3 +126,7 @@ class AlreadyFinalUpdated(MusicTreeException):
 
 class DeepCopyException(MusicTreeException):
     pass
+
+
+class MidiHasNoParentChordError(NoteException):
+    pass

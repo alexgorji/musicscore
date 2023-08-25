@@ -1,12 +1,14 @@
 from typing import Optional, List
 
-from musictree.core import MusicTree
-from musictree.exceptions import NoteTypeError, NoteHasNoParentChordError
+from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied, \
+    XMLArticulations
+
+from musictree.exceptions import NoteTypeError, NoteHasNoParentChordError, MidiHasNoParentChordError
 from musictree.midi import Midi
+from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDurationMixin
 from musictree.util import note_types
 from musictree.xmlwrapper import XMLWrapper
-from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied
 
 __all__ = ['Note', 'tie', 'untie']
 
@@ -34,17 +36,18 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     XMLClass = XMLNote
 
-    def __init__(self, parent_chord, midi=None, quarter_duration=None, *args, **kwargs):
+    def __init__(self, midi, parent_chord=None, quarter_duration=None, *args, **kwargs):
+        self._midi = None
         self._parent_chord = parent_chord
         self._xml_object = self.XMLClass(*args, **kwargs)
+        self.midi = midi
         self._update_xml_voice()
         self._update_xml_staff()
-        self._midi = None
         self._type = None
         self._number_of_dots = None
 
         super().__init__(quarter_duration=quarter_duration)
-        self.midi = midi
+
         self._parent = self.parent_chord
 
     @staticmethod
@@ -187,18 +190,21 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     @property
     def midi(self) -> Midi:
         """
-        val can be a midi or its value. Midi with value 0 means rest.
+        val must be a Midi object with a parent Chord. Midi with value 0 means rest.
         :return: note's :obj:`~musictree.midi.Midi`.
         """
         return self._midi
 
     @midi.setter
     def midi(self, value):
-        self._midi = value if isinstance(value, Midi) or value is None else Midi(value)
+        if not isinstance(value, Midi):
+            raise TypeError('Note.midi property must be of type Midi')
+        if not value.parent_chord:
+            raise MidiHasNoParentChordError
+        self._midi = value
         self._update_xml_pitch_or_rest()
-        if value is not None:
-            self.midi.parent_note = self
-            self._update_xml_accidental()
+        self.midi.parent_note = self
+        self._update_xml_accidental()
 
     @property
     def number_of_dots(self) -> int:
@@ -255,6 +261,9 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         """
         return super().get_parent()
 
+    def get_parent_chord(self):
+        return self.midi.parent_chord
+
     def get_or_create_xml_notations(self) -> 'XMLNotations':
         """
         If note's ``xml_object`` has no :obj:`~musicxml.xmlelement.xmlelement.XMLNotations` as child this child will be created.
@@ -307,7 +316,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         """
         :return: number of :obj:`~musictree.voice.Voice` in note's ancestors
         """
-        return self.parent_chord.get_voice_number()
+        return self.get_parent_chord().get_voice_number()
 
     def remove_tie(self, type_: Optional[str] = None) -> None:
         """

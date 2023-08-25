@@ -24,6 +24,7 @@ class Midi(MusicTree):
         self._pitch_or_rest = None
         self._parent_note = None
         self._ties = set()
+        self._parent_chord = None
 
         self.value = value
         self.accidental = accidental
@@ -87,6 +88,17 @@ class Midi(MusicTree):
     @property
     def octave(self):
         return int(self.value / 12) - 1
+
+    @property
+    def parent_chord(self):
+        return self._parent_chord
+
+    @parent_chord.setter
+    def parent_chord(self, value):
+        if value is not None and 'Chord' not in [cls.__name__ for cls in value.__class__.__mro__]:
+            raise TypeError
+        self._parent_chord = value
+        # self._parent = value
 
     @property
     def parent_note(self):

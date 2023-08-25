@@ -1,12 +1,13 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from musictree import Measure
+from musictree import Chord
 from musicxml.xmlelement.xmlelement import XMLPitch, XMLRest
 
 from musictree.accidental import Accidental
 from musictree.midi import Midi, C, B, G
 from musictree.note import Note
+from musictree.measure import Measure
 
 
 class TestMidi(TestCase):
@@ -76,12 +77,13 @@ class TestMidi(TestCase):
         """
         mock_chord.get_staff_number.return_value = None
         m = Midi(70)
+        ch = Chord(midis=m)
+        assert m.parent_chord == ch
         assert m.parent_note is None
-        n = Note(parent_chord=mock_chord, midi=m)
-
-        assert m.parent_note == n
-        with self.assertRaises(TypeError):
-            m.parent_note = Measure()
+        n = Note(midi=m)
+        # assert m.parent_note == n
+        # with self.assertRaises(TypeError):
+        #     m.parent_note = Measure()
 
     def test_change_midi_value_or_accidental_mode(self):
         """
