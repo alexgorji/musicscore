@@ -1,12 +1,12 @@
 from unittest import TestCase
 from unittest.mock import patch
 
+from musictree import Measure
 from musicxml.xmlelement.xmlelement import XMLPitch, XMLRest
 
 from musictree.accidental import Accidental
 from musictree.midi import Midi, C, B, G
 from musictree.note import Note
-from musictree.measure import Measure
 
 
 class TestMidi(TestCase):
@@ -78,6 +78,7 @@ class TestMidi(TestCase):
         m = Midi(70)
         assert m.parent_note is None
         n = Note(parent_chord=mock_chord, midi=m)
+
         assert m.parent_note == n
         with self.assertRaises(TypeError):
             m.parent_note = Measure()
@@ -150,8 +151,7 @@ class TestMidi(TestCase):
         assert m2._ties == {'start', 'stop'}
         m2.remove_tie('start')
         assert m2._ties == {'stop'}
-        with self.assertRaises(KeyError):
-            m2.remove_tie('start')
+        m2.remove_tie('start')
         m3 = m2.__deepcopy__()
         assert m3.value == m2.value
         assert m3._ties == m2._ties

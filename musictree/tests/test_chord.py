@@ -39,13 +39,13 @@ class TestTreeChord(ChordTestCase):
         ch = Chord(70, 1)
         assert get_chord_midi_values(ch) == [70]
         ch = Chord([70, 50], 1)
-        assert get_chord_midi_values(ch) == [70, 50]
+        assert get_chord_midi_values(ch) == [50, 70]
         ch = Chord(0, 1)
         assert get_chord_midi_values(ch) == [0]
         ch = Chord(Midi(90, accidental=Accidental(mode='enharmonic_1')), 1)
         assert get_chord_midi_values(ch) == [90]
         ch = Chord([Midi(90, accidental=Accidental(mode='enharmonic_1')), 70], 1)
-        assert get_chord_midi_values(ch) == [90, 70]
+        assert get_chord_midi_values(ch) == [70, 90]
 
         with self.assertRaises(ValueError):
             Chord([0, 60], 1)
@@ -358,11 +358,6 @@ class TestTreeChord(ChordTestCase):
         assert ch.midis[0].accidental.show is None
         assert copied.midis[0].accidental.show is False
 
-    def test_split_tied_copy(self):
-        ch = Chord(midis=60, quarter_duration=1)
-        copied = split_copy(ch)
-        assert ch._ties == copied._ties == []
-
     def test_split_quarter_durations(self):
         ch = Chord(midis=60, quarter_duration=4)
         copied = split_copy(ch)
@@ -377,33 +372,6 @@ class TestTreeChord(ChordTestCase):
         ch.quarter_duration = quarter_durations[0][0]
         copied = split_copy(ch, quarter_durations[1])
         assert [ch.quarter_duration, copied.quarter_duration] == [4, 1]
-
-    def test_chord_tie_untie(self):
-        ch1 = Chord(midis=[60, 61], quarter_duration=1)
-        ch2 = Chord(midis=[60, 61], quarter_duration=1)
-        ch1.add_tie('start')
-        ch2.add_tie('stop')
-        ch1._parent = self.mock_beat
-        ch2._parent = self.mock_beat
-        ch1.final_updates()
-        ch2.final_updates()
-        assert [n.is_tied for n in ch1.notes] == [True, True]
-        assert [n.is_tied for n in ch2.notes] == [False, False]
-        assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
-
-        ch1 = Chord(midis=[60, 61], quarter_duration=1)
-        ch2 = Chord(midis=[60, 61], quarter_duration=1)
-        ch1._parent = self.mock_beat
-        ch2._parent = self.mock_beat
-        ch1.final_updates()
-        ch2.final_updates()
-
-        ch1.add_tie('start')
-        ch2.add_tie('stop')
-
-        assert [n.is_tied for n in ch1.notes] == [True, True]
-        assert [n.is_tied for n in ch2.notes] == [False, False]
-        assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
 
     def test_group_chords(self):
         chords = [Chord(60, qd) for qd in [1 / 6, 1 / 6, 1 / 6, 1 / 10, 3 / 10, 1 / 10]]
@@ -573,16 +541,6 @@ class TestTreeChord(ChordTestCase):
         # chord.add_x(XMLAccidentalMark())
         # chord.add_x(XMLFf())
 
-    def test_order_midis(self):
-        midis = [68, 60, 80, 53, 62]
-        chord = Chord(midis)
-        assert [midi.value for midi in chord.midis] == midis
-        chord.sort_midis()
-        assert [midi.value for midi in chord.midis] == sorted(midis)
-        chord = Chord(midis)
-        chord.sort_midis(key=lambda m: -m.value)
-        assert [midi.value for midi in chord.midis] == list(reversed(sorted(midis)))
-
     def test_add_midi(self):
         chord = Chord([60, 62], 2)
         m = Midi(63)
@@ -590,13 +548,82 @@ class TestTreeChord(ChordTestCase):
         assert [midi.value for midi in chord.midis] == [60, 62, 63]
         assert chord.midis[-1] == m
         chord.add_midi(58)
-        assert [midi.value for midi in chord.midis] == [60, 62, 63, 58]
+        assert [midi.value for midi in chord.midis] == [58, 60, 62, 63]
         chord.add_midi(60)
-        assert [midi.value for midi in chord.midis] == [60, 62, 63, 58, 60]
-        chord.sort_midis()
         assert [midi.value for midi in chord.midis] == [58, 60, 60, 62, 63]
 
         chord._parent = self.mock_beat
         chord.final_updates()
         with self.assertRaises(ChordNotesAreAlreadyCreatedError):
             chord.add_midi(80)
+
+
+class TestTies(ChordTestCase):
+
+    def test_add_tie_ties_midis(self):
+        ch = Chord(midis=[60, 63])
+        ch.add_tie('start')
+        for midi in ch.midis:
+            assert midi._ties == {'start'}
+
+    def test_tied_midis(self):
+        m1 = Midi(60)
+        m1.add_tie('start')
+        m2 = Midi(61)
+        m2.add_tie('start')
+        ch = Chord(midis=[m1, m2])
+        assert [n.is_tied for n in ch.notes] == [True, True]
+
+    def test_split_tied_copy(self):
+        ch = Chord(midis=60, quarter_duration=1)
+        copied = split_copy(ch)
+        assert ch._ties == copied._ties == []
+
+    def test_tie_one_note(self):
+        ch1 = Chord(midis=[60, 63])
+        ch2 = Chord(midis=[60, 65])
+        ch1.midis[0].add_tie('start')
+        ch2.midis[0].add_tie('stop')
+        ch1._parent = self.mock_beat
+        ch2._parent = self.mock_beat
+        ch1.final_updates()
+        ch2.final_updates()
+        assert [n.is_tied for n in ch1.notes] == [True, False]
+        assert [n.is_tied_to_previous for n in ch2.notes] == [True, False]
+
+    def test_untie_one_note(self):
+        ch = Chord(midis=[60, 61])
+        ch.add_tie('start')
+        ch._parent = self.mock_beat
+        ch.final_updates()
+        assert [n.is_tied for n in ch.notes] == [True, True]
+        ch.midis[0].remove_tie('start')
+        assert [n.is_tied for n in ch.notes] == [False, True]
+
+    def test_chord_tie_untie(self):
+        ch1 = Chord(midis=[60, 61])
+        ch2 = Chord(midis=[60, 61])
+        ch1.add_tie('start')
+        ch2.add_tie('stop')
+        ch1._parent = self.mock_beat
+        ch2._parent = self.mock_beat
+        ch1.final_updates()
+        ch2.final_updates()
+        assert [n.is_tied for n in ch1.notes] == [True, True]
+        assert [n.is_tied for n in ch2.notes] == [False, False]
+        assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
+
+    def test_chord_change_tie_after_finalizing(self):
+        ch1 = Chord(midis=[60, 61])
+        ch2 = Chord(midis=[60, 61])
+        ch1._parent = self.mock_beat
+        ch2._parent = self.mock_beat
+        ch1.final_updates()
+        ch2.final_updates()
+
+        ch1.add_tie('start')
+        ch2.midis[1].add_tie('stop')
+
+        assert [n.is_tied for n in ch1.notes] == [True, True]
+        assert [n.is_tied for n in ch2.notes] == [False, False]
+        assert [n.is_tied_to_previous for n in ch2.notes] == [False, True]

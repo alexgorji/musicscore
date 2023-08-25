@@ -150,10 +150,19 @@ class Midi(MusicTree):
         return child
 
     def add_tie(self, type_):
+        if type_ not in ['start', 'stop']:
+            raise ValueError
         self._ties.add(type_)
+        if self.parent_note:
+            self.parent_note._update_ties()
 
     def remove_tie(self, type_):
-        self._ties.remove(type_)
+        try:
+            self._ties.remove(type_)
+            if self.parent_note:
+                self.parent_note._update_ties()
+        except KeyError:
+            pass
 
     def get_children(self) -> List[Accidental]:
         """

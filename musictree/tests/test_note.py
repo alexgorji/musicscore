@@ -417,24 +417,39 @@ class TestNoteTie(NoteTestCase):
         assert not n.is_tied_to_previous
         assert n.to_string() == standard_note_xml_start_tie
 
+    def test_remove_tie(self):
+        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
+        n.remove_tie()
+        n.start_tie()
+        n.remove_tie('start')
+        n.stop_tie()
+        n.remove_tie('stop')
+
+        n.midi.add_tie('start')
+        assert n.is_tied
+
     def test_start_tie(self):
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         n.start_tie()
         assert n.is_tied
+        assert n.midi._ties == {'start'}
         assert not n.is_tied_to_previous
         assert n.to_string() == standard_note_xml_start_tie
         n.remove_tie()
         assert not n.is_tied
+        assert n.midi._ties == set()
         assert not n.is_tied_to_previous
         assert n.to_string() == standard_note_xml
 
     def test_stop_tie(self):
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         n.stop_tie()
+        assert n.midi._ties == {'stop'}
         assert not n.is_tied
         assert n.is_tied_to_previous
         assert n.to_string() == standard_note_xml_stop_tie
         n.remove_tie()
+        assert n.midi._ties == set()
         assert not n.is_tied
         assert not n.is_tied_to_previous
         assert n.to_string() == standard_note_xml
@@ -443,15 +458,18 @@ class TestNoteTie(NoteTestCase):
         n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
         n.start_tie()
         n.stop_tie()
+        assert n.midi._ties == {'start', 'stop'}
         assert n.is_tied
         assert n.is_tied_to_previous
         assert n.to_string() == standard_note_xml_stop_start_tie
 
         n.remove_tie('start')
+        assert n.midi._ties == {'stop'}
         assert not n.is_tied
         assert n.is_tied_to_previous
         assert n.to_string() == standard_note_xml_stop_tie
         n.remove_tie()
+        assert n.midi._ties == set()
         assert not n.is_tied
         assert not n.is_tied_to_previous
         assert n.to_string() == standard_note_xml
@@ -515,3 +533,16 @@ class TestNoteTie(NoteTestCase):
         ch.final_updates()
         n = ch.notes[0]
         assert n.up == n.parent_chord
+
+    def test_note_update_ties(self):
+        n = Note(parent_chord=self.mock_chord, midi=60, quarter_duration=1)
+        n.midi.add_tie('start')
+        assert n.is_tied_to_next
+        assert not n.is_tied_to_previous
+        n.midi.add_tie('stop')
+        assert n.is_tied_to_previous
+        n.midi.remove_tie('start')
+        n.remove_tie('start')
+        assert not n.is_tied_to_next
+        n.midi.remove_tie('stop')
+        assert not n.is_tied_to_previous

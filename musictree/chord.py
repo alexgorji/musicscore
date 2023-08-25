@@ -52,6 +52,7 @@ class Chord(MusicTree, QuarterDurationMixin):
     """
     _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'ties'}
 
+
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
         self._midis = None
@@ -93,7 +94,11 @@ class Chord(MusicTree, QuarterDurationMixin):
         if 0 in midis and self.quarter_duration == 0:
             raise ValueError('A rest cannot be a grace note')
         self._midis = [Midi(v) if not isinstance(v, Midi) else v for v in midis]
+        self._sort_midis()
         self._update_notes_pitch_or_rest()
+
+    def _sort_midis(self):
+        self._midis = sorted(self._midis)
 
     def _update_xml_articulations(self):
         def _get_note_xml_articulations():
@@ -324,16 +329,10 @@ class Chord(MusicTree, QuarterDurationMixin):
                     self.add_child(new_note)
 
     def _update_tie(self):
-        if not self._ties:
-            for note in self.notes:
-                note.remove_tie()
-        else:
-            if 'stop' in self._ties:
-                for note in self.notes:
-                    note.stop_tie()
-            if 'start' in self._ties:
-                for note in self.notes:
-                    note.start_tie()
+        # update ties of already created notes
+        for note in self.notes:
+            note._update_ties()
+
 
     @property
     def is_rest(self) -> bool:
@@ -512,18 +511,19 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
         return dynamics_object_list
 
-    def add_tie(self, val: str) -> None:
+    def add_tie(self, type_: str) -> None:
         """
-        Chord's tie list is used to add ties to or update ties of :obj:`musictree.note.Note` objects which are to be or are already
-        created .
+        Chord's tie list is used to add ties to or update ties of all midis and consequently :obj:`musictree.note.Note`
+        objects which are to be or are already created.
 
-        :param val: 'start' or 'stop'
+        :param type_: 'start' or 'stop'
         :return: None
         """
-        if val not in ['start', 'stop']:
-            raise ValueError
-        if val not in self._ties:
-            self._ties.append(val)
+
+        for midi in self.midis:
+            midi.add_tie(type_=type_)
+        if type_ not in self._ties:
+            self._ties.append(type_)
             self._update_tie()
 
     def add_lyric(self, text: Union[Any, XMLLyric]):
@@ -552,6 +552,7 @@ class Chord(MusicTree, QuarterDurationMixin):
             self._midis.append(midi)
         else:
             self._midis.append(Midi(midi))
+        self._sort_midis()
 
     def get_children(self) -> List[Note]:
         """
@@ -660,15 +661,6 @@ class Chord(MusicTree, QuarterDurationMixin):
         self.up.up.leftover_chord = leftover_chord
 
         return output
-
-    def sort_midis(self, key=None):
-        """
-        This method sorts Chord.midis. If no key is provided midis are sorted based on their values.
-        """
-        if not key:
-            self._midis = sorted(self._midis, key=lambda m: m.value)
-        else:
-            self._midis = sorted(self._midis, key=key)
 
     def to_rest(self) -> None:
         """
