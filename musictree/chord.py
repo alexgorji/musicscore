@@ -301,7 +301,7 @@ class Chord(MusicTree, QuarterDurationMixin):
 
         self._update_notes_quarter_duration()
         self._update_xml_lyrics()
-        self._update_tie()
+        self._update_ties()
         self._update_xml_directions()
         self._update_xml_articulations()
         self._update_xml_technicals()
@@ -330,7 +330,7 @@ class Chord(MusicTree, QuarterDurationMixin):
                     new_note = Note(parent_chord=self, midi=m, quarter_duration=self.quarter_duration)
                     self.add_child(new_note)
 
-    def _update_tie(self):
+    def _update_ties(self):
         # update ties of already created notes
         for note in self.notes:
             note._update_ties()
@@ -526,7 +526,7 @@ class Chord(MusicTree, QuarterDurationMixin):
             midi.add_tie(type_=type_)
         if type_ not in self._ties:
             self._ties.append(type_)
-            self._update_tie()
+            self._update_ties()
 
     def add_lyric(self, text: Union[Any, XMLLyric]):
         """

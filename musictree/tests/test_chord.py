@@ -562,9 +562,12 @@ class TestTies(ChordTestCase):
 
     def test_add_tie_ties_midis(self):
         ch = Chord(midis=[60, 63])
+        ch._parent = self.mock_beat
         ch.add_tie('start')
         for midi in ch.midis:
             assert midi._ties == {'start'}
+        ch.final_updates()
+        assert [n.is_tied for n in ch.notes] == [True, True]
 
     def test_tied_midis(self):
         m1 = Midi(60)
@@ -572,6 +575,8 @@ class TestTies(ChordTestCase):
         m2 = Midi(61)
         m2.add_tie('start')
         ch = Chord(midis=[m1, m2])
+        ch._parent = self.mock_beat
+        ch.final_updates()
         assert [n.is_tied for n in ch.notes] == [True, True]
 
     def test_split_tied_copy(self):
