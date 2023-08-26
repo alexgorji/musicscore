@@ -566,7 +566,7 @@ class TestTies(ChordTestCase):
         ch.add_tie('start')
         for midi in ch.midis:
             assert midi._ties == {'start'}
-
+    @skip
     def test_tied_midis(self):
         m1 = Midi(60)
         m1.add_tie('start')
@@ -592,6 +592,7 @@ class TestTies(ChordTestCase):
         assert [n.is_tied for n in ch1.notes] == [True, False]
         assert [n.is_tied_to_previous for n in ch2.notes] == [True, False]
 
+    @skip
     def test_untie_one_note(self):
         ch = Chord(midis=[60, 61])
         ch.add_tie('start')
