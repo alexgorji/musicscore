@@ -1,14 +1,12 @@
 from typing import Optional, List
 
-from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied, \
-    XMLArticulations
-
+from musictree.core import MusicTree
 from musictree.exceptions import NoteTypeError, NoteHasNoParentChordError, MidiHasNoParentChordError
 from musictree.midi import Midi
-from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDurationMixin
 from musictree.util import note_types
 from musictree.xmlwrapper import XMLWrapper
+from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied
 
 __all__ = ['Note', 'tie', 'untie']
 
@@ -36,18 +34,19 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     XMLClass = XMLNote
 
-    def __init__(self, parent_chord, midi=None, quarter_duration=None, *args, **kwargs):
+    def __init__(self, parent_chord, midi, quarter_duration=None, *args, **kwargs):
         self._midi = None
-        self._parent_chord = parent_chord
+        # self._parent_chord = parent_chord
+        self._parent_chord = midi.parent_chord
         self._xml_object = self.XMLClass(*args, **kwargs)
-        self._update_xml_voice()
-        self._update_xml_staff()
         self._type = None
         self._number_of_dots = None
 
         super().__init__(quarter_duration=quarter_duration)
         self.midi = midi
         self._parent = self.parent_chord
+        self._update_xml_voice()
+        self._update_xml_staff()
 
     @staticmethod
     def _check_xml_duration_value(duration):
@@ -122,25 +121,18 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             self.xml_object.xml_duration = duration
 
     def _update_xml_pitch_or_rest(self):
-        midi = self.midi
-        if midi is None:
-            self.xml_object.xml_pitch = None
-            self.xml_object.xml_rest = None
+        if self.midi.value == 0 and self.quarter_duration == 0:
+            raise ValueError('A rest cannot be a grace note.')
+        pitch_or_rest = self.midi.get_pitch_or_rest()
+        if isinstance(pitch_or_rest, XMLRest):
+            if self.xml_object.xml_pitch:
+                self.xml_object.xml_pitch = None
+            self.xml_object.xml_rest = pitch_or_rest
+            self.xml_object.xml_notehead = None
         else:
-            if not isinstance(midi, Midi):
-                raise TypeError
-            if self.midi.value == 0 and self.quarter_duration == 0:
-                raise ValueError('A rest cannot be a grace note.')
-            pitch_or_rest = midi.get_pitch_or_rest()
-            if isinstance(pitch_or_rest, XMLRest):
-                if self.xml_object.xml_pitch:
-                    self.xml_object.xml_pitch = None
-                self.xml_object.xml_rest = pitch_or_rest
-                self.xml_object.xml_notehead = None
-            else:
-                if self.xml_object.xml_rest:
-                    self.xml_object.xml_rest = None
-                self.xml_object.xml_pitch = pitch_or_rest
+            if self.xml_object.xml_rest:
+                self.xml_object.xml_rest = None
+            self.xml_object.xml_pitch = pitch_or_rest
 
     def _update_xml_staff(self):
         self.xml_object.xml_staff = self.get_staff_number()
