@@ -70,20 +70,19 @@ class TestMidi(TestCase):
         assert r.accidental.get_pitch_parameters() is None
         assert r.get_pitch_or_rest().to_string() == '<rest />\n'
 
-    @patch('musictree.chord.Chord')
+    @patch('musictree.chord.Chord', spec=Chord)
     def test_midi_parent_note(self, mock_chord):
         """
         Test if a midi object which is being contained in a note can access it via its parent_note attribute.
         """
         mock_chord.get_staff_number.return_value = None
         m = Midi(70)
-        ch = Chord(midis=m)
-        assert m.parent_chord == ch
+        m._set_parent_chord(mock_chord)
         assert m.parent_note is None
-        n = Note(midi=m)
-        # assert m.parent_note == n
-        # with self.assertRaises(TypeError):
-        #     m.parent_note = Measure()
+        n = Note(parent_chord=mock_chord, midi=m)
+        assert m.parent_note == n
+        with self.assertRaises(TypeError):
+            m.parent_note = Measure()
 
     def test_change_midi_value_or_accidental_mode(self):
         """
@@ -136,10 +135,11 @@ class TestMidi(TestCase):
         assert m.accidental.mode == copied.accidental.mode
         assert m.accidental.show == copied.accidental.show
 
-    @patch('musictree.chord.Chord')
+    @patch('musictree.chord.Chord', spec=Chord)
     def test_midi_up_note(self, mock_chord):
         mock_chord.get_staff_number.return_value = None
         m = Midi(70)
+        m._set_parent_chord(mock_chord)
         n = Note(parent_chord=mock_chord, midi=m)
         assert m.up == n
 

@@ -93,8 +93,7 @@ class Midi(MusicTree):
     def parent_chord(self):
         return self._parent_chord
 
-    @parent_chord.setter
-    def parent_chord(self, value):
+    def _set_parent_chord(self, value):
         if value is not None and 'Chord' not in [cls.__name__ for cls in value.__class__.__mro__]:
             raise TypeError
         self._parent_chord = value

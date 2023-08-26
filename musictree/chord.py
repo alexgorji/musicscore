@@ -96,7 +96,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._midis = [Midi(v) if not isinstance(v, Midi) else v for v in midis]
         self._sort_midis()
         for midi in self._midis:
-            midi.parent_chord = self
+            midi._set_parent_chord(self)
         self._update_notes_pitch_or_rest()
 
     def _sort_midis(self):
@@ -550,11 +550,12 @@ class Chord(MusicTree, QuarterDurationMixin):
     def add_midi(self, midi):
         if self._notes_are_set:
             raise ChordNotesAreAlreadyCreatedError('Chord.add_midi cannot be used after creation of notes.')
-        if isinstance(midi, Midi):
-            self._midis.append(midi)
-        else:
-            self._midis.append(Midi(midi))
+        if not isinstance(midi, Midi):
+            midi = Midi(midi)
+        midi._set_parent_chord(self)
+        self._midis.append(midi)
         self._sort_midis()
+        return midi
 
     def get_children(self) -> List[Note]:
         """

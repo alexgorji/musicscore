@@ -36,18 +36,17 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     XMLClass = XMLNote
 
-    def __init__(self, midi, parent_chord=None, quarter_duration=None, *args, **kwargs):
+    def __init__(self, parent_chord, midi=None, quarter_duration=None, *args, **kwargs):
         self._midi = None
         self._parent_chord = parent_chord
         self._xml_object = self.XMLClass(*args, **kwargs)
-        self.midi = midi
         self._update_xml_voice()
         self._update_xml_staff()
         self._type = None
         self._number_of_dots = None
 
         super().__init__(quarter_duration=quarter_duration)
-
+        self.midi = midi
         self._parent = self.parent_chord
 
     @staticmethod
@@ -262,7 +261,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         return super().get_parent()
 
     def get_parent_chord(self):
-        return self.midi.parent_chord
+        return self.parent_chord
 
     def get_or_create_xml_notations(self) -> 'XMLNotations':
         """

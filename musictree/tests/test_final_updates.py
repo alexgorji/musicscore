@@ -40,7 +40,7 @@ class TestFinalUpdates(IdTestCase):
     def test_chord_final_updates(self):
         self.measure.update_divisions()
         assert self.chord_1.get_children() == []
-        self.chord_1.midis.append(Midi(70))
+        self.chord_1.add_midi(Midi(70))
         self.chord_1.final_updates()
         assert len(self.chord_1.get_children()) == 2
         assert_chord_note_values(self.chord_1, [(60, 1 / 3), (70, 1 / 3)])
