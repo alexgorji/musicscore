@@ -33,6 +33,11 @@ class NoteTestCase(TestCase):
 
 class TestNote(NoteTestCase):
 
+    def test_note_without_mock(self):
+        ch = Chord(midis=80)
+        m = ch.midis[0]
+        n = Note(parent_chord=ch, midi=m)
+
     def test_mock_chord(self):
         assert self.mock_chord.get_voice_number() == 1
         assert self.mock_chord.get_staff_number() is None
@@ -556,6 +561,6 @@ class TestNoteTie(NoteTestCase):
         assert n.is_tied_to_previous
         n.midi.remove_tie('start')
         n.remove_tie('start')
-        # assert not n.is_tied_to_next
-        # n.midi.remove_tie('stop')
-        # assert not n.is_tied_to_previous
+        assert not n.is_tied_to_next
+        n.midi.remove_tie('stop')
+        assert not n.is_tied_to_previous

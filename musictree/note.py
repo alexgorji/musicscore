@@ -201,8 +201,8 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         if not value.parent_chord:
             raise MidiHasNoParentChordError
         self._midi = value
+        self._midi.parent_note = self
         self._update_xml_pitch_or_rest()
-        self.midi.parent_note = self
         self._update_xml_accidental()
 
     @property

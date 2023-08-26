@@ -578,7 +578,10 @@ class Chord(MusicTree, QuarterDurationMixin):
         return self.up.up.up.up
 
     def get_staff_number(self):
-        return self.up.up.up.number
+        try:
+            return self.up.up.up.number
+        except AttributeError:
+            return None
 
     def get_voice(self):
         raise TypeError
@@ -588,7 +591,10 @@ class Chord(MusicTree, QuarterDurationMixin):
         :return: parent voice number
         :rtype: positive int
         """
-        return self.up.up.number
+        try:
+            return self.up.up.number
+        except AttributeError:
+            return None
 
     def set_possible_subdivisions(self):
         raise TypeError

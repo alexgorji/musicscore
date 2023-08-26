@@ -263,6 +263,7 @@ class TestTreeChord(ChordTestCase):
   <type>half</type>
 </note>
 """
+
         chord.final_updates()
         assert chord.notes[0].to_string() == expected
         chord.midis = [60, 61]
