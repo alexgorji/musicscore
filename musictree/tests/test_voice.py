@@ -70,8 +70,8 @@ class TestVoice(TestCase):
         v.add_chord(Chord(quarter_duration=0.5, midis=60))
         assert v.leftover_chord is None
         assert [ch.quarter_duration for ch in v.get_chords()] == [1.5, 0.5, 1.5, 0.5]
-        assert v.get_chords()[1]._ties == ['start']
-        assert v.get_chords()[2]._ties == ['stop']
+        assert v.get_chords()[1].midis[0].is_tied_to_next
+        assert v.get_chords()[2].midis[0].is_tied_to_previous
 
         v = Voice()
         v._parent = mock_staff

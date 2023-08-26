@@ -4,6 +4,7 @@ from unittest import skip
 
 import xmltodict
 
+from musictree import Time
 from musictree.chord import Chord
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError
 from musictree.key import Key
@@ -216,120 +217,6 @@ class TestPart(IdTestCase):
         p.add_child(m1)
         assert p.get_current_measure(staff_number=1, voice_number=1) == m1
 
-    def test_part_add_chord_different_staves_and_voices(self):
-        p = Part('p1')
-        p.add_chord(Chord(60, 1))
-        m = p.get_children()[0]
-        assert m.get_voice(staff_number=1, voice_number=1) is not None
-        p.add_chord(Chord(61, 2), staff_number=2, voice_number=4)
-        for i in range(1, 5):
-            assert m.get_voice(staff_number=2, voice_number=i) is not None
-        p.add_chord(Chord(62, 3), staff_number=1, voice_number=1)
-        assert [ch.quarter_duration for ch in m.get_voice(staff_number=1, voice_number=1).get_chords()] == [1, 3]
-        assert [ch.midis[0].value for ch in m.get_voice(staff_number=1, voice_number=1).get_chords()] == [60, 62]
-        assert [ch.quarter_duration for ch in m.get_voice(staff_number=2, voice_number=4).get_chords()] == [2]
-
-    def test_part_add_chord_with_leftover(self):
-        p = Part('p1')
-        ch = Chord(60, 5)
-        p.add_chord(ch)
-        assert len(p.get_children()) == 2
-        m1, m2 = p.get_children()
-        assert p.get_current_measure(1, 1) == m2
-        assert m1.get_voice(staff_number=1, voice_number=1).is_filled
-        assert not m2.get_voice(staff_number=1, voice_number=1).is_filled
-
-    def test_part_add_chord_to_full_measure(self):
-        p = Part('p1')
-        p.add_chord(Chord(60, 4))
-        p.add_chord(Chord(60, 6))
-        m1, m2, m3 = p.get_children()
-        assert p.get_current_measure() == m3
-
-    def test_part_add_chord_to_existing_measures(self):
-        p = Part('p1')
-        for _ in range(3):
-            p.add_measure()
-        m1, m2, m3 = p.get_children()
-        assert p.get_current_measure() == m1
-        p.add_chord(Chord(60, 5))
-        assert p.get_current_measure() == m2
-
-    def test_part_add_split_chord_without_leftover(self):
-        chord = Chord(midis=60, quarter_duration=5)
-        p = Part('p1')
-        p.add_measure((5, 4))
-        p.add_chord(chord)
-        assert len(p.get_children()) == 1
-        m = p.get_children()[-1]
-        all_chords = [ch1, ch2] = m.get_chords()
-        assert [ch.quarter_duration for ch in all_chords] == [3, 2]
-        assert ch1._ties == ['start']
-        assert ch2._ties == ['stop']
-
-        chord = Chord(midis=60, quarter_duration=10)
-        p = Part('p2')
-        p.add_measure((10, 4))
-        p.add_chord(chord)
-        assert len(p.get_children()) == 1
-        m = p.get_children()[-1]
-        all_chords = [ch1, ch2, ch3] = m.get_chords()
-        assert [ch.quarter_duration for ch in all_chords] == [4, 4, 2]
-        assert ch1._ties == ['start']
-        assert ch2._ties == ['stop', 'start']
-        assert ch3._ties == ['stop']
-
-    def test_split_tied_chord(self):
-        chord = Chord(midis=60, quarter_duration=5)
-        chord.add_tie('start')
-        p = Part('p1')
-        p.add_measure((5, 4))
-        p.add_chord(chord)
-        assert len(p.get_children()) == 1
-        m = p.get_children()[-1]
-        all_chords = [ch1, ch2] = m.get_chords()
-        assert [ch.quarter_duration for ch in all_chords] == [3, 2]
-        assert ch1._ties == ['start']
-        assert ch2._ties == ['stop', 'start']
-
-        chord = Chord(midis=60, quarter_duration=10)
-        chord.add_tie('start')
-        p = Part('p2')
-        p.add_measure((10, 4))
-        p.add_chord(chord)
-        assert len(p.get_children()) == 1
-        m = p.get_children()[-1]
-        all_chords = [ch1, ch2, ch3] = m.get_chords()
-        assert [ch.quarter_duration for ch in all_chords] == [4, 4, 2]
-        assert ch1._ties == ['start']
-        assert ch2._ties == ['stop', 'start']
-        assert ch3._ties == ['stop', 'start']
-
-        chord = Chord(midis=60, quarter_duration=10)
-        # chord.add_tie('start')
-        p = Part('p3')
-        p.add_measure((4, 4))
-        p.add_chord(chord)
-        m1, m2, m3 = p.get_children()
-        all_chords = m1.get_chords() + m2.get_chords() + m3.get_chords()
-        assert [ch.quarter_duration for ch in all_chords] == [4, 4, 2]
-        assert ch1._ties == ['start']
-        assert ch2._ties == ['stop', 'start']
-        assert ch3._ties == ['stop']
-
-    def test_part_add_chord_with_staff_number(self):
-        p = Part('P1')
-        ch1 = Chord(60, 1)
-        ch2 = Chord(48, 1)
-        p.add_chord(ch1, staff_number=1)
-        assert ch1.get_staff_number() is None
-        p.add_chord(ch2, staff_number=2)
-        assert ch1.get_staff_number() == 1
-        assert ch2.get_staff_number() == 2
-        p.final_updates()
-        assert ch1.notes[0].xml_staff.value_ == 1
-        assert ch2.notes[0].xml_staff.value_ == 2
-
 
 class TestScorePart(IdTestCase):
 
@@ -507,3 +394,239 @@ class TestAddChordToPart(IdTestCase):
         for measure_number in range(2, math.ceil(sum(quarter_durations) / 4)):
             print(measure_number, self._get_clefs_of_measure(part, measure_number))
             assert self._get_clefs_of_measure(part, measure_number) is None
+
+    def test_part_add_chord_different_staves_and_voices(self):
+        p = Part('p1')
+        p.add_chord(Chord(60, 1))
+        m = p.get_children()[0]
+        assert m.get_voice(staff_number=1, voice_number=1) is not None
+        p.add_chord(Chord(61, 2), staff_number=2, voice_number=4)
+        for i in range(1, 5):
+            assert m.get_voice(staff_number=2, voice_number=i) is not None
+        p.add_chord(Chord(62, 3), staff_number=1, voice_number=1)
+        assert [ch.quarter_duration for ch in m.get_voice(staff_number=1, voice_number=1).get_chords()] == [1, 3]
+        assert [ch.midis[0].value for ch in m.get_voice(staff_number=1, voice_number=1).get_chords()] == [60, 62]
+        assert [ch.quarter_duration for ch in m.get_voice(staff_number=2, voice_number=4).get_chords()] == [2]
+
+    def test_part_add_chord_with_leftover(self):
+        p = Part('p1')
+        ch = Chord(60, 5)
+        p.add_chord(ch)
+        assert len(p.get_children()) == 2
+        m1, m2 = p.get_children()
+        assert p.get_current_measure(1, 1) == m2
+        assert m1.get_voice(staff_number=1, voice_number=1).is_filled
+        assert not m2.get_voice(staff_number=1, voice_number=1).is_filled
+
+    def test_part_add_chord_to_full_measure(self):
+        p = Part('p1')
+        p.add_chord(Chord(60, 4))
+        p.add_chord(Chord(60, 6))
+        m1, m2, m3 = p.get_children()
+        assert p.get_current_measure() == m3
+
+    def test_part_add_chord_to_existing_measures(self):
+        p = Part('p1')
+        for _ in range(3):
+            p.add_measure()
+        m1, m2, m3 = p.get_children()
+        assert p.get_current_measure() == m1
+        p.add_chord(Chord(60, 5))
+        assert p.get_current_measure() == m2
+
+    def test_split_tied_chord(self):
+        chord = Chord(midis=60, quarter_duration=5)
+        chord.add_tie('start')
+        p = Part('p1')
+        p.add_measure((5, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 1
+        m = p.get_children()[-1]
+        all_chords = [ch1, ch2] = m.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [3, 2]
+        assert ch1.all_midis_are_tied_to_next
+        assert ch2.all_midis_are_tied_to_previous
+        assert ch2.all_midis_are_tied_to_next
+
+        chord = Chord(midis=60, quarter_duration=10)
+        chord.add_tie('start')
+        p = Part('p2')
+        p.add_measure((10, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 1
+        m = p.get_children()[-1]
+        all_chords = [ch1, ch2, ch3] = m.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [4, 4, 2]
+        assert not ch1.all_midis_are_tied_to_previous
+        assert ch1.all_midis_are_tied_to_next
+        assert ch2.all_midis_are_tied_to_previous
+        assert ch2.all_midis_are_tied_to_next
+        assert ch3.all_midis_are_tied_to_previous
+        assert ch3.all_midis_are_tied_to_next
+
+        chord = Chord(midis=60, quarter_duration=10)
+        # chord.add_tie('start')
+        p = Part('p3')
+        p.add_measure((4, 4))
+        p.add_chord(chord)
+        m1, m2, m3 = p.get_children()
+        all_chords = m1.get_chords() + m2.get_chords() + m3.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [4, 4, 2]
+        assert ch1.all_midis_are_tied_to_next
+        assert not ch1.all_midis_are_tied_to_previous
+        assert ch2.all_midis_are_tied_to_next
+        assert ch2.all_midis_are_tied_to_previous
+        assert ch3.all_midis_are_tied_to_previous
+        assert not ch3.all_midis_are_tied_to_next
+
+    def test_part_add_chord_with_staff_number(self):
+        p = Part('P1')
+        ch1 = Chord(60, 1)
+        ch2 = Chord(48, 1)
+        p.add_chord(ch1, staff_number=1)
+        assert ch1.get_staff_number() is None
+        p.add_chord(ch2, staff_number=2)
+        assert ch1.get_staff_number() == 1
+        assert ch2.get_staff_number() == 2
+        p.final_updates()
+        assert ch1.notes[0].xml_staff.value_ == 1
+        assert ch2.notes[0].xml_staff.value_ == 2
+
+
+class TestDifferentQdAndTime(IdTestCase):
+    def test_part_add_split_chord_5_3_4(self):
+        chord = Chord(midis=60, quarter_duration=5)
+        p = Part('p1')
+        p.add_measure((3, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 2
+        m = p.get_children()[-1]
+        assert len(m.get_chords()) == 1
+        ch = m.get_chords()[0]
+        assert ch.quarter_duration == 2
+        assert ch.all_midis_are_tied_to_previous
+        assert not ch.all_midis_are_tied_to_next
+
+    def test_part_add_split_chord_5_4_4(self):
+        chord = Chord(midis=60, quarter_duration=5)
+        p = Part('p1')
+        p.add_measure((4, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 2
+        m = p.get_children()[-1]
+        assert len(m.get_chords()) == 1
+        ch = m.get_chords()[0]
+        assert ch.quarter_duration == 1
+        assert ch.all_midis_are_tied_to_previous
+        assert not ch.all_midis_are_tied_to_next
+
+    def test_part_add_split_chord_5_5_4(self):
+        chord = Chord(midis=60, quarter_duration=5)
+        p = Part('p1')
+        p.add_measure((5, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 1
+        m = p.get_children()[-1]
+        all_chords = [ch1, ch2] = m.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [3, 2]
+        assert not ch1.all_midis_are_tied_to_previous
+        assert ch1.all_midis_are_tied_to_next
+        assert ch2.all_midis_are_tied_to_previous
+        assert not ch2.all_midis_are_tied_to_next
+
+    def test_part_add_split_chord_6_4_4(self):
+        chord = Chord(midis=60, quarter_duration=6)
+        p = Part('p1')
+        p.add_measure((4, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 2
+        m = p.get_children()[-1]
+        assert len(m.get_chords()) == 1
+        ch = m.get_chords()[0]
+        assert ch.quarter_duration == 2
+        assert ch.all_midis_are_tied_to_previous
+        assert not ch.all_midis_are_tied_to_next
+
+    def test_part_add_split_chord_6_5_4(self):
+        chord = Chord(midis=60, quarter_duration=6)
+        p = Part('p1')
+        p.add_measure((5, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 2
+        m = p.get_children()[-1]
+        assert len(m.get_chords()) == 1
+        ch = m.get_chords()[0]
+        assert ch.quarter_duration == 1
+        assert ch.all_midis_are_tied_to_previous
+        assert not ch.all_midis_are_tied_to_next
+
+    def test_part_add_split_chord_7_7_4(self):
+        chord = Chord(midis=60, quarter_duration=7)
+        p = Part('p1')
+        p.add_measure((7, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 1
+        m = p.get_children()[-1]
+        all_chords = [ch1, ch2] = m.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [4, 3]
+        assert not ch1.all_midis_are_tied_to_previous
+        assert ch1.all_midis_are_tied_to_next
+        assert ch2.all_midis_are_tied_to_previous
+        assert not ch2.all_midis_are_tied_to_next
+
+    def test_part_add_split_chord_10_7_4(self):
+        chord = Chord(midis=60, quarter_duration=10)
+        p = Part('p1')
+        p.add_measure((7, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 2
+        m = p.get_children()[-1]
+        assert len(m.get_chords()) == 1
+        ch = m.get_chords()[0]
+        assert ch.quarter_duration == 3
+        assert ch.all_midis_are_tied_to_previous
+        assert not ch.all_midis_are_tied_to_next
+
+    def test_part_add_split_chord_12_7_4(self):
+        chord = Chord(midis=60, quarter_duration=12)
+        p = Part('p1')
+        p.add_measure((7, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 2
+        m = p.get_children()[-1]
+        all_chords = [ch1, ch2] = m.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [3, 2]
+        assert ch1.all_midis_are_tied_to_previous
+        assert ch1.all_midis_are_tied_to_next
+        assert ch2.all_midis_are_tied_to_previous
+        assert not ch2.all_midis_are_tied_to_next
+
+    def test_part_add_split_chord_10_5_4(self):
+        chord = Chord(midis=60, quarter_duration=10)
+        p = Part('p1')
+        p.add_measure((5, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 2
+        m = p.get_children()[-1]
+        all_chords = [ch1, ch2] = m.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [3, 2]
+        assert ch1.all_midis_are_tied_to_next
+        assert ch1.all_midis_are_tied_to_previous
+        assert not ch2.all_midis_are_tied_to_next
+        assert ch2.all_midis_are_tied_to_previous
+
+    def test_part_add_split_chord_10_10_4(self):
+        chord = Chord(midis=60, quarter_duration=10)
+        p = Part('p2')
+        p.add_measure((10, 4))
+        p.add_chord(chord)
+        assert len(p.get_children()) == 1
+        m = p.get_children()[-1]
+        all_chords = [ch1, ch2, ch3] = m.get_chords()
+        assert [ch.quarter_duration for ch in all_chords] == [4, 4, 2]
+        assert not ch1.all_midis_are_tied_to_previous
+        assert ch1.all_midis_are_tied_to_next
+        assert ch2.all_midis_are_tied_to_previous
+        assert ch2.all_midis_are_tied_to_next
+        assert ch3.all_midis_are_tied_to_previous
+        assert not ch3.all_midis_are_tied_to_next

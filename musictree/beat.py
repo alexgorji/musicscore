@@ -279,9 +279,9 @@ class Beat(MusicTree, QuarterDurationMixin):
     def _remove_zero_quarter_durations(self):
         zeros = [ch for ch in self.get_children() if ch.quarter_duration == 0]
         for ch in zeros:
-            if 'start' in ch._ties:
+            if ch.all_midis_are_tied_to_next:
                 pass
-            elif 'stop' in ch._ties:
+            elif ch.all_midis_are_tied_to_previous:
                 ch.up.remove(ch)
             else:
                 pass

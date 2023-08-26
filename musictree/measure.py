@@ -73,7 +73,8 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
             previous_staff = staff.get_previous_staff()
             steps_with_accidentals = set()
             relevant_chords = [ch for ch in staff.get_chords() if not ch.is_rest]
-            relevant_chords_not_tied = [ch for ch in relevant_chords if 'stop' not in ch._ties]
+            relevant_chords_not_tied = [ch for ch in relevant_chords if
+                                        True not in set(m.is_tied_to_previous for m in ch.midis)]
             for chord in relevant_chords:
                 for midi in chord.midis:
                     step = midi.accidental.get_pitch_parameters()[0]
@@ -407,7 +408,7 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
         """
         for staff in self.get_children():
             for chord in staff.get_chords():
-                if 'stop' in chord._ties:
+                if chord.all_midis_are_tied_to_previous:
                     for midi in chord.midis:
                         midi.accidental.show = False
                 for midi in chord.midis:

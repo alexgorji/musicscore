@@ -245,7 +245,8 @@ class Part(MusicTree, FinalUpdateMixin, XMLWrapper):
         leftover_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).leftover_chord
         while leftover_chord:
             current_measure = add_to_next_measure(current_measure, leftover_chord)
-            leftover_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).leftover_chord
+            leftover_chord = current_measure.get_voice(staff_number=staff_number,
+                                                       voice_number=voice_number).leftover_chord
 
     def add_measure(self, time: Optional[Union[Time, Iterator]] = None, number: Optional[int] = None) -> Measure:
         """

@@ -55,7 +55,7 @@
           <sign>G</sign>
           <line>2</line>
         </clef>
-        <clef>
+        <clef number="2">
           <sign>G</sign>
           <line>2</line>
         </clef>

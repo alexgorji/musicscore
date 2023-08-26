@@ -188,11 +188,11 @@ class TestBeatSplitChord(TestCase):
             else:
                 assert beat.get_children() == []
                 assert beat.is_filled
-        assert split_children[0]._ties == ['start']
+        assert split_children[0].midis[0].is_tied_to_next
         assert v.leftover_chord.quarter_duration == 2
         assert not v.leftover_chord.split
         assert v.leftover_chord.midis[0].value == 61
-        assert v.leftover_chord._ties == ['stop']
+        assert v.leftover_chord.midis[0].is_tied_to_previous
 
     def test_beat_add_child_1_3_no_split(self):
         v = create_voice()

@@ -349,39 +349,6 @@ class TestTreeChord(ChordTestCase):
         for note, expected in zip(chord.notes, [expected_1, expected_2, expected_3]):
             assert note.to_string() == expected
 
-    def test_split_copy(self):
-        ch = Chord(midis=[Midi(61, accidental=Accidental(mode='sharp'))], quarter_duration=2, offset=0.5)
-        copied = split_copy(ch)
-        assert ch.midis != copied.midis
-        assert ch.midis[0].value == copied.midis[0].value
-        assert ch.midis[0].accidental != copied.midis[0].accidental
-        assert ch.midis[0].accidental.mode == copied.midis[0].accidental.mode
-        copied.midis[0].accidental.show = False
-        assert ch.midis[0].accidental.show is None
-        assert copied.midis[0].accidental.show is False
-
-    def test_tied_split_copy(self):
-        ch = Chord(midis=61, quarter_duration=2)
-        ch.add_tie('start')
-        copied = split_copy(ch)
-        for m in copied.midis:
-            assert m._ties == {'start'}
-
-    def test_split_quarter_durations(self):
-        ch = Chord(midis=60, quarter_duration=4)
-        copied = split_copy(ch)
-        assert id(ch.quarter_duration) != id(copied.quarter_duration)
-        ch.quarter_duration = 2
-        assert copied.quarter_duration == 4
-        assert ch.quarter_duration == 2
-
-        ch = Chord(midis=60, quarter_duration=5)
-        beats = [Beat(1), Beat(1), Beat(1), Beat(1)]
-        quarter_durations = ch.quarter_duration.get_beatwise_sections(beats=beats)
-        ch.quarter_duration = quarter_durations[0][0]
-        copied = split_copy(ch, quarter_durations[1])
-        assert [ch.quarter_duration, copied.quarter_duration] == [4, 1]
-
     def test_group_chords(self):
         chords = [Chord(60, qd) for qd in [1 / 6, 1 / 6, 1 / 6, 1 / 10, 3 / 10, 1 / 10]]
         with self.assertRaises(ValueError):
@@ -538,7 +505,6 @@ class TestTreeChord(ChordTestCase):
         assert [id(midi) for midi in copied.midis] != [id(midi) for midi in chord.midis]
         assert chord.quarter_duration.value == copied.quarter_duration.value
         assert id(chord.quarter_duration) != id(copied.quarter_duration)
-        assert chord._ties == copied._ties
         chord._parent = self.mock_beat
         chord.final_updates()
         with self.assertRaises(DeepCopyException):
@@ -591,7 +557,7 @@ class TestTies(ChordTestCase):
     def test_split_tied_copy(self):
         ch = Chord(midis=60, quarter_duration=1)
         copied = split_copy(ch)
-        assert ch._ties == copied._ties == []
+        assert ch.midis[0]._ties == copied.midis[0]._ties == set()
 
     def test_tie_one_note(self):
         ch1 = Chord(midis=[60, 63])
@@ -642,3 +608,52 @@ class TestTies(ChordTestCase):
         assert [n.is_tied for n in ch1.notes] == [True, True]
         assert [n.is_tied for n in ch2.notes] == [False, False]
         assert [n.is_tied_to_previous for n in ch2.notes] == [False, True]
+
+    def test_chord_all_midis_tied_to_next_or_previous(self):
+        ch = Chord([60, 61, 62])
+        for m in ch.midis:
+            m.add_tie('start')
+        assert ch.all_midis_are_tied_to_next
+        ch.midis[1].remove_tie('start')
+        assert not ch.all_midis_are_tied_to_next
+        ch.midis[0].add_tie('stop')
+        assert not ch.all_midis_are_tied_to_previous
+        for m in ch.midis:
+            m.add_tie('stop')
+        assert ch.all_midis_are_tied_to_previous
+
+
+class TestSplit(ChordTestCase):
+    def test_split_copy(self):
+        ch = Chord(midis=[Midi(61, accidental=Accidental(mode='sharp'))], quarter_duration=2, offset=0.5)
+        copied = split_copy(ch)
+        assert ch.midis != copied.midis
+        assert ch.midis[0].value == copied.midis[0].value
+        assert ch.midis[0].accidental != copied.midis[0].accidental
+        assert ch.midis[0].accidental.mode == copied.midis[0].accidental.mode
+        copied.midis[0].accidental.show = False
+        assert ch.midis[0].accidental.show is None
+        assert copied.midis[0].accidental.show is False
+
+    def test_tied_split_copy(self):
+        ch = Chord(midis=61, quarter_duration=2)
+        ch.add_tie('start')
+        copied = split_copy(ch)
+        for m in copied.midis:
+            assert m._ties == {'start'}
+
+    def test_split_quarter_durations(self):
+        ch = Chord(midis=60, quarter_duration=4)
+        copied = split_copy(ch)
+        assert id(ch.quarter_duration) != id(copied.quarter_duration)
+        ch.quarter_duration = 2
+        assert copied.quarter_duration == 4
+        assert ch.quarter_duration == 2
+
+        ch = Chord(midis=60, quarter_duration=5)
+        beats = [Beat(1), Beat(1), Beat(1), Beat(1)]
+        quarter_durations = ch.quarter_duration.get_beatwise_sections(beats=beats)
+        ch.quarter_duration = quarter_durations[0][0]
+        copied = split_copy(ch, quarter_durations[1])
+        assert [ch.quarter_duration, copied.quarter_duration] == [4, 1]
+

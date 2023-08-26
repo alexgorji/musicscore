@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, skip
 
 from musicxml.xmlelement.xmlelement import *
 from quicktions import Fraction
@@ -394,6 +394,19 @@ class TestMeasure(TestCase):
 
         assert m.xml_direction.to_string() == expected
 
+    def test_add_long_chord_to_measure(self):
+        part = Part(id='part-1')
+        measure = part.add_measure(time=Time(4, 4))
+        measure.add_chord(Chord(midis=60, quarter_duration=5))
+        assert len(part.get_children()) == 2
+        [ch1, ch2] = part.get_chords()
+        assert ch1.quarter_duration == 4
+        assert ch2.quarter_duration == 1
+        assert not ch1.all_midis_are_tied_to_previous
+        assert ch1.all_midis_are_tied_to_next
+        assert ch2.all_midis_are_tied_to_previous
+        assert not ch2.all_midis_are_tied_to_next
+
 
 class TestUpdateAccidentals(IdTestCase):
     def test_update_accidentals_simple(self):
@@ -464,6 +477,10 @@ class TestUpdateAccidentals(IdTestCase):
         assert cl1.xml_line.value_ == 2
         assert cl2.xml_sign.value_ == 'F'
         assert cl2.xml_line.value_ == 4
+
+    @skip
+    def test_update_chord_accidentals(self):
+        self.fail()
 
 
 class TestMeasureAttributes(TestCase):
@@ -571,7 +588,6 @@ class TestMeasureAttributes(TestCase):
         assert m.get_staff(1).clef.number is None
         assert m.get_staff(1).clef == bass_clef
 
-
         m.add_staff()
         assert m.get_staff(1).clef.number == 1
         assert m.get_staff(2).clef.number == 2
@@ -584,7 +600,6 @@ class TestMeasureAttributes(TestCase):
         m.add_child(Staff(number=3, clef=treble_clef))
         assert m.get_staff(3).clef.number == 3
         assert m.get_staff(3).clef == treble_clef
-
 
     def test_measure_false_show_keys(self):
         expected = """<measure number="1">

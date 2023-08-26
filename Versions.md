@@ -62,6 +62,7 @@ Add `musictree.testing` to `musictree` package
 ``Chord.add_midi(), Chord._sort_midis()`` added
 ``Chord.get_voice_number()`` and ``Chord.get_staff_number()`` return None if no ``Voice`` or ``Staff`` ancestor exist
 ``Chord.__deepcopy__()`` added. Only midi and quarter_duration are deepcopied. _ties are copied.
+``Chord.all_midis_are_tied_to_next`` and ``Chord.all_midis_are_tied_to_previous`` added
 ``Score`` Inherited methode ``Score.write`` will throw an Exception (.export_xml should be used instead)``
 ``Clef`` argument default and property _default added (this will be True if Measure._update_default_clefs() set the clef, otherwise it will be False)
 ``Staff`` default clef argument is changed to None. If no clef is set, it will automatically be set to clef of staff in previous measure. If clef is changed the new clef will have the same number as the old one.

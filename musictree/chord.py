@@ -50,12 +50,11 @@ class Chord(MusicTree, QuarterDurationMixin):
     :param quarter_duration: int, float, Fraction, QuarterDuration for duration counted in quarters (crotchets). 0 for grace note (or
     chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'ties'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
         self._midis = None
-        self._ties = []
         self._xml_direction_types = {'above': [], 'below': []}
 
         self._xml_directions = []
@@ -278,6 +277,20 @@ class Chord(MusicTree, QuarterDurationMixin):
         for n in self.notes[1:]:
             if not n.xml_object.xml_chord:
                 n.xml_object.add_child(XMLChord())
+
+    @property
+    def all_midis_are_tied_to_next(self):
+        if set([m.is_tied_to_next for m in self.midis]) == {True}:
+            return True
+        else:
+            return False
+
+    @property
+    def all_midis_are_tied_to_previous(self):
+        if set([m.is_tied_to_previous for m in self.midis]) == {True}:
+            return True
+        else:
+            return False
 
     def final_updates(self):
         """
@@ -522,9 +535,7 @@ class Chord(MusicTree, QuarterDurationMixin):
 
         for midi in self.midis:
             midi.add_tie(type_=type_)
-        if type_ not in self._ties:
-            self._ties.append(type_)
-            self._update_ties()
+        self._update_ties()
 
     def add_lyric(self, text: Union[Any, XMLLyric]):
         """
@@ -651,6 +662,7 @@ class Chord(MusicTree, QuarterDurationMixin):
             copied = split_copy(self, qd)
             copied.split = True
             voice.get_current_beat().add_child(copied)
+
             current_chord.add_tie('start')
             copied.add_tie('stop')
             for midi in copied.midis:
@@ -658,6 +670,7 @@ class Chord(MusicTree, QuarterDurationMixin):
             current_chord = copied
             output.append(current_chord)
         if quarter_durations[1]:
+            # left over
             leftover_chord = split_copy(self, quarter_durations[1])
             current_chord.add_tie('start')
             leftover_chord.add_tie('stop')
@@ -718,7 +731,6 @@ class Chord(MusicTree, QuarterDurationMixin):
             raise DeepCopyException("After setting notes, Midi cannot be deepcopied anymore. ")
         copied = self.__class__(midis=[midi.__deepcopy__() for midi in self.midis],
                                 quarter_duration=self.quarter_duration.__deepcopy__())
-        copied._ties = self._ties
         return copied
 
 
@@ -733,7 +745,7 @@ def split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fracti
     """
     if new_quarter_duration is None:
         new_quarter_duration = chord.quarter_duration.__copy__()
-    new_chord = Chord(midis=[m.__deepcopy__() for m in chord.midis], quarter_duration=new_quarter_duration)
+    new_chord = Chord(midis=[m.copy_for_split() for m in chord.midis], quarter_duration=new_quarter_duration)
     return new_chord
 
 

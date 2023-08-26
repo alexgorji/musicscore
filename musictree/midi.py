@@ -240,6 +240,12 @@ class Midi(MusicTree):
         copied._ties = copy.copy(self._ties)
         return copied
 
+    def copy_for_split(self):
+        copied_accidental = copy.copy(self.accidental)
+        copied = self.__class__(value=self.value, accidental=copied_accidental)
+        # copied._ties = copy.copy(self._ties)
+        return copied
+
 
 class MidiNote(Midi):
     """
