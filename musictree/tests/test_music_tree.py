@@ -28,7 +28,7 @@ class TestMusicTree(IdTestCase):
         b = Beat()
         c = Chord(60, 1)
         mi = c.add_midi(Midi(60))
-        n = Note(parent_chord=c, midi=mi)
+        n = Note(midi=mi)
         acc = Accidental()
         assert p == s.add_child(p)
         assert m == p.add_child(m)

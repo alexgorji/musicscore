@@ -272,7 +272,7 @@ class Chord(MusicTree, QuarterDurationMixin):
             try:
                 self.get_children()[index].midi = midi
             except IndexError:
-                self.add_child(Note(parent_chord=self, midi=midi, **self._note_attributes))
+                self.add_child(Note(midi=midi, **self._note_attributes))
         self._notes_are_set = True
 
     def _update_xml_chord(self):
@@ -327,7 +327,7 @@ class Chord(MusicTree, QuarterDurationMixin):
                 if index < len(self.notes):
                     self.notes[index].midi = m
                 else:
-                    new_note = Note(parent_chord=self, midi=m, quarter_duration=self.quarter_duration)
+                    new_note = Note(midi=m, quarter_duration=self.quarter_duration)
                     self.add_child(new_note)
 
     def _update_ties(self):
@@ -578,7 +578,10 @@ class Chord(MusicTree, QuarterDurationMixin):
         return self.up.up.up.up
 
     def get_staff_number(self):
-        return self.up.up.up.number
+        try:
+            return self.up.up.up.number
+        except AttributeError:
+            return None
 
     def get_voice(self):
         raise TypeError
@@ -588,7 +591,10 @@ class Chord(MusicTree, QuarterDurationMixin):
         :return: parent voice number
         :rtype: positive int
         """
-        return self.up.up.number
+        try:
+            return self.up.up.number
+        except AttributeError:
+            return None
 
     def set_possible_subdivisions(self):
         raise TypeError

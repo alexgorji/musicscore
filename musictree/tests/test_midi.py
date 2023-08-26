@@ -79,7 +79,7 @@ class TestMidi(TestCase):
         m = Midi(70)
         m._set_parent_chord(mock_chord)
         assert m.parent_note is None
-        n = Note(parent_chord=mock_chord, midi=m)
+        n = Note(midi=m)
         assert m.parent_note == n
         with self.assertRaises(TypeError):
             m.parent_note = Measure()
@@ -140,7 +140,7 @@ class TestMidi(TestCase):
         mock_chord.get_staff_number.return_value = None
         m = Midi(70)
         m._set_parent_chord(mock_chord)
-        n = Note(parent_chord=mock_chord, midi=m)
+        n = Note(midi=m)
         assert m.up == n
 
     def test_midi_tie(self):
