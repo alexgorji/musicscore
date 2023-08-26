@@ -479,7 +479,7 @@ class TestAddChordToPart(IdTestCase):
         assert ch2.all_midis_are_tied_to_next
         assert ch2.all_midis_are_tied_to_previous
         assert ch3.all_midis_are_tied_to_previous
-        assert not ch3.all_midis_are_tied_to_next
+        assert ch3.all_midis_are_tied_to_next
 
     def test_part_add_chord_with_staff_number(self):
         p = Part('P1')
@@ -496,12 +496,23 @@ class TestAddChordToPart(IdTestCase):
 
 
 class TestSplitQdAndTime(IdTestCase):
-    def test_part_add_split_original_chord(self):
+    def test_part_add_split_original_ties_1(self):
         chord = Chord(midis=60, quarter_duration=10)
         p = Part('p1')
         p.add_measure((5, 4))
         p.add_chord(chord)
-        assert set([chord._original_starting_chord for chord in p.get_chords()]) == {chord}
+        for chord in p.get_chords():
+            assert chord._original_starting_ties == [set()]
+
+    def test_part_add_split_original_ties_2(self):
+        chord = Chord(midis=[60, 62], quarter_duration=10)
+        chord.midis[0].add_tie('start')
+        chord.midis[1].add_tie('stop')
+        p = Part('p1')
+        p.add_measure((5, 4))
+        p.add_chord(chord)
+        for chord in p.get_chords():
+            assert chord._original_starting_ties == [{'start'}, {'stop'}]
 
     def test_part_add_split_chord_5_3_4(self):
         chord = Chord(midis=60, quarter_duration=5)

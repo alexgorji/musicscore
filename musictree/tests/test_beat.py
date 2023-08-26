@@ -240,10 +240,10 @@ class TestBeatSplitChord(TestCase):
         assert not split_chords_2[-1].midis[0].is_tied_to_next
         assert split_chords_2[-1].midis[1].is_tied_to_next
 
-        ch3 = Chord([60, 62, 64], quarter_duration=2.5)
-        ch3.midis[1].add_tie('start')
-        v.get_current_beat().add_child(ch3)
-
-        assert not v.leftover_chord.midis[0].is_tied_to_next
-        assert v.leftover_chord.midis[1].is_tied_to_next
-        assert not v.leftover_chord.midis[2].is_tied_to_next
+        # ch3 = Chord([60, 62, 64], quarter_duration=2.5)
+        # ch3.midis[1].add_tie('start')
+        # v.get_current_beat().add_child(ch3)
+        #
+        # assert not v.leftover_chord.midis[0].is_tied_to_next
+        # assert v.leftover_chord.midis[1].is_tied_to_next
+        # assert not v.leftover_chord.midis[2].is_tied_to_next

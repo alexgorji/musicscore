@@ -1,3 +1,4 @@
+import copy
 from fractions import Fraction
 from typing import Union, List, Optional, Any, Dict
 
@@ -74,8 +75,11 @@ class Chord(MusicTree, QuarterDurationMixin):
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
         self.split = False
-        self._original_starting_chord = None
+        self._original_starting_ties = None
         self._final_updated = False
+
+    def _set_original_starting_ties(self, original_chord):
+        self._original_starting_ties = [copy.copy(midi._ties) for midi in original_chord.midis]
 
     def _set_midis(self, midis):
         if isinstance(midis, str):
@@ -656,8 +660,9 @@ class Chord(MusicTree, QuarterDurationMixin):
             offset=beats[0].filled_quarter_duration, beats=beats)
         self.quarter_duration = quarter_durations[0][0]
         self.split = True
-        if not self._original_starting_chord:
-            self._original_starting_chord = self
+
+        if self._original_starting_ties is None:
+            self._set_original_starting_ties(self)
         voice.get_current_beat().add_child(self)
         current_chord = self
         output = [self]
@@ -682,9 +687,9 @@ class Chord(MusicTree, QuarterDurationMixin):
         else:
             leftover_chord = None
         self.up.up.leftover_chord = leftover_chord
-        if not leftover_chord and output[-1]._original_starting_chord:
-            for midi1, midi2 in zip(output[-1]._original_starting_chord.midis, output[-1].midis):
-                if midi1.is_tied_to_next:
+        if not leftover_chord and output[-1]._original_starting_ties:
+            for ties, midi2 in zip(output[-1]._original_starting_ties, output[-1].midis):
+                if 'start' in ties:
                     midi2.add_tie('start')
         return output
 
@@ -752,7 +757,7 @@ def split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fracti
     if new_quarter_duration is None:
         new_quarter_duration = chord.quarter_duration.__copy__()
     new_chord = Chord(midis=[m.copy_for_split() for m in chord.midis], quarter_duration=new_quarter_duration)
-    new_chord._original_starting_chord = chord._original_starting_chord
+    new_chord._original_starting_ties = chord._original_starting_ties
     return new_chord
 
 

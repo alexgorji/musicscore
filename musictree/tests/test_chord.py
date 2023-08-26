@@ -624,6 +624,16 @@ class TestTies(ChordTestCase):
 
 
 class TestSplit(ChordTestCase):
+
+    def test_set_original_starting_ties(self):
+        ch = Chord(midis=[60, 61], quarter_duration=1)
+        ch._set_original_starting_ties(ch)
+        copied = split_copy(ch)
+        assert copied._original_starting_ties == [set(), set()]
+        ch.midis[0].add_tie('start')
+        ch._set_original_starting_ties(ch)
+        assert copied._original_starting_ties == [set(), set()]
+
     def test_split_copy(self):
         ch = Chord(midis=[Midi(61, accidental=Accidental(mode='sharp'))], quarter_duration=2, offset=0.5)
         copied = split_copy(ch)
@@ -640,7 +650,7 @@ class TestSplit(ChordTestCase):
         ch.add_tie('start')
         copied = split_copy(ch)
         for m in copied.midis:
-            assert m._ties == {'start'}
+            assert m._ties == set()
 
     def test_split_quarter_durations(self):
         ch = Chord(midis=60, quarter_duration=4)
