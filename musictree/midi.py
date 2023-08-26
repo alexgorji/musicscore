@@ -86,6 +86,20 @@ class Midi(MusicTree):
             self._accidental.parent_midi = self
 
     @property
+    def is_tied_to_next(self):
+        if 'start' in self._ties:
+            return True
+        else:
+            return False
+
+    @property
+    def is_tied_to_previous(self):
+        if 'stop' in self._ties:
+            return True
+        else:
+            return False
+
+    @property
     def octave(self):
         return int(self.value / 12) - 1
 

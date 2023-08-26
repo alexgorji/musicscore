@@ -52,7 +52,6 @@ class Chord(MusicTree, QuarterDurationMixin):
     """
     _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'ties'}
 
-
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
         self._midis = None
@@ -334,7 +333,6 @@ class Chord(MusicTree, QuarterDurationMixin):
         # update ties of already created notes
         for note in self.notes:
             note._update_ties()
-
 
     @property
     def is_rest(self) -> bool:

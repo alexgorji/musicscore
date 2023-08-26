@@ -159,3 +159,14 @@ class TestMidi(TestCase):
         assert m3._ties == m2._ties
         m3.add_tie('start')
         assert m3._ties != m2._ties
+
+    def test_is_tied_to_next_and_previous(self):
+        m1 = Midi(60)
+        m2 = Midi(60)
+        m1.add_tie('start')
+        m2.add_tie('stop')
+        m2.add_tie('start')
+        assert not m1.is_tied_to_previous
+        assert m1.is_tied_to_next
+        assert m2.is_tied_to_previous
+        assert m2.is_tied_to_next
