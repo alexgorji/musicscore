@@ -272,7 +272,7 @@ class Chord(MusicTree, QuarterDurationMixin):
             try:
                 self.get_children()[index].midi = midi
             except IndexError:
-                self.add_child(Note(parent_chord=self, midi=midi, **self._note_attributes))
+                self.add_child(Note(midi=midi, **self._note_attributes))
         self._notes_are_set = True
 
     def _update_xml_chord(self):
@@ -327,7 +327,7 @@ class Chord(MusicTree, QuarterDurationMixin):
                 if index < len(self.notes):
                     self.notes[index].midi = m
                 else:
-                    new_note = Note(parent_chord=self, midi=m, quarter_duration=self.quarter_duration)
+                    new_note = Note(midi=m, quarter_duration=self.quarter_duration)
                     self.add_child(new_note)
 
     def _update_tie(self):
