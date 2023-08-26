@@ -556,6 +556,6 @@ class TestNoteTie(NoteTestCase):
         assert n.is_tied_to_previous
         n.midi.remove_tie('start')
         n.remove_tie('start')
-        # assert not n.is_tied_to_next
-        # n.midi.remove_tie('stop')
-        # assert not n.is_tied_to_previous
+        assert not n.is_tied_to_next
+        n.midi.remove_tie('stop')
+        assert not n.is_tied_to_previous
