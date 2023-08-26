@@ -656,4 +656,3 @@ class TestSplit(ChordTestCase):
         ch.quarter_duration = quarter_durations[0][0]
         copied = split_copy(ch, quarter_durations[1])
         assert [ch.quarter_duration, copied.quarter_duration] == [4, 1]
-
