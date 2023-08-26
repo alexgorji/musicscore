@@ -334,7 +334,10 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         else:
             raise NotImplementedError
         if tie_to_be_removed:
-            self.midi._ties.remove(tie_to_be_removed.type)
+            try:
+                self.midi._ties.remove(tie_to_be_removed.type)
+            except KeyError:
+                pass
             tied_to_be_removed = \
                 [t for t in self.xml_notations.find_children('XMLTied') if t.type == tie_to_be_removed.type][0]
             tie_to_be_removed.up.remove(tie_to_be_removed)
@@ -342,6 +345,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             xml_notations.remove(tied_to_be_removed)
             if not xml_notations.get_children():
                 xml_notations.up.remove(xml_notations)
+
 
     def start_tie(self) -> None:
         """

@@ -279,7 +279,6 @@ class TestPart(IdTestCase):
         assert ch2._ties == ['stop', 'start']
         assert ch3._ties == ['stop']
 
-    @skip
     def test_split_tied_chord(self):
         chord = Chord(midis=60, quarter_duration=5)
         chord.add_tie('start')

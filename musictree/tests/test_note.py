@@ -547,7 +547,6 @@ class TestNoteTie(NoteTestCase):
         n = ch.notes[0]
         assert n.up == n.parent_chord
 
-    @skip
     def test_note_update_ties(self):
         n = Note(midi=self.set_parent_chord(60), quarter_duration=1)
         n.midi.add_tie('start')

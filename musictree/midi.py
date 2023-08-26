@@ -168,12 +168,14 @@ class Midi(MusicTree):
             self.parent_note._update_ties()
 
     def remove_tie(self, type_):
+        removed = False
         try:
             self._ties.remove(type_)
-            if self.parent_note:
-                self.parent_note._update_ties()
+            removed = True
         except KeyError:
             pass
+        if removed and self.parent_note:
+            self.parent_note._update_ties()
 
     def get_children(self) -> List[Accidental]:
         """

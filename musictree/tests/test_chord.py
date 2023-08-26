@@ -597,13 +597,13 @@ class TestTies(ChordTestCase):
         assert [n.is_tied for n in ch1.notes] == [True, False]
         assert [n.is_tied_to_previous for n in ch2.notes] == [True, False]
 
-    @skip
     def test_untie_one_note(self):
         ch = Chord(midis=[60, 61])
         ch.add_tie('start')
         ch._parent = self.mock_beat
         ch.final_updates()
         assert [n.is_tied for n in ch.notes] == [True, True]
+        print(ch.notes)
         ch.midis[0].remove_tie('start')
         assert [n.is_tied for n in ch.notes] == [False, True]
 
