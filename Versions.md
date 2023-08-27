@@ -86,7 +86,10 @@ if needed.
 clef, otherwise it will be False)
 ``Staff`` default clef argument is changed to None. If no clef is set, it will automatically be set to clef of staff in
 previous measure. If clef is changed the new clef will have the same number as the old one.
-Bug Fix: adding staff to a measure will only set default clefs automatically if the new or old staves does not have a
-from user manually set clef. It means that the manually set clefs won't be overwritten any more.
-``add_chord()`` has been removed from ``Voice``, ``Measure`` and ``Beat``. Use ``Part.add_chord()`` instead!``
+``add_chord()`` has been removed from ``Voice``, ``Measure`` and ``Beat``. Use ``Part.add_chord()`` instead!
+
+``Bug Fix``: adding staff to a measure will only set default clefs automatically if the new or old staves does not have
+a from user manually set clef. It means that the manually set clefs won't be overwritten any more.
+``Bug Fix``: a Chord with tied notes will keep its tie after splitting
+
 

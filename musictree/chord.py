@@ -688,9 +688,13 @@ class Chord(MusicTree, QuarterDurationMixin):
             leftover_chord = None
         self.up.up.leftover_chord = leftover_chord
         if not leftover_chord and output[-1]._original_starting_ties:
-            for ties, midi2 in zip(output[-1]._original_starting_ties, output[-1].midis):
+            for ties, midi in zip(output[-1]._original_starting_ties, output[-1].midis):
                 if 'start' in ties:
-                    midi2.add_tie('start')
+                    midi.add_tie('start')
+        if leftover_chord and leftover_chord._original_starting_ties:
+            for ties, midi in zip(leftover_chord._original_starting_ties, leftover_chord.midis):
+                if 'start' in ties:
+                    midi.add_tie('start')
         return output
 
     def to_rest(self) -> None:

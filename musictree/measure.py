@@ -90,7 +90,7 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
                             if step in steps_with_accidentals:
                                 midi.accidental.show = True
                                 steps_with_accidentals.remove(step)
-                            elif chord == relevant_chords_not_tied[0] and previous_staff and step in \
+                            elif relevant_chords_not_tied and chord == relevant_chords_not_tied[0] and previous_staff and step in \
                                     previous_staff.get_last_pitch_steps_with_accidentals():
                                 midi.accidental.show = True
                             else:

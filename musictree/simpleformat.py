@@ -1,6 +1,7 @@
-from musictree import Midi, Chord
 import copy
 
+from musictree import Midi, Chord
+from musictree.exceptions import SimpleFormatException
 from util import dToX, xToD
 
 
@@ -191,7 +192,7 @@ class SimpleFormat(object):
             chord.quarter_duration *= factor
 
     # @staticmethod
-    # def sum(*simple_formats, no_doubles=False):
+    # def sum(*simple_formats, no_duplicates=False):
     #     """
     #     A static method for combining two SimpleFormats.
     #     """
@@ -223,7 +224,7 @@ class SimpleFormat(object):
     #                     all_positioned_chords[other_position] = chord
     #                 elif not other_chord.is_rest:
     #                     for midi in other_chord.midis:
-    #                         if not no_doubles or midi.value not in [m.value for m in chord.midis]:
+    #                         if not no_duplicates or midi.value not in [m.value for m in chord.midis]:
     #                             chord.add_midi(midi)
     #                 else:
     #                     pass
@@ -236,8 +237,39 @@ class SimpleFormat(object):
     #         output.add_chord(chord)
     #     return output
     @staticmethod
-    def sum(*simple_formats, no_doubles=False):
-        sum_chords = []
+    def sum(*simple_formats, no_duplicates=False):
+        for midi in [midi for simple_format in simple_formats for chord in simple_format.chords for midi in
+                     chord.midis]:
+            if midi._ties != set():
+                raise SimpleFormatException('SimpleFormat.sum() cannot be used on simple_formats containing tied notes')
+
+        def extract_chord_midis(i):
+            def remove_duplicates(new_midis):
+                return new_midis
+
+            chords = ordered_chords[i]
+            output = []
+            for chord in chords:
+                new_ms = [m.__deepcopy__() for m in chord.midis if m.value != 0]
+                try:
+                    if chord in ordered_chords[i + 1]:
+                        for m in new_ms:
+                            m.add_tie('start')
+                except IndexError:
+                    pass
+                try:
+                    if chord in ordered_chords[i - 1]:
+                        for m in new_ms:
+                            m.add_tie('stop')
+                except IndexError:
+                    pass
+                output.extend(new_ms)
+            if no_duplicates:
+                raise NotImplementedError('no_duplicates is not implemented yet.')
+                output = remove_doubles(output)
+            return output
+
+        sf = SimpleFormat()
         combined_positions_and_chords = {}
         for simple_format in simple_formats:
             for qp in simple_format.get_quarter_positions():
@@ -250,15 +282,10 @@ class SimpleFormat(object):
         sum_positions = sorted(combined_positions_and_chords.keys())
         sum_quarter_durations = xToD(sum_positions)
         ordered_chords = [combined_positions_and_chords[position] for position in sum_positions[:-1]]
-        for index in range(len(sum_positions)):
-            chord = Chord()
-            pass
-
-        # for key in sorted(combined_positions_and_chords.keys()):
-        #     if key == 0:
-        #         chord = Chord()
-        #
-        # print(combined_positions_and_midi_values)
+        for index, qd in enumerate(sum_quarter_durations):
+            midis = extract_chord_midis(index)
+            sf.add_chord(Chord(midis, qd))
+        return sf
 
     def retrograde(self):
         self._chords = list(reversed(self.chords))

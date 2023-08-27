@@ -4,10 +4,20 @@ from pathlib import Path
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
+import xml.etree.ElementTree as ET
+from xml.etree import ElementTree
+
+import xmltodict
+from deepdiff import DeepDiff
+
 from musicxml.xmlelement.xmlelement import XMLBendAlter, XMLHoleClosed, XMLArrowDirection, XMLHarmonClosed
 from quicktions import Fraction
 
 from musictree.part import Id
+
+
+class XMLsDifferException(Exception):
+    pass
 
 
 def check_notes(notes, midi_values, quarter_durations):
@@ -230,3 +240,15 @@ def _find_key(dict_, key, output=None):
 
 def find_key(dict_, key):
     return _find_key(dict_, key)
+
+
+def get_xml_elements_diff(el1, el2):
+    return DeepDiff(xmltodict.parse(ET.tostring(el1)), xmltodict.parse(ET.tostring(el2)))
+
+
+def get_xml_diff_part(expected, path):
+    el1 = ET.parse(path).getroot().find("part[@id='part-1']")
+    el2 = ET.parse(expected).getroot().find("part[@id='part-1']")
+    diff = get_xml_elements_diff(el1=el1, el2=el2)
+    if diff:
+        raise XMLsDifferException(diff)

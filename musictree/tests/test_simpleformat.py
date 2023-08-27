@@ -1,13 +1,10 @@
 from pathlib import Path
-from pprint import pprint
 from unittest import skip
 
-import deepdiff
-import xmltodict
 from deepdiff import DeepDiff
 
-from musictree import Score, Midi, QuarterDuration, Chord, SimpleFormat
-from musictree.tests.util import IdTestCase, find_key
+from musictree import Score, Midi, QuarterDuration, Chord, SimpleFormat, BassClef, TrebleClef
+from musictree.tests.util import IdTestCase, get_xml_diff_part, get_xml_elements_diff, XMLsDifferException
 import xml.etree.ElementTree as ET
 
 
@@ -235,86 +232,56 @@ class TestSimpleFormat(IdTestCase):
 
     def test_sum_1(self):
         path = Path(__file__).stem + '_sum_1.xml'
+        expected = Path(__file__).stem + '_sum_1_expected.xml'
         sf1 = SimpleFormat(quarter_durations=[1, 2, 3], midis=[60, 61, 62])
         sf2 = SimpleFormat(quarter_durations=[3, 2, 1], midis=[63, 64, 65])
         sf = SimpleFormat.sum(sf1, sf2)
-        assert [[m.value for m in midi] for midi in sf.midis] == [[60, 63], [61], [62, 64], [65]]
-        assert sf.get_quarter_durations() == [1, 2, 2, 1]
         self.generate_xml_file(sf1, sf2, sf, path=path)
+        get_xml_diff_part(expected, path)
 
     def test_sum_2(self):
         path = Path(__file__).stem + '_sum_2.xml'
+        expected = Path(__file__).stem + '_sum_2_expected.xml'
         sf1 = SimpleFormat(quarter_durations=[1, 2, 3], midis=[60, 61, 62])
         sf2 = SimpleFormat(quarter_durations=[1, 3, 2], midis=[(60, 65), 67, (50, 54)])
         sf = SimpleFormat.sum(sf1, sf2)
-        # self.generate_xml_file(sf1, sf2, sf, path=path)
+        self.generate_xml_file(sf1, sf2, sf, path=path)
+        get_xml_diff_part(expected, path)
 
     def test_sum_3(self):
-        xml_file = Path(__file__).stem + '_sum_2.xml'
-        score = Score()
-        sf1 = SimpleFormat(quarter_durations=[1, 2, 3], midis=[60, 61, 62])
-        sf2 = SimpleFormat(quarter_durations=[1, 3, 2], midis=[(60, 65), 67, (50, 54)])
+        path = Path(__file__).stem + '_sum_3.xml'
+        expected = Path(__file__).stem + '_sum_3_expected.xml'
+        sf1 = SimpleFormat(quarter_durations=[1, 2, 3, 6], midis=[60, 61, 62, 0])
+        sf2 = SimpleFormat(quarter_durations=[1, 3, 2, 6], midis=[(60, 65), 67, (50, 54), 0])
         sf3 = SimpleFormat(quarter_durations=[3, 4, 5], midis=[69, 68, 67])
         sf = SimpleFormat.sum(sf1, sf2, sf3)
+        part = self.score.add_part(id_='part-1')
+        for index, simpleformat in enumerate([sf1, sf2, sf3, sf]):
+            for chord in simpleformat.chords:
+                part.add_chord(chord, staff_number=index + 1)
+        part.get_staff(1, 3).clef = TrebleClef()
+        part.get_staff(1, 4).clef = TrebleClef()
+        self.score.export_xml(path)
+        get_xml_diff_part(expected, path)
 
     def test_complex_sum(self):
-        xml_file = Path(__file__).stem + '_add_to_score.xml'
-        sf_1 = SimpleFormat(quarter_durations=[1, 2, 3, 2, 1], midis=[60, (60, 62), (64, 66, 71), 72, 73])
-        part = self.score.add_part(id_='part1')
-        for chord in sf_1.chords:
-            part.add_chord(chord=chord, staff_number=1)
-        sf_2 = SimpleFormat(quarter_durations=[0.5, 1, 1.5, 2, 3], midis=[0, 69, (72, 73), (58, 60, 65, 71), 80])
-        for chord in sf_2.chords:
-            part.add_chord(chord=chord, staff_number=2)
-        sf_3 = SimpleFormat.sum(sf_1, sf_2)
-        for chord in sf_3.chords:
-            part.add_chord(chord=chord, staff_number=3)
-        self.score.export_xml(xml_file)
+        path = Path(__file__).stem + '_complex_sum.xml'
+        expected = Path(__file__).stem + '_complex_sum_expected.xml'
+        sf1 = SimpleFormat(quarter_durations=[1, 2, 3, 2, 1], midis=[60, (60, 62), (64, 66, 71), 72, 73])
+        sf2 = SimpleFormat(quarter_durations=[0.5, 1, 1.5, 2, 3, 1], midis=[0, 69, (72, 73), (58, 60, 65, 71), 80, 0])
+        sf = SimpleFormat.sum(sf1, sf2)
+        self.generate_xml_file(sf1, sf2, sf, path=path)
+        get_xml_diff_part(expected, path)
+
+    def test_sum_of_tied_chords(self):
+        path = Path(__file__).stem + '_sum_of_tied_chords.xml'
+        expected = Path(__file__).stem + '_sum_of_tied_chords_expected.xml'
+        sf1 = SimpleFormat(quarter_durations=[1, 2, 3], midis=[[60, 63], [60, 61], 62])
+        sf2 = SimpleFormat(quarter_durations=[3, 2, 1], midis=[63, 64, 65])
         self.fail()
 
-    # def test_sum(self):
-    #     sf1 = SimpleFormat(quarter_durations=[1, 2, 3], midis=[60, 61, 62])
-    #     sf2 = SimpleFormat(quarter_durations=[1, 3, 2], midis=[(60, 65), 67, (50, 54)])
-    #     sf3 = SimpleFormat(quarter_durations=[3, 4, 5], midis=[69, 68, 67])
-    #     sf = SimpleFormat.sum(sf1, sf2, sf3)
-    # def test_complex_sum(self):
-    #     xml_file = Path(__file__).stem + '_add_to_score.xml'
-    #     sf_1 = SimpleFormat(quarter_durations=[1, 2, 3, 2, 1], midis=[60, (60, 62), (64, 66, 71), 72, 73])
-    #     part = self.score.add_part(id_='part1')
-    #     for chord in sf_1.chords:
-    #         part.add_chord(chord=chord, staff_number=1)
-    #     sf_2 = SimpleFormat(quarter_durations=[0.5, 1, 1.5, 2, 3], midis=[0, 69, (72, 73), (58, 60, 65, 71), 80])
-    #     for chord in sf_2.chords:
-    #         part.add_chord(chord=chord, staff_number=2)
-    #     sf_3 = SimpleFormat.sum(sf_1, sf_2)
-    #     for chord in sf_3.chords:
-    #         part.add_chord(chord=chord, staff_number=3)
-    #     self.score.export_xml(xml_file)
-    #
-    # def test_2(self):
-    #     xml_path = path + '_test_2.xml'
-    #     sf_1 = SimpleFormat(quarter_durations=[1, 2, 3, 2, 1], midis=[60, (60, 62), (64, 66, 71), 72, 73])
-    #     sf_1.to_stream_voice().add_to_score(self.score)
-    #     sf_2 = SimpleFormat(quarter_durations=[0.5, 1, 1.5, 2, 3], midis=[0, 69, (72, 73), (58, 60, 65, 71), 80])
-    #     sf_2.to_stream_voice().add_to_score(self.score, staff_number=2)
-    #     sf_3 = SimpleFormat.sum(sf_1, sf_2, no_doubles=True)
-    #     sf_3.to_stream_voice().add_to_score(self.score, staff_number=3)
-    #     self.score.write(xml_path)
-    #     self.assertCompareFiles(xml_path)
-    #
-    # def test_3(self):
-    #     xml_path = path + '_test_3.xml'
-    #     sf_1 = SimpleFormat(quarter_durations=[1, 2, 3, 2, 1], midis=[60, (60, 62), (64, 66, 71), 72, 73])
-    #     sf_2 = SimpleFormat(quarter_durations=[0.5, 1, 1.5, 2, 3], midis=[0, 69, (72, 73), (58, 60, 65, 71), 80])
-    #     sf_3 = SimpleFormat(quarter_durations=[1.5, 1.5, 1.5], midis=[(55, 58), 0, 57])
-    #
-    #     sfs = [sf_1, sf_2, sf_3]
-    #
-    #     for index, sf in enumerate(sfs):
-    #         sf.to_stream_voice().add_to_score(self.score, staff_number=index + 1)
-    #
-    #     sum_sf = SimpleFormat.sum(*sfs, no_doubles=True)
-    #     sum_sf.to_stream_voice().add_to_score(self.score, staff_number=len(sfs) + 1)
-    #
-    #     self.score.write(xml_path)
-    #     self.assertCompareFiles(xml_path)
+    def test_sum_without_duplicate(self):
+        self.fail()
+
+    def test_sum_different_simple_format_lengths_exception(self):
+        self.fail()

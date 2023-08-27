@@ -136,3 +136,7 @@ class AddChordException(MusicTreeException):
     def __init__(self):
         msg = f"Use Part._add_chord() instead!"
         super().__init__(msg)
+
+
+class SimpleFormatException(MusicTreeException):
+    pass

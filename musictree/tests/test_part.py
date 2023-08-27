@@ -4,7 +4,7 @@ from unittest import skip
 
 import xmltodict
 
-from musictree import Time
+from musictree import Time, SimpleFormat
 from musictree.chord import Chord
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError
 from musictree.key import Key
@@ -12,7 +12,7 @@ from musictree.measure import Measure
 from musictree.part import Part, ScorePart, Id
 from musictree.quarterduration import QuarterDuration
 from musictree.score import Score
-from musictree.tests.util import IdTestCase
+from musictree.tests.util import IdTestCase, get_xml_elements_diff, XMLsDifferException
 import xml.etree.ElementTree as ET
 
 
@@ -647,3 +647,48 @@ class TestSplitQdAndTime(IdTestCase):
         assert ch2.all_midis_are_tied_to_next
         assert ch3.all_midis_are_tied_to_previous
         assert not ch3.all_midis_are_tied_to_next
+
+    def test_add_chords_with_partially_tied_notes(self):
+        midis = [[60, 63], [61, 63], [62, 64], [62, 65]]
+        quarter_durations = [1, 2, 2, 1]
+        chords = [Chord(ms, qd) for ms, qd in zip(midis, quarter_durations)]
+        chords[0].midis[1].add_tie('start')
+        chords[1].midis[1].add_tie('stop')
+        chords[2].midis[0].add_tie('start')
+        chords[3].midis[0].add_tie('stop')
+        p = Part(id='part-1')
+        for chord in chords:
+            p.add_chord(chord)
+        all_chords = [ch1, ch2, ch3, ch4, ch5] = p.get_chords()
+        assert [[m.value for m in ch.midis] for ch in all_chords] == [[60, 63], [61, 63], [62, 64], [62, 64], [62, 65]]
+        assert [ch.quarter_duration for ch in all_chords] == [1, 2, 1, 1, 1]
+        path = Path(__file__).stem + '_add_chords_with_partially_tied_notes.xml'
+        score = Score()
+        score.add_child(p)
+        score.export_xml(path)
+        # assert ch1.midis[1].is_tied_to_next
+        # assert ch2.midis[1].is_tied_to_previous
+        # assert ch1.midis[1].is_tied_to_next
+        # assert ch2.midis[1].is_tied_to_previous
+
+    def test_add_chords_with_partially_tied_notes_simplified(self):
+        midis = [[62, 64], [62, 65]]
+        quarter_durations = [3, 1]
+        chords = [Chord(ms, qd) for ms, qd in zip(midis, quarter_durations)]
+        chords[0].midis[0].add_tie('start')
+        chords[1].midis[0].add_tie('stop')
+        p = Part('part-1')
+        p.add_measure(Time(2, 4))
+        for chord in chords:
+            p.add_chord(chord)
+        path = Path(__file__).stem + '_add_chords_with_partially_tied_notes_simplified.xml'
+        expected = Path(__file__).stem + '_add_chords_with_partially_tied_notes_simplified_expected.xml'
+        score = Score()
+        score.add_child(p)
+        score.export_xml(path)
+        el1 = ET.parse(path).getroot().find("part[@id='part-1']")
+        el2 = ET.parse(expected).getroot().find("part[@id='part-1']")
+        diff = get_xml_elements_diff(el1=el1, el2=el2)
+        if diff:
+            raise XMLsDifferException(diff)
+
