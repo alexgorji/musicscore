@@ -2,7 +2,7 @@ from typing import List, Optional, Union
 
 from musictree.clef import BassClef, TrebleClef
 from musictree.core import MusicTree
-from musictree.exceptions import AlreadyFinalUpdated
+from musictree.exceptions import AlreadyFinalUpdated, MeasureException, AddChordException
 from musictree.finalupdate_mixin import FinalUpdateMixin
 from musictree.key import Key
 from musictree.staff import Staff
@@ -29,6 +29,13 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
         self._key = Key()
         self.time = time
         self._set_attributes()
+
+    def _add_chord(self, chord, staff_number=None, voice_number=1):
+
+        voice = self.add_voice(staff_number=staff_number, voice_number=voice_number)
+        if not voice.get_children():
+            voice.update_beats()
+        return voice._add_chord(chord)
 
     def _set_attributes(self):
         self.xml_object.xml_attributes = XMLAttributes()
@@ -73,7 +80,8 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
             previous_staff = staff.get_previous_staff()
             steps_with_accidentals = set()
             relevant_chords = [ch for ch in staff.get_chords() if not ch.is_rest]
-            relevant_chords_not_tied = [ch for ch in relevant_chords if 'stop' not in ch._ties]
+            relevant_chords_not_tied = [ch for ch in relevant_chords if
+                                        True not in set(m.is_tied_to_previous for m in ch.midis)]
             for chord in relevant_chords:
                 for midi in chord.midis:
                     step = midi.accidental.get_pitch_parameters()[0]
@@ -306,19 +314,8 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
         self._update_clef_numbers()
         return child
 
-    def add_chord(self, chord: 'Chord', *, staff_number: Optional[int] = None, voice_number: int = 1) -> List['Chord']:
-        """
-        Adds chord to selected :obj:`~musictree.voice.Voice`
-
-        :param chord: :obj:`~musictree.chord.Chord`, required
-        :param staff_number: positive int
-        :param voice_number: positive int
-        :return: added chord or a list of split chords
-        """
-        voice = self.add_voice(staff_number=staff_number, voice_number=voice_number)
-        if not voice.get_children():
-            voice.update_beats()
-        return voice.add_chord(chord)
+    def add_chord(self, *args, **kwargs):
+        raise AddChordException
 
     def add_staff(self, staff_number: Optional[int] = None) -> 'Staff':
         """
@@ -407,7 +404,7 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
         """
         for staff in self.get_children():
             for chord in staff.get_chords():
-                if 'stop' in chord._ties:
+                if chord.all_midis_are_tied_to_previous:
                     for midi in chord.midis:
                         midi.accidental.show = False
                 for midi in chord.midis:

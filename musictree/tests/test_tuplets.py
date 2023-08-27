@@ -52,7 +52,7 @@ class TestTuplets(TestCase):
         ch2 = Chord(midis=60, quarter_duration=2 / 3)
         for c in [ch1, ch2]:
             c.midis[0].accidental.show = False
-            m.add_chord(c)
+            m._add_chord(c)
         m.final_updates()
         assert ch1.notes[0].to_string() == expected_1
         assert ch2.notes[0].to_string() == expected_2
@@ -62,7 +62,7 @@ class TestTuplets(TestCase):
         chords = [Chord(60, 1 / 3), Chord(61, 2 / 3)]
 
         for x in chords:
-            m.add_chord(x)
+            m._add_chord(x)
 
         m.final_updates()
 
@@ -80,7 +80,7 @@ class TestTuplets(TestCase):
         for index, quintuplet in enumerate(generate_all_quintuplets()):
             m = Measure(index + 1)
             for q in quintuplet:
-                m.add_chord(Chord(midis=60, quarter_duration=q))
+                m._add_chord(Chord(midis=60, quarter_duration=q))
             m.final_updates()
             measures.append(m)
 
@@ -101,7 +101,7 @@ class TestTuplets(TestCase):
         m1 = Measure(1)
         quarter_durations = [Fraction(1, 6), Fraction(5, 6)]
         for q in quarter_durations:
-            m1.add_chord(Chord(midis=60, quarter_duration=q))
+            m1._add_chord(Chord(midis=60, quarter_duration=q))
         m1.split_not_writable_chords()
         m1.final_updates()
         b = m1.get_voice(staff_number=1, voice_number=1).get_children()[0]
@@ -120,7 +120,7 @@ class TestTuplets(TestCase):
         m1 = Measure(1)
         quarter_durations = [Fraction(5, 6), Fraction(1, 6)]
         for q in quarter_durations:
-            m1.add_chord(Chord(midis=60, quarter_duration=q))
+            m1._add_chord(Chord(midis=60, quarter_duration=q))
         m1.split_not_writable_chords()
         m1.final_updates()
         n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()]
@@ -137,7 +137,7 @@ class TestTuplets(TestCase):
         for index, sextuplet in enumerate(generate_all_sextuplets()):
             m = Measure(index + 1)
             for q in sextuplet:
-                m.add_chord(Chord(midis=60, quarter_duration=q))
+                m._add_chord(Chord(midis=60, quarter_duration=q))
             m.split_not_writable_chords()
             m.final_updates()
             measures.append(m)
@@ -174,7 +174,7 @@ class TestTuplets(TestCase):
         v1 = create_voice()
         beats = v1.update_beats(1)
         for quarter_duration in [1 / 6, 1 / 6, 1 / 6, 1 / 10, 3 / 10, 1 / 10]:
-            v1.add_chord(Chord(60, quarter_duration))
+            v1._add_chord(Chord(60, quarter_duration))
         v1.up.up.update_divisions()
         beats[0].final_updates()
         n1, n2, n3, n4, n5, n6 = [ch.notes[0] for ch in v1.get_chords()]
@@ -195,7 +195,7 @@ class TestTuplets(TestCase):
         v1 = create_voice()
         beats = v1.update_beats(1, 1, 1)
         for quarter_duration in [q for group in generate_all_triplets() for q in group]:
-            v1.add_chord(Chord(60, quarter_duration))
+            v1._add_chord(Chord(60, quarter_duration))
         v1.up.up.update_divisions()
         for index, beat in enumerate(beats):
             beat.final_updates()

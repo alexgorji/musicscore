@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 
+from musictree import Chord
 from musicxml.xmlelement.xmlelement import XMLPitch, XMLRest
 
 from musictree.accidental import Accidental
@@ -69,15 +70,16 @@ class TestMidi(TestCase):
         assert r.accidental.get_pitch_parameters() is None
         assert r.get_pitch_or_rest().to_string() == '<rest />\n'
 
-    @patch('musictree.chord.Chord')
+    @patch('musictree.chord.Chord', spec=Chord)
     def test_midi_parent_note(self, mock_chord):
         """
         Test if a midi object which is being contained in a note can access it via its parent_note attribute.
         """
         mock_chord.get_staff_number.return_value = None
         m = Midi(70)
+        m._set_parent_chord(mock_chord)
         assert m.parent_note is None
-        n = Note(parent_chord=mock_chord, midi=m)
+        n = Note(midi=m)
         assert m.parent_note == n
         with self.assertRaises(TypeError):
             m.parent_note = Measure()
@@ -133,9 +135,38 @@ class TestMidi(TestCase):
         assert m.accidental.mode == copied.accidental.mode
         assert m.accidental.show == copied.accidental.show
 
-    @patch('musictree.chord.Chord')
+    @patch('musictree.chord.Chord', spec=Chord)
     def test_midi_up_note(self, mock_chord):
         mock_chord.get_staff_number.return_value = None
         m = Midi(70)
-        n = Note(parent_chord=mock_chord, midi=m)
+        m._set_parent_chord(mock_chord)
+        n = Note(midi=m)
         assert m.up == n
+
+    def test_midi_tie(self):
+        m1 = Midi(60)
+        m2 = Midi(60)
+        m1.add_tie('start')
+        m2.add_tie('stop')
+        m2.add_tie('start')
+        assert m1._ties == {'start'}
+        assert m2._ties == {'start', 'stop'}
+        m2.remove_tie('start')
+        assert m2._ties == {'stop'}
+        m2.remove_tie('start')
+        m3 = m2.__deepcopy__()
+        assert m3.value == m2.value
+        assert m3._ties == m2._ties
+        m3.add_tie('start')
+        assert m3._ties != m2._ties
+
+    def test_is_tied_to_next_and_previous(self):
+        m1 = Midi(60)
+        m2 = Midi(60)
+        m1.add_tie('start')
+        m2.add_tie('stop')
+        m2.add_tie('start')
+        assert not m1.is_tied_to_previous
+        assert m1.is_tied_to_next
+        assert m2.is_tied_to_previous
+        assert m2.is_tied_to_next

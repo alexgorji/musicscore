@@ -1,11 +1,11 @@
-from unittest import TestCase
+from unittest import TestCase, skip
 
 from musicxml.xmlelement.xmlelement import *
 from quicktions import Fraction
 
 from musictree.chord import Chord
 from musictree.clef import Clef, BassClef, TrebleClef
-from musictree.exceptions import VoiceIsAlreadyFullError
+from musictree.exceptions import VoiceIsAlreadyFullError, MeasureException, AddChordException
 from musictree.measure import Measure, generate_measures
 from musictree.part import Part
 from musictree.staff import Staff
@@ -96,9 +96,9 @@ class TestMeasure(TestCase):
         quarter_durations_1 = [1 / 3, 2 / 3, 2 / 5, 3 / 5, 1, 1 / 2, 1 / 2]
         quarter_durations_2 = [1, 9 / 7, 5 / 7, 2 / 3, 1 / 3]
         for qd in quarter_durations_1:
-            v1.add_chord(Chord(60, qd))
+            v1._add_chord(Chord(60, qd))
         for qd in quarter_durations_2:
-            v2.add_chord(Chord(70, qd))
+            v2._add_chord(Chord(70, qd))
         m.update_divisions()
         assert m.xml_object.xml_attributes.xml_divisions.value_ == 210
 
@@ -106,10 +106,10 @@ class TestMeasure(TestCase):
         m = Measure(1)
         chord = Chord(60, quarter_duration=2.5)
         chord.midis[0].accidental.show = False
-        m.add_chord(chord)
+        m._add_chord(chord)
         chord = Chord(61, quarter_duration=1.5)
         chord.midis[0].accidental.show = True
-        m.add_chord(chord)
+        m._add_chord(chord)
         m.final_updates()
         for xml_note, duration in zip(m.find_children('XMLNote'), [4, 1, 1, 2]):
             assert xml_note.xml_duration.value_ == duration
@@ -259,28 +259,28 @@ class TestMeasure(TestCase):
     def test_add_chord_voice_filled(self):
         m = Measure(1)
         ch = Chord(quarter_duration=2, midis=60)
-        returned_chords = m.add_chord(ch)
+        returned_chords = m._add_chord(ch)
         assert len(returned_chords) == 1
         assert returned_chords[0] == ch
         assert returned_chords[0].quarter_duration == 2
         assert m.get_children()[0].get_children()[0].leftover_chord is None
         ch = Chord(quarter_duration=2, midis=60)
-        returned_chords = m.add_chord(ch)
+        returned_chords = m._add_chord(ch)
         assert len(returned_chords) == 1
         assert returned_chords[0] == ch
         assert returned_chords[0].quarter_duration == 2
         assert m.get_children()[0].get_children()[0].leftover_chord is None
         with self.assertRaises(VoiceIsAlreadyFullError):
-            m.add_chord(Chord(quarter_duration=2, midis=60))
+            m._add_chord(Chord(quarter_duration=2, midis=60))
         ch = Chord(quarter_duration=2, midis=60)
-        returned_chords = m.add_chord(ch, voice_number=2)
+        returned_chords = m._add_chord(ch, voice_number=2)
         assert len(returned_chords) == 1
         assert [ch.voice_number for ch in m.get_chords()] == [1, 1, 2]
 
     def test_add_chord_leftover(self):
         m = Measure(1)
         ch = Chord(quarter_duration=5, midis=60)
-        returned_chords = m.add_chord(ch)
+        returned_chords = m._add_chord(ch)
         assert len(returned_chords) == 1
         assert returned_chords[0] == ch
         assert returned_chords[0].quarter_duration == 4
@@ -358,10 +358,10 @@ class TestMeasure(TestCase):
 
     def test_add_chord_staff_and_voice(self):
         m = Measure(1)
-        m.add_chord(Chord(60, 1), staff_number=2, voice_number=2)
+        m._add_chord(Chord(60, 1), staff_number=2, voice_number=2)
         assert m.get_staff(2) is not None
         assert m.get_voice(staff_number=2, voice_number=2) is not None
-        m.add_chord(Chord(60, 1), staff_number=4, voice_number=5)
+        m._add_chord(Chord(60, 1), staff_number=4, voice_number=5)
         assert m.get_voice(staff_number=3, voice_number=1) is not None
         assert m.get_voice(staff_number=3, voice_number=2) is None
         assert m.get_voice(staff_number=3, voice_number=5) is None
@@ -375,7 +375,7 @@ class TestMeasure(TestCase):
         m = Measure(1)
         chord = Chord(60, quarter_duration=2.5)
         chord.add_dynamics(["ppp", 'fff'])
-        m.add_chord(chord)
+        m._add_chord(chord)
         m.final_updates()
         assert m.xml_direction is not None
         expected = """<direction placement="below">
@@ -394,13 +394,19 @@ class TestMeasure(TestCase):
 
         assert m.xml_direction.to_string() == expected
 
+    def test_add_chord_to_measure(self):
+        part = Part(id='part-1')
+        measure = part.add_measure(time=Time(4, 4))
+        with self.assertRaises(AddChordException):
+            measure.add_chord(Chord(midis=60, quarter_duration=15))
+
 
 class TestUpdateAccidentals(IdTestCase):
     def test_update_accidentals_simple(self):
         m = Measure(1)
         midis = [60, 61, 62, 60]
         for mi in midis:
-            m.add_chord(Chord(mi, quarter_duration=1))
+            m._add_chord(Chord(mi, quarter_duration=1))
         m.final_updates()
         assert [ch.midis[0].accidental.show for ch in m.get_chords()] == [False, True, False, True]
 
@@ -427,8 +433,8 @@ class TestUpdateAccidentals(IdTestCase):
 
     def test_xml_notes_with_different_voices(self):
         m = Measure(1)
-        m.add_chord(Chord(60, 4))
-        m.add_chord(Chord(60, 4), voice_number=2)
+        m._add_chord(Chord(60, 4))
+        m._add_chord(Chord(60, 4), voice_number=2)
         m.final_updates()
         ch1, ch2 = m.get_chords()
         assert ch1.notes[0].xml_voice.value_ == '1'
@@ -438,10 +444,10 @@ class TestUpdateAccidentals(IdTestCase):
 
     def test_xml_notes_with_different_staves(self):
         m = Measure(1)
-        m.add_chord(Chord(72, 4), staff_number=1, voice_number=1)
-        m.add_chord(Chord(60, 4), staff_number=1, voice_number=2)
-        m.add_chord(Chord(48, 4), staff_number=2, voice_number=1)
-        m.add_chord(Chord(36, 4), staff_number=2, voice_number=2)
+        m._add_chord(Chord(72, 4), staff_number=1, voice_number=1)
+        m._add_chord(Chord(60, 4), staff_number=1, voice_number=2)
+        m._add_chord(Chord(48, 4), staff_number=2, voice_number=1)
+        m._add_chord(Chord(36, 4), staff_number=2, voice_number=2)
         m.clefs[1] = BassClef()
         m.final_updates()
         ch1, ch2, ch3, ch4 = m.get_chords()
@@ -464,6 +470,10 @@ class TestUpdateAccidentals(IdTestCase):
         assert cl1.xml_line.value_ == 2
         assert cl2.xml_sign.value_ == 'F'
         assert cl2.xml_line.value_ == 4
+
+    @skip
+    def test_update_chord_accidentals(self):
+        self.fail()
 
 
 class TestMeasureAttributes(TestCase):
@@ -571,7 +581,6 @@ class TestMeasureAttributes(TestCase):
         assert m.get_staff(1).clef.number is None
         assert m.get_staff(1).clef == bass_clef
 
-
         m.add_staff()
         assert m.get_staff(1).clef.number == 1
         assert m.get_staff(2).clef.number == 2
@@ -584,7 +593,6 @@ class TestMeasureAttributes(TestCase):
         m.add_child(Staff(number=3, clef=treble_clef))
         assert m.get_staff(3).clef.number == 3
         assert m.get_staff(3).clef == treble_clef
-
 
     def test_measure_false_show_keys(self):
         expected = """<measure number="1">
@@ -650,10 +658,10 @@ class TestMeasureAttributes(TestCase):
 class TestMeasureBeatGrouping(TestCase):
     def test_measure_5_4(self):
         m = Measure(1, time=Time(5, 4))
-        chords = m.add_chord(Chord(midis=60, quarter_duration=5))
+        chords = m._add_chord(Chord(midis=60, quarter_duration=5))
         assert [ch.quarter_duration for ch in chords] == [3, 2]
 
     def test_measure_6_4(self):
         m = Measure(1, time=Time(6, 4))
-        chords = m.add_chord(Chord(midis=60, quarter_duration=6))
+        chords = m._add_chord(Chord(midis=60, quarter_duration=6))
         assert [ch.quarter_duration for ch in chords] == [6]

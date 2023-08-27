@@ -21,8 +21,8 @@ class TestFinalUpdates(IdTestCase):
         self.voice = self.staff.add_voice()
         self.voice.update_beats()
         self.beats = self.voice.get_children()
-        self.chord_1 = self.voice.add_chord(Chord(60, QuarterDuration(1, 3)))[0]
-        self.chords_2 = self.voice.add_chord(Chord(61, QuarterDuration(2, 3) + QuarterDuration(3)))
+        self.chord_1 = self.voice._add_chord(Chord(60, QuarterDuration(1, 3)))[0]
+        self.chords_2 = self.voice._add_chord(Chord(61, QuarterDuration(2, 3) + QuarterDuration(3)))
 
     @staticmethod
     def check_note_values(chords, indices=None):
@@ -40,7 +40,7 @@ class TestFinalUpdates(IdTestCase):
     def test_chord_final_updates(self):
         self.measure.update_divisions()
         assert self.chord_1.get_children() == []
-        self.chord_1.midis.append(Midi(70))
+        self.chord_1.add_midi(Midi(70))
         self.chord_1.final_updates()
         assert len(self.chord_1.get_children()) == 2
         assert_chord_note_values(self.chord_1, [(60, 1 / 3), (70, 1 / 3)])

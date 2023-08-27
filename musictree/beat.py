@@ -4,8 +4,9 @@ from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModif
 from quicktions import Fraction
 
 from musictree.chord import split_copy, group_chords, Chord
-from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, ChordHasNoQuarterDurationError, \
-    ChordHasNoMidisError, AlreadyFinalUpdated, BeatNotFullError
+from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
+    ChordHasNoQuarterDurationError, \
+    ChordHasNoMidisError, AlreadyFinalUpdated, BeatNotFullError, AddChordException
 from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from util import lcm
@@ -114,7 +115,13 @@ class Beat(MusicTree, QuarterDurationMixin):
         child._parent = self
         self._children.append(child)
         if self.up.up.up.up:
-            self.up.up.up.up.set_current_measure(staff_number=self.up.up.number, voice_number=self.up.number, measure=self.up.up.up)
+            self.up.up.up.up.set_current_measure(staff_number=self.up.up.number, voice_number=self.up.number,
+                                                 measure=self.up.up.up)
+
+    def _add_chord(self, chord=None):
+        if chord is None:
+            chord = Chord(midis=60, quarter_duration=self.quarter_duration)
+        return self.add_child(chord)
 
     def _change_children_quarter_durations(self, quarter_durations):
         if len(quarter_durations) != len(self.get_children()):
@@ -254,9 +261,11 @@ class Beat(MusicTree, QuarterDurationMixin):
                         self._update_dots(g, actual_notes)
                     return
                 else:
-                    raise NotImplementedError('Beat cannot be halved. It cannot manage the necessary grouping of chords.')
+                    raise NotImplementedError(
+                        'Beat cannot be halved. It cannot manage the necessary grouping of chords.')
             else:
-                raise NotImplementedError('Beat with quarter_duration other than one cannot manage more than one group of chords.')
+                raise NotImplementedError(
+                    'Beat with quarter_duration other than one cannot manage more than one group of chords.')
         self._update_tuplets(self.get_children(), actual_notes)
         self._update_dots(self.get_children(), actual_notes)
 
@@ -279,9 +288,9 @@ class Beat(MusicTree, QuarterDurationMixin):
     def _remove_zero_quarter_durations(self):
         zeros = [ch for ch in self.get_children() if ch.quarter_duration == 0]
         for ch in zeros:
-            if 'start' in ch._ties:
+            if ch.all_midis_are_tied_to_next:
                 pass
-            elif 'stop' in ch._ties:
+            elif ch.all_midis_are_tied_to_previous:
                 ch.up.remove(ch)
             else:
                 pass
@@ -374,14 +383,8 @@ class Beat(MusicTree, QuarterDurationMixin):
                 beats = self.up.get_children()[self.up.get_children().index(self):]
                 return child.split_and_add_beatwise(beats)
 
-    def add_chord(self, chord: Optional[Chord] = None) -> List['Chord']:
-        """
-        :param chord: if None chord is set to a :obj:`~musictree.chord.Chord` with quarter_duration 1 and midis set to 60
-        :return: added chord or a list of split chords
-        """
-        if chord is None:
-            chord = Chord(midis=60, quarter_duration=self.quarter_duration)
-        return self.add_child(chord)
+    def add_chord(self, *args, **kwargs):
+        raise AddChordException
 
     def final_updates(self):
         """

@@ -1,3 +1,4 @@
+import copy
 from math import log2
 from typing import Optional, Union, List
 
@@ -22,6 +23,8 @@ class Midi(MusicTree):
         self._accidental = None
         self._pitch_or_rest = None
         self._parent_note = None
+        self._ties = set()
+        self._parent_chord = None
 
         self.value = value
         self.accidental = accidental
@@ -83,8 +86,32 @@ class Midi(MusicTree):
             self._accidental.parent_midi = self
 
     @property
+    def is_tied_to_next(self):
+        if 'start' in self._ties:
+            return True
+        else:
+            return False
+
+    @property
+    def is_tied_to_previous(self):
+        if 'stop' in self._ties:
+            return True
+        else:
+            return False
+
+    @property
     def octave(self):
         return int(self.value / 12) - 1
+
+    @property
+    def parent_chord(self):
+        return self._parent_chord
+
+    def _set_parent_chord(self, value):
+        if value is not None and 'Chord' not in [cls.__name__ for cls in value.__class__.__mro__]:
+            raise TypeError
+        self._parent_chord = value
+        # self._parent = value
 
     @property
     def parent_note(self):
@@ -147,6 +174,23 @@ class Midi(MusicTree):
         child._update_parent_midi()
         return child
 
+    def add_tie(self, type_):
+        if type_ not in ['start', 'stop']:
+            raise ValueError
+        self._ties.add(type_)
+        if self.parent_note:
+            self.parent_note._update_ties()
+
+    def remove_tie(self, type_):
+        removed = False
+        try:
+            self._ties.remove(type_)
+            removed = True
+        except KeyError:
+            pass
+        if removed and self.parent_note:
+            self.parent_note._update_ties()
+
     def get_children(self) -> List[Accidental]:
         """
         :return: list of added children.
@@ -191,7 +235,13 @@ class Midi(MusicTree):
         return self.__class__(value=self.value, accidental=self.accidental)
 
     def __deepcopy__(self, memodict={}):
-        copied_accidental = self.accidental.__copy__()
+        copied_accidental = copy.copy(self.accidental)
+        copied = self.__class__(value=self.value, accidental=copied_accidental)
+        copied._ties = copy.copy(self._ties)
+        return copied
+
+    def copy_for_split(self):
+        copied_accidental = copy.copy(self.accidental)
         copied = self.__class__(value=self.value, accidental=copied_accidental)
         return copied
 

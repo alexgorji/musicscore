@@ -126,3 +126,13 @@ class AlreadyFinalUpdated(MusicTreeException):
 
 class DeepCopyException(MusicTreeException):
     pass
+
+
+class MidiHasNoParentChordError(NoteException):
+    pass
+
+
+class AddChordException(MusicTreeException):
+    def __init__(self):
+        msg = f"Use Part._add_chord() instead!"
+        super().__init__(msg)

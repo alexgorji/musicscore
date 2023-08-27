@@ -271,6 +271,25 @@ class TestSimpleFormat(IdTestCase):
             part.add_chord(chord=chord, staff_number=3)
         self.score.export_xml(xml_file)
         self.fail()
+
+    # def test_sum(self):
+    #     sf1 = SimpleFormat(quarter_durations=[1, 2, 3], midis=[60, 61, 62])
+    #     sf2 = SimpleFormat(quarter_durations=[1, 3, 2], midis=[(60, 65), 67, (50, 54)])
+    #     sf3 = SimpleFormat(quarter_durations=[3, 4, 5], midis=[69, 68, 67])
+    #     sf = SimpleFormat.sum(sf1, sf2, sf3)
+    # def test_complex_sum(self):
+    #     xml_file = Path(__file__).stem + '_add_to_score.xml'
+    #     sf_1 = SimpleFormat(quarter_durations=[1, 2, 3, 2, 1], midis=[60, (60, 62), (64, 66, 71), 72, 73])
+    #     part = self.score.add_part(id_='part1')
+    #     for chord in sf_1.chords:
+    #         part.add_chord(chord=chord, staff_number=1)
+    #     sf_2 = SimpleFormat(quarter_durations=[0.5, 1, 1.5, 2, 3], midis=[0, 69, (72, 73), (58, 60, 65, 71), 80])
+    #     for chord in sf_2.chords:
+    #         part.add_chord(chord=chord, staff_number=2)
+    #     sf_3 = SimpleFormat.sum(sf_1, sf_2)
+    #     for chord in sf_3.chords:
+    #         part.add_chord(chord=chord, staff_number=3)
+    #     self.score.export_xml(xml_file)
     #
     # def test_2(self):
     #     xml_path = path + '_test_2.xml'

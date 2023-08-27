@@ -1,3 +1,4 @@
+import copy
 from fractions import Fraction
 from typing import Union, List, Optional, Any, Dict
 
@@ -50,12 +51,11 @@ class Chord(MusicTree, QuarterDurationMixin):
     :param quarter_duration: int, float, Fraction, QuarterDuration for duration counted in quarters (crotchets). 0 for grace note (or
     chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'ties'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
         self._midis = None
-        self._ties = []
         self._xml_direction_types = {'above': [], 'below': []}
 
         self._xml_directions = []
@@ -75,7 +75,11 @@ class Chord(MusicTree, QuarterDurationMixin):
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
         self.split = False
+        self._original_starting_ties = None
         self._final_updated = False
+
+    def _set_original_starting_ties(self, original_chord):
+        self._original_starting_ties = [copy.copy(midi._ties) for midi in original_chord.midis]
 
     def _set_midis(self, midis):
         if isinstance(midis, str):
@@ -93,7 +97,13 @@ class Chord(MusicTree, QuarterDurationMixin):
         if 0 in midis and self.quarter_duration == 0:
             raise ValueError('A rest cannot be a grace note')
         self._midis = [Midi(v) if not isinstance(v, Midi) else v for v in midis]
+        self._sort_midis()
+        for midi in self._midis:
+            midi._set_parent_chord(self)
         self._update_notes_pitch_or_rest()
+
+    def _sort_midis(self):
+        self._midis = sorted(self._midis)
 
     def _update_xml_articulations(self):
         def _get_note_xml_articulations():
@@ -265,13 +275,27 @@ class Chord(MusicTree, QuarterDurationMixin):
             try:
                 self.get_children()[index].midi = midi
             except IndexError:
-                self.add_child(Note(parent_chord=self, midi=midi, **self._note_attributes))
+                self.add_child(Note(midi=midi, **self._note_attributes))
         self._notes_are_set = True
 
     def _update_xml_chord(self):
         for n in self.notes[1:]:
             if not n.xml_object.xml_chord:
                 n.xml_object.add_child(XMLChord())
+
+    @property
+    def all_midis_are_tied_to_next(self):
+        if set([m.is_tied_to_next for m in self.midis]) == {True}:
+            return True
+        else:
+            return False
+
+    @property
+    def all_midis_are_tied_to_previous(self):
+        if set([m.is_tied_to_previous for m in self.midis]) == {True}:
+            return True
+        else:
+            return False
 
     def final_updates(self):
         """
@@ -294,7 +318,7 @@ class Chord(MusicTree, QuarterDurationMixin):
 
         self._update_notes_quarter_duration()
         self._update_xml_lyrics()
-        self._update_tie()
+        self._update_ties()
         self._update_xml_directions()
         self._update_xml_articulations()
         self._update_xml_technicals()
@@ -320,20 +344,13 @@ class Chord(MusicTree, QuarterDurationMixin):
                 if index < len(self.notes):
                     self.notes[index].midi = m
                 else:
-                    new_note = Note(parent_chord=self, midi=m, quarter_duration=self.quarter_duration)
+                    new_note = Note(midi=m, quarter_duration=self.quarter_duration)
                     self.add_child(new_note)
 
-    def _update_tie(self):
-        if not self._ties:
-            for note in self.notes:
-                note.remove_tie()
-        else:
-            if 'stop' in self._ties:
-                for note in self.notes:
-                    note.stop_tie()
-            if 'start' in self._ties:
-                for note in self.notes:
-                    note.start_tie()
+    def _update_ties(self):
+        # update ties of already created notes
+        for note in self.notes:
+            note._update_ties()
 
     @property
     def is_rest(self) -> bool:
@@ -512,19 +529,18 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
         return dynamics_object_list
 
-    def add_tie(self, val: str) -> None:
+    def add_tie(self, type_: str) -> None:
         """
-        Chord's tie list is used to add ties to or update ties of :obj:`musictree.note.Note` objects which are to be or are already
-        created .
+        Chord's tie list is used to add ties to or update ties of all midis and consequently :obj:`musictree.note.Note`
+        objects which are to be or are already created.
 
-        :param val: 'start' or 'stop'
+        :param type_: 'start' or 'stop'
         :return: None
         """
-        if val not in ['start', 'stop']:
-            raise ValueError
-        if val not in self._ties:
-            self._ties.append(val)
-            self._update_tie()
+
+        for midi in self.midis:
+            midi.add_tie(type_=type_)
+        self._update_ties()
 
     def add_lyric(self, text: Union[Any, XMLLyric]):
         """
@@ -548,10 +564,12 @@ class Chord(MusicTree, QuarterDurationMixin):
     def add_midi(self, midi):
         if self._notes_are_set:
             raise ChordNotesAreAlreadyCreatedError('Chord.add_midi cannot be used after creation of notes.')
-        if isinstance(midi, Midi):
-            self._midis.append(midi)
-        else:
-            self._midis.append(Midi(midi))
+        if not isinstance(midi, Midi):
+            midi = Midi(midi)
+        midi._set_parent_chord(self)
+        self._midis.append(midi)
+        self._sort_midis()
+        return midi
 
     def get_children(self) -> List[Note]:
         """
@@ -574,7 +592,10 @@ class Chord(MusicTree, QuarterDurationMixin):
         return self.up.up.up.up
 
     def get_staff_number(self):
-        return self.up.up.up.number
+        try:
+            return self.up.up.up.number
+        except AttributeError:
+            return None
 
     def get_voice(self):
         raise TypeError
@@ -584,7 +605,10 @@ class Chord(MusicTree, QuarterDurationMixin):
         :return: parent voice number
         :rtype: positive int
         """
-        return self.up.up.number
+        try:
+            return self.up.up.number
+        except AttributeError:
+            return None
 
     def set_possible_subdivisions(self):
         raise TypeError
@@ -636,6 +660,9 @@ class Chord(MusicTree, QuarterDurationMixin):
             offset=beats[0].filled_quarter_duration, beats=beats)
         self.quarter_duration = quarter_durations[0][0]
         self.split = True
+
+        if self._original_starting_ties is None:
+            self._set_original_starting_ties(self)
         voice.get_current_beat().add_child(self)
         current_chord = self
         output = [self]
@@ -643,6 +670,7 @@ class Chord(MusicTree, QuarterDurationMixin):
             copied = split_copy(self, qd)
             copied.split = True
             voice.get_current_beat().add_child(copied)
+
             current_chord.add_tie('start')
             copied.add_tie('stop')
             for midi in copied.midis:
@@ -650,6 +678,7 @@ class Chord(MusicTree, QuarterDurationMixin):
             current_chord = copied
             output.append(current_chord)
         if quarter_durations[1]:
+            # left over
             leftover_chord = split_copy(self, quarter_durations[1])
             current_chord.add_tie('start')
             leftover_chord.add_tie('stop')
@@ -658,17 +687,11 @@ class Chord(MusicTree, QuarterDurationMixin):
         else:
             leftover_chord = None
         self.up.up.leftover_chord = leftover_chord
-
+        if not leftover_chord and output[-1]._original_starting_ties:
+            for ties, midi2 in zip(output[-1]._original_starting_ties, output[-1].midis):
+                if 'start' in ties:
+                    midi2.add_tie('start')
         return output
-
-    def sort_midis(self, key=None):
-        """
-        This method sorts Chord.midis. If no key is provided midis are sorted based on their values.
-        """
-        if not key:
-            self._midis = sorted(self._midis, key=lambda m: m.value)
-        else:
-            self._midis = sorted(self._midis, key=key)
 
     def to_rest(self) -> None:
         """
@@ -719,7 +742,6 @@ class Chord(MusicTree, QuarterDurationMixin):
             raise DeepCopyException("After setting notes, Midi cannot be deepcopied anymore. ")
         copied = self.__class__(midis=[midi.__deepcopy__() for midi in self.midis],
                                 quarter_duration=self.quarter_duration.__deepcopy__())
-        copied._ties = self._ties
         return copied
 
 
@@ -734,7 +756,8 @@ def split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fracti
     """
     if new_quarter_duration is None:
         new_quarter_duration = chord.quarter_duration.__copy__()
-    new_chord = Chord(midis=[m.__deepcopy__() for m in chord.midis], quarter_duration=new_quarter_duration)
+    new_chord = Chord(midis=[m.copy_for_split() for m in chord.midis], quarter_duration=new_quarter_duration)
+    new_chord._original_starting_ties = chord._original_starting_ties
     return new_chord
 
 

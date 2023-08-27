@@ -1,7 +1,7 @@
 from typing import Optional, Union, List
 
 from musictree.beat import Beat
-from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsAlreadyFullError
+from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsAlreadyFullError, AddChordException
 from musictree.core import MusicTree
 from musictree.finalupdate_mixin import FinalUpdateMixin
 from musictree.xmlwrapper import XMLWrapper
@@ -23,6 +23,17 @@ class Voice(MusicTree, FinalUpdateMixin, XMLWrapper):
         self._current_beat = None
         self._leftover_chord = None
         self._final_updated = False
+
+    def _add_chord(self, chord: 'Chord') -> List['Chord']:
+        """
+        :param chord: :obj:`~musictree.chord.Chord`, required
+        :return: added chord or a list of split chords
+        """
+        if not self.get_children():
+            raise VoiceHasNoBeatsError
+        if self.get_current_beat() is None:
+            raise VoiceIsAlreadyFullError(f'Voice number {self.value_} of Measure number {self.up.up.number} is full.')
+        return self.get_current_beat().add_child(chord)
 
     @property
     def is_filled(self) -> bool:
@@ -80,6 +91,9 @@ class Voice(MusicTree, FinalUpdateMixin, XMLWrapper):
             beat_quarter_duration = 1
         return self.add_child(Beat(beat_quarter_duration))
 
+    def add_chord(self, *args, **kwargs):
+        raise AddChordException()
+
     def add_child(self, child: Beat) -> Beat:
         """
         Check and add child to list of children. Child's parent is set to self.
@@ -91,17 +105,6 @@ class Voice(MusicTree, FinalUpdateMixin, XMLWrapper):
         if not self.up:
             raise VoiceHasNoParentError('A child Beat can only be added to a Voice if voice has a Staff parent.')
         return super().add_child(child)
-
-    def add_chord(self, chord: 'Chord') -> List['Chord']:
-        """
-        :param chord: :obj:`~musictree.chord.Chord`, required
-        :return: added chord or a list of split chords
-        """
-        if not self.get_children():
-            raise VoiceHasNoBeatsError
-        if self.get_current_beat() is None:
-            raise VoiceIsAlreadyFullError(f'Voice number {self.value_} of Measure number {self.up.up.number} is full.')
-        return self.get_current_beat().add_child(chord)
 
     def get_children(self) -> List[Beat]:
         """

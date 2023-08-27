@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 
 from musictree.beat import Beat
 from musictree.chord import Chord
-from musictree.exceptions import VoiceHasNoBeatsError
+from musictree.exceptions import VoiceHasNoBeatsError, AddChordException
 from musictree.voice import Voice
 
 
@@ -63,19 +63,24 @@ class TestVoice(TestCase):
         v._parent = mock_staff
 
         with self.assertRaises(VoiceHasNoBeatsError):
-            v.add_chord(Chord())
+            v._add_chord(Chord())
         v.update_beats(1, 1, 1, 1)
-        v.add_chord(Chord(quarter_duration=1.5, midis=60))
-        v.add_chord(Chord(quarter_duration=2, midis=60))
-        v.add_chord(Chord(quarter_duration=0.5, midis=60))
+        v._add_chord(Chord(quarter_duration=1.5, midis=60))
+        v._add_chord(Chord(quarter_duration=2, midis=60))
+        v._add_chord(Chord(quarter_duration=0.5, midis=60))
         assert v.leftover_chord is None
         assert [ch.quarter_duration for ch in v.get_chords()] == [1.5, 0.5, 1.5, 0.5]
-        assert v.get_chords()[1]._ties == ['start']
-        assert v.get_chords()[2]._ties == ['stop']
+        assert v.get_chords()[1].midis[0].is_tied_to_next
+        assert v.get_chords()[2].midis[0].is_tied_to_previous
 
         v = Voice()
         v._parent = mock_staff
         v.update_beats(1, 1)
-        v.add_chord(Chord(quarter_duration=3, midis=60))
+        v._add_chord(Chord(quarter_duration=3, midis=60))
         assert isinstance(v.leftover_chord, Chord)
         assert v.leftover_chord.quarter_duration == 1
+
+    def test_add_chord_exception(self):
+        v = Voice()
+        with self.assertRaises(AddChordException):
+            v.add_chord()

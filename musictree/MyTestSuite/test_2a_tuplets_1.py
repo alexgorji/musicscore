@@ -44,7 +44,7 @@ class TestHelloTuplets1(IdTestCase):
             for tuplet in tuplet_list:
                 p.add_chord(Chord(60, tuplet))
         # for tuplet in tuplets[6]:
-        #     p.add_chord(Chord(60, tuplet))
+        #     p._add_chord(Chord(60, tuplet))
         """
         ... and exports the xml
         """
