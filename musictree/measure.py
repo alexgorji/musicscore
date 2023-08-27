@@ -2,7 +2,7 @@ from typing import List, Optional, Union
 
 from musictree.clef import BassClef, TrebleClef
 from musictree.core import MusicTree
-from musictree.exceptions import AlreadyFinalUpdated
+from musictree.exceptions import AlreadyFinalUpdated, MeasureException
 from musictree.finalupdate_mixin import FinalUpdateMixin
 from musictree.key import Key
 from musictree.staff import Staff
@@ -29,6 +29,13 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
         self._key = Key()
         self.time = time
         self._set_attributes()
+
+    def _add_chord(self, chord, staff_number=None, voice_number=1):
+
+        voice = self.add_voice(staff_number=staff_number, voice_number=voice_number)
+        if not voice.get_children():
+            voice.update_beats()
+        return voice.add_chord(chord)
 
     def _set_attributes(self):
         self.xml_object.xml_attributes = XMLAttributes()
@@ -319,7 +326,13 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
         voice = self.add_voice(staff_number=staff_number, voice_number=voice_number)
         if not voice.get_children():
             voice.update_beats()
-        return voice.add_chord(chord)
+        added_chords = self._add_chord(chord, staff_number, voice_number)
+
+        leftover_chord = voice.leftover_chord
+        if leftover_chord:
+            raise MeasureException(
+                'Adding chords to measure which extend the quarter_durations of the measure is not implemented yet.')
+        return added_chords
 
     def add_staff(self, staff_number: Optional[int] = None) -> 'Staff':
         """

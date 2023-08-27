@@ -5,7 +5,7 @@ from quicktions import Fraction
 
 from musictree.chord import Chord
 from musictree.clef import Clef, BassClef, TrebleClef
-from musictree.exceptions import VoiceIsAlreadyFullError
+from musictree.exceptions import VoiceIsAlreadyFullError, MeasureException
 from musictree.measure import Measure, generate_measures
 from musictree.part import Part
 from musictree.staff import Staff
@@ -280,7 +280,7 @@ class TestMeasure(TestCase):
     def test_add_chord_leftover(self):
         m = Measure(1)
         ch = Chord(quarter_duration=5, midis=60)
-        returned_chords = m.add_chord(ch)
+        returned_chords = m._add_chord(ch)
         assert len(returned_chords) == 1
         assert returned_chords[0] == ch
         assert returned_chords[0].quarter_duration == 4
@@ -397,15 +397,19 @@ class TestMeasure(TestCase):
     def test_add_long_chord_to_measure(self):
         part = Part(id='part-1')
         measure = part.add_measure(time=Time(4, 4))
-        measure.add_chord(Chord(midis=60, quarter_duration=5))
-        assert len(part.get_children()) == 2
-        [ch1, ch2] = part.get_chords()
-        assert ch1.quarter_duration == 4
-        assert ch2.quarter_duration == 1
-        assert not ch1.all_midis_are_tied_to_previous
-        assert ch1.all_midis_are_tied_to_next
-        assert ch2.all_midis_are_tied_to_previous
-        assert not ch2.all_midis_are_tied_to_next
+        with self.assertRaises(MeasureException):
+            measure.add_chord(Chord(midis=60, quarter_duration=15))
+        # assert len(part.get_children()) == 4
+        # all_chords = [ch1, ch2, ch3, ch4] = part.get_chords()
+        # assert [ch.quarter_duration for ch in all_chords] == [4, 4, 4, 3]
+        # assert not ch1.all_midis_are_tied_to_previous
+        # assert ch1.all_midis_are_tied_to_next
+        # assert ch2.all_midis_are_tied_to_previous
+        # assert ch2.all_midis_are_tied_to_next
+        # assert ch3.all_midis_are_tied_to_previous
+        # assert ch3.all_midis_are_tied_to_next
+        # assert ch4.all_midis_are_tied_to_previous
+        # assert not ch4.all_midis_are_tied_to_next
 
 
 class TestUpdateAccidentals(IdTestCase):

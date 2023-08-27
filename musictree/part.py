@@ -204,6 +204,14 @@ class Part(MusicTree, FinalUpdateMixin, XMLWrapper):
         self.xml_object.add_child(child.xml_object)
         return child
 
+    def _add_to_next_measure(self, current_measure, chord, staff_number, voice_number):
+        if current_measure.next:
+            current_measure = current_measure.next
+        else:
+            current_measure = self.add_measure()
+        current_measure._add_chord(chord, staff_number=staff_number, voice_number=voice_number)
+        return current_measure
+
     def add_chord(self, chord: 'Chord', *, staff_number: Optional[int] = None, voice_number: Optional[int] = 1) -> None:
         """
         - Adds a chord to the specified voice in current measure (see :obj:`get_current_measure()`).
@@ -220,14 +228,6 @@ class Part(MusicTree, FinalUpdateMixin, XMLWrapper):
         :return: None
         """
 
-        def add_to_next_measure(current_measure, ch):
-            if current_measure.next:
-                current_measure = current_measure.next
-            else:
-                current_measure = self.add_measure()
-            current_measure.add_chord(ch, staff_number=staff_number, voice_number=voice_number)
-            return current_measure
-
         if staff_number is None:
             staff_number = 1
         current_measure = self.get_current_measure(staff_number=staff_number, voice_number=voice_number)
@@ -238,13 +238,14 @@ class Part(MusicTree, FinalUpdateMixin, XMLWrapper):
             else:
                 current_measure = self.add_measure()
         try:
-            current_measure.add_chord(chord, staff_number=staff_number, voice_number=voice_number)
+            current_measure._add_chord(chord, staff_number=staff_number, voice_number=voice_number)
         except VoiceIsAlreadyFullError:
-            current_measure = add_to_next_measure(current_measure, chord)
+            current_measure = self._add_to_next_measure(current_measure, chord, staff_number, voice_number)
 
         leftover_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).leftover_chord
         while leftover_chord:
-            current_measure = add_to_next_measure(current_measure, leftover_chord)
+            current_measure = self._add_to_next_measure(current_measure, leftover_chord, staff_number,
+                                                        voice_number)
             leftover_chord = current_measure.get_voice(staff_number=staff_number,
                                                        voice_number=voice_number).leftover_chord
 
