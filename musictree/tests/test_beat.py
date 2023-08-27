@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from musictree.beat import Beat
 from musictree.chord import Chord
+from musictree.exceptions import AddChordException
 from musictree.measure import Measure
 from musictree.quarterduration import QuarterDuration
 from musictree.staff import Staff
@@ -170,8 +171,8 @@ class TestBeatSplitChord(TestCase):
     def test_split_not_writable_chords(self):
         v = create_voice()
         v.update_beats(1)
-        v.add_chord(Chord(60, 5 / 6))
-        v.add_chord(Chord(60, 1 / 6))
+        v._add_chord(Chord(60, 5 / 6))
+        v._add_chord(Chord(60, 1 / 6))
         assert [ch.quarter_duration for ch in v.get_chords()] == [5 / 6, 1 / 6]
         v.get_beat(1).split_not_writable_chords()
         assert [ch.quarter_duration for ch in v.get_chords()] == [1 / 2, 1 / 3, 1 / 6]
@@ -240,10 +241,7 @@ class TestBeatSplitChord(TestCase):
         assert not split_chords_2[-1].midis[0].is_tied_to_next
         assert split_chords_2[-1].midis[1].is_tied_to_next
 
-        # ch3 = Chord([60, 62, 64], quarter_duration=2.5)
-        # ch3.midis[1].add_tie('start')
-        # v.get_current_beat().add_child(ch3)
-        #
-        # assert not v.leftover_chord.midis[0].is_tied_to_next
-        # assert v.leftover_chord.midis[1].is_tied_to_next
-        # assert not v.leftover_chord.midis[2].is_tied_to_next
+    def test_add_chord_exception(self):
+        b = Beat()
+        with self.assertRaises(AddChordException):
+            b.add_chord()

@@ -148,7 +148,7 @@ class TestQuantization(IdTestCase):
     #     for index, qds in enumerate([qds1, qds2, qds3]):
     #         assert sum(qds) == 1
     #         for qd in qds:
-    #             p.add_chord(Chord(midis=60, quarter_duration=qd))
+    #             p._add_chord(Chord(midis=60, quarter_duration=qd))
     #         b = p.get_measure(1).get_staff(1).get_voice(1).get_beat(index + 1)
     #         b.quantize_quarter_durations()
     #         if index == 0:

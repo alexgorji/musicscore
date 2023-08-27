@@ -41,7 +41,7 @@ Hello World (1)
 
    #. Create and add a :obj:`~musictree.staff.Staff` to measure.
       Alternatively you could use :obj:`~musictree.measure.Measure.add_staff()`. Measure has also other useful
-      shortcut methods like :obj:`~musictree.measure.Measure.add_voice()` and :obj:`~musictree.measure.Measure.add_chord()`.
+      shortcut methods like :obj:`~musictree.measure.Measure.add_voice()`.
 
 
        .. code-block::

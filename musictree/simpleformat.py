@@ -224,7 +224,7 @@ class SimpleFormat(object):
     #     _trim_quarter_durations()
     #     output = SimpleFormat()
     #     for chord in all_positioned_chords.values():
-    #         output.add_chord(chord)
+    #         output._add_chord(chord)
     #     return output
 
     def retrograde(self):

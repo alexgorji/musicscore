@@ -28,10 +28,10 @@ class TestScore(IdTestCase):
         s = Score()
         p = s.add_child(Part('p1'))
         m = p.add_child(Measure(1))
-        m.add_chord(Chord(midis=60, quarter_duration=1))
-        m.add_chord(Chord(midis=60, quarter_duration=1))
-        m.add_chord(Chord(midis=60, quarter_duration=1))
-        m.add_chord(Chord(midis=60, quarter_duration=1))
+        m._add_chord(Chord(midis=60, quarter_duration=1))
+        m._add_chord(Chord(midis=60, quarter_duration=1))
+        m._add_chord(Chord(midis=60, quarter_duration=1))
+        m._add_chord(Chord(midis=60, quarter_duration=1))
         assert len(s.get_chords()) == 4
         assert type(s.get_chords()[0]) == Chord
 

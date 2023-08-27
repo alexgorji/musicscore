@@ -21,8 +21,8 @@ class TestFinalUpdates(IdTestCase):
         self.voice = self.staff.add_voice()
         self.voice.update_beats()
         self.beats = self.voice.get_children()
-        self.chord_1 = self.voice.add_chord(Chord(60, QuarterDuration(1, 3)))[0]
-        self.chords_2 = self.voice.add_chord(Chord(61, QuarterDuration(2, 3) + QuarterDuration(3)))
+        self.chord_1 = self.voice._add_chord(Chord(60, QuarterDuration(1, 3)))[0]
+        self.chords_2 = self.voice._add_chord(Chord(61, QuarterDuration(2, 3) + QuarterDuration(3)))
 
     @staticmethod
     def check_note_values(chords, indices=None):

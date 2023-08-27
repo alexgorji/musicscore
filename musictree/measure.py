@@ -2,7 +2,7 @@ from typing import List, Optional, Union
 
 from musictree.clef import BassClef, TrebleClef
 from musictree.core import MusicTree
-from musictree.exceptions import AlreadyFinalUpdated, MeasureException
+from musictree.exceptions import AlreadyFinalUpdated, MeasureException, AddChordException
 from musictree.finalupdate_mixin import FinalUpdateMixin
 from musictree.key import Key
 from musictree.staff import Staff
@@ -35,7 +35,7 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
         voice = self.add_voice(staff_number=staff_number, voice_number=voice_number)
         if not voice.get_children():
             voice.update_beats()
-        return voice.add_chord(chord)
+        return voice._add_chord(chord)
 
     def _set_attributes(self):
         self.xml_object.xml_attributes = XMLAttributes()
@@ -314,25 +314,8 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
         self._update_clef_numbers()
         return child
 
-    def add_chord(self, chord: 'Chord', *, staff_number: Optional[int] = None, voice_number: int = 1) -> List['Chord']:
-        """
-        Adds chord to selected :obj:`~musictree.voice.Voice`
-
-        :param chord: :obj:`~musictree.chord.Chord`, required
-        :param staff_number: positive int
-        :param voice_number: positive int
-        :return: added chord or a list of split chords
-        """
-        voice = self.add_voice(staff_number=staff_number, voice_number=voice_number)
-        if not voice.get_children():
-            voice.update_beats()
-        added_chords = self._add_chord(chord, staff_number, voice_number)
-
-        leftover_chord = voice.leftover_chord
-        if leftover_chord:
-            raise MeasureException(
-                'Adding chords to measure which extend the quarter_durations of the measure is not implemented yet.')
-        return added_chords
+    def add_chord(self, *args, **kwargs):
+        raise AddChordException
 
     def add_staff(self, staff_number: Optional[int] = None) -> 'Staff':
         """

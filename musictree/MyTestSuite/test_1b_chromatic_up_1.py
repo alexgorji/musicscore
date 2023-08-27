@@ -29,7 +29,7 @@ class TestHelloChromatics(TestCase):
         """
         min_midi = 60
         for m, qd in zip(measures, quarter_durations):
-            m.add_chord(Chord(quarter_duration=qd, midis=Midi(min_midi + 10 - qd, accidental=Accidental(mode='sharp'))))
+            m._add_chord(Chord(quarter_duration=qd, midis=Midi(min_midi + 10 - qd, accidental=Accidental(mode='sharp'))))
         """
         Exporting
         """

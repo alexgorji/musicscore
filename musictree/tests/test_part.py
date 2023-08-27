@@ -175,23 +175,23 @@ class TestPart(IdTestCase):
         m1 = p.add_measure()
         assert p.get_current_measure(staff_number=1, voice_number=1) == m1
         m2 = p.add_measure()
-        m1.add_chord(Chord(midis=60, quarter_duration=2))
+        m1._add_chord(Chord(midis=60, quarter_duration=2))
         assert p.get_current_measure(staff_number=1, voice_number=1) == m1
-        m1.add_chord(Chord(midis=60, quarter_duration=2))
+        m1._add_chord(Chord(midis=60, quarter_duration=2))
         assert p.get_current_measure(staff_number=1, voice_number=1) == m1
         assert m1.get_voice(staff_number=1, voice_number=1).is_filled
-        m2.add_chord(Chord(midis=60, quarter_duration=2))
+        m2._add_chord(Chord(midis=60, quarter_duration=2))
         assert p.get_current_measure(staff_number=1, voice_number=1) == m2
         m3 = p.add_measure()
         m4 = p.add_measure()
-        m4.add_chord(Chord(midis=60, quarter_duration=2))
+        m4._add_chord(Chord(midis=60, quarter_duration=2))
         assert p.get_current_measure(staff_number=1, voice_number=1) == m4
 
     def test_part_get_current_measure_complex(self):
         p = Part('p1')
         assert p.get_current_measure(staff_number=None, voice_number=1) is None
         m1 = p.add_measure()
-        m1.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2, voice_number=2)
+        m1._add_chord(Chord(midis=60, quarter_duration=4), staff_number=2, voice_number=2)
         assert p.get_current_measure(staff_number=1, voice_number=1) == m1
         assert p.get_current_measure(staff_number=1, voice_number=2) is None
         assert p.get_current_measure(staff_number=2, voice_number=1) == m1
@@ -204,7 +204,7 @@ class TestPart(IdTestCase):
         assert p.get_current_measure(staff_number=1, voice_number=1) == m1
         #
         m2 = p.add_measure()
-        m2.add_chord(Chord(midis=60, quarter_duration=4), staff_number=2, voice_number=2)
+        m2._add_chord(Chord(midis=60, quarter_duration=4), staff_number=2, voice_number=2)
 
         assert p.get_current_measure(staff_number=1, voice_number=1) == m1
         assert p.get_current_measure(staff_number=1, voice_number=2) is None
@@ -212,7 +212,7 @@ class TestPart(IdTestCase):
         assert p.get_current_measure(staff_number=2, voice_number=2) == m2
 
         m1 = Measure(1)
-        m1.add_chord(Chord(midis=60, quarter_duration=1))
+        m1._add_chord(Chord(midis=60, quarter_duration=1))
         p = Part('p2')
         p.add_child(m1)
         assert p.get_current_measure(staff_number=1, voice_number=1) == m1
