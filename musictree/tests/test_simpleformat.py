@@ -230,7 +230,7 @@ class TestSimpleFormat(IdTestCase):
         sf2 = SimpleFormat(quarter_durations=[3, 2, 1], midis=[63, 64, 65])
         sf = SimpleFormat.sum(sf1, sf2)
         generate_xml_file(self.score, sf1, sf2, sf, path=path)
-        get_xml_diff_part(expected, path)
+        get_xml_diff_part(expected, path, Path(__file__))
 
     def test_sum_2(self):
         path = Path(__file__).stem + '_sum_2.xml'
@@ -239,7 +239,7 @@ class TestSimpleFormat(IdTestCase):
         sf2 = SimpleFormat(quarter_durations=[1, 3, 2], midis=[(60, 65), 67, (50, 54)])
         sf = SimpleFormat.sum(sf1, sf2)
         generate_xml_file(self.score, sf1, sf2, sf, path=path)
-        get_xml_diff_part(expected, path)
+        get_xml_diff_part(expected, path, Path(__file__))
 
     def test_sum_3(self):
         path = Path(__file__).stem + '_sum_3.xml'
@@ -255,7 +255,7 @@ class TestSimpleFormat(IdTestCase):
         part.get_staff(1, 3).clef = TrebleClef()
         part.get_staff(1, 4).clef = TrebleClef()
         self.score.export_xml(path)
-        get_xml_diff_part(expected, path)
+        get_xml_diff_part(expected, path, Path(__file__))
 
     def test_complex_sum(self):
         path = Path(__file__).stem + '_complex_sum.xml'
@@ -264,7 +264,7 @@ class TestSimpleFormat(IdTestCase):
         sf2 = SimpleFormat(quarter_durations=[0.5, 1, 1.5, 2, 3, 1], midis=[0, 69, (72, 73), (58, 60, 65, 71), 80, 0])
         sf = SimpleFormat.sum(sf1, sf2)
         generate_xml_file(self.score, sf1, sf2, sf, path=path)
-        get_xml_diff_part(expected, path)
+        get_xml_diff_part(expected, path, Path(__file__))
 
     def test_sum_of_tied_chords(self):
         path = Path(__file__).stem + '_sum_of_tied_chords.xml'
@@ -289,7 +289,7 @@ class TestSimpleFormat(IdTestCase):
         sum1 = SimpleFormat.sum(sf1, sf2)
         sum2 = SimpleFormat.sum(sf1, sf2, no_duplicates=True)
         generate_xml_file(self.score, sf1, sf2, sum1, sum2, path=path)
-        get_xml_diff_part(expected, path)
+        get_xml_diff_part(expected, path, Path(__file__))
 
     def test_sum_without_duplicates_2(self):
         path = Path(__file__).stem + '_sum_without_duplicates_2.xml'
@@ -301,7 +301,7 @@ class TestSimpleFormat(IdTestCase):
         sum1 = SimpleFormat.sum(sf1, sf2)
         sum2 = SimpleFormat.sum(sf1, sf2, no_duplicates=True)
         generate_xml_file(self.score, sf1, sf2, sum1, sum2, path=path)
-        get_xml_diff_part(expected, path)
+        get_xml_diff_part(expected, path, Path(__file__))
 
     def test_sum_different_simple_format_lengths_exception(self):
         sf1 = SimpleFormat(quarter_durations=[3, 2, 3], midis=[65, 64, 63])

@@ -462,7 +462,7 @@ class TestAddChordToPart(IdTestCase):
         part.get_staff(1, 2).clef = TrebleClef()
         score.export_xml(path)
 
-        get_xml_diff_part(expected, path)
+        get_xml_diff_part(expected, path, Path(__file__))
 
     def test_add_first_chord_with_clef(self):
         path = Path(__file__).stem + '_add_first_chord_with_clef.xml'
@@ -471,7 +471,7 @@ class TestAddChordToPart(IdTestCase):
         sf1.chords[0].clef = BassClef()
         sf1.chords[2].clef = TrebleClef()
         generate_xml_file(Score(), sf1, path=path)
-        get_xml_diff_part(expected, path)
+        get_xml_diff_part(expected, path, Path(__file__))
 
 
 class TestSplitQdAndTime(IdTestCase):
@@ -646,7 +646,7 @@ class TestSplitQdAndTime(IdTestCase):
         score = Score()
         score.add_child(p)
         score.export_xml(path)
-        get_xml_diff_part(expected, path)
+        get_xml_diff_part(expected, path, Path(__file__))
 
     def test_add_chords_with_partially_tied_notes_simplified(self):
         midis = [[62, 64], [62, 65]]
@@ -663,8 +663,8 @@ class TestSplitQdAndTime(IdTestCase):
         score = Score()
         score.add_child(p)
         score.export_xml(path)
-        el1 = ET.parse(path).getroot().find("part[@id='part-1']")
-        el2 = ET.parse(expected).getroot().find("part[@id='part-1']")
+        el1 = ET.parse(Path(__file__).parent / path).getroot().find("part[@id='part-1']")
+        el2 = ET.parse(Path(__file__).parent / expected).getroot().find("part[@id='part-1']")
         diff = get_xml_elements_diff(el1=el1, el2=el2)
         if diff:
             raise XMLsDifferException(diff)
