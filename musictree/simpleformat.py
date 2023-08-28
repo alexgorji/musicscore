@@ -191,61 +191,30 @@ class SimpleFormat(object):
         for chord in self.chords:
             chord.quarter_duration *= factor
 
-    # @staticmethod
-    # def sum(*simple_formats, no_duplicates=False):
-    #     """
-    #     A static method for combining two SimpleFormats.
-    #     """
-    #     def _copied_position_dict(sf):
-    #         output = {}
-    #         for chord, position in zip(sf.chords, sf.get_quarter_positions()):
-    #             output[position] = chord.__deepcopy__()
-    #         return output
-    #
-    #     def _key_sorted_dict(dict):
-    #         output = {}
-    #         for key in sorted(dict.keys()):
-    #             output[key] = dict[key]
-    #         return output
-    #
-    #     def _trim_quarter_durations():
-    #         quarter_durations = xToD(list(all_positioned_chords.keys()))
-    #         chords = all_positioned_chords.values()
-    #         for quarter_duration, chord in zip(quarter_durations, chords):
-    #             chord.quarter_duration = quarter_duration
-    #
-    #     all_positioned_chords = _copied_position_dict(simple_formats[0])
-    #     for sf in simple_formats[1:]:
-    #         other_positioned_chords = _copied_position_dict(sf)
-    #         for other_position, other_chord in other_positioned_chords.items():
-    #             if other_position in all_positioned_chords.keys():
-    #                 chord = all_positioned_chords[other_position]
-    #                 if chord.is_rest:
-    #                     all_positioned_chords[other_position] = chord
-    #                 elif not other_chord.is_rest:
-    #                     for midi in other_chord.midis:
-    #                         if not no_duplicates or midi.value not in [m.value for m in chord.midis]:
-    #                             chord.add_midi(midi)
-    #                 else:
-    #                     pass
-    #             else:
-    #                 all_positioned_chords[other_position] = other_chord
-    #     all_positioned_chords = _key_sorted_dict(all_positioned_chords)
-    #     _trim_quarter_durations()
-    #     output = SimpleFormat()
-    #     for chord in all_positioned_chords.values():
-    #         output.add_chord(chord)
-    #     return output
     @staticmethod
     def sum(*simple_formats, no_duplicates=False):
+        if len(set([sf.quarter_duration for sf in simple_formats])) > 1:
+            raise SimpleFormatException('SimpleFormat.sum() cannot be used on simple_formats with different durations.')
         for midi in [midi for simple_format in simple_formats for chord in simple_format.chords for midi in
                      chord.midis]:
             if midi._ties != set():
-                raise SimpleFormatException('SimpleFormat.sum() cannot be used on simple_formats containing tied notes')
+                raise SimpleFormatException(
+                    'SimpleFormat.sum() cannot be used on simple_formats containing tied notes.')
 
         def extract_chord_midis(i):
             def remove_duplicates(new_midis):
-                return new_midis
+                def check(m):
+                    for nm in newer_midis:
+                        if m.value == nm.value and m.accidental.mode == nm.accidental.mode:
+                            return False
+                    return True
+
+                newer_midis = []
+                for m in new_midis:
+                    if check(m):
+                        newer_midis.append(m)
+
+                return newer_midis
 
             chords = ordered_chords[i]
             output = []
@@ -265,8 +234,8 @@ class SimpleFormat(object):
                     pass
                 output.extend(new_ms)
             if no_duplicates:
-                raise NotImplementedError('no_duplicates is not implemented yet.')
-                output = remove_doubles(output)
+                # raise NotImplementedError('no_duplicates is not implemented yet.')
+                output = remove_duplicates(output)
             return output
 
         sf = SimpleFormat()

@@ -140,3 +140,5 @@ class AddChordException(MusicTreeException):
 
 class SimpleFormatException(MusicTreeException):
     pass
+
+
