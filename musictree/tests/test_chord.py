@@ -3,6 +3,7 @@ from unittest import skip
 
 from quicktions import Fraction
 
+from musictree import BassClef
 from musictree.accidental import Accidental
 from musictree.beat import Beat
 from musictree.chord import Chord, split_copy, group_chords
@@ -169,31 +170,6 @@ class TestTreeChord(ChordTestCase):
         c.midis[0].value = 60
         # c.quarter_duration = 0
         # c._parent = self.mock_beat
-
-    #         c.final_updates()
-    #         expected = """<note>
-    #   <grace />
-    #   <pitch>
-    #     <step>C</step>
-    #     <octave>4</octave>
-    #   </pitch>
-    #   <voice>1</voice>
-    # </note>
-    # """
-    #         assert c.notes[0].to_string() == expected
-    #         # change chord's attributes?
-    #         c.notes[0].relative_x = 20
-    #         c.notes[0].relative_y = 15
-    #         expected = """<note relative-x="20" relative-y="15">
-    #   <grace />
-    #   <pitch>
-    #     <step>C</step>
-    #     <octave>4</octave>
-    #   </pitch>
-    #   <voice>1</voice>
-    # </note>
-    # """
-    #         assert c.notes[0].to_string() == expected
 
     def test_chord_single_non_rest(self):
         """
@@ -420,9 +396,14 @@ class TestTreeChord(ChordTestCase):
     def test_add_words(self):
         self.fail('Incomplete')
 
-    @skip
     def test_add_clef(self):
-        self.fail('Incomplete')
+        ch = Chord(60, 2)
+        assert ch.clef is None
+        cl = BassClef()
+        ch.clef = cl
+        assert ch.clef == cl
+        with self.assertRaises(TypeError):
+            ch.clef = 'bla'
 
     @skip
     def test_add_bracket(self):

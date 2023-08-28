@@ -2,6 +2,7 @@ import copy
 from fractions import Fraction
 from typing import Union, List, Optional, Any, Dict
 
+from musictree.clef import Clef
 from musicxml.xmlelement.xmlelement import *
 
 from musictree.dynamics import Dynamics
@@ -51,7 +52,7 @@ class Chord(MusicTree, QuarterDurationMixin):
     :param quarter_duration: int, float, Fraction, QuarterDuration for duration counted in quarters (crotchets). 0 for grace note (or
     chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
@@ -71,6 +72,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._xml_other_notations = []
         self._note_attributes = kwargs
         self._notes_are_set = False
+        self._clef = None
 
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
@@ -104,6 +106,41 @@ class Chord(MusicTree, QuarterDurationMixin):
 
     def _sort_midis(self):
         self._midis = sorted(self._midis)
+
+    def _update_notes(self):
+        for child in self.get_children()[len(self.midis):]:
+            self.remove(child)
+        for index, midi in enumerate(self.midis):
+            try:
+                self.get_children()[index].midi = midi
+            except IndexError:
+                self.add_child(Note(midi=midi, **self._note_attributes))
+        self._notes_are_set = True
+
+    def _update_notes_pitch_or_rest(self):
+        if self.notes:
+            len_diff = len(self.notes) - len(self.midis)
+            if len_diff > 0:
+                to_be_removed = self.notes[len_diff:]
+                for note in to_be_removed:
+                    note.up.remove(note)
+                    note.parent_chord = None
+                    del note
+            for index, m in enumerate(self.midis):
+                if index < len(self.notes):
+                    self.notes[index].midi = m
+                else:
+                    new_note = Note(midi=m, quarter_duration=self.quarter_duration)
+                    self.add_child(new_note)
+
+    def _update_notes_quarter_duration(self):
+        for note in self.notes:
+            note.quarter_duration = self.quarter_duration
+
+    def _update_ties(self):
+        # update ties of already created notes
+        for note in self.notes:
+            note._update_ties()
 
     def _update_xml_articulations(self):
         def _get_note_xml_articulations():
@@ -268,21 +305,12 @@ class Chord(MusicTree, QuarterDurationMixin):
         for lyric in note_lyrics_not_in_chord:
             n.xml_object.remove(lyric)
 
-    def _update_notes(self):
-        for child in self.get_children()[len(self.midis):]:
-            self.remove(child)
-        for index, midi in enumerate(self.midis):
-            try:
-                self.get_children()[index].midi = midi
-            except IndexError:
-                self.add_child(Note(midi=midi, **self._note_attributes))
-        self._notes_are_set = True
-
     def _update_xml_chord(self):
         for n in self.notes[1:]:
             if not n.xml_object.xml_chord:
                 n.xml_object.add_child(XMLChord())
 
+    # public properties
     @property
     def all_midis_are_tied_to_next(self):
         if set([m.is_tied_to_next for m in self.midis]) == {True}:
@@ -297,60 +325,15 @@ class Chord(MusicTree, QuarterDurationMixin):
         else:
             return False
 
-    def final_updates(self):
-        """
-        Final updates can be called only once. All necessary updates and xmlelement object creations will take place and the MusicTree
-        object will be prepared for returning a musicxml snippet or a whole musicxml file.
+    @property
+    def clef(self):
+        return self._clef
 
-        - Check if parent :obj:`~musictree.beat.Beat` exists.
-        - Ancestor :obj:`~musictree.measure.Measure.update_divisions()` is called to update :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`'s :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions` attribute.
-        - Following updates are triggered: update_notes, update_xml_chord, update_notes_quarter_durations, update_xml_lyrics,
-          update_xml_directions, update_xml_articulations, update_technicals
-        """
-        if self._final_updated:
-            raise AlreadyFinalUpdated(self)
-
-        if not self.up:
-            raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
-
-        self._update_notes()
-        self._update_xml_chord()
-
-        self._update_notes_quarter_duration()
-        self._update_xml_lyrics()
-        self._update_ties()
-        self._update_xml_directions()
-        self._update_xml_articulations()
-        self._update_xml_technicals()
-        self._update_xml_ornaments()
-        self._update_xml_dynamics()
-        self._update_xml_other_notations()
-        self._final_updated = True
-
-    def _update_notes_quarter_duration(self):
-        for note in self.notes:
-            note.quarter_duration = self.quarter_duration
-
-    def _update_notes_pitch_or_rest(self):
-        if self.notes:
-            len_diff = len(self.notes) - len(self.midis)
-            if len_diff > 0:
-                to_be_removed = self.notes[len_diff:]
-                for note in to_be_removed:
-                    note.up.remove(note)
-                    note.parent_chord = None
-                    del note
-            for index, m in enumerate(self.midis):
-                if index < len(self.notes):
-                    self.notes[index].midi = m
-                else:
-                    new_note = Note(midi=m, quarter_duration=self.quarter_duration)
-                    self.add_child(new_note)
-
-    def _update_ties(self):
-        # update ties of already created notes
-        for note in self.notes:
-            note._update_ties()
+    @clef.setter
+    def clef(self, val):
+        if not isinstance(val, Clef):
+            raise TypeError
+        self._clef = val
 
     @property
     def is_rest(self) -> bool:
@@ -464,6 +447,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         return self._xml_technicals
 
+    # public methods
     def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations],
               **kwargs):
         """
@@ -571,6 +555,56 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._sort_midis()
         return midi
 
+    def final_updates(self):
+        """
+        Final updates can be called only once. All necessary updates and xmlelement object creations will take place and the MusicTree
+        object will be prepared for returning a musicxml snippet or a whole musicxml file.
+
+        - Check if parent :obj:`~musictree.beat.Beat` exists.
+        - Ancestor :obj:`~musictree.measure.Measure.update_divisions()` is called to update :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`'s :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions` attribute.
+        - Following updates are triggered: update_notes, update_xml_chord, update_notes_quarter_durations, update_xml_lyrics,
+          update_xml_directions, update_xml_articulations, update_technicals
+        """
+        if self._final_updated:
+            raise AlreadyFinalUpdated(self)
+
+        if not self.up:
+            raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
+
+        self._update_notes()
+        self._update_xml_chord()
+
+        self._update_notes_quarter_duration()
+        self._update_xml_lyrics()
+        self._update_ties()
+        self._update_xml_directions()
+        self._update_xml_articulations()
+        self._update_xml_technicals()
+        self._update_xml_ornaments()
+        self._update_xml_dynamics()
+        self._update_xml_other_notations()
+        self._final_updated = True
+
+    def has_same_pitches(self, other: 'Chord') -> bool:
+        """
+        Only for chords with pitches. Rest chords cannot use this method.
+
+        :param other: Other chord to which the comparison takes place
+        :return: `True` if pitches of self and other chord has the same pitch parameters and accidental values else `False`
+        """
+        if not isinstance(other, Chord):
+            raise TypeError
+        if self.is_rest or other.is_rest:
+            raise TypeError('Rest cannot use method has_same_pitches.')
+        if [m.value for m in self.midis] != [m.value for m in other.midis]:
+            return False
+        for m1, m2 in zip(self.midis, other.midis):
+            if m1.accidental.show != m2.accidental.show:
+                return False
+            if m1.accidental.get_pitch_parameters() != m2.accidental.get_pitch_parameters():
+                return False
+        return True
+
     def get_children(self) -> List[Note]:
         """
         :return: list of added children.
@@ -612,26 +646,6 @@ class Chord(MusicTree, QuarterDurationMixin):
 
     def set_possible_subdivisions(self):
         raise TypeError
-
-    def has_same_pitches(self, other: 'Chord') -> bool:
-        """
-        Only for chords with pitches. Rest chords cannot use this method.
-
-        :param other: Other chord to which the comparison takes place
-        :return: `True` if pitches of self and other chord has the same pitch parameters and accidental values else `False`
-        """
-        if not isinstance(other, Chord):
-            raise TypeError
-        if self.is_rest or other.is_rest:
-            raise TypeError('Rest cannot use method has_same_pitches.')
-        if [m.value for m in self.midis] != [m.value for m in other.midis]:
-            return False
-        for m1, m2 in zip(self.midis, other.midis):
-            if m1.accidental.show != m2.accidental.show:
-                return False
-            if m1.accidental.get_pitch_parameters() != m2.accidental.get_pitch_parameters():
-                return False
-        return True
 
     def split_and_add_beatwise(self, beats: List['Beat']) -> List['Chord']:
         """

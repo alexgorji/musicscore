@@ -3,7 +3,7 @@ from typing import Optional, Set, List
 from musictree.finalupdate_mixin import FinalUpdateMixin
 from musicxml.xmlelement.xmlelement import XMLStaff
 
-from musictree.clef import TrebleClef, Clef
+from musictree.clef import Clef
 from musictree.exceptions import StaffHasNoParentError
 from musictree.core import MusicTree
 from musictree.voice import Voice

@@ -4,7 +4,7 @@ from unittest import skip
 
 import xmltodict
 
-from musictree import Time, SimpleFormat
+from musictree import Time, SimpleFormat, BassClef, TrebleClef
 from musictree.chord import Chord
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError
 from musictree.key import Key
@@ -12,7 +12,8 @@ from musictree.measure import Measure
 from musictree.part import Part, ScorePart, Id
 from musictree.quarterduration import QuarterDuration
 from musictree.score import Score
-from musictree.tests.util import IdTestCase, get_xml_elements_diff, XMLsDifferException
+from musictree.tests.util import IdTestCase, get_xml_elements_diff, XMLsDifferException, get_xml_diff_part, \
+    generate_xml_file
 import xml.etree.ElementTree as ET
 
 
@@ -392,7 +393,7 @@ class TestAddChordToPart(IdTestCase):
         for measure_number in range(2, math.ceil(sum(quarter_durations) / 4)):
             assert self._get_clefs_of_measure(part, measure_number) is None
 
-    def test_part_add_chord_different_staves_and_voices(self):
+    def test_add_chord_different_staves_and_voices(self):
         p = Part('p1')
         p.add_chord(Chord(60, 1))
         m = p.get_children()[0]
@@ -405,7 +406,7 @@ class TestAddChordToPart(IdTestCase):
         assert [ch.midis[0].value for ch in m.get_voice(staff_number=1, voice_number=1).get_chords()] == [60, 62]
         assert [ch.quarter_duration for ch in m.get_voice(staff_number=2, voice_number=4).get_chords()] == [2]
 
-    def test_part_add_chord_with_leftover(self):
+    def test_add_chord_with_leftover(self):
         p = Part('p1')
         ch = Chord(60, 5)
         p.add_chord(ch)
@@ -415,14 +416,14 @@ class TestAddChordToPart(IdTestCase):
         assert m1.get_voice(staff_number=1, voice_number=1).is_filled
         assert not m2.get_voice(staff_number=1, voice_number=1).is_filled
 
-    def test_part_add_chord_to_full_measure(self):
+    def test_add_chord_to_full_measure(self):
         p = Part('p1')
         p.add_chord(Chord(60, 4))
         p.add_chord(Chord(60, 6))
         m1, m2, m3 = p.get_children()
         assert p.get_current_measure() == m3
 
-    def test_part_add_chord_to_existing_measures(self):
+    def test_add_chord_to_existing_measures(self):
         p = Part('p1')
         for _ in range(3):
             p.add_measure()
@@ -431,54 +432,7 @@ class TestAddChordToPart(IdTestCase):
         p.add_chord(Chord(60, 5))
         assert p.get_current_measure() == m2
 
-    def test_split_tied_chord_5_5_4(self):
-        chord = Chord(midis=60, quarter_duration=5)
-        chord.add_tie('start')
-        p = Part('p1')
-        p.add_measure((5, 4))
-        p.add_chord(chord)
-        assert len(p.get_children()) == 1
-        m = p.get_children()[-1]
-        all_chords = [ch1, ch2] = m.get_chords()
-        assert [ch.quarter_duration for ch in all_chords] == [3, 2]
-        assert ch1.all_midis_are_tied_to_next
-        assert ch2.all_midis_are_tied_to_previous
-        assert ch2.all_midis_are_tied_to_next
-
-    def test_split_tied_chord_10_5_4(self):
-        chord = Chord(midis=60, quarter_duration=10)
-        chord.add_tie('start')
-        p = Part('p2')
-        p.add_measure((10, 4))
-        p.add_chord(chord)
-        assert len(p.get_children()) == 1
-        m = p.get_children()[-1]
-        all_chords = [ch1, ch2, ch3] = m.get_chords()
-        assert [ch.quarter_duration for ch in all_chords] == [4, 4, 2]
-        assert not ch1.all_midis_are_tied_to_previous
-        assert ch1.all_midis_are_tied_to_next
-        assert ch2.all_midis_are_tied_to_previous
-        assert ch2.all_midis_are_tied_to_next
-        assert ch3.all_midis_are_tied_to_previous
-        assert ch3.all_midis_are_tied_to_next
-
-    def test_split_tied_chord_10_4_4(self):
-        chord = Chord(midis=60, quarter_duration=10)
-        chord.add_tie('start')
-        p = Part('p3')
-        p.add_measure((4, 4))
-        p.add_chord(chord)
-        m1, m2, m3 = p.get_children()
-        all_chords = [ch1, ch2, ch3] = m1.get_chords() + m2.get_chords() + m3.get_chords()
-        assert [ch.quarter_duration for ch in all_chords] == [4, 4, 2]
-        assert ch1.all_midis_are_tied_to_next
-        assert not ch1.all_midis_are_tied_to_previous
-        assert ch2.all_midis_are_tied_to_next
-        assert ch2.all_midis_are_tied_to_previous
-        assert ch3.all_midis_are_tied_to_previous
-        assert ch3.all_midis_are_tied_to_next
-
-    def test_part_add_chord_with_staff_number(self):
+    def test_add_chord_with_staff_number(self):
         p = Part('P1')
         ch1 = Chord(60, 1)
         ch2 = Chord(48, 1)
@@ -490,6 +444,34 @@ class TestAddChordToPart(IdTestCase):
         p.final_updates()
         assert ch1.notes[0].xml_staff.value_ == 1
         assert ch2.notes[0].xml_staff.value_ == 2
+
+    def test_add_chord_with_clef(self):
+        path = Path(__file__).stem + '_add_chord_with_clef.xml'
+        expected = Path(__file__).stem + '_add_chord_with_clef_expected.xml'
+        sf1 = SimpleFormat(midis=[60, (61, 66), 62], quarter_durations=[1, 2, 3])
+        sf2 = SimpleFormat(midis=[60, (61, 66), 62], quarter_durations=[1, 2, 3])
+        sf1.chords[1].clef = BassClef()
+
+        sf2.chords[1].clef = BassClef()
+        sf2.chords[2].clef = TrebleClef()
+        score = Score()
+        part = score.add_part(id_='part-1')
+        for index, simpleformat in enumerate([sf1, sf2]):
+            for chord in simpleformat.chords:
+                part.add_chord(chord, staff_number=index + 1)
+        part.get_staff(1, 2).clef = TrebleClef()
+        score.export_xml(path)
+
+        get_xml_diff_part(expected, path)
+
+    def test_add_first_chord_with_clef(self):
+        path = Path(__file__).stem + '_add_first_chord_with_clef.xml'
+        expected = Path(__file__).stem + '_add_first_chord_with_clef_expected.xml'
+        sf1 = SimpleFormat(midis=[60, (61, 66), 62], quarter_durations=[2, 6, 4])
+        sf1.chords[0].clef = BassClef()
+        sf1.chords[2].clef = TrebleClef()
+        generate_xml_file(Score(), sf1, path=path)
+        get_xml_diff_part(expected, path)
 
 
 class TestSplitQdAndTime(IdTestCase):
@@ -659,17 +641,12 @@ class TestSplitQdAndTime(IdTestCase):
         p = Part(id='part-1')
         for chord in chords:
             p.add_chord(chord)
-        all_chords = [ch1, ch2, ch3, ch4, ch5] = p.get_chords()
-        assert [[m.value for m in ch.midis] for ch in all_chords] == [[60, 63], [61, 63], [62, 64], [62, 64], [62, 65]]
-        assert [ch.quarter_duration for ch in all_chords] == [1, 2, 1, 1, 1]
         path = Path(__file__).stem + '_add_chords_with_partially_tied_notes.xml'
+        expected = Path(__file__).stem + '_add_chords_with_partially_tied_notes_expected.xml'
         score = Score()
         score.add_child(p)
         score.export_xml(path)
-        # assert ch1.midis[1].is_tied_to_next
-        # assert ch2.midis[1].is_tied_to_previous
-        # assert ch1.midis[1].is_tied_to_next
-        # assert ch2.midis[1].is_tied_to_previous
+        get_xml_diff_part(expected, path)
 
     def test_add_chords_with_partially_tied_notes_simplified(self):
         midis = [[62, 64], [62, 65]]
@@ -691,4 +668,3 @@ class TestSplitQdAndTime(IdTestCase):
         diff = get_xml_elements_diff(el1=el1, el2=el2)
         if diff:
             raise XMLsDifferException(diff)
-

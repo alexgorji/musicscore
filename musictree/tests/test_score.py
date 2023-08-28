@@ -156,4 +156,3 @@ class TestScore(IdTestCase):
   </identification>
 """
         assert s.xml_object.xml_identification.to_string() == expected
-

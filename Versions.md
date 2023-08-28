@@ -80,6 +80,7 @@ if needed.
 ``Chord.add_midi(), Chord._sort_midis()`` added
 ``Chord.get_voice_number()`` and ``Chord.get_staff_number()`` return None if no ``Voice`` or ``Staff`` ancestor exist
 ``Chord.__deepcopy__()`` added. Only midi and quarter_duration are deepcopied.
+``Chord.clef`` property added.
 ``Chord.all_midis_are_tied_to_next`` and ``Chord.all_midis_are_tied_to_previous`` added
 ``Score`` Inherited methode ``Score.write`` will throw an Exception (.export_xml should be used instead)
 ``Clef`` argument default and property _default added (this will be True if Measure._update_default_clefs() set the

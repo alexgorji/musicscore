@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from musictree.chord import Chord
-from musictree.measure import Measure
 from musictree.part import Part
 from musictree.score import Score
 from musictree.tests.util import IdTestCase
@@ -13,20 +12,17 @@ class TestHelloWorld(IdTestCase):
         Hello World as musicxml means having a C4 pitch as a whole in a 4/4 measure with treble clef.
         """
         """
-        Tester creates a timewise score
+        Tester creates score
         """
         s = Score()
         """
-        He adds a measure with one part to it (default Measure has a 4/4 time signature)
+        He adds a part with id P1 (required) and name Music
         """
         p = s.add_child(Part('P1', name='Music'))
-        m = p.add_child(Measure(number=1))
         """
-        He adds a Chord with midi 60 to the measure
+        He adds a Chord with midi 60 to the part. A measure (default Measure has a 4/4 time signature) will be created automatically
         """
-        m.add_chord(Chord(60, 4))
-        m.update_chord_accidentals()
-
+        p.add_chord(Chord(60, 4))
         """
         ... and exports the xml
         """

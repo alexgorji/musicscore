@@ -234,7 +234,6 @@ class SimpleFormat(object):
                     pass
                 output.extend(new_ms)
             if no_duplicates:
-                # raise NotImplementedError('no_duplicates is not implemented yet.')
                 output = remove_duplicates(output)
             return output
 

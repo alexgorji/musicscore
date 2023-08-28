@@ -90,7 +90,8 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
                             if step in steps_with_accidentals:
                                 midi.accidental.show = True
                                 steps_with_accidentals.remove(step)
-                            elif relevant_chords_not_tied and chord == relevant_chords_not_tied[0] and previous_staff and step in \
+                            elif relevant_chords_not_tied and chord == relevant_chords_not_tied[
+                                0] and previous_staff and step in \
                                     previous_staff.get_last_pitch_steps_with_accidentals():
                                 midi.accidental.show = True
                             else:
@@ -177,6 +178,11 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
                 for chord in chords:
                     for xml_direction in chord._xml_directions:
                         self.xml_object.add_child(xml_direction)
+                    if chord.clef and chord.clef.show is True:
+                        if len(self.get_children()) > 1:
+                            chord.clef.number = staff.number
+                        attributes = self.xml_object.add_child(XMLAttributes())
+                        attributes.add_child(chord.clef.xml_object)
                     for note in chord.notes:
                         self.xml_object.add_child(note.xml_object)
 
