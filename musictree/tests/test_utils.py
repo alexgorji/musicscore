@@ -5,7 +5,7 @@ from musictree.midi import C
 
 from musictree.score import Score
 from musictree.tests.util import diff_xml, _create_expected_path, find_key
-from util import isinstance_as_string, lcm
+from musictree.util import lcm, isinstance_as_string
 
 
 class TestUtils(TestCase):

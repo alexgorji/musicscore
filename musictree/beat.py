@@ -9,7 +9,7 @@ from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHa
     ChordHasNoMidisError, AlreadyFinalUpdated, BeatNotFullError, AddChordException
 from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
-from util import lcm
+from musictree.util import lcm
 
 __all__ = ['SPLITTABLES', 'Beat', 'beam_chord_group']
 

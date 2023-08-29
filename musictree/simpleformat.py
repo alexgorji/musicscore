@@ -2,7 +2,7 @@ import copy
 
 from musictree import Midi, Chord
 from musictree.exceptions import SimpleFormatException
-from util import dToX, xToD
+from musictree.util import dToX, xToD
 
 
 class SimpleFormat(object):

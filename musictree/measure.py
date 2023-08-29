@@ -7,7 +7,7 @@ from musictree.finalupdate_mixin import FinalUpdateMixin
 from musictree.key import Key
 from musictree.staff import Staff
 from musictree.time import Time, flatten_times
-from util import lcm
+from musictree.util import lcm
 from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup

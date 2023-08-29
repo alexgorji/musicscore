@@ -1,7 +1,7 @@
 from typing import Optional, List
 
 from musictree.quarterduration import QuarterDuration
-from util import isinstance_as_string
+from musictree.util import isinstance_as_string
 from tree.tree import Tree
 
 __all__ = ['MusicTree']
