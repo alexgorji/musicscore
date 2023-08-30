@@ -55,6 +55,16 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         if duration < 0:
             raise ValueError
 
+    def _add_child(self, child: Midi) -> Midi:
+        """
+        Check and add child to list of children. Child's parent is set to self.
+
+        :param child: :obj:`~musictree.midi.Midi`
+        :return: child
+        :rtype: :obj:`~musictree.midi.Midi`
+        """
+        return super().add_child(child)
+
     def _set_quarter_duration(self, val):
         old_quarter_duration = self._quarter_duration
         super()._set_quarter_duration(val)
@@ -228,16 +238,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     def xml_object(self) -> XMLClass:
         return super().xml_object
 
-    def add_child(self, child: Midi) -> Midi:
-        """
-        Check and add child to list of children. Child's parent is set to self.
-
-        :param child: :obj:`~musictree.midi.Midi`
-        :return: child
-        :rtype: :obj:`~musictree.midi.Midi`
-        """
-        return super().add_child(child)
-
     def get_children(self) -> List[Midi]:
         """
         :return: list of added children.
@@ -345,7 +345,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             xml_notations.remove(tied_to_be_removed)
             if not xml_notations.get_children():
                 xml_notations.up.remove(xml_notations)
-
 
     def start_tie(self) -> None:
         """

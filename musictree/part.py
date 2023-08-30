@@ -209,6 +209,8 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
         :rtype: :obj:`~musictree.measure.Measure`
 
         """
+        if self._finalized is True:
+            raise AlreadyFinalized(self, 'add_child')
         super().add_child(child)
         self.xml_object.add_child(child.xml_object)
         return child
@@ -265,6 +267,8 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
         :param number: positive int, None
         :return: created and added :obj:`~musictree.measure.Measure`
         """
+        if self._finalized is True:
+            raise AlreadyFinalized(self, 'add_measure')
         previous_measure = self.get_children()[-1] if self.get_children() else None
         if not time:
             if previous_measure:

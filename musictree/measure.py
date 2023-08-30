@@ -300,6 +300,8 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         :return: child
         :rtype: :obj:`~musictree.staff.Staff`
         """
+        if self._finalized is True:
+            raise AlreadyFinalized(self, 'add_child')
         self._check_child_to_be_added(child)
 
         if child.number is not None and child.number != len(self.get_children()) + 1:
@@ -332,6 +334,8 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         :param staff_number: positive int or None. If ``None`` staff number it is determined as length of children + 1.
         :return: new :obj:`~musictree.staff.Staff`
         """
+        if self._finalized is True:
+            raise AlreadyFinalized(self, 'add_staff')
         if staff_number is None:
             staff_number = len(self.get_children()) + 1
         staff_object = self.get_staff(staff_number=staff_number)
@@ -352,6 +356,8 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         :param staff_number: positive int or None. If ``None`` staff number it is set to 1.
         :return: new :obj:`~musictree.voice.Voice`
         """
+        if self._finalized is True:
+            raise AlreadyFinalized(self, 'add_voice')
         if staff_number is None:
             staff_number = 1
         voice_object = self.get_voice(staff_number=staff_number, voice_number=voice_number)

@@ -36,11 +36,11 @@ class TestMusicTree(IdTestCase):
         assert v == st.add_child(v)
         assert b == v.add_child(b)
         assert c == b.add_child(c)[0]
-        assert n == c.add_child(n)
+        assert n == c._add_child(n)
         assert mi == n.add_child(mi)
         assert acc == mi.add_child(acc)
 
-        objects = [s, m, st, v, b, c, n, mi]
+        objects = [s, m, st, v, b, n, mi]
         for parent in objects:
             with self.assertRaises(TypeError):
                 parent.add_child(s)

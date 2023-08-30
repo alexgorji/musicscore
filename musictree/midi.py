@@ -2,6 +2,7 @@ import copy
 from math import log2
 from typing import Optional, Union, List
 
+from musictree.exceptions import AlreadyFinalized
 from musicxml.xmlelement.xmlelement import *  # type: ignore
 from musicxml.xsd.xsdsimpletype import XSDSimpleTypeNoteheadValue  # type: ignore
 
@@ -168,7 +169,11 @@ class Midi(MusicTree):
         return f"{self.accidental.get_pitch_parameters()[0]}{accidental}{self.octave}"
 
     # //public methods
-    def add_child(self, child):
+    def add_child(self, child: [Accidental]) -> Accidental:
+        if not isinstance(child, Accidental):
+            raise TypeError
+        if self.parent_chord and self.parent_chord._finalized is True:
+            raise AlreadyFinalized(self, 'add_child')
         super().add_child(child)
         child._update_xml_object()
         child._update_parent_midi()

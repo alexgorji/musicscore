@@ -136,7 +136,7 @@ class MidiHasNoParentChordError(NoteException):
 
 class AddChordException(MusicTreeException):
     def __init__(self):
-        msg = f"Use Part._add_chord() instead!"
+        msg = f"Use Part.add_chord() instead!"
         super().__init__(msg)
 
 

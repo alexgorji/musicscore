@@ -351,6 +351,8 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :param child: Chord to be added as child
         :return: added chord or a list of split chords
         """
+        if self._finalized is True:
+            raise AlreadyFinalized(self, 'add_child')
         self._check_child_to_be_added(child)
         if not self.up:
             raise BeatHasNoParentError('A child Chord can only be added to a beat if it has a voice parent.')

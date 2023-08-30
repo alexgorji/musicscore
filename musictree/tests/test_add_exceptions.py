@@ -1,11 +1,21 @@
 from unittest import skip
 
-from musictree import Part, Chord
-from musictree.exceptions import AlreadyFinalized
+from musictree import Part, Chord, Measure, Beat, Voice, Score, Staff, Accidental
+from musictree.exceptions import AlreadyFinalized, ChordNotesAreAlreadyCreatedError, AddChordException
 from musictree.tests.util import IdTestCase
+from musicxml.xmlelement.xmlelement import XMLCoda, XMLSegno
 
 
 class TestAddExceptions(IdTestCase):
+    def setUp(self):
+        super().setUp()
+        self.score = Score()
+        self.part = self.score.add_part('p1')
+        self.measure = self.part.add_measure()
+        self.staff = self.measure.add_staff()
+        self.voice = self.staff.add_voice()
+        self.beat = self.voice.add_beat()
+
     def test_add_chord_to_part(self):
         p = Part(id='part-1')
         p.add_chord(Chord(60, 4))
@@ -13,102 +23,161 @@ class TestAddExceptions(IdTestCase):
         with self.assertRaises(AlreadyFinalized):
             p.add_chord(Chord(60, 4))
 
-    @skip
     def test_add_child_to_part(self):
-        self.fail()
+        p = Part(id='part-1')
+        p.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            p.add_child(Measure(1))
 
-    @skip
     def test_add_measure_to_part(self):
-        self.fail()
+        p = Part(id='part-1')
+        p.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            p.add_measure()
 
-    @skip
-    def test_add_child_to_chord(self):
-        self.fail()
-
-    @skip
     def test_add_direction_type_to_chord(self):
-        self.fail()
+        p = Part(id='part-1')
+        ch = Chord(60, 4)
+        p.add_chord(ch)
+        ch.add_direction_type(XMLCoda())
+        ch.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            ch.add_direction_type(XMLSegno())
 
-    @skip
     def test_add_midi_to_chord(self):
-        self.fail()
+        p = Part(id='part-1')
+        ch = Chord(60, 4)
+        p.add_chord(ch)
+        ch.add_midi(63)
+        assert [m.value for m in ch.midis] == [60, 63]
+        ch.finalize()
+        with self.assertRaises(ChordNotesAreAlreadyCreatedError):
+            ch.add_midi(65)
 
-    @skip
     def test_add_dynamics_to_chord(self):
-        self.fail()
+        p = Part(id='part-1')
+        ch = Chord(60, 4)
+        p.add_chord(ch)
+        ch.add_dynamics('ff')
+        ch.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            ch.add_dynamics('pp')
 
-    @skip
     def test_add_tie_to_chord(self):
-        self.fail()
+        ch = Chord([60, 62], 4)
+        self.part.add_chord(ch)
+        ch.add_tie('start')
+        ch.finalize()
+        for note in ch.notes:
+            assert note.is_tied_to_next
+            assert not note.is_tied_to_previous
+        ch.add_tie('stop')
+        for note in ch.notes:
+            assert note.is_tied_to_next
+            assert note.is_tied_to_previous
 
-    @skip
     def test_add_lyric_to_chord(self):
-        self.fail()
+        p = Part(id='part-1')
+        ch = Chord(60, 1)
+        p.add_chord(ch)
+        lyrics1 = ch.add_lyric('one')
+        ch.finalize()
+        lyrics2 = ch.add_lyric('two')
+        assert ch.notes[0].find_children('XMLLyric') == [lyrics1, lyrics2]
 
-    @skip
     def test_add_wedge_to_chord(self):
-        self.fail()
+        p = Part(id='part-1')
+        ch = Chord(60, 4)
+        p.add_chord(ch)
+        ch.add_wedge('crescendo')
+        ch.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            ch.add_wedge('stop')
 
     @skip
     def test_add_x_to_chord(self):
         self.fail()
 
-    @skip
     def test_add_child_to_measure(self):
-        self.fail()
+        self.measure.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            self.measure.add_child(Staff())
 
-    @skip
     def test_add_staff_to_measure(self):
-        self.fail()
+        self.measure.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            self.measure.add_staff()
 
-    @skip
     def test_add_voice_to_measure(self):
-        self.fail()
+        self.measure.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            self.measure.add_voice()
 
-    @skip
     def test_add_child_to_beat(self):
-        self.fail()
+        self.beat.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            self.beat.add_child(Chord(60, 1))
 
-    @skip
     def test_add_chord_to_beat(self):
-        self.fail()
+        self.beat.finalize()
+        with self.assertRaises(AddChordException):
+            self.beat.add_chord(Chord(60, 4))
 
-    @skip
     def test_add_child_to_midi(self):
-        self.fail()
+        ch = Chord(60, 1)
+        self.part.add_chord(ch)
+        ch.midis[0].add_child(Accidental())
+        ch.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            ch.midis[0].add_child(Accidental())
 
-    @skip
     def test_add_tie_to_midi(self):
-        self.fail()
+        ch = Chord([60, 62], 4)
+        self.part.add_chord(ch)
+        ch.midis[0].add_tie('start')
+        ch.finalize()
+        n1, n2 = ch.notes
+        assert n1.is_tied_to_next
+        assert not n1.is_tied_to_previous
+        assert not n2.is_tied_to_next
+        assert not n2.is_tied_to_previous
+        ch.midis[0].add_tie('stop')
+        assert n1.is_tied_to_next
+        assert n1.is_tied_to_previous
+        assert not n2.is_tied_to_next
+        assert not n2.is_tied_to_previous
 
-    @skip
-    def test_add_child_note(self):
-        self.fail()
-
-    @skip
     def test_add_child_to_score(self):
-        self.fail()
+        self.score.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            self.score.add_child(Part('p2'))
 
-    @skip
     def test_add_part_to_score(self):
-        self.fail()
+        self.score.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            self.score.add_part('p2')
 
-    @skip
     def test_add_child_to_staff(self):
-        self.fail()
+        self.staff.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            self.staff.add_child(Voice())
 
-    @skip
     def test_add_voice_to_staff(self):
-        self.fail()
+        self.staff.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            self.staff.add_voice()
 
-    @skip
     def test_add_child_to_voice(self):
-        self.fail()
+        self.voice.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            self.voice.add_child(Beat(1))
 
-    @skip
     def test_add_chord_to_voice(self):
-        self.fail()
+        self.voice.finalize()
+        with self.assertRaises(AddChordException):
+            self.voice.add_chord(Chord(60, 1))
 
-    @skip
     def test_add_beat_to_voice(self):
-        self.fail()
+        self.voice.finalize()
+        with self.assertRaises(AlreadyFinalized):
+            self.voice.add_beat(1)

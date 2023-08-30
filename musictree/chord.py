@@ -84,6 +84,16 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._original_starting_ties = None
         # self._final_updated = False
 
+    def _add_child(self, child: Note) -> Note:
+        """
+        Check and add child to list of children. Child's parent is set to self.
+
+        :param child: :obj:`~musictree.note.Note`
+        :return: child
+        :rtype: :obj:`~musictree.note.Note`
+        """
+        return super().add_child(child)
+
     def _set_original_starting_ties(self, original_chord):
         self._original_starting_ties = [copy.copy(midi._ties) for midi in original_chord.midis]
 
@@ -118,7 +128,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             try:
                 self.get_children()[index].midi = midi
             except IndexError:
-                self.add_child(Note(midi=midi, **self._note_attributes))
+                self._add_child(Note(midi=midi, **self._note_attributes))
         self._notes_are_set = True
 
     def _update_notes_pitch_or_rest(self):
@@ -135,7 +145,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
                     self.notes[index].midi = m
                 else:
                     new_note = Note(midi=m, quarter_duration=self.quarter_duration)
-                    self.add_child(new_note)
+                    self._add_child(new_note)
 
     def _update_notes_quarter_duration(self):
         for note in self.notes:
@@ -180,10 +190,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
                 dyn = dt.xml_dynamics = XMLDynamics()
                 dyn.add_child(dynamics.xml_object)
 
-        # def _add_wedge(wedge, xml_direction):
-        #     dt = xml_direction.add_child(XMLDirectionType())
-        #     dt.add_child(wedge)
-
         for placement in self._xml_direction_types:
             direction_types = self._xml_direction_types[placement]
             for direction_type in direction_types:
@@ -194,12 +200,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
                 else:
                     dt = d.add_child(XMLDirectionType())
                     dt.add_child(direction_type)
-                #
-                # elif direction_type[0] == 'wedge':
-                #     _add_wedge(direction_type[1], xml_direction=d)
-                #
-                # else:
-                #     raise NotImplementedError
 
     def _update_xml_dynamics(self):
         def _get_note_xml_dynamics():
@@ -464,17 +464,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     # public methods
 
-    def add_child(self, child: Note) -> Note:
-        """
-        Check and add child to list of children. Child's parent is set to self.
-
-        :param child: :obj:`~musictree.note.Note`
-        :return: child
-        :rtype: :obj:`~musictree.note.Note`
-        """
-        return super().add_child(child)
-
     def add_direction_type(self, direction_type: XMLElement, placement: str = 'below'):
+        if self._finalized is True:
+            raise AlreadyFinalized(self, 'add_direction_type')
         if direction_type.__class__ not in XML_DIRECTION_TYPE_CLASSES:
             raise TypeError(f'Wrong type {direction_type}. Possible classes: {XML_DIRECTION_TYPE_CLASSES}')
         if isinstance(direction_type, XMLDynamics):
@@ -484,6 +476,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def add_dynamics(self, dynamics: Union[List['Dynamics'], List['str'], 'Dynamics', str], placement: str = 'below') -> \
             List['Dynamics']:
+
         """
         This method is used to add one or more :obj:`musictree.dynamics.Dynamics` objects to chord's private dictionary _xml_direction_types
         This list is used to create or update directions of the first :obj:`~musictree.note.Note` object of chord`s notes
@@ -493,6 +486,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :param placement: above or below
         :return: List[:obj:`~musictree.dynamics.Dynamics`]
         """
+        if self._finalized is True:
+            raise AlreadyFinalized(self, 'add_dynamics')
         dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(
             dynamics)
         dynamics_object_list = [d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list]
@@ -551,6 +546,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :param placement: above or below
         :return: :obj:`~musicxml.xmlelement.xmlelement.XMLWedge`
         """
+        if self._finalized is True:
+            raise AlreadyFinalized(self, 'add_wedge')
         wedge = XMLWedge(type=wedge) if isinstance(wedge, str) else wedge
         self.add_direction_type(wedge, placement=placement)
         return wedge
