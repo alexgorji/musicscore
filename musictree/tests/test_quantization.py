@@ -130,7 +130,7 @@ class TestQuantization(IdTestCase):
         for qd in [2, 2 / 7, 1, 5 / 7]:
             p.add_chord(Chord(60, qd))
         p.quantize = True
-        p.final_updates()
+        p.finalize()
         assert [ch.quarter_duration for ch in p.get_chords()] == [2, 1 / 4, 3 / 4, 1 / 4, 3 / 4]
         assert p.get_measure(1).get_divisions() == 4
         assert [ch.notes[0].xml_duration.value_ for ch in p.get_chords()] == [8, 1, 3, 1, 3]

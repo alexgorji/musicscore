@@ -2,8 +2,8 @@ from typing import List, Optional, Union
 
 from musictree.clef import BassClef, TrebleClef
 from musictree.core import MusicTree
-from musictree.exceptions import AlreadyFinalUpdated, MeasureException, AddChordException
-from musictree.finalupdate_mixin import FinalUpdateMixin
+from musictree.exceptions import AlreadyFinalized, MeasureException, AddChordException
+from musictree.finalize_mixin import FinalizeMixin
 from musictree.key import Key
 from musictree.staff import Staff
 from musictree.time import Time, flatten_times
@@ -15,7 +15,7 @@ from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, X
 __all__ = ['Measure', 'generate_measures']
 
 
-class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
+class Measure(MusicTree, FinalizeMixin, XMLWrapper):
     _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLMeasure
@@ -186,17 +186,17 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
                     for note in chord.notes:
                         self.xml_object.add_child(note.xml_object)
 
-    def final_updates(self):
+    def finalize(self):
         """
-        final_updates can only be called once.
+        finalize can only be called once.
 
-        - It calls final_updates()` method of all children.
+        - It calls finalize()` method of all children.
         - Following updates are triggered: update_divisions, update_accidentals, update_xml_backups_notes_directions
 
         """
 
-        if self._final_updated:
-            raise AlreadyFinalUpdated(self)
+        if self._finalized:
+            raise AlreadyFinalized(self)
 
         self._update_attributes()
 
@@ -208,12 +208,13 @@ class Measure(MusicTree, FinalUpdateMixin, XMLWrapper):
         self.update_divisions()
 
         for st in self.get_children():
-            st.final_updates()
+            if not st._finalized:
+                st.finalize()
 
         self._update_accidentals()
         self._update_xml_backup_note_direction()
 
-        self._final_updated = True
+        self._finalized = True
 
     def update_divisions(self):
         chord_divisions = {ch.quarter_duration.denominator for ch in self.get_chords()}

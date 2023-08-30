@@ -278,7 +278,8 @@ class QuarterDurationMixin:
     :obj:`~musictree.beat.Beat`
     """
 
-    def __init__(self, quarter_duration=None):
+    def __init__(self, quarter_duration=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._quarter_duration = None
         self.quarter_duration = quarter_duration
 

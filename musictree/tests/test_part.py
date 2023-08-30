@@ -107,15 +107,15 @@ class TestPart(IdTestCase):
         p = Part('p1')
         m = p.add_measure()
         assert m.key.show is True
-        m.final_updates()
+        m.finalize()
         assert m.xml_object.xml_attributes.xml_key is not None
         m = p.add_measure()
-        m.final_updates()
+        m.finalize()
         assert m.key.show is False
         m.key = Key(fifths=1)
         assert m.key.show is True
         m = p.add_measure()
-        m.final_updates()
+        m.finalize()
         assert m.key.fifths == 1
         assert m.key.show is False
         assert m.xml_object.xml_attributes.xml_key is None
@@ -132,7 +132,7 @@ class TestPart(IdTestCase):
         assert m.clefs[1].show is False
         m = p.add_measure()
         m.clefs[0].show = True
-        m.final_updates()
+        m.finalize()
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
         assert len(clefs) == 1
         assert clefs[0].xml_sign.value_ == 'G'
@@ -241,7 +241,7 @@ class TestScorePart(IdTestCase):
         p = Part('P1')
         m1 = p.add_measure(time=(3, 4))
         m2 = p.add_measure(time=(2, 4))
-        p.final_updates()
+        p.finalize()
         assert m1.clefs[0].show is True
         assert m2.clefs[0].show is False
 
@@ -441,7 +441,7 @@ class TestAddChordToPart(IdTestCase):
         p.add_chord(ch2, staff_number=2)
         assert ch1.get_staff_number() == 1
         assert ch2.get_staff_number() == 2
-        p.final_updates()
+        p.finalize()
         assert ch1.notes[0].xml_staff.value_ == 1
         assert ch2.notes[0].xml_staff.value_ == 2
 

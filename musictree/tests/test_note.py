@@ -1,15 +1,14 @@
-from unittest import TestCase, skip
+from unittest import TestCase
 from unittest.mock import patch, Mock
 
-from musictree.chord import Chord
-from musictree.part import Part
-from musicxml.exceptions import XMLElementChildrenRequired
-from musicxml.xmlelement.xmlelement import *
 from quicktions import Fraction
 
+from musictree.chord import Chord
+from musictree.exceptions import MidiHasNoParentChordError
 from musictree.midi import Midi
 from musictree.note import Note, tie, untie
-from musictree.exceptions import MidiHasNoParentChordError
+from musictree.part import Part
+from musicxml.xmlelement.xmlelement import *
 
 
 class NoteTestCase(TestCase):
@@ -543,7 +542,7 @@ class TestNoteTie(NoteTestCase):
         p = Part('p1')
         ch = Chord(60, 1)
         p.add_chord(ch)
-        ch.final_updates()
+        ch.finalize()
         n = ch.notes[0]
         assert n.up == n.parent_chord
 

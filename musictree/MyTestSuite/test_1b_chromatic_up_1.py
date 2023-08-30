@@ -1,5 +1,4 @@
 from pathlib import Path
-from unittest import TestCase
 
 from musictree.accidental import Accidental
 from musictree.chord import Chord
@@ -7,10 +6,11 @@ from musictree.measure import generate_measures
 from musictree.midi import Midi
 from musictree.part import Part
 from musictree.score import Score
+from musictree.tests.util import IdTestCase
 from musictree.time import Time
 
 
-class TestHelloChromatics(TestCase):
+class TestHelloChromatics(IdTestCase):
     def test_chromatic_up_quarter_grid(self):
         """
         Scale chromatically up with different quarter_durations and time signatures

@@ -1,6 +1,6 @@
 from typing import List, Optional, Union, Iterator
 
-from musictree.finalupdate_mixin import FinalUpdateMixin
+from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError
@@ -116,7 +116,7 @@ class ScorePart(XMLWrapper):
         self.xml_object.xml_part_name = self.part.name
 
 
-class Part(MusicTree, FinalUpdateMixin, XMLWrapper):
+class Part(MusicTree, FinalizeMixin, XMLWrapper):
     _ATTRIBUTES = {'id_', 'name'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLPart
@@ -130,7 +130,15 @@ class Part(MusicTree, FinalUpdateMixin, XMLWrapper):
         self.name = name
         self._score_part = ScorePart(part=self)
         self._current_measures = {}
-        self._final_updated = False
+        # self._final_updated = False
+
+    def _add_to_next_measure(self, current_measure, chord, staff_number, voice_number):
+        if current_measure.next:
+            current_measure = current_measure.next
+        else:
+            current_measure = self.add_measure()
+        current_measure._add_chord(chord, staff_number=staff_number, voice_number=voice_number)
+        return current_measure
 
     def _set_first_current_measure(self, staff_number, voice_number):
         for m in self.get_children():
@@ -203,14 +211,6 @@ class Part(MusicTree, FinalUpdateMixin, XMLWrapper):
         super().add_child(child)
         self.xml_object.add_child(child.xml_object)
         return child
-
-    def _add_to_next_measure(self, current_measure, chord, staff_number, voice_number):
-        if current_measure.next:
-            current_measure = current_measure.next
-        else:
-            current_measure = self.add_measure()
-        current_measure._add_chord(chord, staff_number=staff_number, voice_number=voice_number)
-        return current_measure
 
     def add_chord(self, chord: 'Chord', *, staff_number: Optional[int] = None, voice_number: Optional[int] = 1) -> None:
         """

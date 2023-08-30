@@ -53,7 +53,7 @@ class TestTuplets(TestCase):
         for c in [ch1, ch2]:
             c.midis[0].accidental.show = False
             m._add_chord(c)
-        m.final_updates()
+        m.finalize()
         assert ch1.notes[0].to_string() == expected_1
         assert ch2.notes[0].to_string() == expected_2
 
@@ -64,7 +64,7 @@ class TestTuplets(TestCase):
         for x in chords:
             m._add_chord(x)
 
-        m.final_updates()
+        m.finalize()
 
         t1, t2 = [ch.notes[0].xml_notations.xml_tuplet for ch in chords]
         assert t1.type == 'start'
@@ -81,7 +81,7 @@ class TestTuplets(TestCase):
             m = Measure(index + 1)
             for q in quintuplet:
                 m._add_chord(Chord(midis=60, quarter_duration=q))
-            m.final_updates()
+            m.finalize()
             measures.append(m)
 
         for m in measures:
@@ -103,7 +103,7 @@ class TestTuplets(TestCase):
         for q in quarter_durations:
             m1._add_chord(Chord(midis=60, quarter_duration=q))
         m1.split_not_writable_chords()
-        m1.final_updates()
+        m1.finalize()
         b = m1.get_voice(staff_number=1, voice_number=1).get_children()[0]
         assert b.get_children() == m1.get_chords()
         n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()]
@@ -122,7 +122,7 @@ class TestTuplets(TestCase):
         for q in quarter_durations:
             m1._add_chord(Chord(midis=60, quarter_duration=q))
         m1.split_not_writable_chords()
-        m1.final_updates()
+        m1.finalize()
         n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()]
         assert n1.xml_notations.xml_tuplet.type == 'start'
         assert n3.xml_notations.xml_tuplet.type == 'stop'
@@ -139,7 +139,7 @@ class TestTuplets(TestCase):
             for q in sextuplet:
                 m._add_chord(Chord(midis=60, quarter_duration=q))
             m.split_not_writable_chords()
-            m.final_updates()
+            m.finalize()
             measures.append(m)
 
         for m in measures:
@@ -162,7 +162,7 @@ class TestTuplets(TestCase):
         for ch in chords:
             beats[0].add_child(ch)
         v1.up.up.update_divisions()
-        beats[0].final_updates()
+        beats[0].finalize()
         assert ch1.notes[0].xml_notations.xml_tuplet.type == 'start'
         assert ch1.notes[0].xml_notations.xml_tuplet.bracket == 'yes'
         assert ch1.notes[0].xml_notations.xml_tuplet.number == 1
@@ -176,7 +176,7 @@ class TestTuplets(TestCase):
         for quarter_duration in [1 / 6, 1 / 6, 1 / 6, 1 / 10, 3 / 10, 1 / 10]:
             v1._add_chord(Chord(60, quarter_duration))
         v1.up.up.update_divisions()
-        beats[0].final_updates()
+        beats[0].finalize()
         n1, n2, n3, n4, n5, n6 = [ch.notes[0] for ch in v1.get_chords()]
         for n in [n1, n2, n3]:
             assert (n.xml_time_modification.xml_actual_notes.value_, n.xml_time_modification.xml_normal_notes.value_,
@@ -198,7 +198,7 @@ class TestTuplets(TestCase):
             v1._add_chord(Chord(60, quarter_duration))
         v1.up.up.update_divisions()
         for index, beat in enumerate(beats):
-            beat.final_updates()
+            beat.finalize()
             if index == 0:
                 for i, c in enumerate(beat.get_children()):
                     beams = c.notes[0].find_children('XMLBeam')

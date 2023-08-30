@@ -153,7 +153,7 @@ class TestBeatSplitChord(TestCase):
         v1.up.up.update_divisions()
         v2.up.up.update_divisions()
         for b in v1.get_children() + v2.get_children():
-            b.final_updates()
+            b.finalize()
 
         assert [ch.midis[0].accidental.xml_object.value_ if ch.midis[0].accidental.xml_object else None for ch in
                 all_chords] == ['sharp',

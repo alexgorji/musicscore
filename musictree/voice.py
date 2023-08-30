@@ -3,14 +3,14 @@ from typing import Optional, Union, List
 from musictree.beat import Beat
 from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsAlreadyFullError, AddChordException
 from musictree.core import MusicTree
-from musictree.finalupdate_mixin import FinalUpdateMixin
+from musictree.finalize_mixin import FinalizeMixin
 from musictree.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLVoice
 
 __all__ = ['Voice']
 
 
-class Voice(MusicTree, FinalUpdateMixin, XMLWrapper):
+class Voice(MusicTree, FinalizeMixin, XMLWrapper):
     _ATTRIBUTES = {'number', 'leftover_chord', 'is_filled'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLVoice

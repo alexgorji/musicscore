@@ -1,8 +1,7 @@
 from typing import Optional
 
-from musicxml.xmlelement.xmlelement import XMLClef
-
 from musictree.xmlwrapper import XMLWrapper
+from musicxml.xmlelement.xmlelement import XMLClef
 
 __all__ = ['Clef', 'TrebleClef', 'BassClef', 'AltoClef', 'TenorClef']
 

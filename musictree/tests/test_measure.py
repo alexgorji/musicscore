@@ -110,7 +110,7 @@ class TestMeasure(TestCase):
         chord = Chord(61, quarter_duration=1.5)
         chord.midis[0].accidental.show = True
         m._add_chord(chord)
-        m.final_updates()
+        m.finalize()
         for xml_note, duration in zip(m.find_children('XMLNote'), [4, 1, 1, 2]):
             assert xml_note.xml_duration.value_ == duration
         expected = """<measure number="1">
@@ -376,7 +376,7 @@ class TestMeasure(TestCase):
         chord = Chord(60, quarter_duration=2.5)
         chord.add_dynamics(["ppp", 'fff'])
         m._add_chord(chord)
-        m.final_updates()
+        m.finalize()
         assert m.xml_direction is not None
         expected = """<direction placement="below">
     <direction-type>
@@ -407,7 +407,7 @@ class TestUpdateAccidentals(IdTestCase):
         midis = [60, 61, 62, 60]
         for mi in midis:
             m._add_chord(Chord(mi, quarter_duration=1))
-        m.final_updates()
+        m.finalize()
         assert [ch.midis[0].accidental.show for ch in m.get_chords()] == [False, True, False, True]
 
     def test_update_accidentals_with_last_steps(self):
@@ -418,7 +418,7 @@ class TestUpdateAccidentals(IdTestCase):
         p.add_chord(Chord(midis=61, quarter_duration=2))
         p.add_chord(Chord(midis=60, quarter_duration=4))
         for m in p.get_children():
-            m.final_updates()
+            m.finalize()
         last_chord = p.get_children()[-1].get_children()[-1].get_chords()[0]
         assert last_chord.midis[0].accidental.sign == 'natural'
         assert last_chord.midis[0].accidental.show
@@ -435,7 +435,7 @@ class TestUpdateAccidentals(IdTestCase):
         m = Measure(1)
         m._add_chord(Chord(60, 4))
         m._add_chord(Chord(60, 4), voice_number=2)
-        m.final_updates()
+        m.finalize()
         ch1, ch2 = m.get_chords()
         assert ch1.notes[0].xml_voice.value_ == '1'
         assert ch2.notes[0].xml_voice.value_ == '2'
@@ -449,7 +449,7 @@ class TestUpdateAccidentals(IdTestCase):
         m._add_chord(Chord(48, 4), staff_number=2, voice_number=1)
         m._add_chord(Chord(36, 4), staff_number=2, voice_number=2)
         m.clefs[1] = BassClef()
-        m.final_updates()
+        m.finalize()
         ch1, ch2, ch3, ch4 = m.get_chords()
         assert ch1.notes[0].xml_staff.value_ == 1
         assert ch2.notes[0].xml_staff.value_ == 1
@@ -503,7 +503,7 @@ class TestMeasureAttributes(TestCase):
     def test_measure_clefs(self):
         m = Measure(1)
         m.add_staff()
-        m.final_updates()
+        m.finalize()
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
         assert clefs[0].xml_sign.value_ == 'G'
         assert clefs[0].xml_line.value_ == 2
@@ -511,7 +511,7 @@ class TestMeasureAttributes(TestCase):
         m = Measure(1)
         m.add_staff()
         m.add_staff()
-        m.final_updates()
+        m.finalize()
         clefs = m.xml_object.xml_attributes.find_children('XMLClef')
         assert clefs[0].xml_sign.value_ == 'G'
         assert clefs[0].xml_line.value_ == 2
@@ -521,7 +521,7 @@ class TestMeasureAttributes(TestCase):
         m = Measure(1)
         m.add_staff()
         m.add_staff()
-        m.final_updates()
+        m.finalize()
         m.clefs[0].sign = 'C'
         m.clefs[0].line = 3
 

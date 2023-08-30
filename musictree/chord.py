@@ -3,19 +3,23 @@ from fractions import Fraction
 from typing import Union, List, Optional, Any, Dict
 
 from musictree.clef import Clef
+from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import *
 
 from musictree.dynamics import Dynamics
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
-    ChordQuarterDurationAlreadySetError, AlreadyFinalUpdated, DeepCopyException, ChordNotesAreAlreadyCreatedError
+    ChordQuarterDurationAlreadySetError, AlreadyFinalized, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
+    ChordException
 from musictree.midi import Midi
 from musictree.core import MusicTree
 from musictree.note import Note
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_ORNAMENT_CLASSES, XML_DYNAMIC_CLASSES, \
-    XML_OTHER_NOTATIONS
+    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES
 
 __all__ = ['Chord', 'group_chords']
+
+from musicxml.xmlelement.xmlelement import XMLElement
 
 _all_articulations = Union[
     'XMLAccent', 'XMLStrongAccent', 'XMLStaccato', 'XMLTenuto', 'XMLDetachedLegato', 'XMLStaccatissimo',
@@ -45,7 +49,7 @@ _all_other_notations = Union[
 ]
 
 
-class Chord(MusicTree, QuarterDurationMixin):
+class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     """
     Chord is a sequence of one or more :obj:`~musicxml.xmlelement.xmlelement.XMLNote`s which occur at the same time in a :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` of a :obj:`~musicxml.xmlelement.xmlelement.XMLPart`.
     :param midis: Midi, Midi.value, [Midi, Midi.value] 0 or [0] for a rest.
@@ -78,7 +82,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._set_midis(midis)
         self.split = False
         self._original_starting_ties = None
-        self._final_updated = False
+        # self._final_updated = False
 
     def _set_original_starting_ties(self, original_chord):
         self._original_starting_ties = [copy.copy(midi._ties) for midi in original_chord.midis]
@@ -176,15 +180,26 @@ class Chord(MusicTree, QuarterDurationMixin):
                 dyn = dt.xml_dynamics = XMLDynamics()
                 dyn.add_child(dynamics.xml_object)
 
+        # def _add_wedge(wedge, xml_direction):
+        #     dt = xml_direction.add_child(XMLDirectionType())
+        #     dt.add_child(wedge)
+
         for placement in self._xml_direction_types:
             direction_types = self._xml_direction_types[placement]
             for direction_type in direction_types:
                 d = XMLDirection(placement=placement)
                 self._xml_directions.append(d)
-                if direction_type[0] == 'dynamics':
+                if hasattr(direction_type, '__iter__') and direction_type[0] == 'dynamics':
                     _add_dynamics(list_of_dynamics=direction_type[1], xml_direction=d)
                 else:
-                    raise NotImplementedError
+                    dt = d.add_child(XMLDirectionType())
+                    dt.add_child(direction_type)
+                #
+                # elif direction_type[0] == 'wedge':
+                #     _add_wedge(direction_type[1], xml_direction=d)
+                #
+                # else:
+                #     raise NotImplementedError
 
     def _update_xml_dynamics(self):
         def _get_note_xml_dynamics():
@@ -448,44 +463,6 @@ class Chord(MusicTree, QuarterDurationMixin):
         return self._xml_technicals
 
     # public methods
-    def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations],
-              **kwargs):
-        """
-        This method is used to add one xml object to a chord's private xml object lists (like _xml_articulations, xml_technicals
-        etc.). These lists are used to add or update articulations, technicals etc. of the first :obj:`~musictree.note.Note` object of
-        chord`s notes which are to be or are already created .
-
-        :param x: musicxml articulation element, musicxml technical element, musicxml ornament element, musicxml dynamic element,
-        musicxml other notations
-        :return: x
-        """
-        if x.__class__ in XML_ARTICULATION_CLASSES:
-            self._xml_articulations.append(x)
-            self._xml_articulations_kwargs = kwargs
-            if self.notes:
-                self._update_xml_articulations()
-        elif x.__class__ in XML_TECHNICAL_CLASSES:
-            self._xml_technicals.append(x)
-            self._xml_technicals_kwargs = kwargs
-            if self.notes:
-                self._update_xml_technicals()
-        elif x.__class__ in XML_ORNAMENT_CLASSES:
-            self._xml_ornaments.append(x)
-            self._xml_ornaments_kwargs = kwargs
-            if self.notes:
-                self._update_xml_ornaments()
-        elif x.__class__ in XML_DYNAMIC_CLASSES:
-            self._xml_dynamics.append(x)
-            self._xml_dynamics_kwargs = kwargs
-            if self.notes:
-                self._update_xml_dynamics()
-        elif x.__class__ in XML_OTHER_NOTATIONS:
-            self._xml_other_notations.append(x)
-            if self.notes:
-                self._update_xml_other_notations()
-        else:
-            raise TypeError
-        return x
 
     def add_child(self, child: Note) -> Note:
         """
@@ -497,8 +474,16 @@ class Chord(MusicTree, QuarterDurationMixin):
         """
         return super().add_child(child)
 
-    def add_dynamics(self, dynamics: Union[List['Dynamics'], 'Dynamics', str], placement: str = 'below') -> List[
-        'Dynamics']:
+    def add_direction_type(self, direction_type: XMLElement, placement: str = 'below'):
+        if direction_type.__class__ not in XML_DIRECTION_TYPE_CLASSES:
+            raise TypeError(f'Wrong type {direction_type}. Possible classes: {XML_DIRECTION_TYPE_CLASSES}')
+        if isinstance(direction_type, XMLDynamics):
+            raise ChordException('Use add_dynamics instead!')
+        self._xml_direction_types[placement].append(direction_type)
+        return direction_type
+
+    def add_dynamics(self, dynamics: Union[List['Dynamics'], List['str'], 'Dynamics', str], placement: str = 'below') -> \
+            List['Dynamics']:
         """
         This method is used to add one or more :obj:`musictree.dynamics.Dynamics` objects to chord's private dictionary _xml_direction_types
         This list is used to create or update directions of the first :obj:`~musictree.note.Note` object of chord`s notes
@@ -508,7 +493,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         :param placement: above or below
         :return: List[:obj:`~musictree.dynamics.Dynamics`]
         """
-        dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(dynamics)
+        dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(
+            dynamics)
         dynamics_object_list = [d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list]
         self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
         return dynamics_object_list
@@ -555,9 +541,62 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._sort_midis()
         return midi
 
-    def final_updates(self):
+    def add_wedge(self, wedge: Union['XMLWedge', str], placement: str = 'below') -> XMLWedge:
         """
-        Final updates can be called only once. All necessary updates and xmlelement object creations will take place and the MusicTree
+        This method is used to add one :obj:`~musicxml.xmlelement.xmlelement.XMLWedge` object to chord's private
+        dictionary _xml_direction_types This list is used to create or update directions of the first
+        :obj:`~musictree.note.Note` object of chord`s notes which are to be or are already created .
+
+        :param wedge: str, XMLWedge to be added to directions
+        :param placement: above or below
+        :return: :obj:`~musicxml.xmlelement.xmlelement.XMLWedge`
+        """
+        wedge = XMLWedge(type=wedge) if isinstance(wedge, str) else wedge
+        self.add_direction_type(wedge, placement=placement)
+        return wedge
+
+    def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations],
+              **kwargs):
+        """
+        This method is used to add one xml object to a chord's private xml object lists (like _xml_articulations, xml_technicals
+        etc.). These lists are used to add or update articulations, technicals etc. of the first :obj:`~musictree.note.Note` object of
+        chord`s notes which are to be or are already created .
+
+        :param x: musicxml articulation element, musicxml technical element, musicxml ornament element, musicxml dynamic element,
+        musicxml other notations
+        :return: x
+        """
+        if x.__class__ in XML_ARTICULATION_CLASSES:
+            self._xml_articulations.append(x)
+            self._xml_articulations_kwargs = kwargs
+            if self.notes:
+                self._update_xml_articulations()
+        elif x.__class__ in XML_TECHNICAL_CLASSES:
+            self._xml_technicals.append(x)
+            self._xml_technicals_kwargs = kwargs
+            if self.notes:
+                self._update_xml_technicals()
+        elif x.__class__ in XML_ORNAMENT_CLASSES:
+            self._xml_ornaments.append(x)
+            self._xml_ornaments_kwargs = kwargs
+            if self.notes:
+                self._update_xml_ornaments()
+        elif x.__class__ in XML_DYNAMIC_CLASSES:
+            self._xml_dynamics.append(x)
+            self._xml_dynamics_kwargs = kwargs
+            if self.notes:
+                self._update_xml_dynamics()
+        elif x.__class__ in XML_OTHER_NOTATIONS:
+            self._xml_other_notations.append(x)
+            if self.notes:
+                self._update_xml_other_notations()
+        else:
+            raise TypeError
+        return x
+
+    def finalize(self):
+        """
+        Finalize can be called only once. All necessary updates and xmlelement object creations will take place and the MusicTree
         object will be prepared for returning a musicxml snippet or a whole musicxml file.
 
         - Check if parent :obj:`~musictree.beat.Beat` exists.
@@ -565,8 +604,8 @@ class Chord(MusicTree, QuarterDurationMixin):
         - Following updates are triggered: update_notes, update_xml_chord, update_notes_quarter_durations, update_xml_lyrics,
           update_xml_directions, update_xml_articulations, update_technicals
         """
-        if self._final_updated:
-            raise AlreadyFinalUpdated(self)
+        if self._finalized:
+            raise AlreadyFinalized(self)
 
         if not self.up:
             raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
@@ -583,7 +622,7 @@ class Chord(MusicTree, QuarterDurationMixin):
         self._update_xml_ornaments()
         self._update_xml_dynamics()
         self._update_xml_other_notations()
-        self._final_updated = True
+        self._finalized = True
 
     def has_same_pitches(self, other: 'Chord') -> bool:
         """

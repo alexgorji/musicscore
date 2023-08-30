@@ -72,6 +72,12 @@ XML_OTHER_NOTATIONS = [XMLArpeggiate, XMLFermata, XMLFootnote, XMLGlissando, XML
                        XMLOtherNotation, XMLSlide,
                        XMLSlur]
 
+XML_DIRECTION_TYPE_CLASSES = [
+    XMLRehearsal, XMLSegno, XMLCoda, XMLWords, XMLSymbol, XMLWedge, XMLDynamics, XMLDashes, XMLBracket, XMLPedal,
+    XMLMetronome, XMLOctaveShift, XMLHarpPedals, XMLDamp, XMLDampAll, XMLEyeglasses, XMLStringMute, XMLScordatura,
+    XMLImage, XMLPrincipalVoice, XMLPercussion, XMLAccordionRegistration, XMLStaffDivide, XMLOtherDirection
+]
+
 
 def lcm(l):
     return math.lcm(*l)

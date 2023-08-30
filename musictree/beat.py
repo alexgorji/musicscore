@@ -1,12 +1,13 @@
 from typing import Optional, List
 
+from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
 
 from musictree.chord import split_copy, group_chords, Chord
 from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
     ChordHasNoQuarterDurationError, \
-    ChordHasNoMidisError, AlreadyFinalUpdated, BeatNotFullError, AddChordException
+    ChordHasNoMidisError, AlreadyFinalized, BeatNotFullError, AddChordException
 from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import lcm
@@ -85,7 +86,7 @@ def _find_quantized_locations(duration, subdivision):
     return output
 
 
-class Beat(MusicTree, QuarterDurationMixin):
+class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
     """
     Beat is the direct ancestor of chords. Each :obj:`~musictree.chord.Chord` is placed with an offset between 0 and beat's
     quarter duration inside the beat as its child .
@@ -109,7 +110,6 @@ class Beat(MusicTree, QuarterDurationMixin):
         super().__init__(quarter_duration=quarter_duration)
         self._filled_quarter_duration = 0
         self.leftover_chord = None
-        self._final_updated = False
 
     def _add_child(self, child):
         child._parent = self
@@ -386,27 +386,26 @@ class Beat(MusicTree, QuarterDurationMixin):
     def add_chord(self, *args, **kwargs):
         raise AddChordException
 
-    def final_updates(self):
+    def finalize(self):
         """
-        final_updates can only be called once.
+        finalize can only be called once.
 
-        - It calls :obj:`~musictree.chord.Chord.final_updates()` method of all :obj:`~musictree.chord.Chord` children.
+        - It calls :obj:`~musictree.chord.Chord.finalize()` method of all :obj:`~musictree.chord.Chord` children.
         - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams, quantize_quarter_durations (if quantize is
           True), split_not_writable_chords
         """
-        if self._final_updated:
-            raise AlreadyFinalUpdated(self)
-
+        if self._finalized:
+            raise AlreadyFinalized(self)
         if self.is_filled is False:
             BeatNotFullError()
 
         if self.get_children():
             for chord in self.get_children():
-                chord.final_updates()
+                chord.finalize()
             self._update_note_tuplets_and_dots()
             self._update_note_beams()
 
-        self._final_updated = True
+        self._finalized = True
 
     def get_children(self) -> List[Chord]:
         """
@@ -430,7 +429,7 @@ class Beat(MusicTree, QuarterDurationMixin):
         if needed. Be careful with not writable quarter durations which have to be split (for example 5/6 must be split to 3/6,
         2/6 or some other writable quarter durations).
 
-        :obj:`~musictree.measure.Measure.final_updates()` loops over all its beats calls this method.
+        :obj:`~musictree.measure.Measure.finalize()` loops over all its beats calls this method.
         """
         for chord in self.get_children()[:]:
             split = self._split_not_writable(chord, chord.offset)

@@ -1,7 +1,7 @@
-from musicxml.xmlelement.xmlelement import XMLF, XMLFf, XMLFff, XMLFfff, XMLFffff, XMLFfffff, XMLFp, XMLFz, XMLMf, XMLMp, XMLP, XMLPf, \
-    XMLPp, XMLPpp, XMLPppp, XMLPpppp, XMLPppppp, XMLRf, XMLRfz, XMLSf, XMLSffz, XMLSfp, XMLSfpp, XMLSfz, XMLSfzp
-
 from musictree.xmlwrapper import XMLWrapper
+from musicxml.xmlelement.xmlelement import XMLF, XMLFf, XMLFff, XMLFfff, XMLFffff, XMLFfffff, XMLFp, XMLFz, XMLMf, \
+    XMLMp, XMLP, XMLPf, XMLPp, XMLPpp, XMLPppp, XMLPpppp, XMLPppppp, XMLRf, XMLRfz, XMLSf, XMLSffz, XMLSfp, XMLSfpp, \
+    XMLSfz, XMLSfzp
 
 __all__ = ['DYNAMICS', 'Dynamics']
 

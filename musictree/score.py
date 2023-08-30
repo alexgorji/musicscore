@@ -1,7 +1,7 @@
 from typing import List
 
 from musictree import Part
-from musictree.finalupdate_mixin import FinalUpdateMixin
+from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, \
     XMLEncoding, \
     XMLSupports
@@ -26,7 +26,7 @@ POSSIBLE_SUBDIVISIONS = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [
                          QuarterDuration(1): [2, 3, 4, 5, 6, 7, 8]}
 
 
-class Score(MusicTree, FinalUpdateMixin, XMLWrapper):
+class Score(MusicTree, FinalizeMixin, XMLWrapper):
     _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
 

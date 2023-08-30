@@ -25,7 +25,7 @@ class TestHelloWorld(IdTestCase):
         """
         p.add_measure(time=(5, 4))
         """
-        He adds a loong Chord with midi 61 to Part
+        He adds a long Chord with midi 61 to Part
         """
         p.add_chord(Chord(60, 15))
         """

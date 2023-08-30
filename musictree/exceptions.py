@@ -118,9 +118,9 @@ class IdWithSameValueExistsError(IdException):
     pass
 
 
-class AlreadyFinalUpdated(MusicTreeException):
+class AlreadyFinalized(MusicTreeException):
     def __init__(self, object_):
-        msg = f"final_updates method of {object_.__class__.__name__} can only be called once."
+        msg = f"{object_.__class__.__name__} is already finalized."
         super().__init__(msg)
 
 
@@ -140,5 +140,3 @@ class AddChordException(MusicTreeException):
 
 class SimpleFormatException(MusicTreeException):
     pass
-
-

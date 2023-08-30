@@ -17,9 +17,9 @@ Chords. `Part._add_chord` returns still None.
 
 `Score.update()`, `Part.update()`, `Measure().update()`, `Beat._update_xml_notes()` and `Chord._update_xml_notes()`
 refactored and renamed
-to x.final_updates(). final_updates added to Staff and Voice. This method undertakes the last steps for creating
+to x.finalize(). finalize added to Staff and Voice. This method undertakes the last steps for creating
 musicxml tree and can
-only be called once. If to_string(), exists it checks if final_updates is already called. If not it will be called
+only be called once. If to_string(), exists it checks if finalize is already called. If not it will be called
 first.
 
 `Measure._update_divisions` rename to `update_divisions()` and is only called by `Measure.finale_updates()`
@@ -32,7 +32,7 @@ first.
 
 * If quantize is set to None the first quantize of ancestors which is `False` or `True` will be returned.
 * If `Score.quantize` is set to None it will be converted to `False`
-* `Measure.final_updates()` loops over all beats. If `Beat.quantize` returns True `Beat.quantize_quarter_durations()` is
+* `Measure.finalize()` loops over all beats. If `Beat.quantize` returns True `Beat.quantize_quarter_durations()` is
   called.
 
 # Version 1.2.1
@@ -78,6 +78,8 @@ if needed.
 ``Note.parent_chord`` removed. ``Midi`` is now required. ``Midi`` must have a parent_chord
 ``Midi`` is now the core object for adding or removing ties to ``Chord`` (and ``Note``)
 ``Chord.add_midi(), Chord._sort_midis()`` added
+``Chord.add_direction_type()`` added
+``Chord.add_wedge()'` added
 ``Chord.get_voice_number()`` and ``Chord.get_staff_number()`` return None if no ``Voice`` or ``Staff`` ancestor exist
 ``Chord.__deepcopy__()`` added. Only midi and quarter_duration are deepcopied.
 ``Chord.clef`` property added.
