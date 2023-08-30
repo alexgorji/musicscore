@@ -11,7 +11,7 @@ class TestAddExceptions(IdTestCase):
         p.add_chord(Chord(60, 4))
         p.finalize()
         with self.assertRaises(AlreadyFinalized):
-            self.fail()
+            p.add_chord(Chord(60, 4))
 
     @skip
     def test_add_child_to_part(self):

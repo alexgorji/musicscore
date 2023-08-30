@@ -3,7 +3,8 @@ from typing import List, Optional, Union, Iterator
 from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
-from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError
+from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError, \
+    AlreadyFinalized
 from musictree.measure import Measure
 from musictree.core import MusicTree
 from musictree.time import Time
@@ -227,6 +228,8 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
         :param voice_number: positive_int
         :return: None
         """
+        if self._finalized is True:
+            raise AlreadyFinalized(self, 'add_chord')
 
         if staff_number is None:
             staff_number = 1

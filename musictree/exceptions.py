@@ -119,8 +119,10 @@ class IdWithSameValueExistsError(IdException):
 
 
 class AlreadyFinalized(MusicTreeException):
-    def __init__(self, object_):
+    def __init__(self, object_, method_=None):
         msg = f"{object_.__class__.__name__} is already finalized."
+        if method_:
+            msg += f' Method {object_.__class__.__name__}.{method_}() cannot be called after finalization.'
         super().__init__(msg)
 
 

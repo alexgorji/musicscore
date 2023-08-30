@@ -40,7 +40,7 @@
   </credit>
   <part-list>
     <score-part id="part-1">
-      <part-name />
+      <part-name>part-1</part-name>
     </score-part>
   </part-list>
   <part id="part-1">
@@ -61,9 +61,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <f />
-          </dynamics>
+          <rehearsal />
         </direction-type>
       </direction>
       <note>
@@ -82,9 +80,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <ff />
-          </dynamics>
+          <segno />
         </direction-type>
       </direction>
       <note>
@@ -103,9 +99,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <fff />
-          </dynamics>
+          <coda />
         </direction-type>
       </direction>
       <note>
@@ -124,9 +118,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <ffff />
-          </dynamics>
+          <words />
         </direction-type>
       </direction>
       <note>
@@ -145,9 +137,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <fffff />
-          </dynamics>
+          <symbol>0</symbol>
         </direction-type>
       </direction>
       <note>
@@ -166,9 +156,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <ffffff />
-          </dynamics>
+          <wedge type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -187,9 +175,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <fp />
-          </dynamics>
+          <dashes type="start" />
         </direction-type>
       </direction>
       <note>
@@ -208,9 +194,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <fz />
-          </dynamics>
+          <bracket type="start" line-end="none" />
         </direction-type>
       </direction>
       <note>
@@ -229,9 +213,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <mf />
-          </dynamics>
+          <pedal type="start" />
         </direction-type>
       </direction>
       <note>
@@ -250,9 +232,10 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <mp />
-          </dynamics>
+          <metronome>
+            <beat-unit>quarter</beat-unit>
+            <per-minute>120</per-minute>
+          </metronome>
         </direction-type>
       </direction>
       <note>
@@ -271,9 +254,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <p />
-          </dynamics>
+          <octave-shift type="up" />
         </direction-type>
       </direction>
       <note>
@@ -292,9 +273,12 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <pf />
-          </dynamics>
+          <harp-pedals>
+            <pedal-tuning>
+              <pedal-step>A</pedal-step>
+              <pedal-alter>1</pedal-alter>
+            </pedal-tuning>
+          </harp-pedals>
         </direction-type>
       </direction>
       <note>
@@ -313,9 +297,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <pp />
-          </dynamics>
+          <damp />
         </direction-type>
       </direction>
       <note>
@@ -334,9 +316,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <ppp />
-          </dynamics>
+          <damp-all />
         </direction-type>
       </direction>
       <note>
@@ -355,9 +335,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <pppp />
-          </dynamics>
+          <eyeglasses />
         </direction-type>
       </direction>
       <note>
@@ -376,9 +354,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <ppppp />
-          </dynamics>
+          <string-mute type="on" />
         </direction-type>
       </direction>
       <note>
@@ -397,9 +373,12 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <pppppp />
-          </dynamics>
+          <scordatura>
+            <accord>
+              <tuning-step>A</tuning-step>
+              <tuning-octave>0</tuning-octave>
+            </accord>
+          </scordatura>
         </direction-type>
       </direction>
       <note>
@@ -418,9 +397,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <rf />
-          </dynamics>
+          <principal-voice type="start" symbol="none" />
         </direction-type>
       </direction>
       <note>
@@ -439,9 +416,9 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <rfz />
-          </dynamics>
+          <percussion>
+            <wood>cabasa</wood>
+          </percussion>
         </direction-type>
       </direction>
       <note>
@@ -460,9 +437,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <sf />
-          </dynamics>
+          <accordion-registration />
         </direction-type>
       </direction>
       <note>
@@ -481,9 +456,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <sffz />
-          </dynamics>
+          <staff-divide type="up" />
         </direction-type>
       </direction>
       <note>
@@ -502,124 +475,7 @@
       </attributes>
       <direction placement="below">
         <direction-type>
-          <dynamics>
-            <sfp />
-          </dynamics>
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </measure>
-    <measure number="23">
-      <attributes>
-        <divisions>1</divisions>
-      </attributes>
-      <direction placement="below">
-        <direction-type>
-          <dynamics>
-            <sfpp />
-          </dynamics>
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </measure>
-    <measure number="24">
-      <attributes>
-        <divisions>1</divisions>
-      </attributes>
-      <direction placement="below">
-        <direction-type>
-          <dynamics>
-            <sfz />
-          </dynamics>
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </measure>
-    <measure number="25">
-      <attributes>
-        <divisions>1</divisions>
-      </attributes>
-      <direction placement="below">
-        <direction-type>
-          <dynamics>
-            <sfzp />
-          </dynamics>
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </measure>
-    <measure number="26">
-      <attributes>
-        <divisions>1</divisions>
-      </attributes>
-      <direction placement="below">
-        <direction-type>
-          <dynamics>
-            <p />
-          </dynamics>
-        </direction-type>
-      </direction>
-      <direction placement="below">
-        <direction-type>
-          <wedge type="crescendo" />
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </measure>
-    <measure number="27">
-      <attributes>
-        <divisions>1</divisions>
-      </attributes>
-      <direction placement="below">
-        <direction-type>
-          <dynamics>
-            <ff />
-          </dynamics>
-        </direction-type>
-      </direction>
-      <direction placement="below">
-        <direction-type>
-          <wedge type="stop" />
+          <other-direction />
         </direction-type>
       </direction>
       <note>

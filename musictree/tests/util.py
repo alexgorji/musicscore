@@ -33,8 +33,9 @@ class IdTestCase(TestCase):
         Id.__refs__.clear()
 
 
-class ChordTestCase(TestCase):
+class ChordTestCase(IdTestCase):
     def setUp(self) -> None:
+        super().setUp()
         self.mock_beat = Mock()
         self.mock_voice = Mock()
         self.mock_staff = Mock()

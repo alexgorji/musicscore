@@ -22,7 +22,7 @@ def get_chord_midi_values(chord):
     return [m.value for m in chord._midis]
 
 
-class TestTreeChord(ChordTestCase, IdTestCase):
+class TestTreeChord(ChordTestCase):
 
     def test_mocks(self):
         assert self.mock_voice.number == 1
@@ -551,11 +551,7 @@ class TestTreeChord(ChordTestCase, IdTestCase):
                 assert dt_obj in chord.xml_direction_types['above']
                 assert chord.xml_direction_types['above'] == [dt_obj]
                 p.add_chord(chord)
-                # chord.finalize()
-                print(p.to_string())
-        # xml_path = Path(__file__)
-        # score.export_xml()
-        self.fail('Incomplete')
+        p.finalize()
 
     def test_add_direction_type_wrong_type(self):
         chord = Chord(60, 4)
