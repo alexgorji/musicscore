@@ -14,9 +14,11 @@ class TestAccidental(TestCase):
         assert a.get_pitch_parameters(midi_value=61) == ('C', 1, 4)
         a.mode = 'flat'
         assert a.get_pitch_parameters(midi_value=61) == ('D', -1, 4)
-        a.mode = 'enharmonic_1'
+        a.mode = 'enharmonic'
         assert a.get_pitch_parameters(midi_value=61) == ('D', -1, 4)
-        a.mode = 'enharmonic_2'
+        a.mode = 'force-flat'
+        assert a.get_pitch_parameters(midi_value=61) == ('D', -1, 4)
+        a.mode = 'force-sharp'
         assert a.get_pitch_parameters(midi_value=61) == ('B', 2, 3)
 
         midi = Midi(61, accidental=a)
@@ -30,12 +32,16 @@ class TestAccidental(TestCase):
         assert midi.accidental.sign == 'sharp'
         midi.accidental.mode = 'flat'
         assert midi.accidental.sign == 'flat'
-        midi.accidental.mode = 'enharmonic_2'
+        midi.accidental.mode = 'force-sharp'
         assert midi.accidental.sign == 'double-sharp'
         midi.value = 60
-        assert midi.accidental.sign == 'flat-flat'
+        assert midi.accidental.sign == 'sharp'
         midi.accidental.mode = 'flat'
         assert midi.accidental.sign == 'natural'
+        midi.accidental.mode = 'enharmonic'
+        assert midi.accidental.sign == 'sharp'
+        midi.accidental.mode = 'force-flat'
+        assert midi.accidental.sign == 'flat-flat'
 
         midi = Midi(61)
         assert midi.accidental.sign == 'sharp'
@@ -53,12 +59,12 @@ class TestAccidental(TestCase):
         expected = """<accidental>flat</accidental>
 """
         assert midi.accidental.xml_object.to_string() == expected
-        midi.accidental.mode = 'enharmonic_2'
+        midi.accidental.mode = 'force-sharp'
         expected = """<accidental>double-sharp</accidental>
 """
         assert midi.accidental.xml_object.to_string() == expected
         midi.value = 60
-        expected = """<accidental>flat-flat</accidental>
+        expected = """<accidental>sharp</accidental>
 """
         assert midi.accidental.xml_object.to_string() == expected
         midi.value = 0

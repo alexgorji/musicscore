@@ -1169,23 +1169,25 @@
       </attributes>
       <note>
         <pitch>
-          <step>D</step>
+          <step>C</step>
+          <alter>2</alter>
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <accidental>sharp-sharp</accidental>
       </note>
       <note>
         <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
+          <step>C</step>
+          <alter>-2</alter>
+          <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>flat</accidental>
+        <accidental>flat-flat</accidental>
       </note>
       <note>
         <pitch>

@@ -17,7 +17,7 @@ for midi in scale_2:
     midi.transpose(1)
     if midi.value % 12 in [0, 5]:
         # B# and E#
-        midi.accidental.mode = 'enharmonic_1'
+        midi.accidental.mode = 'enharmonic'
     else:
         midi.accidental.mode = 'sharp'
 # with flats
@@ -26,12 +26,13 @@ for midi in scale_3:
     midi.transpose(-1)
     if midi.value % 12 in [11, 4]:
         # C-flat and F-flat
-        midi.accidental.mode = 'enharmonic_1'
+        midi.accidental.mode = 'enharmonic'
     else:
         midi.accidental.mode = 'flat'
 # Double alterations and cautionary accidentals.
 cs = [Midi(74), Midi(70), Midi(73), Midi(73), Midi(73), Midi(73)]
-cs[0].accidental.sign = 'double-sharp'
+cs[0].accidental.mode = 'force-sharp'
+cs[1].accidental.mode = 'force-flat'
 for midi in scale_1 + scale_2 + scale_3 + cs:
     p.add_chord(Chord(midis=midi, quarter_duration=1))
 xml_path = Path(__file__).with_suffix('.xml')

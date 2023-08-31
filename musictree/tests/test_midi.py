@@ -49,10 +49,12 @@ class TestMidi(TestCase):
     def test_midi_accidental_modes(self):
         m = Midi(60)
         assert m.accidental.get_pitch_parameters() == ('C', 0, 4)
-        m.accidental.mode = 'enharmonic_1'
+        m.accidental.mode = 'enharmonic'
         assert m.accidental.get_pitch_parameters() == ('B', 1, 3)
-        m.accidental.mode = 'enharmonic_2'
+        m.accidental.mode = 'force-flat'
         assert m.accidental.get_pitch_parameters() == ('D', -2, 4)
+        m.accidental.mode = 'force-sharp'
+        assert m.accidental.get_pitch_parameters() == ('B', 1, 3)
 
     def test_midi_note(self):
         m = C(4, 's')
@@ -103,7 +105,7 @@ class TestMidi(TestCase):
 </pitch>
 """
         assert m.get_pitch_or_rest().to_string() == expected
-        m.accidental.mode = 'enharmonic_2'
+        m.accidental.mode = 'force-flat'
         expected = """<pitch>
   <step>B</step>
   <alter>-2</alter>
