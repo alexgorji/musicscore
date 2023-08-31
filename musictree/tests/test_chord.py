@@ -45,9 +45,9 @@ class TestTreeChord(ChordTestCase):
         assert get_chord_midi_values(ch) == [50, 70]
         ch = Chord(0, 1)
         assert get_chord_midi_values(ch) == [0]
-        ch = Chord(Midi(90, accidental=Accidental(mode='enharmonic_1')), 1)
+        ch = Chord(Midi(90, accidental=Accidental(mode='enharmonic')), 1)
         assert get_chord_midi_values(ch) == [90]
-        ch = Chord([Midi(90, accidental=Accidental(mode='enharmonic_1')), 70], 1)
+        ch = Chord([Midi(90, accidental=Accidental(mode='enharmonic')), 70], 1)
         assert get_chord_midi_values(ch) == [70, 90]
 
         with self.assertRaises(ValueError):

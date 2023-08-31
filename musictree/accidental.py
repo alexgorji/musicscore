@@ -5,7 +5,7 @@ from musicxml.xmlelement.xmlelement import XMLAccidental
 from musictree.core import MusicTree
 from musictree.xmlwrapper import XMLWrapper
 
-__all__ = ['STANDARD', 'FLAT', 'SHARP', 'ENHARMONIC1', 'ENHARMONIC2', 'SIGNS', 'Accidental']
+__all__ = ['STANDARD', 'FLAT', 'SHARP', 'ENHARMONIC', 'FORCESHARP', 'FORCEFLAT', 'SIGNS', 'Accidental']
 #:
 STANDARD = {
     0: ('C', 0, 0),
@@ -91,7 +91,7 @@ SHARP = {
 }
 
 #:
-ENHARMONIC1 = {
+ENHARMONIC = {
     0: ('B', 1, -1),
     0.5: ('D', -1.5, 0),
     1: ('D', -1, 0),
@@ -119,18 +119,59 @@ ENHARMONIC1 = {
 }
 
 #:
-ENHARMONIC2 = {
-    0: ('D', -2, 0),
+FORCESHARP = {
+    0: ('B', 1, -1),
+    0.5: ('B', 1.5, -1),
     1: ('B', 2, -1),
-    2: ('E', 2, 0),
-    3: ('F', -2, 0),
+    1.5: ('C', 1.5, 0),
+    2: ('C', 2, 0),
+    2.5: ('D', 0.5, 0),
+    3: ('D', 1, 0),
+    3.5: ('D', 1.5, 0),
     4: ('D', 2, 0),
-    5: ('G', -2, 0),
+    4.5: ('E', 0.5, 0),
+    5: ('E', 1, 0),
+    5.5: ('E', 1.5, 0),
     6: ('E', 2, 0),
+    6.5: ('F', 1.5, 0),
+    7: ('F', 2, 0),
+    7.5: ('G', 0.5, 0),
+    8: ('G', 1, 0),
+    8.5: ('G', 1.5, 0),
+    9: ('G', 2, 0),
+    9.5: ('A', 0.5, 0),
+    10: ('A', 1, 0),
+    10.5: ('A', 1.5, 0),
+    11: ('A', 2, 0),
+    11.5: ('B', 0.5, 0)
+}
+
+#:
+FORCEFLAT = {
+    0: ('D', -2, 0),
+    0.5: ('D', -1.5, 0),
+    1: ('D', -1, 0),
+    1.5: ('D', -0.5, 0),
+    2: ('E', -2, 0),
+    2.5: ('E', -1.5, 0),
+    3: ('F', -2, 0),
+    3.5: ('F', -1.5, 0),
+    4: ('F', -1, 0),
+    4.5: ('F', -0.5, 0),
+    5: ('G', -2, 0),
+    5.5: ('G', -1.5, 0),
+    6: ('G', -1, 0),
+    6.5: ('G', -0.5, 0),
     7: ('A', -2, 0),
+    7.5: ('A', -1.5, 0),
+    8: ('A', -1, 0),
+    8.5: ('A', -0.5, 0),
     9: ('B', -2, 0),
-    10: ('C', -2, 1),
-    11: ('A', 2, 0)
+    9.5: ('B', -1.5, 0),
+    10: ('B', -1, 0),
+    10.5: ('C', -1.5, 1),
+    11: ('C', -1, 1),
+    11.5: ('C', -0.5, 1)
 }
 
 #:
@@ -204,7 +245,7 @@ class Accidental(MusicTree, XMLWrapper):
 
     @mode.setter
     def mode(self, value):
-        permitted = ('standard', 'flat', 'sharp', 'enharmonic_1', 'enharmonic_2')
+        permitted = ('standard', 'flat', 'sharp', 'enharmonic', 'force-sharp', 'force-flat')
         if value not in permitted:
             raise TypeError(f'accidental_mode.value {value} must be in {permitted}')
         self._mode = value
@@ -283,11 +324,14 @@ class Accidental(MusicTree, XMLWrapper):
         if self.mode == 'standard':
             output = STANDARD[midi_value % 12]
 
-        elif self.mode == 'enharmonic_1':
-            output = ENHARMONIC1[midi_value % 12]
+        elif self.mode == 'enharmonic':
+            output = ENHARMONIC[midi_value % 12]
 
-        elif self.mode == 'enharmonic_2':
-            output = ENHARMONIC2[midi_value % 12]
+        elif self.mode == 'force-sharp':
+            output = FORCESHARP[midi_value % 12]
+
+        elif self.mode == 'force-flat':
+            output = FORCEFLAT[midi_value % 12]
 
         elif self.mode == 'flat':
             output = FLAT[midi_value % 12]
