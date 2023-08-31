@@ -237,7 +237,9 @@ class Midi(MusicTree):
         return self.value >= other.value
 
     def __copy__(self):
-        return self.__class__(value=self.value, accidental=self.accidental)
+        copied = self.__class__(value=self.value, accidental=self.accidental)
+        copied._ties = self._ties
+        return copied
 
     def __deepcopy__(self, memodict={}):
         copied_accidental = copy.copy(self.accidental)
@@ -258,7 +260,7 @@ class MidiNote(Midi):
     """
     _VALUE = 60
 
-    def __init__(self, octave, accidental_sign=None, *args, **kwargs):
+    def __init__(self, octave: object, accidental_sign: object = None, *args: object, **kwargs: object) -> object:
         self._accidental_sign = accidental_sign
         self._octave = octave
         super().__init__(value=self._get_value(), *args, **kwargs)
@@ -283,6 +285,22 @@ class MidiNote(Midi):
 
     def __repr__(self):
         return f"{self.name} at {id(self)}"
+
+    def __copy__(self):
+        copied = Midi(value=self.value, accidental=self.accidental)
+        copied._ties = self._ties
+        return copied
+
+    def __deepcopy__(self, memodict={}):
+        copied_accidental = copy.copy(self.accidental)
+        copied = Midi(value=self.value, accidental=copied_accidental)
+        copied._ties = copy.copy(self._ties)
+        return copied
+
+    def copy_for_split(self):
+        copied_accidental = copy.copy(self.accidental)
+        copied = Midi(value=self.value, accidental=copied_accidental)
+        return copied
 
 
 class C(MidiNote):

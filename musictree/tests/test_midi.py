@@ -128,12 +128,65 @@ class TestMidi(TestCase):
 
     def test_midi_copy(self):
         m = Midi(61, accidental=Accidental(mode='sharp', show=False))
+        m.add_tie('start')
+        copied = m.__copy__()
+        assert m != copied
+        assert m.value == copied.value
+        assert id(m.accidental) == id(copied.accidental)
+        assert id(m._ties) == id(copied._ties)
+
         copied = m.__deepcopy__()
         assert m != copied
         assert m.value == copied.value
         assert m.accidental != copied.accidental
         assert m.accidental.mode == copied.accidental.mode
         assert m.accidental.show == copied.accidental.show
+        assert id(m._ties) != id(copied._ties)
+        assert m._ties == copied._ties
+
+        copied = m.copy_for_split()
+        assert m != copied
+        assert m.value == copied.value
+        assert m.accidental != copied.accidental
+        assert m.accidental.mode == copied.accidental.mode
+        assert m.accidental.show == copied.accidental.show
+        assert id(m._ties) != id(copied._ties)
+        assert m._ties != copied._ties
+
+    def test_midi_note_copy(self):
+        m = C(4, '#')
+        m.add_tie('start')
+        copied = m.__copy__()
+        assert m != copied
+        assert m.value == copied.value
+        assert id(m.accidental) == id(copied.accidental)
+        assert id(m._ties) == id(copied._ties)
+
+        copied = m.__deepcopy__()
+        assert m != copied
+        assert m.value == copied.value
+        assert m.accidental != copied.accidental
+        assert m.accidental.mode == copied.accidental.mode
+        assert m.accidental.show == copied.accidental.show
+        assert id(m._ties) != id(copied._ties)
+        assert m._ties == copied._ties
+
+        copied = m.copy_for_split()
+        assert m != copied
+        assert m.value == copied.value
+        assert m.accidental != copied.accidental
+        assert m.accidental.mode == copied.accidental.mode
+        assert m.accidental.show == copied.accidental.show
+        assert id(m._ties) != id(copied._ties)
+        assert m._ties != copied._ties
+
+        #
+        # copied = m.__deepcopy__()
+        # assert m != copied
+        # assert m.value == copied.value
+        # assert m.accidental != copied.accidental
+        # assert m.accidental.mode == copied.accidental.mode
+        # assert m.accidental.show == copied.accidental.show
 
     @patch('musictree.chord.Chord', spec=Chord)
     def test_midi_up_note(self, mock_chord):
