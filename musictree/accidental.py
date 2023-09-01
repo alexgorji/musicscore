@@ -187,6 +187,42 @@ SIGNS = {-2: 'flat-flat',
          }
 
 
+def get_accidental_mode(midi_value, accidental_sign):
+    if accidental_sign in [None, 'natural']:
+        accidental_value = 0
+    elif accidental_sign in ['quarter-sharp']:
+        accidental_value = 0.5
+    elif accidental_sign in ['sharp', '#', 's']:
+        accidental_value = 1
+    elif accidental_sign in ['three-quarters-sharp']:
+        accidental_value = 1.5
+    elif accidental_sign in ['double-sharp', 'sharp-sharp', 'x', '##', 'ss']:
+        accidental_value = 2
+    elif accidental_sign in ['quarter-flat']:
+        accidental_value = -0.5
+    elif accidental_sign in ['flat', 'b', 'f']:
+        accidental_value = -1
+    elif accidental_sign in ['three-quarters-flat']:
+        accidental_value = -1.5
+    elif accidental_sign in ['double-flat', 'flat-flat', 'bb', 'ff']:
+        accidental_value = -2
+    else:
+        raise NotImplementedError(accidental_sign)
+
+    if STANDARD[midi_value % 12][1] == accidental_value:
+        return 'standard'
+    elif ENHARMONIC[midi_value % 12][1] == accidental_value:
+        return 'enharmonic'
+    elif FLAT[midi_value % 12][1] == accidental_value:
+        return 'flat'
+    elif SHARP[midi_value % 12][1] == accidental_value:
+        return 'sharp'
+    elif FORCEFLAT[midi_value % 12][1] == accidental_value:
+        return 'force-flat'
+    elif FORCESHARP[midi_value % 12][1] == accidental_value:
+        return 'force-sharp'
+
+
 class Accidental(MusicTree, XMLWrapper):
     """
     Accidental is the class for managing :obj:`musictree.midi.Midi`'s accidental sign and its pitch parameters: step, alter, octave.

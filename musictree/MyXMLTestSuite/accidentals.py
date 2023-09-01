@@ -3,7 +3,8 @@ from pathlib import Path
 from musictree import Score, G, A, B, C, D, E, F, Chord, Midi, Accidental
 
 """
-All pitches from c4 to c5 in ascending quarter steps; different Accidental.mode: standard, enharmonic, sharp, flat, force-sharp, force-flat.
+All pitches from c4 to c5 in ascending quarter steps; different Accidental.mode: standard, enharmonic, sharp, 
+flat, force-sharp, force-flat. 
 """
 
 

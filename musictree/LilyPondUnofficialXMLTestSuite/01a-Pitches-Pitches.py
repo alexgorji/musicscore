@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from musictree import Score, G, A, B, C, D, E, F, Chord, Midi, Accidental
+from musictree import Score, G, A, B, C, D, E, F, Chord, Midi
 
 """
 All pitches from G to c”” in ascending steps; First without accidentals, then with a sharp and then with a flat 

@@ -6,7 +6,7 @@ from musictree.exceptions import AlreadyFinalized
 from musicxml.xmlelement.xmlelement import *  # type: ignore
 from musicxml.xsd.xsdsimpletype import XSDSimpleTypeNoteheadValue  # type: ignore
 
-from musictree.accidental import Accidental
+from musictree.accidental import Accidental, get_accidental_mode
 from musictree.core import MusicTree
 
 __all__ = ['Midi', 'MidiNote', 'C', 'D', 'E', 'F', 'G', 'A', 'B', 'midi_to_frequency', 'frequency_to_midi']
@@ -267,21 +267,35 @@ class MidiNote(Midi):
         self._set_accidental_mode()
 
     def _set_accidental_mode(self):
-        if self._get_accidental_value() == -1:
-            self.accidental.mode = 'flat'
-        if self._get_accidental_value() == 1:
-            self.accidental.mode = 'sharp'
+        self.accidental.mode = get_accidental_mode(self.value, self._accidental_sign)
 
     def _get_value(self):
         return self._VALUE + self._get_accidental_value() - (4 - self._octave) * 12
 
     def _get_accidental_value(self):
-        if self._accidental_sign is None:
-            return 0
-        if self._accidental_sign in ('flat', 'f', 'b'):
+        permitted = ['double-flat', 'flat-flat', 'ff', 'bb', 'three-quarters-flat', 'flat', 'f', 'b', 'quarter-flat',
+                     'quarter-sharp', 'sharp', 's', '#', 'three-quarters-sharp', 'double-sharp', 'sharp-sharp', 'ss',
+                     '##']
+        if self._accidental_sign in ['double-flat', 'flat-flat', 'ff', 'bb']:
+            return -2
+        elif self._accidental_sign in ['three-quarters-flat']:
+            return -1.5
+        elif self._accidental_sign in ['flat', 'f', 'b']:
             return -1
-        if self._accidental_sign in ('sharp', 's', '#'):
+        elif self._accidental_sign in ['quarter-flat']:
+            return -0.5
+        elif self._accidental_sign in [None, 'natural']:
+            return 0
+        elif self._accidental_sign in ['quarter-sharp']:
+            return 0.5
+        elif self._accidental_sign in ['sharp', 's', '#']:
             return 1
+        elif self._accidental_sign in ['three-quarters-sharp']:
+            return 1.5
+        elif self._accidental_sign in ['double-sharp', 'sharp-sharp', 'ss', '##']:
+            return 2
+        else:
+            raise ValueError(f'accidental_sign value {self._accidental_sign} can be None or must be in {permitted}')
 
     def __repr__(self):
         return f"{self.name} at {id(self)}"
