@@ -235,7 +235,10 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
             raise AlreadyFinalized(self, 'add_child')
         super().add_child(child)
         self.xml_object.add_child(child.xml_object)
-        self.xml_part_list.xml_score_part = child.score_part.xml_object
+        if not self.xml_part_list:
+            self.xml_part_list.xml_score_part = child.score_part.xml_object
+        else:
+            self.xml_part_list.add_child(child.score_part.xml_object)
         return child
 
     def add_part(self, id_: str) -> 'Part':
