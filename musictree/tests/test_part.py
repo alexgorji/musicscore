@@ -79,6 +79,13 @@ class TestPart(IdTestCase):
         assert isinstance(p.score_part, ScorePart)
         assert p.score_part.xml_object.id == p.xml_object.id
 
+    def test_part_list_multiple_parts(self):
+        score = Score()
+        score.add_part('p1')
+        score.add_part('p2')
+        score.finalize()
+        assert len(score.xml_object.xml_part_list.get_children()) == 2
+
     def test_add_measure(self):
         p = Part('p1')
         m = p.add_measure()
