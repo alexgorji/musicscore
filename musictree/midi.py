@@ -275,7 +275,7 @@ class MidiNote(Midi):
     def _get_accidental_value(self):
         permitted = ['double-flat', 'flat-flat', 'ff', 'bb', 'three-quarters-flat', 'flat', 'f', 'b', 'quarter-flat',
                      'quarter-sharp', 'sharp', 's', '#', 'three-quarters-sharp', 'double-sharp', 'sharp-sharp', 'ss',
-                     '##']
+                     '##', 'x']
         if self._accidental_sign in ['double-flat', 'flat-flat', 'ff', 'bb']:
             return -2
         elif self._accidental_sign in ['three-quarters-flat']:
@@ -292,7 +292,7 @@ class MidiNote(Midi):
             return 1
         elif self._accidental_sign in ['three-quarters-sharp']:
             return 1.5
-        elif self._accidental_sign in ['double-sharp', 'sharp-sharp', 'ss', '##']:
+        elif self._accidental_sign in ['double-sharp', 'sharp-sharp', 'ss', '##', 'x']:
             return 2
         else:
             raise ValueError(f'accidental_sign value {self._accidental_sign} can be None or must be in {permitted}')
