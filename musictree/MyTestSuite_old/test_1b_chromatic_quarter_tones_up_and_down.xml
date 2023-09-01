@@ -88,14 +88,14 @@
       </note>
       <note>
         <pitch>
-          <step>D</step>
-          <alter>-0.5</alter>
+          <step>C</step>
+          <alter>1.5</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-flat</accidental>
+        <accidental>three-quarters-sharp</accidental>
       </note>
     </measure>
     <measure number="2">
@@ -110,18 +110,17 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
-          <step>D</step>
-          <alter>0.5</alter>
+          <step>E</step>
+          <alter>-1.5</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
       <note>
         <pitch>
@@ -209,14 +208,14 @@
       </note>
       <note>
         <pitch>
-          <step>G</step>
-          <alter>-0.5</alter>
+          <step>F</step>
+          <alter>1.5</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-flat</accidental>
+        <accidental>three-quarters-sharp</accidental>
       </note>
       <note>
         <pitch>
@@ -226,18 +225,17 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
-          <step>G</step>
-          <alter>0.5</alter>
+          <step>A</step>
+          <alter>-1.5</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
     </measure>
     <measure number="5">
@@ -278,14 +276,14 @@
       </note>
       <note>
         <pitch>
-          <step>A</step>
-          <alter>0.5</alter>
+          <step>B</step>
+          <alter>-1.5</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
     </measure>
     <measure number="6">
@@ -374,14 +372,14 @@
       </note>
       <note>
         <pitch>
-          <step>D</step>
-          <alter>-0.5</alter>
+          <step>C</step>
+          <alter>1.5</alter>
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-flat</accidental>
+        <accidental>three-quarters-sharp</accidental>
       </note>
     </measure>
     <measure number="8">
@@ -396,18 +394,17 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
-          <step>D</step>
-          <alter>0.5</alter>
+          <step>E</step>
+          <alter>-1.5</alter>
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
       <note>
         <pitch>
@@ -495,14 +492,14 @@
       </note>
       <note>
         <pitch>
-          <step>G</step>
-          <alter>-0.5</alter>
+          <step>F</step>
+          <alter>1.5</alter>
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-flat</accidental>
+        <accidental>three-quarters-sharp</accidental>
       </note>
       <note>
         <pitch>
@@ -512,18 +509,17 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
-          <step>G</step>
-          <alter>0.5</alter>
+          <step>A</step>
+          <alter>-1.5</alter>
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
     </measure>
     <measure number="11">
@@ -564,14 +560,14 @@
       </note>
       <note>
         <pitch>
-          <step>A</step>
-          <alter>0.5</alter>
+          <step>B</step>
+          <alter>-1.5</alter>
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
     </measure>
     <measure number="12">
@@ -685,14 +681,14 @@
       </note>
       <note>
         <pitch>
-          <step>A</step>
-          <alter>0.5</alter>
+          <step>B</step>
+          <alter>-1.5</alter>
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
       <note>
         <pitch>
@@ -702,7 +698,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
@@ -733,14 +728,14 @@
       </note>
       <note>
         <pitch>
-          <step>G</step>
-          <alter>0.5</alter>
+          <step>A</step>
+          <alter>-1.5</alter>
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
       <note>
         <pitch>
@@ -750,18 +745,17 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
-          <step>G</step>
-          <alter>-0.5</alter>
+          <step>F</step>
+          <alter>1.5</alter>
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-flat</accidental>
+        <accidental>three-quarters-sharp</accidental>
       </note>
     </measure>
     <measure number="16">
@@ -850,14 +844,14 @@
       </note>
       <note>
         <pitch>
-          <step>D</step>
-          <alter>0.5</alter>
+          <step>E</step>
+          <alter>-1.5</alter>
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
     </measure>
     <measure number="18">
@@ -872,18 +866,17 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
-          <step>D</step>
-          <alter>-0.5</alter>
+          <step>C</step>
+          <alter>1.5</alter>
           <octave>5</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-flat</accidental>
+        <accidental>three-quarters-sharp</accidental>
       </note>
       <note>
         <pitch>
@@ -971,14 +964,14 @@
       </note>
       <note>
         <pitch>
-          <step>A</step>
-          <alter>0.5</alter>
+          <step>B</step>
+          <alter>-1.5</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
       <note>
         <pitch>
@@ -988,7 +981,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
@@ -1019,14 +1011,14 @@
       </note>
       <note>
         <pitch>
-          <step>G</step>
-          <alter>0.5</alter>
+          <step>A</step>
+          <alter>-1.5</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
       <note>
         <pitch>
@@ -1036,18 +1028,17 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
-          <step>G</step>
-          <alter>-0.5</alter>
+          <step>F</step>
+          <alter>1.5</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-flat</accidental>
+        <accidental>three-quarters-sharp</accidental>
       </note>
     </measure>
     <measure number="22">
@@ -1136,14 +1127,14 @@
       </note>
       <note>
         <pitch>
-          <step>D</step>
-          <alter>0.5</alter>
+          <step>E</step>
+          <alter>-1.5</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-sharp</accidental>
+        <accidental>three-quarters-flat</accidental>
       </note>
     </measure>
     <measure number="24">
@@ -1158,18 +1149,17 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>natural</accidental>
       </note>
       <note>
         <pitch>
-          <step>D</step>
-          <alter>-0.5</alter>
+          <step>C</step>
+          <alter>1.5</alter>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>quarter-flat</accidental>
+        <accidental>three-quarters-sharp</accidental>
       </note>
       <note>
         <pitch>

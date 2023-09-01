@@ -39,7 +39,7 @@ class TestAccidental(TestCase):
         midi.accidental.mode = 'flat'
         assert midi.accidental.sign == 'natural'
         midi.accidental.mode = 'enharmonic'
-        assert midi.accidental.sign == 'sharp'
+        assert midi.accidental.sign == 'natural'
         midi.accidental.mode = 'force-flat'
         assert midi.accidental.sign == 'flat-flat'
 

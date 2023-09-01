@@ -50,7 +50,7 @@ class TestMidi(TestCase):
         m = Midi(60)
         assert m.accidental.get_pitch_parameters() == ('C', 0, 4)
         m.accidental.mode = 'enharmonic'
-        assert m.accidental.get_pitch_parameters() == ('B', 1, 3)
+        assert m.accidental.get_pitch_parameters() == ('C', 0, 4)
         m.accidental.mode = 'force-flat'
         assert m.accidental.get_pitch_parameters() == ('D', -2, 4)
         m.accidental.mode = 'force-sharp'
