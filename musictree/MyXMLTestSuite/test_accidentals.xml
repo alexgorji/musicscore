@@ -36,22 +36,22 @@
   </defaults>
   <part-list>
     <score-part id="standard">
-      <part-name>mode standard</part-name>
+      <part-name>standard</part-name>
     </score-part>
     <score-part id="enharmonic">
-      <part-name>mode enharmonic</part-name>
+      <part-name>enharmonic</part-name>
     </score-part>
     <score-part id="sharp">
-      <part-name>mode sharp</part-name>
+      <part-name>sharp</part-name>
     </score-part>
     <score-part id="flat">
-      <part-name>mode flat</part-name>
+      <part-name>flat</part-name>
     </score-part>
     <score-part id="force-sharp">
-      <part-name>mode force-sharp</part-name>
+      <part-name>force-sharp</part-name>
     </score-part>
     <score-part id="force-flat">
-      <part-name>mode force-flat</part-name>
+      <part-name>force-flat</part-name>
     </score-part>
   </part-list>
   <part id="standard">
