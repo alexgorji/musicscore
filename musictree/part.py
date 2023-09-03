@@ -319,6 +319,9 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
         except KeyError:
             return self._set_first_current_measure(staff_number=staff_number, voice_number=voice_number)
 
+    def get_children(self) -> List['Measure']:
+        return super().get_children()
+
     def get_parent(self) -> 'Score':
         """
         :return: parent

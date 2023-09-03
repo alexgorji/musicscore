@@ -1,3 +1,4 @@
+import inspect
 import itertools
 from difflib import Differ
 from pathlib import Path
@@ -10,6 +11,7 @@ from xml.etree import ElementTree
 import xmltodict
 from deepdiff import DeepDiff
 
+from musictree import generate_measures, Chord, C
 from musicxml.xmlelement.xmlelement import XMLBendAlter, XMLHoleClosed, XMLArrowDirection, XMLHarmonClosed
 from quicktions import Fraction
 
@@ -261,3 +263,18 @@ def generate_xml_file(score, *simpleformats, path):
         for chord in simpleformat.chords:
             part.add_chord(chord, staff_number=index + 1)
     score.export_xml(path)
+
+
+def generate_repetitions(part):
+    for m in generate_measures([(3, 8), (3, 4)] + 2 * [(6, 4)] + 3 * [(4, 4)] + [(5, 4)]):
+        part.add_child(m)
+
+    for qd in 3 * [0.5] + 3 * [1] + 4 * [1.5] + 3 * [2] + [1, 1, 1, 2, 1, 1, 2, 2, 3, 3, 3, 4, 4, 2, 2, 1.5, 1.5,
+                                                           3.25, 1.75, 1]:
+        part.add_chord(Chord(C(5, '#'), qd))
+
+
+def generate_path(frame):
+    f = str(inspect.getframeinfo(frame).function) + '.xml'
+    path = Path(inspect.getframeinfo(frame).filename).parent / f
+    return path

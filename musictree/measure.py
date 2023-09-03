@@ -7,7 +7,7 @@ from musictree.finalize_mixin import FinalizeMixin
 from musictree.key import Key
 from musictree.staff import Staff
 from musictree.time import Time, flatten_times
-from musictree.util import lcm
+from musictree.util import lcm, chord_is_in_a_repetition
 from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup
@@ -67,44 +67,39 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
             self.xml_object.xml_attributes.xml_time = None
 
     def _update_accidentals(self):
-        def chord_is_in_a_repetition(chord):
-            if chord.quarter_duration <= 1.5:
-                my_index = chord.up.up.get_chords().index(chord)
-                if my_index > 0:
-                    previous_chord = chord.up.up.get_chords()[my_index - 1]
-                    if previous_chord.quarter_duration < -1.5 and chord.has_same_pitches(previous_chord):
-                        return True
-            return False
 
         for staff in self.get_children():
-            previous_staff = staff.get_previous_staff()
-            steps_with_accidentals = set()
-            relevant_chords = [ch for ch in staff.get_chords() if not ch.is_rest]
-            relevant_chords_not_tied = [ch for ch in relevant_chords if
-                                        True not in set(m.is_tied_to_previous for m in ch.midis)]
-            for chord in relevant_chords:
-                for midi in chord.midis:
-                    step = midi.accidental.get_pitch_parameters()[0]
-                    if midi.accidental.show is None:
-                        if midi.accidental.sign == 'natural':
-                            if step in steps_with_accidentals:
-                                midi.accidental.show = True
-                                steps_with_accidentals.remove(step)
-                            elif relevant_chords_not_tied and chord == relevant_chords_not_tied[
-                                0] and previous_staff and step in \
-                                    previous_staff.get_last_pitch_steps_with_accidentals():
-                                midi.accidental.show = True
+            if staff.show_accidental_signs == 'modern':
+                previous_staff = staff.get_previous_staff()
+                steps_with_accidentals = set()
+                relevant_chords = [ch for ch in staff.get_chords() if not ch.is_rest]
+                relevant_chords_not_tied = [ch for ch in relevant_chords if
+                                            True not in set(m.is_tied_to_previous for m in ch.midis)]
+                for chord in relevant_chords:
+                    for midi in chord.midis:
+                        step = midi.accidental.get_pitch_parameters()[0]
+                        if midi.accidental.show is None:
+                            if midi.accidental.sign == 'natural':
+                                if step in steps_with_accidentals:
+                                    midi.accidental.show = True
+                                    steps_with_accidentals.remove(step)
+                                elif relevant_chords_not_tied and chord == relevant_chords_not_tied[
+                                    0] and previous_staff and step in \
+                                        previous_staff.get_last_pitch_steps_with_accidentals():
+                                    midi.accidental.show = True
+                                else:
+                                    midi.accidental.show = False
                             else:
-                                midi.accidental.show = False
-                        else:
-                            if chord_is_in_a_repetition(chord):
-                                midi.accidental.show = False
-                            else:
-                                midi.accidental.show = True
-                                if step not in steps_with_accidentals:
-                                    steps_with_accidentals.add(step)
-                    elif midi.accidental.sign != 'natural' and step not in steps_with_accidentals:
-                        steps_with_accidentals.add(step)
+                                if chord_is_in_a_repetition(chord):
+                                    midi.accidental.show = False
+                                else:
+                                    midi.accidental.show = True
+                                    if step not in steps_with_accidentals:
+                                        steps_with_accidentals.add(step)
+                        elif midi.accidental.sign != 'natural' and step not in steps_with_accidentals:
+                            steps_with_accidentals.add(step)
+            else:
+                raise NotImplementedError(f'{staff.show_accidental_signs} not implemented yet.')
 
     def _update_attributes(self):
         self._set_key()

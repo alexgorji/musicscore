@@ -318,8 +318,12 @@ class Accidental(MusicTree, XMLWrapper):
     def show(self) -> bool:
         """
         If ``False`` ``xml_object`` will be ``None`` and no accidental is shown in the :obj:`~musictree.score.Score`.
-        If ``True`` the accidental is shown.
+        If ``True`` the accidental is shown. If the value of ``self.parentheses``, ``self.parentheses``.
+        ``self.parentheses`` or ``self.parentheses`` is set to yes, the accidental is always shown regardless of this
+        property
         """
+        if 'yes' in [self.parentheses, self.editorial, self.cautionary, self.bracket]:
+            return True
         return self._show
 
     @show.setter

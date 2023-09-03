@@ -1176,7 +1176,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>sharp-sharp</accidental>
+        <accidental>double-sharp</accidental>
       </note>
       <note>
         <pitch>
@@ -1209,7 +1209,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>sharp</accidental>
       </note>
     </measure>
     <measure number="26">
@@ -1236,7 +1235,6 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <accidental>sharp</accidental>
       </note>
     </measure>
   </part>

@@ -361,6 +361,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <accidental parentheses="yes">natural</accidental>
         <lyric>
           <text>parentheses</text>
         </lyric>
@@ -373,6 +374,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <accidental cautionary="yes">natural</accidental>
         <lyric>
           <text>cautionary</text>
         </lyric>
@@ -385,6 +387,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <accidental editorial="yes">natural</accidental>
         <lyric>
           <text>editorial</text>
         </lyric>
@@ -397,6 +400,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <accidental bracket="yes">natural</accidental>
         <lyric>
           <text>bracket</text>
         </lyric>

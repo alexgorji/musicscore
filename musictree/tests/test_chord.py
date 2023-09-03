@@ -336,14 +336,12 @@ class TestTreeChord(ChordTestCase):
         assert group_chords(chords, [1 / 4, 3 / 4]) is None
 
     def test_has_same_pitches(self):
-        ch1 = Chord([60, Midi(61, accidental=Accidental(show=True)), 62], 1)
-        ch2 = Chord([60, Midi(61, accidental=Accidental(show=True))], 1)
+        ch1 = Chord([60, Midi(61), 62], 1)
+        ch2 = Chord([60, Midi(61)], 1)
         assert not ch1.has_same_pitches(ch2)
-        ch2 = Chord([60, Midi(61, accidental=Accidental(show=True)), 62], 1)
+        ch2 = Chord([60, Midi(61), 62], 1)
         assert ch1.has_same_pitches(ch2)
-        ch2 = Chord([60, Midi(61, accidental=Accidental(show=False)), 62], 1)
-        assert not ch1.has_same_pitches(ch2)
-        ch2 = Chord([60, Midi(61, accidental=Accidental(show=True, mode='flat')), 62], 1)
+        ch2 = Chord([60, Midi(61, accidental=Accidental(mode='flat')), 62], 1)
         assert not ch1.has_same_pitches(ch2)
 
     def test_add_lyric(self):

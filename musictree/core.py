@@ -8,7 +8,7 @@ __all__ = ['MusicTree']
 
 
 class MusicTree(Tree):
-    _ATTRIBUTES = {'quantize'}
+    _ATTRIBUTES = {'quantize', 'show_accidental_signs'}
     """
     MusicTree is the parent class of all music tree objects:
         - Score (root)
@@ -24,16 +24,20 @@ class MusicTree(Tree):
         - Accidental (9th layer)
     """
 
+    default_show_accidental_signs = 'modern'
+
     def __init__(self, quantize=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._possible_subdivisions = {}
+        self._show_accidental_signs = None
         self._quantize = None
         self.quantize = quantize
 
     @staticmethod
     def _check_args_kwargs(args, kwargs, class_name, get_class_name=None):
         def _get_default_keys():
-            default_keys = ['part_number', 'measure_number', 'staff_number', 'voice_number', 'beat_number', 'chord_number']
+            default_keys = ['part_number', 'measure_number', 'staff_number', 'voice_number', 'beat_number',
+                            'chord_number']
             class_names = ['Score', 'Part', 'Measure', 'Staff', 'Voice', 'Beat', 'Chord']
             class_index = class_names.index(class_name)
             get_class_index = -1 if not get_class_name else class_names.index(get_class_name)
@@ -56,14 +60,17 @@ class MusicTree(Tree):
         if not isinstance_as_string(child, 'MusicTree'):
             raise TypeError(f'MusicTree child must be of type MusicTree not {child.__class__}')
 
-        parent_child = {'Score': 'Part', 'Part': 'Measure', 'Measure': 'Staff', 'Staff': 'Voice', 'Voice': 'Beat', 'Beat': 'Chord',
-                        'Chord': 'Note', 'Note': 'Midi', 'Midi': 'Accidental', 'C': 'Accidental', 'D': 'Accidental', 'E': 'Accidental',
+        parent_child = {'Score': 'Part', 'Part': 'Measure', 'Measure': 'Staff', 'Staff': 'Voice', 'Voice': 'Beat',
+                        'Beat': 'Chord',
+                        'Chord': 'Note', 'Note': 'Midi', 'Midi': 'Accidental', 'C': 'Accidental', 'D': 'Accidental',
+                        'E': 'Accidental',
                         'F': 'Accidental', 'G': 'Accidental', 'A': 'Accidental', 'B': 'Accidental'}
 
         try:
             if not isinstance_as_string(child, parent_child[self.__class__.__name__]):
-                raise TypeError(f'{self.__class__.__name__} accepts only children of type {parent_child[self.__class__.__name__]} not '
-                                f'{child.__class__.__name__}')
+                raise TypeError(
+                    f'{self.__class__.__name__} accepts only children of type {parent_child[self.__class__.__name__]} not '
+                    f'{child.__class__.__name__}')
         except KeyError:
             raise NotImplementedError(f'{self.__class__.__name__} add_child() not implemented.')
 
@@ -113,6 +120,30 @@ class MusicTree(Tree):
     @quantize.setter
     def quantize(self, val):
         self._quantize = val
+
+    @property
+    def show_accidental_signs(self) -> str:
+        """
+        - If show_accidental_signs is set to None the first quantize of ancestors which is ``False`` or ``True`` will be returned.
+        - If :obj:`~musictree.score.Score.show_accidental_signs` is set to None it will be converted to ``default_show_accidental_signs``
+        - Possible show_accidental_signs are: None, 'modern', 'traditional'
+        :type: Optional[str]
+        :rtype: str
+        """
+        if self._show_accidental_signs is None:
+            if self.up:
+                return self.up.show_accidental_signs
+            else:
+                return self.default_show_accidental_signs
+        return self._show_accidental_signs
+
+    @show_accidental_signs.setter
+    def show_accidental_signs(self, val):
+        permitted = [None, 'modern', 'traditional']
+        if val not in permitted:
+            raise ValueError(f'show_accidental_signs {val} not in permitted: {permitted}')
+
+        self._show_accidental_signs = val
 
     def get_beat(self, *args, **kwargs) -> 'Beat':
         """
@@ -235,7 +266,8 @@ class MusicTree(Tree):
         if beat_quarter_duration is None:
             beat_quarter_duration = self._get_beat_quarter_duration()
         subdivisions = self._possible_subdivisions.get(beat_quarter_duration)
-        if subdivisions is None and self.up is not None and self.up.get_possible_subdivisions(beat_quarter_duration) is not None:
+        if subdivisions is None and self.up is not None and self.up.get_possible_subdivisions(
+                beat_quarter_duration) is not None:
             subdivisions = self.up.get_possible_subdivisions(beat_quarter_duration)[:]
         return subdivisions
 
@@ -283,7 +315,8 @@ class MusicTree(Tree):
         #
         # raise TypeError
 
-    def set_possible_subdivisions(self, subdivisions: list[int], beat_quarter_duration: Optional[QuarterDuration] = None) -> None:
+    def set_possible_subdivisions(self, subdivisions: list[int],
+                                  beat_quarter_duration: Optional[QuarterDuration] = None) -> None:
         """
         This method is used to set or change possible subdivisions dictionary.
 

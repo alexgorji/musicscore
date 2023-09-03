@@ -362,6 +362,14 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             return False
 
     @property
+    def is_tied_to_previous(self):
+        return self.all_midis_are_tied_to_previous
+
+    @property
+    def is_tied_to_next(self):
+        return self.all_midis_are_tied_to_next
+
+    @property
     def midis(self) -> List['Midi']:
         """
         :return: list of midis
@@ -635,8 +643,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         if [m.value for m in self.midis] != [m.value for m in other.midis]:
             return False
         for m1, m2 in zip(self.midis, other.midis):
-            if m1.accidental.show != m2.accidental.show:
-                return False
+            #     if m1.accidental.show != m2.accidental.show:
+            #         return False
             if m1.accidental.get_pitch_parameters() != m2.accidental.get_pitch_parameters():
                 return False
         return True

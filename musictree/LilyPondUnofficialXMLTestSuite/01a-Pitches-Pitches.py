@@ -17,7 +17,7 @@ for midi in scale_2:
     midi.transpose(1)
     if midi.value % 12 in [0, 5]:
         # B# and E#
-        midi.accidental.mode = 'enharmonic'
+        midi.accidental.mode = 'force-sharp'
     else:
         midi.accidental.mode = 'sharp'
 # with flats
@@ -26,7 +26,7 @@ for midi in scale_3:
     midi.transpose(-1)
     if midi.value % 12 in [11, 4]:
         # C-flat and F-flat
-        midi.accidental.mode = 'enharmonic'
+        midi.accidental.mode = 'force-flat'
     else:
         midi.accidental.mode = 'flat'
 # Double alterations and cautionary accidentals.
