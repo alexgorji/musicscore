@@ -45,8 +45,10 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         super().__init__(quarter_duration=quarter_duration)
         self.midi = midi
         self._parent = self.parent_chord
+        self._update_xml_notehead()
         self._update_xml_voice()
         self._update_xml_staff()
+
 
     @staticmethod
     def _check_xml_duration_value(duration):
@@ -156,6 +158,9 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     def _update_xml_voice(self):
         self.xml_object.xml_voice = str(self.get_voice_number())
+
+    def _update_xml_notehead(self):
+        self.xml_object.xml_notehead = self.midi.notehead
 
     @property
     def is_tied(self) -> bool:

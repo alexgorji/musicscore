@@ -22,10 +22,11 @@ class Midi(MusicTree):
         super().__init__(*args, **kwargs)
         self._value = None
         self._accidental = None
+        self._notehead = None
         self._pitch_or_rest = None
+        self._parent_chord = None
         self._parent_note = None
         self._ties = set()
-        self._parent_chord = None
 
         self.value = value
         self.accidental = accidental
@@ -85,6 +86,22 @@ class Midi(MusicTree):
         self._accidental = value
         if value:
             self._accidental.parent_midi = self
+
+    @property
+    def notehead(self):
+        return self._notehead
+
+    @notehead.setter
+    def notehead(self, val):
+        if self.parent_note:
+            raise AlreadyFinalized('Cannot change notehead after finalizing.')
+
+        if val is None:
+            self._notehead = None
+        elif not isinstance(val, XMLNotehead):
+            self._notehead = XMLNotehead(val)
+        else:
+            self._notehead = val
 
     @property
     def is_tied_to_next(self):
@@ -171,7 +188,7 @@ class Midi(MusicTree):
     # //public methods
     def add_child(self, child: [Accidental]) -> Accidental:
         if not isinstance(child, Accidental):
-            raise TypeError
+            raise TypeError(f'child {child} must be of type Accidental.')
         if self.parent_chord and self.parent_chord._finalized is True:
             raise AlreadyFinalized(self, 'add_child')
         super().add_child(child)
@@ -250,6 +267,7 @@ class Midi(MusicTree):
     def copy_for_split(self):
         copied_accidental = copy.copy(self.accidental)
         copied = self.__class__(value=self.value, accidental=copied_accidental)
+        copied.notehead = self.notehead
         return copied
 
 
@@ -314,6 +332,7 @@ class MidiNote(Midi):
     def copy_for_split(self):
         copied_accidental = copy.copy(self.accidental)
         copied = Midi(value=self.value, accidental=copied_accidental)
+        copied.notehead = self.notehead
         return copied
 
 

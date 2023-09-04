@@ -1,5 +1,8 @@
-from musictree import C, B, G
-from musictree.tests.util import TestCase
+import inspect
+
+from musictree import C, B, G, Part, Chord, Score, Time
+from musictree.tests.util import TestCase, generate_path, IdTestCase
+from musicxml.xmlelement.xmlelement import XMLNotehead
 
 
 class TestMidiNotes(TestCase):
@@ -80,3 +83,40 @@ class TestMidiNotes(TestCase):
         # assert m.accidental != copied.accidental
         # assert m.accidental.mode == copied.accidental.mode
         # assert m.accidental.show == copied.accidental.show
+
+
+
+
+
+class TestMidiNoteNoteHead(IdTestCase):
+    def test_notehead_property(self):
+        m = C(4)
+        m.notehead = 'square'
+        assert isinstance(m.notehead, XMLNotehead)
+        assert m.notehead.value_ == 'square'
+
+    def test_notehead_after_finalize(self):
+        p = Part('p1')
+        ch = Chord(C(4), 1)
+        ch.midis[0].notehead = 'square'
+        p.add_chord(ch)
+        p.finalize()
+        assert ch.midis[0].parent_note.xml_notehead.value_ == 'square'
+
+    def test_notehead_copy_for_split(self):
+        midi = C(4)
+        midi.notehead = 'square'
+        copied = midi.copy_for_split()
+        assert copied.notehead.value_ == 'square'
+
+    def test_midi_note_notehead_after_split(self):
+        s = Score()
+        p = s.add_part('p1')
+        ch = Chord(C(4), 3)
+        ch.midis[0].notehead = 'square'
+        p.add_measure(Time(2, 4))
+        p.add_chord(ch)
+        path = generate_path(inspect.currentframe())
+        s.export_xml(path)
+        assert p.get_chords()[-1].midis[0].notehead.value_ == 'square'
+        assert p.get_chords()[-1].midis[0].parent_note.xml_notehead.value_ == 'square'

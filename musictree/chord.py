@@ -82,7 +82,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._set_midis(midis)
         self.split = False
         self._original_starting_ties = None
-        # self._final_updated = False
 
     def _add_child(self, child: Note) -> Note:
         """

@@ -1,25 +1,28 @@
 import inspect
 import itertools
+import xml.etree.ElementTree as ET
 from difflib import Differ
 from pathlib import Path
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
-import xml.etree.ElementTree as ET
-from xml.etree import ElementTree
-
 import xmltodict
 from deepdiff import DeepDiff
-
-from musictree import generate_measures, Chord, C
-from musicxml.xmlelement.xmlelement import XMLBendAlter, XMLHoleClosed, XMLArrowDirection, XMLHarmonClosed
 from quicktions import Fraction
 
+from musictree import generate_measures, Chord, C
 from musictree.part import Id
+from musicxml.xmlelement.xmlelement import XMLBendAlter, XMLHoleClosed, XMLArrowDirection, XMLHarmonClosed
 
 
 class XMLsDifferException(Exception):
     pass
+
+
+notehead_values = ['slash', 'triangle', 'diamond', 'square', 'rectangle', 'cross', 'x', 'circle dot', 'circle-x',
+                    'circled', 'inverted triangle', 'left triangle', 'arrow down', 'arrow up', 'slashed',
+                    'back slashed', 'normal', 'cluster', 'none']
+notehead_aikin_values = ['do', 're', 'mi', 'fa', 'fa up', 'so', 'la', 'ti']
 
 
 def check_notes(notes, midi_values, quarter_durations):

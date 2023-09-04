@@ -1,12 +1,14 @@
+import inspect
 from unittest import TestCase
 from unittest.mock import patch
 
-from musictree import Chord
+from musictree import Chord, Part, Time, Score
 from musictree.accidental import Accidental
 from musictree.measure import Measure
 from musictree.midi import Midi
 from musictree.note import Note
-from musicxml.xmlelement.xmlelement import XMLPitch, XMLRest
+from musictree.tests.util import generate_path, IdTestCase
+from musicxml.xmlelement.xmlelement import XMLPitch, XMLRest, XMLNotehead
 
 
 class TestMidi(TestCase):
@@ -179,3 +181,38 @@ class TestMidi(TestCase):
         assert m1.is_tied_to_next
         assert m2.is_tied_to_previous
         assert m2.is_tied_to_next
+
+
+class TestMidiNoteHead(IdTestCase):
+    def test_notehead_property(self):
+        m = Midi(60)
+        m.notehead = 'square'
+        assert isinstance(m.notehead, XMLNotehead)
+        assert m.notehead.value_ == 'square'
+
+    def test_notehead_after_finalize(self):
+        p = Part('p1')
+        ch = Chord(60, 1)
+        ch.midis[0].notehead = 'square'
+        p.add_chord(ch)
+        p.finalize()
+        assert ch.midis[0].parent_note.xml_notehead.value_ == 'square'
+
+    def test_notehead_copy_for_split(self):
+        midi = Midi(60)
+        midi.notehead = 'square'
+        copied = midi.copy_for_split()
+        assert copied.notehead.value_ == 'square'
+
+    def test_midi_notehead_after_split(self):
+        s = Score()
+        p = s.add_part('p1')
+        ch = Chord(60, 3)
+        ch.midis[0].notehead = 'square'
+        p.add_measure(Time(2, 4))
+        p.add_chord(ch)
+        path = generate_path(inspect.currentframe())
+        s.export_xml(path)
+        assert p.get_chords()[-1].midis[0].notehead.value_ == 'square'
+        assert p.get_chords()[-1].midis[0].parent_note.xml_notehead.value_ == 'square'
+
