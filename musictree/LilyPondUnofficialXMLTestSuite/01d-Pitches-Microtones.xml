@@ -36,7 +36,7 @@
   </defaults>
   <part-list>
     <score-part id="microtones">
-      <part-name>microtones</part-name>
+      <part-name />
     </score-part>
   </part-list>
   <part id="microtones">

@@ -36,7 +36,7 @@
   </defaults>
   <part-list>
     <score-part id="cautionary">
-      <part-name>cautionary</part-name>
+      <part-name />
     </score-part>
   </part-list>
   <part id="cautionary">

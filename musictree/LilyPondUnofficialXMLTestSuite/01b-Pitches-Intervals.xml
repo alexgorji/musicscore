@@ -36,7 +36,7 @@
   </defaults>
   <part-list>
     <score-part id="intervals">
-      <part-name>intervals</part-name>
+      <part-name />
     </score-part>
   </part-list>
   <part id="intervals">

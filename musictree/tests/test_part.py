@@ -68,11 +68,11 @@ class TestPart(IdTestCase):
 
     def test_part_name(self):
         p = Part(id='p1')
-        assert p.name == 'p1'
+        assert p.name == ''
         p = Part(id='p2', name='Part 1')
         assert p.name == 'Part 1'
         p.name = None
-        assert p.name == 'p2'
+        assert p.name == ''
 
     def test_part_and_score_part(self):
         p = Part(id='p1')
@@ -230,16 +230,16 @@ class TestScorePart(IdTestCase):
 
     def test_score_part_name(self):
         p = Part(id='p1')
-        assert p.score_part.xml_part_name.value_ == p.name == 'p1'
+        assert p.score_part.xml_part_name.value_ == p.name == ''
         p.name = 'Part 1'
         assert p.score_part.xml_part_name.value_ == p.name == 'Part 1'
         p.name = None
-        assert p.score_part.xml_part_name.value_ == p.name == 'p1'
+        assert p.score_part.xml_part_name.value_ == p.name == ''
 
     def test_score_part_to_string(self):
         p = Part(id='p1')
         expected = """<score-part id="p1">
-  <part-name>p1</part-name>
+  <part-name />
 </score-part>
 """
         assert p.score_part.to_string() == expected

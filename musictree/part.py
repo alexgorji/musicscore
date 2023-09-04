@@ -1,5 +1,6 @@
 from typing import List, Optional, Union, Iterator
 
+from musictree import Chord
 from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
@@ -179,7 +180,7 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
         if self._name is not None:
             return self._name
         else:
-            return self.id
+            return ''
 
     @name.setter
     def name(self, val):
@@ -230,6 +231,8 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
         :param voice_number: positive_int
         :return: None
         """
+        if not isinstance(chord, Chord):
+            raise TypeError(f'{chord} must be of type Chord.')
         if self._finalized is True:
             raise AlreadyFinalized(self, 'add_chord')
 

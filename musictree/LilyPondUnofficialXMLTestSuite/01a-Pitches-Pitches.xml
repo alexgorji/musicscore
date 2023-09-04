@@ -36,7 +36,7 @@
   </defaults>
   <part-list>
     <score-part id="pitches">
-      <part-name>pitches</part-name>
+      <part-name />
     </score-part>
   </part-list>
   <part id="pitches">

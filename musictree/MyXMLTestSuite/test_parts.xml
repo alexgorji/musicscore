@@ -36,19 +36,19 @@
   </defaults>
   <part-list>
     <score-part id="part-0">
-      <part-name>part-0</part-name>
+      <part-name />
     </score-part>
     <score-part id="part-1">
-      <part-name>part-1</part-name>
+      <part-name />
     </score-part>
     <score-part id="part-2">
-      <part-name>part-2</part-name>
+      <part-name />
     </score-part>
     <score-part id="part-3">
-      <part-name>part-3</part-name>
+      <part-name />
     </score-part>
     <score-part id="part-4">
-      <part-name>part-4</part-name>
+      <part-name />
     </score-part>
   </part-list>
   <part id="part-0">
