@@ -1,5 +1,4 @@
 import copy
-from pathlib import Path
 from unittest import skip
 
 from quicktions import Fraction
@@ -12,7 +11,7 @@ from musictree.exceptions import ChordHasNoParentError, DeepCopyException, Chord
     ChordException
 from musictree.midi import Midi
 from musictree.quarterduration import QuarterDuration
-from musictree.tests.util import ChordTestCase, create_articulation, create_technical, create_ornament, IdTestCase
+from musictree.tests.util import ChordTestCase, create_articulation, create_technical, create_ornament
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, \
     XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES
 from musicxml.xmlelement.xmlelement import *

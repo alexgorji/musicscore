@@ -806,6 +806,45 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         return copied
 
 
+class GraceChord(Chord):
+    _ATTRIBUTES = Chord._ATTRIBUTES.union({'type'})
+
+    def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None, type=None,
+                 **kwargs):
+        super().__init__(midis=midis, quarter_duration=0, **kwargs)
+        self._type = None
+        self.type = type
+
+    @Chord.quarter_duration.setter
+    def quarter_duration(self, val):
+        if val != 0:
+            raise ChordException('quarter_duration of a GraceChord is always 0 and cannot be set')
+        else:
+            self._quarter_duration = 0
+
+    def _update_xml_type(self):
+        for n in self.notes:
+            n.xml_object.xml_type = self.type
+
+    @property
+    def type(self):
+        return self._type
+
+    @type.setter
+    def type(self, val):
+        if val is None:
+            self._type = None
+        else:
+            if not isinstance(val, XMLType):
+                self._type = XMLType(val)
+            else:
+                self._type = val
+
+    def finalize(self):
+        super().finalize()
+        self._update_xml_type()
+
+
 def split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fraction, int, float] = None) -> Chord:
     """
     This function is used when a chord needs to be split. It creates a copy of the chord with a new quarter_duration object. All midis

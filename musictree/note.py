@@ -49,7 +49,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self._update_xml_voice()
         self._update_xml_staff()
 
-
     @staticmethod
     def _check_xml_duration_value(duration):
         if int(duration) != duration:

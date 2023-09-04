@@ -61,7 +61,7 @@ class MusicTree(Tree):
             raise TypeError(f'MusicTree child must be of type MusicTree not {child.__class__}')
 
         parent_child = {'Score': 'Part', 'Part': 'Measure', 'Measure': 'Staff', 'Staff': 'Voice', 'Voice': 'Beat',
-                        'Beat': 'Chord',
+                        'Beat': 'Chord', 'GraceChord': 'Note',
                         'Chord': 'Note', 'Note': 'Midi', 'Midi': 'Accidental', 'C': 'Accidental', 'D': 'Accidental',
                         'E': 'Accidental',
                         'F': 'Accidental', 'G': 'Accidental', 'A': 'Accidental', 'B': 'Accidental'}

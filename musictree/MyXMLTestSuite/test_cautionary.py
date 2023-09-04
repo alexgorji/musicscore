@@ -11,7 +11,6 @@ class TestCautionaryAccidentalSigns(IdTestCase):
         self.score = Score()
         self.part = self.score.add_part('p.')
 
-
     @skip
     def test_cautionary_signs_repetition_traditional(self):
         self.part.show_accidental_signs = 'traditional'
