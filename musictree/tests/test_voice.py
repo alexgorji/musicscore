@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 
 from musictree.beat import Beat
 from musictree.chord import Chord
-from musictree.exceptions import VoiceHasNoBeatsError, AddChordException
+from musictree.exceptions import VoiceHasNoBeatsError, AddChordException, VoiceIsFullError
 from musictree.voice import Voice
 
 
@@ -55,7 +55,8 @@ class TestVoice(TestCase):
         v.get_children()[3]._filled_quarter_duration = 1 / 8
         assert v.get_current_beat() == beats[3]
         v.get_children()[3]._filled_quarter_duration = 1 / 4
-        assert v.get_current_beat() is None
+        with self.assertRaises(VoiceIsFullError):
+            assert v.get_current_beat() is None
 
     @patch('musictree.staff.Staff')
     def test_add_chord(self, mock_staff):

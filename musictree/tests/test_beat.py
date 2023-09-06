@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from musictree.beat import Beat
 from musictree.chord import Chord
-from musictree.exceptions import AddChordException
+from musictree.exceptions import AddChordException, VoiceIsFullError
 from musictree.measure import Measure
 from musictree.quarterduration import QuarterDuration
 from musictree.staff import Staff
@@ -74,7 +74,8 @@ class TestBeatAddChild(TestCase):
         assert v.get_current_beat() == beats[2]
         chord4 = v.get_current_beat().add_child(Chord(60, quarter_duration=1 / 2))[0]
         assert chord4.up == beats[2]
-        assert v.get_current_beat() is None
+        with self.assertRaises(VoiceIsFullError):
+            v.get_current_beat()
         assert beats[3].is_filled
         assert v.leftover_chord is None
 

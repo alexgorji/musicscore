@@ -1,17 +1,17 @@
 import copy
-from unittest import skip
+from unittest import skip, TestCase
 
 from quicktions import Fraction
 
-from musictree import BassClef, Score
+from musictree import BassClef, Score, Part
 from musictree.accidental import Accidental
 from musictree.beat import Beat
-from musictree.chord import Chord, split_copy, group_chords
+from musictree.chord import Chord, split_copy, group_chords, GraceChord
 from musictree.exceptions import ChordHasNoParentError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
     ChordException
 from musictree.midi import Midi
 from musictree.quarterduration import QuarterDuration
-from musictree.tests.util import ChordTestCase, create_articulation, create_technical, create_ornament
+from musictree.tests.util import ChordTestCase, create_articulation, create_technical, create_ornament, IdTestCase
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, \
     XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES
 from musicxml.xmlelement.xmlelement import *
@@ -646,7 +646,7 @@ class TestTies(ChordTestCase):
         assert ch.all_midis_are_tied_to_previous
 
 
-class TestSplit(ChordTestCase):
+class TestSplit(TestCase):
 
     def test_set_original_starting_ties(self):
         ch = Chord(midis=[60, 61], quarter_duration=1)
@@ -689,3 +689,104 @@ class TestSplit(ChordTestCase):
         ch.quarter_duration = quarter_durations[0][0]
         copied = split_copy(ch, quarter_durations[1])
         assert [ch.quarter_duration, copied.quarter_duration] == [4, 1]
+
+
+class TestAddGraceChord(ChordTestCase):
+    def test_add_grace_chord_parameters(self):
+        ch = Chord(60, 1)
+        gch = ch.add_grace_chord(midis_or_grace_chord=60)
+        assert gch.midis[0].value == 60
+        in_gch = GraceChord(61)
+        gch = ch.add_grace_chord(midis_or_grace_chord=in_gch)
+        assert gch == in_gch
+        gch = ch.add_grace_chord(midis_or_grace_chord=[62, 63])
+        assert [m.value for m in gch.midis] == [62, 63]
+        gch = ch.add_grace_chord(64)
+        assert gch.midis[0].value == 64
+        gch = ch.add_grace_chord(midis_or_grace_chord=65, type='16th')
+        assert gch.midis[0].value == 65
+        assert gch.type.value_ == '16th'
+        in_gch = GraceChord(61, '16th')
+        gch = ch.add_grace_chord(midis_or_grace_chord=in_gch)
+        assert gch == in_gch
+        assert gch.type.value_ == '16th'
+        with self.assertRaises(ValueError):
+            ch.add_grace_chord(midis_or_grace_chord=GraceChord(66, 'quarter'), type='16th')
+        gch = ch.add_grace_chord(67, '16th')
+        assert gch.midis[0].value == 67
+        assert gch.type.value_ == '16th'
+        gch = ch.add_grace_chord(68, '16th', position='after')
+        assert gch.position == 'after'
+        assert gch.midis[0].value == 68
+        assert gch.type.value_ == '16th'
+        with self.assertRaises(ValueError):
+            gch = ch.add_grace_chord(GraceChord(66, 'quarter'), position='after')
+
+    def test_add_grace_chord_before_and_after_argument(self):
+        ch = Chord(60, 1)
+        midis_or_chord = [62, [63, 65], GraceChord(66)]
+        before_chords = [ch.add_grace_chord(x) for x in midis_or_chord]
+        assert ch._grace_chords['before'] == before_chords
+
+        midis_or_chord = [67, [68, 70], GraceChord(71)]
+        after_chords = [ch.add_grace_chord(x, position='after') for x in midis_or_chord]
+        assert ch._grace_chords['after'] == after_chords
+
+    def test_add_grace_chord_generates_grace_chords(self):
+        ch = Chord(60, 1)
+        with self.assertRaises(TypeError):
+            ch.add_grace_chord()
+        gc1 = ch.add_grace_chord(60)
+        gc2 = ch.add_grace_chord(61, 'quarter')
+        gc3 = ch.add_grace_chord(GraceChord(midis=[62, 64]))
+        gc4 = ch.add_grace_chord(GraceChord(63, '16th'))
+        all_gcs = [gc1, gc2, gc3, gc4]
+        assert [[m.value for m in gc.midis] for gc in all_gcs] == [[60], [61], [62, 64], [63]]
+        assert [gc.type.value_ if gc.type else None for gc in all_gcs] == [None, 'quarter', None, '16th']
+
+    def test_add_grace_chord_finalize(self):
+        part = Part('p1')
+        ch = Chord(midis=[60, 63], quarter_duration=4)
+        midis_or_chord = [62, [63, 65], GraceChord(66)]
+        before_chords = [ch.add_grace_chord(x) for x in midis_or_chord]
+        midis_or_chord = [67, [68, 70], GraceChord(71)]
+        after_chords = [ch.add_grace_chord(x, position='after') for x in midis_or_chord]
+        part.add_chord(ch)
+        with self.assertRaises(ChordException):
+            ch.add_grace_chord(80)
+        part.finalize()
+        assert len(part.get_chords()) == 7
+
+    def test_grace_chords_are_added_to_right_voice(self):
+        part = Part('p1')
+        ch = Chord(midis=[60, 63], quarter_duration=4)
+        gch1 = ch.add_grace_chord(80)
+        gch2 = ch.add_grace_chord(90, position='after')
+        part.add_chord(ch, staff_number=2, voice_number=2)
+        part.finalize()
+        assert part.get_chords() == [gch1, ch, gch2]
+        for c in [gch1, ch, gch2]:
+            assert c.voice_number == 2
+            assert c.get_staff_number() == 2
+
+    def test_grace_chords_after_the_last_chord_in_measure(self):
+        part = Part('p1')
+        ch = Chord(60, 4)
+        gch = ch.add_grace_chord(80, position='after')
+        part.add_chord(ch)
+        part.add_chord(Chord(90, 1))
+        part.finalize()
+        assert gch in part.get_measure(1).get_chords()
+
+    def test_error_grace_chord_add_grace_chord(self):
+        gch = GraceChord(60)
+        with self.assertRaises(TypeError):
+            gch.add_grace_chord(80)
+
+    def test_grace_chords_after_to_right_beat(self):
+        part = Part('p1')
+        ch = Chord(60, 1)
+        gch = ch.add_grace_chord(80, position='after')
+        part.add_chord(ch)
+        part.add_chord(Chord(90, 3))
+        assert gch in part.get_beat(1, 1, 1, 1).get_children()

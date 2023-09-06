@@ -58,7 +58,7 @@
       <note>
         <grace />
         <pitch>
-          <step>C</step>
+          <step>D</step>
           <octave>5</octave>
         </pitch>
         <voice>1</voice>
@@ -76,7 +76,7 @@
       <note>
         <grace />
         <pitch>
-          <step>C</step>
+          <step>E</step>
           <octave>5</octave>
         </pitch>
         <voice>1</voice>
@@ -85,25 +85,7 @@
       <note>
         <grace />
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <voice>1</voice>
-        <type>16th</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <grace />
-        <pitch>
-          <step>C</step>
+          <step>D</step>
           <octave>5</octave>
         </pitch>
         <voice>1</voice>
@@ -121,7 +103,25 @@
       <note>
         <grace />
         <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note>
+        <pitch>
           <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <grace />
+        <pitch>
+          <step>D</step>
           <octave>5</octave>
         </pitch>
         <voice>1</voice>
@@ -144,7 +144,7 @@
       <note>
         <grace />
         <pitch>
-          <step>C</step>
+          <step>D</step>
           <octave>5</octave>
         </pitch>
         <voice>1</voice>
@@ -168,7 +168,7 @@
       <note>
         <grace />
         <pitch>
-          <step>C</step>
+          <step>E</step>
           <octave>5</octave>
         </pitch>
         <voice>1</voice>
@@ -177,7 +177,7 @@
       <note>
         <grace />
         <pitch>
-          <step>C</step>
+          <step>D</step>
           <octave>5</octave>
         </pitch>
         <voice>1</voice>
@@ -195,7 +195,7 @@
       <note>
         <grace />
         <pitch>
-          <step>C</step>
+          <step>D</step>
           <octave>5</octave>
         </pitch>
         <voice>1</voice>
@@ -220,7 +220,7 @@
       <note>
         <grace />
         <pitch>
-          <step>C</step>
+          <step>D</step>
           <octave>5</octave>
         </pitch>
         <voice>1</voice>
@@ -250,7 +250,7 @@
       <note>
         <grace />
         <pitch>
-          <step>C</step>
+          <step>D</step>
           <octave>5</octave>
         </pitch>
         <voice>1</voice>

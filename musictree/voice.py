@@ -1,7 +1,8 @@
 from typing import Optional, Union, List
 
 from musictree.beat import Beat
-from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsAlreadyFullError, \
+from musictree.chord import GraceChord
+from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsFullError, \
     AddChordException, AlreadyFinalized
 from musictree.core import MusicTree
 from musictree.finalize_mixin import FinalizeMixin
@@ -21,7 +22,7 @@ class Voice(MusicTree, FinalizeMixin, XMLWrapper):
         self._xml_object = self.XMLClass(value_='1', *args, **kwargs)
         self._number = None
         self.number = number
-        self._current_beat = None
+        self._current_beat_index = None
         self._leftover_chord = None
         self._final_updated = False
 
@@ -32,9 +33,20 @@ class Voice(MusicTree, FinalizeMixin, XMLWrapper):
         """
         if not self.get_children():
             raise VoiceHasNoBeatsError
-        if self.get_current_beat() is None:
-            raise VoiceIsAlreadyFullError(f'Voice number {self.value_} of Measure number {self.up.up.number} is full.')
-        return self.get_current_beat().add_child(chord)
+
+        try:
+            current_beat = self.get_children()[self.get_current_beat_index()]
+        except IndexError:
+            raise VoiceIsFullError(f'Voice number {self.value_} of Measure number {self.up.up.number} is full.')
+
+        if isinstance(chord, GraceChord) and chord.position == 'after':
+            return current_beat.add_child(chord)
+
+        if current_beat.is_filled:
+            self._current_beat_index += 1
+            return self._add_chord(chord)
+        else:
+            return current_beat.add_child(chord)
 
     @property
     def is_filled(self) -> bool:
@@ -125,16 +137,34 @@ class Voice(MusicTree, FinalizeMixin, XMLWrapper):
         """
         return super().get_parent()
 
-    def get_current_beat(self) -> Beat:
+    def get_current_beat_index(self) -> int:
         """
         :return: First not filled child :obj:`~musictree.beat.Beat`
         """
         if not self.get_children():
             raise ValueError('Voice has no beats.')
         else:
-            for beat in self.get_children():
-                if not beat.is_filled:
-                    return beat
+            if not self._current_beat_index:
+                self._current_beat_index = 0
+        return self._current_beat_index
+        # try:
+        #     return self.get_children()[self._current_beat_index]
+
+        # else:
+        #     return self._current_beat_index
+        # for beat in self.get_children():
+        #     if not beat.is_filled:
+        #         return beat
+
+    def get_current_beat(self) -> 'Beat':
+        try:
+            current_beat = self.get_children()[self.get_current_beat_index()]
+        except IndexError:
+            raise VoiceIsFullError()
+        if current_beat.is_filled:
+            self._current_beat_index += 1
+            return self.get_current_beat()
+        return current_beat
 
     def update_beats(self, *quarter_durations) -> Optional[List[Beat]]:
         """

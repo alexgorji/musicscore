@@ -4,7 +4,7 @@ from musictree import Chord
 from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
-from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsAlreadyFullError, \
+from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsFullError, \
     AlreadyFinalized
 from musictree.measure import Measure
 from musictree.core import MusicTree
@@ -236,6 +236,9 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
         if self._finalized is True:
             raise AlreadyFinalized(self, 'add_chord')
 
+        for gch in chord._grace_chords['before']:
+            self.add_chord(gch, staff_number=staff_number, voice_number=voice_number)
+
         if staff_number is None:
             staff_number = 1
         current_measure = self.get_current_measure(staff_number=staff_number, voice_number=voice_number)
@@ -247,8 +250,11 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
                 current_measure = self.add_measure()
         try:
             current_measure._add_chord(chord, staff_number=staff_number, voice_number=voice_number)
-        except VoiceIsAlreadyFullError:
+        except VoiceIsFullError:
             current_measure = self._add_to_next_measure(current_measure, chord, staff_number, voice_number)
+
+        for gch in chord._grace_chords['after']:
+            self.add_chord(gch, staff_number=staff_number, voice_number=voice_number)
 
         leftover_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).leftover_chord
         while leftover_chord:

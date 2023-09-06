@@ -77,6 +77,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._note_attributes = kwargs
         self._notes_are_set = False
         self._clef = None
+        self._grace_chords = {'before': [], 'after': []}
 
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
@@ -121,8 +122,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._midis = sorted(self._midis)
 
     def _update_notes(self):
-        for child in self.get_children()[len(self.midis):]:
-            self.remove(child)
+        if self._notes_are_set:
+            raise ChordNotesAreAlreadyCreatedError()
         for index, midi in enumerate(self.midis):
             try:
                 self.get_children()[index].midi = midi
@@ -501,6 +502,30 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
         return dynamics_object_list
 
+    def add_grace_chord(self, midis_or_grace_chord, type=None, *, position=None):
+        if isinstance(self, GraceChord):
+            raise TypeError('GraceChord does not accept grace chords')
+
+        if self.up:
+            raise ChordException(f'Chord {self} is already added to a measure. No grace chords can be added anymore.')
+        if isinstance(midis_or_grace_chord, GraceChord):
+            if type:
+                raise ValueError(f'Use GraceNote.type to set the type.')
+            if position:
+                raise ValueError(f'Use GraceNote.position to set the position.')
+            gch = midis_or_grace_chord
+        else:
+            if not position:
+                position = 'before'
+            gch = GraceChord(midis_or_grace_chord, type=type, position=position)
+
+        if gch.position == 'before':
+            self._grace_chords['before'].append(gch)
+        elif gch.position == 'after':
+            self._grace_chords['after'].append(gch)
+        gch.parent_chord = self
+        return gch
+
     def add_tie(self, type_: str) -> None:
         """
         Chord's tie list is used to add ties to or update ties of all midis and consequently :obj:`musictree.note.Note`
@@ -807,13 +832,15 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
 
 class GraceChord(Chord):
-    _ATTRIBUTES = Chord._ATTRIBUTES.union({'type'})
+    _ATTRIBUTES = Chord._ATTRIBUTES.union({'type', 'parent_chord', 'position'})
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None, type=None,
-                 **kwargs):
+                 position='before', **kwargs):
         super().__init__(midis=midis, quarter_duration=0, **kwargs)
         self._type = None
+        self._position = None
         self.type = type
+        self.position = position
 
     @Chord.quarter_duration.setter
     def quarter_duration(self, val):
@@ -825,6 +852,18 @@ class GraceChord(Chord):
     def _update_xml_type(self):
         for n in self.notes:
             n.xml_object.xml_type = self.type
+
+    @property
+    def position(self):
+        return self._position
+
+    @position.setter
+    def position(self, val):
+        permitted = ['before', 'after']
+        if val not in permitted:
+            raise ValueError(f'Wrong position. Permitted are: {permitted}')
+        else:
+            self._position = val
 
     @property
     def type(self):

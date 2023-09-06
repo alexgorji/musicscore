@@ -3,9 +3,9 @@ from unittest import TestCase, skip
 from musicxml.xmlelement.xmlelement import *
 from quicktions import Fraction
 
-from musictree.chord import Chord
+from musictree.chord import Chord, GraceChord
 from musictree.clef import Clef, BassClef, TrebleClef
-from musictree.exceptions import VoiceIsAlreadyFullError, MeasureException, AddChordException
+from musictree.exceptions import VoiceIsFullError, MeasureException, AddChordException
 from musictree.measure import Measure, generate_measures
 from musictree.part import Part
 from musictree.staff import Staff
@@ -270,7 +270,7 @@ class TestMeasure(TestCase):
         assert returned_chords[0] == ch
         assert returned_chords[0].quarter_duration == 2
         assert m.get_children()[0].get_children()[0].leftover_chord is None
-        with self.assertRaises(VoiceIsAlreadyFullError):
+        with self.assertRaises(VoiceIsFullError):
             m._add_chord(Chord(quarter_duration=2, midis=60))
         ch = Chord(quarter_duration=2, midis=60)
         returned_chords = m._add_chord(ch, voice_number=2)

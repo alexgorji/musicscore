@@ -82,7 +82,7 @@ class VoiceHasNoParentError(VoiceException):
     pass
 
 
-class VoiceIsAlreadyFullError(VoiceException):
+class VoiceIsFullError(VoiceException):
     pass
 
 
