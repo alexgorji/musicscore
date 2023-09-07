@@ -85,6 +85,7 @@ if needed.
 ``Chord.__deepcopy__()`` added. Only midi and quarter_duration are deepcopied.
 ``Chord.clef`` property added.
 ``Chord.all_midis_are_tied_to_next`` and ``Chord.all_midis_are_tied_to_previous`` added.
+``GraceChord()`` added.
 ``Accidental.mode`` changed to standard, enharmonic, sharp, flat, force-sharp and force-flat.
 ``Score`` Inherited methode ``Score.write`` will throw an Exception (.export_xml should be used instead).
 ``Clef`` argument default and property _default added (this will be True if Measure._update_default_clefs() set the

@@ -703,24 +703,24 @@ class TestAddGraceChord(ChordTestCase):
         assert [m.value for m in gch.midis] == [62, 63]
         gch = ch.add_grace_chord(64)
         assert gch.midis[0].value == 64
-        gch = ch.add_grace_chord(midis_or_grace_chord=65, type='16th')
+        gch = ch.add_grace_chord(midis_or_grace_chord=65, type_='16th')
         assert gch.midis[0].value == 65
-        assert gch.type.value_ == '16th'
-        in_gch = GraceChord(61, '16th')
+        assert gch.type_.value_ == '16th'
+        in_gch = GraceChord(61, type_='16th')
         gch = ch.add_grace_chord(midis_or_grace_chord=in_gch)
         assert gch == in_gch
-        assert gch.type.value_ == '16th'
+        assert gch.type_.value_ == '16th'
         with self.assertRaises(ValueError):
-            ch.add_grace_chord(midis_or_grace_chord=GraceChord(66, 'quarter'), type='16th')
-        gch = ch.add_grace_chord(67, '16th')
+            ch.add_grace_chord(midis_or_grace_chord=GraceChord(66, type_='quarter'), type_='16th')
+        gch = ch.add_grace_chord(67, type_='16th')
         assert gch.midis[0].value == 67
-        assert gch.type.value_ == '16th'
-        gch = ch.add_grace_chord(68, '16th', position='after')
+        assert gch.type_.value_ == '16th'
+        gch = ch.add_grace_chord(68, type_='16th', position='after')
         assert gch.position == 'after'
         assert gch.midis[0].value == 68
-        assert gch.type.value_ == '16th'
+        assert gch.type_.value_ == '16th'
         with self.assertRaises(ValueError):
-            gch = ch.add_grace_chord(GraceChord(66, 'quarter'), position='after')
+            gch = ch.add_grace_chord(GraceChord(66, type_='quarter'), position='after')
 
     def test_add_grace_chord_before_and_after_argument(self):
         ch = Chord(60, 1)
@@ -728,8 +728,10 @@ class TestAddGraceChord(ChordTestCase):
         before_chords = [ch.add_grace_chord(x) for x in midis_or_chord]
         assert ch._grace_chords['before'] == before_chords
 
-        midis_or_chord = [67, [68, 70], GraceChord(71)]
-        after_chords = [ch.add_grace_chord(x, position='after') for x in midis_or_chord]
+        midis_or_chord = [67, [68, 70], GraceChord(71, position='after')]
+        after_chords = [
+            ch.add_grace_chord(x, position='after') if not isinstance(x, GraceChord) else ch.add_grace_chord(x) for x in
+            midis_or_chord]
         assert ch._grace_chords['after'] == after_chords
 
     def test_add_grace_chord_generates_grace_chords(self):
@@ -737,20 +739,22 @@ class TestAddGraceChord(ChordTestCase):
         with self.assertRaises(TypeError):
             ch.add_grace_chord()
         gc1 = ch.add_grace_chord(60)
-        gc2 = ch.add_grace_chord(61, 'quarter')
+        gc2 = ch.add_grace_chord(61, type_='quarter')
         gc3 = ch.add_grace_chord(GraceChord(midis=[62, 64]))
-        gc4 = ch.add_grace_chord(GraceChord(63, '16th'))
+        gc4 = ch.add_grace_chord(GraceChord(63, type_='16th'))
         all_gcs = [gc1, gc2, gc3, gc4]
         assert [[m.value for m in gc.midis] for gc in all_gcs] == [[60], [61], [62, 64], [63]]
-        assert [gc.type.value_ if gc.type else None for gc in all_gcs] == [None, 'quarter', None, '16th']
+        assert [gc.type_.value_ if gc.type_ else None for gc in all_gcs] == [None, 'quarter', None, '16th']
 
     def test_add_grace_chord_finalize(self):
         part = Part('p1')
         ch = Chord(midis=[60, 63], quarter_duration=4)
         midis_or_chord = [62, [63, 65], GraceChord(66)]
         before_chords = [ch.add_grace_chord(x) for x in midis_or_chord]
-        midis_or_chord = [67, [68, 70], GraceChord(71)]
-        after_chords = [ch.add_grace_chord(x, position='after') for x in midis_or_chord]
+        midis_or_chord = [67, [68, 70], GraceChord(71, position='after')]
+        after_chords = [
+            ch.add_grace_chord(x, position='after') if not isinstance(x, GraceChord) else ch.add_grace_chord(x) for x in
+            midis_or_chord]
         part.add_chord(ch)
         with self.assertRaises(ChordException):
             ch.add_grace_chord(80)

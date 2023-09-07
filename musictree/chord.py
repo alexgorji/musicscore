@@ -502,22 +502,22 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
         return dynamics_object_list
 
-    def add_grace_chord(self, midis_or_grace_chord, type=None, *, position=None):
+    def add_grace_chord(self, midis_or_grace_chord, type_=None, *, position=None):
         if isinstance(self, GraceChord):
             raise TypeError('GraceChord does not accept grace chords')
 
         if self.up:
             raise ChordException(f'Chord {self} is already added to a measure. No grace chords can be added anymore.')
         if isinstance(midis_or_grace_chord, GraceChord):
-            if type:
-                raise ValueError(f'Use GraceNote.type to set the type.')
+            if type_:
+                raise ValueError(f'Use GraceNote.type_ to set the type.')
             if position:
                 raise ValueError(f'Use GraceNote.position to set the position.')
             gch = midis_or_grace_chord
         else:
             if not position:
                 position = 'before'
-            gch = GraceChord(midis_or_grace_chord, type=type, position=position)
+            gch = GraceChord(midis_or_grace_chord, type_=type_, position=position)
 
         if gch.position == 'before':
             self._grace_chords['before'].append(gch)
@@ -832,14 +832,14 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
 
 class GraceChord(Chord):
-    _ATTRIBUTES = Chord._ATTRIBUTES.union({'type', 'parent_chord', 'position'})
+    _ATTRIBUTES = Chord._ATTRIBUTES.union({'type_', 'parent_chord', 'position'})
 
-    def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None, type=None,
-                 position='before', **kwargs):
+    def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None, *,
+                 type_=None, position='before', **kwargs):
         super().__init__(midis=midis, quarter_duration=0, **kwargs)
         self._type = None
         self._position = None
-        self.type = type
+        self.type_ = type_
         self.position = position
 
     @Chord.quarter_duration.setter
@@ -851,7 +851,7 @@ class GraceChord(Chord):
 
     def _update_xml_type(self):
         for n in self.notes:
-            n.xml_object.xml_type = self.type
+            n.xml_object.xml_type = self.type_
 
     @property
     def position(self):
@@ -866,11 +866,11 @@ class GraceChord(Chord):
             self._position = val
 
     @property
-    def type(self):
+    def type_(self):
         return self._type
 
-    @type.setter
-    def type(self, val):
+    @type_.setter
+    def type_(self, val):
         if val is None:
             self._type = None
         else:

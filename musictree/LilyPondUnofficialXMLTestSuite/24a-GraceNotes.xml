@@ -242,20 +242,20 @@
           <slur type="stop" />
         </notations>
       </note>
-    </measure>
-    <measure number="3">
-      <attributes>
-        <divisions>1</divisions>
-      </attributes>
       <note>
         <grace />
         <pitch>
-          <step>D</step>
+          <step>E</step>
           <octave>5</octave>
         </pitch>
         <voice>1</voice>
         <type>16th</type>
       </note>
+    </measure>
+    <measure number="3">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
       <note>
         <grace />
         <pitch>

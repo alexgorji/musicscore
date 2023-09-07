@@ -360,7 +360,7 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
             raise ChordHasNoQuarterDurationError('Chord with no quarter_duration cannot be added to Beat.')
         if not child.midis:
             raise ChordHasNoMidisError('Chord with no midis cannot be added to Beat.')
-        if self.is_filled:
+        if self.is_filled and child.quarter_duration != 0:
             raise BeatIsFullError()
         diff = child.quarter_duration - (self.quarter_duration - self.filled_quarter_duration)
         if diff <= 0:
