@@ -539,7 +539,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             midi.add_tie(type_=type_)
         self._update_ties()
 
-    def add_lyric(self, text: Union[Any, XMLLyric]):
+    def add_lyric(self, text: Union[Any, XMLLyric], **kwargs):
         """
         This method is used to add :obj:`~musicxml.xmlelement.xmlelement.XMLLyric` to chord's private _xml_lyricx list.
         This list is used to add lyrics to or update lyrics of the first :obj:`~musictree.note.Note` object of chord`s notes
@@ -551,7 +551,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         if isinstance(text, XMLLyric):
             l = text
         else:
-            l = XMLLyric()
+            l = XMLLyric(**kwargs)
             l.xml_text = str(text)
         self._xml_lyrics.append(l)
         if self.notes:
