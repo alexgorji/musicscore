@@ -472,13 +472,13 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     # public methods
 
-    def add_direction_type(self, direction_type: XMLElement, placement: str = 'below'):
+    def add_direction_type(self, direction_type: XMLElement, placement: str = 'above'):
         if self._finalized is True:
             raise AlreadyFinalized(self, 'add_direction_type')
         if direction_type.__class__ not in XML_DIRECTION_TYPE_CLASSES:
             raise TypeError(f'Wrong type {direction_type}. Possible classes: {XML_DIRECTION_TYPE_CLASSES}')
-        if isinstance(direction_type, XMLDynamics):
-            raise ChordException('Use add_dynamics instead!')
+        # if isinstance(direction_type, XMLDynamics):
+        #     raise ChordException('Use add_dynamics instead!')
         self._xml_direction_types[placement].append(direction_type)
         return direction_type
 

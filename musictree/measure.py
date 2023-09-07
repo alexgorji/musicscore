@@ -1,8 +1,8 @@
-from typing import List, Optional, Union
+from typing import List, Optional
 
 from musictree.clef import BassClef, TrebleClef
 from musictree.core import MusicTree
-from musictree.exceptions import AlreadyFinalized, MeasureException, AddChordException
+from musictree.exceptions import AlreadyFinalized, AddChordException
 from musictree.finalize_mixin import FinalizeMixin
 from musictree.key import Key
 from musictree.staff import Staff
