@@ -1,0 +1,19 @@
+measure.barline
+measure.new_system
+function: add_wedge_to_chords(ch, ch, ch ...) > p < ff
+funtion: add_slur_to_chords
+
+
+check all methods > documentation / which _methods of other classes are used? rename and add> only for library's internal use
+if a private property is used: get_ or set + only for library's ...
+
+
+measure: groupings other than time ... (time actual signatures?)
+measure: beam grouping other than default
+
+time: 2/8 actual also 2/8
+5/8: actual 3/8 2/8
+6/8: 3/8 3/8
+7/7: 4/8 3/8
+9/8: 3/8 3/8 3/8
+12/8: 3/8 3/8 3/8 3/8 ...

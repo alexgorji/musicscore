@@ -383,5 +383,13 @@ class Accidental(MusicTree, XMLWrapper):
             raise ValueError
         return output[0], output[1], output[2] + (int(midi_value // 12)) - 1
 
+    def update(self):
+        """
+        Library intern use
+        Midi
+        """
+        self._update_parent_midi()
+        self._update_xml_object()
+
     def __copy__(self):
         return self.__class__(mode=self.mode, show=self.show)

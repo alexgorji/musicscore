@@ -192,8 +192,7 @@ class Midi(MusicTree):
         if self.parent_chord and self.parent_chord._finalized is True:
             raise AlreadyFinalized(self, 'add_child')
         super().add_child(child)
-        child._update_xml_object()
-        child._update_parent_midi()
+        child.update()
         return child
 
     def add_tie(self, type_):

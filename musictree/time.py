@@ -7,6 +7,27 @@ from musictree.xmlwrapper import XMLWrapper
 __all__ = ['Time', 'flatten_times']
 
 
+def _convert_signatures_to_ints(signatures):
+    output = []
+    for i in range(int(len(signatures) / 2)):
+        beat = signatures[i * 2]
+        beat_type = signatures[i * 2 + 1]
+        if isinstance(beat, str):
+            l = beat.split('+')
+            if len(l) == 1:
+                output.append(int(beat))
+                output.append(int(beat_type))
+            else:
+                for x in l:
+                    output.append(int(x))
+                    output.append(int(beat_type))
+        else:
+            output.append(beat)
+            output.append(int(beat_type))
+
+    return output
+
+
 class Time(XMLWrapper):
     _ATTRIBUTES = {'signatures', 'actual_signatures', 'parent_measure', 'show'}
     XMLClass = XMLTime
@@ -17,21 +38,42 @@ class Time(XMLWrapper):
         self.parent_measure = None
 
         self._signatures = None
-        self.signatures = signatures
         self._actual_signatures = None
         self._intern_actual_signatures = None
         self._show = None
+
+        self.signatures = signatures
         self.show = show
 
     def _calculate_actual_signatures(self):
-        signatures = [self.signatures[i:i + 2] for i in range(0, len(self.signatures), 2)]
+        map = {'2/8': [2, 8], '4/8': [2, 8, 2, 8], '5/8': [3, 8, 2, 8], '7/8': [4, 8, 3, 8]}
+        signatures = _convert_signatures_to_ints(self.signatures)
+        signatures = [signatures[i:i + 2] for i in range(0, len(signatures), 2)]
         self._intern_actual_signatures = []
         for signature in signatures:
-            if signature[1] % 8 == 0 and signature[0] % 3 == 0:
+            key = "/".join([str(x) for x in signature])
+            if key in map:
+                self._intern_actual_signatures.extend(map[key])
+            elif signature[1] % 8 == 0 and signature[0] % 3 == 0:
                 self._intern_actual_signatures.extend([3, signature[1]] * (signature[0] // 3))
             else:
                 self._intern_actual_signatures.extend([1, signature[1]] * signature[0])
         return self._intern_actual_signatures
+
+    def _update_signature_objects(self):
+        signatures = [self.signatures[i:i + 2] for i in range(0, len(self.signatures), 2)]
+        for beats, beat_type in zip(self._xml_object.find_children('XMLBeats'),
+                                    self._xml_object.find_children('XMLBeatType')):
+            if signatures:
+                signature = signatures.pop(0)
+                beats.value_ = str(signature[0])
+                beat_type.value_ = str(signature[1])
+            else:
+                beats.up.remove(beats)
+                beat_type.up.remove(beat_type)
+        for beats, beat_type in signatures:
+            self._xml_object.add_child(XMLBeats(str(beats)))
+            self._xml_object.add_child(XMLBeatType(str(beat_type)))
 
     @property
     def actual_signatures(self) -> List[int]:
@@ -51,9 +93,11 @@ class Time(XMLWrapper):
 
     @actual_signatures.setter
     def actual_signatures(self, val):
+        if val is not None:
+            val = _convert_signatures_to_ints(val)
         self._actual_signatures = val
         if self.parent_measure:
-            self.parent_measure._update_voice_beats()
+            self.parent_measure.update_voice_beats()
 
     @property
     def signatures(self) -> List[int]:
@@ -72,13 +116,13 @@ class Time(XMLWrapper):
         if not val:
             val = [4, 4]
         for v in val:
-            if not isinstance(v, int):
+            if not isinstance(v, int) and not isinstance(v, str):
                 raise TypeError
         self._signatures = val
-        self._update_signature()
-        self._intern_actual_signatures = None
+        self._reset_actual_signatures()
+        self._update_signature_objects()
         if self.parent_measure:
-            self.parent_measure._update_voice_beats()
+            self.parent_measure.update_voice_beats()
 
     @property
     def show(self) -> bool:
@@ -100,29 +144,16 @@ class Time(XMLWrapper):
     def xml_object(self) -> XMLClass:
         return super().xml_object
 
-    def _update_signature(self):
-        signatures = [self.signatures[i:i + 2] for i in range(0, len(self.signatures), 2)]
-        for beats, beat_type in zip(self._xml_object.find_children('XMLBeats'), self._xml_object.find_children('XMLBeatType')):
-            if signatures:
-                signature = signatures.pop(0)
-                beats.value_ = str(signature[0])
-                beat_type.value_ = str(signature[1])
-            else:
-                beats.up.remove(beats)
-                beat_type.up.remove(beat_type)
-        for beats, beat_type in signatures:
-            self._xml_object.add_child(XMLBeats(str(beats)))
-            self._xml_object.add_child(XMLBeatType(str(beat_type)))
-
     def get_beats_quarter_durations(self) -> List[QuarterDuration]:
         """
         :return: List of quarter durations according to :obj:`actual_signatures`
         """
-        return [QuarterDuration(numerator, denominator) * 4 for numerator, denominator in [self.actual_signatures[i:i + 2] for i in range(0,
-                                                                                                                                          len(self.actual_signatures),
-                                                                                                                                          2)]]
+        return [QuarterDuration(numerator, denominator) * 4 for numerator, denominator in
+                [self.actual_signatures[i:i + 2] for i in range(0,
+                                                                len(self.actual_signatures),
+                                                                2)]]
 
-    def reset_actual_signatures(self) -> None:
+    def _reset_actual_signatures(self) -> None:
         """
         Resets actual signatures to None.
         """

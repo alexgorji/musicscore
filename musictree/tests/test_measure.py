@@ -340,7 +340,7 @@ class TestMeasure(TestCase):
         assert [child.quarter_duration.as_integer_ratio() for child in v.get_children()] == [(1, 1)] * 3 + [(1, 2)]
 
         m.time = Time(2, 8)
-        assert [child.quarter_duration.as_integer_ratio() for child in v.get_children()] == [(1, 2)] * 2
+        assert [child.quarter_duration.as_integer_ratio() for child in v.get_children()] == [(1, 1)]
 
         m.time.signatures = [3, 4, 1, 8]
         assert [child.quarter_duration.as_integer_ratio() for child in v.get_children()] == [(1, 1)] * 3 + [(1, 2)]

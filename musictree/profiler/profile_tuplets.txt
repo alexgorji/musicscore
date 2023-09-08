@@ -288,7 +288,7 @@
       413    0.001    0.000    0.001    0.000 chord.py:76(_update_xml_directions)
       391    0.001    0.000    0.003    0.000 note.py:295(remove_tie)
      1893    0.001    0.000    0.002    0.000 xmlchildcontainer.py:360(chosen_child)
-      105    0.001    0.000    0.052    0.000 time.py:103(_update_signature)
+      105    0.001    0.000    0.052    0.000 time.py:103(_update_signature_objects)
     12018    0.001    0.000    0.001    0.000 {method 'items' of 'xml.etree.ElementTree.Element' objects}
      1025    0.001    0.000    0.002    0.000 voice.py:68(xml_object)
       101    0.001    0.000    0.001    0.000 ElementPath.py:226(prepare_predicate)
@@ -471,7 +471,7 @@
         4    0.000    0.000    0.000    0.000 sre_compile.py:413(<listcomp>)
        53    0.000    0.000    0.000    0.000 ElementPath.py:182(prepare_descendant)
     42/34    0.000    0.000    0.000    0.000 {built-in method _abc._abc_subclasscheck}
-      105    0.000    0.000    0.000    0.000 measure.py:142(_update_voice_beats)
+      105    0.000    0.000    0.000    0.000 measure.py:142(update_voice_beats)
       104    0.000    0.000    0.001    0.000 measure.py:218(key)
       413    0.000    0.000    0.000    0.000 chord.py:102(<listcomp>)
       105    0.000    0.000    0.000    0.000 measure.py:76(<listcomp>)

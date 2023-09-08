@@ -149,7 +149,10 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
                 else:
                     _set_default_clef(index + 1, BassClef(default=True))
 
-    def _update_voice_beats(self):
+    def update_voice_beats(self):
+        """
+        Only for library's internal use: Time.actual_signatures, Time.signatures
+        """
         for staff in self.get_children():
             for voice in staff.get_children():
                 voice.update_beats()
@@ -269,7 +272,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
             val = Time()
         self._time = val
         self._time.parent_measure = self
-        self._update_voice_beats()
+        self.update_voice_beats()
 
     @property
     def quarter_duration(self) -> 'QuarterDuration':

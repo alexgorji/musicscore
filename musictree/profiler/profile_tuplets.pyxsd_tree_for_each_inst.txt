@@ -283,7 +283,7 @@
       590    0.001    0.000    0.002    0.000 quarterduration.py:169(__hash__)
      1587    0.001    0.000    0.001    0.000 xmlelement.py:290(<listcomp>)
       908    0.001    0.000    0.007    0.000 voice.py:120(get_current_beat)
-      105    0.001    0.000    0.530    0.005 time.py:103(_update_signature)
+      105    0.001    0.000    0.530    0.005 time.py:103(_update_signature_objects)
       391    0.001    0.000    0.003    0.000 note.py:295(remove_tie)
       422    0.001    0.000    0.274    0.001 xmlchildcontainer.py:235(_create_empty_copy)
       413    0.001    0.000    3.732    0.009 midi.py:19(__init__)
@@ -460,7 +460,7 @@
       402    0.000    0.000    0.000    0.000 voice.py:37(leftover_chord)
       113    0.000    0.000    0.001    0.000 xsdindicator.py:51(xsd_tree)
     43/35    0.000    0.000    0.000    0.000 {built-in method _abc._abc_subclasscheck}
-      105    0.000    0.000    0.000    0.000 measure.py:142(_update_voice_beats)
+      105    0.000    0.000    0.000    0.000 measure.py:142(update_voice_beats)
       131    0.000    0.000    0.000    0.000 {built-in method math.lcm}
         2    0.000    0.000    0.000    0.000 sre_parse.py:493(_parse)
       107    0.000    0.000    0.000    0.000 part.py:190(xml_object)
