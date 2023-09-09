@@ -366,55 +366,6 @@ class TestTreeChord(ChordTestCase):
         self.mock_staff.number = 1
         assert ch.get_staff_number() == 1
 
-    def test_add_articulation_after_creating_notes(self):
-        ch = Chord(60, 1)
-        ch._parent = self.mock_beat
-        staccato = ch.add_x(create_articulation(XMLStaccato))
-        ch.finalize()
-        assert isinstance(ch.notes[0].xml_notations.xml_articulations.get_children()[0], XMLStaccato)
-        accent = ch.add_x(create_articulation(XMLAccent))
-        assert ch.notes[0].xml_notations.xml_articulations.get_children() == [staccato, accent]
-
-    def test_add_multiple_articulations(self):
-        articulation_classes = XML_ARTICULATION_CLASSES[:3]
-        ch = Chord(60, 1)
-        ch._parent = self.mock_beat
-        for a in articulation_classes:
-            ch.add_x(a())
-        assert len(ch._xml_articulations) == 3
-        ch.finalize()
-        n = ch.notes[0]
-        assert n.xml_notations.xml_articulations is not None
-        assert [type(a) for a in n.xml_notations.xml_articulations.get_children()] == articulation_classes
-
-    def test_add_xml_wedge_objects(self):
-        wedges = [XMLWedge(type=val) for val in ['crescendo', 'stop', 'diminuendo', 'stop']]
-        for wedge in wedges:
-            ch = Chord(60, 4)
-            ch._parent = self.mock_beat
-            ch.add_wedge(wedge)
-            ch.finalize()
-            assert len(ch._xml_directions) == 1
-            d = ch._xml_directions[0]
-            assert d.placement == 'below'
-            assert d.xml_direction_type.xml_wedge == wedge
-
-    def test_add_wedge_string(self):
-        wedges = ['crescendo', 'stop', 'diminuendo', 'stop']
-        for wedge in wedges:
-            ch = Chord(60, 4)
-            ch._parent = self.mock_beat
-            ch.add_wedge(wedge)
-            ch.finalize()
-            assert len(ch._xml_directions) == 1
-            d = ch._xml_directions[0]
-            assert d.placement == 'below'
-            assert d.xml_direction_type.xml_wedge.type == wedge
-
-    @skip
-    def test_add_words(self):
-        self.fail('Incomplete')
-
     def test_add_clef(self):
         ch = Chord(60, 2)
         assert ch.clef is None
@@ -439,63 +390,6 @@ class TestTreeChord(ChordTestCase):
     @skip
     def test_finger_tremolo(self):
         self.fail('Incomplete')
-
-    def test_chord_add_x_as_object_articulation(self):
-        for cls in XML_ARTICULATION_CLASSES:
-            ch = Chord(60, 1)
-            ch.add_x(create_articulation(cls))
-            ch._parent = self.mock_beat
-            ch.finalize()
-            assert isinstance(ch.notes[0].xml_notations.xml_articulations.get_children()[0], cls)
-
-    def test_chord_add_x_as_object_technical(self):
-        for cls in XML_TECHNICAL_CLASSES:
-            ch = Chord(60, 1)
-            ch.add_x(create_technical(cls))
-            ch._parent = self.mock_beat
-            ch.finalize()
-            assert isinstance(ch.notes[0].xml_notations.xml_technical.get_children()[0], cls)
-
-    def test_chord_add_x_as_object_dynamics(self):
-        for cls in XML_DYNAMIC_CLASSES:
-            ch = Chord(60, 1)
-            ch.add_x(cls())
-            ch._parent = self.mock_beat
-            ch.finalize()
-            assert isinstance(ch.notes[0].xml_notations.xml_dynamics.get_children()[0], cls)
-
-    def test_chord_add_x_as_object_ornaments(self):
-        for cls in XML_ORNAMENT_CLASSES[1:]:
-            ch = Chord(60, 1)
-            ch.add_x(create_ornament(cls))
-            ch._parent = self.mock_beat
-            ch.finalize()
-            assert isinstance(ch.notes[0].xml_notations.xml_ornaments.get_children()[0], cls)
-
-    def test_chord_add_x_trill_with_wavy_line_and_accidental_mark(self):
-        ch = Chord(60, 1)
-        ch.add_x(XMLTrillMark())
-        ch.add_x(XMLAccidentalMark('sharp'), parent_type='ornament')
-        ch.add_x(XMLWavyLine(type='start', relative_x=0))
-        ch.add_x(XMLWavyLine(type='stop', relative_x=20))
-        ch._parent = self.mock_beat
-        ch.finalize()
-        expected = """<ornaments>
-      <trill-mark />
-      <accidental-mark>sharp</accidental-mark>
-      <wavy-line type="start" relative-x="0" />
-      <wavy-line type="stop" relative-x="20" />
-    </ornaments>
-"""
-        assert ch.notes[0].xml_notations.xml_ornaments.to_string() == expected
-
-    def test_chord_add_x_as_object_other_notations(self):
-        for cls in XML_OTHER_NOTATIONS:
-            ch = Chord(60, 1)
-            ch.add_x(cls())
-            ch._parent = self.mock_beat
-            ch.finalize()
-            assert isinstance(ch.notes[0].xml_notations.get_children()[0], cls)
 
     def test_deepcopy_chord(self):
         chord = Chord([60, 62], 2)
@@ -794,3 +688,117 @@ class TestAddGraceChord(ChordTestCase):
         part.add_chord(ch)
         part.add_chord(Chord(90, 3))
         assert gch in part.get_beat(1, 1, 1, 1).get_children()
+
+
+class TestAddX(ChordTestCase):
+
+    def test_add_x_parent_type(self):
+        ch = Chord(60, 1)
+        ch.add_x(XML_DIRECTION_TYPE_CLASSES[0]())
+
+    def test_add_articulation_after_creating_notes(self):
+        ch = Chord(60, 1)
+        ch._parent = self.mock_beat
+        staccato = ch.add_x(create_articulation(XMLStaccato))
+        ch.finalize()
+        assert ch.notes[0].xml_notations.xml_articulations.get_children() == [staccato]
+        assert isinstance(ch.notes[0].xml_notations.xml_articulations.get_children()[0], XMLStaccato)
+        accent = ch.add_x(create_articulation(XMLAccent))
+        assert ch.notes[0].xml_notations.xml_articulations.get_children() == [staccato, accent]
+
+    def test_add_multiple_articulations(self):
+        articulation_classes = XML_ARTICULATION_CLASSES[:3]
+        ch = Chord(60, 1)
+        ch._parent = self.mock_beat
+        for a in articulation_classes:
+            ch.add_x(a())
+        assert len(ch._xml_articulations) == 3
+        ch.finalize()
+        n = ch.notes[0]
+        assert n.xml_notations.xml_articulations is not None
+        assert [type(a) for a in n.xml_notations.xml_articulations.get_children()] == articulation_classes
+
+    def test_chord_add_x_as_object_articulation(self):
+        for cls in XML_ARTICULATION_CLASSES:
+            ch = Chord(60, 1)
+            ch.add_x(create_articulation(cls))
+            ch._parent = self.mock_beat
+            ch.finalize()
+            assert isinstance(ch.notes[0].xml_notations.xml_articulations.get_children()[0], cls)
+
+    def test_chord_add_x_as_object_technical(self):
+        for cls in XML_TECHNICAL_CLASSES:
+            ch = Chord(60, 1)
+            ch.add_x(create_technical(cls))
+            ch._parent = self.mock_beat
+            ch.finalize()
+            assert isinstance(ch.notes[0].xml_notations.xml_technical.get_children()[0], cls)
+
+    def test_chord_add_x_as_object_dynamics(self):
+        for cls in XML_DYNAMIC_CLASSES:
+            ch = Chord(60, 1)
+            ch.add_x(cls(), parent_type='notation')
+            ch._parent = self.mock_beat
+            ch.finalize()
+            assert isinstance(ch.notes[0].xml_notations.xml_dynamics.get_children()[0], cls)
+
+    def test_chord_add_x_as_object_ornaments(self):
+        for cls in XML_ORNAMENT_CLASSES[1:]:
+            ch = Chord(60, 1)
+            ch.add_x(create_ornament(cls))
+            ch._parent = self.mock_beat
+            ch.finalize()
+            assert isinstance(ch.notes[0].xml_notations.xml_ornaments.get_children()[0], cls)
+
+    def test_chord_add_x_trill_with_wavy_line_and_accidental_mark(self):
+        ch = Chord(60, 1)
+        ch.add_x(XMLTrillMark())
+        ch.add_x(XMLAccidentalMark('sharp'), parent_type='ornament')
+        ch.add_x(XMLWavyLine(type='start', relative_x=0))
+        ch.add_x(XMLWavyLine(type='stop', relative_x=20))
+        ch._parent = self.mock_beat
+        ch.finalize()
+        expected = """<ornaments>
+      <trill-mark />
+      <accidental-mark>sharp</accidental-mark>
+      <wavy-line type="start" relative-x="0" />
+      <wavy-line type="stop" relative-x="20" />
+    </ornaments>
+"""
+        assert ch.notes[0].xml_notations.xml_ornaments.to_string() == expected
+
+    def test_chord_add_x_as_object_other_notations(self):
+        for cls in XML_OTHER_NOTATIONS:
+            ch = Chord(60, 1)
+            ch.add_x(cls())
+            ch._parent = self.mock_beat
+            ch.finalize()
+            assert isinstance(ch.notes[0].xml_notations.get_children()[0], cls)
+
+    def test_add_xml_wedge_objects(self):
+        wedges = [XMLWedge(type=val) for val in ['crescendo', 'stop', 'diminuendo', 'stop']]
+        for wedge in wedges:
+            ch = Chord(60, 4)
+            ch._parent = self.mock_beat
+            ch.add_wedge(wedge)
+            ch.finalize()
+            assert len(ch._xml_directions) == 1
+            d = ch._xml_directions[0]
+            assert d.placement == 'below'
+            assert d.xml_direction_type.xml_wedge == wedge
+
+    def test_add_wedge_string(self):
+        wedges = ['crescendo', 'stop', 'diminuendo', 'stop']
+        for wedge in wedges:
+            ch = Chord(60, 4)
+            ch._parent = self.mock_beat
+            ch.add_wedge(wedge)
+            ch.finalize()
+            assert len(ch._xml_directions) == 1
+            d = ch._xml_directions[0]
+            assert d.placement == 'below'
+            assert d.xml_direction_type.xml_wedge.type == wedge
+
+    @skip
+    def test_add_words(self):
+        self.fail('Incomplete')

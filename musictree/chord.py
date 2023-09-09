@@ -15,7 +15,8 @@ from musictree.core import MusicTree
 from musictree.note import Note
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_ORNAMENT_CLASSES, XML_DYNAMIC_CLASSES, \
-    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS
+    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, \
+    XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
 
 __all__ = ['Chord', 'group_chords']
 
@@ -84,6 +85,14 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self.split = False
         self._original_starting_ties = None
 
+    def _add_articulation(self, articulation, kwargs=None):
+        if articulation.__class__ not in XML_ARTICULATION_CLASSES:
+            raise ChordException(f'{articulation} is not an articulation object.')
+        self._xml_articulations.append(articulation)
+        self._xml_articulations_kwargs = kwargs
+        if self.notes:
+            self._update_xml_articulations()
+
     def _add_child(self, child: Note) -> Note:
         """
         Check and add child to list of children. Child's parent is set to self.
@@ -94,20 +103,43 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
         return super().add_child(child)
 
-    def _add_notation(self):
-        pass
+    def _add_direction_type(self, direction_type, kwargs):
+        if direction_type.__class__ in XML_DYNAMIC_CLASSES:
+            d = XMLDynamics()
+            d.add_child(direction_type)
+            direction_type = d
+        if direction_type.__class__ not in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
+            raise ChordException(f'{direction_type} is not a direction type object.')
+        if 'placement' in kwargs:
+            self.add_direction_type(direction_type, placement=kwargs['placement'])
+        else:
+            self.add_direction_type(direction_type)
+    def _add_notation(self, notation, kwargs):
+        if notation.__class__ in XML_DYNAMIC_CLASSES:
+            d = XMLDynamics()
+            d.add_child(notation)
+            notation = d
+        if notation.__class__ not in XML_OTHER_NOTATIONS + XML_ORNAMENT_AND_OTHER_NOTATIONS + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
+            raise ChordException(f'{notation} is not a notation type object.')
+        self._xml_other_notations.append(notation)
+        if self.notes:
+            self._update_xml_other_notations()
 
-    def _add_technical(self):
-        pass
+    def _add_ornament(self, ornament, kwargs):
+        if ornament.__class__ not in XML_ORNAMENT_CLASSES + XML_ORNAMENT_AND_OTHER_NOTATIONS:
+            raise ChordException(f'{ornament} is not an ornament type object.')
+        self._xml_ornaments.append(ornament)
+        self._xml_ornaments_kwargs = kwargs
+        if self.notes:
+            self._update_xml_ornaments()
 
-    def _add_ornament(self):
-        pass
-
-    def _add_articulation(self):
-        pass
-
-    def _add_direction_type(self):
-        pass
+    def _add_technical(self, technical, kwargs):
+        if technical.__class__ not in XML_TECHNICAL_CLASSES:
+            raise ChordException(f'{technical} is not a technial object.')
+        self._xml_technicals.append(technical)
+        self._xml_technicals_kwargs = kwargs
+        if self.notes:
+            self._update_xml_technicals()
 
     def _set_original_starting_ties(self, original_chord):
         self._original_starting_ties = [copy.copy(midi._ties) for midi in original_chord.midis]
@@ -195,7 +227,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         for art in note_articulations_not_in_chord:
             n.xml_notations.xml_articulations.remove(art)
-
         n.update_xml_notations()
 
     def _update_xml_directions(self):
@@ -611,47 +642,67 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         musicxml other notations
         :return: x
         """
-        if x.__class__ in XML_ARTICULATION_CLASSES:
-            self._xml_articulations.append(x)
-            self._xml_articulations_kwargs = kwargs
-            if self.notes:
-                self._update_xml_articulations()
-        elif x.__class__ in XML_TECHNICAL_CLASSES:
-            self._xml_technicals.append(x)
-            self._xml_technicals_kwargs = kwargs
-            if self.notes:
-                self._update_xml_technicals()
-        elif x.__class__ in XML_ORNAMENT_CLASSES:
-            self._xml_ornaments.append(x)
-            self._xml_ornaments_kwargs = kwargs
-            if self.notes:
-                self._update_xml_ornaments()
-        elif x.__class__ in XML_DYNAMIC_CLASSES:
-            self._xml_dynamics.append(x)
-            self._xml_dynamics_kwargs = kwargs
-            if self.notes:
-                self._update_xml_dynamics()
-        elif x.__class__ in XML_OTHER_NOTATIONS:
-            self._xml_other_notations.append(x)
-            if self.notes:
-                self._update_xml_other_notations()
-        elif x.__class__ in XML_ORNAMENT_AND_OTHER_NOTATIONS:
-            permitted_parent_types = 'notations', 'ornament'
-            if parent_type == 'notations':
-                self._xml_other_notations.append(x)
-                if self.notes:
-                    self._update_xml_other_notations()
-            elif parent_type == 'ornament':
-                self._xml_ornaments.append(x)
-                self._xml_ornaments_kwargs = kwargs
-                if self.notes:
-                    self._update_xml_ornaments()
+        if parent_type is None:
+            if x.__class__ in XML_ARTICULATION_CLASSES:
+                parent_type = 'articulation'
+            elif x.__class__ in XML_TECHNICAL_CLASSES:
+                parent_type = 'technical'
+            elif x.__class__ in XML_ORNAMENT_CLASSES:
+                parent_type = 'ornament'
+            elif x.__class__ in XML_OTHER_NOTATIONS:
+                parent_type = 'notation'
+            elif x.__class__ in XML_DIRECTION_TYPE_CLASSES:
+                parent_type = 'direction_type'
+            elif x.__class__ in XML_ORNAMENT_AND_OTHER_NOTATIONS:
+                permitted_parent_types = ['notation', 'ornament']
+                raise NotationException(f'{x} is ambivalent. Set parent type {permitted_parent_types}.')
+            elif x.__class__ in XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS or x.__class__ in XML_DYNAMIC_CLASSES:
+                permitted_parent_types = ['notations', 'direction_type']
+                raise NotationException(f'{x} is ambivalent. Set parent type {permitted_parent_types}.')
             else:
-                raise NotationException(f'{x} is ambivalent. Set parent type {permitted_parent_types}')
+                raise ValueError(f'parent_type of {x} could not be determined.')
 
+        if parent_type == 'articulation':
+            self._add_articulation(x, kwargs)
+        elif parent_type == 'technical':
+            self._add_technical(x, kwargs)
+        elif parent_type == 'ornament':
+            self._add_ornament(x, kwargs)
+        elif parent_type == 'notation':
+            self._add_notation(x, kwargs)
+        elif parent_type == 'direction_type':
+            self._add_direction_type(x, kwargs)
         else:
-            raise TypeError
+            raise NotImplementedError(f'parent_type: {parent_type} not implemented.')
+
         return x
+
+        # elif x.__class__ in XML_DYNAMIC_CLASSES:
+        #     self._xml_dynamics.append(x)
+        #     self._xml_dynamics_kwargs = kwargs
+        #     if self.notes:
+        #         self._update_xml_dynamics()
+        # elif x.__class__ in XML_OTHER_NOTATIONS:
+        #     self._xml_other_notations.append(x)
+        #     if self.notes:
+        #         self._update_xml_other_notations()
+        # elif x.__class__ in XML_ORNAMENT_AND_OTHER_NOTATIONS:
+        #     permitted_parent_types = 'notations', 'ornament'
+        #     if parent_type == 'notations':
+        #         self._xml_other_notations.append(x)
+        #         if self.notes:
+        #             self._update_xml_other_notations()
+        #     elif parent_type == 'ornament':
+        #         self._xml_ornaments.append(x)
+        #         self._xml_ornaments_kwargs = kwargs
+        #         if self.notes:
+        #             self._update_xml_ornaments()
+        #     else:
+        #         raise NotationException(f'{x} is ambivalent. Set parent type {permitted_parent_types}')
+        #
+        # else:
+        #     raise TypeError
+        # return x
 
     def finalize(self):
         """
