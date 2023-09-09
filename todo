@@ -9,3 +9,7 @@ if a private property is used: get_ or set + only for library's ...
 
 
 measure: break or connect beams manually
+
+check if chord.add_x() excepts EVERY THING!
+
+XMLNonArpeggiate > type

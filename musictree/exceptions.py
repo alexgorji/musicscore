@@ -5,6 +5,8 @@ class MusicTreeException(Exception):
 class NoteException(MusicTreeException):
     pass
 
+class NotationException(NoteException):
+    pass
 
 class NoteHasNoParentChordError(NoteException):
     pass

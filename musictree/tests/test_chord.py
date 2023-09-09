@@ -475,7 +475,7 @@ class TestTreeChord(ChordTestCase):
     def test_chord_add_x_trill_with_wavy_line_and_accidental_mark(self):
         ch = Chord(60, 1)
         ch.add_x(XMLTrillMark())
-        ch.add_x(XMLAccidentalMark('sharp'))
+        ch.add_x(XMLAccidentalMark('sharp'), parent_type='ornament')
         ch.add_x(XMLWavyLine(type='start', relative_x=0))
         ch.add_x(XMLWavyLine(type='stop', relative_x=20))
         ch._parent = self.mock_beat

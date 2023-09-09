@@ -9,13 +9,13 @@ from musicxml.xmlelement.xmlelement import *
 from musictree.dynamics import Dynamics
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, AlreadyFinalized, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
-    ChordException
+    ChordException, NotationException
 from musictree.midi import Midi
 from musictree.core import MusicTree
 from musictree.note import Note
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_ORNAMENT_CLASSES, XML_DYNAMIC_CLASSES, \
-    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES
+    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS
 
 __all__ = ['Chord', 'group_chords']
 
@@ -33,7 +33,7 @@ _all_technicals = Union[
     "XMLHalfMuted", "XMLHarmonMute", "XMLGolpe", "XMLOtherTechnical"]
 
 _all_ornaments = Union[
-    "XMLAccidentalMark", "XMLDelayedInvertedTurn", "XMLDelayedTurn", "XMLHaydn", "XMLInvertedMordent", "XMLInvertedTurn",
+    "XMLDelayedInvertedTurn", "XMLDelayedTurn", "XMLHaydn", "XMLInvertedMordent", "XMLInvertedTurn",
     "XMLInvertedVerticalTurn", "XMLMordent", "XMLOtherOrnament", "XMLSchleifer", "XMLShake", "XMLTremolo", "XMLTrillMark", "XMLTurn",
     "XMLVerticalTurn", "XMLWavyLine"
 ]
@@ -45,7 +45,7 @@ _all_dynamics = Union[
 
 _all_other_notations = Union[
     "XMLArpeggiate", "XMLFermata", "XMLFootnote", "XMLGlissando", "XMLLevel", "XMLNonArpeggiate", "XMLOtherNotation", "XMLSlide",
-    "XMLSlur"
+    "XMLSlur", "XMLAccidentalMark"
 ]
 
 
@@ -93,6 +93,21 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :rtype: :obj:`~musictree.note.Note`
         """
         return super().add_child(child)
+
+    def _add_notation(self):
+        pass
+
+    def _add_technical(self):
+        pass
+
+    def _add_ornament(self):
+        pass
+
+    def _add_articulation(self):
+        pass
+
+    def _add_direction_type(self):
+        pass
 
     def _set_original_starting_ties(self, original_chord):
         self._original_starting_ties = [copy.copy(midi._ties) for midi in original_chord.midis]
@@ -585,6 +600,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         return wedge
 
     def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations],
+              parent_type=None,
               **kwargs):
         """
         This method is used to add one xml object to a chord's private xml object lists (like _xml_articulations, xml_technicals
@@ -619,6 +635,20 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             self._xml_other_notations.append(x)
             if self.notes:
                 self._update_xml_other_notations()
+        elif x.__class__ in XML_ORNAMENT_AND_OTHER_NOTATIONS:
+            permitted_parent_types = 'notations', 'ornament'
+            if parent_type == 'notations':
+                self._xml_other_notations.append(x)
+                if self.notes:
+                    self._update_xml_other_notations()
+            elif parent_type == 'ornament':
+                self._xml_ornaments.append(x)
+                self._xml_ornaments_kwargs = kwargs
+                if self.notes:
+                    self._update_xml_ornaments()
+            else:
+                raise NotationException(f'{x} is ambivalent. Set parent type {permitted_parent_types}')
+
         else:
             raise TypeError
         return x

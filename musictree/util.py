@@ -58,7 +58,7 @@ XML_TECHNICAL_CLASSES = [XMLUpBow, XMLDownBow, XMLHarmonic, XMLOpenString, XMLTh
                          XMLSmear, XMLOpen,
                          XMLHalfMuted, XMLHarmonMute, XMLGolpe, XMLOtherTechnical]
 
-XML_ORNAMENT_CLASSES = [XMLAccidentalMark, XMLDelayedInvertedTurn, XMLDelayedTurn, XMLHaydn, XMLInvertedMordent,
+XML_ORNAMENT_CLASSES = [XMLDelayedInvertedTurn, XMLDelayedTurn, XMLHaydn, XMLInvertedMordent,
                         XMLInvertedTurn,
                         XMLInvertedVerticalTurn, XMLMordent, XMLOtherOrnament, XMLSchleifer, XMLShake, XMLTremolo,
                         XMLTrillMark, XMLTurn,
@@ -73,10 +73,14 @@ XML_OTHER_NOTATIONS = [XMLArpeggiate, XMLFermata, XMLFootnote, XMLGlissando, XML
                        XMLSlur]
 
 XML_DIRECTION_TYPE_CLASSES = [
-    XMLRehearsal, XMLSegno, XMLCoda, XMLWords, XMLSymbol, XMLWedge, XMLDynamics, XMLDashes, XMLBracket, XMLPedal,
+    XMLRehearsal, XMLSegno, XMLCoda, XMLWords, XMLSymbol, XMLWedge, XMLDashes, XMLBracket, XMLPedal,
     XMLMetronome, XMLOctaveShift, XMLHarpPedals, XMLDamp, XMLDampAll, XMLEyeglasses, XMLStringMute, XMLScordatura,
     XMLImage, XMLPrincipalVoice, XMLPercussion, XMLAccordionRegistration, XMLStaffDivide, XMLOtherDirection
 ]
+
+XML_ORNAMENT_AND_OTHER_NOTATIONS = [XMLAccidentalMark]
+
+XML_DIRECTION_OTHER_NOTATIONS = [XMLDynamics]
 
 
 def lcm(l):
@@ -120,7 +124,7 @@ def isinstance_as_string(child: object, parent_class_names: Union[str, List[str]
 def chord_is_in_a_repetition(chord):
     my_index = chord.up.up.get_chords().index(chord)
     if my_index > 0 and not chord.is_tied_to_previous:
-        all_previous_chords = [chord.up.up.get_chords()[my_index - i] for i in range(1, my_index+1)]
+        all_previous_chords = [chord.up.up.get_chords()[my_index - i] for i in range(1, my_index + 1)]
         if set([ch.is_tied_to_previous for ch in all_previous_chords]) == {True}:
             return False
         previous_chord = all_previous_chords[0]
