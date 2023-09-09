@@ -303,8 +303,9 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
 
             for staff in previous_measure.get_children():
                 st = m.add_staff(staff_number=staff.number)
-                st.clef = staff.clef.__copy__()
-                st.clef.show = False
+                if st.clef:
+                    st.clef = staff.clef.__copy__()
+                    st.clef.show = False
                 if st:
                     st.add_voice(voice_number=1)
         else:

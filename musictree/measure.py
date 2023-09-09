@@ -45,7 +45,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         existing_clefs = self.xml_object.xml_attributes.find_children(XMLClef)
         for existing_clef in existing_clefs:
             existing_clef.up.remove(existing_clef)
-        for clef in [c for c in self.clefs if c.show is True]:
+        for clef in [c for c in self.clefs if c and c.show is True]:
             self.xml_object.xml_attributes.add_child(clef.xml_object)
 
     def _set_key(self):
@@ -109,7 +109,10 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
 
     def _update_clef_numbers(self):
         if len(self.clefs) == 1:
-            self.clefs[0].number = None
+            try:
+                self.clefs[0].number = None
+            except AttributeError:
+                pass
         else:
             n = 1
             for cl in self.clefs:

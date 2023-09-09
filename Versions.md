@@ -86,12 +86,15 @@ if needed.
 ``Chord.clef`` property added.
 ``Chord.all_midis_are_tied_to_next`` and ``Chord.all_midis_are_tied_to_previous`` added.
 ``GraceChord()`` added.
-``Time.signatures and Time.actual_signatures`` accept also strings to allow creating a complex time signature like 3+2+5/8 = ``Time('3+2+5', 8)``
-Automatically created ``Time.actual_sigatures`` has been updated: 2/8 = 2/8; 4/8 = 2/8 + 2/8; 5/8 = 3/8 + 2/8; 7/8 = 4/8 + 3/8
+``Time.signatures and Time.actual_signatures`` accept also strings to allow creating a complex time signature like
+3+2+5/8 = ``Time('3+2+5', 8)``
+Automatically created ``Time.actual_sigatures`` has been updated: 2/8 = 2/8; 4/8 = 2/8 + 2/8; 5/8 = 3/8 + 2/8; 7/8 =
+4/8 + 3/8
 ``Accidental.mode`` changed to standard, enharmonic, sharp, flat, force-sharp and force-flat.
 ``Score`` Inherited methode ``Score.write`` will throw an Exception (.export_xml should be used instead).
 ``Clef`` argument default and property _default added (this will be True if Measure._update_default_clefs() set the
 clef, otherwise it will be False).
+``PerucssionClef()`` added.
 ``Staff`` default clef argument is changed to None. If no clef is set, it will automatically be set to clef of staff in
 previous measure. If clef is changed the new clef will have the same number as the old one.
 ``add_chord()`` has been removed from ``Voice``, ``Measure`` and ``Beat``. Use ``Part.add_chord()`` instead!

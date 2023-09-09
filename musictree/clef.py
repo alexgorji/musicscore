@@ -10,7 +10,7 @@ class Clef(XMLWrapper):
     _ATTRIBUTES = {'show', 'sign', 'line', 'octave_change'}
     XMLClass = XMLClef
 
-    def __init__(self, sign: str = 'G', line: int = 2, octave_change: int = None, show: bool = True,
+    def __init__(self, sign: str = 'G', line: Optional[int] = 2, octave_change: int = None, show: bool = True,
                  default: bool = False, *args, **kwargs):
         super().__init__()
         self._xml_object = self.XMLClass(*args, **kwargs)
@@ -40,8 +40,8 @@ class Clef(XMLWrapper):
     @property
     def octave_change(self) -> Optional[int]:
         """
-        Sets and gets ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLClefOctaveChange`
-
+        Sets and gets ``value_`` (int) of :obj:`~musicxml.xmlelement.xmlelement.XMLClefOctaveChange`and indicates how
+        many octaves to add to get from written pitch to sounding pitch.
         :return: ``self.xml_object.xml_clef_octave_change.value_``
         :rtype: int, None
         """
@@ -136,3 +136,14 @@ class TenorClef(Clef):
 
     def __init__(self, show: bool = True, octave_change: Optional[int] = None, **kwargs):
         super().__init__(sign='C', line=4, show=show, octave_change=octave_change, **kwargs)
+
+
+class PercussionClef(Clef):
+    """
+    Default parameters:
+      - sign=percussion
+      - line=None
+    """
+
+    def __init__(self, show: bool = True, octave_change: Optional[int] = None, **kwargs):
+        super().__init__(sign='percussion', line=None, show=show, octave_change=octave_change, **kwargs)

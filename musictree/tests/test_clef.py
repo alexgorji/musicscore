@@ -1,9 +1,11 @@
 from unittest import TestCase
 
-from musictree.clef import Clef, TrebleClef, BassClef, TenorClef, AltoClef
+from musictree import Part
+from musictree.clef import Clef, TrebleClef, BassClef, TenorClef, AltoClef, PercussionClef
+from musictree.tests.util import IdTestCase
 
 
-class TestClef(TestCase):
+class TestClef(IdTestCase):
     def test_default_clef(self):
         c = Clef()
         expected = """<clef>
@@ -36,6 +38,10 @@ class TestClef(TestCase):
         c = AltoClef()
         assert c.sign == 'C'
         assert c.line == 3
+        c = PercussionClef()
+        assert c.sign == 'percussion'
+        assert c.line is None
+
         c = TrebleClef(octave_change=1)
         expected = """<clef>
   <sign>G</sign>
@@ -44,3 +50,17 @@ class TestClef(TestCase):
 </clef>
 """
         assert c.to_string() == expected
+
+    def test_staff_clef(self):
+        clefs = [None, TrebleClef(), AltoClef(), TenorClef(), BassClef(), PercussionClef(),
+                 TrebleClef(octave_change=-1),
+                 Clef(sign='F', line=3)]
+
+        part = Part('p1')
+        for c in clefs:
+            m = part.add_measure()
+            m.get_staff(1).clef = c
+        for m, c in zip(part.get_children(), clefs):
+            if c:
+                assert m.clefs == [c]
+        part.finalize()

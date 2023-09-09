@@ -33,7 +33,7 @@ class Staff(MusicTree, FinalizeMixin, XMLWrapper):
         :rtype: :obj:`~musictree.clef.Clef`
         """
         if not self._clef:
-            if self.get_previous_staff():
+            if self.get_previous_staff() and self.get_previous_staff().clef:
                 self._clef = self.get_previous_staff().clef.__copy__()
                 self._clef.show = False
         return self._clef
