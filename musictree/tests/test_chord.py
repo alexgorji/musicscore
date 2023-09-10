@@ -8,12 +8,12 @@ from musictree.accidental import Accidental
 from musictree.beat import Beat
 from musictree.chord import Chord, split_copy, group_chords, GraceChord
 from musictree.exceptions import ChordHasNoParentError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
-    ChordException
+    ChordException, MusicTreeException
 from musictree.midi import Midi
 from musictree.quarterduration import QuarterDuration
 from musictree.tests.util import ChordTestCase, create_articulation, create_technical, create_ornament, IdTestCase
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, \
-    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES
+    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS
 from musicxml.xmlelement.xmlelement import *
 
 
@@ -449,6 +449,14 @@ class TestTreeChord(ChordTestCase):
         with self.assertRaises(TypeError):
             chord.add_direction_type(XMLFermata())
 
+    def test_chord_to_string(self):
+        p = Part('p1')
+        ch = Chord(60, 1)
+        p.add_chord(ch)
+        ch.finalize()
+        with self.assertRaises(MusicTreeException):
+            ch.to_string()
+
 
 class TestTies(ChordTestCase):
 
@@ -695,6 +703,37 @@ class TestAddX(ChordTestCase):
     def test_add_x_parent_type(self):
         ch = Chord(60, 1)
         ch.add_x(XML_DIRECTION_TYPE_CLASSES[0]())
+
+    def test_add_x_placement(self):
+        # direction_type object and notation objects of types technical, articulation and ornament
+        x_objects = [XML_DIRECTION_TYPE_CLASSES[0](), XML_TECHNICAL_CLASSES[0](),
+                     XML_ARTICULATION_CLASSES[0](), XML_ORNAMENT_CLASSES[0]()]
+
+        for x in x_objects:
+            for placement in ['above', 'below']:
+                ch = Chord(60, 1)
+                ch.add_x(x, placement=placement)
+                ch._parent = self.mock_beat
+                ch.finalize()
+                print(ch.notes[0].to_string())
+
+        # notation only objects does not accept placement (except fermata)
+        notation_object = XML_OTHER_NOTATIONS[0]()
+
+        # ambivalent notation or ornament
+        notation_accidental = XMLAccidentalMark('sharp')
+        ornament_accidental = XMLAccidentalMark('flat')
+
+        # ambivalent notation or direction_type
+        notation_dynamics = XMLF()
+        direction_type_dynamics = XMLF()
+
+        # mixed below and above
+        x_objects = [XMLTenuto(), XMLStaccato(), XMLAccent()]
+        placements = ['below', 'below', 'above']
+
+        # fermata placement is translated in fermata types inverted or upright
+        self.fail('Not completed')
 
     def test_add_articulation_after_creating_notes(self):
         ch = Chord(60, 1)

@@ -5,8 +5,10 @@ class MusicTreeException(Exception):
 class NoteException(MusicTreeException):
     pass
 
+
 class NotationException(NoteException):
     pass
+
 
 class NoteHasNoParentChordError(NoteException):
     pass
@@ -17,6 +19,10 @@ class NoteTypeError(NoteException):
 
 
 class ChordException(MusicTreeException):
+    pass
+
+
+class ChordAddXException(ChordException):
     pass
 
 

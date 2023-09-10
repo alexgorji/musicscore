@@ -1,5 +1,5 @@
 from pathlib import Path
-from unittest import TestCase
+from unittest import TestCase, skip
 
 from musictree.midi import C
 
@@ -179,3 +179,23 @@ class TestFindKey(TestCase):
                                                      'staff': '3',
                                                      'type': 'quarter',
                                                      'voice': '1'}]}]}}
+
+    @skip
+    def test_direction_type_test_objects(self):
+        self.fail()
+
+    @skip
+    def test_ornament_test_objects(self):
+        self.fail()
+
+    @skip
+    def test_technical_test_objects(self):
+        self.fail()
+
+    @skip
+    def test_articulation_test_objects(self):
+        self.fail()
+
+    @skip
+    def test_other_notation_test_objects(self):
+        self.fail()

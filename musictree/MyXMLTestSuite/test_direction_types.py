@@ -11,7 +11,7 @@ from musicxml.xmlelement.xmlelement import XMLSymbol, XMLDynamics, XMLWedge, XML
 
 class TestDynamics(IdTestCase):
     def test_direction_types(self):
-        score = Score(title='Dirctions')
+        score = Score(title='Directions')
         p = score.add_part('part-1')
         for dt_class in [cl for cl in XML_DIRECTION_TYPE_CLASSES if cl != XMLDynamics]:
             if dt_class == XMLSymbol:

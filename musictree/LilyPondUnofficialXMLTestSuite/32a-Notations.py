@@ -4,6 +4,7 @@ All <notation> elements defined in MusicXML. The lyrics show the notation assign
 from pathlib import Path
 
 from musictree import Score, Chord, C, E, G
+from musictree.util import XML_DYNAMIC_CLASSES
 from musicxml.xmlelement.xmlelement import XMLFermata, XMLArpeggiate, XMLNonArpeggiate, XMLAccidentalMark, XMLAccent, \
     XMLStrongAccent, XMLStaccato, XMLTenuto, XMLStaccatissimo, XMLSpiccato, XMLScoop, XMLPlop, XMLDoit, XMLFalloff, \
     XMLBreathMark, XMLCaesura, XMLStress, XMLUnstress, XMLTrillMark, XMLTurn, XMLDelayedTurn, XMLInvertedTurn, XMLShake, \
@@ -11,7 +12,7 @@ from musicxml.xmlelement.xmlelement import XMLFermata, XMLArpeggiate, XMLNonArpe
     XMLHarmonic, XMLNatural, XMLArtificial, XMLBasePitch, XMLTouchingPitch, XMLSoundingPitch, XMLOpenString, \
     XMLFingering, XMLThumbPosition, XMLPluck, XMLDoubleTongue, XMLTripleTongue, XMLStopped, XMLSnapPizzicato, XMLFret, \
     XMLString, XMLPullOff, XMLHammerOn, XMLBend, XMLBendAlter, XMLWithBar, XMLPreBend, XMLRelease, XMLTap, XMLHeel, \
-    XMLToe, XMLFingernails
+    XMLToe, XMLFingernails, XMLF, XMLPpp, XMLSfp, XMLOtherDynamics
 
 score = Score()
 part = score.add_part('p1')
@@ -122,6 +123,12 @@ xml_notations += [
     None,
     None,
     None,
+    XMLF(),
+    XMLPpp(),
+    XMLSfp(),
+    XMLOtherDynamics('sfffz'),
+    (XMLStrongAccent(), XMLStaccato()),
+    (XMLStaccato(), XMLAccent(), XMLTenuto())
 ]
 
 for n in xml_notations:
@@ -139,7 +146,7 @@ for n in xml_notations:
         part.add_chord(ch)
     elif isinstance(n, XMLAccidentalMark):
         ch = Chord(C(5), 1)
-        ch.add_x(n, parent_type='notations')
+        ch.add_x(n, parent_type='notation')
         part.add_chord(ch)
     elif isinstance(n, list):
         for x in n:
@@ -150,9 +157,13 @@ for n in xml_notations:
         ch = Chord(C(5), 1)
         for x in n:
             if isinstance(x, XMLAccidentalMark):
-                ch.add_x(x, 'ornament')
+                ch.add_x(x, parent_type='ornament')
             else:
                 ch.add_x(x)
+        part.add_chord(ch)
+    elif n.__class__ in XML_DYNAMIC_CLASSES:
+        ch = Chord(C(5), 1)
+        ch.add_x(n, parent_type='notation', placement='below')
         part.add_chord(ch)
     else:
         ch = Chord(C(5), 1)

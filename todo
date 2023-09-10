@@ -10,6 +10,13 @@ if a private property is used: get_ or set + only for library's ...
 
 measure: break or connect beams manually
 
-check if chord.add_x() excepts EVERY THING!
+
 
 XMLNonArpeggiate > type
+
+
+
+check if chord.add_x() excepts EVERY THING!
+Chord.add_x() all sorts (add_direction_type too) with placement argument
+
+test to_string method of all Classes (Chord raises and Error, Beat and Voice too?)

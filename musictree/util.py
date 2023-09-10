@@ -66,7 +66,8 @@ XML_ORNAMENT_CLASSES = [XMLDelayedInvertedTurn, XMLDelayedTurn, XMLHaydn, XMLInv
 
 XML_DYNAMIC_CLASSES = [XMLF, XMLFf, XMLFff, XMLFfff, XMLFffff, XMLFfffff, XMLFp, XMLFz, XMLMf, XMLMp, XMLP, XMLPf,
                        XMLPp, XMLPpp, XMLPppp,
-                       XMLPpppp, XMLPppppp, XMLRf, XMLRfz, XMLSf, XMLSffz, XMLSfp, XMLSfpp, XMLSfz, XMLSfzp]
+                       XMLPpppp, XMLPppppp, XMLRf, XMLRfz, XMLSf, XMLSffz, XMLSfp, XMLSfpp, XMLSfz, XMLSfzp,
+                       XMLOtherDynamics]
 
 XML_OTHER_NOTATIONS = [XMLArpeggiate, XMLFermata, XMLFootnote, XMLGlissando, XMLLevel, XMLNonArpeggiate,
                        XMLOtherNotation, XMLSlide,
@@ -131,3 +132,12 @@ def chord_is_in_a_repetition(chord):
         if chord.has_same_pitches(previous_chord):
             return True
     return False
+
+def create_test_objects(type_):
+    output = []
+    if type_ == 'direction_type':
+        for cl in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
+            obj = cl()
+            output.append(obj)
+    return output
+

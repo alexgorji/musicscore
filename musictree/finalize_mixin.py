@@ -1,4 +1,4 @@
-from musictree.exceptions import AlreadyFinalized
+from musictree.exceptions import AlreadyFinalized, MusicTreeException
 
 
 class FinalizeMixin:
@@ -25,4 +25,8 @@ class FinalizeMixin:
         if not self._finalized:
             self.finalize()
 
-        return super().to_string(*args, **kwargs)
+        try:
+            return super().to_string(*args, **kwargs)
+        except AttributeError:
+            raise MusicTreeException(
+                f'{self.__class__} has no direct equivalent in MusicXML and cannot be converted to string.')

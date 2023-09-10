@@ -64,7 +64,7 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <fermata />
+          <fermata placement="below" />
         </notations>
       </note>
       <note>
@@ -1351,6 +1351,103 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+      </note>
+    </measure>
+    <measure number="22">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <dynamics>
+            <f />
+          </dynamics>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <dynamics>
+            <ppp />
+          </dynamics>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <dynamics>
+            <sfp />
+          </dynamics>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <dynamics>
+            <other-dynamics>sfffz</other-dynamics>
+          </dynamics>
+        </notations>
+      </note>
+    </measure>
+    <measure number="23">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <articulations>
+            <strong-accent />
+            <staccato />
+          </articulations>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <articulations>
+            <staccato />
+            <accent />
+            <tenuto />
+          </articulations>
+        </notations>
       </note>
     </measure>
   </part>

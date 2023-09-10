@@ -36,7 +36,7 @@
   </defaults>
   <credit page="1">
     <credit-type>title</credit-type>
-    <credit-words font-size="24" default-x="616" default-y="1573" justify="center" valign="top">Dirctions</credit-words>
+    <credit-words font-size="24" default-x="616" default-y="1573" justify="center" valign="top">Directions</credit-words>
   </credit>
   <part-list>
     <score-part id="part-1">
