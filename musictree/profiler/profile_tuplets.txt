@@ -150,7 +150,7 @@
      8525    0.008    0.000    0.021    0.000 xmlelement.py:84(<listcomp>)
     13646    0.008    0.000    0.010    0.000 beat.py:408(get_children)
      6632    0.007    0.000    0.007    0.000 xmlchildcontainer.py:421(<listcomp>)
-    20361    0.007    0.000    0.007    0.000 {method 'update' of 'dict' objects}
+    20361    0.007    0.000    0.007    0.000 {method '_update' of 'dict' objects}
   12017/5    0.007    0.000    0.303    0.061 xmlelement.py:187(et_xml_element)
      7582    0.007    0.000    0.020    0.000 xsdsimpletype.py:112(_populate_forced_permitted)
      6738    0.007    0.000    0.022    0.000 quarterduration.py:220(__eq__)
@@ -177,7 +177,7 @@
     29666    0.006    0.000    0.006    0.000 {method 'items' of 'dict' objects}
      1649    0.005    0.000    0.013    0.000 core.py:55(_check_child_to_be_added)
      1272    0.005    0.000    0.093    0.000 xmlelement.py:52(_check_attribute)
-      105    0.005    0.000    0.314    0.003 beat.py:457(beam_chord_group)
+      105    0.005    0.000    0.314    0.003 beat.py:457(_beam_chord_group)
         1    0.005    0.005    0.007    0.007 ElementTree.py:810(_namespaces)
      6632    0.005    0.000    0.031    0.000 xmlchildcontainer.py:464(<listcomp>)
      2665    0.005    0.000    0.047    0.000 xsdsimpletype.py:156(value)
@@ -251,7 +251,7 @@
       413    0.002    0.000    0.192    0.000 note.py:136(_update_xml_type)
      1272    0.002    0.000    0.075    0.000 xsdattribute.py:81(__call__)
      1899    0.002    0.000    0.612    0.000 xmlchildcontainer.py:550(get_required_element_names)
-      826    0.002    0.000    0.070    0.000 note.py:259(update_xml_notations)
+      826    0.002    0.000    0.070    0.000 note.py:259(_update_xml_notations)
       477    0.002    0.000    0.005    0.000 core.py:5(get_cleaned_token)
       639    0.002    0.000    0.013    0.000 xsdsimpletype.py:227(value)
       413    0.002    0.000    0.005    0.000 chord.py:145(_update_xml_lyrics)
@@ -315,7 +315,7 @@
     212/1    0.001    0.000    5.251    5.251 finalupdate_mixin.py:9(finalize)
      1148    0.001    0.000    0.001    0.000 clef.py:82(xml_object)
       413    0.001    0.000    0.006    0.000 chord.py:464(get_voice_number)
-      413    0.001    0.000    0.089    0.000 midi.py:46(update_pitch_or_rest)
+      413    0.001    0.000    0.089    0.000 midi.py:46(_update_pitch_or_rest)
   630/105    0.001    0.000    0.003    0.000 core.py:95(quantize)
       413    0.001    0.000    0.228    0.001 midi.py:142(add_child)
       931    0.001    0.000    0.043    0.000 quarterduration.py:278(__init__)
@@ -336,7 +336,7 @@
       826    0.001    0.000    0.001    0.000 quarterduration.py:23(numerator)
       413    0.001    0.000    0.005    0.000 note.py:283(get_staff_number)
       132    0.001    0.000    0.001    0.000 {built-in method fromkeys}
-      105    0.001    0.000    0.044    0.000 beat.py:422(split_not_writable_chords)
+      105    0.001    0.000    0.044    0.000 beat.py:422(_split_not_writable_chords)
       413    0.001    0.000    0.006    0.000 accidental.py:205(mode)
       105    0.001    0.000    0.020    0.000 measure.py:198(update_divisions)
         1    0.001    0.001    0.001    0.001 {method 'getvalue' of '_io.StringIO' objects}
@@ -367,7 +367,7 @@
       105    0.001    0.000    0.097    0.001 time.py:14(__init__)
       105    0.001    0.000    0.008    0.000 staff.py:66(add_child)
       413    0.001    0.000    0.001    0.000 {method 'match' of 're.Pattern' objects}
-      402    0.001    0.000    0.001    0.000 quarterduration.py:306(check_quarter_duration_value)
+      402    0.001    0.000    0.001    0.000 quarterduration.py:306(_check_quarter_duration_value)
       104    0.001    0.000    0.008    0.000 clef.py:54(sign)
       105    0.001    0.000    0.001    0.000 time.py:26(_calculate_actual_signatures)
      2054    0.001    0.000    0.001    0.000 accidental.py:240(show)
@@ -471,7 +471,7 @@
         4    0.000    0.000    0.000    0.000 sre_compile.py:413(<listcomp>)
        53    0.000    0.000    0.000    0.000 ElementPath.py:182(prepare_descendant)
     42/34    0.000    0.000    0.000    0.000 {built-in method _abc._abc_subclasscheck}
-      105    0.000    0.000    0.000    0.000 measure.py:142(update_voice_beats)
+      105    0.000    0.000    0.000    0.000 measure.py:142(_update_voice_beats)
       104    0.000    0.000    0.001    0.000 measure.py:218(key)
       413    0.000    0.000    0.000    0.000 chord.py:102(<listcomp>)
       105    0.000    0.000    0.000    0.000 measure.py:76(<listcomp>)
@@ -501,7 +501,7 @@
       132    0.000    0.000    0.118    0.001 {built-in method builtins.next}
         1    0.000    0.000    0.001    0.001 util.py:118(generate_all_septuplets)
       141    0.000    0.000    0.000    0.000 sre_parse.py:233(__next)
-       11    0.000    0.000    0.011    0.001 chord.py:574(split_copy)
+       11    0.000    0.000    0.011    0.001 chord.py:574(_split_copy)
         1    0.000    0.000    7.829    7.829 {built-in method builtins.exec}
        22    0.000    0.000    0.000    0.000 note.py:146(is_tied)
        13    0.000    0.000    0.000    0.000 core.py:13(convert_to_xsd_class_name)

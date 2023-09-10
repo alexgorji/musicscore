@@ -18,7 +18,7 @@ from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_
     XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, \
     XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
 
-__all__ = ['Chord', 'group_chords']
+__all__ = ['Chord']
 
 from musicxml.xmlelement.xmlelement import XMLElement
 
@@ -221,7 +221,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             note.quarter_duration = self.quarter_duration
 
     def _update_ties(self):
-        # update ties of already created notes
+        # _update ties of already created notes
         for note in self.notes:
             note._update_ties()
 
@@ -249,7 +249,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         for art in note_articulations_not_in_chord:
             n.xml_notations.xml_articulations.remove(art)
-        n.update_xml_notations()
+        n._update_xml_notations()
 
     def _update_xml_directions(self):
         def _add_dynamics(list_of_dynamics, xml_direction):
@@ -293,7 +293,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         for d in note_dynamics_not_in_chord:
             n.xml_notations.xml_dynamics.remove(d)
 
-        n.update_xml_notations()
+        n._update_xml_notations()
 
     def _update_xml_ornaments(self):
         def _get_note_xml_ornaments():
@@ -319,7 +319,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         for o in note_ornaments_not_in_chord:
             n.xml_notations.xml_ornaments.remove(o)
 
-        n.update_xml_notations()
+        n._update_xml_notations()
 
     def _update_xml_other_notations(self):
         def _get_note_xml_other_notations():
@@ -343,7 +343,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         for on in note_other_notations_not_in_chord:
             n.xml_notations.remove(on)
 
-        n.update_xml_notations()
+        n._update_xml_notations()
 
     def _update_xml_technicals(self):
         def get_note_xml_technical():
@@ -369,7 +369,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         for tech in note_technicals_not_in_chord:
             n.xml_notations.xml_technical.remove(tech)
 
-        n.update_xml_notations()
+        n._update_xml_notations()
 
     def _update_xml_lyrics(self):
 
@@ -556,7 +556,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         """
         This method is used to add one or more :obj:`musictree.dynamics.Dynamics` objects to chord's private dictionary _xml_direction_types
-        This list is used to create or update directions of the first :obj:`~musictree.note.Note` object of chord`s notes
+        This list is used to create or _update directions of the first :obj:`~musictree.note.Note` object of chord`s notes
         which are to be or are already created .
 
         :param dynamics: str, Dynamics of a list of Dynamics to be added to directions
@@ -597,7 +597,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def add_tie(self, type_: str) -> None:
         """
-        Chord's tie list is used to add ties to or update ties of all midis and consequently :obj:`musictree.note.Note`
+        Chord's tie list is used to add ties to or _update ties of all midis and consequently :obj:`musictree.note.Note`
         objects which are to be or are already created.
 
         :param type_: 'start' or 'stop'
@@ -611,7 +611,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def add_lyric(self, text: Union[Any, XMLLyric], **kwargs):
         """
         This method is used to add :obj:`~musicxml.xmlelement.xmlelement.XMLLyric` to chord's private _xml_lyricx list.
-        This list is used to add lyrics to or update lyrics of the first :obj:`~musictree.note.Note` object of chord`s notes
+        This list is used to add lyrics to or _update lyrics of the first :obj:`~musictree.note.Note` object of chord`s notes
         which are to be or are already created .
 
         :param text: if not of type :obj:`~musicxml.xmlelement.xmlelement.XMLLyric` a string conversion will be applied to text.
@@ -640,7 +640,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def add_wedge(self, wedge: Union['XMLWedge', str], placement: str = 'below') -> XMLWedge:
         """
         This method is used to add one :obj:`~musicxml.xmlelement.xmlelement.XMLWedge` object to chord's private
-        dictionary _xml_direction_types This list is used to create or update directions of the first
+        dictionary _xml_direction_types This list is used to create or _update directions of the first
         :obj:`~musictree.note.Note` object of chord`s notes which are to be or are already created .
 
         :param wedge: str, XMLWedge to be added to directions
@@ -657,7 +657,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
               *, placement=None, parent_type=None):
         """
         This method is used to add one xml object to a chord's private xml object lists (like _xml_articulations, xml_technicals
-        etc.). These lists are used to add or update articulations, technicals etc. of the first :obj:`~musictree.note.Note` object of
+        etc.). These lists are used to add or _update articulations, technicals etc. of the first :obj:`~musictree.note.Note` object of
         chord`s notes which are to be or are already created .
 
         :param x: musicxml articulation element, musicxml technical element, musicxml ornament element, musicxml dynamic element,
@@ -705,7 +705,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         object will be prepared for returning a musicxml snippet or a whole musicxml file.
 
         - Check if parent :obj:`~musictree.beat.Beat` exists.
-        - Ancestor :obj:`~musictree.measure.Measure.update_divisions()` is called to update :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`'s :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions` attribute.
+        - Ancestor :obj:`~musictree.measure.Measure.update_divisions()` is called to _update :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`'s :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions` attribute.
         - Following updates are triggered: update_notes, update_xml_chord, update_notes_quarter_durations, update_xml_lyrics,
           update_xml_directions, update_xml_articulations, update_technicals
         """
@@ -825,7 +825,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         current_chord = self
         output = [self]
         for qd in quarter_durations[0][1:]:
-            copied = split_copy(self, qd)
+            copied = _split_copy(self, qd)
             copied.split = True
             voice.get_current_beat().add_child(copied)
 
@@ -837,7 +837,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             output.append(current_chord)
         if quarter_durations[1]:
             # left over
-            leftover_chord = split_copy(self, quarter_durations[1])
+            leftover_chord = _split_copy(self, quarter_durations[1])
             current_chord.add_tie('start')
             leftover_chord.add_tie('stop')
             for midi in leftover_chord.midis:
@@ -960,7 +960,7 @@ class GraceChord(Chord):
         self._update_xml_type()
 
 
-def split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fraction, int, float] = None) -> Chord:
+def _split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fraction, int, float] = None) -> Chord:
     """
     This function is used when a chord needs to be split. It creates a copy of the chord with a new quarter_duration object. All midis
     will be deepcopied. No attributes like lyrics, articulations etc. will be added to the copy.
@@ -971,12 +971,12 @@ def split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fracti
     """
     if new_quarter_duration is None:
         new_quarter_duration = chord.quarter_duration.__copy__()
-    new_chord = Chord(midis=[m.copy_for_split() for m in chord.midis], quarter_duration=new_quarter_duration)
+    new_chord = Chord(midis=[m._copy_for_split() for m in chord.midis], quarter_duration=new_quarter_duration)
     new_chord._original_starting_ties = chord._original_starting_ties
     return new_chord
 
 
-def group_chords(chords: List[Chord], quarter_durations: List[Union[QuarterDuration, Fraction, int, float]]) -> \
+def _group_chords(chords: List[Chord], quarter_durations: List[Union[QuarterDuration, Fraction, int, float]]) -> \
         Optional[List[List[Chord]]]:
     """
     A creates a nested list of chords. Chords can be divided into groups. Each group has its own specific quarter duration sum.

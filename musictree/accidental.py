@@ -241,6 +241,10 @@ class Accidental(MusicTree, XMLWrapper):
         self.show = show
         self.mode = mode
 
+    def _update(self):
+        self._update_parent_midi()
+        self._update_xml_object()
+
     def _update_parent_midi(self):
         if self.parent_midi and self.parent_midi.value != 0:
             self.parent_midi._update_pitch_parameters()
@@ -382,14 +386,6 @@ class Accidental(MusicTree, XMLWrapper):
         else:
             raise ValueError
         return output[0], output[1], output[2] + (int(midi_value // 12)) - 1
-
-    def update(self):
-        """
-        Library intern use
-        Midi
-        """
-        self._update_parent_midi()
-        self._update_xml_object()
 
     def __copy__(self):
         return self.__class__(mode=self.mode, show=self.show)

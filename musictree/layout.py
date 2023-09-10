@@ -1,12 +1,14 @@
 from typing import Union, Optional
 
-from musicxml.xmlelement.xmlelement import XMLPageLayout, XMLPageMargins, XMLLeftMargin, XMLRightMargin, XMLTopMargin, XMLBottomMargin, \
+from musicxml.xmlelement.xmlelement import XMLPageLayout, XMLPageMargins, XMLLeftMargin, XMLRightMargin, XMLTopMargin, \
+    XMLBottomMargin, \
     XMLScaling, XMLDefaults, XMLSystemLayout, XMLSystemMargins, XMLStaffLayout
 
 from musictree.util import isinstance_as_string
 from musictree.xmlwrapper import XMLWrapper
 
-__all__ = ['PAGE_MARGINS', 'PAGE_SIZES', 'SYSTEM_MARGINS', 'SYSTEM_LAYOUT', 'STAFF_LAYOUT', 'SCALING', 'Margins', 'Scaling',
+__all__ = ['PAGE_MARGINS', 'PAGE_SIZES', 'SYSTEM_MARGINS', 'SYSTEM_LAYOUT', 'STAFF_LAYOUT', 'SCALING', 'Margins',
+           'Scaling',
            'PageLayout', 'SystemLayout', 'StaffLayout']
 #:
 PAGE_MARGINS = {
@@ -77,7 +79,8 @@ class LayoutMixin:
 
 
 class Margins:
-    def __init__(self, parent: Union['PageLayout', 'SystemLayout'], left: Union[float, int] = None, right: Union[float, int] = None,
+    def __init__(self, parent: Union['PageLayout', 'SystemLayout'], left: Union[float, int] = None,
+                 right: Union[float, int] = None,
                  top: Union[float, int] = None, bottom: Union[float, int] = None):
         self._parent = None
         self._left = None
@@ -171,7 +174,8 @@ class Scaling(XMLWrapper):
     _ATTRIBUTES = {'millimeters', 'tenths', 'score'}
     XMLClass = XMLScaling
 
-    def __init__(self, millimeters: Union[int, float] = SCALING['millimeters'], tenths: Union[int, float] = SCALING['tenths']):
+    def __init__(self, millimeters: Union[int, float] = SCALING['millimeters'],
+                 tenths: Union[int, float] = SCALING['tenths']):
         super().__init__()
         self._xml_object = self.XMLClass()
         self._millimeters = None
@@ -271,6 +275,18 @@ class PageLayout(XMLWrapper, LayoutMixin):
 
         self._margins = Margins(parent=self, **PAGE_MARGINS[self.size][self.orientation])
 
+    def _get_page_height(self):
+        return self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][1]) if self.orientation == 'portrait' else \
+            self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][0])
+
+    def _get_page_width(self):
+        return self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][0]) if self.orientation == 'portrait' else \
+            self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][1])
+
+    def _set_page_height_and_width(self):
+        self.xml_object.xml_page_height = self._get_page_height()
+        self.xml_object.xml_page_width = self._get_page_width()
+
     def _update(self):
         self._set_page_height_and_width()
         self._margins = Margins(parent=self, **PAGE_MARGINS[self.size][self.orientation])
@@ -333,18 +349,6 @@ class PageLayout(XMLWrapper, LayoutMixin):
             self._size = val
             if self.orientation and self.parent:
                 self._update()
-
-    def _set_page_height_and_width(self):
-        self.xml_object.xml_page_height = self._get_page_height()
-        self.xml_object.xml_page_width = self._get_page_width()
-
-    def _get_page_height(self):
-        return self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][1]) if self.orientation == 'portrait' else \
-            self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][0])
-
-    def _get_page_width(self):
-        return self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][0]) if self.orientation == 'portrait' else \
-            self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][1])
 
 
 class SystemLayout(XMLWrapper, LayoutMixin):

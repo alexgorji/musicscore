@@ -55,7 +55,7 @@
      3000    0.001    0.000    0.002    0.000 copyreg.py:94(__newobj__)
      1000    0.001    0.000    0.002    0.000 xsdcomplextype.py:15(__init__)
      8000    0.001    0.000    0.001    0.000 xsdelement.py:14(xsd_tree)
-     3000    0.001    0.000    0.001    0.000 {method 'update' of 'dict' objects}
+     3000    0.001    0.000    0.001    0.000 {method '_update' of 'dict' objects}
      1000    0.001    0.000    0.470    0.000 time_xml_score.py:11(hello_xml_score)
      1000    0.001    0.000    0.001    0.000 core.py:40(replace_key_underline_with_hyphen)
      3000    0.001    0.000    0.001    0.000 {built-in method __new__ of type object at 0x1038493b8}

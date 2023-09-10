@@ -99,13 +99,33 @@ class MusicTree(Tree):
         else:
             raise TypeError
 
+    def _get_music_tree_descendent(self, args, kwargs, get_class_name):
+        kwargs = self._get_kwargs(args, kwargs, get_class_name)
+
+        if not kwargs:
+            raise TypeError
+
+        if len(kwargs) == 1:
+            try:
+                return self.get_children()[list(kwargs.values())[0] - 1]
+            except IndexError:
+                return None
+        else:
+            output = self
+            for key in kwargs:
+                string_to_eval = f"output.get_{key.split('_')[0]}(kwargs['{key}'])"
+                output = eval(string_to_eval)
+                if not output:
+                    return None
+            return output
+
     @property
     def quantize(self) -> bool:
         """
         - If quantize is set to None the first quantize of ancestors which is ``False`` or ``True`` will be returned.
         - If :obj:`~musictree.score.Score.quantize` is set to None it will be converted to ``False``
         - :obj:`~musictree.measure.Measure.finalize()` loops over all beats. If :obj:`~musictree.beat.Beat.quantize` returns True
-          :obj:`~musictree.beat.Beat.quantize_quarter_durations()` is called.
+          :obj:`~musictree.beat.Beat._quantize_quarter_durations()` is called.
 
         :type: Optional[bool]
         :rtype: bool
@@ -202,26 +222,6 @@ class MusicTree(Tree):
                         raise TypeError
             return output
 
-    def _get_music_tree_descendent(self, args, kwargs, get_class_name):
-        kwargs = self._get_kwargs(args, kwargs, get_class_name)
-
-        if not kwargs:
-            raise TypeError
-
-        if len(kwargs) == 1:
-            try:
-                return self.get_children()[list(kwargs.values())[0] - 1]
-            except IndexError:
-                return None
-        else:
-            output = self
-            for key in kwargs:
-                string_to_eval = f"output.get_{key.split('_')[0]}(kwargs['{key}'])"
-                output = eval(string_to_eval)
-                if not output:
-                    return None
-            return output
-
     def get_measure(self, *args, **kwargs) -> 'Measure':
         """
         This method can be used for :obj:`~musictree.score.Score` and :obj:`~musictree.part.Part`
@@ -246,7 +246,7 @@ class MusicTree(Tree):
 
     def get_possible_subdivisions(self, beat_quarter_duration: Optional[QuarterDuration] = None) -> List[int]:
         """
-        This method is used by :obj:`~musictree.beat.Beat`'s :obj:`~musictree.beat.Beat.quantize_quarter_durations()`.
+        This method is used by :obj:`~musictree.beat.Beat`'s :obj:`~musictree.beat.Beat._quantize_quarter_durations()`.
 
         Possible subdivisions dictionary can be set with :obj:`~musictree.core.MusicTree.set_possible_subdivisions()`.
 
@@ -260,7 +260,7 @@ class MusicTree(Tree):
                If ``None`` and self is a :obj:`~musictree.beat.Beat` ``self.quarter_duration`` is used.
                If ``None`` and self is not a :obj:`~musictree.beat.Beat` it is set to 1.
         :return: A list of possible subdivisions of a :obj:`~musictree.beat.Beat`. This is used by beat's
-                 :obj:`~musictree.beat.Beat.quantize_quarter_durations()`
+                 :obj:`~musictree.beat.Beat._quantize_quarter_durations()`
         :rtype: List[int]
         """
         if beat_quarter_duration is None:
@@ -320,7 +320,7 @@ class MusicTree(Tree):
         """
         This method is used to set or change possible subdivisions dictionary.
 
-        :param subdivisions: list of possible subdivisions to be used duration :obj:`musictree.beat.Beat.quantize_quarter_durations()`
+        :param subdivisions: list of possible subdivisions to be used duration :obj:`musictree.beat.Beat._quantize_quarter_durations()`
         :param beat_quarter_duration: If ``None`` and self is a :obj:`~musictree.beat.Beat` ``self.quarter_duration`` is used.
                                       If ``None`` and self is not a :obj:`~musictree.beat.Beat` it is set to 1.
         :return: None

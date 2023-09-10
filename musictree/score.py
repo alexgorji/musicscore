@@ -252,13 +252,6 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         p = Part(id_)
         return self.add_child(p)
 
-    def get_children(self) -> List['Part']:
-        """
-        :return: list of added children.
-        :rtype: List[:obj:`~musictree.part.Part`]
-        """
-        return super().get_children()
-
     def export_xml(self, path: 'pathlib.Path') -> None:
         """
         :param path: Output xml file
@@ -271,6 +264,13 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
     "http://www.musicxml.org/dtds/partwise.dtd">
 """)
             f.write(self.to_string())
+
+    def get_children(self) -> List['Part']:
+        """
+        :return: list of added children.
+        :rtype: List[:obj:`~musictree.part.Part`]
+        """
+        return super().get_children()
 
     def write(self, *args, **kwargs):
         raise NotImplementedError('Use Score.export_xml instead!')

@@ -327,7 +327,7 @@
      2000    0.005    0.000    0.033    0.000 {built-in method builtins.sum}
      5000    0.005    0.000    0.024    0.000 finalupdate_mixin.py:6(__init__)
      3000    0.005    0.000    0.014    0.000 tree.py:95(previous)
-     4000    0.005    0.000    0.028    0.000 beat.py:422(split_not_writable_chords)
+     4000    0.005    0.000    0.028    0.000 beat.py:422(_split_not_writable_chords)
      1000    0.004    0.000    0.689    0.001 clef.py:14(__init__)
      1000    0.004    0.000    0.032    0.000 measure.py:360(get_divisions)
      2000    0.004    0.000    1.001    0.001 note.py:210(quarter_duration)
@@ -352,7 +352,7 @@
      4000    0.004    0.000    0.006    0.000 part.py:141(id_)
      1000    0.004    0.000    0.412    0.000 note.py:136(_update_xml_type)
      1000    0.004    0.000    0.089    0.000 part.py:175(name)
-     2000    0.004    0.000    0.145    0.000 note.py:259(update_xml_notations)
+     2000    0.004    0.000    0.145    0.000 note.py:259(_update_xml_notations)
      1000    0.004    0.000    0.004    0.000 contextlib.py:86(__init__)
      1000    0.004    0.000    0.867    0.001 chord.py:59(_set_midis)
      1000    0.004    0.000    0.833    0.001 part.py:87(__init__)
@@ -378,7 +378,7 @@
      2000    0.003    0.000    0.006    0.000 layout.py:309(scaling)
      2229    0.003    0.000    0.003    0.000 {method 'match' of 're.Pattern' objects}
      4000    0.003    0.000    0.006    0.000 quarterduration.py:166(__ge__)
-     1000    0.003    0.000    0.008    0.000 beat.py:457(beam_chord_group)
+     1000    0.003    0.000    0.008    0.000 beat.py:457(_beam_chord_group)
      2000    0.003    0.000    0.012    0.000 layout.py:42(__init__)
      2000    0.003    0.000    0.031    0.000 xsdsimpletype.py:200(value)
     11000    0.003    0.000    0.003    0.000 xsdattribute.py:66(type_)
@@ -408,7 +408,7 @@
      1000    0.003    0.000    0.173    0.000 layout.py:235(tenths)
      3000    0.002    0.000    0.005    0.000 xsdsimpletype.py:266(value)
      1000    0.002    0.000    0.074    0.000 chord.py:120(get_note_xml_technical)
-     1000    0.002    0.000    0.153    0.000 midi.py:46(update_pitch_or_rest)
+     1000    0.002    0.000    0.153    0.000 midi.py:46(_update_pitch_or_rest)
      5000    0.002    0.000    0.002    0.000 core.py:48(<dictcomp>)
      1000    0.002    0.000    0.516    0.001 midi.py:142(add_child)
      1000    0.002    0.000    0.684    0.001 midi.py:74(accidental)
@@ -511,7 +511,7 @@
      1000    0.001    0.000    0.008    0.000 note.py:277(get_parent_measure)
      1000    0.001    0.000    0.001    0.000 staff.py:62(xml_object)
      3000    0.001    0.000    0.001    0.000 measure.py:237(time)
-     1000    0.001    0.000    0.002    0.000 measure.py:142(update_voice_beats)
+     1000    0.001    0.000    0.002    0.000 measure.py:142(_update_voice_beats)
      5000    0.001    0.000    0.001    0.000 part.py:68(get_parents)
      1000    0.001    0.000    0.002    0.000 measure.py:75(<listcomp>)
      5000    0.001    0.000    0.001    0.000 {method 'keys' of 'dict' objects}
@@ -531,7 +531,7 @@
      1003    0.001    0.000    0.001    0.000 {built-in method fromkeys}
      1000    0.001    0.000    0.001    0.000 ElementTree.py:536(__init__)
      1000    0.001    0.000    0.002    0.000 chord.py:209(_update_notes_pitch_or_rest)
-     1000    0.001    0.000    0.001    0.000 quarterduration.py:306(check_quarter_duration_value)
+     1000    0.001    0.000    0.001    0.000 quarterduration.py:306(_check_quarter_duration_value)
      1000    0.001    0.000    0.001    0.000 part.py:135(_set_first_current_measure)
      3000    0.001    0.000    0.001    0.000 layout.py:116(left)
      3000    0.001    0.000    0.001    0.000 layout.py:145(right)

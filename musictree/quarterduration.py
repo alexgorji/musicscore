@@ -287,7 +287,7 @@ class QuarterDurationMixin:
         if isinstance(val, QuarterDuration):
             self._quarter_duration = val
         else:
-            check_quarter_duration_value(val)
+            _check_quarter_duration_value(val)
             self._quarter_duration = QuarterDuration(val)
 
     @property
@@ -307,7 +307,7 @@ class QuarterDurationMixin:
             self._quarter_duration = None
 
 
-def check_quarter_duration_value(val):
+def _check_quarter_duration_value(val):
     if not isinstance(val, int) and not isinstance(val, float) and not isinstance(val, Fraction) and not isinstance(val,
                                                                                                                     QuarterDuration):
         raise TypeError(f'Wrong type for quarter duration {val}: {type(val)}')

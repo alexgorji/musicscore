@@ -137,7 +137,7 @@ class TestMidi(TestCase):
         assert id(m._ties) != id(copied._ties)
         assert m._ties == copied._ties
 
-        copied = m.copy_for_split()
+        copied = m._copy_for_split()
         assert m != copied
         assert m.value == copied.value
         assert m.accidental != copied.accidental
@@ -201,7 +201,7 @@ class TestMidiNoteHead(IdTestCase):
     def test_notehead_copy_for_split(self):
         midi = Midi(60)
         midi.notehead = 'square'
-        copied = midi.copy_for_split()
+        copied = midi._copy_for_split()
         assert copied.notehead.value_ == 'square'
 
     def test_midi_notehead_after_split(self):

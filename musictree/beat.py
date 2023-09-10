@@ -4,7 +4,7 @@ from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
 
-from musictree.chord import split_copy, group_chords, Chord
+from musictree.chord import _split_copy, _group_chords, Chord
 from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
     ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError, AlreadyFinalized, BeatNotFullError, AddChordException
@@ -12,7 +12,7 @@ from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import lcm
 
-__all__ = ['SPLITTABLES', 'Beat', 'beam_chord_group']
+__all__ = ['SPLITTABLES', 'Beat', '_beam_chord_group']
 
 #: {offset : {chord.quarter_duration: split quarter_durations, ...}, ...}
 SPLITTABLES = {
@@ -84,6 +84,108 @@ def _find_quantized_locations(duration, subdivision):
     fr = duration / subdivision
     output = [x * fr for x in output]
     return output
+
+
+def _beam_chord_group(chord_group: List['Chord']) -> None:
+    """
+    Function for setting beams of a list of chords (chord_group). This function is used to create or _update beams inside a beat.
+
+    :param chord_group:
+    :return: None
+    """
+    chord_group = [ch for ch in chord_group if ch.quarter_duration != 0]
+
+    def add_beam(chord, number, value):
+        if value == 'hook':
+            if chord.quarter_duration == QuarterDuration(1, 6) and chord.offset == QuarterDuration(1, 3):
+                value = 'backward hook'
+            else:
+                value = 'forward hook'
+        for note in chord.notes:
+            note.xml_object.add_child(XMLBeam(number=number, value_=value))
+
+    def add_last_beam(chord, last_beam, current_beams, cont=False):
+        if last_beam <= current_beams:
+            if cont:
+                add_beam(chord, 1, 'continue')
+                for n in range(2, last_beam + 1):
+                    add_beam(chord, n, 'end')
+            else:
+                for n in range(1, last_beam + 1):
+                    add_beam(chord, n, 'end')
+        else:
+            if current_beams != 0:
+                if cont:
+                    add_beam(chord, 1, 'continue')
+                    for n in range(2, current_beams + 1):
+                        add_beam(chord, n, 'end')
+                else:
+                    for n in range(1, current_beams + 1):
+                        add_beam(chord, n, 'end')
+                for n in range(current_beams + 1, last_beam + 1):
+                    add_beam(chord, n, 'backward hook')
+
+    beams = {'eighth': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
+    current_beams = 0
+    for index in range(len(chord_group) - 1):
+        chord = chord_group[index]
+        next_chord = chord_group[index + 1]
+        t1, t2 = chord.notes[0].xml_type.value_, next_chord.notes[0].xml_type.value_
+        b1, b2 = beams.get(t1), beams.get(t2)
+        types = []
+        if b1 and b2:
+            if next_chord.offset == QuarterDuration(1, 2) \
+                    and current_beams != 0 \
+                    and (b1 == 3 or b2 == 3
+                         or current_beams == 3
+                         or chord.quarter_duration == QuarterDuration(3, 8)
+                         or next_chord.quarter_duration == QuarterDuration(3, 8)):
+                add_last_beam(chord, b1, current_beams, True)
+                current_beams = 1
+            elif b2 < b1 <= current_beams:
+                types.append(('continue', 0, b2))
+                types.append(('end', b2, current_beams))
+                current_beams = b1
+            elif b2 < b1 > current_beams:
+                if current_beams == 0:
+                    types.append(('begin', 0, b2))
+                else:
+                    types.append(('continue', 0, current_beams))
+                    types.append(('begin', current_beams, b2))
+                    types.append(('hook', b2, b1))
+                current_beams = b1
+            elif b2 == b1 <= current_beams:
+                types.append(('continue', 0, b1))
+                current_beams = b1
+
+            elif b2 == b1 > current_beams:
+                if current_beams == 0:
+                    types.append(('begin', 0, b2))
+                else:
+                    types.append(('continue', 0, current_beams))
+                    types.append(('begin', current_beams, b2))
+                current_beams = b1
+
+            elif b2 > b1 <= current_beams:
+                types.append(('continue', 0, b1))
+                current_beams = b1
+
+            elif b2 > b1 > current_beams:
+                if current_beams == 0:
+                    types.append(('begin', 0, b1))
+                else:
+                    types.append(('continue', 0, current_beams))
+                    types.append(('begin', current_beams, b1))
+                current_beams = b1
+        elif b1 and not b2:
+            add_last_beam(chord, b1, current_beams)
+        else:
+            pass
+        for l in types:
+            for n in range(l[1] + 1, l[2] + 1):
+                add_beam(chord, n, l[0])
+        if index == len(chord_group) - 2 and b2:
+            add_last_beam(next_chord, b2, current_beams)
 
 
 class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
@@ -185,7 +287,7 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
         output = [chord]
         chord._quarter_duration = quarter_durations[0]
         for qd in quarter_durations[1:]:
-            copied = split_copy(chord, qd)
+            copied = _split_copy(chord, qd)
             output.append(copied)
         for index, ch in enumerate(output[:-1]):
             next_ch = output[index + 1]
@@ -253,7 +355,7 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
         actual_notes = self._get_actual_notes(self.get_children())
         if not actual_notes:
             if self.quarter_duration == 1:
-                grouped_chords = group_chords(self.get_children(), [1 / 2, 1 / 2])
+                grouped_chords = _group_chords(self.get_children(), [1 / 2, 1 / 2])
                 if grouped_chords:
                     for g in grouped_chords:
                         actual_notes = self._get_actual_notes(g)
@@ -271,7 +373,7 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def _update_note_beams(self):
         if self.get_children():
-            beam_chord_group(chord_group=self.get_children())
+            _beam_chord_group(chord_group=self.get_children())
 
     @staticmethod
     def _get_actual_notes(chords):
@@ -294,6 +396,40 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
                 ch.up.remove(ch)
             else:
                 pass
+
+    def _split_not_writable_chords(self) -> None:
+        """
+        This method checks if the quarter duration of all children chords must be split according to :obj:`~musictree.beat.SPLITTABLES`
+        dictionary. If chord's offset and its quarter duration exist in the dictionary a list of splitting quarter durations can be
+        accessed like this: ``SPLITTABLES[chord.offset[chord.quarter_duration]]`` This dictionary can be manipulated by user during runtime
+        if needed. Be careful with not writable quarter durations which have to be split (for example 5/6 must be split to 3/6,
+        2/6 or some other writable quarter durations).
+
+        :obj:`~musictree.measure.Measure.finalize()` loops over all its beats calls this method.
+        """
+        for chord in self.get_children()[:]:
+            split = self._split_not_writable(chord, chord.offset)
+            if split:
+                for ch in split:
+                    ch._parent = self
+                if chord == self.get_children()[-1]:
+                    self._children = self.get_children()[:-1] + split
+                else:
+                    index = self.get_children().index(chord)
+                    self._children = self.get_children()[:index] + split + self.get_children()[index + 1:]
+
+    def _quantize_quarter_durations(self):
+        """
+        When called the positioning of children will be quantized according to :obj:`musictree.core.MusicTree.get_possible_subdivisions()`
+        """
+        if self.get_possible_subdivisions() and self.get_children():
+            if self._get_actual_notes(self.get_children()) in self.get_possible_subdivisions():
+                pass
+            else:
+                quarter_durations = [chord.quarter_duration for chord in self.get_children()]
+                if len([d for d in quarter_durations if d != 0]) > 1:
+                    self._change_children_quarter_durations(self._get_quantized_quarter_durations(quarter_durations))
+                    self._remove_zero_quarter_durations()
 
     @property
     def is_filled(self) -> bool:
@@ -393,8 +529,8 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
         finalize can only be called once.
 
         - It calls :obj:`~musictree.chord.Chord.finalize()` method of all :obj:`~musictree.chord.Chord` children.
-        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams, quantize_quarter_durations (if quantize is
-          True), split_not_writable_chords
+        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams, _quantize_quarter_durations (if quantize is
+          True), _split_not_writable_chords
         """
         if self._finalized:
             raise AlreadyFinalized(self)
@@ -422,139 +558,3 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :rtype: :obj:`~musictree.voice.Voice`
         """
         return super().get_parent()
-
-    def split_not_writable_chords(self) -> None:
-        """
-        This method checks if the quarter duration of all children chords must be split according to :obj:`~musictree.beat.SPLITTABLES`
-        dictionary. If chord's offset and its quarter duration exist in the dictionary a list of splitting quarter durations can be
-        accessed like this: ``SPLITTABLES[chord.offset[chord.quarter_duration]]`` This dictionary can be manipulated by user during runtime
-        if needed. Be careful with not writable quarter durations which have to be split (for example 5/6 must be split to 3/6,
-        2/6 or some other writable quarter durations).
-
-        :obj:`~musictree.measure.Measure.finalize()` loops over all its beats calls this method.
-        """
-        for chord in self.get_children()[:]:
-            split = self._split_not_writable(chord, chord.offset)
-            if split:
-                for ch in split:
-                    ch._parent = self
-                if chord == self.get_children()[-1]:
-                    self._children = self.get_children()[:-1] + split
-                else:
-                    index = self.get_children().index(chord)
-                    self._children = self.get_children()[:index] + split + self.get_children()[index + 1:]
-
-    def quantize_quarter_durations(self):
-        """
-        When called the positioning of children will be quantized according to :obj:`musictree.core.MusicTree.get_possible_subdivisions()`
-        """
-        if self.get_possible_subdivisions() and self.get_children():
-            if self._get_actual_notes(self.get_children()) in self.get_possible_subdivisions():
-                pass
-            else:
-                quarter_durations = [chord.quarter_duration for chord in self.get_children()]
-                if len([d for d in quarter_durations if d != 0]) > 1:
-                    self._change_children_quarter_durations(self._get_quantized_quarter_durations(quarter_durations))
-                    self._remove_zero_quarter_durations()
-
-
-def beam_chord_group(chord_group: List['Chord']) -> None:
-    """
-    Function for setting beams of a list of chords (chord_group). This function is used to create or update beams inside a beat.
-
-    :param chord_group:
-    :return: None
-    """
-    chord_group = [ch for ch in chord_group if ch.quarter_duration != 0]
-
-    def add_beam(chord, number, value):
-        if value == 'hook':
-            if chord.quarter_duration == QuarterDuration(1, 6) and chord.offset == QuarterDuration(1, 3):
-                value = 'backward hook'
-            else:
-                value = 'forward hook'
-        for note in chord.notes:
-            note.xml_object.add_child(XMLBeam(number=number, value_=value))
-
-    def add_last_beam(chord, last_beam, current_beams, cont=False):
-        if last_beam <= current_beams:
-            if cont:
-                add_beam(chord, 1, 'continue')
-                for n in range(2, last_beam + 1):
-                    add_beam(chord, n, 'end')
-            else:
-                for n in range(1, last_beam + 1):
-                    add_beam(chord, n, 'end')
-        else:
-            if current_beams != 0:
-                if cont:
-                    add_beam(chord, 1, 'continue')
-                    for n in range(2, current_beams + 1):
-                        add_beam(chord, n, 'end')
-                else:
-                    for n in range(1, current_beams + 1):
-                        add_beam(chord, n, 'end')
-                for n in range(current_beams + 1, last_beam + 1):
-                    add_beam(chord, n, 'backward hook')
-
-    beams = {'eighth': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
-    current_beams = 0
-    for index in range(len(chord_group) - 1):
-        chord = chord_group[index]
-        next_chord = chord_group[index + 1]
-        t1, t2 = chord.notes[0].xml_type.value_, next_chord.notes[0].xml_type.value_
-        b1, b2 = beams.get(t1), beams.get(t2)
-        types = []
-        if b1 and b2:
-            if next_chord.offset == QuarterDuration(1, 2) \
-                    and current_beams != 0 \
-                    and (b1 == 3 or b2 == 3
-                         or current_beams == 3
-                         or chord.quarter_duration == QuarterDuration(3, 8)
-                         or next_chord.quarter_duration == QuarterDuration(3, 8)):
-                add_last_beam(chord, b1, current_beams, True)
-                current_beams = 1
-            elif b2 < b1 <= current_beams:
-                types.append(('continue', 0, b2))
-                types.append(('end', b2, current_beams))
-                current_beams = b1
-            elif b2 < b1 > current_beams:
-                if current_beams == 0:
-                    types.append(('begin', 0, b2))
-                else:
-                    types.append(('continue', 0, current_beams))
-                    types.append(('begin', current_beams, b2))
-                    types.append(('hook', b2, b1))
-                current_beams = b1
-            elif b2 == b1 <= current_beams:
-                types.append(('continue', 0, b1))
-                current_beams = b1
-
-            elif b2 == b1 > current_beams:
-                if current_beams == 0:
-                    types.append(('begin', 0, b2))
-                else:
-                    types.append(('continue', 0, current_beams))
-                    types.append(('begin', current_beams, b2))
-                current_beams = b1
-
-            elif b2 > b1 <= current_beams:
-                types.append(('continue', 0, b1))
-                current_beams = b1
-
-            elif b2 > b1 > current_beams:
-                if current_beams == 0:
-                    types.append(('begin', 0, b1))
-                else:
-                    types.append(('continue', 0, current_beams))
-                    types.append(('begin', current_beams, b1))
-                current_beams = b1
-        elif b1 and not b2:
-            add_last_beam(chord, b1, current_beams)
-        else:
-            pass
-        for l in types:
-            for n in range(l[1] + 1, l[2] + 1):
-                add_beam(chord, n, l[0])
-        if index == len(chord_group) - 2 and b2:
-            add_last_beam(next_chord, b2, current_beams)

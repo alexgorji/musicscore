@@ -15,7 +15,7 @@ musicxml and quicktions as requirements
 `Beat.add_child` and consequently `Beat._add_chord`, `Voice._add_chord` and `Measure._add_chord` return always a list of
 Chords. `Part._add_chord` returns still None.
 
-`Score.update()`, `Part.update()`, `Measure().update()`, `Beat._update_xml_notes()` and `Chord._update_xml_notes()`
+`Score._update()`, `Part._update()`, `Measure()._update()`, `Beat._update_xml_notes()` and `Chord._update_xml_notes()`
 refactored and renamed
 to x.finalize(). finalize added to Staff and Voice. This method undertakes the last steps for creating
 musicxml tree and can
@@ -32,7 +32,7 @@ first.
 
 * If quantize is set to None the first quantize of ancestors which is `False` or `True` will be returned.
 * If `Score.quantize` is set to None it will be converted to `False`
-* `Measure.finalize()` loops over all beats. If `Beat.quantize` returns True `Beat.quantize_quarter_durations()` is
+* `Measure.finalize()` loops over all beats. If `Beat.quantize` returns True `Beat._quantize_quarter_durations()` is
   called.
 
 # Version 1.2.1

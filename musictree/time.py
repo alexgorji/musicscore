@@ -60,6 +60,13 @@ class Time(XMLWrapper):
                 self._intern_actual_signatures.extend([1, signature[1]] * signature[0])
         return self._intern_actual_signatures
 
+    def _reset_actual_signatures(self) -> None:
+        """
+        Resets actual signatures to None.
+        """
+        self._actual_signatures = None
+        self._intern_actual_signatures = None
+
     def _update_signature_objects(self):
         signatures = [self.signatures[i:i + 2] for i in range(0, len(self.signatures), 2)]
         for beats, beat_type in zip(self._xml_object.find_children('XMLBeats'),
@@ -97,7 +104,7 @@ class Time(XMLWrapper):
             val = _convert_signatures_to_ints(val)
         self._actual_signatures = val
         if self.parent_measure:
-            self.parent_measure.update_voice_beats()
+            self.parent_measure._update_voice_beats()
 
     @property
     def signatures(self) -> List[int]:
@@ -122,7 +129,7 @@ class Time(XMLWrapper):
         self._reset_actual_signatures()
         self._update_signature_objects()
         if self.parent_measure:
-            self.parent_measure.update_voice_beats()
+            self.parent_measure._update_voice_beats()
 
     @property
     def show(self) -> bool:
@@ -152,13 +159,6 @@ class Time(XMLWrapper):
                 [self.actual_signatures[i:i + 2] for i in range(0,
                                                                 len(self.actual_signatures),
                                                                 2)]]
-
-    def _reset_actual_signatures(self) -> None:
-        """
-        Resets actual signatures to None.
-        """
-        self._actual_signatures = None
-        self._intern_actual_signatures = None
 
     def __copy__(self):
         cp = self.__class__(*self.signatures, show=self.show)

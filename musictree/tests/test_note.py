@@ -348,7 +348,7 @@ class TestNote(NoteTestCase):
         assert len(n.xml_notations.xml_articulations.get_children()) == 0
         assert len(n.xml_notations.xml_technical.get_children()) == 1
 
-        n.update_xml_notations()
+        n._update_xml_notations()
         assert len(n.xml_notations.get_children()) == 1
         assert n.xml_notations.xml_articulations is None
         assert len(n.xml_notations.xml_technical.get_children()) == 1
@@ -358,7 +358,7 @@ class TestNote(NoteTestCase):
         assert n.xml_notations.xml_articulations is None
         assert len(n.xml_notations.xml_technical.get_children()) == 0
 
-        n.update_xml_notations()
+        n._update_xml_notations()
         assert n.xml_notations is None
 
 

@@ -66,6 +66,14 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         else:
             self.xml_object.xml_attributes.xml_time = None
 
+    def _split_not_writable_chords(self):
+        """
+        Calls :obj:`~musictree.beat.Beat._split_not_writable_chords()` method of all :obj:`~musictree.beat.Beat` descendents.
+        """
+        for b in [beat for staff in self.get_children() for voice in staff.get_children() for beat in
+                  voice.get_children()]:
+            b._split_not_writable_chords()
+
     def _update_accidentals(self):
 
         for staff in self.get_children():
@@ -152,10 +160,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
                 else:
                     _set_default_clef(index + 1, BassClef(default=True))
 
-    def update_voice_beats(self):
-        """
-        Only for library's internal use: Time.actual_signatures, Time.signatures
-        """
+    def _update_voice_beats(self):
         for staff in self.get_children():
             for voice in staff.get_children():
                 voice.update_beats()
@@ -203,8 +208,8 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
 
         for beat in self.get_beats():
             if beat.quantize:
-                beat.quantize_quarter_durations()
-            beat.split_not_writable_chords()
+                beat._quantize_quarter_durations()
+            beat._split_not_writable_chords()
 
         self.update_divisions()
 
@@ -275,7 +280,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
             val = Time()
         self._time = val
         self._time.parent_measure = self
-        self.update_voice_beats()
+        self._update_voice_beats()
 
     @property
     def quarter_duration(self) -> 'QuarterDuration':
@@ -387,28 +392,10 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         """
         return super().get_parent()
 
-    # def get_voice(self, *, staff_number: int = 1, voice_number: int = 1) -> 'Voice':
-    #     """
-    #     :param staff_number: positive int
-    #     :param voice_number: positive int
-    #     :return: :obj:`~musictree.voice.Voice` if it exists, else ``None``
-    #     """
-    #     staff_object = self.get_staff(staff_number=staff_number)
-    #     if staff_object:
-    #         return staff_object.get_voice(voice_number=voice_number)
-
     def remove(self, child) -> None:
         number = child.value
         super().remove(child)
         self.clefs.pop(number - 1)
-
-    def split_not_writable_chords(self):
-        """
-        Calls :obj:`~musictree.beat.Beat.split_not_writable_chords()` method of all :obj:`~musictree.beat.Beat` descendents.
-        """
-        for b in [beat for staff in self.get_children() for voice in staff.get_children() for beat in
-                  voice.get_children()]:
-            b.split_not_writable_chords()
 
     def update_chord_accidentals(self) -> None:
         """

@@ -163,7 +163,7 @@
     15166    0.007    0.000    0.009    0.000 xsdsimpletype.py:93(<listcomp>)
      3408    0.007    0.000    0.018    0.000 accidental.py:266(get_pitch_parameters)
     16803    0.007    0.000    0.008    0.000 xmlchildcontainer.py:388(requirements_not_fulfilled)
-    20362    0.007    0.000    0.007    0.000 {method 'update' of 'dict' objects}
+    20362    0.007    0.000    0.007    0.000 {method '_update' of 'dict' objects}
     14836    0.007    0.000    0.011    0.000 xsdtree.py:91(is_simple_type)
      1272    0.006    0.000    0.364    0.000 xmlelement.py:53(_check_attribute)
     10098    0.006    0.000    0.008    0.000 accidental.py:259(get_parent)
@@ -186,7 +186,7 @@
      2074    0.005    0.000    0.190    0.000 core.py:27(__init__)
      4239    0.005    0.000    0.109    0.000 xsdcomplextype.py:26(_check_value)
      6634    0.005    0.000    0.030    0.000 xmlchildcontainer.py:462(<listcomp>)
-      105    0.005    0.000    1.716    0.016 beat.py:457(beam_chord_group)
+      105    0.005    0.000    1.716    0.016 beat.py:457(_beam_chord_group)
     29674    0.005    0.000    0.005    0.000 {method 'items' of 'dict' objects}
       310    0.005    0.000    0.026    0.000 xmlchildcontainer.py:466(<listcomp>)
      6805    0.005    0.000    0.012    0.000 chord.py:272(notes)
@@ -201,7 +201,7 @@
      9685    0.004    0.000    0.016    0.000 accidental.py:214(parent_midi)
      6425    0.004    0.000    0.006    0.000 xmlchildcontainer.py:279(<listcomp>)
      2939    0.004    0.000    0.005    0.000 core.py:35(_get_default_keys)
-      826    0.004    0.000    0.495    0.001 note.py:259(update_xml_notations)
+      826    0.004    0.000    0.495    0.001 note.py:259(_update_xml_notations)
       413    0.004    0.000    0.579    0.001 note.py:112(_update_xml_pitch_or_rest)
      4239    0.004    0.000    0.112    0.000 xsdcomplextype.py:39(value)
      7753    0.004    0.000   15.548    0.002 {built-in method builtins.next}
@@ -297,7 +297,7 @@
      1272    0.001    0.000    0.003    0.000 core.py:24(<listcomp>)
       413    0.001    0.000    0.126    0.000 chord.py:171(_update_xml_chord)
      1148    0.001    0.000    0.001    0.000 clef.py:82(xml_object)
-      413    0.001    0.000    1.058    0.003 midi.py:46(update_pitch_or_rest)
+      413    0.001    0.000    1.058    0.003 midi.py:46(_update_pitch_or_rest)
       826    0.001    0.000    1.809    0.002 accidental.py:167(_update_parent_midi)
       804    0.001    0.000    0.009    0.000 numbers.py:91(__sub__)
       105    0.001    0.000    0.540    0.005 measure.py:315(add_staff)
@@ -343,7 +343,7 @@
       105    0.001    0.000    0.021    0.000 measure.py:56(_set_time)
       403    0.001    0.000    0.001    0.000 part.py:320(set_current_measure)
       413    0.001    0.000    0.001    0.000 chord.py:76(_update_xml_directions)
-      105    0.001    0.000    0.133    0.001 beat.py:422(split_not_writable_chords)
+      105    0.001    0.000    0.133    0.001 beat.py:422(_split_not_writable_chords)
       208    0.001    0.000    0.002    0.000 measure.py:224(number)
      1248    0.001    0.000    0.002    0.000 core.py:113(quantize)
       105    0.001    0.000    0.032    0.000 measure.py:198(update_divisions)
@@ -363,7 +363,7 @@
       413    0.001    0.000    0.001    0.000 midi.py:94(<listcomp>)
      2180    0.001    0.000    0.001    0.000 chord.py:248(midis)
      2065    0.001    0.000    0.001    0.000 note.py:202(parent_chord)
-      402    0.001    0.000    0.001    0.000 quarterduration.py:306(check_quarter_duration_value)
+      402    0.001    0.000    0.001    0.000 quarterduration.py:306(_check_quarter_duration_value)
       105    0.001    0.000    0.001    0.000 time.py:26(_calculate_actual_signatures)
       826    0.001    0.000    0.001    0.000 quarterduration.py:78(as_integer_ratio)
       413    0.001    0.000    0.001    0.000 note.py:50(_check_xml_duration_value)
@@ -460,7 +460,7 @@
       402    0.000    0.000    0.000    0.000 voice.py:37(leftover_chord)
       113    0.000    0.000    0.001    0.000 xsdindicator.py:51(xsd_tree)
     43/35    0.000    0.000    0.000    0.000 {built-in method _abc._abc_subclasscheck}
-      105    0.000    0.000    0.000    0.000 measure.py:142(update_voice_beats)
+      105    0.000    0.000    0.000    0.000 measure.py:142(_update_voice_beats)
       131    0.000    0.000    0.000    0.000 {built-in method math.lcm}
         2    0.000    0.000    0.000    0.000 sre_parse.py:493(_parse)
       107    0.000    0.000    0.000    0.000 part.py:190(xml_object)
@@ -494,7 +494,7 @@
         1    0.000    0.000   19.416   19.416 score.py:242(export_xml)
       141    0.000    0.000    0.000    0.000 sre_parse.py:233(__next)
        11    0.000    0.000    0.102    0.009 midi.py:191(__deepcopy__)
-       11    0.000    0.000    0.103    0.009 chord.py:574(split_copy)
+       11    0.000    0.000    0.103    0.009 chord.py:574(_split_copy)
        48    0.000    0.000    0.000    0.000 xsdtree.py:48(<listcomp>)
       112    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
         1    0.000    0.000   27.237   27.237 {built-in method builtins.exec}

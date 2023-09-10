@@ -36,7 +36,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     def __init__(self, midi, quarter_duration=None, *args, **kwargs):
         self._midi = None
-        # self._parent_chord = parent_chord
         self._parent_chord = midi.parent_chord
         self._xml_object = self.XMLClass(*args, **kwargs)
         self._type = None
@@ -158,6 +157,32 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     def _update_xml_voice(self):
         self.xml_object.xml_voice = str(self.get_voice_number())
 
+    def _update_xml_notations(self):
+        """
+        If ``self.xml_object.xml_notations`` has children of types :obj:`~musicxml.xmlelement.xmlelement.XMLArticulation` oder
+        :obj:`~musicxml.xmlelement.xmlelement.XMLTechnical`, :obj:`~musicxml.xmlelement.xmlelement.XMLOrnaments`,
+        :obj:`~musicxml.xmlelement.xmlelement.XMLDynamics`
+        which have no children themselves, these will be removed.
+        ``self.xml_object.xml_notations`` will be removed itself if it has no children.
+
+        :return: None
+        """
+        if self.xml_object.xml_notations:
+            if self.xml_object.xml_notations.xml_articulations and not self.xml_object.xml_notations.xml_articulations.get_children():
+                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_articulations)
+
+            if self.xml_object.xml_notations.xml_technical and not self.xml_object.xml_notations.xml_technical.get_children():
+                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_technical)
+
+            if self.xml_object.xml_notations.xml_ornaments and not self.xml_object.xml_notations.xml_ornaments.get_children():
+                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_ornaments)
+
+            if self.xml_object.xml_notations.xml_dynamics and not self.xml_object.xml_notations.xml_dynamics.get_children():
+                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_dynamics)
+
+            if not self.xml_object.xml_notations.get_children():
+                self.xml_object.remove(self.xml_object.xml_notations)
+
     def _update_xml_notehead(self):
         self.xml_object.xml_notehead = self.midi.notehead
 
@@ -268,32 +293,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         if not self.xml_object.xml_notations:
             self.xml_object.xml_notations = XMLNotations()
         return self.xml_object.xml_notations
-
-    def update_xml_notations(self):
-        """
-        If ``self.xml_object.xml_notations`` has children of types :obj:`~musicxml.xmlelement.xmlelement.XMLArticulation` oder
-        :obj:`~musicxml.xmlelement.xmlelement.XMLTechnical`, :obj:`~musicxml.xmlelement.xmlelement.XMLOrnaments`,
-        :obj:`~musicxml.xmlelement.xmlelement.XMLDynamics`
-        which have no children themselves, these will be removed.
-        ``self.xml_object.xml_notations`` will be removed itself if it has no children.
-
-        :return: None
-        """
-        if self.xml_object.xml_notations:
-            if self.xml_object.xml_notations.xml_articulations and not self.xml_object.xml_notations.xml_articulations.get_children():
-                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_articulations)
-
-            if self.xml_object.xml_notations.xml_technical and not self.xml_object.xml_notations.xml_technical.get_children():
-                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_technical)
-
-            if self.xml_object.xml_notations.xml_ornaments and not self.xml_object.xml_notations.xml_ornaments.get_children():
-                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_ornaments)
-
-            if self.xml_object.xml_notations.xml_dynamics and not self.xml_object.xml_notations.xml_dynamics.get_children():
-                self.xml_object.xml_notations.remove(self.xml_object.xml_notations.xml_dynamics)
-
-            if not self.xml_object.xml_notations.get_children():
-                self.xml_object.remove(self.xml_object.xml_notations)
 
     def get_parent_measure(self) -> 'Measure':
         """

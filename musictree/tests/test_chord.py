@@ -6,7 +6,7 @@ from quicktions import Fraction
 from musictree import BassClef, Score, Part
 from musictree.accidental import Accidental
 from musictree.beat import Beat
-from musictree.chord import Chord, split_copy, group_chords, GraceChord
+from musictree.chord import Chord, _split_copy, _group_chords, GraceChord
 from musictree.exceptions import ChordHasNoParentError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
     ChordException, MusicTreeException, ChordAddXException, ChordAddXPlacementException
 from musictree.midi import Midi
@@ -329,10 +329,10 @@ class TestTreeChord(ChordTestCase):
     def test_group_chords(self):
         chords = [Chord(60, qd) for qd in [1 / 6, 1 / 6, 1 / 6, 1 / 10, 3 / 10, 1 / 10]]
         with self.assertRaises(ValueError):
-            assert group_chords(chords, [1 / 2, 1 / 2, 1 / 2])
-        assert group_chords(chords, [1 / 2, 1 / 2]) == [chords[:3], chords[3:]]
-        assert group_chords(chords, [1 / 3, 2 / 3]) == [chords[:2], chords[2:]]
-        assert group_chords(chords, [1 / 4, 3 / 4]) is None
+            assert _group_chords(chords, [1 / 2, 1 / 2, 1 / 2])
+        assert _group_chords(chords, [1 / 2, 1 / 2]) == [chords[:3], chords[3:]]
+        assert _group_chords(chords, [1 / 3, 2 / 3]) == [chords[:2], chords[2:]]
+        assert _group_chords(chords, [1 / 4, 3 / 4]) is None
 
     def test_has_same_pitches(self):
         ch1 = Chord([60, Midi(61), 62], 1)
@@ -477,7 +477,7 @@ class TestTies(ChordTestCase):
 
     def test_split_tied_copy(self):
         ch = Chord(midis=60, quarter_duration=1)
-        copied = split_copy(ch)
+        copied = _split_copy(ch)
         assert ch.midis[0]._ties == copied.midis[0]._ties == set()
 
     def test_tie_one_note(self):
@@ -549,7 +549,7 @@ class TestSplit(TestCase):
     def test_set_original_starting_ties(self):
         ch = Chord(midis=[60, 61], quarter_duration=1)
         ch._set_original_starting_ties(ch)
-        copied = split_copy(ch)
+        copied = _split_copy(ch)
         assert copied._original_starting_ties == [set(), set()]
         ch.midis[0].add_tie('start')
         ch._set_original_starting_ties(ch)
@@ -557,7 +557,7 @@ class TestSplit(TestCase):
 
     def test_split_copy(self):
         ch = Chord(midis=[Midi(61, accidental=Accidental(mode='sharp'))], quarter_duration=2, offset=0.5)
-        copied = split_copy(ch)
+        copied = _split_copy(ch)
         assert ch.midis != copied.midis
         assert ch.midis[0].value == copied.midis[0].value
         assert ch.midis[0].accidental != copied.midis[0].accidental
@@ -569,13 +569,13 @@ class TestSplit(TestCase):
     def test_tied_split_copy(self):
         ch = Chord(midis=61, quarter_duration=2)
         ch.add_tie('start')
-        copied = split_copy(ch)
+        copied = _split_copy(ch)
         for m in copied.midis:
             assert m._ties == set()
 
     def test_split_quarter_durations(self):
         ch = Chord(midis=60, quarter_duration=4)
-        copied = split_copy(ch)
+        copied = _split_copy(ch)
         assert id(ch.quarter_duration) != id(copied.quarter_duration)
         ch.quarter_duration = 2
         assert copied.quarter_duration == 4
@@ -585,7 +585,7 @@ class TestSplit(TestCase):
         beats = [Beat(1), Beat(1), Beat(1), Beat(1)]
         quarter_durations = ch.quarter_duration.get_beatwise_sections(beats=beats)
         ch.quarter_duration = quarter_durations[0][0]
-        copied = split_copy(ch, quarter_durations[1])
+        copied = _split_copy(ch, quarter_durations[1])
         assert [ch.quarter_duration, copied.quarter_duration] == [4, 1]
 
 

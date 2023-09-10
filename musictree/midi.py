@@ -31,7 +31,13 @@ class Midi(MusicTree):
         self.value = value
         self.accidental = accidental
 
-    def update_parent_note(self):
+    def _set_parent_chord(self, value):
+        if value is not None and 'Chord' not in [cls.__name__ for cls in value.__class__.__mro__]:
+            raise TypeError
+        self._parent_chord = value
+        # self._parent = value
+
+    def _update_parent_note(self):
         if self.parent_note:
             self.parent_note._update_xml_pitch_or_rest()
             self.parent_note._update_xml_accidental()
@@ -49,7 +55,7 @@ class Midi(MusicTree):
         else:
             raise TypeError
 
-    def update_pitch_or_rest(self):
+    def _update_pitch_or_rest(self):
         if self._pitch_or_rest is None:
             if self.value == 0:
                 self._pitch_or_rest = XMLRest()
@@ -59,13 +65,13 @@ class Midi(MusicTree):
             if self.value == 0:
                 if not isinstance(self._pitch_or_rest, XMLRest):
                     self._pitch_or_rest = XMLRest()
-                    self.update_parent_note()
+                    self._update_parent_note()
                 else:
                     pass
             else:
                 if not isinstance(self._pitch_or_rest, XMLPitch):
                     self._pitch_or_rest = XMLPitch()
-                    self.update_parent_note()
+                    self._update_parent_note()
                 if self.accidental:
                     self.accidental._update_xml_object()
                     self._update_pitch_parameters()
@@ -125,12 +131,6 @@ class Midi(MusicTree):
     def parent_chord(self):
         return self._parent_chord
 
-    def _set_parent_chord(self, value):
-        if value is not None and 'Chord' not in [cls.__name__ for cls in value.__class__.__mro__]:
-            raise TypeError
-        self._parent_chord = value
-        # self._parent = value
-
     @property
     def parent_note(self):
         return self._parent_note
@@ -154,7 +154,7 @@ class Midi(MusicTree):
             raise ValueError(
                 f'Midi.value {v} can be zero for a rest or must be in a range between 12 and 127 inclusively')
         self._value = v
-        self.update_pitch_or_rest()
+        self._update_pitch_or_rest()
 
     @property
     def name(self):
@@ -192,7 +192,7 @@ class Midi(MusicTree):
         if self.parent_chord and self.parent_chord._finalized is True:
             raise AlreadyFinalized(self, 'add_child')
         super().add_child(child)
-        child.update()
+        child._update()
         return child
 
     def add_tie(self, type_):
@@ -263,7 +263,7 @@ class Midi(MusicTree):
         copied._ties = copy.copy(self._ties)
         return copied
 
-    def copy_for_split(self):
+    def _copy_for_split(self):
         copied_accidental = copy.copy(self.accidental)
         copied = self.__class__(value=self.value, accidental=copied_accidental)
         copied.notehead = self.notehead
@@ -328,7 +328,7 @@ class MidiNote(Midi):
         copied._ties = copy.copy(self._ties)
         return copied
 
-    def copy_for_split(self):
+    def _copy_for_split(self):
         copied_accidental = copy.copy(self.accidental)
         copied = Midi(value=self.value, accidental=copied_accidental)
         copied.notehead = self.notehead
