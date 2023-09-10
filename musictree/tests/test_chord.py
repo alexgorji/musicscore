@@ -11,7 +11,7 @@ from musictree.exceptions import ChordHasNoParentError, DeepCopyException, Chord
     ChordException, MusicTreeException
 from musictree.midi import Midi
 from musictree.quarterduration import QuarterDuration
-from musictree.tests.util import ChordTestCase, create_articulation, create_technical, create_ornament, IdTestCase
+from musictree.tests.util import ChordTestCase, create_test_objects
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, \
     XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS
 from musicxml.xmlelement.xmlelement import *
@@ -699,23 +699,26 @@ class TestAddGraceChord(ChordTestCase):
 
 
 class TestAddX(ChordTestCase):
+    def setUp(self):
+        super().setUp()
+        self.score = Score()
+        self.part = self.score.add_part('p1')
 
     def test_add_x_parent_type(self):
         ch = Chord(60, 1)
         ch.add_x(XML_DIRECTION_TYPE_CLASSES[0]())
 
     def test_add_x_placement(self):
-        # direction_type object and notation objects of types technical, articulation and ornament
-        x_objects = [XML_DIRECTION_TYPE_CLASSES[0](), XML_TECHNICAL_CLASSES[0](),
-                     XML_ARTICULATION_CLASSES[0](), XML_ORNAMENT_CLASSES[0]()]
 
-        for x in x_objects:
+        # direction_type objects
+
+        for x in create_articulation():
             for placement in ['above', 'below']:
                 ch = Chord(60, 1)
                 ch.add_x(x, placement=placement)
-                ch._parent = self.mock_beat
-                ch.finalize()
-                print(ch.notes[0].to_string())
+                self.part.add_chord(ch)
+
+        print(self.part.to_string())
 
         # notation only objects does not accept placement (except fermata)
         notation_object = XML_OTHER_NOTATIONS[0]()
@@ -738,11 +741,11 @@ class TestAddX(ChordTestCase):
     def test_add_articulation_after_creating_notes(self):
         ch = Chord(60, 1)
         ch._parent = self.mock_beat
-        staccato = ch.add_x(create_articulation(XMLStaccato))
+        staccato = ch.add_x(XMLStaccato())
         ch.finalize()
         assert ch.notes[0].xml_notations.xml_articulations.get_children() == [staccato]
         assert isinstance(ch.notes[0].xml_notations.xml_articulations.get_children()[0], XMLStaccato)
-        accent = ch.add_x(create_articulation(XMLAccent))
+        accent = ch.add_x(XMLAccent())
         assert ch.notes[0].xml_notations.xml_articulations.get_children() == [staccato, accent]
 
     def test_add_multiple_articulations(self):
@@ -758,20 +761,20 @@ class TestAddX(ChordTestCase):
         assert [type(a) for a in n.xml_notations.xml_articulations.get_children()] == articulation_classes
 
     def test_chord_add_x_as_object_articulation(self):
-        for cls in XML_ARTICULATION_CLASSES:
+        for obj in create_test_objects('articulation'):
             ch = Chord(60, 1)
-            ch.add_x(create_articulation(cls))
+            ch.add_x(obj)
             ch._parent = self.mock_beat
             ch.finalize()
-            assert isinstance(ch.notes[0].xml_notations.xml_articulations.get_children()[0], cls)
+            assert ch.notes[0].xml_notations.xml_articulations.get_children()[0] == obj
 
     def test_chord_add_x_as_object_technical(self):
-        for cls in XML_TECHNICAL_CLASSES:
+        for obj in create_test_objects('technical'):
             ch = Chord(60, 1)
-            ch.add_x(create_technical(cls))
+            ch.add_x(obj)
             ch._parent = self.mock_beat
             ch.finalize()
-            assert isinstance(ch.notes[0].xml_notations.xml_technical.get_children()[0], cls)
+            assert ch.notes[0].xml_notations.xml_technical.get_children()[0] == obj
 
     def test_chord_add_x_as_object_dynamics(self):
         for cls in XML_DYNAMIC_CLASSES:
@@ -782,12 +785,15 @@ class TestAddX(ChordTestCase):
             assert isinstance(ch.notes[0].xml_notations.xml_dynamics.get_children()[0], cls)
 
     def test_chord_add_x_as_object_ornaments(self):
-        for cls in XML_ORNAMENT_CLASSES[1:]:
+        for obj in create_test_objects('ornament'):
             ch = Chord(60, 1)
-            ch.add_x(create_ornament(cls))
+            if isinstance(obj, XMLAccidentalMark):
+                ch.add_x(obj, parent_type='ornament')
+            else:
+                ch.add_x(obj)
             ch._parent = self.mock_beat
             ch.finalize()
-            assert isinstance(ch.notes[0].xml_notations.xml_ornaments.get_children()[0], cls)
+            assert ch.notes[0].xml_notations.xml_ornaments.get_children()[0] == obj
 
     def test_chord_add_x_trill_with_wavy_line_and_accidental_mark(self):
         ch = Chord(60, 1)

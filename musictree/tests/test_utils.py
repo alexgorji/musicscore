@@ -4,8 +4,10 @@ from unittest import TestCase, skip
 from musictree.midi import C
 
 from musictree.score import Score
-from musictree.tests.util import diff_xml, _create_expected_path, find_key
-from musictree.util import lcm, isinstance_as_string
+from musictree.tests.util import diff_xml, _create_expected_path, create_test_objects
+from musictree.util import lcm, isinstance_as_string, XML_DYNAMIC_CLASSES, XML_ARTICULATION_CLASSES, \
+    XML_ORNAMENT_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, XML_TECHNICAL_CLASSES, XML_OTHER_NOTATIONS, \
+    XML_DIRECTION_TYPE_CLASSES, XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
 
 
 class TestUtils(TestCase):
@@ -43,159 +45,40 @@ class TestUtils(TestCase):
         assert lcm([2, 4, 6]) == 12
 
 
-class TestFindKey(TestCase):
-    def setUp(self):
-        self.dict = {'part': {'@id': 'part-1',
-                              'measure': [{'@number': '1',
-                                           'attributes': {'clef': [{'@number': '1',
-                                                                    'clef-octave-change': '2',
-                                                                    'line': '2',
-                                                                    'sign': 'G'},
-                                                                   {'@number': '2',
-                                                                    'line': '2',
-                                                                    'sign': 'G'},
-                                                                   {'@number': '3',
-                                                                    'line': '4',
-                                                                    'sign': 'F'}],
-                                                          'divisions': '1',
-                                                          'key': {'fifths': '0'},
-                                                          'staves': '3',
-                                                          'time': {'beat-type': '4', 'beats': '4'}},
-                                           'backup': [{'duration': '4'}, {'duration': '4'}],
-                                           'note': [{'duration': '1',
-                                                     'pitch': {'octave': '4', 'step': 'C'},
-                                                     'staff': '1',
-                                                     'type': 'quarter',
-                                                     'voice': '1'},
-                                                    {'accidental': 'sharp',
-                                                     'duration': '2',
-                                                     'pitch': {'alter': '1',
-                                                               'octave': '4',
-                                                               'step': 'C'},
-                                                     'staff': '1',
-                                                     'type': 'half',
-                                                     'voice': '1'},
-                                                    {'duration': '1',
-                                                     'notations': {'tied': {'@type': 'start'}},
-                                                     'pitch': {'octave': '4', 'step': 'D'},
-                                                     'staff': '1',
-                                                     'tie': {'@type': 'start'},
-                                                     'type': 'quarter',
-                                                     'voice': '1'},
-                                                    {'accidental': 'flat',
-                                                     'dot': None,
-                                                     'duration': '3',
-                                                     'pitch': {'alter': '-1',
-                                                               'octave': '4',
-                                                               'step': 'E'},
-                                                     'staff': '2',
-                                                     'type': 'half',
-                                                     'voice': '1'},
-                                                    {'accidental': 'natural',
-                                                     'duration': '1',
-                                                     'notations': {'tied': {'@type': 'start'}},
-                                                     'pitch': {'octave': '4', 'step': 'E'},
-                                                     'staff': '2',
-                                                     'tie': {'@type': 'start'},
-                                                     'type': 'quarter',
-                                                     'voice': '1'},
-                                                    {'duration': '1',
-                                                     'pitch': {'octave': '4', 'step': 'C'},
-                                                     'staff': '3',
-                                                     'type': 'quarter',
-                                                     'voice': '1'},
-                                                    {'accidental': 'flat',
-                                                     'chord': None,
-                                                     'duration': '1',
-                                                     'pitch': {'alter': '-1',
-                                                               'octave': '4',
-                                                               'step': 'E'},
-                                                     'staff': '3',
-                                                     'type': 'quarter',
-                                                     'voice': '1'},
-                                                    {'accidental': 'sharp',
-                                                     'duration': '2',
-                                                     'pitch': {'alter': '1',
-                                                               'octave': '4',
-                                                               'step': 'C'},
-                                                     'staff': '3',
-                                                     'type': 'half',
-                                                     'voice': '1'},
-                                                    {'duration': '1',
-                                                     'notations': {'tied': {'@type': 'start'}},
-                                                     'pitch': {'octave': '4', 'step': 'D'},
-                                                     'staff': '3',
-                                                     'tie': {'@type': 'start'},
-                                                     'type': 'quarter',
-                                                     'voice': '1'},
-                                                    {'accidental': 'natural',
-                                                     'chord': None,
-                                                     'duration': '1',
-                                                     'notations': {'tied': {'@type': 'start'}},
-                                                     'pitch': {'octave': '4', 'step': 'E'},
-                                                     'staff': '3',
-                                                     'tie': {'@type': 'start'},
-                                                     'type': 'quarter',
-                                                     'voice': '1'}]},
-                                          {'@number': '2',
-                                           'attributes': {'divisions': '1', 'staves': '3'},
-                                           'backup': [{'duration': '4'}, {'duration': '4'}],
-                                           'note': [{'duration': '2',
-                                                     'notations': {'tied': {'@type': 'stop'}},
-                                                     'pitch': {'octave': '4', 'step': 'D'},
-                                                     'staff': '1',
-                                                     'tie': {'@type': 'stop'},
-                                                     'type': 'half',
-                                                     'voice': '1'},
-                                                    {'duration': '1',
-                                                     'notations': {'tied': {'@type': 'stop'}},
-                                                     'pitch': {'octave': '4', 'step': 'E'},
-                                                     'staff': '2',
-                                                     'tie': {'@type': 'stop'},
-                                                     'type': 'quarter',
-                                                     'voice': '1'},
-                                                    {'duration': '1',
-                                                     'pitch': {'octave': '4', 'step': 'F'},
-                                                     'staff': '2',
-                                                     'type': 'quarter',
-                                                     'voice': '1'},
-                                                    {'duration': '1',
-                                                     'notations': {'tied': {'@type': 'stop'}},
-                                                     'pitch': {'octave': '4', 'step': 'D'},
-                                                     'staff': '3',
-                                                     'tie': {'@type': 'stop'},
-                                                     'type': 'quarter',
-                                                     'voice': '1'},
-                                                    {'chord': None,
-                                                     'duration': '1',
-                                                     'notations': {'tied': {'@type': 'stop'}},
-                                                     'pitch': {'octave': '4', 'step': 'E'},
-                                                     'staff': '3',
-                                                     'tie': {'@type': 'stop'},
-                                                     'type': 'quarter',
-                                                     'voice': '1'},
-                                                    {'duration': '1',
-                                                     'pitch': {'octave': '4', 'step': 'F'},
-                                                     'staff': '3',
-                                                     'type': 'quarter',
-                                                     'voice': '1'}]}]}}
+class TestTestObjects(TestCase):
 
-    @skip
     def test_direction_type_test_objects(self):
-        self.fail()
+        test_object = create_test_objects(type_='direction_type')
+        assert len(XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS) == len(test_object)
+        for obj in test_object:
+            assert obj.__class__ in XML_DIRECTION_TYPE_CLASSES or obj.__class__ in XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
 
-    @skip
     def test_ornament_test_objects(self):
-        self.fail()
+        test_object = create_test_objects(type_='ornament')
+        assert len(XML_ORNAMENT_CLASSES + XML_ORNAMENT_AND_OTHER_NOTATIONS) == len(test_object)
+        for obj in test_object:
+            assert obj.__class__ in XML_ORNAMENT_CLASSES + XML_ORNAMENT_AND_OTHER_NOTATIONS
 
-    @skip
     def test_technical_test_objects(self):
-        self.fail()
+        test_object = create_test_objects(type_='technical')
+        assert len(XML_TECHNICAL_CLASSES) == len(test_object)
+        for obj in test_object:
+            assert obj.__class__ in XML_TECHNICAL_CLASSES
 
-    @skip
     def test_articulation_test_objects(self):
-        self.fail()
+        test_object = create_test_objects(type_='articulation')
+        assert len(XML_ARTICULATION_CLASSES) == len(test_object)
+        for obj in test_object:
+            assert obj.__class__ in XML_ARTICULATION_CLASSES
 
-    @skip
     def test_other_notation_test_objects(self):
-        self.fail()
+        test_object = create_test_objects(type_='notation')
+        assert len(XML_OTHER_NOTATIONS + XML_ORNAMENT_AND_OTHER_NOTATIONS) == len(test_object)
+        for obj in test_object:
+            assert obj.__class__ in XML_OTHER_NOTATIONS + XML_ORNAMENT_AND_OTHER_NOTATIONS
+
+    def test_dynamics_test_objects(self):
+        test_object = create_test_objects(type_='dynamics')
+        assert len(XML_DYNAMIC_CLASSES) == len(test_object)
+        for obj in test_object:
+            assert obj.__class__ in XML_DYNAMIC_CLASSES

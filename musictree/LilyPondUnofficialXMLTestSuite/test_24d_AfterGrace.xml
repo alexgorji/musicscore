@@ -81,7 +81,6 @@
         </pitch>
         <voice>1</voice>
         <type>16th</type>
-        <beam number="1">end</beam>
       </note>
       <note>
         <grace />
@@ -91,8 +90,6 @@
         </pitch>
         <voice>1</voice>
         <type>16th</type>
-        <beam number="1">begin</beam>
-        <beam number="1">end</beam>
       </note>
       <note>
         <pitch>

@@ -12,7 +12,10 @@ from quicktions import Fraction
 
 from musictree import generate_measures, Chord, C
 from musictree.part import Id
-from musicxml.xmlelement.xmlelement import XMLBendAlter, XMLHoleClosed, XMLArrowDirection, XMLHarmonClosed
+from musicxml.xmlelement.xmlelement import *
+from musictree.util import XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_OTHER_NOTATIONS, \
+    XML_ORNAMENT_CLASSES, XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, \
+    XML_ORNAMENT_AND_OTHER_NOTATIONS
 
 
 class XMLsDifferException(Exception):
@@ -20,8 +23,8 @@ class XMLsDifferException(Exception):
 
 
 notehead_values = ['slash', 'triangle', 'diamond', 'square', 'rectangle', 'cross', 'x', 'circle dot', 'circle-x',
-                    'circled', 'inverted triangle', 'left triangle', 'arrow down', 'arrow up', 'slashed',
-                    'back slashed', 'normal', 'cluster', 'none']
+                   'circled', 'inverted triangle', 'left triangle', 'arrow down', 'arrow up', 'slashed',
+                   'back slashed', 'normal', 'cluster', 'none']
 notehead_aikin_values = ['do', 're', 'mi', 'fa', 'fa up', 'so', 'la', 'ti']
 
 
@@ -176,76 +179,46 @@ def generate_all_triplets():
     return output
 
 
-def create_technical(class_):
-    if class_.__name__ == 'XMLFingering':
-        technical = class_('2')
-    elif class_.__name__ == 'XMLPluck':
-        technical = class_('something')
-    elif class_.__name__ == 'XMLFret':
-        technical = class_(2)
-    elif class_.__name__ == 'XMLString':
-        technical = class_(2)
-    elif class_.__name__ == 'XMLTap':
-        technical = class_('2')
-    elif class_.__name__ == 'XMLHandbell':
-        technical = class_('damp')
-    elif class_.__name__ == 'XMLHarmonClosed':
-        technical = class_('yes')
-    elif class_.__name__ == 'XMLOtherTechnical':
-        technical = class_('bla')
-    else:
-        technical = class_()
-    if class_.__name__ == 'XMLBend':
-        technical.add_child(XMLBendAlter(2))
-    elif class_.__name__ == 'XMLHole':
-        technical.add_child(XMLHoleClosed('yes'))
-    elif class_.__name__ == 'XMLArrow':
-        technical.add_child(XMLArrowDirection('up'))
-    elif class_.__name__ == 'XMLHarmonMute':
-        technical.add_child(XMLHarmonClosed('yes'))
-
-    return technical
-
-
-def create_articulation(class_):
-    if class_.__name__ == 'XMLBreathMark':
-        articulation = class_('comma')
-    elif class_.__name__ == 'XMLCaesura':
-        articulation = class_('normal')
-    else:
-        articulation = class_()
-    return articulation
+# def create_technical(class_):
+#     if class_.__name__ == 'XMLFingering':
+#         technical = class_('2')
+#     elif class_.__name__ == 'XMLPluck':
+#         technical = class_('something')
+#     elif class_.__name__ == 'XMLFret':
+#         technical = class_(2)
+#     elif class_.__name__ == 'XMLString':
+#         technical = class_(2)
+#     elif class_.__name__ == 'XMLTap':
+#         technical = class_('2')
+#     elif class_.__name__ == 'XMLHandbell':
+#         technical = class_('damp')
+#     elif class_.__name__ == 'XMLHarmonClosed':
+#         technical = class_('yes')
+#     elif class_.__name__ == 'XMLOtherTechnical':
+#         technical = class_('bla')
+#     else:
+#         technical = class_()
+#     if class_.__name__ == 'XMLBend':
+#         technical.add_child(XMLBendAlter(2))
+#     elif class_.__name__ == 'XMLHole':
+#         technical.add_child(XMLHoleClosed('yes'))
+#     elif class_.__name__ == 'XMLArrow':
+#         technical.add_child(XMLArrowDirection('up'))
+#     elif class_.__name__ == 'XMLHarmonMute':
+#         technical.add_child(XMLHarmonClosed('yes'))
+#
+#     return technical
 
 
-def create_ornament(class_):
-    if class_.__name__ == 'XMLAccidentalMark':
-        ornament = class_('sharp')
-    elif class_.__name__ == 'XMLTremolo':
-        ornament = class_(3)
-    elif class_.__name__ == 'XMLWavyLine':
-        ornament = class_(type='start')
-    else:
-        ornament = class_()
-    return ornament
+# def create_articulation(class_):
+#     if class_.__name__ == 'XMLBreathMark':
+#         articulation = class_('comma')
+#     elif class_.__name__ == 'XMLCaesura':
+#         articulation = class_('normal')
+#     else:
+#         articulation = class_()
+#     return articulation
 
-
-def _find_key(dict_, key, output=None):
-    if output is None:
-        output = []
-    for k in dict_:
-        if k == key:
-            output.append({k: dict_[k]})
-        if isinstance(dict_[k], dict):
-            o = _find_key(dict_[k], key, output=output)
-            if o:
-                output.append(o)
-    if not output:
-        return None
-    return output
-
-
-def find_key(dict_, key):
-    return _find_key(dict_, key)
 
 
 def get_xml_elements_diff(el1, el2):
@@ -281,3 +254,91 @@ def generate_path(frame):
     f = str(inspect.getframeinfo(frame).function) + '.xml'
     path = Path(inspect.getframeinfo(frame).filename).parent / f
     return path
+
+
+def create_test_objects(type_):
+    output = []
+    if type_ == 'direction_type':
+        for cl in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
+            if cl == XMLSymbol:
+                obj = cl('0')
+            elif cl == XMLWedge:
+                obj = cl(type='crescendo')
+            elif cl == XMLDashes:
+                obj = cl(type='start')
+            elif cl == XMLBracket:
+                obj = cl(type='start', line_end='none')
+            elif cl == XMLPedal:
+                obj = cl(type='start')
+            elif cl == XMLMetronome:
+                obj = cl()
+                obj.add_child(XMLBeatUnit('quarter'))
+                obj.add_child(XMLPerMinute('120'))
+            elif cl == XMLOctaveShift:
+                obj = cl(type='up')
+            elif cl == XMLHarpPedals:
+                obj = cl()
+                pt = obj.add_child(XMLPedalTuning())
+                pt.add_child(XMLPedalStep('A'))
+                pt.add_child(XMLPedalAlter(1))
+            elif cl == XMLStringMute:
+                obj = cl(type='on')
+            elif cl == XMLScordatura:
+                obj = cl()
+                acc = obj.add_child(XMLAccord())
+                acc.add_child(XMLTuningStep('A'))
+                acc.add_child(XMLTuningOctave(0))
+            # elif cl == XMLImage:
+            #     obj = cl(source='www.example.com', type='image/gif')
+            elif cl == XMLPrincipalVoice:
+                obj = cl(type='start', symbol='none')
+            elif cl == XMLPercussion:
+                obj = cl()
+                obj.add_child(XMLWood('cabasa'))
+            elif cl == XMLStaffDivide:
+                obj = cl(type='up')
+            else:
+                obj = cl()
+            output.append(obj)
+
+    elif type_ == 'technical':
+        for cl in XML_TECHNICAL_CLASSES:
+            if cl == XMLFret:
+                obj = cl(1)
+            elif cl == XMLString:
+                obj = cl(1)
+            elif cl == XMLHandbell:
+                obj = cl('belltree')
+            else:
+                obj = cl()
+            output.append(obj)
+
+    elif type_ == 'ornament':
+        for cl in XML_ORNAMENT_AND_OTHER_NOTATIONS + XML_ORNAMENT_CLASSES:
+            if cl == XMLAccidentalMark:
+                obj = cl('sharp')
+            elif cl == XMLTremolo:
+                obj = cl(3)
+            else:
+                obj = cl()
+            output.append(obj)
+
+    elif type_ == 'notation':
+        for cl in XML_OTHER_NOTATIONS + XML_ORNAMENT_AND_OTHER_NOTATIONS:
+            if cl == XMLAccidentalMark:
+                obj = cl('sharp')
+            else:
+                obj = cl()
+            output.append(obj)
+
+    elif type_ == 'articulation':
+        for cl in XML_ARTICULATION_CLASSES:
+            obj = cl()
+            output.append(obj)
+    elif type_ == 'dynamics':
+        for cl in XML_DYNAMIC_CLASSES:
+            obj = cl()
+            output.append(obj)
+    else:
+        raise NotImplementedError(f"type_ {type_}")
+    return output

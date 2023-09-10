@@ -64,7 +64,7 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <fermata placement="below" />
+          <fermata />
         </notations>
       </note>
       <note>

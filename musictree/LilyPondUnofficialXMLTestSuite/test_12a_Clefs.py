@@ -5,18 +5,22 @@ from pathlib import Path
 
 from musictree import AltoClef, TenorClef, BassClef, TrebleClef, Score, Chord
 from musictree.clef import PercussionClef, Clef
+from musictree.tests.util import IdTestCase
 
 clefs = [TrebleClef(), AltoClef(), TenorClef(), BassClef(), PercussionClef(), TrebleClef(octave_change=-1),
          BassClef(octave_change=-1), Clef(sign='G', line=1), Clef(sign='F', line=3), Clef(sign='C', line=5),
          Clef(sign='C', line=2), Clef(sign='C', line=1), PercussionClef(), TrebleClef(octave_change=1),
          BassClef(octave_change=1), Clef(sign='TAB'), Clef('none'), TrebleClef()]
 
-score = Score()
-part = score.add_part('p1')
-for c in clefs:
-    ch = Chord(60, 4)
-    part.add_chord(ch)
-    part.get_current_measure().get_staff(1).clef = c
 
-xml_path = Path(__file__).with_suffix('.xml')
-score.export_xml(xml_path)
+class TestLily12a(IdTestCase):
+    def test_lily_12a_Clefs(self):
+        score = Score()
+        part = score.add_part('p1')
+        for c in clefs:
+            ch = Chord(60, 4)
+            part.add_chord(ch)
+            part.get_current_measure().get_staff(1).clef = c
+
+        xml_path = Path(__file__).with_suffix('.xml')
+        score.export_xml(xml_path)

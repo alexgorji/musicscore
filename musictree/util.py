@@ -73,10 +73,16 @@ XML_OTHER_NOTATIONS = [XMLArpeggiate, XMLFermata, XMLFootnote, XMLGlissando, XML
                        XMLOtherNotation, XMLSlide,
                        XMLSlur]
 
+# XML_DIRECTION_TYPE_CLASSES = [
+#     XMLRehearsal, XMLSegno, XMLCoda, XMLWords, XMLSymbol, XMLWedge, XMLDashes, XMLBracket, XMLPedal,
+#     XMLMetronome, XMLOctaveShift, XMLHarpPedals, XMLDamp, XMLDampAll, XMLEyeglasses, XMLStringMute, XMLScordatura,
+#     XMLImage, XMLPrincipalVoice, XMLPercussion, XMLAccordionRegistration, XMLStaffDivide, XMLOtherDirection
+# ]
+
 XML_DIRECTION_TYPE_CLASSES = [
     XMLRehearsal, XMLSegno, XMLCoda, XMLWords, XMLSymbol, XMLWedge, XMLDashes, XMLBracket, XMLPedal,
     XMLMetronome, XMLOctaveShift, XMLHarpPedals, XMLDamp, XMLDampAll, XMLEyeglasses, XMLStringMute, XMLScordatura,
-    XMLImage, XMLPrincipalVoice, XMLPercussion, XMLAccordionRegistration, XMLStaffDivide, XMLOtherDirection
+    XMLPrincipalVoice, XMLPercussion, XMLAccordionRegistration, XMLStaffDivide, XMLOtherDirection
 ]
 
 XML_ORNAMENT_AND_OTHER_NOTATIONS = [XMLAccidentalMark]
@@ -132,12 +138,3 @@ def chord_is_in_a_repetition(chord):
         if chord.has_same_pitches(previous_chord):
             return True
     return False
-
-def create_test_objects(type_):
-    output = []
-    if type_ == 'direction_type':
-        for cl in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
-            obj = cl()
-            output.append(obj)
-    return output
-
