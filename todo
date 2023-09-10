@@ -22,3 +22,5 @@ Chord.add_x() all sorts (add_direction_type too) with placement argument
 test to_string method of all Classes (Chord raises and Error, Beat and Voice too?)
 
 get_measure(-1)
+
+articulations with mixed placements (s. Lily.Notations)

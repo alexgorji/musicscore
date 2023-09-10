@@ -9,7 +9,7 @@ from musicxml.xmlelement.xmlelement import *
 from musictree.dynamics import Dynamics
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, AlreadyFinalized, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
-    ChordException, NotationException, ChordAddXException
+    ChordException, NotationException, ChordAddXException, ChordAddXPlacementException
 from musictree.midi import Midi
 from musictree.core import MusicTree
 from musictree.note import Note
@@ -70,10 +70,10 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._xml_technicals = []
         self._xml_ornaments = []
         self._xml_dynamics = []
-        self._xml_articulations_kwargs = {}
-        self._xml_technicals_kwargs = {}
-        self._xml_ornaments_kwargs = {}
-        self._xml_dynamics_kwargs = {}
+        # self._xml_articulations_kwargs = {}
+        # self._xml_technicals_kwargs = {}
+        # self._xml_ornaments_kwargs = {}
+        # self._xml_dynamics_kwargs = {}
         self._xml_other_notations = []
         self._note_attributes = kwargs
         self._notes_are_set = False
@@ -85,11 +85,15 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self.split = False
         self._original_starting_ties = None
 
-    def _add_articulation(self, articulation, placement=None, **kwargs):
+    def _add_articulation(self, articulation, placement=None):
         if articulation.__class__ not in XML_ARTICULATION_CLASSES:
             raise ChordAddXException(f'{articulation} is not an articulation object.')
+        if placement:
+            try:
+                articulation.placement = placement
+            except AttributeError:
+                raise ChordAddXPlacementException(f'{articulation} has to placement attribute.')
         self._xml_articulations.append(articulation)
-        self._xml_articulations_kwargs = kwargs
         if self.notes:
             self._update_xml_articulations()
 
@@ -103,7 +107,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
         return super().add_child(child)
 
-    def _add_direction_type(self, direction_type, placement=None, **kwargs):
+    def _add_direction_type(self, direction_type, placement=None):
         if direction_type.__class__ in XML_DYNAMIC_CLASSES:
             d = XMLDynamics()
             d.add_child(direction_type)
@@ -115,30 +119,47 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         else:
             self.add_direction_type(direction_type)
 
-    def _add_notation(self, notation, **kwargs):
+    def _add_notation(self, notation, placement=None):
         if notation.__class__ in XML_DYNAMIC_CLASSES:
-            d = XMLDynamics()
+            d = XMLDynamics(placement=placement)
             d.add_child(notation)
             notation = d
-        if notation.__class__ not in XML_OTHER_NOTATIONS + XML_ORNAMENT_AND_OTHER_NOTATIONS + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
+        elif isinstance(notation, XMLFermata):
+            if placement == 'above':
+                notation.type = 'upright'
+            elif placement == 'below':
+                notation.type = 'inverted'
+        elif notation.__class__ not in XML_OTHER_NOTATIONS + XML_ORNAMENT_AND_OTHER_NOTATIONS + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
             raise ChordAddXException(f'{notation} is not a notation type object.')
+        elif placement:
+            raise ChordAddXPlacementException(
+                f'Chord.add_x({notation}) of parent_type notations cannot have a placement argument.')
+
         self._xml_other_notations.append(notation)
         if self.notes:
             self._update_xml_other_notations()
 
-    def _add_ornament(self, ornament, **kwargs):
+    def _add_ornament(self, ornament, placement=None):
         if ornament.__class__ not in XML_ORNAMENT_CLASSES + XML_ORNAMENT_AND_OTHER_NOTATIONS:
             raise ChordAddXException(f'{ornament} is not an ornament type object.')
+        if placement:
+            try:
+                ornament.placement = placement
+            except AttributeError:
+                raise ChordAddXPlacementException(f'{ornament} has to placement attribute.')
         self._xml_ornaments.append(ornament)
-        self._xml_ornaments_kwargs = kwargs
         if self.notes:
             self._update_xml_ornaments()
 
-    def _add_technical(self, technical, placement=None, **kwargs):
+    def _add_technical(self, technical, placement=None):
         if technical.__class__ not in XML_TECHNICAL_CLASSES:
-            raise ChordAddXException(f'{technical} is not a technial object.')
+            raise ChordAddXException(f'{technical} is not a technical object.')
+        if placement:
+            try:
+                technical.placement = placement
+            except AttributeError:
+                raise ChordAddXPlacementException(f'{technical} has to placement attribute.')
         self._xml_technicals.append(technical)
-        self._xml_technicals_kwargs = kwargs
         if self.notes:
             self._update_xml_technicals()
 
@@ -221,7 +242,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         if chord_articulations_not_in_note:
             n.get_or_create_xml_notations()
             if not n.xml_notations.xml_articulations:
-                n.xml_notations.xml_articulations = XMLArticulations(**self._xml_articulations_kwargs)
+                n.xml_notations.xml_articulations = XMLArticulations()
 
             for xml_articulation in chord_articulations_not_in_note:
                 n.xml_notations.xml_articulations.add_child(xml_articulation)
@@ -290,7 +311,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         if chord_ornaments_not_in_note:
             n.get_or_create_xml_notations()
             if not n.xml_notations.xml_ornaments:
-                n.xml_notations.xml_ornaments = XMLOrnaments(**self._xml_ornaments_kwargs)
+                n.xml_notations.xml_ornaments = XMLOrnaments()
 
             for xml_ornament in chord_ornaments_not_in_note:
                 n.xml_notations.xml_ornaments.add_child(xml_ornament)
@@ -340,7 +361,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         if chord_technicals_not_in_note:
             n.get_or_create_xml_notations()
             if not n.xml_notations.xml_technical:
-                n.xml_notations.xml_technical = XMLTechnical(**self._xml_technicals_kwargs)
+                n.xml_notations.xml_technical = XMLTechnical()
 
             for xml_technical in chord_technicals_not_in_note:
                 n.xml_notations.xml_technical.add_child(xml_technical)
@@ -633,7 +654,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         return wedge
 
     def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations],
-              *, placement=None, parent_type=None, **kwargs):
+              *, placement=None, parent_type=None):
         """
         This method is used to add one xml object to a chord's private xml object lists (like _xml_articulations, xml_technicals
         etc.). These lists are used to add or update articulations, technicals etc. of the first :obj:`~musictree.note.Note` object of
@@ -664,48 +685,19 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
                 raise ValueError(f'parent_type of {x} could not be determined.')
 
         if parent_type == 'articulation':
-            self._add_articulation(x, placement=placement, **kwargs)
+            self._add_articulation(x, placement=placement)
         elif parent_type == 'technical':
-            self._add_technical(x, **kwargs)
+            self._add_technical(x, placement=placement)
         elif parent_type == 'ornament':
-            self._add_ornament(x, **kwargs)
+            self._add_ornament(x, placement=placement)
         elif parent_type == 'notation':
-            # if placement:
-            #     raise ChordAddXException()
-            self._add_notation(x, **kwargs)
+            self._add_notation(x, placement=placement)
         elif parent_type == 'direction_type':
-            self._add_direction_type(x, **kwargs)
+            self._add_direction_type(x, placement=placement)
         else:
             raise NotImplementedError(f'parent_type: {parent_type} not implemented.')
 
         return x
-
-        # elif x.__class__ in XML_DYNAMIC_CLASSES:
-        #     self._xml_dynamics.append(x)
-        #     self._xml_dynamics_kwargs = kwargs
-        #     if self.notes:
-        #         self._update_xml_dynamics()
-        # elif x.__class__ in XML_OTHER_NOTATIONS:
-        #     self._xml_other_notations.append(x)
-        #     if self.notes:
-        #         self._update_xml_other_notations()
-        # elif x.__class__ in XML_ORNAMENT_AND_OTHER_NOTATIONS:
-        #     permitted_parent_types = 'notations', 'ornament'
-        #     if parent_type == 'notations':
-        #         self._xml_other_notations.append(x)
-        #         if self.notes:
-        #             self._update_xml_other_notations()
-        #     elif parent_type == 'ornament':
-        #         self._xml_ornaments.append(x)
-        #         self._xml_ornaments_kwargs = kwargs
-        #         if self.notes:
-        #             self._update_xml_ornaments()
-        #     else:
-        #         raise NotationException(f'{x} is ambivalent. Set parent type {permitted_parent_types}')
-        #
-        # else:
-        #     raise TypeError
-        # return x
 
     def finalize(self):
         """

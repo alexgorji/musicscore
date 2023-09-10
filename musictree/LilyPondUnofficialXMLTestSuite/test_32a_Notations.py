@@ -133,11 +133,9 @@ class TestLily321(IdTestCase):
             XMLSfp(),
             XMLOtherDynamics('sfffz'),
             (XMLStrongAccent(), XMLStaccato()),
-            (XMLStaccato(), XMLAccent(), XMLTenuto())
         ]
 
         for n in xml_notations:
-            print(n)
             if n is None:
                 ch = Chord(0, 1)
                 part.add_chord(ch)
@@ -174,6 +172,14 @@ class TestLily321(IdTestCase):
                 ch = Chord(C(5), 1)
                 ch.add_x(n)
                 part.add_chord(ch)
+
+        objects = (XMLStaccato(), XMLAccent(), XMLTenuto())
+        placements = ['above', 'below', 'below']
+        ch = Chord(60, 1)
+        for o, p in zip(objects, placements):
+            ch.add_x(o, placement=p)
+            print(o.placement)
+        part.add_chord(ch)
 
         xml_path = Path(__file__).with_suffix('.xml')
         score.export_xml(xml_path)

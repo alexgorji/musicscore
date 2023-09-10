@@ -94,10 +94,6 @@ class TestAddExceptions(IdTestCase):
         with self.assertRaises(AlreadyFinalized):
             ch.add_wedge('stop')
 
-    @skip
-    def test_add_x_to_chord(self):
-        self.fail()
-
     def test_add_child_to_measure(self):
         self.measure.finalize()
         with self.assertRaises(AlreadyFinalized):

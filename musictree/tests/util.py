@@ -220,7 +220,6 @@ def generate_all_triplets():
 #     return articulation
 
 
-
 def get_xml_elements_diff(el1, el2):
     return DeepDiff(xmltodict.parse(ET.tostring(el1)), xmltodict.parse(ET.tostring(el2)))
 
@@ -302,13 +301,19 @@ def create_test_objects(type_):
             output.append(obj)
 
     elif type_ == 'technical':
+        needed_values = {XMLFret: 1, XMLString: 1, XMLHandbell: 'belltree', XMLFingering: '2', XMLPluck: 'something',
+                         XMLTap: '2', XMLHarmonClosed: 'yes', XMLOtherTechnical: 'something'}
+        needed_types = {XMLHammerOn: 'start', XMLPullOff: 'start'}
+        needed_children = {XMLBend: XMLBendAlter(2), XMLHole: XMLHoleClosed('yes'), XMLArrow: XMLArrowDirection('up'),
+                           XMLHarmonMute: XMLHarmonClosed('yes')}
         for cl in XML_TECHNICAL_CLASSES:
-            if cl == XMLFret:
-                obj = cl(1)
-            elif cl == XMLString:
-                obj = cl(1)
-            elif cl == XMLHandbell:
-                obj = cl('belltree')
+            if cl in needed_children:
+                obj = cl()
+                obj.add_child(needed_children[cl])
+            elif cl in needed_types:
+                obj = cl(type=needed_types[cl])
+            elif cl in needed_values:
+                obj = cl(needed_values[cl])
             else:
                 obj = cl()
             output.append(obj)

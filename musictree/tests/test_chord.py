@@ -8,7 +8,7 @@ from musictree.accidental import Accidental
 from musictree.beat import Beat
 from musictree.chord import Chord, split_copy, group_chords, GraceChord
 from musictree.exceptions import ChordHasNoParentError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
-    ChordException, MusicTreeException
+    ChordException, MusicTreeException, ChordAddXException, ChordAddXPlacementException
 from musictree.midi import Midi
 from musictree.quarterduration import QuarterDuration
 from musictree.tests.util import ChordTestCase, create_test_objects
@@ -380,10 +380,6 @@ class TestTreeChord(ChordTestCase):
         self.fail('Incomplete')
 
     @skip
-    def test_add_grace_chords(self):
-        self.fail('Incomplete')
-
-    @skip
     def test_percussion_notation(self):
         self.fail('Incomplete')
 
@@ -699,44 +695,107 @@ class TestAddGraceChord(ChordTestCase):
 
 
 class TestAddX(ChordTestCase):
-    def setUp(self):
-        super().setUp()
-        self.score = Score()
-        self.part = self.score.add_part('p1')
+    # def setUp(self):
+    #     super().setUp()
+    #     self.score = Score()
+    #     self.part = self.score.add_part('p1')
 
     def test_add_x_parent_type(self):
         ch = Chord(60, 1)
         ch.add_x(XML_DIRECTION_TYPE_CLASSES[0]())
 
     def test_add_x_placement(self):
+        def add_type_and_placement(type_, xml_object=None):
+            above_part = Part(f"above-{type_}-{xml_object.name}") if xml_object else Part(f"above-{type_}")
+            below_part = Part(f"below-{type_}-{xml_object.name}") if xml_object else Part(f"below-{type_}")
+            if not xml_object:
+                above_objects = create_test_objects(type_)
+                below_objects = create_test_objects(type_)
+            else:
+                above_objects = [xml_object]
+                below_objects = [xml_object.__deepcopy__()]
+
+            for obj in above_objects:
+                ch = Chord(60, 1)
+                try:
+                    ch.add_x(obj, placement='above', parent_type=type_)
+                except ChordAddXPlacementException:
+                    ch.add_x(obj, placement=None, parent_type=type_)
+                above_part.add_chord(ch)
+            for obj in below_objects:
+                ch = Chord(60, 1)
+                try:
+                    ch.add_x(obj, placement='below', parent_type=type_)
+                except ChordAddXPlacementException:
+                    ch.add_x(obj, placement=None, parent_type=type_)
+                below_part.add_chord(ch)
+
+            above_part.finalize()
+            below_part.finalize()
+            if type_ == 'direction_type':
+                for p in ['above', 'below']:
+                    directions = [d for m in eval(f"{p}_part.get_children()") for d in
+                                  [c for c in m.xml_object.get_children() if isinstance(c, XMLDirection)]]
+                    assert len(directions) == len(above_objects)
+                    for x in directions:
+                        assert x.placement == p
+
+            elif type_ in ['technical', 'ornament', 'articulation']:
+                for p in ['above', 'below']:
+                    notations = [notation for measure in eval(f'{p}_part').get_children() for note in
+                                 [x for x in measure.xml_object.get_children() if isinstance(x, XMLNote)] for notation
+                                 in
+                                 [y for y in note.get_children() if isinstance(y, XMLNotations)]]
+                    assert len(notations) == len(above_objects)
+                    for x in notations:
+                        if x.get_children()[0].get_children()[0].__class__ not in [XMLFret, XMLBend]:
+                            assert x.get_children()[0].get_children()[0].placement == p
+            else:
+                raise NotImplementedError(f'testing type_ {type_}')
 
         # direction_type objects
+        add_type_and_placement('direction_type')
 
-        for x in create_articulation():
-            for placement in ['above', 'below']:
-                ch = Chord(60, 1)
-                ch.add_x(x, placement=placement)
-                self.part.add_chord(ch)
+        # technical objects
+        add_type_and_placement('technical')
 
-        print(self.part.to_string())
+        # ornament objects
+        add_type_and_placement('ornament')
+
+        # articulation objects
+        add_type_and_placement('articulation')
 
         # notation only objects does not accept placement (except fermata)
-        notation_object = XML_OTHER_NOTATIONS[0]()
-
-        # ambivalent notation or ornament
-        notation_accidental = XMLAccidentalMark('sharp')
-        ornament_accidental = XMLAccidentalMark('flat')
-
-        # ambivalent notation or direction_type
-        notation_dynamics = XMLF()
-        direction_type_dynamics = XMLF()
+        notation_object = XMLArpeggiate()
+        ch = Chord(60, 1)
+        with self.assertRaises(ChordAddXPlacementException):
+            ch.add_x(notation_object, placement='above', parent_type='notation')
+        ch.add_x(notation_object, placement=None, parent_type='notation')
 
         # mixed below and above
+        part = Part('mixed_placements')
         x_objects = [XMLTenuto(), XMLStaccato(), XMLAccent()]
         placements = ['below', 'below', 'above']
+        ch = Chord(60, 1)
+        for obj, plc in zip(x_objects, placements):
+            ch.add_x(obj, placement=plc)
+        part.add_chord(ch)
+        part.finalize()
+        notations = [notation for measure in part.get_children() for note in
+                     [x for x in measure.xml_object.get_children() if isinstance(x, XMLNote)] for notation in
+                     [y for y in note.get_children() if isinstance(y, XMLNotations)]]
+        for index, x in enumerate(notations[0].xml_articulations.get_children()):
+            assert x.placement == placements[index]
 
         # fermata placement is translated in fermata types inverted or upright
-        self.fail('Not completed')
+        fermatas = [XMLFermata(), XMLFermata()]
+        placements = ['above', 'below']
+        ch = Chord(60, 1)
+        for f, p in zip(fermatas, placements):
+            ch.add_x(f, placement=p)
+
+        for f, t in zip(fermatas, ['upright', 'inverted']):
+            assert f.type == t
 
     def test_add_articulation_after_creating_notes(self):
         ch = Chord(60, 1)

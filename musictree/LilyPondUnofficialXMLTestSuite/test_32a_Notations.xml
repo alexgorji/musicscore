@@ -1366,7 +1366,7 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics>
+          <dynamics placement="below">
             <f />
           </dynamics>
         </notations>
@@ -1380,7 +1380,7 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics>
+          <dynamics placement="below">
             <ppp />
           </dynamics>
         </notations>
@@ -1394,7 +1394,7 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics>
+          <dynamics placement="below">
             <sfp />
           </dynamics>
         </notations>
@@ -1408,7 +1408,7 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <dynamics>
+          <dynamics placement="below">
             <other-dynamics>sfffz</other-dynamics>
           </dynamics>
         </notations>
@@ -1436,16 +1436,16 @@
       <note>
         <pitch>
           <step>C</step>
-          <octave>5</octave>
+          <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
         <notations>
           <articulations>
-            <staccato />
-            <accent />
-            <tenuto />
+            <staccato placement="above" />
+            <accent placement="below" />
+            <tenuto placement="below" />
           </articulations>
         </notations>
       </note>

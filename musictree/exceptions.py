@@ -25,6 +25,8 @@ class ChordException(MusicTreeException):
 class ChordAddXException(ChordException):
     pass
 
+class ChordAddXPlacementException(ChordAddXException):
+    pass
 
 class ChordAlreadySplitError(ChordException):
     pass
