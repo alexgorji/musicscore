@@ -705,7 +705,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         object will be prepared for returning a musicxml snippet or a whole musicxml file.
 
         - Check if parent :obj:`~musictree.beat.Beat` exists.
-        - Ancestor :obj:`~musictree.measure.Measure.update_divisions()` is called to _update :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`'s :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions` attribute.
+        - Ancestor :obj:`~musictree.measure.Measure._update_divisions()` is called to _update :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`'s :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions` attribute.
         - Following updates are triggered: update_notes, update_xml_chord, update_notes_quarter_durations, update_xml_lyrics,
           update_xml_directions, update_xml_articulations, update_technicals
         """

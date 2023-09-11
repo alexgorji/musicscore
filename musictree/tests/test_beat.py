@@ -151,8 +151,8 @@ class TestBeatSplitChord(TestCase):
         v2.update_beats(1, 1, 1)
         v2.get_current_beat().add_child(v1.leftover_chord)
         all_chords = v1.get_chords() + v2.get_chords()
-        v1.up.up.update_divisions()
-        v2.up.up.update_divisions()
+        v1.up.up._update_divisions()
+        v2.up.up._update_divisions()
         for b in v1.get_children() + v2.get_children():
             b.finalize()
 

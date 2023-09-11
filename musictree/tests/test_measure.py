@@ -100,7 +100,7 @@ class TestMeasure(TestCase):
             v1._add_chord(Chord(60, qd))
         for qd in quarter_durations_2:
             v2._add_chord(Chord(70, qd))
-        m.update_divisions()
+        m._update_divisions()
         assert m.xml_object.xml_attributes.xml_divisions.value_ == 210
 
     def test_add_chord(self):
@@ -413,6 +413,15 @@ class TestMeasure(TestCase):
         assert len(m.get_children()[0].get_children()) == 1
         v = m.get_children()[0].get_children()[0]
         assert len(v.get_children()) == 4
+
+    def test_add_barline_simple(self):
+        barline_styles = ['regular', 'regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy',
+                          'heavy-light', 'heavy-heavy', 'tick', 'short', 'none']
+        for bs in barline_styles:
+            m = Measure(1)
+            m.barline_style = bs
+            m.finalize()
+            assert m.xml_barline.xml_bar_style.value_ == bs
 
 
 class TestUpdateAccidentals(IdTestCase):
