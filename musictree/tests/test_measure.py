@@ -1,5 +1,6 @@
 from unittest import TestCase, skip
 
+from musictree import Score
 from musicxml.xmlelement.xmlelement import *
 from quicktions import Fraction
 
@@ -400,6 +401,19 @@ class TestMeasure(TestCase):
         with self.assertRaises(AddChordException):
             measure.add_chord(Chord(midis=60, quarter_duration=15))
 
+    def test_default_staff(self):
+        # inconsistency add_part doesn't add measure but add_measure does create staff, voice and beats
+        m = Measure(1)
+        assert len(m.get_children()) == 0
+        score = Score()
+        p = score.add_part('p1')
+        assert len(m.get_children()) == 0
+        m = p.add_measure()
+        assert len(m.get_children()) == 1
+        assert len(m.get_children()[0].get_children()) == 1
+        v = m.get_children()[0].get_children()[0]
+        assert len(v.get_children()) == 4
+
 
 class TestUpdateAccidentals(IdTestCase):
     def test_update_accidentals_simple(self):
@@ -665,3 +679,10 @@ class TestMeasureBeatGrouping(TestCase):
         m = Measure(1, time=Time(6, 4))
         chords = m._add_chord(Chord(midis=60, quarter_duration=6))
         assert [ch.quarter_duration for ch in chords] == [6]
+
+    def test_add_staff_to_score(self):
+        score = Score()
+        part = score.add_part('p1')
+        measure = part.add_measure()
+        st = measure.add_staff()
+        assert st == measure.get_children()[-1]

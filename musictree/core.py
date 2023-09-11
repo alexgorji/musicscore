@@ -35,6 +35,13 @@ class MusicTree(Tree):
 
     @staticmethod
     def _check_args_kwargs(args, kwargs, class_name, get_class_name=None):
+        for x in args:
+            if not isinstance(x, int) or x < 1:
+                raise TypeError(f'args {args} must be positive integers')
+        for x in kwargs.values():
+            if not isinstance(x, int) or x < 1:
+                raise TypeError(f'kwargs values {kwargs} must be positive integers')
+
         def _get_default_keys():
             default_keys = ['part_number', 'measure_number', 'staff_number', 'voice_number', 'beat_number',
                             'chord_number']
@@ -48,12 +55,13 @@ class MusicTree(Tree):
             raise ValueError('Both args and kwargs cannot be set')
         if args:
             if len(args) != len(default_keys):
-                raise ValueError('Wrong number of args.')
+                raise ValueError(f'Wrong number of args {args}. Keys are: {default_keys}')
             kwargs = {key: value for key, value in zip(default_keys, args)}
         else:
             keys = kwargs.keys()
             if set(keys) != set(default_keys[:len(keys)]):
-                raise ValueError('Wrong keys in kwargs.')
+                raise ValueError(
+                    f'Wrong (number) of keys: {list(keys)} in kwargs. All Keys: {default_keys} must be set.')
         return kwargs
 
     def _check_child_to_be_added(self, child):

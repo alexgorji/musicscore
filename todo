@@ -11,7 +11,6 @@ if a private property is used: get_ or set + only for library's ...
 measure: break or connect beams manually
 
 
-
 XMLNonArpeggiate > type
 
 
@@ -20,3 +19,11 @@ test to_string method of all Classes (Chord raises and Error, Beat and Voice too
 get_measure(-1)
 
 articulations with mixed placements (s. Lily.Notations)
+
+profiler
+
+coverage
+
+lint flake8
+
+inconsistency: part.add_measure(): adds a staff, add_staff()

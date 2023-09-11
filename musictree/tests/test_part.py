@@ -4,7 +4,7 @@ from unittest import skip
 
 import xmltodict
 
-from musictree import Time, SimpleFormat, BassClef, TrebleClef
+from musictree import Time, SimpleFormat, BassClef, TrebleClef, MusicTree
 from musictree.chord import Chord
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError
 from musictree.key import Key
