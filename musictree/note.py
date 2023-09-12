@@ -150,7 +150,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     def _update_xml_type(self):
         if self._type is None:
             if self.quarter_duration != 0:
-                self.xml_type = note_types[self.quarter_duration.as_integer_ratio()]
+                self.xml_type = self.quarter_duration.get_type()
             else:
                 self.xml_type = None
 

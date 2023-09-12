@@ -38,7 +38,7 @@ class TestFinalUpdates(IdTestCase):
                 assert_chord_note_values(chord, [(61, 3)])
 
     def test_chord_finalize(self):
-        self.measure.update_divisions()
+        self.measure._update_divisions()
         assert self.chord_1.get_children() == []
         self.chord_1.add_midi(Midi(70))
         self.chord_1.finalize()
@@ -51,7 +51,7 @@ class TestFinalUpdates(IdTestCase):
         assert_chord_note_values(self.chords_2[0], [(61, 2 / 3)])
 
     def test_beat_finalize(self):
-        self.measure.update_divisions()
+        self.measure._update_divisions()
         self.beats[0].finalize()
         self.check_note_values(self.beats[0].get_chords(), [0, 1])
 
@@ -64,14 +64,14 @@ class TestFinalUpdates(IdTestCase):
             self.beats[1].finalize()
 
     def test_voice_finalize(self):
-        self.measure.update_divisions()
+        self.measure._update_divisions()
         self.voice.finalize()
         self.check_note_values(self.voice.get_chords())
         with self.assertRaises(AlreadyFinalized):
             self.voice.finalize()
 
     def test_staff_finalize(self):
-        self.measure.update_divisions()
+        self.measure._update_divisions()
         self.staff.finalize()
         self.check_note_values(self.staff.get_chords())
         with self.assertRaises(AlreadyFinalized):
@@ -97,13 +97,13 @@ class TestFinalUpdates(IdTestCase):
             self.score.finalize()
 
     def test_to_string_calls_finalize_voice(self):
-        self.measure.update_divisions()
+        self.measure._update_divisions()
         assert self.voice._finalized is False
         self.voice.to_string()
         assert self.voice._finalized is True
 
     def test_to_string_calls_finalize_staff(self):
-        self.measure.update_divisions()
+        self.measure._update_divisions()
         assert self.staff._finalized is False
         self.staff.to_string()
         assert self.staff._finalized is True

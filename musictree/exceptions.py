@@ -25,8 +25,10 @@ class ChordException(MusicTreeException):
 class ChordAddXException(ChordException):
     pass
 
+
 class ChordAddXPlacementException(ChordAddXException):
     pass
+
 
 class ChordAlreadySplitError(ChordException):
     pass
@@ -151,4 +153,12 @@ class AddChordException(MusicTreeException):
 
 
 class SimpleFormatException(MusicTreeException):
+    pass
+
+
+class QuarterDurationException(MusicTreeException):
+    pass
+
+
+class QuarterDurationIsNotWritable(QuarterDurationException):
     pass

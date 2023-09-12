@@ -161,7 +161,7 @@ class TestTuplets(TestCase):
         ch1, ch2, ch3 = chords = [Chord(60, 2 / 5), Chord(61, 2 / 5), Chord(62, 1 / 5)]
         for ch in chords:
             beats[0].add_child(ch)
-        v1.up.up.update_divisions()
+        v1.up.up._update_divisions()
         beats[0].finalize()
         assert ch1.notes[0].xml_notations.xml_tuplet.type == 'start'
         assert ch1.notes[0].xml_notations.xml_tuplet.bracket == 'yes'
@@ -175,7 +175,7 @@ class TestTuplets(TestCase):
         beats = v1.update_beats(1)
         for quarter_duration in [1 / 6, 1 / 6, 1 / 6, 1 / 10, 3 / 10, 1 / 10]:
             v1._add_chord(Chord(60, quarter_duration))
-        v1.up.up.update_divisions()
+        v1.up.up._update_divisions()
         beats[0].finalize()
         n1, n2, n3, n4, n5, n6 = [ch.notes[0] for ch in v1.get_chords()]
         for n in [n1, n2, n3]:
@@ -196,7 +196,7 @@ class TestTuplets(TestCase):
         beats = v1.update_beats(1, 1, 1)
         for quarter_duration in [q for group in generate_all_triplets() for q in group]:
             v1._add_chord(Chord(60, quarter_duration))
-        v1.up.up.update_divisions()
+        v1.up.up._update_divisions()
         for index, beat in enumerate(beats):
             beat.finalize()
             if index == 0:

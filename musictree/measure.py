@@ -10,13 +10,13 @@ from musictree.time import Time, flatten_times
 from musictree.util import lcm, chord_is_in_a_repetition
 from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
-from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup
+from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup, XMLBarline
 
 __all__ = ['Measure', 'generate_measures']
 
 
 class Measure(MusicTree, FinalizeMixin, XMLWrapper):
-    _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration'}
+    _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration', 'barline_style'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLMeasure
 
@@ -25,6 +25,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         self._updated = False
         self._xml_object = self.XMLClass(*args, **kwargs)
         self.number = number
+        self._barline_style = None
         self._time = None
         self._key = Key()
         self.time = time
@@ -115,6 +116,14 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         self._set_staves()
         self._set_clefs()
 
+    def _update_barline_style(self):
+        if self.xml_barline and self.barline_style:
+            self.xml_barline.xml_bar_style = self.barline_style
+        else:
+            if self.barline_style:
+                self.xml_barline = XMLBarline()
+                self.xml_barline.xml_bar_style = self.barline_style
+
     def _update_clef_numbers(self):
         if len(self.clefs) == 1:
             try:
@@ -160,6 +169,11 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
                 else:
                     _set_default_clef(index + 1, BassClef(default=True))
 
+    def _update_divisions(self):
+        chord_divisions = {ch.quarter_duration.denominator for ch in self.get_chords()}
+        divisions = lcm(list(chord_divisions))
+        self.xml_object.xml_attributes.xml_divisions = divisions
+
     def _update_voice_beats(self):
         for staff in self.get_children():
             for voice in staff.get_children():
@@ -197,7 +211,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         finalize can only be called once.
 
         - It calls finalize()` method of all children.
-        - Following updates are triggered: update_divisions, update_accidentals, update_xml_backups_notes_directions
+        - Following updates are triggered: _update_divisions, update_accidentals, update_xml_backups_notes_directions
 
         """
 
@@ -211,7 +225,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
                 beat._quantize_quarter_durations()
             beat._split_not_writable_chords()
 
-        self.update_divisions()
+        self._update_divisions()
 
         for st in self.get_children():
             if not st._finalized:
@@ -219,13 +233,21 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
 
         self._update_accidentals()
         self._update_xml_backup_note_direction()
+        self._update_barline_style()
 
         self._finalized = True
 
-    def update_divisions(self):
-        chord_divisions = {ch.quarter_duration.denominator for ch in self.get_chords()}
-        divisions = lcm(list(chord_divisions))
-        self.xml_object.xml_attributes.xml_divisions = divisions
+    @property
+    def barline_style(self):
+        return self._barline_style
+
+    @barline_style.setter
+    def barline_style(self, val):
+        permitted = [None, 'regular', 'regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy',
+                     'heavy-light', 'heavy-heavy', 'tick', 'short', 'none']
+        if val not in permitted:
+            raise ValueError(f'Measure.barline {val} must be in {permitted}')
+        self._barline_style = val
 
     @property
     def clefs(self) -> List['Clef']:

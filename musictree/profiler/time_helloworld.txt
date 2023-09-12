@@ -156,7 +156,7 @@
     51027    0.035    0.000    0.111    0.000 xsdindicator.py:7(__init__)
     19000    0.034    0.000    6.129    0.000 copy.py:66(copy)
     21000    0.033    0.000    0.107    0.000 quarterduration.py:151(__add__)
-     3000    0.032    0.000    0.206    0.000 quarterduration.py:227(is_writable)
+     3000    0.032    0.000    0.206    0.000 quarterduration.py:227(_is_writable)
 2000/1000    0.032    0.000    0.667    0.001 beat.py:329(add_child)
     99000    0.032    0.000    0.079    0.000 abc.py:117(__instancecheck__)
    165000    0.031    0.000    0.031    0.000 xmlelement.py:206(value_)
