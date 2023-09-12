@@ -4,8 +4,54 @@ import numbers
 
 __all__ = ['BEATWISE_EXCEPTIONS', 'QuarterDuration']
 
+from musictree.exceptions import QuarterDurationIsNotWritable
+
 #: {offset: {quarter_duration: return value(s), ... }, ...}
 BEATWISE_EXCEPTIONS = {0: {5: (3, 2), 6: (6,)}}
+
+_note_simple_types = {
+    (1, 12): '32nd',
+    (1, 11): '32nd',
+    (2, 11): '16th',
+    # (3, 11): '16th',
+    (4, 11): 'eighth',
+    # (6, 11): 'eighth',
+    (8, 11): 'quarter',
+    (1, 10): '32nd',
+    # (3, 10): '16th',
+    (1, 9): '32nd',
+    (2, 9): '16th',
+    (4, 9): 'eighth',
+    (8, 9): 'quarter',
+    (1, 8): '32nd',
+    # (3, 8): '16th',
+    # (7, 8): 'eighth',
+    (1, 7): '16th',
+    (2, 7): 'eighth',
+    # (3, 7): 'eighth',
+    (4, 7): 'quarter',
+    # (6, 7): 'quarter',
+    (1, 6): '16th',
+    (1, 5): '16th',
+    (2, 5): 'eighth',
+    # (3, 5): 'eighth',
+    (4, 5): 'quarter',
+    (1, 4): '16th',
+    (2, 4): 'eighth',
+    # (3, 4): 'eighth',
+    # (7, 4): 'quarter',
+    (1, 3): 'eighth',
+    (2, 3): 'quarter',
+    # (3, 2): 'quarter',
+    (1, 2): 'eighth',
+    (1, 1): 'quarter',
+    (2, 1): 'half',
+    # (3, 1): 'half',
+    (4, 1): 'whole',
+    # (6, 1): 'whole',
+    (8, 1): 'breve',
+    # (12, 1): 'breve'
+}
 
 
 class QuarterDuration(numbers.Rational):
@@ -75,6 +121,23 @@ class QuarterDuration(numbers.Rational):
             else:
                 raise ValueError
 
+    def _get_type_and_dots(self):
+        type = _note_simple_types.get(self.as_integer_ratio())
+        if type:
+            return type, 0
+        else:
+            qd = QuarterDuration(self.value * 2 / 3)
+            type = _note_simple_types.get(qd.as_integer_ratio())
+            if type:
+                return type, 1
+            else:
+                qd = QuarterDuration(self.value * 4 / 7)
+                type = _note_simple_types.get(qd.as_integer_ratio())
+                if type:
+                    return type, 2
+                else:
+                    raise QuarterDurationIsNotWritable(f'quarter duration {self} is not writable.')
+
     def as_integer_ratio(self):
         """
         :return: (numerator, denominator)
@@ -122,7 +185,7 @@ class QuarterDuration(numbers.Rational):
             if not output[1]:
                 output[1] = [current_value]
             else:
-                if is_writable(output[1][-1] + current_value):
+                if _is_writable(output[1][-1] + current_value):
                     output[1][-1] += current_value
                 else:
                     output[1].append(current_value)
@@ -138,6 +201,12 @@ class QuarterDuration(numbers.Rational):
             return exception
 
         return output
+
+    def get_type(self):
+        return self._get_type_and_dots()[0]
+
+    def get_number_of_dots(self):
+        return self._get_type_and_dots()[1]
 
     def __repr__(self):
         return f'{self.value.numerator}/{self.value.denominator}'
@@ -227,39 +296,41 @@ class QuarterDuration(numbers.Rational):
         return self.__class__(self.value)
 
 
-def is_writable(quarter_duration: Union[float, int, Fraction, 'QuarterDuration']):
+def _is_writable(quarter_duration: Union[float, int, Fraction, 'QuarterDuration']):
     """
     Function to check if a quarter duration is writable or must be split into two durations.
 
     :param quarter_duration:
     :return: boolean
 
-    >>> is_writable(5)
+    >>> _is_writable(5)
     False
-    >>> is_writable(7/8)
+    >>> _is_writable(7/8)
     False
-    >>> is_writable(3/8)
+    >>> _is_writable(3/8)
     True
     """
-    if quarter_duration in [QuarterDuration(1, 64),
-                            QuarterDuration(1, 32),
-                            QuarterDuration(3, 64),
-                            QuarterDuration(1, 16),
-                            QuarterDuration(3, 32),
-                            QuarterDuration(1, 8),
-                            QuarterDuration(3, 16),
-                            QuarterDuration(1, 4),
-                            QuarterDuration(3, 8),
-                            QuarterDuration(1, 2),
-                            QuarterDuration(3, 4),
-                            QuarterDuration(1),
-                            QuarterDuration(3, 2),
-                            QuarterDuration(2),
-                            QuarterDuration(3),
-                            QuarterDuration(4),
-                            QuarterDuration(6),
-                            QuarterDuration(8),
-                            QuarterDuration(12)]:
+    writables = {1 / 64,
+                 1 / 32,
+                 3 / 64,
+                 1 / 16,
+                 3 / 32,
+                 1 / 8,
+                 3 / 16,
+                 1 / 4,
+                 3 / 8,
+                 1 / 2,
+                 3 / 4,
+                 1,
+                 3 / 2,
+                 2,
+                 3,
+                 4,
+                 6,
+                 8,
+                 12}
+
+    if quarter_duration in writables:
         return True
     else:
         return False

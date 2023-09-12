@@ -85,6 +85,7 @@ if needed.
 ``Chord.__deepcopy__()`` added. Only midi and quarter_duration are deepcopied.
 ``Chord.clef`` property added.
 ``Chord.all_midis_are_tied_to_next`` and ``Chord.all_midis_are_tied_to_previous`` added.
+``QuarterDurartion.get_type()`` and ``QuarrterDurtion.get_number_of_dots()`` added.
 ``GraceChord()`` added.
 ``Time.signatures and Time.actual_signatures`` accept also strings to allow creating a complex time signature like
 3+2+5/8 = ``Time('3+2+5', 8)``
