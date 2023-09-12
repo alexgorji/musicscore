@@ -1,3 +1,5 @@
+from musictree import QuarterDuration
+from musictree.exceptions import MetronomeWrongBeatUnitException
 from musictree.metronome import Metronome
 from musictree.tests.util import IdTestCase
 
@@ -5,11 +7,32 @@ from musictree.tests.util import IdTestCase
 class TestCase(IdTestCase):
     def test_metronome_init(self):
         m = Metronome(100)
+        assert isinstance(m.beat_unit, QuarterDuration)
         assert m.per_minute == 100
         assert m.xml_per_minute.value_ == '100'
         assert m.beat_unit == 1
         assert m.xml_beat_unit.value_ == 'quarter'
-        assert m.xml_beat_dot is None
+        assert m.get_xml_beat_dot_objects() is []
+        assert m.sound.tempo == 100
+
+    def test_metronome_dotted(self):
+        m = Metronome(100, beat_unit=1.5)
+        assert m.xml_beat_unit.value_ == 'quarter'
+        assert len(m.get_xml_beat_dot_objects()) == 1
+
+    def test_metronome_change_values(self):
+        m = Metronome(100)
+        assert m.xml_beat_unit.value_ == 'quarter'
+        assert len(m.get_xml_beat_dot_objects()) == 0
+        m.beat_unit = 3
+        assert m.xml_beat_unit.value_ == 'halb'
+        assert len(m.get_xml_beat_dot_objects()) == 1
+
+    def test_metronome_wrong_beat_units(self):
+        with self.assertRaises(MetronomeWrongBeatUnitException):
+            Metronome(100, 1.2)
+        with self.assertRaises(MetronomeWrongBeatUnitException):
+            Metronome(100, 2 / 3)
 
 
 """

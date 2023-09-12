@@ -4,7 +4,7 @@ from unittest.mock import patch, Mock
 from quicktions import Fraction
 
 from musictree.chord import Chord
-from musictree.exceptions import MidiHasNoParentChordError
+from musictree.exceptions import NoteMidiHasNoParentChordError
 from musictree.midi import Midi
 from musictree.note import Note, tie, untie
 from musictree.part import Part
@@ -41,7 +41,7 @@ class TestNote(NoteTestCase):
         with self.assertRaises(TypeError):
             Note()
 
-        with self.assertRaises(MidiHasNoParentChordError):
+        with self.assertRaises(NoteMidiHasNoParentChordError):
             Note(midi=Midi(60))
 
     def test_note_init(self):

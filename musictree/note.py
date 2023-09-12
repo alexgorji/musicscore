@@ -1,7 +1,7 @@
 from typing import Optional, List
 
 from musictree.core import MusicTree
-from musictree.exceptions import NoteTypeError, NoteHasNoParentChordError, MidiHasNoParentChordError
+from musictree.exceptions import NoteTypeError, NoteHasNoParentChordError, NoteMidiHasNoParentChordError
 from musictree.midi import Midi
 from musictree.quarterduration import QuarterDurationMixin
 from musictree.util import note_types
@@ -230,7 +230,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         if not isinstance(value, Midi):
             raise TypeError('Note.midi property must be of type Midi')
         if not value.parent_chord:
-            raise MidiHasNoParentChordError
+            raise NoteMidiHasNoParentChordError
         self._midi = value
         self._midi.parent_note = self
         self._update_xml_pitch_or_rest()
