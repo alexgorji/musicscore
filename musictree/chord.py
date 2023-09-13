@@ -652,7 +652,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._sort_midis()
         return midi
 
-    def add_wedge(self, wedge: Union['XMLWedge', str], placement: str = 'below') -> XMLWedge:
+    def add_wedge(self, wedge: Union['XMLWedge', str], placement: str = 'below') -> 'XMLWedge':
         """
         This method is used to add one :obj:`~musicxml.xmlelement.xmlelement.XMLWedge` object to chord's private
         dictionary _xml_direction_types This list is used to create or _update directions of the first
@@ -667,6 +667,17 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         wedge = XMLWedge(type=wedge) if isinstance(wedge, str) else wedge
         self.add_direction_type(wedge, placement=placement)
         return wedge
+
+    def add_words(self, words: Union['XMLWords', str], placement: str = 'above', **kwargs) -> 'XMLWords':
+        if self._finalized is True:
+            raise AlreadyFinalized(self, 'add_words')
+
+        if not isinstance(words, XMLWords):
+            words = XMLWords(words, **kwargs)
+        else:
+            for key in kwargs:
+                setattr(words, key, kwargs[key])
+        return self.add_direction_type(words, placement=placement)
 
     def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations],
               *, placement=None, parent_type=None):

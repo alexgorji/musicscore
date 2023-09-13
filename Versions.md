@@ -82,6 +82,7 @@ if needed.
 ``Chord.add_midi(), Chord._sort_midis()`` added.
 ``Chord.add_direction_type()`` added.
 ``Chord.add_wedge()`` added.
+``Chord.add_words()`` added.
 ``Chord.get_voice_number()`` and ``Chord.get_staff_number()`` return None if no ``Voice`` or ``Staff`` ancestor exist.
 ``Chord.__deepcopy__()`` added. Only midi and quarter_duration are deepcopied.
 ``Chord.clef`` property added.

@@ -903,6 +903,36 @@ class TestAddX(ChordTestCase):
             assert d.placement == 'below'
             assert d.xml_direction_type.xml_wedge.type == wedge
 
-    @skip
     def test_add_words(self):
-        self.fail('Incomplete')
+        ch = Chord(60, 4)
+        ch._parent = self.mock_beat
+        texts = ['Below', 'Above', 'FontSize', 'Bold']
+        xml_words_objects = [ch.add_words(texts[0], placement='below'),
+                             ch.add_words(texts[1]),
+                             ch.add_words(texts[2], font_size=18, relative_y=30),
+                             ch.add_words(texts[3], font_weight='bold', relative_y=60)]
+        ch.finalize()
+        assert set(xml_words_objects) == set([d.xml_direction_type.xml_words for d in ch._xml_directions])
+
+        for obj, t in zip(xml_words_objects, texts):
+            assert obj.value_ == t
+
+        for obj, p in zip(xml_words_objects, ['below', 'above', 'above', 'above']):
+            assert obj.up.up.placement == p
+        for fs, obj in zip([None, None, 18, None], xml_words_objects):
+            assert obj.font_size == fs
+        for fw, obj in zip([None, None, None, 'bold'], xml_words_objects):
+            assert obj.font_weight == fw
+        for ry, obj in zip([None, None, 30, 60], xml_words_objects):
+            assert obj.relative_y == ry
+
+        ch = Chord(60, 4)
+        ch._parent = self.mock_beat
+
+        xml_words = ch.add_words(XMLWords('something', font_size=10, relative_y=20), placement='below', font_size=20)
+        ch.finalize()
+        d = ch._xml_directions[0]
+        assert d.xml_direction_type.xml_words.value_ == 'something'
+        assert d.placement == 'below'
+        assert xml_words.font_size == 20
+        assert xml_words.relative_y == 20

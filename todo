@@ -31,3 +31,5 @@ quarter duration only to: 32nd (64th and 128th must be supported too)
 check _is_writable
 
 tree> get_children_by_type
+
+chord.add_direction : add direction objects to a list (don't use {'above':[], 'below':[]} dictionary like it is now to preserve order of added directions)
