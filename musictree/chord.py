@@ -3,20 +3,19 @@ from fractions import Fraction
 from typing import Union, List, Optional, Any, Dict
 
 from musictree.clef import Clef
-from musictree.finalize_mixin import FinalizeMixin
-from musicxml.xmlelement.xmlelement import *
-
+from musictree.core import MusicTree
 from musictree.dynamics import Dynamics
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, AlreadyFinalized, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
     ChordException, NotationException, ChordAddXException, ChordAddXPlacementException
+from musictree.finalize_mixin import FinalizeMixin
 from musictree.midi import Midi
-from musictree.core import MusicTree
 from musictree.note import Note
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_ORNAMENT_CLASSES, XML_DYNAMIC_CLASSES, \
     XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, \
-    XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
+    XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, isinstance_as_string
+from musicxml.xmlelement.xmlelement import *
 
 __all__ = ['Chord']
 
@@ -57,7 +56,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     :param quarter_duration: int, float, Fraction, QuarterDuration for duration counted in quarters (crotchets). 0 for grace note (or
     chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef', 'metronome'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
@@ -70,14 +69,11 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._xml_technicals = []
         self._xml_ornaments = []
         self._xml_dynamics = []
-        # self._xml_articulations_kwargs = {}
-        # self._xml_technicals_kwargs = {}
-        # self._xml_ornaments_kwargs = {}
-        # self._xml_dynamics_kwargs = {}
         self._xml_other_notations = []
         self._note_attributes = kwargs
         self._notes_are_set = False
         self._clef = None
+        self._metronome = None
         self._grace_chords = {'before': [], 'after': []}
 
         super().__init__(quarter_duration=quarter_duration)
@@ -295,6 +291,15 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         n._update_xml_notations()
 
+    def _update_xml_metronome(self):
+        if self.metronome:
+            d = XMLDirection(placement='above')
+            self._xml_directions.append(d)
+            dt = d.add_child(XMLDirectionType())
+            dt.add_child(self.metronome.xml_object)
+            if self.metronome.sound:
+                d.add_child(self.metronome.sound)
+
     def _update_xml_ornaments(self):
         def _get_note_xml_ornaments():
             try:
@@ -436,6 +441,16 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     @property
     def is_tied_to_next(self):
         return self.all_midis_are_tied_to_next
+
+    @property
+    def metronome(self):
+        return self._metronome
+
+    @metronome.setter
+    def metronome(self, val):
+        if not isinstance_as_string(val, 'Metronome'):
+            raise TypeError
+        self._metronome = val
 
     @property
     def midis(self) -> List['Midi']:
@@ -722,6 +737,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._update_xml_lyrics()
         self._update_ties()
         self._update_xml_directions()
+        self._update_xml_metronome()
         self._update_xml_articulations()
         self._update_xml_technicals()
         self._update_xml_ornaments()

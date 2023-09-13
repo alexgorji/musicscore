@@ -76,6 +76,7 @@ Add `musictree.testing` to `musictree` package
 ``SimpleFormat`` added. It is useful tool to generate list of chords and also do some simple algorithmic changes to it
 if needed.
 ``Note.parent_chord`` removed. ``Midi`` is now required. ``Midi`` must have a parent_chord.
+``Metronome`` new Class.
 ``Midi`` is now the core object for adding or removing ties to ``Chord`` (and ``Note``).
 ``Midi.notehead`` property added.
 ``Chord.add_midi(), Chord._sort_midis()`` added.
@@ -84,6 +85,7 @@ if needed.
 ``Chord.get_voice_number()`` and ``Chord.get_staff_number()`` return None if no ``Voice`` or ``Staff`` ancestor exist.
 ``Chord.__deepcopy__()`` added. Only midi and quarter_duration are deepcopied.
 ``Chord.clef`` property added.
+``Chord.metronome`` property added.
 ``Chord.all_midis_are_tied_to_next`` and ``Chord.all_midis_are_tied_to_previous`` added.
 ``QuarterDurartion.get_type()`` and ``QuarrterDurtion.get_number_of_dots()`` added.
 ``GraceChord()`` added.
