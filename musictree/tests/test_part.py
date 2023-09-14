@@ -1,10 +1,10 @@
 import math
+import xml.etree.ElementTree as ET
 from pathlib import Path
-from unittest import skip
 
 import xmltodict
 
-from musictree import Time, SimpleFormat, BassClef, TrebleClef, MusicTree
+from musictree import Time, SimpleFormat, BassClef, TrebleClef
 from musictree.chord import Chord
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError
 from musictree.key import Key
@@ -14,7 +14,6 @@ from musictree.quarterduration import QuarterDuration
 from musictree.score import Score
 from musictree.tests.util import IdTestCase, get_xml_elements_diff, XMLsDifferException, get_xml_diff_part, \
     generate_xml_file
-import xml.etree.ElementTree as ET
 
 
 class TestId(IdTestCase):
