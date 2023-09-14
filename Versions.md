@@ -71,7 +71,7 @@ package.
 
 Add `musictree.testing` to `musictree` package
 
-# Version 1.4
+# Version 2.0
 
 ``SimpleFormat`` added. It is useful tool to generate list of chords and also do some simple algorithmic changes to it
 if needed.
@@ -96,6 +96,7 @@ Automatically created ``Time.actual_sigatures`` has been updated: 2/8 = 2/8; 4/8
 4/8 + 3/8
 ``Accidental.mode`` changed to standard, enharmonic, sharp, flat, force-sharp and force-flat.
 ``Score`` Inherited methode ``Score.write`` will throw an Exception (.export_xml should be used instead).
+``Score.group_parts(number, start_part_number, end_part_number, symbol='square', name=None, abbreviation=None)`` added
 ``Clef`` argument default and property _default added (this will be True if Measure._update_default_clefs() set the
 clef, otherwise it will be False).
 ``PerucssionClef()`` added.
