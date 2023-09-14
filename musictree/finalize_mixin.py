@@ -17,7 +17,8 @@ class FinalizeMixin:
             raise AlreadyFinalized(self)
 
         for child in self.get_children():
-            child.finalize()
+            if not child._finalized:
+                child.finalize()
 
         self._finalized = True
 

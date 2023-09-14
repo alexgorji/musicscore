@@ -28,6 +28,8 @@ class Midi(MusicTree):
         self._parent_note = None
         self._ties = set()
 
+        self._staff_number = None
+
         self.value = value
         self.accidental = accidental
 
@@ -232,12 +234,18 @@ class Midi(MusicTree):
         """
         return self._pitch_or_rest
 
+    def get_staff_number(self):
+        return self._staff_number
+
     def transpose(self, val: float) -> 'Midi':
         """
         Adds val to value and returns self
         """
         self.value += val
         return self
+
+    def set_staff_number(self, val):
+        self._staff_number = val
 
     # //operators
     def __lt__(self, other):  # For x < y

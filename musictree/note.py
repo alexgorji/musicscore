@@ -304,6 +304,10 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         """
         :return: number of :obj:`~musictree.staff.Staff` in note's ancestors
         """
+        midi_staff_number = self.midi.get_staff_number()
+        if midi_staff_number:
+            return midi_staff_number
+
         return self.parent_chord.get_staff_number()
 
     def get_voice_number(self) -> int:

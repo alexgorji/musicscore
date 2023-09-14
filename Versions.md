@@ -79,6 +79,7 @@ if needed.
 ``Metronome`` new Class.
 ``Midi`` is now the core object for adding or removing ties to ``Chord`` (and ``Note``).
 ``Midi.notehead`` property added.
+``Midi.set_staff_number()`` and ``Midi.get_staff_number()`` added to make staff crossing possible.
 ``Chord.add_midi(), Chord._sort_midis()`` added.
 ``Chord.add_direction_type()`` added.
 ``Chord.add_wedge()`` added.

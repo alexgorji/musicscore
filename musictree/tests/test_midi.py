@@ -182,6 +182,11 @@ class TestMidi(TestCase):
         assert m2.is_tied_to_previous
         assert m2.is_tied_to_next
 
+    def test_set_staff_number(self):
+        midi = Midi(60)
+        assert not midi.get_staff_number()
+        midi.set_staff_number(2)
+        assert midi.get_staff_number() == 2
 
 class TestMidiNoteHead(IdTestCase):
     def test_notehead_property(self):
