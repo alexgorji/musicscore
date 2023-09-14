@@ -5,7 +5,7 @@ from musictree.exceptions import AlreadyFinalized
 from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, \
     XMLEncoding, \
-    XMLSupports
+    XMLSupports, XMLScorePart, XMLPartGroup, XMLGroupSymbol, XMLGroupBarline, XMLGroupName, XMLGroupAbbreviation
 
 from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDuration
@@ -271,6 +271,31 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         :rtype: List[:obj:`~musictree.part.Part`]
         """
         return super().get_children()
+
+    def group_parts(self, number, start_part_number, end_part_number, symbol='square', name=None, abbreviation=None):
+        parts = self.get_children_of_type(Part)
+        for part_number in [start_part_number, end_part_number]:
+            if not 0 < part_number <= len(parts):
+                raise ValueError(f'Wrong part number {part_number}. Permitted between 1 and {len(parts)}')
+        if not start_part_number < end_part_number:
+            raise ValueError(
+                f'Wrong part numbers. start_part_number {start_part_number} must be smaller than end_part_number {end_part_number}')
+
+        new_xml_part_list = XMLPartList(xsd_check=False)
+        for child in self.xml_part_list.get_children():
+            if isinstance(child, XMLScorePart) and child.id == parts[start_part_number - 1].id_.value:
+                pg = new_xml_part_list.add_child(XMLPartGroup(number=str(number), type='start'))
+                pg.add_child(XMLGroupSymbol(symbol))
+                pg.add_child(XMLGroupBarline('yes'))
+                if name:
+                    pg.add_child(XMLGroupName(name))
+                if abbreviation:
+                    pg.add_child(XMLGroupAbbreviation(abbreviation))
+            new_xml_part_list.add_child(child)
+            if isinstance(child, XMLScorePart) and child.id == parts[end_part_number - 1].id_.value:
+                new_xml_part_list.add_child(XMLPartGroup(number=str(number), type='stop'))
+
+        self.xml_part_list = new_xml_part_list
 
     def write(self, *args, **kwargs):
         raise NotImplementedError('Use Score.export_xml instead!')

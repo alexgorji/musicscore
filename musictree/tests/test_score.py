@@ -156,3 +156,55 @@ class TestScore(IdTestCase):
   </identification>
 """
         assert s.xml_object.xml_identification.to_string() == expected
+
+    def test_group_parts_wrong_number(self):
+        score = Score()
+        [score.add_part(f'p-{i}') for i in range(1, 3)]
+        with self.assertRaises(ValueError):
+            score.group_parts(1, 0, 1)
+        with self.assertRaises(ValueError):
+            score.group_parts(2, 1, 6)
+        with self.assertRaises(ValueError):
+            score.group_parts(3, 2, 1)
+
+    def test_group_parts(self):
+        score = Score()
+        parts = [score.add_part(f'p-{i}') for i in range(1, 6)]
+        for p in parts:
+            p.add_chord(Chord(0, 4))
+
+        score.group_parts(1, 2, 4, name='Group 1', symbol='square')
+        score.group_parts(2, 3, 4, name='Group 2', symbol='bracket')
+
+        expected = """<part-list>
+    <score-part id="p-1">
+      <part-name />
+    </score-part>
+    <part-group number="1" type="start">
+      <group-name>Group 1</group-name>
+      <group-symbol>square</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="p-2">
+      <part-name />
+    </score-part>
+    <part-group number="2" type="start">
+      <group-name>Group 2</group-name>
+      <group-symbol>bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="p-3">
+      <part-name />
+    </score-part>
+    <score-part id="p-4">
+      <part-name />
+    </score-part>
+    <part-group number="2" type="stop" />
+    <part-group number="1" type="stop" />
+    <score-part id="p-5">
+      <part-name />
+    </score-part>
+  </part-list>
+"""
+        score.finalize()
+        assert score.xml_part_list.to_string() == expected
