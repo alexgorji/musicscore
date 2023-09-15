@@ -2,13 +2,14 @@ from unittest import TestCase
 
 from quicktions import Fraction
 
+from musictree import Part, Time
 from musictree.chord import Chord
 from musictree.measure import Measure
 from musictree.tests.test_beat import create_voice
-from musictree.tests.util import generate_all_quintuplets, generate_all_triplets, generate_all_sextuplets
+from musictree.tests.util import generate_all_quintuplets, generate_all_triplets, generate_all_sextuplets, IdTestCase
 
 
-class TestTuplets(TestCase):
+class TestTuplets(IdTestCase):
 
     def test_simple_triplet(self):
         expected_1 = """<note>
@@ -208,3 +209,51 @@ class TestTuplets(TestCase):
             else:
                 for c in beat.get_children():
                     assert c.notes[0].find_child('XMLBeam') is None
+
+    def test_quarter_triplets(self):
+        expected_1 = """<note>
+            <pitch>
+              <step>C</step>
+              <octave>4</octave>
+            </pitch>
+            <duration>1</duration>
+            <voice>1</voice>
+            <type>eighth</type>
+            <time-modification>
+              <actual-notes>3</actual-notes>
+              <normal-notes>2</normal-notes>
+              <normal-type>eighth</normal-type>
+            </time-modification>
+            <notations>
+              <tuplet bracket="yes" number="1" type="start" />
+            </notations>
+          </note>
+        """
+        expected_2 = """<note>
+            <pitch>
+              <step>C</step>
+              <octave>4</octave>
+            </pitch>
+            <duration>2</duration>
+            <voice>1</voice>
+            <type>quarter</type>
+            <time-modification>
+              <actual-notes>3</actual-notes>
+              <normal-notes>2</normal-notes>
+              <normal-type>eighth</normal-type>
+            </time-modification>
+            <notations>
+              <tuplet number="1" type="stop" />
+            </notations>
+          </note>
+        """
+        m = Measure(1)
+        m.time = Time(1, 2)
+        ch1 = Chord(midis=60, quarter_duration=2 / 3)
+        ch2 = Chord(midis=60, quarter_duration=4 / 3)
+        for c in [ch1, ch2]:
+            # c.midis[0].accidental.show = False
+            m._add_chord(c)
+        m.finalize()
+        assert ch1.notes[0].to_string() == expected_1
+        assert ch2.notes[0].to_string() == expected_2
