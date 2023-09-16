@@ -66,7 +66,7 @@
         <time-modification>
           <actual-notes>3</actual-notes>
           <normal-notes>2</normal-notes>
-          <normal-type>eighth</normal-type>
+          <normal-type>quarter</normal-type>
         </time-modification>
         <notations>
           <tuplet bracket="yes" number="1" type="start" />
@@ -83,7 +83,7 @@
         <time-modification>
           <actual-notes>3</actual-notes>
           <normal-notes>2</normal-notes>
-          <normal-type>eighth</normal-type>
+          <normal-type>quarter</normal-type>
         </time-modification>
       </note>
       <note>
@@ -97,7 +97,7 @@
         <time-modification>
           <actual-notes>3</actual-notes>
           <normal-notes>2</normal-notes>
-          <normal-type>eighth</normal-type>
+          <normal-type>quarter</normal-type>
         </time-modification>
         <notations>
           <tuplet number="1" type="stop" />

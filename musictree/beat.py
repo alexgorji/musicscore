@@ -313,6 +313,7 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
                         note.update_dots(note.quarter_duration.get_number_of_dots())
 
     def _update_tuplets(self, chord_group, actual_notes, factor=1):
+
         def add_bracket_to_notes(chord, type_, number=1):
             for note in chord.notes:
                 if not note.xml_notations:
@@ -324,16 +325,15 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
                 t.type = type_
 
         normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
-        types = {8: '32nd', 4: '16th', 2: 'eighth'}
+        types = {8: '32nd', 4: '16th', 2: 'eighth', 1: 'quarter', 0.5: 'half'}
 
         actual_notes *= factor
         if int(actual_notes) != actual_notes:
             raise ValueError
         actual_notes = int(actual_notes)
-
         if actual_notes in normals:
             normal = normals[actual_notes]
-            type_ = types[normal / factor]
+            type_ = types[(normal / factor / self.quarter_duration.value)]
             for chord in chord_group:
                 for note in chord.notes:
                     note.xml_time_modification = XMLTimeModification()
@@ -364,6 +364,7 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
             else:
                 raise NotImplementedError(
                     'Beat with quarter_duration other than one cannot manage more than one group of chords.')
+
         self._update_tuplets(self.get_children(), actual_notes)
         self._update_dots(self.get_children(), actual_notes)
 

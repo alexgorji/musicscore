@@ -212,48 +212,50 @@ class TestTuplets(IdTestCase):
 
     def test_quarter_triplets(self):
         expected_1 = """<note>
-            <pitch>
-              <step>C</step>
-              <octave>4</octave>
-            </pitch>
-            <duration>1</duration>
-            <voice>1</voice>
-            <type>eighth</type>
-            <time-modification>
-              <actual-notes>3</actual-notes>
-              <normal-notes>2</normal-notes>
-              <normal-type>eighth</normal-type>
-            </time-modification>
-            <notations>
-              <tuplet bracket="yes" number="1" type="start" />
-            </notations>
-          </note>
-        """
+    <pitch>
+      <step>C</step>
+      <octave>4</octave>
+    </pitch>
+    <duration>2</duration>
+    <voice>1</voice>
+    <type>quarter</type>
+    <time-modification>
+      <actual-notes>3</actual-notes>
+      <normal-notes>2</normal-notes>
+      <normal-type>quarter</normal-type>
+    </time-modification>
+    <notations>
+      <tuplet bracket="yes" number="1" type="start" />
+    </notations>
+  </note>
+"""
         expected_2 = """<note>
-            <pitch>
-              <step>C</step>
-              <octave>4</octave>
-            </pitch>
-            <duration>2</duration>
-            <voice>1</voice>
-            <type>quarter</type>
-            <time-modification>
-              <actual-notes>3</actual-notes>
-              <normal-notes>2</normal-notes>
-              <normal-type>eighth</normal-type>
-            </time-modification>
-            <notations>
-              <tuplet number="1" type="stop" />
-            </notations>
-          </note>
-        """
+    <pitch>
+      <step>D</step>
+      <octave>4</octave>
+    </pitch>
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>half</type>
+    <time-modification>
+      <actual-notes>3</actual-notes>
+      <normal-notes>2</normal-notes>
+      <normal-type>quarter</normal-type>
+    </time-modification>
+    <notations>
+      <tuplet number="1" type="stop" />
+    </notations>
+  </note>
+"""
         m = Measure(1)
         m.time = Time(1, 2)
         ch1 = Chord(midis=60, quarter_duration=2 / 3)
-        ch2 = Chord(midis=60, quarter_duration=4 / 3)
+        ch2 = Chord(midis=62, quarter_duration=4 / 3)
         for c in [ch1, ch2]:
             # c.midis[0].accidental.show = False
             m._add_chord(c)
         m.finalize()
+        assert [beat.quarter_duration for beat in m.get_beats()] == [2]
+        assert m.xml_object.xml_attributes.xml_divisions.value_ == 3
         assert ch1.notes[0].to_string() == expected_1
         assert ch2.notes[0].to_string() == expected_2
