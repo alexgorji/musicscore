@@ -2,6 +2,8 @@ from unittest import TestCase
 
 from fractions import Fraction
 
+from musictree import Part, Chord, Measure
+from musictree.tests.util import IdTestCase
 from musictree.time import Time, flatten_times, _convert_signatures_to_ints
 
 
@@ -158,3 +160,51 @@ class TestTime(TestCase):
         assert copied.signatures == t.signatures
         assert copied.actual_signatures == t.actual_signatures
         assert copied.show == t.show
+
+
+class TestActualTime(IdTestCase):
+
+    # def test_actual_time_cannot_change_measure_quarter_duration(self):
+    #     t = Time(3, 4)
+    #     t.actual_signatures = [4, 4]
+    def test_add_measure_sets_actual_time_of_previous(self):
+        p = Part('p1')
+        t = Time(4, 4)
+        t.actual_signatures = [2, 2]
+        m1 = p.add_measure(t)
+        m2 = p.add_measure()
+        assert m1.time.actual_signatures == m2.time.actual_signatures
+        assert [b.quarter_duration for b in m1.get_beats()] == [b.quarter_duration for b in m2.get_beats()]
+
+    def test_actual_time_and_beat_quarter_duration(self):
+        t = Time(3, 2)
+        assert t.get_beats_quarter_durations() == [2, 2, 2]
+        t.actual_signatures = [3, 2]
+        assert t.get_beats_quarter_durations() == [6]
+
+        t = Time(2, 2)
+        assert t.get_beats_quarter_durations() == [2, 2]
+        t.actual_signatures = [2, 2]
+        assert t.get_beats_quarter_durations() == [4]
+
+    def test_actual_time_and_beat_get_actual_notes(self):
+        part = Part('p1')
+        t = Time(2, 2)
+        measure = part.add_measure(t)
+        quarter_durations = [4 / 3, 2 / 3, 2 / 5, 2 / 5, 2 / 5, 2 / 5, 2 / 5]
+        for qd in quarter_durations:
+            part.add_chord(Chord(60, qd))
+        assert measure.get_beat(staff_number=1, voice_number=1, beat_number=1).quarter_duration == 2
+        assert len(measure.get_beat(staff_number=1, voice_number=1, beat_number=1).get_children()) == 2
+        assert len(measure.get_beat(staff_number=1, voice_number=1, beat_number=2).get_children()) == 5
+
+        part = Part('p2')
+        t = Time(2, 2)
+        t.actual_signatures = [1, 2, 1, 2]
+        measure = part.add_measure(t)
+        quarter_durations = [4 / 3, 2 / 3, 2 / 5, 2 / 5, 2 / 5, 2 / 5, 2 / 5]
+        for qd in quarter_durations:
+            part.add_chord(Chord(60, qd))
+        assert measure.get_beat(staff_number=1, voice_number=1, beat_number=1).quarter_duration == 2
+        assert len(measure.get_beat(staff_number=1, voice_number=1, beat_number=1).get_children()) == 2
+        assert len(measure.get_beat(staff_number=1, voice_number=1, beat_number=2).get_children()) == 5

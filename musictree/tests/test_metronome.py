@@ -52,17 +52,6 @@ class TestCase(IdTestCase):
         ch = Chord(60, 4)
         p.add_chord(ch)
         ch.metronome = Metronome(100, 1.5)
-        # expected = """<direction placement="above">
-        #         <direction-type>
-        #           <metronome default-y="40" font-family="Finale Maestro" font-size="12" halign="left" relative-y="30">
-        #             <beat-unit>quarter</beat-unit>
-        #             <beat-unit-dot/>
-        #             <per-minute font-family="Times New Roman" font-size="12">100</per-minute>
-        #           </metronome>
-        #         </direction-type>
-        #         <sound tempo="150"/>
-        #       </direction>
-        # """
         expected = """<direction placement="above">
       <direction-type>
         <metronome>

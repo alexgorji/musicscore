@@ -127,7 +127,7 @@ class TestQuarterDuration(TestCase):
         assert QuarterDuration(2 + 2 / 2 + 2 / 4).get_number_of_dots() == 2
 
     def test_is_not_writable(self):
-        for value in [0.23, 5 / 2, 9 / 2, 5 / 4, 8 / 5, 9 / 5]:
+        for value in [0.23, 5 / 2, 9 / 2, 5 / 4, 9 / 5]:
             with self.assertRaises(QuarterDurationIsNotWritable):
                 QuarterDuration(value)._get_type_and_dots()
             with self.assertRaises(QuarterDurationIsNotWritable):

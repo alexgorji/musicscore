@@ -28,6 +28,15 @@ def _convert_signatures_to_ints(signatures):
     return output
 
 
+def _get_quarter_durations_from_ints(signatures):
+    output = 0
+    for i in range(int(len(signatures) / 2)):
+        beat = signatures[i * 2]
+        beat_type = signatures[i * 2 + 1]
+        output += 4 * beat / beat_type
+    return output
+
+
 class Time(XMLWrapper):
     _ATTRIBUTES = {'signatures', 'actual_signatures', 'parent_measure', 'show'}
     XMLClass = XMLTime
@@ -102,6 +111,7 @@ class Time(XMLWrapper):
     def actual_signatures(self, val):
         if val is not None:
             val = _convert_signatures_to_ints(val)
+
         self._actual_signatures = val
         if self.parent_measure:
             self.parent_measure._update_voice_beats()
@@ -156,9 +166,7 @@ class Time(XMLWrapper):
         :return: List of quarter durations according to :obj:`actual_signatures`
         """
         return [QuarterDuration(numerator, denominator) * 4 for numerator, denominator in
-                [self.actual_signatures[i:i + 2] for i in range(0,
-                                                                len(self.actual_signatures),
-                                                                2)]]
+                [self.actual_signatures[i:i + 2] for i in range(0, len(self.actual_signatures), 2)]]
 
     def __copy__(self):
         cp = self.__class__(*self.signatures, show=self.show)

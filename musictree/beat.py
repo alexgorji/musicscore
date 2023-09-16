@@ -313,7 +313,6 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
                         note.update_dots(note.quarter_duration.get_number_of_dots())
 
     def _update_tuplets(self, chord_group, actual_notes, factor=1):
-
         def add_bracket_to_notes(chord, type_, number=1):
             for note in chord.notes:
                 if not note.xml_notations:

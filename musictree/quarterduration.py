@@ -28,6 +28,7 @@ _note_simple_types = {
     (1, 5): '16th',
     (2, 5): 'eighth',
     (4, 5): 'quarter',
+    (8, 5): 'half',
     (1, 4): '16th',
     (2, 4): 'eighth',
     (1, 3): 'eighth',

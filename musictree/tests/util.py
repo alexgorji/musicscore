@@ -179,47 +179,6 @@ def generate_all_triplets():
     return output
 
 
-# def create_technical(class_):
-#     if class_.__name__ == 'XMLFingering':
-#         technical = class_('2')
-#     elif class_.__name__ == 'XMLPluck':
-#         technical = class_('something')
-#     elif class_.__name__ == 'XMLFret':
-#         technical = class_(2)
-#     elif class_.__name__ == 'XMLString':
-#         technical = class_(2)
-#     elif class_.__name__ == 'XMLTap':
-#         technical = class_('2')
-#     elif class_.__name__ == 'XMLHandbell':
-#         technical = class_('damp')
-#     elif class_.__name__ == 'XMLHarmonClosed':
-#         technical = class_('yes')
-#     elif class_.__name__ == 'XMLOtherTechnical':
-#         technical = class_('bla')
-#     else:
-#         technical = class_()
-#     if class_.__name__ == 'XMLBend':
-#         technical.add_child(XMLBendAlter(2))
-#     elif class_.__name__ == 'XMLHole':
-#         technical.add_child(XMLHoleClosed('yes'))
-#     elif class_.__name__ == 'XMLArrow':
-#         technical.add_child(XMLArrowDirection('up'))
-#     elif class_.__name__ == 'XMLHarmonMute':
-#         technical.add_child(XMLHarmonClosed('yes'))
-#
-#     return technical
-
-
-# def create_articulation(class_):
-#     if class_.__name__ == 'XMLBreathMark':
-#         articulation = class_('comma')
-#     elif class_.__name__ == 'XMLCaesura':
-#         articulation = class_('normal')
-#     else:
-#         articulation = class_()
-#     return articulation
-
-
 def get_xml_elements_diff(el1, el2):
     return DeepDiff(xmltodict.parse(ET.tostring(el1)), xmltodict.parse(ET.tostring(el2)))
 
