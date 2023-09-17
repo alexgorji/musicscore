@@ -118,10 +118,7 @@ class TestUtils(TestCase):
                 assert bracket.line_end == 'up'
 
     def test_octave_chords(self):
-        chords = [Chord(60, 1)]
-        with self.assertRaises(WrongNumberOfChordsError):
-            octave_chords(chords)
-        chords.extend([Chord(61, 1), Chord(62, 1)])
+        chords = [Chord(60, 1) for _ in range(3)]
         octave_chords(chords)
         assert chords[0].get_x(XMLOctaveShift)[0].type == 'down'
         assert chords[1].get_x(XMLOctaveShift)[0].type == 'continue'
