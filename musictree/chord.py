@@ -776,6 +776,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
                 return False
         return True
 
+    def get_brackets(self):
+        return self.get_x(XMLBracket)
+
     def get_children(self) -> List[Note]:
         """
         :return: list of added children.

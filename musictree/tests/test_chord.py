@@ -377,10 +377,6 @@ class TestTreeChord(ChordTestCase):
             ch.clef = 'bla'
 
     @skip
-    def test_add_bracket(self):
-        self.fail('Incomplete')
-
-    @skip
     def test_percussion_notation(self):
         self.fail('Incomplete')
 
@@ -484,7 +480,6 @@ class TestTreeChord(ChordTestCase):
         dt3 = chord.add_x(cl1('flat'), parent_type='notation')
         assert chord.get_x(cl1) == [dt1, dt2, dt3]
 
-
     def test_get_wedges(self):
         chord = Chord(60, 1)
         dt1 = chord.add_x(XMLWedge(type='crescendo'))
@@ -504,6 +499,11 @@ class TestTreeChord(ChordTestCase):
         dt1 = chord.add_x(XMLWords('something'))
         dt2 = chord.add_x(XMLWords('something else'))
         assert chord.get_words() == [dt1, dt2]
+
+    def test_get_brackets(self):
+        chords = [Chord(60, 1) for _ in range(3)]
+        b1, b2, b3 = chords[0].add_x(XMLBracket()), chords[1].add_x(XMLBracket()), chords[2].add_x(XMLBracket())
+        assert [ch.get_brackets()[0] for ch in chords] == [b1, b2, b3]
 
 
 class TestTies(ChordTestCase):

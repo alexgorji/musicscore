@@ -9,7 +9,9 @@ from musictree.score import Score
 from musictree.tests.util import diff_xml, _create_expected_path, create_test_objects
 from musictree.util import lcm, isinstance_as_string, XML_DYNAMIC_CLASSES, XML_ARTICULATION_CLASSES, \
     XML_ORNAMENT_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, XML_TECHNICAL_CLASSES, XML_OTHER_NOTATIONS, \
-    XML_DIRECTION_TYPE_CLASSES, XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, slur_chords, wedge_chords
+    XML_DIRECTION_TYPE_CLASSES, XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, slur_chords, wedge_chords, \
+    trill_chords, bracket_chords
+from musicxml import XMLTrillMark, XMLWavyLine
 
 
 class TestUtils(TestCase):
@@ -65,6 +67,55 @@ class TestUtils(TestCase):
         assert chords[0].get_wedges()[0].type == 'crescendo'
         assert chords[1].get_wedges()[0].type == 'continue'
         assert chords[2].get_wedges()[0].type == 'stop'
+
+    def test_trill_chords(self):
+        chords = [Chord(60, 1)]
+        with self.assertRaises(WrongNumberOfChordsError):
+            trill_chords(chords)
+        chords.extend([Chord(61, 1), Chord(62, 1)])
+        trill_chords(chords)
+        assert len(chords[0].get_x(XMLTrillMark)) == 1
+        assert len(chords[1].get_x(XMLTrillMark)) == 0
+        assert len(chords[2].get_x(XMLTrillMark)) == 0
+        assert chords[0].get_x(XMLWavyLine)[0].type == 'start'
+        assert chords[1].get_x(XMLWavyLine)[0].type == 'continue'
+        assert chords[2].get_x(XMLWavyLine)[0].type == 'stop'
+
+    def test_bracket_chords(self):
+        chords = [Chord(60, 1)]
+        with self.assertRaises(WrongNumberOfChordsError):
+            bracket_chords(chords)
+        chords.extend([Chord(61, 1), Chord(62, 1)])
+        bracket_chords(chords)
+        assert chords[0].get_brackets()[0].type == 'start'
+        assert chords[1].get_brackets()[0].type == 'continue'
+        assert chords[2].get_brackets()[0].type == 'stop'
+
+        for i, ch in enumerate(chords):
+            bracket = ch.get_brackets()[0]
+            assert bracket.line_type == 'solid'
+            # assert bracket.placement == 'above'
+            assert bracket.number == 1
+            if i == 0:
+                assert bracket.line_end == 'down'
+            elif i == 1:
+                assert bracket.line_end == 'none'
+            else:
+                assert bracket.line_end == 'down'
+
+        chords = [Chord(60, 1) for _ in range(3)]
+        bracket_chords(chords, 'dashed', 'none', 'up', placement='below', number=2)
+        for i, ch in enumerate(chords):
+            bracket = ch.get_brackets()[0]
+            # assert bracket.placement == 'below'
+            assert bracket.number == 2
+            assert bracket.line_type == 'dashed'
+            if i == 0:
+                assert bracket.line_end == 'none'
+            elif i == 1:
+                assert bracket.line_end == 'none'
+            else:
+                assert bracket.line_end == 'up'
 
 
 class TestTestObjects(TestCase):

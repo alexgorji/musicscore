@@ -154,6 +154,16 @@ def slur_chords(chords, number=1, **kwargs):
         ch.add_x(XMLSlur(type='continue', number=number))
 
 
+def trill_chords(chords, number=1, placement='above'):
+    if len(chords) < 2:
+        raise WrongNumberOfChordsError('util.trill_chords needs at list two chords.')
+    chords[0].add_x(XMLTrillMark(placement=placement))
+    chords[0].add_x(XMLWavyLine(type='start', number=number), placement=placement)
+    chords[-1].add_x(XMLWavyLine(type='stop', number=number), placement=placement)
+    for ch in chords[1:-1]:
+        ch.add_x(XMLWavyLine(type='continue', number=number), placement=placement)
+
+
 def wedge_chords(chords, wedge_type, number=1, placement='below', **kwargs):
     if len(chords) < 2:
         raise WrongNumberOfChordsError('util.wedge_chords needs at list two chords.')
@@ -162,3 +172,15 @@ def wedge_chords(chords, wedge_type, number=1, placement='below', **kwargs):
     chords[-1].add_x(XMLWedge(type='stop', number=number), placement=placement)
     for ch in chords[1:-1]:
         ch.add_x(XMLWedge(type='continue', number=number), placement=placement)
+
+
+def bracket_chords(chords, line_type='solid', start_line_end='down', end_line_end='down', placement='above', number=1):
+    if len(chords) < 2:
+        raise WrongNumberOfChordsError('util.bracket_chords needs at list two chords.')
+
+    chords[0].add_x(XMLBracket(type='start', line_end=start_line_end, line_type=line_type, number=number),
+                    placement=placement)
+    chords[-1].add_x(XMLBracket(type='stop', line_end=end_line_end, line_type=line_type, number=number),
+                     placement=placement)
+    for ch in chords[1:-1]:
+        ch.add_x(XMLBracket(type='continue', line_end='none', line_type=line_type, number=number), placement=placement)

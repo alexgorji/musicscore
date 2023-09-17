@@ -1,5 +1,3 @@
-from unittest import skip
-
 from musictree import Part, Chord, Measure, Beat, Voice, Score, Staff, Accidental
 from musictree.exceptions import AlreadyFinalizedError, ChordNotesAreAlreadyCreatedError, AddChordError
 from musictree.tests.util import IdTestCase

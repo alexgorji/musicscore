@@ -6,7 +6,8 @@ from pathlib import Path
 
 from musictree import Score, Time, Chord
 from musictree.tests.util import IdTestCase
-from musictree.util import slur_chords, wedge_chords
+from musictree.util import slur_chords, wedge_chords, trill_chords, bracket_chords
+from musicxml import XMLBracket
 
 
 class TestLily33a(IdTestCase):
@@ -36,6 +37,38 @@ class TestLily33a(IdTestCase):
 
         chords = [Chord(71, 1) for _ in range(3)]
         wedge_chords(chords, 'diminuendo', placement='above')
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        trill_chords(chords, placement='above')
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1), Chord(0, 2)]
+        trill_chords(chords, placement='above')
+        [part.add_chord(ch) for ch in chords]
+
+        # chords = [Chord(71, 1) for _ in range(3)]
+        # octave_chords(chords, placement='above')
+        # [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        bracket_chords(chords, 'solid', 'down', 'down', placement='above')
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        bracket_chords(chords, 'dashed', 'down', 'down', placement='above')
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        bracket_chords(chords, 'solid', 'none', 'down', placement='above')
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        bracket_chords(chords, 'dashed', 'none', 'up', placement='above')
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        bracket_chords(chords, 'solid', 'none', 'none', placement='above')
         [part.add_chord(ch) for ch in chords]
 
         xml_path = Path(__file__).with_suffix('.xml')
