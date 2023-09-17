@@ -10,8 +10,8 @@ from musictree.tests.util import diff_xml, _create_expected_path, create_test_ob
 from musictree.util import lcm, isinstance_as_string, XML_DYNAMIC_CLASSES, XML_ARTICULATION_CLASSES, \
     XML_ORNAMENT_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, XML_TECHNICAL_CLASSES, XML_OTHER_NOTATIONS, \
     XML_DIRECTION_TYPE_CLASSES, XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, slur_chords, wedge_chords, \
-    trill_chords, bracket_chords
-from musicxml import XMLTrillMark, XMLWavyLine
+    trill_chords, bracket_chords, octave_chords
+from musicxml import XMLTrillMark, XMLWavyLine, XMLOctaveShift
 
 
 class TestUtils(TestCase):
@@ -116,6 +116,25 @@ class TestUtils(TestCase):
                 assert bracket.line_end == 'none'
             else:
                 assert bracket.line_end == 'up'
+
+    def test_octave_chords(self):
+        chords = [Chord(60, 1)]
+        with self.assertRaises(WrongNumberOfChordsError):
+            octave_chords(chords)
+        chords.extend([Chord(61, 1), Chord(62, 1)])
+        octave_chords(chords)
+        assert chords[0].get_x(XMLOctaveShift)[0].type == 'down'
+        assert chords[1].get_x(XMLOctaveShift)[0].type == 'continue'
+        assert chords[2].get_x(XMLOctaveShift)[0].type == 'stop'
+
+        chords = [Chord(60, 1) for _ in range(3)]
+        octave_chords(chords, type='down', size=15, number=2)
+        assert chords[0].get_x(XMLOctaveShift)[0].type == 'down'
+        assert chords[1].get_x(XMLOctaveShift)[0].type == 'continue'
+        assert chords[2].get_x(XMLOctaveShift)[0].type == 'stop'
+        for ch in chords:
+            assert ch.get_x(XMLOctaveShift)[0].size == 15
+            assert ch.get_x(XMLOctaveShift)[0].number == 2
 
 
 class TestTestObjects(TestCase):

@@ -6,8 +6,8 @@ from pathlib import Path
 
 from musictree import Score, Time, Chord
 from musictree.tests.util import IdTestCase
-from musictree.util import slur_chords, wedge_chords, trill_chords, bracket_chords
-from musicxml import XMLBracket
+from musictree.util import slur_chords, wedge_chords, trill_chords, bracket_chords, octave_chords
+from musicxml import XMLBracket, XMLOctave
 
 
 class TestLily33a(IdTestCase):
@@ -47,9 +47,13 @@ class TestLily33a(IdTestCase):
         trill_chords(chords, placement='above')
         [part.add_chord(ch) for ch in chords]
 
-        # chords = [Chord(71, 1) for _ in range(3)]
-        # octave_chords(chords, placement='above')
-        # [part.add_chord(ch) for ch in chords]
+        chords = [Chord(71, 1) for _ in range(3)]
+        octave_chords(chords)
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        octave_chords(chords, type='up', size=15)
+        [part.add_chord(ch) for ch in chords]
 
         chords = [Chord(71, 1) for _ in range(3)]
         bracket_chords(chords, 'solid', 'down', 'down', placement='above')

@@ -375,7 +375,7 @@
       </attributes>
       <direction placement="above">
         <direction-type>
-          <bracket type="start" line-end="down" line-type="solid" number="1" />
+          <octave-shift type="down" size="8" number="1" />
         </direction-type>
       </direction>
       <note>
@@ -389,7 +389,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <bracket type="continue" line-end="none" line-type="solid" number="1" />
+          <octave-shift type="continue" size="8" number="1" />
         </direction-type>
       </direction>
       <note>
@@ -403,7 +403,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <bracket type="stop" line-end="down" line-type="solid" number="1" />
+          <octave-shift type="stop" size="8" number="1" />
         </direction-type>
       </direction>
       <note>
@@ -420,9 +420,9 @@
       <attributes>
         <divisions>1</divisions>
       </attributes>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
-          <bracket type="start" line-end="down" line-type="dashed" number="1" />
+          <octave-shift type="up" size="15" number="1" />
         </direction-type>
       </direction>
       <note>
@@ -434,9 +434,9 @@
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
-          <bracket type="continue" line-end="none" line-type="dashed" number="1" />
+          <octave-shift type="continue" size="15" number="1" />
         </direction-type>
       </direction>
       <note>
@@ -448,9 +448,9 @@
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
-          <bracket type="stop" line-end="down" line-type="dashed" number="1" />
+          <octave-shift type="stop" size="15" number="1" />
         </direction-type>
       </direction>
       <note>
@@ -469,7 +469,7 @@
       </attributes>
       <direction placement="above">
         <direction-type>
-          <bracket type="start" line-end="none" line-type="solid" number="1" />
+          <bracket type="start" line-end="down" line-type="solid" number="1" />
         </direction-type>
       </direction>
       <note>
@@ -516,6 +516,100 @@
       </attributes>
       <direction placement="above">
         <direction-type>
+          <bracket type="start" line-end="down" line-type="dashed" number="1" />
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <direction placement="above">
+        <direction-type>
+          <bracket type="continue" line-end="none" line-type="dashed" number="1" />
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <direction placement="above">
+        <direction-type>
+          <bracket type="stop" line-end="down" line-type="dashed" number="1" />
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <measure number="12">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <direction placement="above">
+        <direction-type>
+          <bracket type="start" line-end="none" line-type="solid" number="1" />
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <direction placement="above">
+        <direction-type>
+          <bracket type="continue" line-end="none" line-type="solid" number="1" />
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <direction placement="above">
+        <direction-type>
+          <bracket type="stop" line-end="down" line-type="solid" number="1" />
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <measure number="13">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <direction placement="above">
+        <direction-type>
           <bracket type="start" line-end="none" line-type="dashed" number="1" />
         </direction-type>
       </direction>
@@ -557,7 +651,7 @@
         <type>quarter</type>
       </note>
     </measure>
-    <measure number="12">
+    <measure number="14">
       <attributes>
         <divisions>1</divisions>
       </attributes>
