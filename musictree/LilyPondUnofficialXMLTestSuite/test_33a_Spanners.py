@@ -4,10 +4,11 @@ dashed none/up, solid none/none), dashes, glissando (wavy), bend-alter, slide (s
 hammer-on, pull-off, pedal (down, change, up)."""
 from pathlib import Path
 
-from musictree import Score, Time, Chord
+from musictree import Score, Time, Chord, F, C
 from musictree.tests.util import IdTestCase
 from musictree.util import slur_chords, wedge_chords, trill_chords, bracket_chords, octave_chords
-from musicxml import XMLBracket, XMLOctave
+from musicxml import XMLBracket, XMLOctave, XMLDashes, XMLGlissando, XMLBendAlter, XMLBend, XMLSlide, XMLGrouping, \
+    XMLHammerOn, XMLPullOff, XMLPedal
 
 
 class TestLily33a(IdTestCase):
@@ -73,6 +74,54 @@ class TestLily33a(IdTestCase):
 
         chords = [Chord(71, 1) for _ in range(3)]
         bracket_chords(chords, 'solid', 'none', 'none', placement='above')
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        chords[0].add_words('rit.', placement='above', font_style='italic')
+        chords[0].add_x(XMLDashes(type='start', relative_x=10))
+        chords[1].add_x(XMLDashes(type='continue'))
+        chords[2].add_x(XMLDashes(type='stop'))
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1), Chord(F(5), 1), Chord(0, 1)]
+        chords[0].add_x(XMLGlissando(type='start', line_type='wavy'))
+        chords[1].add_x(XMLGlissando(type='stop'))
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1), Chord(F(5), 1), Chord(0, 1)]
+        b = chords[0].add_x(XMLBend(shape='curved'))
+        b.xml_bend_alter = XMLBendAlter(5)
+        b = chords[1].add_x(XMLBend())
+        b.xml_bend_alter = XMLBendAlter(0)
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1), Chord(C(4), 1), Chord(0, 1)]
+        chords[0].add_x(XMLSlide(type='start'))
+        chords[1].add_x(XMLSlide(type='stop'))
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        chords[0].add_words('XMLGrouping not implemented yet')
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1), Chord(71, 1), Chord(0, 1)]
+        chords[0].add_words('Fingered tremolo not implemented yet', placement='below')
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1), Chord(71, 1), Chord(0, 1)]
+        chords[0].add_x(XMLHammerOn(type='start'))
+        chords[1].add_x(XMLHammerOn(type='stop'))
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1), Chord(71, 1), Chord(0, 1)]
+        chords[0].add_x(XMLPullOff(type='start'))
+        chords[1].add_x(XMLPullOff(type='stop'))
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        chords[0].add_x(XMLPedal(type='start'))
+        chords[1].add_x(XMLPedal(type='change'))
+        chords[2].add_x(XMLPedal(type='stop'))
         [part.add_chord(ch) for ch in chords]
 
         xml_path = Path(__file__).with_suffix('.xml')

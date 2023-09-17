@@ -555,7 +555,13 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     # public methods
 
-    def add_direction_type(self, direction_type: XMLElement, placement: str = 'above'):
+    def add_direction_type(self, direction_type: XMLElement, placement: Optional[str] = None):
+        if not placement:
+            if isinstance(direction_type, XMLPedal) or isinstance(direction_type, XMLWedge):
+                placement = 'below'
+            else:
+                placement = 'above'
+
         if self._finalized is True:
             raise AlreadyFinalizedError(self, 'add_direction_type')
         if direction_type.__class__ not in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
