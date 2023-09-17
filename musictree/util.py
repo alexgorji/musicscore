@@ -187,12 +187,16 @@ def bracket_chords(chords, line_type='solid', start_line_end='down', end_line_en
 
 
 def octave_chords(chords, type='down', size=8, number=1):
+    try:
+        len(chords)
+    except TypeError:
+        chords = [chords]
     if type == 'down':
         placement = 'above'
     else:
         placement = 'below'
-    if len(chords) < 2:
-        raise WrongNumberOfChordsError('util.octave_chords needs at list two chords.')
+    # if len(chords) < 2:
+    #     raise WrongNumberOfChordsError('util.octave_chords needs at list two chords.')
 
     chords[0].add_x(XMLOctaveShift(type=type, size=size, number=number), placement=placement)
     chords[-1].add_x(XMLOctaveShift(type='stop', size=size, number=number), placement=placement)

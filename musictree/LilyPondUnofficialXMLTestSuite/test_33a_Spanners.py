@@ -7,8 +7,7 @@ from pathlib import Path
 from musictree import Score, Time, Chord, F, C
 from musictree.tests.util import IdTestCase
 from musictree.util import slur_chords, wedge_chords, trill_chords, bracket_chords, octave_chords
-from musicxml import XMLBracket, XMLOctave, XMLDashes, XMLGlissando, XMLBendAlter, XMLBend, XMLSlide, XMLGrouping, \
-    XMLHammerOn, XMLPullOff, XMLPedal
+from musicxml import XMLDashes, XMLGlissando, XMLBendAlter, XMLBend, XMLSlide, XMLHammerOn, XMLPullOff, XMLPedal
 
 
 class TestLily33a(IdTestCase):
