@@ -6,6 +6,7 @@ from pathlib import Path
 
 from musictree import Score, Time, Chord
 from musictree.tests.util import IdTestCase
+from musictree.util import slur_chords, wedge_chords
 
 
 class TestLily33a(IdTestCase):
@@ -18,8 +19,24 @@ class TestLily33a(IdTestCase):
         part.add_measure(t)
         part.add_measure(Time(3, 4))
 
-        [part.add_chord(Chord(72, 2/3)) for _ in range(3)]
+        [part.add_chord(Chord(71, 2 / 3)) for _ in range(3)]
         part.add_chord(Chord(0, 1))
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        slur_chords(chords)
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        slur_chords(chords, line_type='dashed')
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        wedge_chords(chords, 'crescendo', placement='above')
+        [part.add_chord(ch) for ch in chords]
+
+        chords = [Chord(71, 1) for _ in range(3)]
+        wedge_chords(chords, 'diminuendo', placement='above')
+        [part.add_chord(ch) for ch in chords]
 
         xml_path = Path(__file__).with_suffix('.xml')
         score.export_xml(xml_path)

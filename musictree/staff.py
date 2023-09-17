@@ -4,7 +4,7 @@ from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLStaff
 
 from musictree.clef import Clef
-from musictree.exceptions import StaffHasNoParentError, AlreadyFinalized
+from musictree.exceptions import StaffHasNoParentError, AlreadyFinalizedError
 from musictree.core import MusicTree
 from musictree.voice import Voice
 from musictree.xmlwrapper import XMLWrapper
@@ -81,7 +81,7 @@ class Staff(MusicTree, FinalizeMixin, XMLWrapper):
         :return: added :obj:`~musictree.voice.Voice`
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_child')
+            raise AlreadyFinalizedError(self, 'add_child')
         self._check_child_to_be_added(child)
 
         if not self.up:
@@ -108,7 +108,7 @@ class Staff(MusicTree, FinalizeMixin, XMLWrapper):
         :return: new :obj:`~musictree.voice.Voice`
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_voice')
+            raise AlreadyFinalizedError(self, 'add_voice')
         if voice_number is None:
             voice_number = len(self.get_children()) + 1
 

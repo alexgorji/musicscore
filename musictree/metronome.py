@@ -1,5 +1,5 @@
 from musictree import QuarterDuration
-from musictree.exceptions import QuarterDurationIsNotWritable, MetronomeWrongBeatUnitException
+from musictree.exceptions import QuarterDurationIsNotWritable, MetronomeWrongBeatUnitError
 from musictree.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMetronome, XMLBeatUnitDot, XMLSound
 
@@ -20,11 +20,11 @@ class Metronome(XMLWrapper):
 
     def _set_xml_beat_unit(self):
         if self.beat_unit.denominator not in [1, 2, 4, 8, 16, 32]:
-            raise MetronomeWrongBeatUnitException(self.beat_unit)
+            raise MetronomeWrongBeatUnitError(self.beat_unit)
         try:
             self.xml_object.xml_beat_unit = self.beat_unit.get_type()
         except QuarterDurationIsNotWritable:
-            raise MetronomeWrongBeatUnitException(self.beat_unit)
+            raise MetronomeWrongBeatUnitError(self.beat_unit)
         self._set_xml_sound_tempo()
 
     def _set_xml_per_minute(self):

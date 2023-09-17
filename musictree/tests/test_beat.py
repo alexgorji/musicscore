@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from musictree.beat import Beat
 from musictree.chord import Chord
-from musictree.exceptions import AddChordException, VoiceIsFullError
+from musictree.exceptions import AddChordError, VoiceIsFullError
 from musictree.measure import Measure
 from musictree.quarterduration import QuarterDuration
 from musictree.staff import Staff
@@ -244,5 +244,5 @@ class TestBeatSplitChord(TestCase):
 
     def test_add_chord_exception(self):
         b = Beat()
-        with self.assertRaises(AddChordException):
+        with self.assertRaises(AddChordError):
             b.add_chord()

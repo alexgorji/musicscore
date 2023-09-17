@@ -13,7 +13,8 @@ from musictree.midi import Midi
 from musictree.quarterduration import QuarterDuration
 from musictree.tests.util import ChordTestCase, create_test_objects
 from musictree.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, \
-    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS
+    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, \
+    XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
 from musicxml.xmlelement.xmlelement import *
 
 
@@ -452,6 +453,57 @@ class TestTreeChord(ChordTestCase):
         ch.finalize()
         with self.assertRaises(MusicTreeException):
             ch.to_string()
+
+    def test_get_x(self):
+        def test_get_objects(*classes):
+            chord = Chord(60, 1)
+            cl1, cl2, cl3 = classes
+            dt1 = chord.add_x(cl1())
+            dt2 = chord.add_x(cl1())
+            dt3 = chord.add_x(cl2())
+            assert chord.get_x(cl1) == [dt1, dt2]
+            assert chord.get_x(cl2) == [dt3]
+            assert chord.get_x(cl3) == []
+
+        # oranment
+        test_get_objects(XML_ORNAMENT_CLASSES[0], XML_ORNAMENT_CLASSES[1], XML_ORNAMENT_CLASSES[2])
+        # articualtion
+        test_get_objects(XML_ARTICULATION_CLASSES[0], XML_ARTICULATION_CLASSES[1], XML_ARTICULATION_CLASSES[2])
+        # technical
+        test_get_objects(XML_TECHNICAL_CLASSES[0], XML_TECHNICAL_CLASSES[1], XML_TECHNICAL_CLASSES[2])
+        # other notations
+        test_get_objects(XML_OTHER_NOTATIONS[0], XML_OTHER_NOTATIONS[1], XML_OTHER_NOTATIONS[2])
+        # direction type
+        test_get_objects(XML_DIRECTION_TYPE_CLASSES[0], XML_DIRECTION_TYPE_CLASSES[1], XML_DIRECTION_TYPE_CLASSES[2])
+
+        # ornament or notation
+        chord = Chord(60, 1)
+        cl1 = XMLAccidentalMark
+        dt1 = chord.add_x(cl1('sharp'), parent_type='ornament')
+        dt2 = chord.add_x(cl1('flat'), parent_type='ornament')
+        dt3 = chord.add_x(cl1('flat'), parent_type='notation')
+        assert chord.get_x(cl1) == [dt1, dt2, dt3]
+
+
+    def test_get_wedges(self):
+        chord = Chord(60, 1)
+        dt1 = chord.add_x(XMLWedge(type='crescendo'))
+        dt2 = chord.add_x(XMLWedge(type='continue'))
+        dt3 = chord.add_x(XMLWedge(type='stop'))
+        assert chord.get_wedges() == [dt1, dt2, dt3]
+
+    def test_get_slurs(self):
+        chord = Chord(60, 1)
+        dt1 = chord.add_x(XMLSlur(type='start'))
+        dt2 = chord.add_x(XMLSlur(type='continue'))
+        dt3 = chord.add_x(XMLSlur(type='stop'))
+        assert chord.get_slurs() == [dt1, dt2, dt3]
+
+    def test_get_words(self):
+        chord = Chord(60, 1)
+        dt1 = chord.add_x(XMLWords('something'))
+        dt2 = chord.add_x(XMLWords('something else'))
+        assert chord.get_words() == [dt1, dt2]
 
 
 class TestTies(ChordTestCase):

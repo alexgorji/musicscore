@@ -1,6 +1,7 @@
 import math
 from typing import Union, List
 
+from musictree.exceptions import WrongNumberOfChordsError
 from musicxml.xmlelement.xmlelement import *
 
 note_types = {(1, 12): '32nd',
@@ -141,3 +142,23 @@ def chord_is_in_a_repetition(chord):
         if chord.has_same_pitches(previous_chord):
             return True
     return False
+
+
+def slur_chords(chords, number=1, **kwargs):
+    if len(chords) < 2:
+        raise WrongNumberOfChordsError('util.slur_chords needs at list two chords.')
+
+    chords[0].add_x(XMLSlur(type='start', number=number, **kwargs))
+    chords[-1].add_x(XMLSlur(type='stop', number=number))
+    for ch in chords[1:-1]:
+        ch.add_x(XMLSlur(type='continue', number=number))
+
+
+def wedge_chords(chords, wedge_type, number=1, placement='below', **kwargs):
+    if len(chords) < 2:
+        raise WrongNumberOfChordsError('util.wedge_chords needs at list two chords.')
+
+    chords[0].add_x(XMLWedge(type=wedge_type, number=number, **kwargs), placement=placement)
+    chords[-1].add_x(XMLWedge(type='stop', number=number), placement=placement)
+    for ch in chords[1:-1]:
+        ch.add_x(XMLWedge(type='continue', number=number), placement=placement)

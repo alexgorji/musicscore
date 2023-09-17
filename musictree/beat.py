@@ -7,7 +7,7 @@ from quicktions import Fraction
 from musictree.chord import _split_copy, _group_chords, Chord
 from musictree.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
     ChordHasNoQuarterDurationError, \
-    ChordHasNoMidisError, AlreadyFinalized, BeatNotFullError, AddChordException
+    ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError
 from musictree.core import MusicTree
 from musictree.quarterduration import QuarterDuration, QuarterDurationMixin
 from musictree.util import lcm
@@ -484,7 +484,7 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :return: added chord or a list of split chords
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_child')
+            raise AlreadyFinalizedError(self, 'add_child')
         self._check_child_to_be_added(child)
         if not self.up:
             raise BeatHasNoParentError('A child Chord can only be added to a beat if it has a voice parent.')
@@ -518,7 +518,7 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
                 return child.split_and_add_beatwise(beats)
 
     def add_chord(self, *args, **kwargs):
-        raise AddChordException
+        raise AddChordError
 
     def finalize(self):
         """
@@ -529,7 +529,7 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
           True), _split_not_writable_chords
         """
         if self._finalized:
-            raise AlreadyFinalized(self)
+            raise AlreadyFinalizedError(self)
         if self.is_filled is False:
             BeatNotFullError()
 

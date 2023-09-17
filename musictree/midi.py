@@ -2,7 +2,7 @@ import copy
 from math import log2
 from typing import Optional, Union, List
 
-from musictree.exceptions import AlreadyFinalized
+from musictree.exceptions import AlreadyFinalizedError
 from musicxml.xmlelement.xmlelement import *  # type: ignore
 from musicxml.xsd.xsdsimpletype import XSDSimpleTypeNoteheadValue  # type: ignore
 
@@ -102,7 +102,7 @@ class Midi(MusicTree):
     @notehead.setter
     def notehead(self, val):
         if self.parent_note:
-            raise AlreadyFinalized('Cannot change notehead after finalizing.')
+            raise AlreadyFinalizedError('Cannot change notehead after finalizing.')
 
         if val is None:
             self._notehead = None
@@ -192,7 +192,7 @@ class Midi(MusicTree):
         if not isinstance(child, Accidental):
             raise TypeError(f'child {child} must be of type Accidental.')
         if self.parent_chord and self.parent_chord._finalized is True:
-            raise AlreadyFinalized(self, 'add_child')
+            raise AlreadyFinalizedError(self, 'add_child')
         super().add_child(child)
         child._update()
         return child

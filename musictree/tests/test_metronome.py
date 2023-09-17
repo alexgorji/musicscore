@@ -1,5 +1,5 @@
 from musictree import QuarterDuration, Part, Chord
-from musictree.exceptions import MetronomeWrongBeatUnitException
+from musictree.exceptions import MetronomeWrongBeatUnitError
 from musictree.metronome import Metronome
 from musictree.tests.util import IdTestCase
 from musicxml.xmlelement.xmlelement import XMLSound
@@ -33,11 +33,11 @@ class TestCase(IdTestCase):
         assert len(m.get_xml_beat_dot_objects()) == 1
 
     def test_metronome_wrong_beat_units(self):
-        with self.assertRaises(MetronomeWrongBeatUnitException):
+        with self.assertRaises(MetronomeWrongBeatUnitError):
             Metronome(100, 1.1)
-        with self.assertRaises(MetronomeWrongBeatUnitException):
+        with self.assertRaises(MetronomeWrongBeatUnitError):
             Metronome(100, 2 / 3)
-        with self.assertRaises(MetronomeWrongBeatUnitException):
+        with self.assertRaises(MetronomeWrongBeatUnitError):
             Metronome(100, 6 / 5)
 
     def test_metronome_sound(self):

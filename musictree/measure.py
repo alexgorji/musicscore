@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from musictree.clef import BassClef, TrebleClef
 from musictree.core import MusicTree
-from musictree.exceptions import AlreadyFinalized, AddChordException
+from musictree.exceptions import AlreadyFinalizedError, AddChordError
 from musictree.finalize_mixin import FinalizeMixin
 from musictree.key import Key
 from musictree.staff import Staff
@@ -216,7 +216,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         """
 
         if self._finalized:
-            raise AlreadyFinalized(self)
+            raise AlreadyFinalizedError(self)
 
         self._update_attributes()
 
@@ -329,7 +329,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         :rtype: :obj:`~musictree.staff.Staff`
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_child')
+            raise AlreadyFinalizedError(self, 'add_child')
         self._check_child_to_be_added(child)
 
         if child.number is not None and child.number != len(self.get_children()) + 1:
@@ -352,7 +352,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         return child
 
     def add_chord(self, *args, **kwargs):
-        raise AddChordException
+        raise AddChordError
 
     def add_staff(self, staff_number: Optional[int] = None) -> 'Staff':
         """
@@ -363,7 +363,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         :return: new :obj:`~musictree.staff.Staff`
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_staff')
+            raise AlreadyFinalizedError(self, 'add_staff')
         if staff_number is None:
             staff_number = len(self.get_children()) + 1
         staff_object = self.get_staff(staff_number=staff_number)
@@ -385,7 +385,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         :return: new :obj:`~musictree.voice.Voice`
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_voice')
+            raise AlreadyFinalizedError(self, 'add_voice')
         if staff_number is None:
             staff_number = 1
         voice_object = self.get_voice(staff_number=staff_number, voice_number=voice_number)

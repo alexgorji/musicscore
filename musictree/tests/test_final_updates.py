@@ -1,5 +1,5 @@
 from musictree.chord import Chord
-from musictree.exceptions import AlreadyFinalized
+from musictree.exceptions import AlreadyFinalizedError
 from musictree.midi import Midi
 from musictree.part import Part
 from musictree.quarterduration import QuarterDuration
@@ -44,7 +44,7 @@ class TestFinalUpdates(IdTestCase):
         self.chord_1.finalize()
         assert len(self.chord_1.get_children()) == 2
         assert_chord_note_values(self.chord_1, [(60, 1 / 3), (70, 1 / 3)])
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.chord_1.finalize()
 
         self.chords_2[0].finalize()
@@ -58,42 +58,42 @@ class TestFinalUpdates(IdTestCase):
         self.beats[1].finalize()
         self.check_note_values(self.beats[1].get_chords(), [2])
 
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.beats[0].finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.beats[1].finalize()
 
     def test_voice_finalize(self):
         self.measure._update_divisions()
         self.voice.finalize()
         self.check_note_values(self.voice.get_chords())
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.voice.finalize()
 
     def test_staff_finalize(self):
         self.measure._update_divisions()
         self.staff.finalize()
         self.check_note_values(self.staff.get_chords())
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.staff.finalize()
         self.staff.to_string()
 
     def test_measure_finalize(self):
         self.measure.finalize()
         self.check_note_values(self.measure.get_chords())
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.measure.finalize()
 
     def test_part_finalize(self):
         self.part.finalize()
         self.check_note_values(self.part.get_chords())
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.part.finalize()
 
     def test_score_finalize(self):
         self.score.finalize()
         self.check_note_values(self.score.get_chords())
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.score.finalize()
 
     def test_to_string_calls_finalize_voice(self):

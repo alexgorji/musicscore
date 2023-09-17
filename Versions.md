@@ -87,6 +87,8 @@ if needed.
 ``Chord.get_voice_number()`` and ``Chord.get_staff_number()`` return None if no ``Voice`` or ``Staff`` ancestor exist.
 ``Chord.__deepcopy__()`` added. Only midi and quarter_duration are deepcopied.
 ``Chord.clef`` property added.
+``Chord.get_x()`` added.
+``Chord.get_words(), Chord.get_slurs(), Chord.get_wedges`` added.
 ``Chord.metronome`` property added.
 ``Chord.all_midis_are_tied_to_next`` and ``Chord.all_midis_are_tied_to_previous`` added.
 ``QuarterDurartion.get_type()`` and ``QuarrterDurtion.get_number_of_dots()`` added.
@@ -104,11 +106,13 @@ clef, otherwise it will be False).
 ``Staff`` default clef argument is changed to None. If no clef is set, it will automatically be set to clef of staff in
 previous measure. If clef is changed the new clef will have the same number as the old one.
 ``add_chord()`` has been removed from ``Voice``, ``Measure`` and ``Beat``. Use ``Part.add_chord()`` instead!
-
+``util.slur_chords()`` added.
+``util.wedge_chords()`` added.
 ``Bug Fix``: adding staff to a measure will only set default clefs automatically if the new or old staves does not have
 a from user manually set clef. It means that the manually set clefs won't be overwritten any more.
 ``Bug Fix``: a Chord with tied notes will keep its tie after splitting.
 ``Bug Fix``: ``Score`` with multiple parts creates ``XMLPartList`` accordingly.
 ``Bug Fix``: cautionary signs are removed in repetitions.
+Some Exceptions added or renamed.
 
 

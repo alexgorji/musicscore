@@ -2,13 +2,13 @@ class MusicTreeException(Exception):
     pass
 
 
-class AddChordException(MusicTreeException):
+class AddChordError(MusicTreeException):
     def __init__(self):
         msg = f"Use Part.add_chord() instead!"
         super().__init__(msg)
 
 
-class AlreadyFinalized(MusicTreeException):
+class AlreadyFinalizedError(MusicTreeException):
     def __init__(self, object_, method_=None):
         msg = f"{object_.__class__.__name__} is already finalized."
         if method_:
@@ -17,6 +17,10 @@ class AlreadyFinalized(MusicTreeException):
 
 
 class DeepCopyException(MusicTreeException):
+    pass
+
+
+class WrongNumberOfChordsError(MusicTreeException):
     pass
 
 
@@ -98,7 +102,7 @@ class MetronomeException(MusicTreeException):
     pass
 
 
-class MetronomeWrongBeatUnitException(MetronomeException):
+class MetronomeWrongBeatUnitError(MetronomeException):
     pass
 
 

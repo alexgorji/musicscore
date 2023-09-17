@@ -3,7 +3,7 @@ from unittest import TestCase, skip
 from musictree import Score
 from musictree.chord import Chord
 from musictree.clef import BassClef, TrebleClef
-from musictree.exceptions import VoiceIsFullError, AddChordException
+from musictree.exceptions import VoiceIsFullError, AddChordError
 from musictree.measure import Measure, generate_measures
 from musictree.part import Part
 from musictree.staff import Staff
@@ -395,7 +395,7 @@ class TestMeasure(TestCase):
     def test_add_chord_to_measure(self):
         part = Part(id='part-1')
         measure = part.add_measure(time=Time(4, 4))
-        with self.assertRaises(AddChordException):
+        with self.assertRaises(AddChordError):
             measure.add_chord(Chord(midis=60, quarter_duration=15))
 
     def test_default_staff(self):

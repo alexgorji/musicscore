@@ -1,4 +1,4 @@
-from musictree.exceptions import AlreadyFinalized, MusicTreeException
+from musictree.exceptions import AlreadyFinalizedError, MusicTreeException
 
 
 class FinalizeMixin:
@@ -14,7 +14,7 @@ class FinalizeMixin:
         It calls finalize()` method of all children.
         """
         if self._finalized:
-            raise AlreadyFinalized(self)
+            raise AlreadyFinalizedError(self)
 
         for child in self.get_children():
             if not child._finalized:

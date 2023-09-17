@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 
 from musictree.beat import Beat
 from musictree.chord import Chord
-from musictree.exceptions import VoiceHasNoBeatsError, AddChordException, VoiceIsFullError
+from musictree.exceptions import VoiceHasNoBeatsError, AddChordError, VoiceIsFullError
 from musictree.voice import Voice
 
 
@@ -83,5 +83,5 @@ class TestVoice(TestCase):
 
     def test_add_chord_exception(self):
         v = Voice()
-        with self.assertRaises(AddChordException):
+        with self.assertRaises(AddChordError):
             v.add_chord()

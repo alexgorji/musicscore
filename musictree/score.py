@@ -1,7 +1,7 @@
 from typing import List
 
 from musictree import Part
-from musictree.exceptions import AlreadyFinalized
+from musictree.exceptions import AlreadyFinalizedError
 from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, \
     XMLEncoding, \
@@ -232,7 +232,7 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         :rtype: :obj:`~musictree.part.Part`
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_child')
+            raise AlreadyFinalizedError(self, 'add_child')
         super().add_child(child)
         self.xml_object.add_child(child.xml_object)
         if not self.xml_part_list:
@@ -248,7 +248,7 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         :return: part
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_part')
+            raise AlreadyFinalizedError(self, 'add_part')
         p = Part(id_)
         return self.add_child(p)
 

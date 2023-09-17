@@ -1,13 +1,15 @@
 from pathlib import Path
 from unittest import TestCase, skip
 
+from musictree import Chord
+from musictree.exceptions import WrongNumberOfChordsError
 from musictree.midi import C
 
 from musictree.score import Score
 from musictree.tests.util import diff_xml, _create_expected_path, create_test_objects
 from musictree.util import lcm, isinstance_as_string, XML_DYNAMIC_CLASSES, XML_ARTICULATION_CLASSES, \
     XML_ORNAMENT_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, XML_TECHNICAL_CLASSES, XML_OTHER_NOTATIONS, \
-    XML_DIRECTION_TYPE_CLASSES, XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
+    XML_DIRECTION_TYPE_CLASSES, XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, slur_chords, wedge_chords
 
 
 class TestUtils(TestCase):
@@ -43,6 +45,26 @@ class TestUtils(TestCase):
     def test_lcm(self):
         assert lcm([3, 4, 5, 7]) == 420
         assert lcm([2, 4, 6]) == 12
+
+    def test_slur_chords(self):
+        chords = [Chord(60, 1)]
+        with self.assertRaises(WrongNumberOfChordsError):
+            slur_chords(chords)
+        chords.extend([Chord(61, 1), Chord(62, 1)])
+        slur_chords(chords)
+        assert chords[0].get_slurs()[0].type == 'start'
+        assert chords[1].get_slurs()[0].type == 'continue'
+        assert chords[2].get_slurs()[0].type == 'stop'
+
+    def test_wedge_chords(self):
+        chords = [Chord(60, 1)]
+        with self.assertRaises(WrongNumberOfChordsError):
+            wedge_chords(chords, 'crescendo')
+        chords.extend([Chord(61, 1), Chord(62, 1)])
+        wedge_chords(chords, 'crescendo')
+        assert chords[0].get_wedges()[0].type == 'crescendo'
+        assert chords[1].get_wedges()[0].type == 'continue'
+        assert chords[2].get_wedges()[0].type == 'stop'
 
 
 class TestTestObjects(TestCase):

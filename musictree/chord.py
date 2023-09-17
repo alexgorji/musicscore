@@ -6,7 +6,7 @@ from musictree.clef import Clef
 from musictree.core import MusicTree
 from musictree.dynamics import Dynamics
 from musictree.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
-    ChordQuarterDurationAlreadySetError, AlreadyFinalized, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
+    ChordQuarterDurationAlreadySetError, AlreadyFinalizedError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
     ChordException, NotationException, ChordAddXException, ChordAddXPlacementException
 from musictree.finalize_mixin import FinalizeMixin
 from musictree.midi import Midi
@@ -557,7 +557,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def add_direction_type(self, direction_type: XMLElement, placement: str = 'above'):
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_direction_type')
+            raise AlreadyFinalizedError(self, 'add_direction_type')
         if direction_type.__class__ not in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
             raise TypeError(
                 f'Wrong type {direction_type}. Possible classes: {XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS}')
@@ -579,7 +579,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :return: List[:obj:`~musictree.dynamics.Dynamics`]
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_dynamics')
+            raise AlreadyFinalizedError(self, 'add_dynamics')
         dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(
             dynamics)
         dynamics_object_list = [d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list]
@@ -663,14 +663,14 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :return: :obj:`~musicxml.xmlelement.xmlelement.XMLWedge`
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_wedge')
+            raise AlreadyFinalizedError(self, 'add_wedge')
         wedge = XMLWedge(type=wedge) if isinstance(wedge, str) else wedge
         self.add_direction_type(wedge, placement=placement)
         return wedge
 
     def add_words(self, words: Union['XMLWords', str], placement: str = 'above', **kwargs) -> 'XMLWords':
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_words')
+            raise AlreadyFinalizedError(self, 'add_words')
 
         if not isinstance(words, XMLWords):
             words = XMLWords(words, **kwargs)
@@ -736,7 +736,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
           update_xml_directions, update_xml_articulations, update_technicals
         """
         if self._finalized:
-            raise AlreadyFinalized(self)
+            raise AlreadyFinalizedError(self)
 
         if not self.up:
             raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
@@ -783,6 +783,29 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
         return super().get_children()
 
+    def get_x(self, type_):
+        if type_ == XMLDynamics:
+            raise NotImplementedError(f'get_x of type_ {type_} not Implemented.')
+        elif type_ in XML_DIRECTION_TYPE_CLASSES:
+            output = []
+            output += [x for x in self._xml_direction_types['above'] if isinstance(x, type_)]
+            output += [x for x in self._xml_direction_types['below'] if isinstance(x, type_)]
+            return output
+        elif type_ in XML_ORNAMENT_CLASSES:
+            return [x for x in self._xml_ornaments if isinstance(x, type_)]
+        elif type_ in XML_TECHNICAL_CLASSES:
+            return [x for x in self._xml_technicals if isinstance(x, type_)]
+        elif type_ in XML_ARTICULATION_CLASSES:
+            return [x for x in self._xml_articulations if isinstance(x, type_)]
+        elif type_ in XML_OTHER_NOTATIONS:
+            return [x for x in self._xml_other_notations if isinstance(x, type_)]
+        elif type_ in XML_ORNAMENT_AND_OTHER_NOTATIONS:
+            return [x for x in self._xml_ornaments if isinstance(x, type_)] + [x for x in
+                                                                               self._xml_other_notations if
+                                                                               isinstance(x, type_)]
+        else:
+            raise NotImplementedError(f'get_x of type_ {type_} not Implemented.')
+
     def get_parent(self) -> 'Beat':
         """
         :return: parent
@@ -795,6 +818,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :return: parent measure
         """
         return self.up.up.up.up
+
+    def get_slurs(self):
+        return self.get_x(XMLSlur)
 
     def get_staff_number(self):
         try:
@@ -814,6 +840,12 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             return self.up.up.number
         except AttributeError:
             return None
+
+    def get_wedges(self):
+        return self.get_x(XMLWedge)
+
+    def get_words(self):
+        return self.get_x(XMLWords)
 
     def set_possible_subdivisions(self):
         raise TypeError

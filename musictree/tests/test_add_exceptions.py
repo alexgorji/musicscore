@@ -1,7 +1,7 @@
 from unittest import skip
 
 from musictree import Part, Chord, Measure, Beat, Voice, Score, Staff, Accidental
-from musictree.exceptions import AlreadyFinalized, ChordNotesAreAlreadyCreatedError, AddChordException
+from musictree.exceptions import AlreadyFinalizedError, ChordNotesAreAlreadyCreatedError, AddChordError
 from musictree.tests.util import IdTestCase
 from musicxml.xmlelement.xmlelement import XMLCoda, XMLSegno
 
@@ -20,19 +20,19 @@ class TestAddExceptions(IdTestCase):
         p = Part(id='part-1')
         p.add_chord(Chord(60, 4))
         p.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             p.add_chord(Chord(60, 4))
 
     def test_add_child_to_part(self):
         p = Part(id='part-1')
         p.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             p.add_child(Measure(1))
 
     def test_add_measure_to_part(self):
         p = Part(id='part-1')
         p.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             p.add_measure()
 
     def test_add_direction_type_to_chord(self):
@@ -41,7 +41,7 @@ class TestAddExceptions(IdTestCase):
         p.add_chord(ch)
         ch.add_direction_type(XMLCoda())
         ch.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             ch.add_direction_type(XMLSegno())
 
     def test_add_midi_to_chord(self):
@@ -60,7 +60,7 @@ class TestAddExceptions(IdTestCase):
         p.add_chord(ch)
         ch.add_dynamics('ff')
         ch.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             ch.add_dynamics('pp')
 
     def test_add_tie_to_chord(self):
@@ -91,32 +91,32 @@ class TestAddExceptions(IdTestCase):
         p.add_chord(ch)
         ch.add_wedge('crescendo')
         ch.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             ch.add_wedge('stop')
 
     def test_add_child_to_measure(self):
         self.measure.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.measure.add_child(Staff())
 
     def test_add_staff_to_measure(self):
         self.measure.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.measure.add_staff()
 
     def test_add_voice_to_measure(self):
         self.measure.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.measure.add_voice()
 
     def test_add_child_to_beat(self):
         self.beat.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.beat.add_child(Chord(60, 1))
 
     def test_add_chord_to_beat(self):
         self.beat.finalize()
-        with self.assertRaises(AddChordException):
+        with self.assertRaises(AddChordError):
             self.beat.add_chord(Chord(60, 4))
 
     def test_add_child_to_midi(self):
@@ -124,7 +124,7 @@ class TestAddExceptions(IdTestCase):
         self.part.add_chord(ch)
         ch.midis[0].add_child(Accidental())
         ch.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             ch.midis[0].add_child(Accidental())
 
     def test_add_tie_to_midi(self):
@@ -145,35 +145,35 @@ class TestAddExceptions(IdTestCase):
 
     def test_add_child_to_score(self):
         self.score.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.score.add_child(Part('p2'))
 
     def test_add_part_to_score(self):
         self.score.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.score.add_part('p2')
 
     def test_add_child_to_staff(self):
         self.staff.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.staff.add_child(Voice())
 
     def test_add_voice_to_staff(self):
         self.staff.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.staff.add_voice()
 
     def test_add_child_to_voice(self):
         self.voice.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.voice.add_child(Beat(1))
 
     def test_add_chord_to_voice(self):
         self.voice.finalize()
-        with self.assertRaises(AddChordException):
+        with self.assertRaises(AddChordError):
             self.voice.add_chord(Chord(60, 1))
 
     def test_add_beat_to_voice(self):
         self.voice.finalize()
-        with self.assertRaises(AlreadyFinalized):
+        with self.assertRaises(AlreadyFinalizedError):
             self.voice.add_beat(1)

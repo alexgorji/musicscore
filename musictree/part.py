@@ -5,7 +5,7 @@ from musictree.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
 from musictree.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsFullError, \
-    AlreadyFinalized
+    AlreadyFinalizedError
 from musictree.measure import Measure
 from musictree.core import MusicTree
 from musictree.time import Time
@@ -211,7 +211,7 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
 
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_child')
+            raise AlreadyFinalizedError(self, 'add_child')
         super().add_child(child)
         self.xml_object.add_child(child.xml_object)
         return child
@@ -234,7 +234,7 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
         if not isinstance(chord, Chord):
             raise TypeError(f'{chord} must be of type Chord.')
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_chord')
+            raise AlreadyFinalizedError(self, 'add_chord')
 
         for gch in chord._grace_chords['before']:
             self.add_chord(gch, staff_number=staff_number, voice_number=voice_number)
@@ -277,7 +277,7 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
         :return: created and added :obj:`~musictree.measure.Measure`
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_measure')
+            raise AlreadyFinalizedError(self, 'add_measure')
         previous_measure = self.get_children()[-1] if self.get_children() else None
         if not time:
             if previous_measure:

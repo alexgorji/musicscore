@@ -3,7 +3,7 @@ from typing import Optional, Union, List
 from musictree.beat import Beat
 from musictree.chord import GraceChord
 from musictree.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsFullError, \
-    AddChordException, AlreadyFinalized
+    AddChordError, AlreadyFinalizedError
 from musictree.core import MusicTree
 from musictree.finalize_mixin import FinalizeMixin
 from musictree.xmlwrapper import XMLWrapper
@@ -101,13 +101,13 @@ class Voice(MusicTree, FinalizeMixin, XMLWrapper):
         :return: :obj:`~musictree.beat.Beat`
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_beat')
+            raise AlreadyFinalizedError(self, 'add_beat')
         if beat_quarter_duration is None:
             beat_quarter_duration = 1
         return self.add_child(Beat(beat_quarter_duration))
 
     def add_chord(self, *args, **kwargs):
-        raise AddChordException()
+        raise AddChordError()
 
     def add_child(self, child: Beat) -> Beat:
         """
@@ -118,7 +118,7 @@ class Voice(MusicTree, FinalizeMixin, XMLWrapper):
         :rtype: :obj:`~musictree.beat.Beat`
         """
         if self._finalized is True:
-            raise AlreadyFinalized(self, 'add_child')
+            raise AlreadyFinalizedError(self, 'add_child')
         if not self.up:
             raise VoiceHasNoParentError('A child Beat can only be added to a Voice if voice has a Staff parent.')
         return super().add_child(child)
