@@ -92,6 +92,24 @@ class ChordQuarterDurationAlreadySetError(ChordException):
     pass
 
 
+# Lyrics exceptions
+
+class LyricsException(MusicTreeException):
+    pass
+
+
+class LyricsExtensionError(LyricsException):
+    pass
+
+
+class LyricSyllabicOrExtensionError(LyricsException):
+    pass
+
+
+class LyricsWrongNumberOfChordsError(LyricsException):
+    pass
+
+
 # Measure exceptions
 class MeasureException(MusicTreeException):
     pass

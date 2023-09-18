@@ -73,8 +73,8 @@ Add `musictree.testing` to `musictree` package
 
 # Version 2.0
 
-``SimpleFormat`` added. It is useful tool to generate list of chords and also do some simple algorithmic changes to it
-if needed.
+``SimpleFormat`` added. It is useful tool to generate list of chords and also do some simple algorithmic changes to it if needed.
+``Lyrics`` added. A class to generate XMLLyrics and adding it to a list of chords.
 ``Note.parent_chord`` removed. ``Midi`` is now required. ``Midi`` must have a parent_chord.
 ``Metronome`` new Class.
 ``Midi`` is now the core object for adding or removing ties to ``Chord`` (and ``Note``).
