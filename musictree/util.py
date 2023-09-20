@@ -1,7 +1,7 @@
 import math
 from typing import Union, List
 
-from musictree.exceptions import WrongNumberOfChordsError
+from musictree.exceptions import WrongNumberOfChordsError, LyricSyllabicOrExtensionError
 from musicxml.xmlelement.xmlelement import *
 
 note_types = {(1, 12): '32nd',
@@ -202,3 +202,69 @@ def octave_chords(chords, type='down', size=8, number=1):
     chords[-1].add_x(XMLOctaveShift(type='stop', size=size, number=number), placement=placement)
     for ch in chords[1:-1]:
         ch.add_x(XMLOctaveShift(type='continue', size=size, number=number), placement=placement)
+
+
+def _generate_lyrics(lyrics, number=1, mode='list'):
+    def _get_syllables_extensions_from_group(syllabic_group):
+        if syllabic_group[0] is None:
+            raise LyricSyllabicOrExtensionError(
+                f'Syllabic or extension cannot be added to the beginning of a syllabic group.')
+        extensions_ = []
+        syllables_ = list(syllabic_group)[:]
+        while syllables_[-1] is None:
+            extensions_.append(syllables_.pop())
+        return [syllables_, extensions_]
+
+    if isinstance(lyrics, str) or isinstance(lyrics, tuple):
+        lyrics = [lyrics]
+
+    output = []
+    if mode == 'list':
+        for i in range(len(lyrics)):
+            ll = lyrics[i]
+            if isinstance(ll, str):
+                xl = XMLLyric(number=str(number))
+                xl.xml_text = ll
+                xl.xml_syllabic = 'single'
+                output.append(xl)
+
+            elif isinstance(ll, tuple) or isinstance(ll, list):
+                syllables, extensions = _get_syllables_extensions_from_group(ll)
+                if len(syllables) == 1:
+                    xl = XMLLyric(number=str(number))
+                    xl.xml_text = ll
+                    xl.xml_syllabic = 'single'
+                    if len(extensions) > 0:
+                        xl.xml_extend = XMLExtend(type='start')
+                    output.append(xl)
+                else:
+                    for j in range(len(syllables)):
+                        xl = XMLLyric(number=str(number))
+                        l = syllables[j]
+                        if l:
+                            xl.xml_text = l
+                            if j == 0:
+                                xl.xml_syllabic = 'begin'
+                            elif j == len(syllables) - 1:
+                                xl.xml_syllabic = 'end'
+                                if len(extensions) > 0:
+                                    xl.xml_extend = XMLExtend(type='start')
+                            else:
+                                xl.xml_syllabic = 'middle'
+                        else:
+                            xl = None
+                        output.append(xl)
+
+                for k in range(len(extensions)):
+                    xl = XMLLyric(number=str(number))
+                    if k == len(extensions) - 1:
+                        xl.xml_extend = XMLExtend(type='stop')
+                    else:
+                        xl.xml_extend = XMLExtend(type='continue')
+                    xl.xsd_check = False
+                    output.append(xl)
+            else:
+                raise NotImplementedError(ll)
+    else:
+        raise NotImplementedError
+    return output

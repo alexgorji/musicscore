@@ -505,6 +505,56 @@ class TestTreeChord(ChordTestCase):
         b1, b2, b3 = chords[0].add_x(XMLBracket()), chords[1].add_x(XMLBracket()), chords[2].add_x(XMLBracket())
         assert [ch.get_brackets()[0] for ch in chords] == [b1, b2, b3]
 
+    def test_add_arpeggio_normal(self):
+        ch = Chord([60, 64, 67], 1)
+        assert not ch.arpeggio
+        ch._parent = self.mock_beat
+        ch.arpeggio = 'normal'
+        assert ch.arpeggio == 'normal'
+        ch.finalize()
+        for n in ch.notes:
+            assert n.xml_notations.xml_arpeggiate
+            assert n.xml_notations.xml_arpeggiate.direction is None
+
+    def test_add_arpeggio_up(self):
+        ch = Chord([60, 64, 67], 1)
+        assert not ch.arpeggio
+        ch._parent = self.mock_beat
+        ch.arpeggio = 'up'
+        assert ch.arpeggio == 'up'
+        ch.finalize()
+        for n in ch.notes:
+            assert n.xml_notations.xml_arpeggiate
+            if n == ch.notes[0]:
+                assert n.xml_notations.xml_arpeggiate.direction == 'up'
+
+    def test_add_arpeggio_bottom(self):
+        ch = Chord([60, 64, 67], 1)
+        assert not ch.arpeggio
+        ch._parent = self.mock_beat
+        ch.arpeggio = 'down'
+        assert ch.arpeggio == 'down'
+        ch.finalize()
+        for n in ch.notes:
+            assert n.xml_notations.xml_arpeggiate
+            if n == ch.notes[0]:
+                assert n.xml_notations.xml_arpeggiate.direction == 'down'
+
+    def test_add_none_arpeggio(self):
+        ch = Chord([60, 64, 67], 1)
+        assert not ch.arpeggio
+        ch._parent = self.mock_beat
+        ch.arpeggio = 'none'
+        assert ch.arpeggio == 'none'
+        ch.finalize()
+        for n in ch.notes:
+            if n == ch.notes[0]:
+                assert n.xml_notations.xml_non_arpeggiate
+                assert n.xml_notations.xml_non_arpeggiate.type == 'bottom'
+            elif n == ch.notes[-1]:
+                assert n.xml_notations.xml_non_arpeggiate
+                assert n.xml_notations.xml_non_arpeggiate.type == 'top'
+
 
 class TestTies(ChordTestCase):
 

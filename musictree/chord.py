@@ -56,7 +56,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     :param quarter_duration: int, float, Fraction, QuarterDuration for duration counted in quarters (crotchets). 0 for grace note (or
     chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef', 'metronome'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef', 'metronome', 'arpeggio'}
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
                  quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
@@ -75,6 +75,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._clef = None
         self._metronome = None
         self._grace_chords = {'before': [], 'after': []}
+        self._arpeggio = None
 
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
@@ -220,6 +221,21 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         # _update ties of already created notes
         for note in self.notes:
             note._update_ties()
+
+    def _update_xml_notations_arpeggiate(self):
+        if self.arpeggio:
+            for n in self.notes:
+                if not n.xml_notations:
+                    n.xml_notations = XMLNotations()
+                if self.arpeggio != 'none':
+                    n.xml_notations.xml_arpeggiate = XMLArpeggiate()
+                    if self.arpeggio != 'normal' and n == self.notes[0]:
+                        n.xml_notations.xml_arpeggiate.direction = self.arpeggio
+                else:
+                    if n == self.notes[0]:
+                        n.xml_notations.xml_non_arpeggiate = XMLNonArpeggiate(type='bottom')
+                    elif n == self.notes[-1]:
+                        n.xml_notations.xml_non_arpeggiate = XMLNonArpeggiate(type='top')
 
     def _update_xml_articulations(self):
         def _get_note_xml_articulations():
@@ -414,6 +430,19 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             return False
 
     @property
+    def arpeggio(self):
+        return self._arpeggio
+
+    @arpeggio.setter
+    def arpeggio(self, val):
+        permitted = [None, 'normal', 'up', 'down', 'none']
+        if val not in permitted:
+            raise ValueError(f'arpeggio value {val} must be in permitted list: {permitted}')
+        if self._finalized:
+            raise AlreadyFinalizedError(self, 'arpeggio.setter')
+        self._arpeggio = val
+
+    @property
     def clef(self):
         return self._clef
 
@@ -567,8 +596,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         if direction_type.__class__ not in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
             raise TypeError(
                 f'Wrong type {direction_type}. Possible classes: {XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS}')
-        # if isinstance(direction_type, XMLDynamics):
-        #     raise ChordException('Use add_dynamics instead!')
         self._xml_direction_types[placement].append(direction_type)
         return direction_type
 
@@ -760,6 +787,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._update_xml_ornaments()
         self._update_xml_dynamics()
         self._update_xml_other_notations()
+        self._update_xml_notations_arpeggiate()
         self._finalized = True
 
     def has_same_pitches(self, other: 'Chord') -> bool:

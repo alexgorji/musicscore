@@ -63,6 +63,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <chord />
@@ -73,6 +76,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <chord />
@@ -83,6 +89,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -92,6 +101,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate direction="up" />
+        </notations>
       </note>
       <note>
         <chord />
@@ -102,6 +114,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <chord />
@@ -112,6 +127,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -121,6 +139,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <chord />
@@ -131,6 +152,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <chord />
@@ -141,6 +165,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -150,6 +177,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate direction="down" />
+        </notations>
       </note>
       <note>
         <chord />
@@ -160,6 +190,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <chord />
@@ -170,6 +203,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
     </measure>
     <measure number="2">
@@ -184,6 +220,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <chord />
@@ -194,6 +233,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <chord />
@@ -204,6 +246,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -213,6 +258,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <non-arpeggiate type="bottom" />
+        </notations>
       </note>
       <note>
         <chord />
@@ -223,6 +271,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations />
       </note>
       <note>
         <chord />
@@ -233,6 +282,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <non-arpeggiate type="top" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -242,6 +294,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <chord />
@@ -252,6 +307,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
       <note>
         <chord />
@@ -262,35 +320,9 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <chord />
-        <pitch>
-          <step>E</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <chord />
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
+        <notations>
+          <arpeggiate />
+        </notations>
       </note>
     </measure>
   </part>

@@ -13,7 +13,7 @@ from musictree.voice import Voice
 from musicxml.xmlelement.xmlelement import *
 
 
-class TestMeasure(TestCase):
+class TestMeasure(IdTestCase):
     def test_measure_default_init(self):
         expected = """<measure number="1">
   <attributes>

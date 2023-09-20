@@ -11,7 +11,9 @@ from deepdiff import DeepDiff
 from quicktions import Fraction
 
 from musictree import generate_measures, Chord, C
+from musictree.exceptions import LyricsExtensionError, LyricSyllabicOrExtensionError
 from musictree.part import Id
+from musicxml import XMLLyric, XMLExtend
 from musicxml.xmlelement.xmlelement import *
 from musictree.util import XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_OTHER_NOTATIONS, \
     XML_ORNAMENT_CLASSES, XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, \
@@ -306,3 +308,12 @@ def create_test_objects(type_):
     else:
         raise NotImplementedError(f"type_ {type_}")
     return output
+
+
+def _generate_xml_lyric(text=None, number=1, syllabic=None, extend=None):
+    xl = XMLLyric(number=str(number))
+    xl.xml_text = text
+    xl.xml_syllabic = syllabic
+    if extend:
+        xl.xml_extend = XMLExtend(type=extend)
+    return xl

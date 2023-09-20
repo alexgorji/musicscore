@@ -13,11 +13,11 @@ class TestLily32d(IdTestCase):
         score = Score()
         part = score.add_part('p1')
 
-        chords = [Chord([C(4), E(5), G(5)], 1) for _ in range(8)]
+        types = ['normal', 'up', 'normal', 'down', 'normal', 'none', 'normal']
+        chords = [Chord([C(4), E(5), G(5)], 1) for _ in types]
 
-        for i, ch in enumerate(chords):
-            if i == 0:
-                ch.add_arpeggio()
+        for t, ch in zip(types, chords):
+            ch.arpeggio = t
 
         [part.add_chord(ch) for ch in chords]
 
