@@ -4,13 +4,13 @@ from pathlib import Path
 long_description = (Path(__file__).parent / "README.rst").read_text()
 setuptools.setup(
     name="musicscore2",
-    version="1.4.beta2",
+    version="2.0beta1",
     author="Alex Gorji",
     author_email="aligorji@hotmail.com",
     description="Generating musicxml files.",
     url="https://github.com/alexgorji/musicscore2.git",
     packages=setuptools.find_packages(),
-    install_requires=['musicxml', 'quicktions'],
+    install_requires=['musicxml==1.3.3', 'quicktions'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
