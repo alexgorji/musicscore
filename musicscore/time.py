@@ -1,5 +1,6 @@
 from typing import List
 
+from musicscore.exceptions import TimeActualSignaturesNotValidError
 from musicscore.quarterduration import QuarterDuration
 from musicxml.xmlelement.xmlelement import XMLTime, XMLBeats, XMLBeatType
 from musicscore.xmlwrapper import XMLWrapper
@@ -24,7 +25,8 @@ def _convert_signatures_to_ints(signatures):
         else:
             output.append(beat)
             output.append(int(beat_type))
-
+    if not output:
+        raise TimeActualSignaturesNotValidError
     return output
 
 
@@ -111,7 +113,6 @@ class Time(XMLWrapper):
     def actual_signatures(self, val):
         if val is not None:
             val = _convert_signatures_to_ints(val)
-
         self._actual_signatures = val
         if self.parent_measure:
             self.parent_measure._update_voice_beats()

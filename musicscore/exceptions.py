@@ -92,6 +92,20 @@ class ChordQuarterDurationAlreadySetError(ChordException):
     pass
 
 
+# Id exceptions (see Part)
+
+class IdException(MusicTreeException):
+    pass
+
+
+class IdHasAlreadyParentOfSameTypeError(IdException):
+    pass
+
+
+class IdWithSameValueExistsError(IdException):
+    pass
+
+
 # Lyrics exceptions
 
 class LyricsException(MusicTreeException):
@@ -150,13 +164,40 @@ class PartException(MusicTreeException):
     pass
 
 
-# Staff exceptions
+# QuarterDuration exceptions
+class QuarterDurationException(MusicTreeException):
+    pass
 
+
+class QuarterDurationIsNotWritable(QuarterDurationException):
+    pass
+
+
+# SimpleFormat exceptions
+class SimpleFormatException(MusicTreeException):
+    pass
+
+
+# Score exceptions
+class ScoreException(MusicTreeException):
+    pass
+
+
+# Staff exceptions
 class StaffException(MusicTreeException):
     pass
 
 
 class StaffHasNoParentError(StaffException):
+    pass
+
+
+# Time exceptions
+class TimeException(MusicTreeException):
+    pass
+
+
+class TimeActualSignaturesNotValidError(TimeException):
     pass
 
 
@@ -174,37 +215,4 @@ class VoiceHasNoParentError(VoiceException):
 
 
 class VoiceIsFullError(VoiceException):
-    pass
-
-
-# Id exceptions (see Part)
-
-class IdException(MusicTreeException):
-    pass
-
-
-class IdHasAlreadyParentOfSameTypeError(IdException):
-    pass
-
-
-class IdWithSameValueExistsError(IdException):
-    pass
-
-
-# QuarterDuration exceptions
-class QuarterDurationException(MusicTreeException):
-    pass
-
-
-class QuarterDurationIsNotWritable(QuarterDurationException):
-    pass
-
-
-# Score exceptions
-class ScoreException(MusicTreeException):
-    pass
-
-
-# SimpleFormat exceptions
-class SimpleFormatException(MusicTreeException):
     pass

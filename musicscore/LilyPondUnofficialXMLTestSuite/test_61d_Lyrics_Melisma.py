@@ -1,7 +1,7 @@
 """How to treat lyrics and slurred notes. Normally, a slurred group of notes is assigned only one lyrics syllable."""
 from pathlib import Path
 
-from musicscore import Score, A, Chord, F, Lyrics, C, E
+from musicscore import Score, A, Chord, Lyrics, C, E
 from musicscore.tests.util import IdTestCase
 from musicscore.util import slur_chords
 
