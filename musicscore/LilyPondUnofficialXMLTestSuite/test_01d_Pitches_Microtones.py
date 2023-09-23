@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from musicscore import Score, G, A, B, C, D, E, F, Chord, Midi, Accidental, Time
+from musicscore import Score, C, D, E, F, Chord, Midi
 from musicscore.tests.util import IdTestCase
 
 """

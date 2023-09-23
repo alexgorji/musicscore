@@ -154,7 +154,7 @@
       <attributes>
         <divisions>1</divisions>
       </attributes>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <wedge type="crescendo" />
         </direction-type>
@@ -211,7 +211,7 @@
       <attributes>
         <divisions>1</divisions>
       </attributes>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <pedal type="start" />
         </direction-type>
