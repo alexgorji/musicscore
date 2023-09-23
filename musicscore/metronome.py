@@ -1,4 +1,4 @@
-from musicscore import QuarterDuration
+from musicscore.quarterduration import QuarterDuration
 from musicscore.exceptions import QuarterDurationIsNotWritable, MetronomeWrongBeatUnitError
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMetronome, XMLBeatUnitDot, XMLSound

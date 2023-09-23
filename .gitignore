@@ -7,5 +7,5 @@ docs/_build
 .pytest_cache
 .mypy_cache
 build/
-musicscore2.egg-info/
+musicscore.egg-info/
 dist

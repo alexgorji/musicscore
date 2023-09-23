@@ -3,8 +3,8 @@ from pathlib import Path
 
 long_description = (Path(__file__).parent / "README.rst").read_text()
 setuptools.setup(
-    name="musicscore2",
-    version="2.0beta2",
+    name="musicscore",
+    version="2.0beta4",
     author="Alex Gorji",
     author_email="aligorji@hotmail.com",
     description="Generating musicxml files.",
