@@ -204,7 +204,7 @@ def octave_chords(chords, type='down', size=8, number=1):
         ch.add_x(XMLOctaveShift(type='continue', size=size, number=number), placement=placement)
 
 
-def _generate_lyrics(lyrics, number=1, mode='list'):
+def _generate_lyrics(lyrics, number=1, show_number=False, mode='list'):
     def _get_syllables_extensions_from_group(syllabic_group):
         if syllabic_group[0] is None:
             raise LyricSyllabicOrExtensionError(
@@ -232,10 +232,11 @@ def _generate_lyrics(lyrics, number=1, mode='list'):
                 syllables, extensions = _get_syllables_extensions_from_group(ll)
                 if len(syllables) == 1:
                     xl = XMLLyric(number=str(number))
-                    xl.xml_text = ll
+                    xl.xml_text = syllables[0]
                     xl.xml_syllabic = 'single'
                     if len(extensions) > 0:
                         xl.xml_extend = XMLExtend(type='start')
+
                     output.append(xl)
                 else:
                     for j in range(len(syllables)):
@@ -267,4 +268,16 @@ def _generate_lyrics(lyrics, number=1, mode='list'):
                 raise NotImplementedError(ll)
     else:
         raise NotImplementedError
+    if show_number:
+        first = XMLLyric()
+        for k, i in output[0].attributes.items():
+            setattr(first, k, i)
+        first.add_child(XMLSyllabic('single'))
+        first.add_child(XMLText(f'{number}.'))
+        first.add_child(XMLElision(' '))
+
+        for child in output[0].get_children():
+            first.add_child(child)
+
+        output[0] = first
     return output

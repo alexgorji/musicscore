@@ -2,11 +2,24 @@ from musicscore import Score, Chord
 from musicscore.lyrics import Lyrics
 from musicscore.tests.util import IdTestCase, _generate_xml_lyric
 from musicscore.util import _generate_lyrics
-from musicxml import XMLLyric
+from musicxml import XMLLyric, XMLText, XMLElision, XMLSyllabic
 from musicxml.exceptions import XMLElementChildrenRequired
 
 test_lyrics_string = ['Bla!', 'Hello World!', 'Clou-dy day.', 'Tra-la-la Ja! Tra-ra! Bah!',
                       'No-body is per-fect! - - Are they?', 'No- - - -body is per- - fect! - - Are they?']
+
+
+def chord_lyric_asserssions(chords, expected, number=1):
+    for xl1, ch in zip(expected, chords):
+        if xl1:
+            xl2 = ch._xml_lyrics[number - 1]
+            try:
+                assert xl1.to_string() == xl2.to_string()
+            except XMLElementChildrenRequired:
+                xl1.xsd_check = False
+                assert xl1.to_string() == xl2.to_string()
+        else:
+            assert not ch._xml_lyrics
 
 
 class TestLyrics(IdTestCase):
@@ -33,6 +46,17 @@ class TestLyrics(IdTestCase):
         for xl1, xl2 in zip(xml_lyrics, expected):
             assert xl1.to_string() == xl2.to_string()
 
+    def test_generate_lyrics_two_syllabic_without_None(self):
+        word = [('Syl', 'lable')]
+        expected = [
+            _generate_xml_lyric(text='Syl', syllabic='begin'),
+            _generate_xml_lyric(text='lable', syllabic='end'),
+        ]
+
+        xml_lyrics = _generate_lyrics(word)
+        for xl1, xl2 in zip(expected, xml_lyrics):
+            assert xl1.to_string() == xl2.to_string()
+
     def test_generate_lyrics_syllabic_without_None(self):
         word = [('Clou', 'di', 'ness')]
         expected = [
@@ -42,12 +66,6 @@ class TestLyrics(IdTestCase):
         ]
 
         xml_lyrics = _generate_lyrics(word)
-        for xl1, xl2 in zip(expected, xml_lyrics):
-            assert xl1.to_string() == xl2.to_string()
-
-        word = ('Clou', 'di', 'ness')
-        xml_lyrics = _generate_lyrics(word)
-
         for xl1, xl2 in zip(expected, xml_lyrics):
             assert xl1.to_string() == xl2.to_string()
 
@@ -87,7 +105,24 @@ class TestLyrics(IdTestCase):
             else:
                 assert xl1 == xl2 is None
 
-    def test_generate_lyrics_syllabic_with_None_at_the_end(self):
+    def test_generate_lyrics_single_syllabic_with_None_at_the_end(self):
+        word = ('ja!', None)
+
+        expected = [
+            _generate_xml_lyric(text='ja!', syllabic='single', extend='start'),
+            _generate_xml_lyric(extend='stop'),
+        ]
+
+        xml_lyrics = _generate_lyrics(word)
+
+        for xl1, xl2 in zip(expected, xml_lyrics):
+            try:
+                assert xl1.to_string() == xl2.to_string()
+            except XMLElementChildrenRequired:
+                xl1.xsd_check = False
+                assert xl1.to_string() == xl2.to_string()
+
+    def test_generate_lyrics_syllabic_with_multiple_None_at_the_end(self):
         word = ('per', 'fect!', None, None)
 
         expected = [
@@ -159,14 +194,52 @@ class TestLyrics(IdTestCase):
         chords = [Chord(60, 1) for _ in range(len(expected))]
         Lyrics(words).add_to_chords(chords)
 
+        chord_lyric_asserssions(chords, expected)
 
-        for xl1, ch in zip(expected, chords):
-            if xl1:
-                xl2 = ch._xml_lyrics[0]
-                try:
-                    assert xl1.to_string() == xl2.to_string()
-                except XMLElementChildrenRequired:
-                    xl1.xsd_check = False
-                    assert xl1.to_string() == xl2.to_string()
-            else:
-                assert not ch._xml_lyrics
+    def test_generate_lyrics_list_syllabic_multiple(self):
+        lyrics_1 = [('syl', 'labic')]
+        lyrics_2 = [('SYL', 'LABIC')]
+        expected_1 = [
+            _generate_xml_lyric(text='syl', syllabic='begin'),
+            _generate_xml_lyric(text='labic', syllabic='end'),
+        ]
+        expected_2 = [
+            _generate_xml_lyric(text='SYL', syllabic='begin', number=2),
+            _generate_xml_lyric(text='LABIC', syllabic='end', number=2),
+        ]
+        chords = [Chord(60, 1) for _ in range(2)]
+        Lyrics(lyrics_1).add_to_chords(chords)
+        Lyrics(lyrics_2, number=2).add_to_chords(chords)
+        chord_lyric_asserssions(chords, expected_1)
+        chord_lyric_asserssions(chords, expected_2, 2)
+
+    def test_generate_lyrics_list_syllabic_multiple_show_number(self):
+        lyrics_1 = [('syl', 'labic')]
+        lyrics_2 = [('SYL', 'LABIC')]
+        first_syllable_1 = XMLLyric(number='1')
+        first_syllable_1.add_child(XMLSyllabic('single'))
+        first_syllable_1.add_child(XMLText('1.'))
+        first_syllable_1.add_child(XMLElision(' '))
+        first_syllable_1.add_child(XMLSyllabic('begin'))
+        first_syllable_1.add_child(XMLText('syl'))
+
+        first_syllable_2 = XMLLyric(number='2')
+        first_syllable_2.add_child(XMLSyllabic('single'))
+        first_syllable_2.add_child(XMLText('2.'))
+        first_syllable_2.add_child(XMLElision(' '))
+        first_syllable_2.add_child(XMLSyllabic('begin'))
+        first_syllable_2.add_child(XMLText('SYL'))
+
+        expected_1 = [
+            first_syllable_1,
+            _generate_xml_lyric(text='labic', syllabic='end'),
+        ]
+        expected_2 = [
+            first_syllable_2,
+            _generate_xml_lyric(text='LABIC', syllabic='end', number=2),
+        ]
+        chords = [Chord(60, 1) for _ in range(2)]
+        Lyrics(lyrics_1, show_number=True).add_to_chords(chords)
+        Lyrics(lyrics_2, number=2, show_number=True).add_to_chords(chords)
+        chord_lyric_asserssions(chords, expected_1)
+        chord_lyric_asserssions(chords, expected_2, 2)

@@ -3,14 +3,19 @@ from musicscore.util import _generate_lyrics
 
 
 class Lyrics:
-    def __init__(self, word_groups, number=1):
-        self._number = number
+    def __init__(self, word_groups, number=1, show_number=False):
         self._word_groups = word_groups
-        self._xml_lyrics = _generate_lyrics(word_groups, number=number)
+        self._number = number
+        self._show_number = show_number
+        self._xml_lyrics = _generate_lyrics(word_groups, number=number, show_number=show_number)
 
     @property
     def number(self):
         return self._number
+
+    @property
+    def show_number(self):
+        return self._show_number
 
     @property
     def word_groups(self):
