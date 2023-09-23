@@ -14,9 +14,10 @@ from musicscore.note import *
 from musicscore.part import *
 from musicscore.quarterduration import *
 from musicscore.score import *
-from musicscore.simpleformat import *
 from musicscore.staff import *
 from musicscore.time import *
 from musicscore.voice import *
+from musicscore.simpleformat import *
+
 
 
