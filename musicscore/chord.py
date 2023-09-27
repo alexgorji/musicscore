@@ -76,7 +76,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._metronome = None
         self._grace_chords = {'before': [], 'after': []}
         self._arpeggio = None
-
+        self._after_notes_xml_objects = []
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
         self.split = False
@@ -583,6 +583,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         return self._xml_technicals
 
     # public methods
+    def add_after_note_xml_objects(self, xml_object):
+        self._after_notes_xml_objects.append(xml_object)
 
     def add_direction_type(self, direction_type: XMLElement, placement: Optional[str] = None):
         if not placement:

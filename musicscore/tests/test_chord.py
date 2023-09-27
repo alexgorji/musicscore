@@ -1,6 +1,6 @@
 import copy
 from unittest import skip, TestCase
-
+import xmltodict
 from quicktions import Fraction
 
 from musicscore import BassClef, Score, Part
@@ -11,7 +11,7 @@ from musicscore.exceptions import ChordHasNoParentError, DeepCopyException, Chor
     ChordException, MusicTreeException, ChordAddXException, ChordAddXPlacementException
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDuration
-from musicscore.tests.util import ChordTestCase, create_test_objects
+from musicscore.tests.util import ChordTestCase, create_test_objects, IdTestCase
 from musicscore.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, \
     XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, \
     XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
@@ -1038,3 +1038,72 @@ class TestAddX(ChordTestCase):
         assert d.placement == 'below'
         assert xml_words.font_size == 20
         assert xml_words.relative_y == 20
+
+
+class TestAddAfterNotes(IdTestCase):
+    def test_add_after_notes(self):
+        part = Part('p1')
+        chords = [Chord([60, 62], 2), Chord(64, 2)]
+        chords[0].add_dynamics('ff')
+        [part.add_chord(ch) for ch in chords]
+        b = XMLBarline(location='middle')
+        b.xml_bar_style = 'dashed'
+        chords[0].add_after_note_xml_objects(b)
+        part.finalize()
+        m = part.get_measure(1)
+        expected = """<measure number="1">
+    <attributes>
+      <divisions>1</divisions>
+      <key>
+        <fifths>0</fifths>
+      </key>
+      <time>
+        <beats>4</beats>
+        <beat-type>4</beat-type>
+      </time>
+      <clef>
+        <sign>G</sign>
+        <line>2</line>
+      </clef>
+    </attributes>
+    <direction placement="below">
+      <direction-type>
+        <dynamics>
+          <ff />
+        </dynamics>
+      </direction-type>
+    </direction>
+    <note>
+      <pitch>
+        <step>C</step>
+        <octave>4</octave>
+      </pitch>
+      <duration>2</duration>
+      <voice>1</voice>
+      <type>half</type>
+    </note>
+    <note>
+      <chord />
+      <pitch>
+        <step>D</step>
+        <octave>4</octave>
+      </pitch>
+      <duration>2</duration>
+      <voice>1</voice>
+      <type>half</type>
+    </note>
+    <barline location="middle">
+      <bar-style>dashed</bar-style>
+    </barline>
+    <note>
+      <pitch>
+        <step>E</step>
+        <octave>4</octave>
+      </pitch>
+      <duration>2</duration>
+      <voice>1</voice>
+      <type>half</type>
+    </note>
+  </measure>
+"""
+        assert m.to_string() == expected

@@ -205,6 +205,8 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
                         attributes.add_child(chord.clef.xml_object)
                     for note in chord.notes:
                         self.xml_object.add_child(note.xml_object)
+                    for xml_object in chord._after_notes_xml_objects:
+                        self.xml_object.add_child(xml_object)
 
     def finalize(self):
         """

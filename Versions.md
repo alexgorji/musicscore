@@ -84,6 +84,7 @@ Add `musictree.testing` to `musictree` package
 ``Chord.add_direction_type()`` added.
 ``Chord.add_wedge()`` added.
 ``Chord.add_words()`` added.
+``Chord.add_after_note_xml_objects()`` added.
 ``Chord.get_voice_number()`` and ``Chord.get_staff_number()`` return None if no ``Voice`` or ``Staff`` ancestor exist.
 ``Chord.__deepcopy__()`` added. Only midi and quarter_duration are deepcopied.
 ``Chord.clef`` property added.
