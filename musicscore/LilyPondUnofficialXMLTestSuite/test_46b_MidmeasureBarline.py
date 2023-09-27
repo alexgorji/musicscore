@@ -22,9 +22,8 @@ class TestLily46b(IdTestCase):
         [p.add_chord(ch) for ch in chords]
         b = XMLBarline(location='middle')
         b.xml_bar_style = 'dashed'
-        chords[1].add_after_note_xml_objects(XMLBarline(b))
+        chords[1].add_after_note_xml_objects(b)
         score.finalize()
-        print(p.get_measure(1).xml_object.tree_representation())
 
         xml_path = Path(__file__).with_suffix('.xml')
         score.export_xml(xml_path)
