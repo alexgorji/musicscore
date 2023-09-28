@@ -1,0 +1,1476 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC
+    "-//Recordare//DTD MusicXML 4.0 Partwise//EN"
+    "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="4.0">
+  <identification>
+    <encoding>
+      <supports element="accidental" type="yes" />
+      <supports element="beam" type="yes" />
+      <supports element="stem" type="yes" />
+    </encoding>
+  </identification>
+  <defaults>
+    <scaling>
+      <millimeters>2.6176</millimeters>
+      <tenths>40</tenths>
+    </scaling>
+    <page-layout>
+      <page-height>4539</page-height>
+      <page-width>3209</page-width>
+      <page-margins type="both">
+        <left-margin>200</left-margin>
+        <right-margin>70</right-margin>
+        <top-margin>70</top-margin>
+        <bottom-margin>70</bottom-margin>
+      </page-margins>
+    </page-layout>
+    <system-layout>
+      <system-margins>
+        <left-margin>0</left-margin>
+        <right-margin>0</right-margin>
+      </system-margins>
+      <system-distance>117</system-distance>
+      <top-system-distance>117</top-system-distance>
+    </system-layout>
+  </defaults>
+  <part-list>
+    <part-group number="2" type="start">
+      <group-symbol>bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="p1">
+      <part-name>Piccolo</part-name>
+      <part-abbreviation>picc</part-abbreviation>
+    </score-part>
+    <part-group number="1" type="start">
+      <group-symbol default-x="-18">square</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="p2">
+      <part-name>Flute 1</part-name>
+      <part-abbreviation>fl 1</part-abbreviation>
+    </score-part>
+    <score-part id="p3">
+      <part-name>Flute 2</part-name>
+      <part-abbreviation>fl 2</part-abbreviation>
+    </score-part>
+    <part-group number="1" type="stop" />
+    <part-group number="1" type="start">
+      <group-symbol default-x="-18">square</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="p4">
+      <part-name>Oboe 1</part-name>
+      <part-abbreviation>ob 1</part-abbreviation>
+    </score-part>
+    <score-part id="p5">
+      <part-name>Oboe 2</part-name>
+      <part-abbreviation>ob 2</part-abbreviation>
+    </score-part>
+    <part-group number="1" type="stop" />
+    <score-part id="p6">
+      <part-name>English Horn</part-name>
+      <part-abbreviation>eh</part-abbreviation>
+    </score-part>
+    <score-part id="p7">
+      <part-name>Clarinet in Eb</part-name>
+      <part-abbreviation>cl(Eb)</part-abbreviation>
+    </score-part>
+    <part-group number="1" type="start">
+      <group-symbol default-x="-18">square</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="p8">
+      <part-name>Clarinet 1 in Bb</part-name>
+      <part-abbreviation>cl(Bb) 1</part-abbreviation>
+    </score-part>
+    <score-part id="p9">
+      <part-name>Clarinet 2 in Bb</part-name>
+      <part-abbreviation>cl(Bb) 2</part-abbreviation>
+    </score-part>
+    <part-group number="1" type="stop" />
+    <score-part id="p10">
+      <part-name>Bass Clarinet</part-name>
+      <part-abbreviation>bcl</part-abbreviation>
+    </score-part>
+    <part-group number="1" type="start">
+      <group-symbol default-x="-18">square</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="p11">
+      <part-name>Bassoon 1</part-name>
+      <part-abbreviation>bn 2</part-abbreviation>
+    </score-part>
+    <score-part id="p12">
+      <part-name>Bassoon 2</part-name>
+      <part-abbreviation>bn 1</part-abbreviation>
+    </score-part>
+    <part-group number="1" type="stop" />
+    <score-part id="p13">
+      <part-name>Contrabassoon</part-name>
+      <part-abbreviation>cbn</part-abbreviation>
+    </score-part>
+    <part-group number="2" type="stop" />
+    <part-group number="2" type="start">
+      <group-symbol>bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <part-group number="1" type="start">
+      <group-symbol default-x="-18">square</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="p14">
+      <part-name>Horn in F 1</part-name>
+      <part-abbreviation>hn(F) 1</part-abbreviation>
+    </score-part>
+    <score-part id="p15">
+      <part-name>Horn in F 2</part-name>
+      <part-abbreviation>hn(F) 2</part-abbreviation>
+    </score-part>
+    <part-group number="1" type="stop" />
+    <part-group number="1" type="start">
+      <group-symbol default-x="-18">square</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="p16">
+      <part-name>Trumpet in C 1</part-name>
+      <part-abbreviation>tp(C) 1</part-abbreviation>
+    </score-part>
+    <score-part id="p17">
+      <part-name>Trumpet in C 2</part-name>
+      <part-abbreviation>tp(C) 1</part-abbreviation>
+    </score-part>
+    <part-group number="1" type="stop" />
+    <part-group number="1" type="start">
+      <group-symbol default-x="-18">square</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="p18">
+      <part-name>Trombone 1</part-name>
+      <part-abbreviation>tbn</part-abbreviation>
+    </score-part>
+    <score-part id="p19">
+      <part-name>Trombone 2</part-name>
+      <part-abbreviation>tbn</part-abbreviation>
+    </score-part>
+    <part-group number="1" type="stop" />
+    <score-part id="p20">
+      <part-name>Tuba</part-name>
+      <part-abbreviation>tb</part-abbreviation>
+    </score-part>
+    <part-group number="2" type="stop" />
+    <score-part id="p21">
+      <part-name>Timpani</part-name>
+      <part-abbreviation>tmp</part-abbreviation>
+    </score-part>
+    <score-part id="p22">
+      <part-name>Percussion</part-name>
+      <part-abbreviation>perc</part-abbreviation>
+    </score-part>
+    <score-part id="p23">
+      <part-name>Harp</part-name>
+      <part-abbreviation>hrp</part-abbreviation>
+    </score-part>
+    <score-part id="p24">
+      <part-name>Piano</part-name>
+      <part-abbreviation>pno</part-abbreviation>
+    </score-part>
+    <part-group number="2" type="start">
+      <group-symbol>bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <part-group number="1" type="start">
+      <group-symbol default-x="-18">square</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="p25">
+      <part-name>Violin I</part-name>
+      <part-abbreviation>vn 2</part-abbreviation>
+    </score-part>
+    <score-part id="p26">
+      <part-name>Violin II</part-name>
+      <part-abbreviation>vn 1</part-abbreviation>
+    </score-part>
+    <part-group number="1" type="stop" />
+    <score-part id="p27">
+      <part-name>Viola</part-name>
+      <part-abbreviation>va</part-abbreviation>
+    </score-part>
+    <score-part id="p28">
+      <part-name>Cello</part-name>
+      <part-abbreviation>vc</part-abbreviation>
+    </score-part>
+    <score-part id="p29">
+      <part-name>Contrabass</part-name>
+      <part-abbreviation>cb</part-abbreviation>
+    </score-part>
+    <part-group number="2" type="stop" />
+  </part-list>
+  <part id="p1">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          <clef-octave-change>1</clef-octave-change>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p2">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p3">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p4">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p5">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p6">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+        <transpose>
+          <chromatic>-7</chromatic>
+        </transpose>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p7">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+        <transpose>
+          <chromatic>3</chromatic>
+        </transpose>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p8">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+        <transpose>
+          <chromatic>-2</chromatic>
+        </transpose>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p9">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+        <transpose>
+          <chromatic>-2</chromatic>
+        </transpose>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p10">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+          <clef-octave-change>-1</clef-octave-change>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p11">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p12">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p13">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+          <clef-octave-change>-1</clef-octave-change>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p14">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+        <transpose>
+          <chromatic>-7</chromatic>
+        </transpose>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p15">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+        <transpose>
+          <chromatic>-7</chromatic>
+        </transpose>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p16">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p17">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p18">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p19">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p20">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p21">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p22">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>percussion</sign>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p23">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <staves>2</staves>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+        <clef number="2">
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+        <staff>1</staff>
+      </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <staff>2</staff>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+        <staves>2</staves>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <staff>1</staff>
+      </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <staff>2</staff>
+      </note>
+    </measure>
+  </part>
+  <part id="p24">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <staves>2</staves>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+        <clef number="2">
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+        <staff>1</staff>
+      </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <staff>2</staff>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+        <staves>2</staves>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <staff>1</staff>
+      </note>
+      <backup>
+        <duration>4</duration>
+      </backup>
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <staff>2</staff>
+      </note>
+    </measure>
+  </part>
+  <part id="p25">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p26">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p27">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>C</sign>
+          <line>3</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p28">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="p29">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+          <clef-octave-change>-1</clef-octave-change>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <measure number="2">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <print new-system="yes" />
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+</score-partwise>

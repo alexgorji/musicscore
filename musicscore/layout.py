@@ -1,11 +1,9 @@
 from typing import Union, Optional
 
-from musicxml.xmlelement.xmlelement import XMLPageLayout, XMLPageMargins, XMLLeftMargin, XMLRightMargin, XMLTopMargin, \
-    XMLBottomMargin, \
-    XMLScaling, XMLDefaults, XMLSystemLayout, XMLSystemMargins, XMLStaffLayout
-
 from musicscore.util import isinstance_as_string
 from musicscore.xmlwrapper import XMLWrapper
+from musicxml.xmlelement.xmlelement import XMLPageLayout, XMLPageMargins, XMLScaling, XMLDefaults, XMLSystemLayout, \
+    XMLSystemMargins, XMLStaffLayout
 
 __all__ = ['PAGE_MARGINS', 'PAGE_SIZES', 'SYSTEM_MARGINS', 'SYSTEM_LAYOUT', 'STAFF_LAYOUT', 'SCALING', 'Margins',
            'Scaling',

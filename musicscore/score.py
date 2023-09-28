@@ -272,7 +272,8 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         """
         return super().get_children()
 
-    def group_parts(self, number, start_part_number, end_part_number, symbol='square', name=None, abbreviation=None):
+    def group_parts(self, number, start_part_number, end_part_number, symbol='square', name=None, abbreviation=None,
+                    **kwargs):
         parts = self.get_children_of_type(Part)
         for part_number in [start_part_number, end_part_number]:
             if not 0 < part_number <= len(parts):
@@ -285,7 +286,7 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         for child in self.xml_part_list.get_children():
             if isinstance(child, XMLScorePart) and child.id == parts[start_part_number - 1].id_.value:
                 pg = new_xml_part_list.add_child(XMLPartGroup(number=str(number), type='start'))
-                pg.add_child(XMLGroupSymbol(symbol))
+                pg.add_child(XMLGroupSymbol(symbol, **kwargs))
                 pg.add_child(XMLGroupBarline('yes'))
                 if name:
                     pg.add_child(XMLGroupName(name))

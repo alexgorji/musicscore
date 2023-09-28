@@ -73,6 +73,15 @@ class TestPart(IdTestCase):
         p.name = None
         assert p.name == ''
 
+    def test_part_abbreviation(self):
+        p = Part(id='p1')
+        assert p.abbreviation is None
+        p = Part(id='p2', name='Part 1', abbreviation='p 1')
+        assert p.abbreviation == 'p 1'
+        p = Part(id='p3', name='Part 3')
+        p.abbreviation = 'p 3'
+        assert p.abbreviation == 'p 3'
+
     def test_part_and_score_part(self):
         p = Part(id='p1')
         assert isinstance(p.score_part, ScorePart)
@@ -234,6 +243,15 @@ class TestScorePart(IdTestCase):
         assert p.score_part.xml_part_name.value_ == p.name == 'Part 1'
         p.name = None
         assert p.score_part.xml_part_name.value_ == p.name == ''
+
+    def test_score_part_abbreviation(self):
+        p = Part(id='p1')
+        assert p.score_part.xml_part_abbreviation == p.abbreviation is None
+        p = Part(id='p2', name='Part 1', abbreviation='p 1')
+        assert p.score_part.xml_part_abbreviation.value_ == p.abbreviation == 'p 1'
+        p = Part(id='p3', name='Part 3')
+        p.abbreviation = 'p 3'
+        assert p.score_part.xml_part_abbreviation.value_ == p.abbreviation == 'p 3'
 
     def test_score_part_to_string(self):
         p = Part(id='p1')

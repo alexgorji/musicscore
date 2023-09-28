@@ -114,25 +114,29 @@ class ScorePart(XMLWrapper):
             self.part.id_.add_parent(self)
         self._update_name()
 
+    def _update_abbreviation(self):
+        self.xml_object.xml_part_abbreviation = self.part.abbreviation
+
     def _update_name(self):
         self.xml_object.xml_part_name = self.part.name
 
 
 class Part(MusicTree, FinalizeMixin, XMLWrapper):
-    _ATTRIBUTES = {'id_', 'name'}
+    _ATTRIBUTES = {'id_', 'name', 'abbreviation'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLPart
 
-    def __init__(self, id, name=None, *args, **kwargs):
+    def __init__(self, id, name=None, abbreviation=None, *args, **kwargs):
         super().__init__()
         self._xml_object = self.XMLClass(*args, **kwargs)
         self._id = None
         self.id_ = id
+        self._score_part = ScorePart(part=self)
         self._name = None
         self.name = name
-        self._score_part = ScorePart(part=self)
+        self._abbreviation = None
+        self.abbreviation = abbreviation
         self._current_measures = {}
-        # self._final_updated = False
 
     def _add_to_next_measure(self, current_measure, chord, staff_number, voice_number):
         if current_measure.next:
@@ -147,6 +151,18 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
             if m.get_voice(staff_number=staff_number, voice_number=voice_number):
                 self.set_current_measure(staff_number, voice_number, m)
                 return m
+
+    @property
+    def abbreviation(self) -> Optional[str]:
+        return self._abbreviation
+
+    @abbreviation.setter
+    def abbreviation(self, val):
+        self._abbreviation = val
+        try:
+            self.score_part._update_abbreviation()
+        except AttributeError:
+            pass
 
     @property
     def id_(self) -> Id:

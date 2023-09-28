@@ -71,15 +71,19 @@ package.
 
 Add `musictree.testing` to `musictree` package
 
+/////////////////////////// CHANGE IN PACKAGING >>>>>>
+musicscore2 was removed from pip. The old package musicscore has been reactivated. musicscore version 2.0 corresponds to
+musicscore2. All older versions of musicscore2 are not anymore accessible via pip. The repository musicscore2 is however
+still publicly reachable which contains a tag for each version.
+``musictree`` has been renamed to musicscore for consistency reasons. All classes can be imported new with the
+command``import musicscore.CLASS`` or ``from musicscore import *``.
+
 # Version 2.0
 
-``SimpleFormat`` added. It is useful tool to generate list of chords and also do some simple algorithmic changes to it if needed.
-``Lyrics`` added. A class to generate XMLLyrics and adding it to a list of chords.
-``Note.parent_chord`` removed. ``Midi`` is now required. ``Midi`` must have a parent_chord.
-``Metronome`` new Class.
-``Midi`` is now the core object for adding or removing ties to ``Chord`` (and ``Note``).
-``Midi.notehead`` property added.
-``Midi.set_staff_number()`` and ``Midi.get_staff_number()`` added to make staff crossing possible.
+``Accidental.mode`` changed to standard, enharmonic, sharp, flat, force-sharp and force-flat.
+
+``add_chord()`` has been removed from ``Voice``, ``Measure`` and ``Beat``. Use ``Part.add_chord()`` instead!
+
 ``Chord.add_midi(), Chord._sort_midis()`` added.
 ``Chord.add_direction_type()`` added.
 ``Chord.add_wedge()`` added.
@@ -93,22 +97,46 @@ Add `musictree.testing` to `musictree` package
 ``Chord.get_words(), Chord.get_slurs(), Chord.get_wedges(), Chord.get_brackets()`` added.
 ``Chord.metronome`` property added.
 ``Chord.all_midis_are_tied_to_next`` and ``Chord.all_midis_are_tied_to_previous`` added.
-``QuarterDurartion.get_type()`` and ``QuarrterDurtion.get_number_of_dots()`` added.
-``GraceChord()`` added.
-``Time.signatures and Time.actual_signatures`` accept also strings to allow creating a complex time signature like
-3+2+5/8 = ``Time('3+2+5', 8)``
-Automatically created ``Time.actual_sigatures`` has been updated: 2/8 = 2/8; 4/8 = 2/8 + 2/8; 5/8 = 3/8 + 2/8; 7/8 =
-4/8 + 3/8
-``Accidental.mode`` changed to standard, enharmonic, sharp, flat, force-sharp and force-flat.
-``Score`` Inherited methode ``Score.write`` will throw an Exception (.export_xml should be used instead).
-``Score.group_parts(number, start_part_number, end_part_number, symbol='square', name=None, abbreviation=None)`` added
+
 ``Clef`` argument default and property _default added (this will be True if Measure._update_default_clefs() set the
 clef, otherwise it will be False).
+
+``GraceChord()`` added.
+
+``Lyrics`` added. A class to generate XMLLyrics and adding it to a list of chords.
+
+``Measure.new_system`` property added.
+
+``Metronome`` new Class.
+
+``Midi`` is now the core object for adding or removing ties to ``Chord`` (and ``Note``).
+``Midi.notehead`` property added.
+``Midi.set_staff_number()`` and ``Midi.get_staff_number()`` added to make staff crossing possible.
+
+``Note.parent_chord`` removed. ``Midi`` is now required. ``Midi`` must have a parent_chord.
+
+``Part.abbreviation`` property added.
+
 ``PerucssionClef()`` added.
+
+``QuarterDurartion.get_type()`` and ``QuarrterDurtion.get_number_of_dots()`` added.
+
+``Score`` Inherited methode ``Score.write`` will throw an Exception (.export_xml should be used instead).
+``Score.group_parts(number, start_part_number, end_part_number, symbol='square', name=None, abbreviation=None)`` added
+``Score.group_parts()`` **kwargs added. This will be added to ``XMLGroupSymbol``
+
+``SimpleFormat`` added. It is useful tool to generate list of chords and also do some simple algorithmic changes to it
+if needed.
+
 ``Staff`` default clef argument is changed to None. If no clef is set, it will automatically be set to clef of staff in
 previous measure. If clef is changed the new clef will have the same number as the old one.
-``add_chord()`` has been removed from ``Voice``, ``Measure`` and ``Beat``. Use ``Part.add_chord()`` instead!
+
+``Time.signatures and Time.actual_signatures`` accept also strings to allow creating a complex time signature like
+3+2+5/8 = ``Time('3+2+5', 8)``Automatically created ``Time.actual_sigatures`` has been updated: 2/8 = 2/8; 4/8 = 2/8 +
+2/8; 5/8 = 3/8 + 2/8; 7/8 = 4/8 + 3/8
+
 ``util.slur_chords(), util.wedge_chords(), util.trill_chords(), util.bracket_chords(), util.octave_chords()`` added.
+
 ``Bug Fix``: adding staff to a measure will only set default clefs automatically if the new or old staves does not have
 a from user manually set clef. It means that the manually set clefs won't be overwritten any more.
 ``Bug Fix``: a Chord with tied notes will keep its tie after splitting.

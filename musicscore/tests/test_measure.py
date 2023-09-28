@@ -420,6 +420,12 @@ class TestMeasure(IdTestCase):
             m.finalize()
             assert m.xml_barline.xml_bar_style.value_ == bs
 
+    def test_new_system(self):
+        m = Measure(1)
+        assert m.new_system is False
+        m.new_system = True
+        assert m.new_system is True
+        assert m.xml_object.xml_print.new_system == 'yes'
 
 class TestUpdateAccidentals(IdTestCase):
     def test_update_accidentals_simple(self):

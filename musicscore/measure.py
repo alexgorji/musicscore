@@ -10,13 +10,13 @@ from musicscore.time import Time, flatten_times
 from musicscore.util import lcm, chord_is_in_a_repetition
 from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
-from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup, XMLBarline
+from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup, XMLBarline, XMLPrint
 
 __all__ = ['Measure', 'generate_measures']
 
 
 class Measure(MusicTree, FinalizeMixin, XMLWrapper):
-    _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration', 'barline_style'}
+    _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration', 'barline_style', 'new_system'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     XMLClass = XMLMeasure
 
@@ -30,6 +30,7 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         self._key = Key()
         self.time = time
         self._set_attributes()
+        self._new_system = False
 
     def _add_chord(self, chord, staff_number=None, voice_number=1):
 
@@ -174,6 +175,16 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         divisions = lcm(list(chord_divisions))
         self.xml_object.xml_attributes.xml_divisions = divisions
 
+    def _update_print(self):
+        if self.new_system:
+            if self.xml_object.xml_print:
+                self.xml_object.xml_print.new_system = 'yes'
+            else:
+                self.xml_object.xml_print = XMLPrint(new_system='yes')
+        else:
+            if self.xml_object.xml_print:
+                self.xml_object.xml_print.new_system = 'no'
+
     def _update_voice_beats(self):
         for staff in self.get_children():
             for voice in staff.get_children():
@@ -284,6 +295,17 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
     @number.setter
     def number(self, val):
         self.xml_object.number = str(val)
+
+    @property
+    def new_system(self) -> bool:
+        return self._new_system
+
+    @new_system.setter
+    def new_system(self, val):
+        if not isinstance(val, bool):
+            raise TypeError
+        self._new_system = val
+        self._update_print()
 
     @property
     def time(self) -> Time:
