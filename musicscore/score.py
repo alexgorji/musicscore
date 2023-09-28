@@ -1,11 +1,12 @@
 from typing import List
 
-from musicscore import Part
-from musicscore.exceptions import AlreadyFinalizedError
+from musicscore import Part, Chord
+from musicscore.exceptions import AlreadyFinalizedError, ScoreMultipleMeasureRestError
 from musicscore.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, \
     XMLEncoding, \
-    XMLSupports, XMLScorePart, XMLPartGroup, XMLGroupSymbol, XMLGroupBarline, XMLGroupName, XMLGroupAbbreviation
+    XMLSupports, XMLScorePart, XMLPartGroup, XMLGroupSymbol, XMLGroupBarline, XMLGroupName, XMLGroupAbbreviation, \
+    XMLMeasureStyle
 
 from musicscore.core import MusicTree
 from musicscore.quarterduration import QuarterDuration
@@ -53,6 +54,8 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         self.title = title
         self.subtitle = subtitle
         self._possible_subdivisions = POSSIBLE_SUBDIVISIONS.copy()
+
+        self._measure_numbers_within_multiple_measure_rests = set()
 
         self._final_updated = False
 
@@ -252,6 +255,14 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         p = Part(id_)
         return self.add_child(p)
 
+    def finalize(self) -> None:
+        super().finalize()
+        for measure_number in self._measure_numbers_within_multiple_measure_rests:
+            for part in self.get_children():
+                measure = part.get_measure(measure_number)
+                for ch in measure.get_chords():
+                    ch.notes[0].xml_rest.measure = 'yes'
+
     def export_xml(self, path: 'pathlib.Path') -> None:
         """
         :param path: Output xml file
@@ -297,6 +308,34 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
                 new_xml_part_list.add_child(XMLPartGroup(number=str(number), type='stop'))
 
         self.xml_part_list = new_xml_part_list
+
+    def set_multiple_measure_rest(self, first_measure_number, last_measure_number):
+        if len(self.get_children()) == 0:
+            raise ScoreMultipleMeasureRestError(f'score has no parts.')
+        if last_measure_number <= first_measure_number:
+            raise ScoreMultipleMeasureRestError(
+                f'last_measure_number {last_measure_number} must be larger than first_measure_number {first_measure_number}')
+        for x in range(first_measure_number, last_measure_number + 1):
+            if x in self._measure_numbers_within_multiple_measure_rests:
+                raise ScoreMultipleMeasureRestError(f'measure number {x} is already part of a multiple measure reset')
+        for part in self.get_children():
+            for _ in range(last_measure_number - len(part.get_children())):
+                m = part.add_measure()
+                part.add_chord(Chord(0, m.quarter_duration))
+
+            for measure in part.get_children()[first_measure_number - 1:last_measure_number]:
+                for ch in measure.get_chords():
+                    if not ch.is_rest:
+                        raise ScoreMultipleMeasureRestError(
+                            f'Measures contain not rest chords')
+
+            first_measure = part.get_measure(first_measure_number)
+            if not first_measure.xml_attributes.xml_measure_style:
+                first_measure.xml_attributes.xml_measure_style = XMLMeasureStyle()
+            first_measure.xml_attributes.xml_measure_style.xml_multiple_rest = last_measure_number - first_measure_number + 1
+            if part == self.get_children()[0]:
+                self._measure_numbers_within_multiple_measure_rests.update(
+                    {x for x in range(first_measure_number, last_measure_number + 1)})
 
     def write(self, *args, **kwargs):
         raise NotImplementedError('Use Score.export_xml instead!')

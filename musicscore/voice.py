@@ -147,14 +147,6 @@ class Voice(MusicTree, FinalizeMixin, XMLWrapper):
             if not self._current_beat_index:
                 self._current_beat_index = 0
         return self._current_beat_index
-        # try:
-        #     return self.get_children()[self._current_beat_index]
-
-        # else:
-        #     return self._current_beat_index
-        # for beat in self.get_children():
-        #     if not beat.is_filled:
-        #         return beat
 
     def get_current_beat(self) -> 'Beat':
         try:

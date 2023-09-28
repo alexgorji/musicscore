@@ -183,6 +183,10 @@ class ScoreException(MusicTreeException):
     pass
 
 
+class ScoreMultipleMeasureRestError(ScoreException):
+    pass
+
+
 # Staff exceptions
 class StaffException(MusicTreeException):
     pass

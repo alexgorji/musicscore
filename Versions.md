@@ -125,6 +125,7 @@ clef, otherwise it will be False).
 ``Score`` Inherited methode ``Score.write`` will throw an Exception (.export_xml should be used instead).
 ``Score.group_parts(number, start_part_number, end_part_number, symbol='square', name=None, abbreviation=None)`` added
 ``Score.group_parts()`` **kwargs added. This will be added to ``XMLGroupSymbol``
+``Score.set_multiple_measure_rest()`` method added.
 
 ``SimpleFormat`` added. It is useful tool to generate list of chords and also do some simple algorithmic changes to it
 if needed.
