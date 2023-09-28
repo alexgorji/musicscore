@@ -10,7 +10,8 @@ from musicscore.time import Time, flatten_times
 from musicscore.util import lcm, chord_is_in_a_repetition
 from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
-from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup, XMLBarline, XMLPrint
+from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup, XMLBarline, XMLPrint, \
+    XMLRepeat
 
 __all__ = ['Measure', 'generate_measures']
 
@@ -377,6 +378,13 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
 
     def add_chord(self, *args, **kwargs):
         raise AddChordError
+
+    def add_repeat(self, direction='backward', **kwargs):
+        bl = XMLBarline()
+        bl.xml_bar_style = 'light-heavy'
+        bl.add_child(XMLRepeat(direction=direction, **kwargs))
+        self.xml_barline = bl
+        return bl
 
     def add_staff(self, staff_number: Optional[int] = None) -> 'Staff':
         """

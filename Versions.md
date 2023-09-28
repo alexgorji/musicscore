@@ -106,6 +106,7 @@ clef, otherwise it will be False).
 ``Lyrics`` added. A class to generate XMLLyrics and adding it to a list of chords.
 
 ``Measure.new_system`` property added.
+``Measure().add_repeat()`` method added.
 
 ``Metronome`` new Class.
 

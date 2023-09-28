@@ -427,6 +427,11 @@ class TestMeasure(IdTestCase):
         assert m.new_system is True
         assert m.xml_object.xml_print.new_system == 'yes'
 
+    def test_add_repeat(self):
+        m = Measure(1)
+        m.add_repeat(times=5)
+        print(m.to_string())
+
 class TestUpdateAccidentals(IdTestCase):
     def test_update_accidentals_simple(self):
         m = Measure(1)
