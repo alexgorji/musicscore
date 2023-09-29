@@ -173,6 +173,24 @@ class QuarterDurationIsNotWritable(QuarterDurationException):
     pass
 
 
+# Rest exceptions
+
+class RestException(MusicTreeException):
+    pass
+
+
+class RestCannotSetMidiError(RestException):
+    pass
+
+
+class RestWithDisplayStepHasNoDisplayOctave(RestException):
+    pass
+
+
+class RestWithDisplayOctaveHasNoDisplayStep(RestException):
+    pass
+
+
 # SimpleFormat exceptions
 class SimpleFormatException(MusicTreeException):
     pass

@@ -122,6 +122,8 @@ clef, otherwise it will be False).
 
 ``QuarterDurartion.get_type()`` and ``QuarrterDurtion.get_number_of_dots()`` added.
 
+``Rest`` class added.
+
 ``Score`` Inherited methode ``Score.write`` will throw an Exception (.export_xml should be used instead).
 ``Score.group_parts(number, start_part_number, end_part_number, symbol='square', name=None, abbreviation=None)`` added
 ``Score.group_parts()`` **kwargs added. This will be added to ``XMLGroupSymbol``

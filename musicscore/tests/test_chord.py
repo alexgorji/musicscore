@@ -1,20 +1,20 @@
 import copy
 from unittest import skip, TestCase
-import xmltodict
+
 from quicktions import Fraction
 
 from musicscore import BassClef, Score, Part
 from musicscore.accidental import Accidental
 from musicscore.beat import Beat
-from musicscore.chord import Chord, _split_copy, _group_chords, GraceChord
+from musicscore.chord import Chord, _split_copy, _group_chords, GraceChord, Rest
 from musicscore.exceptions import ChordHasNoParentError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
-    ChordException, MusicTreeException, ChordAddXException, ChordAddXPlacementException
+    ChordException, MusicTreeException, ChordAddXPlacementException, RestCannotSetMidiError, \
+    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDuration
 from musicscore.tests.util import ChordTestCase, create_test_objects, IdTestCase
 from musicscore.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, \
-    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, \
-    XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
+    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES
 from musicxml.xmlelement.xmlelement import *
 
 
@@ -554,6 +554,49 @@ class TestTreeChord(ChordTestCase):
             elif n == ch.notes[-1]:
                 assert n.xml_notations.xml_non_arpeggiate
                 assert n.xml_notations.xml_non_arpeggiate.type == 'top'
+
+
+class TestTreeRest(ChordTestCase):
+    def test_rest_init(self):
+        r = Rest(4)
+        r._parent = self.mock_beat
+        assert isinstance(r, Rest)
+        assert isinstance(r, Chord)
+        assert r.midis[0].value == 0
+        r.finalize()
+        n = r.notes[0]
+        assert r.display_step == r.display_octave == n.xml_object.xml_rest.xml_display_step == n.xml_object.xml_rest.xml_display_octave is None
+        assert r.quarter_duration == 4
+        r = Rest(4, display_step='C', display_octave=4)
+        r._parent = self.mock_beat
+        r.finalize()
+        n = r.notes[0]
+        assert r.display_step == n.xml_object.xml_rest.xml_display_step.value_ == 'C'
+        assert r.display_octave == n.xml_object.xml_rest.xml_display_octave.value_ == 4
+        r = Rest(4, measure='yes')
+        assert r.measure == 'yes'
+        r._parent = self.mock_beat
+        r.finalize()
+        n = r.notes[0]
+        assert n.xml_object.xml_rest.measure == 'yes'
+        with self.assertRaises(RestCannotSetMidiError):
+            Rest(midis=0, quarter_duration=2)
+        with self.assertRaises(TypeError):
+            Rest()
+        with self.assertRaises(RestWithDisplayStepHasNoDisplayOctave):
+            r = Rest(4, display_step='D')
+            r._parent = self.mock_beat
+            r.finalize()
+        with self.assertRaises(RestWithDisplayOctaveHasNoDisplayStep):
+            r = Rest(4, display_octave=4)
+            r._parent = self.mock_beat
+            r.finalize()
+        with self.assertRaises(TypeError):
+            Rest(4, display_step='H', display_octave=2)
+        with self.assertRaises(TypeError):
+            Rest(4, display_step='C', display_octave=2.2)
+        with self.assertRaises(TypeError):
+            Rest(4, display_step='C', display_octave=-2)
 
 
 class TestTies(ChordTestCase):

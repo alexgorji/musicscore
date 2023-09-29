@@ -7,7 +7,8 @@ from musicscore.core import MusicTree
 from musicscore.dynamics import Dynamics
 from musicscore.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, AlreadyFinalizedError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
-    ChordException, NotationException, ChordAddXException, ChordAddXPlacementException
+    ChordException, NotationException, ChordAddXException, ChordAddXPlacementException, RestCannotSetMidiError, \
+    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep
 from musicscore.finalize_mixin import FinalizeMixin
 from musicscore.midi import Midi
 from musicscore.note import Note
@@ -1056,6 +1057,64 @@ class GraceChord(Chord):
     def finalize(self):
         super().finalize()
         self._update_xml_type()
+
+
+class Rest(Chord):
+    _ATTRIBUTES = Chord._ATTRIBUTES.union({'display_step', 'display_octave', 'measure'})
+
+    def __init__(self, quarter_duration, display_step=None, display_octave=None, measure=None, **kwargs):
+        if 'midis' in kwargs.keys():
+            raise RestCannotSetMidiError
+        super().__init__(midis=0, quarter_duration=quarter_duration, **kwargs)
+        self._display_step = None
+        self._display_octave = None
+        self.display_step = display_step
+        self.display_octave = display_octave
+        self._measure = None
+        self.measure = measure
+
+    @property
+    def display_step(self):
+        return self._display_step
+
+    @display_step.setter
+    def display_step(self, val):
+        permitted = [None, 'A', 'B', 'C', 'D', 'E', 'F', 'G']
+        if val not in permitted:
+            raise TypeError(f'display_step value {val} not in permitted list {permitted}')
+        self._display_step = val
+
+    @property
+    def display_octave(self):
+        return self._display_octave
+
+    @display_octave.setter
+    def display_octave(self, val):
+        if val and (not isinstance(val, int) or val < 1):
+            raise TypeError(f'display_octave value {val} can only be None or a positive integer. ')
+        self._display_octave = val
+
+    @property
+    def measure(self):
+        return self._measure
+
+    @measure.setter
+    def measure(self, val):
+        self._measure = val
+
+    def finalize(self):
+        if self.display_step and not self.display_octave:
+            raise RestWithDisplayStepHasNoDisplayOctave({self.display_step})
+
+        if self.display_octave and not self.display_step:
+            raise RestWithDisplayOctaveHasNoDisplayStep({self.display_octave})
+
+        super().finalize()
+        if self.display_step and self.display_octave:
+            self.notes[0].xml_rest.xml_display_step = self.display_step
+            self.notes[0].xml_rest.xml_display_octave = self.display_octave
+        if self.measure:
+            self.notes[0].xml_rest.measure = self.measure
 
 
 def _split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fraction, int, float] = None) -> Chord:

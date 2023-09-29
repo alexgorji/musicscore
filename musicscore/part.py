@@ -1,4 +1,4 @@
-from typing import List, Optional, Union, Iterator
+from typing import List, Optional, Union, Iterator, Tuple
 
 from musicscore import Chord
 from musicscore.finalize_mixin import FinalizeMixin
@@ -279,7 +279,7 @@ class Part(MusicTree, FinalizeMixin, XMLWrapper):
             leftover_chord = current_measure.get_voice(staff_number=staff_number,
                                                        voice_number=voice_number).leftover_chord
 
-    def add_measure(self, time: Optional[Union[Time, Iterator]] = None, number: Optional[int] = None) -> Measure:
+    def add_measure(self, time: Optional[Union[Time, List, Tuple]] = None, number: Optional[int] = None) -> Measure:
         """
         - Creates and adds a :obj:`~musicscore.measure.Measure` to part.
         - If time is not given last measure's :obj:`~musicscore.time.Time` is copied. Its :obj:`~musicscore.time.Time.show` to
