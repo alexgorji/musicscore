@@ -9,7 +9,7 @@ from musicscore.beat import Beat
 from musicscore.chord import Chord, _split_copy, _group_chords, GraceChord, Rest
 from musicscore.exceptions import ChordHasNoParentError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
     ChordException, MusicTreeException, ChordAddXPlacementException, RestCannotSetMidiError, \
-    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep
+    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotes
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDuration
 from musicscore.tests.util import ChordTestCase, create_test_objects, IdTestCase
@@ -737,33 +737,35 @@ class TestSplit(TestCase):
 class TestAddGraceChord(ChordTestCase):
     def test_add_grace_chord_parameters(self):
         ch = Chord(60, 1)
-        gch = ch.add_grace_chord(midis_or_grace_chord=60)
+        g1 = gch = ch.add_grace_chord(midis_or_grace_chord=60)
         assert gch.midis[0].value == 60
         in_gch = GraceChord(61)
-        gch = ch.add_grace_chord(midis_or_grace_chord=in_gch)
+        g2 = gch = ch.add_grace_chord(midis_or_grace_chord=in_gch)
         assert gch == in_gch
-        gch = ch.add_grace_chord(midis_or_grace_chord=[62, 63])
+        g3 = gch = ch.add_grace_chord(midis_or_grace_chord=[62, 63])
         assert [m.value for m in gch.midis] == [62, 63]
-        gch = ch.add_grace_chord(64)
+        g4 = gch = ch.add_grace_chord(64)
         assert gch.midis[0].value == 64
-        gch = ch.add_grace_chord(midis_or_grace_chord=65, type_='16th')
+        g5 = gch = ch.add_grace_chord(midis_or_grace_chord=65, type_='16th')
         assert gch.midis[0].value == 65
         assert gch.type_.value_ == '16th'
         in_gch = GraceChord(61, type_='16th')
-        gch = ch.add_grace_chord(midis_or_grace_chord=in_gch)
+        g6 = gch = ch.add_grace_chord(midis_or_grace_chord=in_gch)
         assert gch == in_gch
         assert gch.type_.value_ == '16th'
         with self.assertRaises(ValueError):
             ch.add_grace_chord(midis_or_grace_chord=GraceChord(66, type_='quarter'), type_='16th')
-        gch = ch.add_grace_chord(67, type_='16th')
+        g7 = gch = ch.add_grace_chord(67, type_='16th')
         assert gch.midis[0].value == 67
         assert gch.type_.value_ == '16th'
-        gch = ch.add_grace_chord(68, type_='16th', position='after')
+        g8 = gch = ch.add_grace_chord(68, type_='16th', position='after')
         assert gch.position == 'after'
         assert gch.midis[0].value == 68
         assert gch.type_.value_ == '16th'
         with self.assertRaises(ValueError):
-            gch = ch.add_grace_chord(GraceChord(66, type_='quarter'), position='after')
+            ch.add_grace_chord(GraceChord(66, type_='quarter'), position='after')
+        assert ch.get_grace_chords(position='before') == [g1, g2, g3, g4, g5, g6, g7]
+        assert ch.get_grace_chords(position='after') == [g8]
 
     def test_add_grace_chord_before_and_after_argument(self):
         ch = Chord(60, 1)
@@ -827,7 +829,7 @@ class TestAddGraceChord(ChordTestCase):
 
     def test_error_grace_chord_add_grace_chord(self):
         gch = GraceChord(60)
-        with self.assertRaises(TypeError):
+        with self.assertRaises(GraceChordCannotHaveGraceNotes):
             gch.add_grace_chord(80)
 
     def test_grace_chords_after_to_right_beat(self):

@@ -92,6 +92,16 @@ class ChordQuarterDurationAlreadySetError(ChordException):
     pass
 
 
+# GraceChord Exceptions
+
+class GraceChordException(ChordException):
+    pass
+
+
+class GraceChordCannotHaveGraceNotes(GraceChordException):
+    pass
+
+
 # Id exceptions (see Part)
 
 class IdException(MusicTreeException):

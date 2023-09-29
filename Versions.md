@@ -97,6 +97,7 @@ command``import musicscore.CLASS`` or ``from musicscore import *``.
 ``Chord.get_words(), Chord.get_slurs(), Chord.get_wedges(), Chord.get_brackets()`` added.
 ``Chord.metronome`` property added.
 ``Chord.all_midis_are_tied_to_next`` and ``Chord.all_midis_are_tied_to_previous`` added.
+``Chord.get_grace_chords()`` added.
 
 ``Clef`` argument default and property _default added (this will be True if Measure._update_default_clefs() set the
 clef, otherwise it will be False).

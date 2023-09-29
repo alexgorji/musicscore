@@ -8,7 +8,7 @@ from musicscore.dynamics import Dynamics
 from musicscore.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, AlreadyFinalizedError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
     ChordException, NotationException, ChordAddXException, ChordAddXPlacementException, RestCannotSetMidiError, \
-    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep
+    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotes
 from musicscore.finalize_mixin import FinalizeMixin
 from musicscore.midi import Midi
 from musicscore.note import Note
@@ -623,9 +623,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         return dynamics_object_list
 
     def add_grace_chord(self, midis_or_grace_chord, type_=None, *, position=None):
-        if isinstance(self, GraceChord):
-            raise TypeError('GraceChord does not accept grace chords')
-
         if self.up:
             raise ChordException(f'Chord {self} is already added to a measure. No grace chords can be added anymore.')
         if isinstance(midis_or_grace_chord, GraceChord):
@@ -822,6 +819,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :rtype: List[:obj:`~musicscore.note.Note`]
         """
         return super().get_children()
+
+    def get_grace_chords(self, position='before'):
+        return self._grace_chords[position]
 
     def get_x(self, type_):
         if type_ == XMLDynamics:
@@ -1053,6 +1053,12 @@ class GraceChord(Chord):
                 self._type = XMLType(val)
             else:
                 self._type = val
+
+    def add_grace_chord(self, midis_or_grace_chord, type_=None, *, position=None):
+        raise GraceChordCannotHaveGraceNotes
+
+    def get_grace_chords(self, position='before'):
+        raise GraceChordCannotHaveGraceNotes
 
     def finalize(self):
         super().finalize()
