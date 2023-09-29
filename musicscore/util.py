@@ -204,7 +204,7 @@ def octave_chords(chords, type='down', size=8, number=1):
         ch.add_x(XMLOctaveShift(type='continue', size=size, number=number), placement=placement)
 
 
-def _generate_lyrics(lyrics, number=1, show_number=False, mode='list'):
+def _generate_lyrics(lyrics, number=1, show_number=False, mode='list', **kwargs):
     def _get_syllables_extensions_from_group(syllabic_group):
         if syllabic_group[0] is None:
             raise LyricSyllabicOrExtensionError(
@@ -223,7 +223,7 @@ def _generate_lyrics(lyrics, number=1, show_number=False, mode='list'):
         for i in range(len(lyrics)):
             ll = lyrics[i]
             if isinstance(ll, str):
-                xl = XMLLyric(number=str(number))
+                xl = XMLLyric(number=str(number), **kwargs)
                 xl.xml_text = ll
                 xl.xml_syllabic = 'single'
                 output.append(xl)
@@ -231,7 +231,7 @@ def _generate_lyrics(lyrics, number=1, show_number=False, mode='list'):
             elif isinstance(ll, tuple) or isinstance(ll, list):
                 syllables, extensions = _get_syllables_extensions_from_group(ll)
                 if len(syllables) == 1:
-                    xl = XMLLyric(number=str(number))
+                    xl = XMLLyric(number=str(number), **kwargs)
                     xl.xml_text = syllables[0]
                     xl.xml_syllabic = 'single'
                     if len(extensions) > 0:
@@ -240,7 +240,7 @@ def _generate_lyrics(lyrics, number=1, show_number=False, mode='list'):
                     output.append(xl)
                 else:
                     for j in range(len(syllables)):
-                        xl = XMLLyric(number=str(number))
+                        xl = XMLLyric(number=str(number), **kwargs)
                         l = syllables[j]
                         if l:
                             xl.xml_text = l
@@ -257,19 +257,21 @@ def _generate_lyrics(lyrics, number=1, show_number=False, mode='list'):
                         output.append(xl)
 
                 for k in range(len(extensions)):
-                    xl = XMLLyric(number=str(number))
+                    xl = XMLLyric(number=str(number), **kwargs)
                     if k == len(extensions) - 1:
                         xl.xml_extend = XMLExtend(type='stop')
                     else:
                         xl.xml_extend = XMLExtend(type='continue')
                     xl.xsd_check = False
                     output.append(xl)
+            elif ll is None:
+                output.append(None)
             else:
                 raise NotImplementedError(ll)
     else:
         raise NotImplementedError
     if show_number:
-        first = XMLLyric()
+        first = XMLLyric(**kwargs)
         for k, i in output[0].attributes.items():
             setattr(first, k, i)
         first.add_child(XMLSyllabic('single'))

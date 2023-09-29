@@ -9,7 +9,7 @@ test_lyrics_string = ['Bla!', 'Hello World!', 'Clou-dy day.', 'Tra-la-la Ja! Tra
                       'No-body is per-fect! - - Are they?', 'No- - - -body is per- - fect! - - Are they?']
 
 
-def chord_lyric_asserssions(chords, expected, number=1):
+def chord_lyric_assertions(chords, expected, number=1):
     for xl1, ch in zip(expected, chords):
         if xl1:
             xl2 = ch._xml_lyrics[number - 1]
@@ -194,7 +194,7 @@ class TestLyrics(IdTestCase):
         chords = [Chord(60, 1) for _ in range(len(expected))]
         Lyrics(words).add_to_chords(chords)
 
-        chord_lyric_asserssions(chords, expected)
+        chord_lyric_assertions(chords, expected)
 
     def test_generate_lyrics_list_syllabic_multiple(self):
         lyrics_1 = [('syl', 'labic')]
@@ -210,8 +210,8 @@ class TestLyrics(IdTestCase):
         chords = [Chord(60, 1) for _ in range(2)]
         Lyrics(lyrics_1).add_to_chords(chords)
         Lyrics(lyrics_2, number=2).add_to_chords(chords)
-        chord_lyric_asserssions(chords, expected_1)
-        chord_lyric_asserssions(chords, expected_2, 2)
+        chord_lyric_assertions(chords, expected_1)
+        chord_lyric_assertions(chords, expected_2, 2)
 
     def test_generate_lyrics_list_syllabic_multiple_show_number(self):
         lyrics_1 = [('syl', 'labic')]
@@ -241,5 +241,34 @@ class TestLyrics(IdTestCase):
         chords = [Chord(60, 1) for _ in range(2)]
         Lyrics(lyrics_1, show_number=True).add_to_chords(chords)
         Lyrics(lyrics_2, number=2, show_number=True).add_to_chords(chords)
-        chord_lyric_asserssions(chords, expected_1)
-        chord_lyric_asserssions(chords, expected_2, 2)
+        chord_lyric_assertions(chords, expected_1)
+        chord_lyric_assertions(chords, expected_2, 2)
+
+    def test_generate_lyrics_list_with_None(self):
+        chords = [Chord(60, 1) for _ in range(8)]
+        Lyrics(['There', 'are', 'two', 'pauses!', None, None, 'And', 'go!']).add_to_chords(chords)
+        assert chords[4].xml_lyrics == []
+        assert chords[5].xml_lyrics == []
+
+    def test_generate_lyrics_with_kwargs(self):
+        words = [('No', None, None, 'body'), 'is', ('per', None, None, 'fect!', None, None), 'Are', 'they?']
+        expected = [
+            _generate_xml_lyric(text='No', syllabic='begin', default_y=-10),
+            None,
+            None,
+            _generate_xml_lyric(text='body', syllabic='end', default_y=-10),
+            _generate_xml_lyric(text='is', syllabic='single', default_y=-10),
+            _generate_xml_lyric(text='per', syllabic='begin', default_y=-10),
+            None,
+            None,
+            _generate_xml_lyric(text='fect!', syllabic='end', extend='start', default_y=-10),
+            _generate_xml_lyric(extend='continue', default_y=-10),
+            _generate_xml_lyric(extend='stop', default_y=-10),
+
+            _generate_xml_lyric(text='Are', syllabic='single', default_y=-10),
+            _generate_xml_lyric(text='they?', syllabic='single', default_y=-10),
+        ]
+
+        chords = [Chord(60, 1) for _ in range(len(expected))]
+        Lyrics(words, default_y=-10).add_to_chords(chords)
+        chord_lyric_assertions(chords, expected)

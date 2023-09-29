@@ -310,8 +310,8 @@ def create_test_objects(type_):
     return output
 
 
-def _generate_xml_lyric(text=None, number=1, syllabic=None, extend=None):
-    xl = XMLLyric(number=str(number))
+def _generate_xml_lyric(text=None, number=1, syllabic=None, extend=None, **kwargs):
+    xl = XMLLyric(number=str(number), **kwargs)
     xl.xml_text = text
     xl.xml_syllabic = syllabic
     if extend:
