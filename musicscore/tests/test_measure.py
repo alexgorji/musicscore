@@ -307,21 +307,57 @@ class TestMeasure(IdTestCase):
         assert m.width == 10
         assert m.xml_object.width == 10
 
-    def test_barstyle(self):
+    def test_left_and_right_barline_property(self):
         m = Measure(number='1')
-        assert m.xml_barline is None
-        m.xml_barline = XMLBarline()
-        m.xml_barline.xml_bar_style = 'light-light'
+        assert m.get_barline(location='left') == m.get_barline() == m.get_barline(location='right') is None
+
+        m.set_barline(location='left')
+        assert isinstance(m.get_barline(location='left'), XMLBarline)
+        assert not m.get_barline(location='left').get_children()
+
+        m.set_barline(location='right')
+        assert isinstance(m.get_barline(location='right'), XMLBarline)
+        assert not m.get_barline(location='right').get_children()
+        assert isinstance(m.get_barline(), XMLBarline)
+        assert not m.get_barline().get_children()
+
+        barline_styles = ['regular', 'regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy',
+                          'heavy-light', 'heavy-heavy', 'tick', 'short', 'none']
+        for bs in barline_styles:
+            m = Measure(1)
+            m.set_barline(style=bs)
+            m.finalize()
+            assert m.xml_barline.xml_bar_style.value_ == bs
+            assert m.xml_barline.location == 'right'
+
+        for bs in barline_styles:
+            m = Measure(1)
+            m.set_barline(style=bs, location='left')
+            m.finalize()
+            assert m.xml_barline.xml_bar_style.value_ == bs
+            assert m.xml_barline.location == 'left'
+
+    def test_barline(self):
+        m = Measure(number='1')
+        m.set_barline(style='light-light')
         expected = """<measure number="1">
   <attributes>
     <divisions>1</divisions>
+    <key>
+      <fifths>0</fifths>
+    </key>
+    <time>
+      <beats>4</beats>
+      <beat-type>4</beat-type>
+    </time>
   </attributes>
-  <barline>
+  <barline location="right">
     <bar-style>light-light</bar-style>
   </barline>
 </measure>
 """
-        assert m.xml_object.to_string() == expected
+        print(m.to_string())
+        assert m.to_string() == expected
 
     def test_update_beats_from_parent_measure(self):
         v = Voice()
@@ -411,15 +447,6 @@ class TestMeasure(IdTestCase):
         v = m.get_children()[0].get_children()[0]
         assert len(v.get_children()) == 4
 
-    def test_add_barline_simple(self):
-        barline_styles = ['regular', 'regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy',
-                          'heavy-light', 'heavy-heavy', 'tick', 'short', 'none']
-        for bs in barline_styles:
-            m = Measure(1)
-            m.barline_style = bs
-            m.finalize()
-            assert m.xml_barline.xml_bar_style.value_ == bs
-
     def test_new_system(self):
         m = Measure(1)
         assert m.new_system is False
@@ -427,10 +454,86 @@ class TestMeasure(IdTestCase):
         assert m.new_system is True
         assert m.xml_object.xml_print.new_system == 'yes'
 
-    def test_add_repeat(self):
+    def test_add_repeat_left(self):
         m = Measure(1)
-        m.add_repeat(times=5)
-        print(m.to_string())
+        m._add_chord(Chord(60, 4))
+        m.set_repeat_barline(times=5)
+        expected = """<measure number="1">
+  <attributes>
+    <divisions>1</divisions>
+    <key>
+      <fifths>0</fifths>
+    </key>
+    <time>
+      <beats>4</beats>
+      <beat-type>4</beat-type>
+    </time>
+    <clef>
+      <sign>G</sign>
+      <line>2</line>
+    </clef>
+  </attributes>
+  <note>
+    <pitch>
+      <step>C</step>
+      <octave>4</octave>
+    </pitch>
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
+  </note>
+  <barline location="right">
+    <bar-style>light-heavy</bar-style>
+    <repeat direction="backward" times="5" />
+  </barline>
+</measure>
+"""
+        assert m.to_string() == expected
+
+    def test_add_ending_without_repeat(self):
+        m = Measure(1)
+        # add_ending needs number and type
+        with self.assertRaises(TypeError):
+            m.set_repeat_ending()
+        with self.assertRaises(TypeError):
+            m.set_repeat_ending(number=1)
+        with self.assertRaises(TypeError):
+            m.set_repeat_ending(type='stop')
+        # wrong type
+        with self.assertRaises(ValueError):
+            m.set_repeat_ending(number=1, type='bal')
+
+        # right init
+        m._add_chord(Chord(0, 4))
+        m.set_repeat_ending(number=2, type='discontinue')
+        expected = """<measure number="1">
+  <attributes>
+    <divisions>1</divisions>
+    <key>
+      <fifths>0</fifths>
+    </key>
+    <time>
+      <beats>4</beats>
+      <beat-type>4</beat-type>
+    </time>
+    <clef>
+      <sign>G</sign>
+      <line>2</line>
+    </clef>
+  </attributes>
+  <note>
+    <rest />
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
+  </note>
+  <barline location="right">
+    <ending number="2" type="discontinue" />
+  </barline>
+</measure>
+"""
+        assert m.to_string() == expected
+
 
 class TestUpdateAccidentals(IdTestCase):
     def test_update_accidentals_simple(self):

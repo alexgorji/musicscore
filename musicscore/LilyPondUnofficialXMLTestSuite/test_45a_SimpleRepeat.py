@@ -14,7 +14,7 @@ class TestLily45a(IdTestCase):
         part = score.add_part('p1')
 
         [part.add_chord(Chord(0, 4)) for _ in range(2)]
-        part.get_measure(1).add_repeat(times=5)
+        part.get_measure(1).set_repeat_barline(times=5)
 
         xml_path = Path(__file__).with_suffix('.xml')
         score.export_xml(xml_path)

@@ -11,7 +11,7 @@ from musicscore.util import lcm, chord_is_in_a_repetition
 from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup, XMLBarline, XMLPrint, \
-    XMLRepeat
+    XMLRepeat, XMLEnding
 
 __all__ = ['Measure', 'generate_measures']
 
@@ -26,12 +26,12 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         self._updated = False
         self._xml_object = self.XMLClass(*args, **kwargs)
         self.number = number
-        self._barline_style = None
         self._time = None
         self._key = Key()
         self.time = time
         self._set_attributes()
         self._new_system = False
+        self._barlines = {'left': None, 'right': None}
 
     def _add_chord(self, chord, staff_number=None, voice_number=1):
 
@@ -118,13 +118,13 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         self._set_staves()
         self._set_clefs()
 
-    def _update_barline_style(self):
-        if self.xml_barline and self.barline_style:
-            self.xml_barline.xml_bar_style = self.barline_style
-        else:
-            if self.barline_style:
-                self.xml_barline = XMLBarline()
-                self.xml_barline.xml_bar_style = self.barline_style
+    def _update_left_barline(self):
+        if self.get_barline(location='left'):
+            self.xml_object.add_child(self.get_barline(location='left'))
+
+    def _update_right_barline(self):
+        if self.get_barline(location='right'):
+            self.xml_object.add_child(self.get_barline(location='right'))
 
     def _update_clef_numbers(self):
         if len(self.clefs) == 1:
@@ -219,49 +219,6 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
                         self.xml_object.add_child(note.xml_object)
                     for xml_object in chord._after_notes_xml_objects:
                         self.xml_object.add_child(xml_object)
-
-    def finalize(self):
-        """
-        finalize can only be called once.
-
-        - It calls finalize()` method of all children.
-        - Following updates are triggered: _update_divisions, update_accidentals, update_xml_backups_notes_directions
-
-        """
-
-        if self._finalized:
-            raise AlreadyFinalizedError(self)
-
-        self._update_attributes()
-
-        for beat in self.get_beats():
-            if beat.quantize:
-                beat._quantize_quarter_durations()
-            beat._split_not_writable_chords()
-
-        self._update_divisions()
-
-        for st in self.get_children():
-            if not st._finalized:
-                st.finalize()
-
-        self._update_accidentals()
-        self._update_xml_backup_note_direction()
-        self._update_barline_style()
-
-        self._finalized = True
-
-    @property
-    def barline_style(self):
-        return self._barline_style
-
-    @barline_style.setter
-    def barline_style(self, val):
-        permitted = [None, 'regular', 'regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy',
-                     'heavy-light', 'heavy-heavy', 'tick', 'short', 'none']
-        if val not in permitted:
-            raise ValueError(f'Measure.barline {val} must be in {permitted}')
-        self._barline_style = val
 
     @property
     def clefs(self) -> List['Clef']:
@@ -379,11 +336,21 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
     def add_chord(self, *args, **kwargs):
         raise AddChordError
 
-    def add_repeat(self, direction='backward', **kwargs):
-        bl = XMLBarline()
+    def set_repeat_ending(self, number, type, **kwargs):
+        for location in ['left', 'right']:
+            if not self.get_barline(location=location):
+                self.set_barline(location=location)
+
+        self.get_barline(location='left').add_child(XMLEnding(number=str(number), type='start', **kwargs))
+
+        self.get_barline(location='right').add_child(XMLEnding(number=str(number), type=type))
+
+    def set_repeat_barline(self, direction='backward', location='right', **kwargs):
+        if not self.get_barline(location=location):
+            self.set_barline(location=location)
+        bl = self.get_barline(location=location)
         bl.xml_bar_style = 'light-heavy'
-        bl.add_child(XMLRepeat(direction=direction, **kwargs))
-        self.xml_barline = bl
+        bl.xml_repeat = XMLRepeat(direction=direction, **kwargs)
         return bl
 
     def add_staff(self, staff_number: Optional[int] = None) -> 'Staff':
@@ -426,6 +393,42 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
             return staff_object.add_voice(voice_number=voice_number)
         return voice_object
 
+    def finalize(self):
+        """
+        finalize can only be called once.
+
+        - It calls finalize()` method of all children.
+        - Following updates are triggered: _update_divisions, update_accidentals, update_xml_backups_notes_directions
+
+        """
+
+        if self._finalized:
+            raise AlreadyFinalizedError(self)
+
+        self._update_attributes()
+        self._update_left_barline()
+        for beat in self.get_beats():
+            if beat.quantize:
+                beat._quantize_quarter_durations()
+            beat._split_not_writable_chords()
+
+        self._update_divisions()
+
+        for st in self.get_children():
+            if not st._finalized:
+                st.finalize()
+
+        self._update_accidentals()
+        self._update_xml_backup_note_direction()
+        self._update_right_barline()
+        self._finalized = True
+
+    def get_barline(self, location='right'):
+        try:
+            return self._barlines[location]
+        except KeyError:
+            raise ValueError(f'location {location} not permitted')
+
     def get_children(self) -> List[Staff]:
         """
         :return: list of added children.
@@ -450,6 +453,12 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         number = child.value
         super().remove(child)
         self.clefs.pop(number - 1)
+
+    def set_barline(self, location='right', style=None, **kwargs):
+        bl = XMLBarline(location=location, **kwargs)
+        if style:
+            bl.xml_bar_style = style
+        self._barlines[location] = bl
 
     def update_chord_accidentals(self) -> None:
         """

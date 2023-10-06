@@ -107,7 +107,11 @@ clef, otherwise it will be False).
 ``Lyrics`` added. A class to generate XMLLyrics and adding it to a list of chords.
 
 ``Measure.new_system`` property added.
-``Measure().add_repeat()`` method added.
+``Measure.barline_style`` removed
+``Measure.set_barline()`` added
+``Measure.get_barline()`` added
+``Measure().set_repeat_barline()`` method added.
+``Measure.set_repeat_ending()`` added
 
 ``Metronome`` new Class.
 
