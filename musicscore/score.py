@@ -1,6 +1,7 @@
 from typing import List
 
 from musicscore import Part, Chord
+from musicscore.chord import Rest
 from musicscore.exceptions import AlreadyFinalizedError, ScoreMultipleMeasureRestError
 from musicscore.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, \
@@ -59,6 +60,13 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
 
         self._final_updated = False
 
+    def _create_missing_measures(self):
+        number_of_measures = max([len(p.get_children()) for p in self.get_children()])
+        longest_parts = [p for p in self.get_children() if len(p.get_children()) == number_of_measures]
+        for p in set(self.get_children()).difference(set(longest_parts)):
+            for measure_number in range(len(p.get_children()) + 1, number_of_measures + 1):
+                p.add_chord(Rest(longest_parts[0].get_measure(measure_number).quarter_duration))
+
     def _get_title_attributes(self):
         output = TITLE.copy()
         output['default_x'] = TITLE['default_x']['A4']['portrait']
@@ -70,6 +78,34 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         output['default_x'] = SUBTITLE['default_x']['A4']['portrait']
         output['default_y'] = SUBTITLE['default_y']['A4']['portrait']
         return output
+
+    def _set_last_barline(self):
+        last_measures = [p.get_children()[-1] for p in self.get_children() if p.get_children()]
+        try:
+            if not last_measures[0].get_barline():
+                for m in last_measures:
+                    m.set_barline(style='light-heavy')
+        except IndexError:
+            pass
+
+    def _set_missing_barlines(self):
+        for measures in zip(*[p.get_children() for p in self.get_children()]):
+            right_barline = None
+            left_barline = None
+            for m in measures:
+                if m.get_barline(location='right'):
+                    right_barline = m.get_barline(location='right')
+                    break
+            for m in measures:
+                if m.get_barline(location='left'):
+                    left_barline = m.get_barline(location='left')
+                    break
+            if right_barline:
+                for m in measures:
+                    m._barlines['right'] = right_barline
+            if left_barline:
+                for m in measures:
+                    m._barlines['left'] = left_barline
 
     def _update_xml_object(self):
         self.xml_object.xml_part_list = XMLPartList()
@@ -256,6 +292,9 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         return self.add_child(p)
 
     def finalize(self) -> None:
+        self._create_missing_measures()
+        self._set_missing_barlines()
+        self._set_last_barline()
         super().finalize()
         for measure_number in self._measure_numbers_within_multiple_measure_rests:
             for part in self.get_children():

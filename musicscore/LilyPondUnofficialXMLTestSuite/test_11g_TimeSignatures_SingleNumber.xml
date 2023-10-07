@@ -85,6 +85,9 @@
         <type>eighth</type>
         <beam number="1">end</beam>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
 </score-partwise>

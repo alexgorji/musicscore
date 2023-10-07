@@ -36,7 +36,7 @@
   </defaults>
   <part-list>
     <score-part id="part-1">
-      <part-name>part-1</part-name>
+      <part-name />
     </score-part>
   </part-list>
   <part id="part-1">
@@ -327,6 +327,9 @@
         <type>quarter</type>
         <staff>3</staff>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
 </score-partwise>

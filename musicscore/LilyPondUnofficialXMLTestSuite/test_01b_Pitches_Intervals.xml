@@ -643,6 +643,9 @@
         <type>quarter</type>
         <accidental>sharp</accidental>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
 </score-partwise>

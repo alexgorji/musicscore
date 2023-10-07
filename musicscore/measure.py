@@ -337,13 +337,13 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         raise AddChordError
 
     def set_repeat_ending(self, number, type, **kwargs):
-        for location in ['left', 'right']:
-            if not self.get_barline(location=location):
-                self.set_barline(location=location)
-
-        self.get_barline(location='left').add_child(XMLEnding(number=str(number), type='start', **kwargs))
-
-        self.get_barline(location='right').add_child(XMLEnding(number=str(number), type=type))
+        if type == 'start':
+            location = 'left'
+        else:
+            location = 'right'
+        if not self.get_barline(location=location):
+            self.set_barline(location=location)
+        self.get_barline(location=location).add_child(XMLEnding(number=str(number), type=type, **kwargs))
 
     def set_repeat_barline(self, direction='backward', location='right', **kwargs):
         if not self.get_barline(location=location):

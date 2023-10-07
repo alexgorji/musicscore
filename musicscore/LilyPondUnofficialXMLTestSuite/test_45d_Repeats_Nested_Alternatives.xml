@@ -36,10 +36,7 @@
   </defaults>
   <part-list>
     <score-part id="p1">
-      <part-name>Part 1</part-name>
-    </score-part>
-    <score-part id="p2">
-      <part-name>Part 2</part-name>
+      <part-name />
     </score-part>
   </part-list>
   <part id="p1">
@@ -57,15 +54,9 @@
           <sign>G</sign>
           <line>2</line>
         </clef>
-        <staff-details>
-          <staff-lines>1</staff-lines>
-        </staff-details>
       </attributes>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
+        <rest />
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
@@ -75,136 +66,36 @@
       <attributes>
         <divisions>1</divisions>
       </attributes>
+      <barline location="left">
+        <ending number="1" type="start" />
+      </barline>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </measure>
-    <measure number="3">
-      <attributes>
-        <divisions>1</divisions>
-      </attributes>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </measure>
-    <measure number="4">
-      <attributes>
-        <divisions>1</divisions>
-      </attributes>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
+        <rest />
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
       </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
+        <ending number="1" type="stop" />
+        <repeat direction="backward" />
       </barline>
-    </measure>
-  </part>
-  <part id="p2">
-    <measure number="1">
-      <attributes>
-        <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-        <clef>
-          <sign>G</sign>
-          <line>2</line>
-        </clef>
-        <staff-details>
-          <staff-lines>4</staff-lines>
-        </staff-details>
-      </attributes>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>half</type>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>half</type>
-      </note>
-    </measure>
-    <measure number="2">
-      <attributes>
-        <divisions>1</divisions>
-        <staff-details>
-          <staff-lines>3</staff-lines>
-        </staff-details>
-      </attributes>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>half</type>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>half</type>
-      </note>
     </measure>
     <measure number="3">
       <attributes>
         <divisions>1</divisions>
-        <staff-details>
-          <staff-lines>2</staff-lines>
-        </staff-details>
+        <measure-style>
+          <multiple-rest>3</multiple-rest>
+        </measure-style>
       </attributes>
+      <barline location="left">
+        <ending number="2" type="start" />
+      </barline>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
+        <rest measure="yes" />
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="4">
@@ -212,22 +103,107 @@
         <divisions>1</divisions>
       </attributes>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
+        <rest measure="yes" />
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
+    </measure>
+    <measure number="5">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
+        <rest measure="yes" />
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
+      </note>
+      <barline location="right">
+        <ending number="2" type="discontinue" />
+      </barline>
+    </measure>
+    <measure number="6">
+      <attributes>
+        <divisions>1</divisions>
+        <measure-style>
+          <multiple-rest>3</multiple-rest>
+        </measure-style>
+      </attributes>
+      <note>
+        <rest measure="yes" />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+    <measure number="7">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <rest measure="yes" />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+    <measure number="8">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <rest measure="yes" />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+    <measure number="9">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <barline location="left">
+        <ending number="1" type="start" />
+      </barline>
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        <ending number="1" type="stop" />
+        <repeat direction="backward" />
+      </barline>
+    </measure>
+    <measure number="10">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <barline location="left">
+        <ending number="2" type="start" />
+      </barline>
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+      <barline location="right">
+        <ending number="5" type="discontinue" />
+      </barline>
+    </measure>
+    <measure number="11">
+      <attributes>
+        <divisions>1</divisions>
+      </attributes>
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
       </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>

@@ -144,6 +144,9 @@
           <slur type="stop" number="2" />
         </notations>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
 </score-partwise>

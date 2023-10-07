@@ -83,6 +83,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p-2">
@@ -107,6 +110,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p-3">
@@ -131,6 +137,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p-4">
@@ -155,6 +164,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p-5">
@@ -179,6 +191,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
 </score-partwise>

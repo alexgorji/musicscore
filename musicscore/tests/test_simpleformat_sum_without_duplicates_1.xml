@@ -480,6 +480,9 @@
         <accidental>flat</accidental>
         <staff>4</staff>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
 </score-partwise>

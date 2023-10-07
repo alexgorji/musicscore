@@ -169,6 +169,19 @@ class TestScore(IdTestCase):
         with self.assertRaises(ValueError):
             score.group_parts(3, 2, 1)
 
+    def test_create_missing_measures(self):
+        score = Score()
+        parts = [score.add_part(f'p-{i}') for i in range(1, 4)]
+        [parts[0].add_chord(Chord(60, 4)) for _ in range(5)]
+        [parts[2].add_chord(Chord(60, 4)) for _ in range(3)]
+        score.finalize()
+        for p in parts:
+            assert len(p.get_children()) == 5
+        for m in parts[1].get_children():
+            assert m.get_chords()[0].is_rest
+        for m in parts[2].get_children()[3:]:
+            assert m.get_chords()[0].is_rest
+
     def test_group_parts(self):
         score = Score()
         parts = [score.add_part(f'p-{i}') for i in range(1, 6)]
@@ -273,11 +286,52 @@ class TestScore(IdTestCase):
             score.set_multiple_measure_rest(9, 10)
         # Check if rest measure attribute is set to yes
         score.finalize()
+        for measure in p1.get_children():
+            if int(measure.number) in [1, 2, 3, 4, 6, 7, 8]:
+                assert measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure == 'yes'
+            elif int(measure.number) in [5]:
+                assert measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure is None
+            else:
+                assert measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest is None
+
+        for measure in p2.get_children():
+            if int(measure.number) in [1, 2, 3, 4, 6, 7, 8]:
+                assert measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure == 'yes'
+            else:
+                assert measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure is None
+
+    def test_barline(self):
+        score = Score()
+        parts = [score.add_part(f'p-{i}') for i in range(1, 4)]
+        [parts[0].add_chord(Chord(60, 4)) for _ in range(5)]
+        [parts[2].add_chord(Chord(60, 4)) for _ in range(3)]
+        parts[2].get_measure(2).set_barline(style='light-light')
+        parts[0].get_measure(2).set_barline(style='light-heavy')
+        parts[0].get_measure(4).set_barline(style='heavy-heavy')
+        score.finalize()
         for p in parts:
-            for measure in p.get_children():
-                if int(measure.number) in [1, 2, 3, 4, 6, 7, 8]:
-                    assert measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure == 'yes'
-                elif int(measure.number) == 5:
-                    assert measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure is None
-                else:
-                    assert measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest is None
+            assert p.get_measure(2).get_barline().xml_bar_style.value_ == 'light-heavy'
+            assert p.get_measure(4).get_barline().xml_bar_style.value_ == 'heavy-heavy'
+
+    def test_last_measure_barline(self):
+        score = Score()
+        parts = [score.add_part(f'p-{i}') for i in range(1, 6)]
+        for p in parts:
+            for _ in range(3):
+                p.add_chord(Chord(0, 4))
+        score.finalize()
+        for p in parts:
+            assert p.get_children()[-1].xml_barline.location == 'right'
+            assert p.get_children()[-1].xml_barline.xml_bar_style.value_ == 'light-heavy'
+
+    def test_last_measure_barline_already_set(self):
+        score = Score()
+        parts = [score.add_part(f'p-{i}') for i in range(1, 6)]
+        for p in parts:
+            for _ in range(3):
+                p.add_chord(Chord(0, 4))
+        parts[0].get_children()[-1].set_barline(style='light-light')
+        score.finalize()
+        for p in parts:
+            assert p.get_children()[-1].xml_barline.location == 'right'
+            assert p.get_children()[-1].xml_barline.xml_bar_style.value_ == 'light-light'

@@ -22,7 +22,7 @@ class TestLily46a(IdTestCase):
             ch = Chord(0, 4)
             ch.add_x(XMLWords(bs), placement='below')
             p.add_chord(ch)
-            p.get_current_measure().barline_style = bs
+            p.get_current_measure().set_barline(style=bs)
 
         xml_path = Path(__file__).with_suffix('.xml')
         score.export_xml(xml_path)

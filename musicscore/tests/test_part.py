@@ -358,7 +358,9 @@ class TestAddChordToPart(IdTestCase):
                                                                         'time': {'beats': '4', 'beat-type': '4'},
                                                                         'clef': {'sign': 'G', 'line': '2'}},
                                                          'note': {'pitch': {'step': 'C', 'octave': '4'},
-                                                                  'duration': '4', 'voice': '1', 'type': 'whole'}}}}
+                                                                  'duration': '4', 'voice': '1', 'type': 'whole'},
+                                                         'barline': {'@location': 'right',
+                                                                     'bar-style': 'light-heavy'}}}}
         assert output_part_xml_dict == expected
 
     def test_add_chord_to_staff_with_bass_clef(self):

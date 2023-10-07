@@ -247,6 +247,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p2">
@@ -288,6 +291,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p3">
@@ -329,6 +335,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p4">
@@ -370,6 +379,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p5">
@@ -411,6 +423,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p6">
@@ -455,6 +470,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p7">
@@ -499,6 +517,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p8">
@@ -543,6 +564,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p9">
@@ -587,6 +611,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p10">
@@ -629,6 +656,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p11">
@@ -670,6 +700,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p12">
@@ -711,6 +744,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p13">
@@ -753,6 +789,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p14">
@@ -797,6 +836,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p15">
@@ -841,6 +883,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p16">
@@ -882,6 +927,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p17">
@@ -923,6 +971,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p18">
@@ -964,6 +1015,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p19">
@@ -1005,6 +1059,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p20">
@@ -1046,6 +1103,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p21">
@@ -1087,6 +1147,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p22">
@@ -1127,6 +1190,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p23">
@@ -1196,6 +1262,9 @@
         <type>whole</type>
         <staff>2</staff>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p24">
@@ -1265,6 +1334,9 @@
         <type>whole</type>
         <staff>2</staff>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p25">
@@ -1306,6 +1378,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p26">
@@ -1347,6 +1422,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p27">
@@ -1388,6 +1466,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p28">
@@ -1429,6 +1510,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="p29">
@@ -1471,6 +1555,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
 </score-partwise>

@@ -187,6 +187,9 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
 </score-partwise>
