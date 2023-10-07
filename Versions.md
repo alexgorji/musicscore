@@ -130,6 +130,7 @@ clef, otherwise it will be False).
 ``Rest`` class added.
 
 ``Score`` Inherited methode ``Score.write`` will throw an Exception (.export_xml should be used instead).
+``Score.xml_identifacation.xml_encondings.xml_supports`` two support added for print new system and print new page.
 ``Score.group_parts(number, start_part_number, end_part_number, symbol='square', name=None, abbreviation=None)`` added
 ``Score.group_parts()`` **kwargs added. This will be added to ``XMLGroupSymbol``
 ``Score.set_multiple_measure_rest()`` method added.

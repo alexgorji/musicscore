@@ -5,6 +5,8 @@
 <score-partwise version="4.0">
   <identification>
     <encoding>
+      <supports attribute="new-system" element="print" type="yes" value="yes" />
+      <supports attribute="new-page" element="print" type="yes" value="yes" />
       <supports element="accidental" type="yes" />
       <supports element="beam" type="yes" />
       <supports element="stem" type="yes" />
@@ -487,6 +489,9 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
 </score-partwise>

@@ -5,6 +5,8 @@
 <score-partwise version="Accidental modes">
   <identification>
     <encoding>
+      <supports attribute="new-system" element="print" type="yes" value="yes" />
+      <supports attribute="new-page" element="print" type="yes" value="yes" />
       <supports element="accidental" type="yes" />
       <supports element="beam" type="yes" />
       <supports element="stem" type="yes" />
@@ -348,6 +350,9 @@
         <type>quarter</type>
         <accidental>quarter-flat</accidental>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="enharmonic">
@@ -644,6 +649,9 @@
         <type>quarter</type>
         <accidental>quarter-sharp</accidental>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="sharp">
@@ -937,6 +945,9 @@
         <type>quarter</type>
         <accidental>quarter-sharp</accidental>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="flat">
@@ -1236,6 +1247,9 @@
         <type>quarter</type>
         <accidental>quarter-flat</accidental>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="force-sharp">
@@ -1543,6 +1557,9 @@
         <type>quarter</type>
         <accidental>quarter-sharp</accidental>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
   <part id="force-flat">
@@ -1850,6 +1867,9 @@
         <type>quarter</type>
         <accidental>quarter-flat</accidental>
       </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
     </measure>
   </part>
 </score-partwise>

@@ -111,6 +111,9 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         self.xml_object.xml_part_list = XMLPartList()
         self.xml_object.xml_identification = XMLIdentification()
         encoding = self.xml_object.xml_identification.xml_encoding = XMLEncoding()
+        encoding.add_child(XMLSupports(attribute='new-system', element='print', type='yes', value='yes'))
+        encoding.add_child(XMLSupports(attribute='new-page', element='print', type='yes', value='yes'))
+
         encoding.add_child(XMLSupports(element='accidental', type='yes'))
         encoding.add_child(XMLSupports(element='beam', type='yes'))
         encoding.add_child(XMLSupports(element='stem', type='yes'))

@@ -38,7 +38,13 @@
   </defaults>
   <part-list>
     <score-part id="p1">
-      <part-name />
+      <part-name>Long
+Staff
+Name        
+</part-name>
+      <part-abbreviation>St.
+Nm.
+</part-abbreviation>
     </score-part>
   </part-list>
   <part id="p1">
@@ -46,10 +52,10 @@
       <attributes>
         <divisions>1</divisions>
         <key>
-          <fifths>-11</fifths>
+          <fifths>0</fifths>
         </key>
         <time>
-          <beats>2</beats>
+          <beats>4</beats>
           <beat-type>4</beat-type>
         </time>
         <clef>
@@ -59,386 +65,322 @@
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="2">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>-10</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="3">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>-9</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="4">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>-8</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="5">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>-7</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="6">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>-6</fifths>
-        </key>
       </attributes>
+      <print new-system="yes" />
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="7">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>-5</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="8">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>-4</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="9">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>-3</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="10">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>-2</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="11">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>-1</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="12">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="13">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>1</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
-    <measure number="14">
+    <measure number="14" width="80">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>2</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
-    <measure number="15">
+    <measure number="15" width="80">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>3</fifths>
-        </key>
       </attributes>
+      <print new-system="yes" />
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
-    <measure number="16">
+    <measure number="16" width="80">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>4</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
-    <measure number="17">
+    <measure number="17" width="80">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>5</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
-    <measure number="18">
+    <measure number="18" width="80">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>6</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
-    <measure number="19">
+    <measure number="19" width="80">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>7</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
-    <measure number="20">
+    <measure number="20" width="80">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>8</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
-    <measure number="21">
+    <measure number="21" width="80">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>9</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
-    <measure number="22">
+    <measure number="22" width="80">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>10</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
     </measure>
-    <measure number="23">
+    <measure number="23" width="80">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>11</fifths>
-        </key>
       </attributes>
       <note>
         <pitch>
-          <step>C</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
       </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
