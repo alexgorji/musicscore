@@ -154,14 +154,14 @@ def slur_chords(chords, number=1, **kwargs):
         ch.add_x(XMLSlur(type='continue', number=number))
 
 
-def trill_chords(chords, number=1, placement='above'):
+def trill_chords(chords, number=1, placement='above', **kwargs):
     if len(chords) < 2:
         raise WrongNumberOfChordsError('util.trill_chords needs at list two chords.')
-    chords[0].add_x(XMLTrillMark(placement=placement))
-    chords[0].add_x(XMLWavyLine(type='start', number=number), placement=placement)
-    chords[-1].add_x(XMLWavyLine(type='stop', number=number), placement=placement)
+    chords[0].add_x(XMLTrillMark(placement=placement, **kwargs))
+    chords[0].add_x(XMLWavyLine(type='start', number=number, **kwargs), placement=placement)
+    chords[-1].add_x(XMLWavyLine(type='stop', number=number, **kwargs), placement=placement)
     for ch in chords[1:-1]:
-        ch.add_x(XMLWavyLine(type='continue', number=number), placement=placement)
+        ch.add_x(XMLWavyLine(type='continue', number=number, **kwargs), placement=placement)
 
 
 def wedge_chords(chords, wedge_type, number=1, placement='below', **kwargs):

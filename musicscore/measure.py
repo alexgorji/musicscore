@@ -345,7 +345,11 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
             self.set_barline(location=location)
         self.get_barline(location=location).add_child(XMLEnding(number=str(number), type=type, **kwargs))
 
-    def set_repeat_barline(self, direction='backward', location='right', **kwargs):
+    def set_repeat_barline(self, location='right', **kwargs):
+        if location == 'right':
+            direction = 'backward'
+        else:
+            direction = 'forward'
         if not self.get_barline(location=location):
             self.set_barline(location=location)
         bl = self.get_barline(location=location)
