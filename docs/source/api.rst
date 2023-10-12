@@ -4,4 +4,4 @@ API
 .. autosummary::
    :toctree: generated
 
-   accidental
+   musicscore.accidental
