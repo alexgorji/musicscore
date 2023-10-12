@@ -12,8 +12,9 @@ version = '2.0beta5'
 from pathlib import Path
 import sys
 
-sys.path.insert(0, (Path(__file__).parents[1].resolve() / 'musicscore').as_posix())
-
+sys.path.insert(0, (Path(__file__).parents[2].resolve() / 'musicscore').as_posix())
+print(sys.path)
+# print((Path(__file__).parents[2].resolve() / 'musicscore').as_posix())
 # -- General configuration
 
 extensions = [

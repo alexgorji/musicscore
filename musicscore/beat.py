@@ -1,14 +1,14 @@
-from typing import Optional, List
+from typing import List
 
-from musicscore.finalize_mixin import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
 
 from musicscore.chord import _split_copy, _group_chords, Chord
+from musicscore.core import MusicTree
 from musicscore.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
     ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError
-from musicscore.core import MusicTree
+from musicscore.finalize_mixin import FinalizeMixin
 from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
 from musicscore.util import lcm
 
