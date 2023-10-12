@@ -18,12 +18,12 @@ sys.path.insert(0, (Path(__file__).parents[1].resolve()/'musicscore').as_posix()
 
 # -- Project information -----------------------------------------------------
 
-project = 'musicscore2'
-copyright = '2022, Alex Gorji'
+project = 'musicscore'
+copyright = '2023, Alex Gorji'
 author = 'Alex Gorji'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
+release = '2.0beta5'
 
 # -- General configuration ---------------------------------------------------
 

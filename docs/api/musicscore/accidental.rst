@@ -1,5 +1,5 @@
 musicscore.accidental
-====================
+=====================
 
 .. automodule:: musicscore.accidental
    :members:
