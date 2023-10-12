@@ -1,13 +1,17 @@
-Welcome to Lumache's documentation!
-===================================
+INTRO
+#####
 
-**Lumache** (/lu'make/) is a Python library for cooks and food lovers
-that creates recipes mixing random ingredients.
-It pulls data from the `Open Food Facts database <https://world.openfoodfacts.org/>`_
-and offers a *simple* and *intuitive* API.
+musicscore
+===========
+**musicscore** is a python library for generating musicxml data in an intuitive and easy but nevertheless exhaustive way. The generated files can be imported in several music notation programs and be processed further if necessary. The preferred software is Finale which seems at the moment to have the best implementation of musicxml format files and supports the newest version 4.0.
 
-Check out the :doc:`usage` section for further information, including
-how to :ref:`installation` the project.
+**musicscore** depends on **musicxml**
+
+.. note::
+
+   This project is under active development.
+
+Check out the :doc:`usage` section for further information, including how to :ref:`install <installation>` the project.
 
 .. note::
 
@@ -17,6 +21,7 @@ Contents
 --------
 
 .. toctree::
+   :maxdepth: 4
 
    usage
    api
