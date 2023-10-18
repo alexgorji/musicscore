@@ -717,10 +717,10 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
         This method is used to add one xml object to a chord's private xml object lists (like _xml_articulations, xml_technicals
         etc.). These lists are used to add or _update articulations, technicals etc. of the first :obj:`~musicscore.note.Note` object of
-        chord`s notes which are to be or are already created .
+        chord`s notes which are to be or are already created.
 
-        :param x: musicxml articulation element, musicxml technical element, musicxml ornament element, musicxml dynamic element,
-        musicxml other notations
+        :param x: musicxml articulation element, musicxml technical element, musicxml ornament element, musicxml dynamic element, musicxml other notations
+
         :return: x
         """
         if parent_type is None:

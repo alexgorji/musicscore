@@ -283,15 +283,15 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
             self.xml_part_list.add_child(child.score_part.xml_object)
         return child
 
-    def add_part(self, id_: str) -> 'Part':
+    def add_part(self, id: str) -> 'Part':
         """
         Creates and adds part
-        :param id_: part's id
+        :param id: part's id
         :return: part
         """
         if self._finalized is True:
             raise AlreadyFinalizedError(self, 'add_part')
-        p = Part(id_)
+        p = Part(id)
         return self.add_child(p)
 
     def finalize(self) -> None:
