@@ -189,7 +189,7 @@ class MusicTree(Tree):
 
     def get_chord(self, *args, **kwargs) -> 'Chord':
         """
-        This method can be used for :obj:`~musicscore.score.Score` and :obj:`~musicscore.part.Part`, :obj:`~musicscore.measure.Measure` and
+        This method can be used for :obj:`~musicscore.score.Score` and :obj:`~musicscore.part.Part`, :obj:`~musicscore.measure.Measure`,
         :obj:`~musicscore.staff.Staff`, :obj:`~musicscore.voice.Voice` and :obj:`~musicscore.beat.Beat`
 
         :param args: can be used instead of ``kwargs``. A mixture of args and kwargs is not allowed.
@@ -203,6 +203,9 @@ class MusicTree(Tree):
 
     def get_beats(self) -> List['Beat']:
         """
+        This method can be used for :obj:`~musicscore.score.Score` and :obj:`~musicscore.part.Part`, :obj:`~musicscore.measure.Measure`,
+        :obj:`~musicscore.staff.Staff` and :obj:`~musicscore.voice.Voice`.
+
         :return: a flat list of all beats.
         :rtype: List[:obj:`~musicscore.beat.Beat`]
         """
@@ -218,6 +221,9 @@ class MusicTree(Tree):
 
     def get_chords(self) -> List['Chord']:
         """
+        This method can be used for :obj:`~musicscore.score.Score` and :obj:`~musicscore.part.Part`, :obj:`~musicscore.measure.Measure` and
+        :obj:`~musicscore.staff.Staff`, :obj:`~musicscore.voice.Voice` and :obj:`~musicscore.beat.Beat`
+
         :return: a flat list of all chords.
         :rtype: List[:obj:`~musicscore.chord.Chord`]
         """
@@ -301,28 +307,6 @@ class MusicTree(Tree):
         :rtype: :obj:`~musicscore.voice.Voice`
         """
         return self._get_music_tree_descendent(args, kwargs, 'Voice')
-        # if isinstance_as_string(self, 'Staff'):
-        #     kwargs = self._check_args_kwargs(args, kwargs, 'Staff', 'Voice')
-        #     try:
-        #         return self.get_children()[kwargs['voice_number'] - 1]
-        #     except IndexError:
-        #         return None
-        # elif isinstance_as_string(self, 'Measure'):
-        #     kwargs = self._check_args_kwargs(args, kwargs, 'Measure', 'Voice')
-        #     return self.get_staff(kwargs['staff_number']).get_voice(kwargs['voice_number'])
-        #
-        # elif isinstance_as_string(self, 'Part'):
-        #     kwargs = self._check_args_kwargs(args, kwargs, 'Part', 'Voice')
-        #     return self.get_measure(kwargs['measure_number']).get_staff(kwargs['staff_number']).get_voice(kwargs['voice_number'])
-        #
-        # elif isinstance_as_string(self, 'Score'):
-        #     kwargs = self._check_args_kwargs(args, kwargs, 'Score', 'Voice')
-        #     return self.get_part(kwargs['part_number']).self.get_measure(kwargs['measure_number']).get_staff(kwargs[
-        #                                                                                                          'staff_number']).get_voice(
-        #         kwargs[
-        #             'voice_number'])
-        #
-        # raise TypeError
 
     def set_possible_subdivisions(self, subdivisions: list[int],
                                   beat_quarter_duration: Optional[QuarterDuration] = None) -> None:

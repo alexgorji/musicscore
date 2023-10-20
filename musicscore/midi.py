@@ -2,14 +2,74 @@ import copy
 from math import log2
 from typing import Optional, Union, List
 
+from musicscore import STANDARD, ENHARMONIC, FLAT, SHARP, FORCEFLAT, FORCESHARP
 from musicscore.exceptions import AlreadyFinalizedError
 from musicxml.xmlelement.xmlelement import *  # type: ignore
 from musicxml.xsd.xsdsimpletype import XSDSimpleTypeNoteheadValue  # type: ignore
 
-from musicscore.accidental import Accidental, get_accidental_mode
+from musicscore.accidental import Accidental
 from musicscore.core import MusicTree
 
-__all__ = ['Midi', 'MidiNote', 'C', 'D', 'E', 'F', 'G', 'A', 'B', 'midi_to_frequency', 'frequency_to_midi']
+__all__ = ['Midi', 'MidiNote', 'C', 'D', 'E', 'F', 'G', 'A', 'B', 'midi_to_frequency', 'frequency_to_midi',
+           'get_accidental_mode']
+
+
+def midi_to_frequency(midi, a4=440):
+    try:
+        midi = midi.value
+    except AttributeError:
+        pass
+
+    f = 2 ** ((midi - 69) / 12) * a4
+    return f
+
+
+def frequency_to_midi(frequency, a4=440):
+    m = 69 + 12 * log2(frequency / a4)
+    return m
+
+
+def get_accidental_mode(midi_value: Union[float, int], accidental_sign: Optional[str] = None) -> str:
+    """'
+    :param midi_value: a valid midi value in half steps (int or float)
+    :param accidental_sign: 'double-flat', 'flat-flat', 'bb', 'ff' – 'three-quarters-flat' – 'flat', 'b', 'f' – 'quarter-flat' – None, 'natural' – 'quarter-sharp' – 'sharp', '#', 's' – 'three-quarters-sharp' – 'double-sharp', 'sharp-sharp', 'x', '##', 'ss'
+    :return: accidental_mode: 'standard', 'enharmonic', 'flat', 'sharp', 'force-flat', 'force-sharp'
+    '"""
+    # midi value is valid
+    Midi(midi_value)
+    if accidental_sign in [None, 'natural']:
+        accidental_value = 0
+    elif accidental_sign in ['quarter-sharp']:
+        accidental_value = 0.5
+    elif accidental_sign in ['sharp', '#', 's']:
+        accidental_value = 1
+    elif accidental_sign in ['three-quarters-sharp']:
+        accidental_value = 1.5
+    elif accidental_sign in ['double-sharp', 'sharp-sharp', 'x', '##', 'ss']:
+        accidental_value = 2
+    elif accidental_sign in ['quarter-flat']:
+        accidental_value = -0.5
+    elif accidental_sign in ['flat', 'b', 'f']:
+        accidental_value = -1
+    elif accidental_sign in ['three-quarters-flat']:
+        accidental_value = -1.5
+    elif accidental_sign in ['double-flat', 'flat-flat', 'bb', 'ff']:
+        accidental_value = -2
+    else:
+        raise NotImplementedError(accidental_sign)
+
+    if STANDARD[midi_value % 12][1] == accidental_value:
+        return 'standard'
+    elif ENHARMONIC[midi_value % 12][1] == accidental_value:
+        return 'enharmonic'
+    elif FLAT[midi_value % 12][1] == accidental_value:
+        return 'flat'
+    elif SHARP[midi_value % 12][1] == accidental_value:
+        return 'sharp'
+    elif FORCEFLAT[midi_value % 12][1] == accidental_value:
+        return 'force-flat'
+    elif FORCESHARP[midi_value % 12][1] == accidental_value:
+        return 'force-sharp'
 
 
 class Midi(MusicTree):
@@ -369,18 +429,3 @@ class A(MidiNote):
 
 class B(MidiNote):
     _VALUE = 71
-
-
-def midi_to_frequency(midi, a4=440):
-    try:
-        midi = midi.value
-    except AttributeError:
-        pass
-
-    f = 2 ** ((midi - 69) / 12) * a4
-    return f
-
-
-def frequency_to_midi(frequency, a4=440):
-    m = 69 + 12 * log2(frequency / a4)
-    return m
