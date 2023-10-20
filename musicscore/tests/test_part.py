@@ -346,7 +346,7 @@ class TestAddChordToPart(IdTestCase):
 
     def test_add_one_chord_quarter_duration_4(self):
         xml_file = Path(__file__).stem + '_add_quarter_duration_4.xml'
-        p = self.score.add_part(id_='part1')
+        p = self.score.add_part(id='part1')
         chord = Chord(60, 4)
         p.add_chord(chord)
         self.score.export_xml(xml_file)
@@ -481,7 +481,7 @@ class TestAddChordToPart(IdTestCase):
         sf2.chords[1].clef = BassClef()
         sf2.chords[2].clef = TrebleClef()
         score = Score()
-        part = score.add_part(id_='part-1')
+        part = score.add_part(id='part-1')
         for index, simpleformat in enumerate([sf1, sf2]):
             for chord in simpleformat.chords:
                 part.add_chord(chord, staff_number=index + 1)

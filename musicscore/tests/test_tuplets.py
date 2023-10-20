@@ -108,7 +108,7 @@ class TestTuplets(IdTestCase):
         b = m1.get_voice(staff_number=1, voice_number=1).get_children()[0]
         assert b.get_children() == m1.get_chords()
         n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()]
-        print([n.quarter_duration for n in [n1, n2, n3]])
+        # print([n.quarter_duration for n in [n1, n2, n3]])
         assert n1.xml_notations.xml_tuplet.type == 'start'
         assert n3.xml_notations.xml_tuplet.type == 'stop'
         assert not n1.is_tied

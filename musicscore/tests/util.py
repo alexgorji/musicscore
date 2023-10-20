@@ -194,7 +194,7 @@ def get_xml_diff_part(expected, path, file_path):
 
 
 def generate_xml_file(score, *simpleformats, path):
-    part = score.add_part(id_='part-1')
+    part = score.add_part(id='part-1')
     for index, simpleformat in enumerate(simpleformats):
         for chord in simpleformat.chords:
             part.add_chord(chord, staff_number=index + 1)

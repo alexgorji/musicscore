@@ -1,5 +1,7 @@
 from typing import List
 
+from math import trunc
+
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
 
@@ -278,7 +280,7 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
         for i in range(len(quarter_durations)):
             fr = Fraction(
                 quantized_positions[i + 1] - quantized_positions[i]).limit_denominator(
-                int(best_div / self.quarter_duration))
+                trunc(best_div / self.quarter_duration))
             quantized_durations.append(QuarterDuration(fr))
         return quantized_durations
 

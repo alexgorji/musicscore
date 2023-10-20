@@ -1,5 +1,7 @@
 from typing import List, Optional
 
+from math import trunc
+
 from musicscore.clef import BassClef, TrebleClef
 from musicscore.core import MusicTree
 from musicscore.exceptions import AlreadyFinalizedError, AddChordError
@@ -195,9 +197,9 @@ class Measure(MusicTree, FinalizeMixin, XMLWrapper):
         def add_backup():
             b = XMLBackup()
             d = self.quarter_duration * self.get_divisions()
-            if int(d) != d:
+            if trunc(d) != d:
                 raise ValueError
-            b.xml_duration = int(d)
+            b.xml_duration = trunc(d)
             self.xml_object.add_child(b)
 
         for staff in self.get_children():

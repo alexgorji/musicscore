@@ -248,7 +248,7 @@ class TestSimpleFormat(IdTestCase):
         sf2 = SimpleFormat(quarter_durations=[1, 3, 2, 6], midis=[(60, 65), 67, (50, 54), 0])
         sf3 = SimpleFormat(quarter_durations=[3, 4, 5], midis=[69, 68, 67])
         sf = SimpleFormat.sum(sf1, sf2, sf3)
-        part = self.score.add_part(id_='part-1')
+        part = self.score.add_part(id='part-1')
         for index, simpleformat in enumerate([sf1, sf2, sf3, sf]):
             for chord in simpleformat.chords:
                 part.add_chord(chord, staff_number=index + 1)

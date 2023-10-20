@@ -643,7 +643,7 @@ class TestTies(ChordTestCase):
         ch._parent = self.mock_beat
         ch.finalize()
         assert [n.is_tied for n in ch.notes] == [True, True]
-        print(ch.notes)
+        # print(ch.notes)
         ch.midis[0].remove_tie('start')
         assert [n.is_tied for n in ch.notes] == [False, True]
 
