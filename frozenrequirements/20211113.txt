@@ -1,4 +1,0 @@
-Jinja2==3.0.3
-MarkupSafe==2.0.1
-pdoc==8.0.1
-Pygments==2.10.0

@@ -1,11 +1,6 @@
 Usage
 =====
 
-.. _installation:
-
-Installation
-------------
-
 1. Check the version of python on your computer: `python --version`. This library has been developed under ``python 3.9``. Possibly you
 have to install this version (for example via Homebrew or whatever way you choose.)
 
