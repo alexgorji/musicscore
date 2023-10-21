@@ -3,9 +3,9 @@ from typing import List, Optional
 from math import trunc
 
 from musicscore.clef import BassClef, TrebleClef
-from musicscore.core import MusicTree
+from musicscore.musictree import MusicTree
 from musicscore.exceptions import AlreadyFinalizedError, AddChordError
-from musicscore.finalize_mixin import FinalizeMixin
+from musicscore.finalize import FinalizeMixin
 from musicscore.key import Key
 from musicscore.staff import Staff
 from musicscore.time import Time, flatten_times

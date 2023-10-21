@@ -2,7 +2,7 @@ from typing import Optional
 
 from musicxml.xmlelement.xmlelement import XMLAccidental
 
-from musicscore.core import MusicTree
+from musicscore.musictree import MusicTree
 from musicscore.xmlwrapper import XMLWrapper
 
 __all__ = ['STANDARD', 'FLAT', 'SHARP', 'ENHARMONIC', 'FORCESHARP', 'FORCEFLAT', 'SIGNS', 'Accidental']

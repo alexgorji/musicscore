@@ -17,7 +17,7 @@
     19000    0.015    0.000    0.015    0.000 xsdtree.py:278(copy_et_element)
     10000    0.012    0.000    0.044    0.000 ElementPath.py:394(findall)
 19000/17000    0.012    0.000    0.016    0.000 xmlelement.py:366(__setattr__)
-    21000    0.011    0.000    0.022    0.000 tree.py:306(reset_frozen)
+    21000    0.011    0.000    0.022    0.000 tree.py:306(_reset_iterators)
     10000    0.011    0.000    0.064    0.000 xsdtree.py:57(_populate_children)
      8000    0.011    0.000    0.285    0.000 xsdelement.py:42(__copy__)
     10000    0.009    0.000    0.013    0.000 ElementPath.py:172(select)

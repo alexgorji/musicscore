@@ -38,7 +38,7 @@
    468117    0.064    0.000    0.064    0.000 tree.py:179(get_parent)
    279462    0.063    0.000    0.065    0.000 xsdtree.py:116(tag)
     42735    0.062    0.000    0.641    0.000 ElementPath.py:394(findall)
-82948/78682    0.061    0.000    0.194    0.000 tree.py:306(reset_frozen)
+82948/78682    0.061    0.000    0.194    0.000 tree.py:306(_reset_iterators)
    131356    0.061    0.000    0.115    0.000 tree.py:106(up)
   12018/2    0.059    0.000    0.308    0.154 xmlelement.py:110(_create_et_xml_element)
      8525    0.058    0.000    2.269    0.000 xmlelement.py:76(_convert_attribute_to_child)

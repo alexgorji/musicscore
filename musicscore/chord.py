@@ -3,13 +3,13 @@ from fractions import Fraction
 from typing import Union, List, Optional, Any, Dict
 
 from musicscore.clef import Clef
-from musicscore.core import MusicTree
+from musicscore.musictree import MusicTree
 from musicscore.dynamics import Dynamics
 from musicscore.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, AlreadyFinalizedError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
     ChordException, NotationException, ChordAddXException, ChordAddXPlacementException, RestCannotSetMidiError, \
     RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotes
-from musicscore.finalize_mixin import FinalizeMixin
+from musicscore.finalize import FinalizeMixin
 from musicscore.midi import Midi
 from musicscore.note import Note
 from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin

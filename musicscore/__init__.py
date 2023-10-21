@@ -2,7 +2,7 @@ from musicscore.accidental import *
 from musicscore.beat import *
 from musicscore.chord import *
 from musicscore.clef import *
-from musicscore.core import *
+from musicscore.musictree import *
 from musicscore.dynamics import *
 from musicscore.key import *
 from musicscore.layout import *

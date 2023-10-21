@@ -1,11 +1,11 @@
 from typing import Optional, Set, List
 
-from musicscore.finalize_mixin import FinalizeMixin
+from musicscore.finalize import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLStaff
 
 from musicscore.clef import Clef
 from musicscore.exceptions import StaffHasNoParentError, AlreadyFinalizedError
-from musicscore.core import MusicTree
+from musicscore.musictree import MusicTree
 from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
 

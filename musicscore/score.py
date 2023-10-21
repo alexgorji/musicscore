@@ -1,15 +1,15 @@
-from typing import List
+from typing import List, Union, Optional
 
 from musicscore import Part, Chord
 from musicscore.chord import Rest
 from musicscore.exceptions import AlreadyFinalizedError, ScoreMultipleMeasureRestError
-from musicscore.finalize_mixin import FinalizeMixin
+from musicscore.finalize import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, \
     XMLEncoding, \
     XMLSupports, XMLScorePart, XMLPartGroup, XMLGroupSymbol, XMLGroupBarline, XMLGroupName, XMLGroupAbbreviation, \
     XMLMeasureStyle
 
-from musicscore.core import MusicTree
+from musicscore.musictree import MusicTree
 from musicscore.quarterduration import QuarterDuration
 from musicscore.xmlwrapper import XMLWrapper
 from musicscore.layout import Scaling, PageLayout, SystemLayout, StaffLayout
@@ -286,6 +286,7 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
     def add_part(self, id: str) -> 'Part':
         """
         Creates and adds part
+
         :param id: part's id
         :return: part
         """
@@ -293,6 +294,21 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
             raise AlreadyFinalizedError(self, 'add_part')
         p = Part(id)
         return self.add_child(p)
+
+    def export_xml(self, path: 'pathlib.Path') -> None:
+        """
+        Creates a musicxml file
+
+        :param path: Output xml file
+        :return: None
+        """
+        with open(path, '+w') as f:
+            f.write("""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC
+    "-//Recordare//DTD MusicXML 4.0 Partwise//EN"
+    "http://www.musicxml.org/dtds/partwise.dtd">
+""")
+            f.write(self.to_string())
 
     def finalize(self) -> None:
         self._create_missing_measures()
@@ -305,19 +321,6 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
                 for ch in measure.get_chords():
                     ch.notes[0].xml_rest.measure = 'yes'
 
-    def export_xml(self, path: 'pathlib.Path') -> None:
-        """
-        :param path: Output xml file
-        :return: None
-        """
-        with open(path, '+w') as f:
-            f.write("""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE score-partwise PUBLIC
-    "-//Recordare//DTD MusicXML 4.0 Partwise//EN"
-    "http://www.musicxml.org/dtds/partwise.dtd">
-""")
-            f.write(self.to_string())
-
     def get_children(self) -> List['Part']:
         """
         :return: list of added children.
@@ -325,8 +328,21 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         """
         return super().get_children()
 
-    def group_parts(self, number, start_part_number, end_part_number, symbol='square', name=None, abbreviation=None,
-                    **kwargs):
+    def group_parts(self, number: Union[int, str], start_part_number: int, end_part_number: int, symbol: str = 'square',
+                    name: Optional[str] = None, abbreviation: Optional[str] = None,
+                    **kwargs) -> None:
+        """
+        Adds a XMLPartList child
+
+        :param number: sets number property of :obj:`~musicxml.xmlelement.xmlelement.XMLPartGroup`
+        :param start_part_number: number of part to start the group
+        :param end_part_number: number of part to end the group
+        :param symbol: symbol property of :obj:`~musicxml.xmlelement.xmlelement.XMLGroupSymbol`:'none', 'brace', 'line', 'bracket', 'square'; default: 'square'
+        :param name: value of :obj:`~musicxml.xmlelement.xmlelement.XMLGroupName`
+        :param abbreviation: value of :obj:`~musicxml.xmlelement.xmlelement.XMLGroupAbbreviation`
+        :param kwargs: kwargs of :obj:`~musicxml.xmlelement.xmlelement.XMLGroupSymbol`
+        :return: None
+        """
         parts = self.get_children_of_type(Part)
         for part_number in [start_part_number, end_part_number]:
             if not 0 < part_number <= len(parts):
@@ -351,7 +367,14 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
 
         self.xml_part_list = new_xml_part_list
 
-    def set_multiple_measure_rest(self, first_measure_number, last_measure_number):
+    def set_multiple_measure_rest(self, first_measure_number: int, last_measure_number: int) -> None:
+        """
+        Creates a multi measure rest
+
+        :param first_measure_number: number of measure to start the multi measure rest
+        :param last_measure_number: number of measure to end the multi measure rest
+        """
+
         if len(self.get_children()) == 0:
             raise ScoreMultipleMeasureRestError(f'score has no parts.')
         if last_measure_number <= first_measure_number:
@@ -380,4 +403,7 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
                     {x for x in range(first_measure_number, last_measure_number + 1)})
 
     def write(self, *args, **kwargs):
+        """
+        Not implemented. Use Score.export_xml instead!
+        """
         raise NotImplementedError('Use Score.export_xml instead!')

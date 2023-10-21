@@ -66,7 +66,7 @@
        16    0.000    0.000    0.000    0.000 ElementPath.py:73(xpath_tokenizer)
         1    0.000    0.000    0.003    0.003 ElementPath.py:388(find)
         5    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
-      5/4    0.000    0.000    0.000    0.000 tree.py:306(reset_frozen)
+      5/4    0.000    0.000    0.000    0.000 tree.py:306(_reset_iterators)
         5    0.000    0.000    0.000    0.000 re.py:289(_compile)
         1    0.000    0.000    0.075    0.075 time_xml_left_margin.py:13(time_hello_xml_left_margin)
         1    0.000    0.000    0.075    0.075 timeit.py:230(timeit)

@@ -8,7 +8,7 @@ from musicxml.xmlelement.xmlelement import *  # type: ignore
 from musicxml.xsd.xsdsimpletype import XSDSimpleTypeNoteheadValue  # type: ignore
 
 from musicscore.accidental import Accidental
-from musicscore.core import MusicTree
+from musicscore.musictree import MusicTree
 
 __all__ = ['Midi', 'MidiNote', 'C', 'D', 'E', 'F', 'G', 'A', 'B', 'midi_to_frequency', 'frequency_to_midi',
            'get_accidental_mode']

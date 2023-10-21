@@ -2,6 +2,9 @@ from musicscore.exceptions import AlreadyFinalizedError, MusicTreeException
 
 
 class FinalizeMixin:
+    """
+    FinalizeMixin is a mixin for finalizable classes: Score, Part, Measure, Staff, Voice, Beat and Chord
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -11,7 +14,7 @@ class FinalizeMixin:
         """
         finalize can only be called once.
 
-        It calls finalize()` method of all children.
+        It calls finalize` method of all children.
         """
         if self._finalized:
             raise AlreadyFinalizedError(self)

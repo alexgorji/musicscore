@@ -3,22 +3,25 @@ musicscore API
 
 .. toctree::
 
+   musictree
+   xmlwrapper
+   finalize
+   quarterduration
+
+   exceptions
+
    accidental
    beat
    chord
    clef
-   core
    dynamics
-   exceptions
    key
    layout
    measure
    midi
    note
    part
-   quarterduration
    score
    staff
    time
    voice
-   xmlwrapper

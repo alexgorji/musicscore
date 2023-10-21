@@ -4,8 +4,8 @@ from musicscore.beat import Beat
 from musicscore.chord import GraceChord
 from musicscore.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsFullError, \
     AddChordError, AlreadyFinalizedError
-from musicscore.core import MusicTree
-from musicscore.finalize_mixin import FinalizeMixin
+from musicscore.musictree import MusicTree
+from musicscore.finalize import FinalizeMixin
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLVoice
 

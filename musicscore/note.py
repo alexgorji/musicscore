@@ -1,6 +1,6 @@
 from typing import Optional, List
 
-from musicscore.core import MusicTree
+from musicscore.musictree import MusicTree
 from musicscore.exceptions import NoteTypeError, NoteHasNoParentChordError, NoteMidiHasNoParentChordError
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDurationMixin

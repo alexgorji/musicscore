@@ -5,7 +5,7 @@ from musicscore.beat import Beat
 from musicscore.chord import Chord
 from musicscore.measure import Measure
 from musicscore.midi import Midi
-from musicscore.core import MusicTree
+from musicscore.musictree import MusicTree
 from musicscore.note import Note
 from musicscore.part import Part
 from musicscore.score import Score

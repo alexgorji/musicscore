@@ -6,11 +6,11 @@ from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModif
 from quicktions import Fraction
 
 from musicscore.chord import _split_copy, _group_chords, Chord
-from musicscore.core import MusicTree
+from musicscore.musictree import MusicTree
 from musicscore.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
     ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError
-from musicscore.finalize_mixin import FinalizeMixin
+from musicscore.finalize import FinalizeMixin
 from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
 from musicscore.util import lcm
 

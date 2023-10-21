@@ -11,17 +11,17 @@ class MusicTree(Tree):
     _ATTRIBUTES = {'quantize', 'show_accidental_signs'}
     """
     MusicTree is the parent class of all music tree objects:
-        - Score (root)
-        - Part (1st layer)
-        - Measure (2nd layer)
-        - Staff (3rd layer)
-        - Voice (4th layer)
-        - Beat (5th layer)
-        - Chord (6th layer)
-        - Note (7th layer)
-        - Midi (8th layer)
+        - obj:`~musicscore.score.Score` (root)
+        - obj:`~musicscore.part.Part` (1st layer)
+        - obj:`~musicscore.measure.Measure` Measure (2nd layer)
+        - obj:`~musicscore.staff.Staff` Staff (3rd layer)
+        - obj:`~musicscore.voice.Voice` Voice (4th layer)
+        - obj:`~musicscore.beat.Beat` Beat (5th layer)
+        - obj:`~musicscore.chord.Chord` Chord (6th layer)
+        - obj:`~musicscore.note.Note` Note (7th layer)
+        - obj:`~musicscore.midi.Midi` Midi (8th layer)
           Midi can represent a pitch or a rest (value=0) and controls accidental sign of the pitch if necessary.
-        - Accidental (9th layer)
+        - obj:`~musicscore.accidental.Accidental` Accidental (9th layer)
     """
 
     default_show_accidental_signs = 'modern'
@@ -130,6 +130,8 @@ class MusicTree(Tree):
     @property
     def quantize(self) -> bool:
         """
+        :obj:`~musicscore.musictree.MusicTree` property
+
         - If quantize is set to None the first quantize of ancestors which is ``False`` or ``True`` will be returned.
         - If :obj:`~musicscore.score.Score.quantize` is set to None it will be converted to ``False``
         - :obj:`~musicscore.measure.Measure.finalize()` loops over all beats. If :obj:`~musicscore.beat.Beat.quantize` returns True
@@ -152,6 +154,8 @@ class MusicTree(Tree):
     @property
     def show_accidental_signs(self) -> str:
         """
+        :obj:`~musicscore.musictree.MusicTree` property
+
         - If show_accidental_signs is set to None the first quantize of ancestors which is ``False`` or ``True`` will be returned.
         - If :obj:`~musicscore.score.Score.show_accidental_signs` is set to None it will be converted to ``default_show_accidental_signs``
         - Possible show_accidental_signs are: None, 'modern', 'traditional'
@@ -176,6 +180,8 @@ class MusicTree(Tree):
 
     def get_beat(self, *args, **kwargs) -> 'Beat':
         """
+        :obj:`~musicscore.musictree.MusicTree` method
+
         This method can be used for :obj:`~musicscore.score.Score` and :obj:`~musicscore.part.Part`, :obj:`~musicscore.measure.Measure` and
         :obj:`~musicscore.staff.Staff` and :obj:`~musicscore.voice.Voice`
 
@@ -189,6 +195,8 @@ class MusicTree(Tree):
 
     def get_chord(self, *args, **kwargs) -> 'Chord':
         """
+        :obj:`~musicscore.musictree.MusicTree` method
+
         This method can be used for :obj:`~musicscore.score.Score` and :obj:`~musicscore.part.Part`, :obj:`~musicscore.measure.Measure`,
         :obj:`~musicscore.staff.Staff`, :obj:`~musicscore.voice.Voice` and :obj:`~musicscore.beat.Beat`
 
@@ -203,6 +211,8 @@ class MusicTree(Tree):
 
     def get_beats(self) -> List['Beat']:
         """
+        :obj:`~musicscore.musictree.MusicTree` method
+
         This method can be used for :obj:`~musicscore.score.Score` and :obj:`~musicscore.part.Part`, :obj:`~musicscore.measure.Measure`,
         :obj:`~musicscore.staff.Staff` and :obj:`~musicscore.voice.Voice`.
 
@@ -221,6 +231,8 @@ class MusicTree(Tree):
 
     def get_chords(self) -> List['Chord']:
         """
+        :obj:`~musicscore.musictree.MusicTree` method
+
         This method can be used for :obj:`~musicscore.score.Score` and :obj:`~musicscore.part.Part`, :obj:`~musicscore.measure.Measure` and
         :obj:`~musicscore.staff.Staff`, :obj:`~musicscore.voice.Voice` and :obj:`~musicscore.beat.Beat`
 
@@ -239,6 +251,8 @@ class MusicTree(Tree):
 
     def get_measure(self, *args, **kwargs) -> 'Measure':
         """
+        :obj:`~musicscore.musictree.MusicTree` method
+
         This method can be used for :obj:`~musicscore.score.Score` and :obj:`~musicscore.part.Part`
 
         :param args: can be used instead of ``kwargs``. A mixture of args and kwargs is not allowed.
@@ -250,6 +264,8 @@ class MusicTree(Tree):
 
     def get_part(self, *args, **kwargs) -> 'Part':
         """
+        :obj:`~musicscore.musictree.MusicTree` method
+
         This method can be used for :obj:`~musicscore.score.Score`
 
         :param args: can be used instead of ``kwargs``. A mixture of args and kwargs is not allowed.
@@ -261,6 +277,8 @@ class MusicTree(Tree):
 
     def get_possible_subdivisions(self, beat_quarter_duration: Optional[QuarterDuration] = None) -> List[int]:
         """
+        :obj:`~musicscore.musictree.MusicTree` method
+
         This method is used by :obj:`~musicscore.beat.Beat`'s :obj:`~musicscore.beat.Beat._quantize_quarter_durations()`.
 
         Possible subdivisions dictionary can be set with :obj:`~musicscore.core.MusicTree.set_possible_subdivisions()`.
@@ -288,6 +306,8 @@ class MusicTree(Tree):
 
     def get_staff(self, *args, **kwargs) -> 'Staff':
         """
+        :obj:`~musicscore.musictree.MusicTree` method
+
         This method can be used for :obj:`~musicscore.score.Score`, :obj:`~musicscore.part.Part` and :obj:`~musicscore.measure.Measure`
 
         :param args: can be used instead of ``kwargs``. A mixture of args and kwargs is not allowed.
@@ -299,6 +319,8 @@ class MusicTree(Tree):
 
     def get_voice(self, *args, **kwargs) -> 'Voice':
         """
+        :obj:`~musicscore.musictree.MusicTree` method
+
         This method can be used for :obj:`~musicscore.score.Score` and :obj:`~musicscore.part.Part`, :obj:`~musicscore.measure.Measure` and
         :obj:`~musicscore.staff.Staff`
 
@@ -311,6 +333,8 @@ class MusicTree(Tree):
     def set_possible_subdivisions(self, subdivisions: list[int],
                                   beat_quarter_duration: Optional[QuarterDuration] = None) -> None:
         """
+        :obj:`~musicscore.musictree.MusicTree` method
+
         This method is used to set or change possible subdivisions dictionary.
 
         :param subdivisions: list of possible subdivisions to be used duration :obj:`musicscore.beat.Beat._quantize_quarter_durations()`

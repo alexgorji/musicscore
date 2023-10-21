@@ -1,13 +1,13 @@
 from typing import List, Optional, Union, Iterator, Tuple
 
 from musicscore import Chord
-from musicscore.finalize_mixin import FinalizeMixin
+from musicscore.finalize import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
 from musicscore.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsFullError, \
     AlreadyFinalizedError
 from musicscore.measure import Measure
-from musicscore.core import MusicTree
+from musicscore.musictree import MusicTree
 from musicscore.time import Time
 from musicscore.xmlwrapper import XMLWrapper
 
