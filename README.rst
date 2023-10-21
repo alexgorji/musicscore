@@ -1,5 +1,5 @@
 musicscore
-===========
+==========
 Tested with python 3.9, 3.10 and 3.11
 
 **musicscore** is a python library for generating musicxml data in an intuitive and easy but nevertheless exhaustive way. The generated
@@ -9,13 +9,13 @@ seems at the moment to have the best implementation of musicxml format files and
 
 For documentation see: `<https://musicscore.readthedocs.io>`_
 
-The project can be found on GitHub under: `<https://github.com/alexgorji/musicscore2>`_
+The project can be found on GitHub under: `<https://github.com/alexgorji/musicscore>`_
 
-**musicscore2** can be installed via pip:
+**musicscore** can be installed via pip:
 
 .. code-block:: console
 
-    (.venv) $ pip install musicscore2
+    (.venv) $ pip install musicscore
 
 
 **musicxml** can also be found in a separate repository under: `<https://github.com/alexgorji/musicxml>` and be installed via pip:
