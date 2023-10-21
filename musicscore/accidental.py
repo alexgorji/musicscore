@@ -248,7 +248,7 @@ class Accidental(MusicTree, XMLWrapper):
     @property
     def parent_midi(self) -> 'Midi':
         """
-        :return: The midi parent in ``musicscore``. It is equivalent to :obj:`up` or :obj:`get_parent()`
+        :return: The midi parent of Accidental in the :obj:`~musicscore.musictree.MusicTree` structure. It is equivalent to :obj:`up` or :obj:`get_parent()`
         :rtype: :obj:`musicscore.midi.Midi`
         """
         return self.up
@@ -275,8 +275,8 @@ class Accidental(MusicTree, XMLWrapper):
     def show(self) -> bool:
         """
         If ``False`` ``xml_object`` will be ``None`` and no accidental is shown in the :obj:`~musicscore.score.Score`.
-        If ``True`` the accidental is shown. If the value of ``self.parentheses``, ``self.parentheses``.
-        ``self.parentheses`` or ``self.parentheses`` is set to yes, the accidental is always shown regardless of this
+        If ``True`` the accidental is shown. If the value of one of the following xml_object :obj:`~musicxml.xmlelement.xmlelement.XMLAccidental` properties:``self.parentheses``, ``self.editorial``.
+        ``self.cautionary`` or ``self.bracket`` is set to yes, the accidental is always shown regardless of this
         property
         """
         if 'yes' in [self.parentheses, self.editorial, self.cautionary, self.bracket]:

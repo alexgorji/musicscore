@@ -8,22 +8,21 @@ __all__ = ['MusicTree']
 
 
 class MusicTree(Tree):
-    _ATTRIBUTES = {'show_accidental_signs'}
     """
     MusicTree is the parent class of all music tree objects:
-        - obj:`~musicscore.score.Score` (root)
-        - obj:`~musicscore.part.Part` (1st layer)
-        - obj:`~musicscore.measure.Measure` Measure (2nd layer)
-        - obj:`~musicscore.staff.Staff` Staff (3rd layer)
-        - obj:`~musicscore.voice.Voice` Voice (4th layer)
-        - obj:`~musicscore.beat.Beat` Beat (5th layer)
-        - obj:`~musicscore.chord.Chord` Chord (6th layer)
-        - obj:`~musicscore.note.Note` Note (7th layer)
-        - obj:`~musicscore.midi.Midi` Midi (8th layer)
+        - :obj:`~musicscore.score.Score` (root)
+        - :obj:`~musicscore.part.Part` (1st layer)
+        - :obj:`~musicscore.measure.Measure` (2nd layer)
+        - :obj:`~musicscore.staff.Staff` (3rd layer)
+        - :obj:`~musicscore.voice.Voice` (4th layer)
+        - :obj:`~musicscore.beat.Beat` (5th layer)
+        - :obj:`~musicscore.chord.Chord`, :obj:`~musicscore.chord.Rest` or :obj:`~musicscore.chord.GraceChord` (6th layer)
+        - :obj:`~musicscore.note.Note` (7th layer)
+        - :obj:`~musicscore.midi.Midi` (8th layer)
           Midi can represent a pitch or a rest (value=0) and controls accidental sign of the pitch if necessary.
-        - obj:`~musicscore.accidental.Accidental` Accidental (9th layer)
+        - :obj:`~musicscore.accidental.Accidental` (9th layer)
     """
-
+    _ATTRIBUTES = {'show_accidental_signs'}
     default_show_accidental_signs = 'modern'
 
     def __init__(self, *args, **kwargs):
@@ -192,7 +191,8 @@ class MusicTree(Tree):
             if not output:
                 for cls_name in ['Beat', 'Chord', 'Note', 'Midi', 'Accidental']:
                     if isinstance_as_string(self, cls_name):
-                        raise MusicTreeTypeError(f'MusicTree descendents of type {self.__class__} cannot use this method.')
+                        raise MusicTreeTypeError(
+                            f'MusicTree descendents of type {self.__class__} cannot use this method.')
             return output
 
     def get_chords(self) -> List['Chord']:
@@ -212,7 +212,8 @@ class MusicTree(Tree):
             if not output:
                 for cls_name in ['Chord', 'Note', 'Midi', 'Accidental']:
                     if isinstance_as_string(self, cls_name):
-                        raise MusicTreeTypeError(f'MusicTree descendents of type {self.__class__} cannot use this method.')
+                        raise MusicTreeTypeError(
+                            f'MusicTree descendents of type {self.__class__} cannot use this method.')
             return output
 
     def get_measure(self, *args, **kwargs) -> 'Measure':

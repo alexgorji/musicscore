@@ -18,7 +18,7 @@ from musicscore.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML
     XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, isinstance_as_string
 from musicxml.xmlelement.xmlelement import *
 
-__all__ = ['Chord']
+__all__ = ['Chord', 'Rest', 'GraceChord']
 
 from musicxml.xmlelement.xmlelement import XMLElement
 
