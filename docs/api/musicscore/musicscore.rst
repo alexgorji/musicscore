@@ -7,6 +7,7 @@ musicscore API
    xmlwrapper
    finalize
    quarterduration
+   quantize
 
    exceptions
 

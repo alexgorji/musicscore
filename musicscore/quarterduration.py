@@ -2,7 +2,7 @@ from typing import List, Union
 from quicktions import Fraction
 import numbers
 
-__all__ = ['BEATWISE_EXCEPTIONS', 'QuarterDuration']
+__all__ = ['BEATWISE_EXCEPTIONS', 'QuarterDuration', 'QuarterDurationMixin']
 
 from musicscore.exceptions import QuarterDurationIsNotWritable
 

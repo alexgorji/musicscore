@@ -23,12 +23,12 @@ class QuantizeMixin:
     @property
     def get_quantized(self) -> bool:
         """
-        :obj:`~musicscore.get_quantized.QuantizeMixin` property
+        :obj:`~musicscore.quantize.QuantizeMixin` property
 
         - If get_quantized is set to None the first get_quantized of ancestors which is ``False`` or ``True`` will be returned.
-        - If :obj:`~musicscore.score.Score.get_quantized` is set to None it will be converted to ``False``
-        - :obj:`~musicscore.measure.Measure.finalize()` loops over all beats. If :obj:`~musicscore.beat.Beat.get_quantized` returns True
-          :obj:`~musicscore.beat.Beat._quantize_quarter_durations()` is called.
+        - If :obj:`~musicscore.score.Score`.get_quantized is set to None it will be converted to ``False``
+        - :obj:`~musicscore.measure.Measure`.finalize() loops over all beats. If :obj:`~musicscore.beat.Beat`.get_quantized returns True
+          :obj:`~musicscore.beat.Beat`._quantize_quarter_durations() is called.
 
         :type: Optional[bool]
         :rtype: bool
@@ -46,7 +46,7 @@ class QuantizeMixin:
 
     def get_possible_subdivisions(self, beat_quarter_duration: Optional[QuarterDuration] = None) -> List[int]:
         """
-        :obj:`~musicscore.musictree.MusicTree` method
+        :obj:`~musicscore.quantize.QuantizeMixin` method
 
         This method is used by :obj:`~musicscore.beat.Beat`'s :obj:`~musicscore.beat.Beat._quantize_quarter_durations()`.
 
@@ -76,7 +76,7 @@ class QuantizeMixin:
     def set_possible_subdivisions(self, subdivisions: list[int],
                                   beat_quarter_duration: Optional[QuarterDuration] = None) -> None:
         """
-        :obj:`~musicscore.get_quantized.QuantizeMixin` method
+        :obj:`~musicscore.quantize.QuantizeMixin` method
 
         This method is used to set or change possible subdivisions dictionary of a beat or its ascendants.
 
