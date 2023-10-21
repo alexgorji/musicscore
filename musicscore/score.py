@@ -37,9 +37,9 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     XMLClass = XMLScorePartwise
 
-    def __init__(self, version='4.0', title=None, subtitle=None, quantize=False, *args, **kwargs):
+    def __init__(self, version='4.0', title=None, subtitle=None, get_quantized=False, *args, **kwargs):
 
-        super().__init__(quantize=quantize)
+        super().__init__(get_quantized=get_quantized)
         self._xml_object = self.XMLClass(*args, **kwargs)
         self._update_xml_object()
         self._version = None

@@ -42,49 +42,46 @@ class TestQuantization(IdTestCase):
         v = st.get_children()[0]
         beats = v.get_children()
 
-        assert s.quantize is False
-        assert p.quantize is False
-        assert m.quantize is False
-        assert st.quantize is False
-        assert v.quantize is False
+        assert s.get_quantized is False
+        assert p.get_quantized is False
+        assert m.get_quantized is False
+        assert st.get_quantized is False
+        assert v.get_quantized is False
         for b in beats:
-            assert b.quantize is False
+            assert b.get_quantized is False
 
-        s.quantize = True
-        assert p.quantize is True
-        assert m.quantize is True
-        assert st.quantize is True
-        assert v.quantize is True
+        s.get_quantized = True
+        assert p.get_quantized is True
+        assert m.get_quantized is True
+        assert st.get_quantized is True
+        assert v.get_quantized is True
         for b in beats:
-            assert b.quantize is True
+            assert b.get_quantized is True
 
-        st.quantize = False
-        assert s.quantize is True
-        assert p.quantize is True
-        assert m.quantize is True
-        assert st.quantize is False
-        assert v.quantize is False
+        st.get_quantized = False
+        assert s.get_quantized is True
+        assert p.get_quantized is True
+        assert m.get_quantized is True
+        assert st.get_quantized is False
+        assert v.get_quantized is False
         for b in beats:
-            assert b.quantize is False
+            assert b.get_quantized is False
 
-        p.quantize = False
-        m.quantize = True
-        st.quantize = False
-        v.quantize = True
-        beats[0].quantize = False
-        beats[1].quantize = True
-        beats[2].quantize = False
-        beats[3].quantize = True
+        p.get_quantized = False
+        m.get_quantized = True
+        st.get_quantized = False
+        v.get_quantized = True
+        beats[0].get_quantized = False
+        beats[1].get_quantized = True
+        beats[2].get_quantized = False
+        beats[3].get_quantized = True
 
-        assert s.quantize is True
-        assert p.quantize is False
-        assert m.quantize is True
-        assert st.quantize is False
-        assert v.quantize is True
-        beats[0].quantize is False
-        beats[1].quantize is True
-        beats[2].quantize is False
-        beats[3].quantize is True
+        assert s.get_quantized is True
+        assert p.get_quantized is False
+        assert m.get_quantized is True
+        assert st.get_quantized is False
+        assert v.get_quantized is True
+
 
     def test_simple_quantization(self):
         s = Score()
@@ -116,7 +113,7 @@ class TestQuantization(IdTestCase):
         for beat in [b for m in p.get_children() for st in m.get_children() for v in st.get_children() for b in
                      v.get_children()]:
             beat._quantize_quarter_durations()
-        # p.quantize = True
+        # p.get_quantized = True
         for measure in p.get_children():
             v = measure.get_staff(1).get_voice(1)
             for b in v.get_children():
@@ -131,7 +128,7 @@ class TestQuantization(IdTestCase):
         p = s.add_child(Part('p1'))
         for qd in [2, 2 / 7, 1, 5 / 7]:
             p.add_chord(Chord(60, qd))
-        p.quantize = True
+        p.get_quantized = True
         p.finalize()
         assert [ch.quarter_duration for ch in p.get_chords()] == [2, 1 / 4, 3 / 4, 1 / 4, 3 / 4]
         assert p.get_measure(1).get_divisions() == 4
