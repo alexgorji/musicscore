@@ -2,6 +2,7 @@ from typing import List, Optional, Union, Iterator, Tuple
 
 from musicscore import Chord
 from musicscore.finalize import FinalizeMixin
+from musicscore.quantize import QuantizeMixin
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
 from musicscore.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsFullError, \
@@ -121,9 +122,10 @@ class ScorePart(XMLWrapper):
         self.xml_object.xml_part_name = self.part.name
 
 
-class Part(MusicTree, FinalizeMixin, XMLWrapper):
+class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     _ATTRIBUTES = {'id_', 'name', 'abbreviation'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
     XMLClass = XMLPart
 
     def __init__(self, id, name=None, abbreviation=None, *args, **kwargs):

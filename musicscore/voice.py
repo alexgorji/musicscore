@@ -6,15 +6,17 @@ from musicscore.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, V
     AddChordError, AlreadyFinalizedError
 from musicscore.musictree import MusicTree
 from musicscore.finalize import FinalizeMixin
+from musicscore.quantize import QuantizeMixin
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLVoice
 
 __all__ = ['Voice']
 
 
-class Voice(MusicTree, FinalizeMixin, XMLWrapper):
+class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     _ATTRIBUTES = {'number', 'leftover_chord', 'is_filled'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
     XMLClass = XMLVoice
 
     def __init__(self, number=None, *args, **kwargs):

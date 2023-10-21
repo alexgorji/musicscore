@@ -8,7 +8,7 @@ __all__ = ['MusicTree']
 
 
 class MusicTree(Tree):
-    _ATTRIBUTES = {'quantize', 'show_accidental_signs'}
+    _ATTRIBUTES = {'show_accidental_signs'}
     """
     MusicTree is the parent class of all music tree objects:
         - obj:`~musicscore.score.Score` (root)
@@ -26,12 +26,9 @@ class MusicTree(Tree):
 
     default_show_accidental_signs = 'modern'
 
-    def __init__(self, quantize=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._possible_subdivisions = {}
         self._show_accidental_signs = None
-        self._quantize = None
-        self.quantize = quantize
 
     @staticmethod
     def _check_args_kwargs(args, kwargs, class_name, get_class_name=None):
@@ -82,13 +79,6 @@ class MusicTree(Tree):
         except KeyError:
             raise NotImplementedError(f'{self.__class__.__name__} add_child() not implemented.')
 
-    def _get_beat_quarter_duration(self):
-        if isinstance_as_string(self, 'Beat'):
-            beat_quarter_duration = self.quarter_duration
-        else:
-            beat_quarter_duration = QuarterDuration(1)
-        return beat_quarter_duration
-
     def _get_kwargs(self, args_, kwargs_, get_class_name):
         if isinstance_as_string(self, 'Score'):
             return self._check_args_kwargs(args_, kwargs_, 'Score', get_class_name)
@@ -126,30 +116,6 @@ class MusicTree(Tree):
                 if not output:
                     return None
             return output
-
-    @property
-    def quantize(self) -> bool:
-        """
-        :obj:`~musicscore.musictree.MusicTree` property
-
-        - If quantize is set to None the first quantize of ancestors which is ``False`` or ``True`` will be returned.
-        - If :obj:`~musicscore.score.Score.quantize` is set to None it will be converted to ``False``
-        - :obj:`~musicscore.measure.Measure.finalize()` loops over all beats. If :obj:`~musicscore.beat.Beat.quantize` returns True
-          :obj:`~musicscore.beat.Beat._quantize_quarter_durations()` is called.
-
-        :type: Optional[bool]
-        :rtype: bool
-        """
-        if self._quantize is None:
-            if self.up:
-                return self.up.quantize
-            else:
-                return False
-        return self._quantize
-
-    @quantize.setter
-    def quantize(self, val):
-        self._quantize = val
 
     @property
     def show_accidental_signs(self) -> str:
@@ -275,35 +241,6 @@ class MusicTree(Tree):
 
         return self._get_music_tree_descendent(args, kwargs, 'Part')
 
-    def get_possible_subdivisions(self, beat_quarter_duration: Optional[QuarterDuration] = None) -> List[int]:
-        """
-        :obj:`~musicscore.musictree.MusicTree` method
-
-        This method is used by :obj:`~musicscore.beat.Beat`'s :obj:`~musicscore.beat.Beat._quantize_quarter_durations()`.
-
-        Possible subdivisions dictionary can be set with :obj:`~musicscore.core.MusicTree.set_possible_subdivisions()`.
-
-        If it is not set or ``beat_quarter_duration`` as key does not exist, the parent's possible subdivisions dictionary will be checked.
-
-        :obj:`~musicscore.score.Score` has a default :obj:`~musicscore.score.POSSIBLE_SUBDIVISIONS` dictionary which will be used if no other
-        musicscore node on the path from self to root has its own possilbe subdivisions dictionary set with ``beat_quarter_duration`` as a
-        key. For setting possible subdivisions dictionary use always :obj:`~musicscore.core.MusicTree.set_possible_subdivisions()`.
-
-        :param beat_quarter_duration: Used as key in possible subdivisions dictionary.
-               If ``None`` and self is a :obj:`~musicscore.beat.Beat` ``self.quarter_duration`` is used.
-               If ``None`` and self is not a :obj:`~musicscore.beat.Beat` it is set to 1.
-        :return: A list of possible subdivisions of a :obj:`~musicscore.beat.Beat`. This is used by beat's
-                 :obj:`~musicscore.beat.Beat._quantize_quarter_durations()`
-        :rtype: List[int]
-        """
-        if beat_quarter_duration is None:
-            beat_quarter_duration = self._get_beat_quarter_duration()
-        subdivisions = self._possible_subdivisions.get(beat_quarter_duration)
-        if subdivisions is None and self.up is not None and self.up.get_possible_subdivisions(
-                beat_quarter_duration) is not None:
-            subdivisions = self.up.get_possible_subdivisions(beat_quarter_duration)[:]
-        return subdivisions
-
     def get_staff(self, *args, **kwargs) -> 'Staff':
         """
         :obj:`~musicscore.musictree.MusicTree` method
@@ -329,29 +266,3 @@ class MusicTree(Tree):
         :rtype: :obj:`~musicscore.voice.Voice`
         """
         return self._get_music_tree_descendent(args, kwargs, 'Voice')
-
-    def set_possible_subdivisions(self, subdivisions: list[int],
-                                  beat_quarter_duration: Optional[QuarterDuration] = None) -> None:
-        """
-        :obj:`~musicscore.musictree.MusicTree` method
-
-        This method is used to set or change possible subdivisions dictionary.
-
-        :param subdivisions: list of possible subdivisions to be used duration :obj:`musicscore.beat.Beat._quantize_quarter_durations()`
-        :param beat_quarter_duration: If ``None`` and self is a :obj:`~musicscore.beat.Beat` ``self.quarter_duration`` is used.
-                                      If ``None`` and self is not a :obj:`~musicscore.beat.Beat` it is set to 1.
-        :return: None
-        """
-        if beat_quarter_duration is None:
-            beat_quarter_duration = self._get_beat_quarter_duration()
-        elif isinstance_as_string(self, 'Beat') and beat_quarter_duration != self.quarter_duration:
-            raise ValueError(
-                f"beat_quarter_duration '{beat_quarter_duration}' must be None or equal to the beat quarter_duration '{self.quarter_duration}'")
-
-        if not isinstance(beat_quarter_duration, QuarterDuration):
-            beat_quarter_duration = QuarterDuration(beat_quarter_duration)
-        try:
-            subdivisions = list(subdivisions)
-        except TypeError:
-            subdivisions = [subdivisions]
-        self._possible_subdivisions[beat_quarter_duration] = subdivisions

@@ -1,6 +1,7 @@
 from typing import Optional, Set, List
 
 from musicscore.finalize import FinalizeMixin
+from musicscore.quantize import QuantizeMixin
 from musicxml.xmlelement.xmlelement import XMLStaff
 
 from musicscore.clef import Clef
@@ -12,9 +13,10 @@ from musicscore.xmlwrapper import XMLWrapper
 __all__ = ['Staff']
 
 
-class Staff(MusicTree, FinalizeMixin, XMLWrapper):
+class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     _ATTRIBUTES = {'clef', 'default_clef', 'number'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
     XMLClass = XMLStaff
 
     def __init__(self, number=None, clef=None, **kwargs):

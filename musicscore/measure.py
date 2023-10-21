@@ -7,6 +7,7 @@ from musicscore.musictree import MusicTree
 from musicscore.exceptions import AlreadyFinalizedError, AddChordError
 from musicscore.finalize import FinalizeMixin
 from musicscore.key import Key
+from musicscore.quantize import QuantizeMixin
 from musicscore.staff import Staff
 from musicscore.time import Time, flatten_times
 from musicscore.util import lcm, chord_is_in_a_repetition
@@ -18,9 +19,10 @@ from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, X
 __all__ = ['Measure', 'generate_measures']
 
 
-class Measure(MusicTree, FinalizeMixin, XMLWrapper):
+class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration', 'barline_style', 'new_system'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
     XMLClass = XMLMeasure
 
     def __init__(self, number, time=None, *args, **kwargs):

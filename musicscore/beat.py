@@ -2,6 +2,7 @@ from typing import List
 
 from math import trunc
 
+from musicscore.quantize import QuantizeMixin
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
 
@@ -190,7 +191,7 @@ def _beam_chord_group(chord_group: List['Chord']) -> None:
             add_last_beam(next_chord, b2, current_beams)
 
 
-class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
+class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
     """
     Beat is the direct ancestor of chords. Each :obj:`~musicscore.chord.Chord` is placed with an offset between 0 and beat's
     quarter duration inside the beat as its child .
@@ -418,7 +419,9 @@ class Beat(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def _quantize_quarter_durations(self):
         """
-        When called the positioning of children will be quantized according to :obj:`musicscore.core.MusicTree.get_possible_subdivisions()`
+        When called the positioning of children will be quantized according to :obj:`musicscore.musictree.MusicTree.get_possible_subdivisions()`
+        This method is called by :obj:`~musicscore.measure.Measure`
+
         """
         if self.get_possible_subdivisions() and self.get_children():
             if self._get_actual_notes(self.get_children()) in self.get_possible_subdivisions():

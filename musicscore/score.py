@@ -4,6 +4,7 @@ from musicscore import Part, Chord
 from musicscore.chord import Rest
 from musicscore.exceptions import AlreadyFinalizedError, ScoreMultiMeasureRestError
 from musicscore.finalize import FinalizeMixin
+from musicscore.quantize import QuantizeMixin
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, \
     XMLEncoding, \
     XMLSupports, XMLScorePart, XMLPartGroup, XMLGroupSymbol, XMLGroupBarline, XMLGroupName, XMLGroupAbbreviation, \
@@ -29,9 +30,10 @@ POSSIBLE_SUBDIVISIONS = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [
                          QuarterDuration(1): [2, 3, 4, 5, 6, 7, 8]}
 
 
-class Score(MusicTree, FinalizeMixin, XMLWrapper):
+class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
 
     XMLClass = XMLScorePartwise
 
@@ -373,6 +375,7 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
 
         :param first_measure_number: number of measure to start the multi measure rest
         :param last_measure_number: number of measure to end the multi measure rest
+        :return: None
         """
 
         if len(self.get_children()) == 0:
