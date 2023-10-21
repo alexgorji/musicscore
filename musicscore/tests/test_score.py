@@ -1,7 +1,7 @@
 from unittest import skip
 
 from musicscore.chord import Chord
-from musicscore.exceptions import ScoreMultipleMeasureRestError
+from musicscore.exceptions import ScoreMultiMeasureRestError
 from musicscore.layout import StaffLayout
 from musicscore.measure import Measure
 from musicscore.part import Part
@@ -218,30 +218,30 @@ class TestScore(IdTestCase):
 
     def test_set_multiple_measure_rests_one_part(self):
         score = Score()
-        with self.assertRaises(ScoreMultipleMeasureRestError):
-            score.set_multiple_measure_rest(1, 4)
+        with self.assertRaises(ScoreMultiMeasureRestError):
+            score.set_multi_measure_rest(1, 4)
         part = score.add_part('p1')
         assert len(part.get_children()) == 0
         # add 4 measures and set multiple rests in measure attributes
-        score.set_multiple_measure_rest(1, 4)
+        score.set_multi_measure_rest(1, 4)
         assert len(part.get_children()) == 4
         assert part.get_measure(1).xml_attributes.xml_measure_style.xml_multiple_rest.value_ == 4
 
         # Trying to set multiple rest measures again throws error
-        with self.assertRaises(ScoreMultipleMeasureRestError):
-            score.set_multiple_measure_rest(2, 3)
+        with self.assertRaises(ScoreMultiMeasureRestError):
+            score.set_multi_measure_rest(2, 3)
 
         # add 4 measures manually
         [part.add_chord(Chord(0, 4)) for _ in range(4)]
         assert len(part.get_children()) == 8
         # set multiple measure rests for the last three measures
-        score.set_multiple_measure_rest(6, 8)
+        score.set_multi_measure_rest(6, 8)
         assert part.get_measure(5).xml_attributes.xml_measure_style is None
         assert part.get_measure(6).xml_attributes.xml_measure_style.xml_multiple_rest.value_ == 3
         # Trying to set multiple rest measures on measures with pitches throws error
         [part.add_chord(Chord(60, 4)) for _ in range(4)]
-        with self.assertRaises(ScoreMultipleMeasureRestError):
-            score.set_multiple_measure_rest(9, 10)
+        with self.assertRaises(ScoreMultiMeasureRestError):
+            score.set_multi_measure_rest(9, 10)
 
         # Check if rest measure attribute is set to yes
         score.finalize()
@@ -257,7 +257,7 @@ class TestScore(IdTestCase):
         score = Score()
         parts = p1, p2 = score.add_part('p1'), score.add_part('p2')
         # add 4 measures and set multiple rests in measure attributes
-        score.set_multiple_measure_rest(1, 4)
+        score.set_multi_measure_rest(1, 4)
         for p in parts:
             assert len(p.get_children()) == 4
             assert p.get_measure(1).xml_attributes.xml_measure_style.xml_multiple_rest.value_ == 4
@@ -267,15 +267,15 @@ class TestScore(IdTestCase):
         assert len(p1.get_children()) == 8
         assert len(p2.get_children()) == 4
         # set multiple measure rests for the last three measures
-        score.set_multiple_measure_rest(6, 8)
+        score.set_multi_measure_rest(6, 8)
         assert len(p2.get_children()) == 8
         for p in parts:
             assert p.get_measure(5).xml_attributes.xml_measure_style is None
             assert p.get_measure(6).xml_attributes.xml_measure_style.xml_multiple_rest.value_ == 3
         # Trying to set multiple rest measures on measures with pitches throws error
         [p1.add_chord(Chord(60, 4)) for _ in range(4)]
-        with self.assertRaises(ScoreMultipleMeasureRestError):
-            score.set_multiple_measure_rest(9, 10)
+        with self.assertRaises(ScoreMultiMeasureRestError):
+            score.set_multi_measure_rest(9, 10)
         # Check if rest measure attribute is set to yes
         score.finalize()
         for measure in p1.get_children():

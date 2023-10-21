@@ -133,7 +133,7 @@ clef, otherwise it will be False).
 ``Score.xml_identifacation.xml_encondings.xml_supports`` two support added for print new system and print new page.
 ``Score.group_parts(number, start_part_number, end_part_number, symbol='square', name=None, abbreviation=None)`` added
 ``Score.group_parts()`` **kwargs added. This will be added to ``XMLGroupSymbol``
-``Score.set_multiple_measure_rest()`` method added.
+``Score.set_multi_measure_rest()`` method added.
 
 ``SimpleFormat`` added. It is useful tool to generate list of chords and also do some simple algorithmic changes to it
 if needed.

@@ -211,7 +211,7 @@ class ScoreException(MusicTreeException):
     pass
 
 
-class ScoreMultipleMeasureRestError(ScoreException):
+class ScoreMultiMeasureRestError(ScoreException):
     pass
 
 

@@ -2,7 +2,7 @@ from typing import List, Union, Optional
 
 from musicscore import Part, Chord
 from musicscore.chord import Rest
-from musicscore.exceptions import AlreadyFinalizedError, ScoreMultipleMeasureRestError
+from musicscore.exceptions import AlreadyFinalizedError, ScoreMultiMeasureRestError
 from musicscore.finalize import FinalizeMixin
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, \
     XMLEncoding, \
@@ -56,7 +56,7 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         self.subtitle = subtitle
         self._possible_subdivisions = POSSIBLE_SUBDIVISIONS.copy()
 
-        self._measure_numbers_within_multiple_measure_rests = set()
+        self._measure_numbers_within_multi_measure_rests = set()
 
         self._final_updated = False
 
@@ -315,7 +315,7 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         self._set_missing_barlines()
         self._set_last_barline()
         super().finalize()
-        for measure_number in self._measure_numbers_within_multiple_measure_rests:
+        for measure_number in self._measure_numbers_within_multi_measure_rests:
             for part in self.get_children():
                 measure = part.get_measure(measure_number)
                 for ch in measure.get_chords():
@@ -367,7 +367,7 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
 
         self.xml_part_list = new_xml_part_list
 
-    def set_multiple_measure_rest(self, first_measure_number: int, last_measure_number: int) -> None:
+    def set_multi_measure_rest(self, first_measure_number: int, last_measure_number: int) -> None:
         """
         Creates a multi measure rest
 
@@ -376,13 +376,13 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
         """
 
         if len(self.get_children()) == 0:
-            raise ScoreMultipleMeasureRestError(f'score has no parts.')
+            raise ScoreMultiMeasureRestError(f'score has no parts.')
         if last_measure_number <= first_measure_number:
-            raise ScoreMultipleMeasureRestError(
+            raise ScoreMultiMeasureRestError(
                 f'last_measure_number {last_measure_number} must be larger than first_measure_number {first_measure_number}')
         for x in range(first_measure_number, last_measure_number + 1):
-            if x in self._measure_numbers_within_multiple_measure_rests:
-                raise ScoreMultipleMeasureRestError(f'measure number {x} is already part of a multiple measure reset')
+            if x in self._measure_numbers_within_multi_measure_rests:
+                raise ScoreMultiMeasureRestError(f'measure number {x} is already part of a multiple measure reset')
         for part in self.get_children():
             for _ in range(last_measure_number - len(part.get_children())):
                 m = part.add_measure()
@@ -391,7 +391,7 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
             for measure in part.get_children()[first_measure_number - 1:last_measure_number]:
                 for ch in measure.get_chords():
                     if not ch.is_rest:
-                        raise ScoreMultipleMeasureRestError(
+                        raise ScoreMultiMeasureRestError(
                             f'Measures contain not rest chords')
 
             first_measure = part.get_measure(first_measure_number)
@@ -399,7 +399,7 @@ class Score(MusicTree, FinalizeMixin, XMLWrapper):
                 first_measure.xml_attributes.xml_measure_style = XMLMeasureStyle()
             first_measure.xml_attributes.xml_measure_style.xml_multiple_rest = last_measure_number - first_measure_number + 1
             if part == self.get_children()[0]:
-                self._measure_numbers_within_multiple_measure_rests.update(
+                self._measure_numbers_within_multi_measure_rests.update(
                     {x for x in range(first_measure_number, last_measure_number + 1)})
 
     def write(self, *args, **kwargs):

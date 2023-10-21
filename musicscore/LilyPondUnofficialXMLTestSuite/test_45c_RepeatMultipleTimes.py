@@ -14,8 +14,8 @@ class TestLily45c(IdTestCase):
         p = score.add_part('p1')
         [p.add_chord(Chord(0, 4)) for _ in range(8)]
 
-        score.set_multiple_measure_rest(2, 3)
-        score.set_multiple_measure_rest(4, 7)
+        score.set_multi_measure_rest(2, 3)
+        score.set_multi_measure_rest(4, 7)
 
         p.get_measure(2).set_repeat_barline(location='left')
         p.get_measure(3).set_repeat_barline(location='right')
