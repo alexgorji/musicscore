@@ -28,11 +28,11 @@ first.
 
 `MusicTree.get_part()`, get_staff() etc. refactored.
 
-`MusicTree.quantize` attribute: Default is False, if quantization is necessary it must be set to True.
+`MusicTree.get_quantized` attribute: Default is False, if quantization is necessary it must be set to True.
 
-* If quantize is set to None the first quantize of ancestors which is `False` or `True` will be returned.
-* If `Score.quantize` is set to None it will be converted to `False`
-* `Measure.finalize()` loops over all beats. If `Beat.quantize` returns True `Beat._quantize_quarter_durations()` is
+* If get_quantized is set to None the first get_quantized of ancestors which is `False` or `True` will be returned.
+* If `Score.get_quantized` is set to None it will be converted to `False`
+* `Measure.finalize()` loops over all beats. If `Beat.get_quantized` returns True `Beat._quantize_quarter_durations()` is
   called.
 
 # Version 1.2.1

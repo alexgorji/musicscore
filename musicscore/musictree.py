@@ -122,7 +122,7 @@ class MusicTree(Tree):
         """
         :obj:`~musicscore.musictree.MusicTree` property
 
-        - If show_accidental_signs is set to None the first quantize of ancestors which is ``False`` or ``True`` will be returned.
+        - If show_accidental_signs is set to None the first get_quantized of ancestors which is ``False`` or ``True`` will be returned.
         - If :obj:`~musicscore.score.Score.show_accidental_signs` is set to None it will be converted to ``default_show_accidental_signs``
         - Possible show_accidental_signs are: None, 'modern', 'traditional'
 

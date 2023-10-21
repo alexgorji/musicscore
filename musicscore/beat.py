@@ -530,7 +530,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         finalize can only be called once.
 
         - It calls :obj:`~musicscore.chord.Chord.finalize()` method of all :obj:`~musicscore.chord.Chord` children.
-        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams, _quantize_quarter_durations (if quantize is
+        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams, _quantize_quarter_durations (if get_quantized is
           True), _split_not_writable_chords
         """
         if self._finalized:

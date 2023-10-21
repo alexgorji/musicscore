@@ -35,7 +35,7 @@ class TestHelloWorldQuantization(IdTestCase):
             ch.add_lyric(round(float(ch.quarter_duration), 2))
             p.add_chord(ch)
         """
-        He sets part's quantize attribute to True.
+        He sets part's get_quantized attribute to True.
         """
         p.quantize = True
         """

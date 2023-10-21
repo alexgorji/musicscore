@@ -5,13 +5,13 @@ from musicscore.util import isinstance_as_string
 
 
 class QuantizeMixin:
-    _ATTRIBUTES = {'quantize'}
+    _ATTRIBUTES = {'get_quantized'}
 
-    def __init__(self, quantize=None, *args, **kwargs):
+    def __init__(self, get_quantized=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._possible_subdivisions = {}
-        self._quantize = None
-        self.quantize = quantize
+        self._get_quantized = None
+        self.get_quantized = get_quantized
 
     def _get_beat_quarter_duration(self):
         if isinstance_as_string(self, 'Beat'):
@@ -21,28 +21,28 @@ class QuantizeMixin:
         return beat_quarter_duration
 
     @property
-    def quantize(self) -> bool:
+    def get_quantized(self) -> bool:
         """
-        :obj:`~musicscore.quantize.QuantizeMixin` property
+        :obj:`~musicscore.get_quantized.QuantizeMixin` property
 
-        - If quantize is set to None the first quantize of ancestors which is ``False`` or ``True`` will be returned.
-        - If :obj:`~musicscore.score.Score.quantize` is set to None it will be converted to ``False``
-        - :obj:`~musicscore.measure.Measure.finalize()` loops over all beats. If :obj:`~musicscore.beat.Beat.quantize` returns True
+        - If get_quantized is set to None the first get_quantized of ancestors which is ``False`` or ``True`` will be returned.
+        - If :obj:`~musicscore.score.Score.get_quantized` is set to None it will be converted to ``False``
+        - :obj:`~musicscore.measure.Measure.finalize()` loops over all beats. If :obj:`~musicscore.beat.Beat.get_quantized` returns True
           :obj:`~musicscore.beat.Beat._quantize_quarter_durations()` is called.
 
         :type: Optional[bool]
         :rtype: bool
         """
-        if self._quantize is None:
+        if self._get_quantized is None:
             if self.up:
-                return self.up.quantize
+                return self.up.get_quantized
             else:
                 return False
-        return self._quantize
+        return self._get_quantized
 
-    @quantize.setter
-    def quantize(self, val):
-        self._quantize = val
+    @get_quantized.setter
+    def get_quantized(self, val):
+        self._get_quantized = val
 
     def get_possible_subdivisions(self, beat_quarter_duration: Optional[QuarterDuration] = None) -> List[int]:
         """
@@ -76,7 +76,7 @@ class QuantizeMixin:
     def set_possible_subdivisions(self, subdivisions: list[int],
                                   beat_quarter_duration: Optional[QuarterDuration] = None) -> None:
         """
-        :obj:`~musicscore.quantize.QuantizeMixin` method
+        :obj:`~musicscore.get_quantized.QuantizeMixin` method
 
         This method is used to set or change possible subdivisions dictionary of a beat or its ascendants.
 
