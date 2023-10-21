@@ -91,7 +91,7 @@ class TestQuantization(IdTestCase):
         assert [ch.quarter_duration for ch in p.get_chords()] == [0.2, 0.8, 3]
         b = p.get_measure(1).get_staff(1).get_voice(1).get_beat(1)
         b.set_possible_subdivisions(subdivisions=[2, 3, 4])
-        b._quantize_quarter_durations()
+        b.quantize_quarter_durations()
         assert [ch.quarter_duration for ch in p.get_measure(1).get_staff(1).get_voice(1).get_chords()] == [0.25, 0.75,
                                                                                                            3]
         assert [ch.offset for ch in p.get_measure(1).get_staff(1).get_voice(1).get_chords()] == [0, 0.25, 0]
@@ -111,7 +111,7 @@ class TestQuantization(IdTestCase):
             p.add_chord(Chord(midis=60, quarter_duration=qd))
         for beat in [b for m in p.get_children() for st in m.get_children() for v in st.get_children() for b in
                      v.get_children()]:
-            beat._quantize_quarter_durations()
+            beat.quantize_quarter_durations()
         # p.get_quantized = True
         for measure in p.get_children():
             v = measure.get_staff(1).get_voice(1)

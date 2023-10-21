@@ -417,7 +417,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._update_left_barline()
         for beat in self.get_beats():
             if beat.get_quantized:
-                beat._quantize_quarter_durations()
+                beat.quantize_quarter_durations()
             beat._split_not_writable_chords()
 
         self._update_divisions()

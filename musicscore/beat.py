@@ -17,7 +17,6 @@ from musicscore.util import lcm
 
 __all__ = ['SPLITTABLES', 'Beat', '_beam_chord_group']
 
-#: {offset : {chord.quarter_duration: split quarter_durations, ...}, ...}
 SPLITTABLES = {
     QuarterDuration(0): {
         QuarterDuration(5, 6): [QuarterDuration(3, 6), QuarterDuration(2, 6)],
@@ -417,21 +416,6 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     index = self.get_children().index(chord)
                     self._children = self.get_children()[:index] + split + self.get_children()[index + 1:]
 
-    def _quantize_quarter_durations(self):
-        """
-        When called the positioning of children will be quantized according to :obj:`musicscore.musictree.MusicTree.get_possible_subdivisions()`
-        This method is called by :obj:`~musicscore.measure.Measure`
-
-        """
-        if self.get_possible_subdivisions() and self.get_children():
-            if self._get_actual_notes(self.get_children()) in self.get_possible_subdivisions():
-                pass
-            else:
-                quarter_durations = [chord.quarter_duration for chord in self.get_children()]
-                if len([d for d in quarter_durations if d != 0]) > 1:
-                    self._change_children_quarter_durations(self._get_quantized_quarter_durations(quarter_durations))
-                    self._remove_zero_quarter_durations()
-
     @property
     def is_filled(self) -> bool:
         """
@@ -476,17 +460,17 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         """
         If child's quarter duration is less than beat's remaining quarter duration: child is added to the beat.
 
-        If child's quarter duration is greater than beat's remaining quarter duration: :obj:`~musicscore.chord.Chord.split_and_add_beatwise` is
-        called. It is possible to add a chord with a quarter duration exceeding the beat's quarter duration without splitting the chord.
+        If child's quarter duration is greater than beat's remaining quarter duration: :obj:`~musicscore.chord.Chord`'s :obj:`~musicscore.chord.Chord.split_and_add_beatwise` is
+        method called. It is possible to add a chord with a quarter duration exceeding the beat's quarter duration without splitting the chord.
         For example if the first beat in a 4/4 measure gets a chord with quarter duration 3, the chord will be added to this first beat as a
         child and the following two beats will be set to filled without having a child themselves and the parent
-        :obj:`~musicscore.voice.Voice` return the fourth beat if its :obj:`~musicscore.voice.Voice.get_current_beat` is called.
+        :obj:`~musicscore.voice.Voice` returns the fourth beat if its :obj:`~musicscore.voice.Voice.get_current_beat` is called.
 
-        If child's quarter duration exceeds the voice's remaining quarter duration a leftover chord will be added to the voice and can be
-        accessed when the next measure is created.
+        If child's quarter duration exceeds the :obj:`~musicscore.voice.Voice`'s remaining quarter duration a leftover :obj:`~musicscore.chord.Chord` will be added to the voice and can be
+        accessed when the next :obj:`~musicscore.measure.Measure` is created.
 
-        :param child: Chord to be added as child
-        :return: added chord or a list of split chords
+        :param child: :obj:`~musicscore.chord.Chord` to be added as child
+        :return: list of split chords
         """
         if self._finalized is True:
             raise AlreadyFinalizedError(self, 'add_child')
@@ -530,7 +514,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         finalize can only be called once.
 
         - It calls :obj:`~musicscore.chord.Chord.finalize()` method of all :obj:`~musicscore.chord.Chord` children.
-        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams, _quantize_quarter_durations (if get_quantized is
+        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams, quantize_quarter_durations (if get_quantized is
           True), _split_not_writable_chords
         """
         if self._finalized:
@@ -559,3 +543,18 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         :rtype: :obj:`~musicscore.voice.Voice`
         """
         return super().get_parent()
+
+    def quantize_quarter_durations(self):
+        """
+        When called the positioning of children will be quantized according to :obj:`~musicscore.quantize.QuantizeMixin.get_possible_subdivisions()`
+        This method is called by :obj:`~musicscore.measure.Measure`
+
+        """
+        if self.get_possible_subdivisions() and self.get_children():
+            if self._get_actual_notes(self.get_children()) in self.get_possible_subdivisions():
+                pass
+            else:
+                quarter_durations = [chord.quarter_duration for chord in self.get_children()]
+                if len([d for d in quarter_durations if d != 0]) > 1:
+                    self._change_children_quarter_durations(self._get_quantized_quarter_durations(quarter_durations))
+                    self._remove_zero_quarter_durations()

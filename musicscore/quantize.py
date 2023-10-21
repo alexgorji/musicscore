@@ -28,7 +28,7 @@ class QuantizeMixin:
         - If get_quantized is set to None the first get_quantized of ancestors which is ``False`` or ``True`` will be returned.
         - If :obj:`~musicscore.score.Score`.get_quantized is set to None it will be converted to ``False``
         - :obj:`~musicscore.measure.Measure`.finalize() loops over all beats. If :obj:`~musicscore.beat.Beat`.get_quantized returns True
-          :obj:`~musicscore.beat.Beat`._quantize_quarter_durations() is called.
+          :obj:`~musicscore.beat.Beat`.quantize_quarter_durations() is called.
 
         :type: Optional[bool]
         :rtype: bool
@@ -48,21 +48,21 @@ class QuantizeMixin:
         """
         :obj:`~musicscore.quantize.QuantizeMixin` method
 
-        This method is used by :obj:`~musicscore.beat.Beat`'s :obj:`~musicscore.beat.Beat._quantize_quarter_durations()`.
+        This method is used by :obj:`~musicscore.beat.Beat`'s :obj:`~musicscore.beat.Beat.quantize_quarter_durations()`.
 
-        Possible subdivisions dictionary can be set with :obj:`~musicscore.core.MusicTree.set_possible_subdivisions()`.
+        Possible subdivisions dictionary can be set with :obj:`~musicscore.quantize.QuantizeMixin.set_possible_subdivisions()`. Keys in the subdivisions dictionary correspond to beat quarter durations (e.g. 1, 1/2 etc.)
 
-        If it is not set or ``beat_quarter_duration`` as key does not exist, the parent's possible subdivisions dictionary will be checked.
+        If this dictionary is not set or ``beat_quarter_duration`` as key does not exist, the parent's possible subdivisions dictionary will be checked.
 
         :obj:`~musicscore.score.Score` has a default :obj:`~musicscore.score.POSSIBLE_SUBDIVISIONS` dictionary which will be used if no other
-        musicscore node on the path from self to root has its own possilbe subdivisions dictionary set with ``beat_quarter_duration`` as a
-        key. For setting possible subdivisions dictionary use always :obj:`~musicscore.core.MusicTree.set_possible_subdivisions()`.
+        musicscore node on the path from self to root has its own possible subdivisions dictionary with ``beat_quarter_duration`` as a
+        key. For setting possible subdivisions dictionary use always :obj:`~musicscore.quantize.QuantizeMixin.set_possible_subdivisions()`.
 
         :param beat_quarter_duration: Used as key in possible subdivisions dictionary.
                If ``None`` and self is a :obj:`~musicscore.beat.Beat` ``self.quarter_duration`` is used.
                If ``None`` and self is not a :obj:`~musicscore.beat.Beat` it is set to 1.
         :return: A list of possible subdivisions of a :obj:`~musicscore.beat.Beat`. This is used by beat's
-                 :obj:`~musicscore.beat.Beat._quantize_quarter_durations()`
+                 :obj:`~musicscore.beat.Beat.quantize_quarter_durations()`
         :rtype: List[int]
         """
         if beat_quarter_duration is None:
@@ -80,7 +80,7 @@ class QuantizeMixin:
 
         This method is used to set or change possible subdivisions dictionary of a beat or its ascendants.
 
-        :param subdivisions: list of possible subdivisions to be used in :obj:`musicscore.beat.Beat._quantize_quarter_durations()`
+        :param subdivisions: list of possible subdivisions to be used in :obj:`musicscore.beat.Beat.quantize_quarter_durations()`
         :param beat_quarter_duration: If ``None`` and self is a :obj:`~musicscore.beat.Beat` ``self.quarter_duration`` is used.
                                       If ``None`` and self is not a :obj:`~musicscore.beat.Beat` it is set to 1.
         :return: None

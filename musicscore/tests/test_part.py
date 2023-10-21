@@ -309,7 +309,7 @@ class TestScorePart(IdTestCase):
 
         for beat in [b for m in p.get_children() for st in m.get_children() for v in st.get_children() for b in
                      v.get_children()]:
-            beat._quantize_quarter_durations()
+            beat.quantize_quarter_durations()
             beat._split_not_writable_chords()
         expected = [QuarterDuration(3, 7), QuarterDuration(2, 7), QuarterDuration(2, 7), QuarterDuration(1, 1),
                     QuarterDuration(4, 5), QuarterDuration(1, 5), QuarterDuration(1, 1)]
