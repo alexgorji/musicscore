@@ -24,7 +24,7 @@ copyright = '2023, Alex Gorji'
 author = 'Alex Gorji'
 
 # The full version, including alpha/beta/rc tags
-release = '2.0beta5'
+release = '2.0beta'
 
 # -- General configuration ---------------------------------------------------
 
@@ -64,10 +64,10 @@ html_theme = 'sphinx_rtd_theme'
 
 autodoc_member_order = 'groupwise'
 
-# html_theme_options = {
-#     "collapse_navigation": True
-# }
-#
+html_theme_options = {
+    "collapse_navigation": True
+}
+
 # autodoc_typehints = "description"
 #
 todo_include_todos = True

@@ -6,3 +6,4 @@ Content
 
    usage
    api
+   examples

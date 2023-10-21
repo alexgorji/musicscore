@@ -16,6 +16,9 @@ __all__ = ['Id', 'ScorePart', 'Part']
 
 
 class Id:
+    """
+    This class uses the class attribute __refs__ of type list to keep track of all :obj:`~musicscore.part.Part` ids of one score to make sure they are unique.
+    """
     __refs__ = []
 
     def __init__(self, value):
@@ -61,7 +64,7 @@ class Id:
 
     def add_parent(self, obj: XMLWrapper) -> None:
         """
-        Gets object to Id as parent. Parents id gets updated.
+        Adds object to Id as parent. Parents id gets updated.
         """
         if obj.__class__ in [type(parent) for parent in self.get_parents()]:
             raise IdHasAlreadyParentOfSameTypeError()
@@ -96,11 +99,9 @@ class ScorePart(XMLWrapper):
     @property
     def part(self) -> 'Part':
         """
-        val type: :obj:~`Part`
-        obj:~`musicxml.xmlelement.xmlelement.XMLPartName`will be updated
-        :obj:~`musicscore.part.Id` is set or updated
+        Setting part property updates its :obj:`~musicxml.xmlelement.xmlelement.XMLPartName` and sets or updates its :obj:`~musicscore.part.Id`
 
-        :return: :obj:~`Part`
+        :return: :obj:`~Part`
         """
         return self._part
 
@@ -244,7 +245,7 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         - If a leftover chord remains after adding chord, it is added to voice's :obj:`~musicscore.voice.Voice.leftover_chord` and is
           added to so many next measures as needed.
 
-        :param chord: obj:`~musicscore.chord.Chord` required
+        :param chord: :obj:`~musicscore.chord.Chord` required
         :param staff_number: positive int, None. If None is set to 1.
         :param voice_number: positive_int
         :return: None
@@ -284,13 +285,13 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     def add_measure(self, time: Optional[Union[Time, List, Tuple]] = None, number: Optional[int] = None) -> Measure:
         """
         - Creates and adds a :obj:`~musicscore.measure.Measure` to part.
-        - If time is not given last measure's :obj:`~musicscore.time.Time` is copied. Its :obj:`~musicscore.time.Time.show` to
+        - If time is not given last measure's :obj:`~musicscore.time.Time` is copied. Its :obj:`~musicscore.time.Time.show` property is set to
           ``False``
         - If number is not given last measure's number is incremented.
         - New measure's :obj:`~musicscore.key.Key` is a copy of last measure's :obj:`~musicscore.key.Key`. Its
-          :obj:`~musicscore.key.Key.show` is set to ``False``
+          :obj:`~musicscore.key.Key.show` property is set to ``False``
 
-        :param time: Time, (numerator, denominator), None
+        :param time: :obj:`~musicscore.time.Time`, (numerator, denominator), None
         :param number: positive int, None
         :return: created and added :obj:`~musicscore.measure.Measure`
         """

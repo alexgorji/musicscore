@@ -1,7 +1,7 @@
-import math
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+import math
 import xmltodict
 
 from musicscore import Time, SimpleFormat, BassClef, TrebleClef
@@ -12,11 +12,12 @@ from musicscore.measure import Measure
 from musicscore.part import Part, ScorePart, Id
 from musicscore.quarterduration import QuarterDuration
 from musicscore.score import Score
-from musicscore.tests.util import IdTestCase, get_xml_elements_diff, XMLsDifferException, get_xml_diff_part, \
+from musicscore.tests.test_metronome import TestCase
+from musicscore.tests.util import get_xml_elements_diff, XMLsDifferException, get_xml_diff_part, \
     generate_xml_file
 
 
-class TestId(IdTestCase):
+class TestId(TestCase):
 
     def test_id_refs(self):
         id1 = Id('p1')
@@ -59,7 +60,7 @@ class TestId(IdTestCase):
         assert p.xml_object.id == p.score_part.xml_object.id == 'p3'
 
 
-class TestPart(IdTestCase):
+class TestPart(TestCase):
     def test_part_init(self):
         p = Part(id='p1')
         p.add_child(Measure(1))
@@ -234,7 +235,7 @@ class TestPart(IdTestCase):
         assert p.get_current_measure(staff_number=1, voice_number=1) == m1
 
 
-class TestScorePart(IdTestCase):
+class TestScorePart(TestCase):
 
     def test_score_part_name(self):
         p = Part(id='p1')
@@ -334,7 +335,7 @@ class TestScorePart(IdTestCase):
         assert [ch.offset for ch in p.get_chords()] == [0, 0, 0, 0.5]
 
 
-class TestAddChordToPart(IdTestCase):
+class TestAddChordToPart(TestCase):
     def setUp(self):
         self.score = Score()
         super().setUp()
@@ -500,7 +501,7 @@ class TestAddChordToPart(IdTestCase):
         get_xml_diff_part(expected, path, Path(__file__))
 
 
-class TestSplitQdAndTime(IdTestCase):
+class TestSplitQdAndTime(TestCase):
     def test_part_add_split_original_ties_1(self):
         chord = Chord(midis=60, quarter_duration=10)
         p = Part('p1')

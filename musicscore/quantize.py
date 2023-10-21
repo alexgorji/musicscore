@@ -51,7 +51,7 @@ class QuantizeMixin:
         This method is used by :obj:`~musicscore.beat.Beat`'s :obj:`~musicscore.beat.Beat.quantize_quarter_durations()`.
 
         Possible subdivisions dictionary can be set with :obj:`~musicscore.quantize.QuantizeMixin.set_possible_subdivisions()`. Keys in the subdivisions dictionary correspond to beat quarter durations (e.g. 1, 1/2 etc.)
-
+        For example if get_possible_subdivisions()[1] ==  [3, 5, 8] a beat with a quarter duration of 1 can after quantization consists only of eighth triplets, quintuplets and 32ths.
         If this dictionary is not set or ``beat_quarter_duration`` as key does not exist, the parent's possible subdivisions dictionary will be checked.
 
         :obj:`~musicscore.score.Score` has a default :obj:`~musicscore.score.POSSIBLE_SUBDIVISIONS` dictionary which will be used if no other
@@ -79,6 +79,7 @@ class QuantizeMixin:
         :obj:`~musicscore.quantize.QuantizeMixin` method
 
         This method is used to set or change possible subdivisions dictionary of a beat or its ascendants.
+        For example if get_possible_subdivisions()[1] ==  [3, 5, 8] a beat with a quarter duration of 1 can after quantization consists only of eighth triplets, quintuplets and 32ths.
 
         :param subdivisions: list of possible subdivisions to be used in :obj:`musicscore.beat.Beat.quantize_quarter_durations()`
         :param beat_quarter_duration: If ``None`` and self is a :obj:`~musicscore.beat.Beat` ``self.quarter_duration`` is used.
