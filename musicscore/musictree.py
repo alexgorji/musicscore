@@ -1,6 +1,6 @@
-from typing import Optional, List
+from typing import List
 
-from musicscore.quarterduration import QuarterDuration
+from musicscore.exceptions import MusicTreeTypeError
 from musicscore.util import isinstance_as_string
 from tree.tree import Tree
 
@@ -63,7 +63,7 @@ class MusicTree(Tree):
 
     def _check_child_to_be_added(self, child):
         if not isinstance_as_string(child, 'MusicTree'):
-            raise TypeError(f'MusicTree child must be of type MusicTree not {child.__class__}')
+            raise MusicTreeTypeError(f'MusicTree child must be of type MusicTree not {child.__class__}')
 
         parent_child = {'Score': 'Part', 'Part': 'Measure', 'Measure': 'Staff', 'Staff': 'Voice', 'Voice': 'Beat',
                         'Beat': 'Chord', 'GraceChord': 'Note', 'Rest': 'Note',
@@ -73,7 +73,7 @@ class MusicTree(Tree):
 
         try:
             if not isinstance_as_string(child, parent_child[self.__class__.__name__]):
-                raise TypeError(
+                raise MusicTreeTypeError(
                     f'{self.__class__.__name__} accepts only children of type {parent_child[self.__class__.__name__]} not '
                     f'{child.__class__.__name__}')
         except KeyError:
@@ -95,7 +95,7 @@ class MusicTree(Tree):
         elif isinstance_as_string(self, 'Chord'):
             return self._check_args_kwargs(args_, kwargs_, 'Chord', get_class_name)
         else:
-            raise TypeError
+            raise MusicTreeTypeError(f'MusicTree descendents of type {self.__class__} cannot use this method.')
 
     def _get_music_tree_descendent(self, args, kwargs, get_class_name):
         kwargs = self._get_kwargs(args, kwargs, get_class_name)
@@ -192,7 +192,7 @@ class MusicTree(Tree):
             if not output:
                 for cls_name in ['Beat', 'Chord', 'Note', 'Midi', 'Accidental']:
                     if isinstance_as_string(self, cls_name):
-                        raise TypeError
+                        raise MusicTreeTypeError(f'MusicTree descendents of type {self.__class__} cannot use this method.')
             return output
 
     def get_chords(self) -> List['Chord']:
@@ -212,7 +212,7 @@ class MusicTree(Tree):
             if not output:
                 for cls_name in ['Chord', 'Note', 'Midi', 'Accidental']:
                     if isinstance_as_string(self, cls_name):
-                        raise TypeError
+                        raise MusicTreeTypeError(f'MusicTree descendents of type {self.__class__} cannot use this method.')
             return output
 
     def get_measure(self, *args, **kwargs) -> 'Measure':

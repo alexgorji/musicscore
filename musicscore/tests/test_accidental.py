@@ -1,5 +1,6 @@
 from unittest import TestCase
 
+from musicscore.exceptions import MusicTreeTypeError
 from musicscore.midi import Midi
 from musicscore.accidental import Accidental
 
@@ -119,3 +120,22 @@ class TestAccidental(TestCase):
     def test_get_leaves(self):
         a = Accidental()
         assert a.get_leaves() == []
+
+    def test_not_implemented_inherited_methods(self):
+        a = Accidental()
+        with self.assertRaises(MusicTreeTypeError):
+            a.get_chord()
+        with self.assertRaises(MusicTreeTypeError):
+            a.get_beat()
+        with self.assertRaises(MusicTreeTypeError):
+            a.get_voice()
+        with self.assertRaises(MusicTreeTypeError):
+            a.get_staff()
+        with self.assertRaises(MusicTreeTypeError):
+            a.get_measure()
+        with self.assertRaises(MusicTreeTypeError):
+            a.get_part()
+        with self.assertRaises(MusicTreeTypeError):
+            a.get_beats()
+        with self.assertRaises(MusicTreeTypeError):
+            a.get_chords()

@@ -2,6 +2,10 @@ class MusicTreeException(Exception):
     pass
 
 
+class MusicTreeTypeError(MusicTreeException, TypeError):
+    pass
+
+
 class AddChordError(MusicTreeException):
     def __init__(self):
         msg = f"Use Part.add_chord() instead!"

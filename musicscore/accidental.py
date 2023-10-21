@@ -229,21 +229,10 @@ class Accidental(MusicTree, XMLWrapper):
     @property
     def mode(self):
         """
-        permitted modes: ``standard``, ``flat``, ``sharp``, ``enharmonic_1``, ``enharmonic_2``
+        permitted modes: ``standard``, ``flat``, ``sharp``, ``enharmonic``, ``force-sharp``, ``force-flat``
 
         :return: accidental mode which corresponds to global variables :obj:`~musicscore.accidental.STANDARD`, :obj:`~musicscore.accidental.FLAT`, :obj:`~musicscore.accidental.SHARP`,
-                 :obj:`~musicscore.accidental.ENHARMONIC_1`, :obj:`~musicscore.accidental.ENHARMONIC_2`
-
-        >>> Accidental(mode='standard').get_pitch_parameters(midi_value=61) # C4# (step='C', alter='1', octave='4')
-        ('C', 1, 4)
-        >>> Accidental(mode='flat').get_pitch_parameters(midi_value=61) # D4b
-        ('D', -1, 4)
-        >>> Accidental(mode='sharp').get_pitch_parameters(midi_value=61) # C4#
-        ('C', 1, 4)
-        >>> Accidental(mode='enharmonic_1').get_pitch_parameters(midi_value=61) # D4b
-        ('D', -1, 4)
-        >>> Accidental(mode='enharmonic_2').get_pitch_parameters(midi_value=61) # B3#
-        ('B', 2, 3)
+                 :obj:`~musicscore.accidental.ENHARMONIC`, :obj:`~musicscore.accidental.FORCESHARP`, :obj:`~musicscore.accidental.FORCEFLAT`
         """
         return self._mode
 
