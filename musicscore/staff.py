@@ -76,7 +76,7 @@ class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         - Adds a :obj:`~musicscore.voice.Voice` as child to staff.
         - If voice number is ``None``, it is determined as length of children + 1.
         - If voice number is already set an is not equal to length of children + 1. a ``ValueError`` is raised.
-        - If Staff has no parent :obj:`~musicscore.measure.Measure` ``StaffHasNoParentError`` is raised.
+        - If Staff has no parent :obj:`~musicscore.measure.Measure` a :obj:`~musicscore.exceptions.StaffHasNoParentError` is raised.
         - After adding voice its :obj:`~musicscore.voice.Voice.update_beats()` is called.
 
         :param child: :obj:`~musicscore.voice.Voice` , required
@@ -153,8 +153,8 @@ class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     def get_last_pitch_steps_with_accidentals(self) -> Set[str]:
         """
-        :return: a set of pitch steps with not natural accidental. This method is used to take track of accidental signs which needs to
-                 be shown hidden
+        :return: A set of pitch steps with not natural accidental. This method is used to keep track of accidental signs which needs to
+                 be shown hidden.
         :rtype:  Set[str]
         """
         output = set()
