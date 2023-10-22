@@ -304,8 +304,8 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     def add_child(self, child: Staff) -> Staff:
         """
-        - Adds a :obj:`~musicscore.staff.Staff` as child to measure.
-        - If staff number is ``None``, it is determined as length of children + 1.
+        - Adds a :obj:`~musicscore.staff.Staff` as a child to measure.
+        - If staff number is ``None``, it will determined as length of children + 1.
         - If staff number is already set an is not equal to length of children + 1 a ``ValueError`` is raised.
         - If staff is the first child default clefs are set.
         - :obj:`~musicscore.clef.Clef`'s numbers are updated.
@@ -381,7 +381,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             return new_staff
         return staff_object
 
-    def add_voice(self, *, staff_number=None, voice_number=1):
+    def add_voice(self, *, staff_number=None, voice_number=1) -> Voice:
         """
         - Creates and adds a new :obj:`~musicscore.voice.Voice` object as child to the given :obj:`~musicscore.staff.Staff` if it already
           does not exist.
@@ -405,8 +405,9 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         """
         finalize can only be called once.
 
-        - It calls finalize()` method of all children.
-        - Following updates are triggered: _update_divisions, update_accidentals, update_xml_backups_notes_directions
+        - It calls finalize() method of all children.
+        - Following updates are triggered: _update_attributes, _update_divisions, _update_left_barline, _update_accidentals, update_xml_backups_notes_directions, _update_right_barline
+        - All beats with the property get_quantized set to True will get quantized.
 
         """
 
@@ -415,6 +416,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
         self._update_attributes()
         self._update_left_barline()
+        # self.quantize
         for beat in self.get_beats():
             if beat.get_quantized:
                 beat.quantize_quarter_durations()
