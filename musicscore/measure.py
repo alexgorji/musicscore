@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from math import trunc
 
@@ -260,6 +260,9 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     @property
     def new_system(self) -> bool:
+        """
+        If ``True``: ``new_system`` attribute of self.xml_object's child :obj:`~musicxml.xmlelement.xmlelement.XMLPrint` will be set to ``yes``
+        """
         return self._new_system
 
     @new_system.setter
@@ -293,7 +296,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     @property
     def quarter_duration(self) -> 'QuarterDuration':
         """
-        :return: sum of quarter durations defined via :obj:`time`s method :obj:`~musicscore.time.Time.get_beats_quarter_durations()`
+        :return: sum of quarter durations defined via property :obj:`time`'s method :obj:`~musicscore.time.Time.get_beats_quarter_durations()`
         :rtype: :obj:`~musicscore.quarterduration.QuarterDuration`
         """
         return sum(self.time.get_beats_quarter_durations())
@@ -340,33 +343,12 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     def add_chord(self, *args, **kwargs):
         raise AddChordError
 
-    def set_repeat_ending(self, number, type, **kwargs):
-        if type == 'start':
-            location = 'left'
-        else:
-            location = 'right'
-        if not self.get_barline(location=location):
-            self.set_barline(location=location)
-        self.get_barline(location=location).add_child(XMLEnding(number=str(number), type=type, **kwargs))
-
-    def set_repeat_barline(self, location='right', **kwargs):
-        if location == 'right':
-            direction = 'backward'
-        else:
-            direction = 'forward'
-        if not self.get_barline(location=location):
-            self.set_barline(location=location)
-        bl = self.get_barline(location=location)
-        bl.xml_bar_style = 'light-heavy'
-        bl.xml_repeat = XMLRepeat(direction=direction, **kwargs)
-        return bl
-
     def add_staff(self, staff_number: Optional[int] = None) -> 'Staff':
         """
         - Creates and adds a new :obj:`~musicscore.staff.Staff` object as child to measure if it already does not exist.
         - If staff number is greater than length of children + 1 all missing staves are created and added first.
 
-        :param staff_number: positive int or None. If ``None`` staff number it is determined as length of children + 1.
+        :param staff_number: ``positive int`` or ``None``. If ``None`` staff number it is determined as length of children + 1.
         :return: new :obj:`~musicscore.staff.Staff`
         """
         if self._finalized is True:
@@ -381,20 +363,24 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             return new_staff
         return staff_object
 
-    def add_voice(self, *, staff_number=None, voice_number=1) -> Voice:
+    def add_voice(self, *, staff_number: Optional[int] = None, voice_number: Optional[int] = None) -> Voice:
         """
         - Creates and adds a new :obj:`~musicscore.voice.Voice` object as child to the given :obj:`~musicscore.staff.Staff` if it already
           does not exist.
         - :obj:`add_staff()` is called to get or create the given staff.
         - :obj:`musicscore.staff.Staff.add_voice()` is called to add voice to staff.
 
-        :param staff_number: positive int or None. If ``None`` staff number it is set to 1.
+        :param staff_number: ``positive int`` or ``None``. If ``None`` staff number it is set to 1.
+        :param voice_number: ``positive int`` or ``None``. If ``None`` voice_numberit is set to 1.
+
         :return: new :obj:`~musicscore.voice.Voice`
         """
         if self._finalized is True:
             raise AlreadyFinalizedError(self, 'add_voice')
         if staff_number is None:
             staff_number = 1
+        if voice_number is None:
+            voice_number = 1
         voice_object = self.get_voice(staff_number=staff_number, voice_number=voice_number)
         if voice_object is None:
             staff_object = self.add_staff(staff_number=staff_number)
@@ -405,7 +391,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         """
         finalize can only be called once.
 
-        - It calls finalize() method of all children.
+        - It calls the finalize() method of all children.
         - Following updates are triggered: _update_attributes, _update_divisions, _update_left_barline, _update_accidentals, update_xml_backups_notes_directions, _update_right_barline
         - All beats with the property get_quantized set to True will get quantized.
 
@@ -433,7 +419,11 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._update_right_barline()
         self._finalized = True
 
-    def get_barline(self, location='right'):
+    def get_barline(self, location: str = 'right') -> Optional['XMLBarline']:
+        """
+        :param location: 'left' or 'right' barline position.
+        :return: None or :obj:`~musicxml.xmlelement.xmlelement.XMLBarline`
+        """
         try:
             return self._barlines[location]
         except KeyError:
@@ -446,7 +436,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         """
         return super().get_children()
 
-    def get_divisions(self):
+    def get_divisions(self) -> 'musicxml.xsd.xsdsimpletype.XSDSimpleTypeInteger':
         """
         :return: ``value_`` of existing :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions`
         """
@@ -464,15 +454,59 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         super().remove(child)
         self.clefs.pop(number - 1)
 
-    def set_barline(self, location='right', style=None, **kwargs):
+    def set_barline(self, location: str = 'right', style: Optional[str] = None, **kwargs) -> 'XMLBarline':
+        """
+        :param location: 'left' or 'right' barline position.
+        :param style: 'regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy', 'heavy-light', 'heavy-heavy', 'tick', 'short', 'none'
+        :return: created :obj:`~musicxml.xmlelement.xmlelement.XMLBarline`
+        """
         bl = XMLBarline(location=location, **kwargs)
         if style:
             bl.xml_bar_style = style
         self._barlines[location] = bl
+        return bl
+
+    def set_repeat_barline(self, location: str = 'right', **kwargs) -> 'XMLBarline':
+        """
+        If barline does not exist a :obj:`~musicxml.xmlelement.xmlelement.XMLBarline` will be added to location. Than a :obj:`~musicxml.xmlelement.xmlelement.XMLRepeat` will be added to it as child.
+
+        :param location: ``left`` or ``right`` barline position. If ``left`` :obj:`~musicxml.xmlelement.xmlelement.XMLBarline`'s ``direction`` is set to ``forward`` otherwise to ``backward``
+        :param kwargs: passed on to :obj:`~musicxml.xmlelement.xmlelement.XMLRepeat`
+        :return: created or existing :obj:`~musicxml.xmlelement.xmlelement.XMLBarline`
+        """
+        if location == 'right':
+            direction = 'backward'
+        else:
+            direction = 'forward'
+        if not self.get_barline(location=location):
+            self.set_barline(location=location)
+        bl = self.get_barline(location=location)
+        bl.xml_bar_style = 'light-heavy'
+        bl.xml_repeat = XMLRepeat(direction=direction, **kwargs)
+        return bl
+
+    def set_repeat_ending(self, number: Union[str, int], type: str, **kwargs) -> 'XMLEnding':
+        """
+        If ``type`` == ``start`` location is set to ``left`` otherwise to ``right``.
+        If barline does not exist a :obj:`~musicxml.xmlelement.xmlelement.XMLBarline` will be added to location. Than a :obj:`~musicxml.xmlelement.xmlelement.XMLEnding` will be added to it as child.
+
+        :param number: :obj:`~musicxml.xmlelement.xmlelement.XMLEnding`'s number
+        :param kwargs: passed on to :obj:`~musicxml.xmlelement.xmlelement.XMLEnding`
+        :return: :obj:`~musicxml.xmlelement.xmlelement.XMLEnding`
+        """
+        if type == 'start':
+            location = 'left'
+        else:
+            location = 'right'
+        if not self.get_barline(location=location):
+            self.set_barline(location=location)
+        ending = XMLEnding(number=str(number), type=type, **kwargs)
+        self.get_barline(location=location).add_child(ending)
+        return ending
 
     def update_chord_accidentals(self) -> None:
         """
-        Updates :obj:`~musicscore.accidental.Accidental.show` attribute of descendent midis' accidentals.
+        Updates :obj:`musicscore.accidental.Accidental.show` attribute of descendent :obj:`~musicscore.midi.Midi`\s' accidentals.
 
         :return: None
         """

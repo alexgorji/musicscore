@@ -23,7 +23,8 @@ class MusicTree(Tree):
         - :obj:`~musicscore.accidental.Accidental` (9th layer)
     """
     _ATTRIBUTES = {'show_accidental_signs'}
-    default_show_accidental_signs = 'modern'
+
+    default_show_accidental_signs = 'modern'  #: Class attribute of :obj:`~musicscore.musictree.MusicTree`
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
