@@ -263,10 +263,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         else:
             self.xml_object.xml_duration = None
 
-    @XMLWrapper.xml_object.getter
-    def xml_object(self) -> XMLClass:
-        return super().xml_object
-
     def get_children(self) -> List[Midi]:
         """
         :return: list of added children.

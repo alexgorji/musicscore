@@ -301,10 +301,6 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         """
         return sum(self.time.get_beats_quarter_durations())
 
-    @XMLWrapper.xml_object.getter
-    def xml_object(self) -> XMLClass:
-        return super().xml_object
-
     def add_child(self, child: Staff) -> Staff:
         """
         - Adds a :obj:`~musicscore.staff.Staff` as a child to measure.

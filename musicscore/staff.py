@@ -5,7 +5,7 @@ from musicscore.quantize import QuantizeMixin
 from musicxml.xmlelement.xmlelement import XMLStaff
 
 from musicscore.clef import Clef
-from musicscore.exceptions import StaffHasNoParentError, AlreadyFinalizedError
+from musicscore.exceptions import StaffHasNoParentError, AlreadyFinalizedError, AddChordError
 from musicscore.musictree import MusicTree
 from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
@@ -67,10 +67,6 @@ class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         else:
             self.xml_object.value_ = val
 
-    @XMLWrapper.xml_object.getter
-    def xml_object(self) -> XMLClass:
-        return super().xml_object
-
     def add_child(self, child: Voice) -> Voice:
         """
         - Adds a :obj:`~musicscore.voice.Voice` as child to staff.
@@ -100,6 +96,9 @@ class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._children.append(child)
 
         return child
+
+    def add_chord(self, *args, **kwargs):
+        raise AddChordError()
 
     def add_voice(self, voice_number: Optional[int] = None) -> Voice:
         """

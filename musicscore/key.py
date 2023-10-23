@@ -46,9 +46,5 @@ class Key(XMLWrapper):
             raise TypeError
         self._show = val
 
-    @XMLWrapper.xml_object.getter
-    def xml_object(self) -> XMLClass:
-        return super().xml_object
-
     def __copy__(self):
         return self.__class__(fifths=self.fifths, show=self.show)

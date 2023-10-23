@@ -216,10 +216,6 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         """
         return self._score_part
 
-    @XMLWrapper.xml_object.getter
-    def xml_object(self) -> XMLClass:
-        return super().xml_object
-
     def add_child(self, child: Measure) -> Measure:
         """
         Check and add child to list of children. Child's parent is set to self.

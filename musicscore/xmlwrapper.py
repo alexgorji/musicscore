@@ -8,14 +8,23 @@ class XMLWrapper:
     XMLClass = None
 
     @property
-    def xml_object(self) -> 'XMLELement':
+    def xml_object(self) -> 'self.XMLClass':
         """
-        :return: wrapped musicxml element of type :obj:`XMLClass`
+        :obj:`~musicscore.xmlwrapper.XMLWrapper` method
+
+        This musicscore class has an equivalent ``MusicXML`` class which can be reached via this property.
+
+        If an attribute is not found directly in the main class, it wll be passed on to ``__get_attribute__`` or ``__set__attribute__`` methods of ``self.xml_object``.
+        It can also use the short cut attributes of :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to get or set the first child.
+
+        :return: wrapped MusicXML element of type :obj:`self.XMLClass`
         """
         return self._xml_object
 
     def to_string(self, *args, **kwargs) -> str:
         """
+        :obj:`~musicscore.xmlwrapper.XMLWrapper` method
+
         Calls :obj:`~musicxml.xmlelement.xmlelement.XMLElement.to_string` method of self.xml_object
 
         :return: musicxml snippet

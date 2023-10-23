@@ -81,10 +81,6 @@ class Clef(XMLWrapper):
             raise TypeError
         self._show = val
 
-    @XMLWrapper.xml_object.getter
-    def xml_object(self) -> XMLClass:
-        return super().xml_object
-
     def __copy__(self):
         new_clef = self.__class__()
         new_clef.sign = self.sign

@@ -158,10 +158,6 @@ class Time(XMLWrapper):
             raise TypeError
         self._show = val
 
-    @XMLWrapper.xml_object.getter
-    def xml_object(self) -> XMLClass:
-        return super().xml_object
-
     def get_beats_quarter_durations(self) -> List[QuarterDuration]:
         """
         :return: List of quarter durations according to :obj:`actual_signatures`

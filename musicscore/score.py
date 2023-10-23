@@ -261,10 +261,6 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._version = str(val)
         self.xml_object.version = self.version
 
-    @XMLWrapper.xml_object.getter
-    def xml_object(self) -> XMLClass:
-        return super().xml_object
-
     def add_child(self, child: 'Part') -> 'Part':
         """
         - Check and add child to list of children. Child's parent is set to self.

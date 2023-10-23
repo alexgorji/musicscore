@@ -219,6 +219,12 @@ class Accidental(MusicTree, XMLWrapper):
 
     @XMLWrapper.xml_object.getter
     def xml_object(self) -> Optional[XMLClass]:
+        """
+        If an attribute is not found directly in a :obj:`~musicscore.musictree.MusicTree` class which inherits this class, it wll be passed on to ``__get_attribute__`` and ``__set__attribute__`` methods of ``xml_object``.
+        It can also use the short cut attributes of :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to get or set the first child.
+
+        :return: wrapped MusicXML element of type :obj:`XMLClass`
+        """
         if self.parent_midi and self.parent_midi.value == 0:
             return None
         if self.show is True:

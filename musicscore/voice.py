@@ -74,8 +74,8 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     @property
     def number(self) -> Optional[int]:
         """
-        :type: None or int. If None number is set to 1.
-        :return: positive int or None
+        :type: ``None`` or ``int``. If ``None`` number is set to 1.
+        :return: ``positive int`` or ``None``
         """
         if self._number is None:
             return None
@@ -90,10 +90,6 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             self.xml_object.value_ = str(val)
         else:
             self.xml_object.value_ = '1'
-
-    @XMLWrapper.xml_object.getter
-    def xml_object(self) -> XMLClass:
-        return super().xml_object
 
     def add_beat(self, beat_quarter_duration: Optional[Union['QuarterDuration', 'Fraction', int, float]] = 1) -> Beat:
         """
@@ -139,18 +135,11 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         """
         return super().get_parent()
 
-    def get_current_beat_index(self) -> int:
-        """
-        :return: First not filled child :obj:`~musicscore.beat.Beat`
-        """
-        if not self.get_children():
-            raise ValueError('Voice has no beats.')
-        else:
-            if not self._current_beat_index:
-                self._current_beat_index = 0
-        return self._current_beat_index
-
     def get_current_beat(self) -> 'Beat':
+        """
+        :return: First not completely filled child of type :obj:`~musicscore.beat.Beat`
+        :exception: :obj:`~musicscore.exceptions.VoiceIsFullError` is raised if all beats are already filled.
+        """
         try:
             current_beat = self.get_children()[self.get_current_beat_index()]
         except IndexError:
@@ -159,6 +148,17 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             self._current_beat_index += 1
             return self.get_current_beat()
         return current_beat
+
+    def get_current_beat_index(self) -> int:
+        """
+        :return: Index of first not completely filled child of type :obj:`~musicscore.beat.Beat`
+        """
+        if not self.get_children():
+            raise ValueError('Voice has no beats.')
+        else:
+            if not self._current_beat_index:
+                self._current_beat_index = 0
+        return self._current_beat_index
 
     def update_beats(self, *quarter_durations) -> Optional[List[Beat]]:
         """
