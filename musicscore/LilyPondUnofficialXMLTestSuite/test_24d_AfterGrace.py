@@ -14,10 +14,10 @@ class TestLily24d(IdTestCase):
 
         chords = [Chord(E(5), 2), Chord(E(5), 2)]
         for midi in [G(5), A(5), A(5)]:
-            chords[0].add_grace_chord(midi, type_='16th', position='after')
+            chords[0].add_grace_chord(midi, type='16th', position='after')
 
-        chords[1].add_grace_chord(G(5), type_='16th', position='after')
-        chords[1].add_grace_chord(A(5), type_='16th', position='after')
+        chords[1].add_grace_chord(G(5), type='16th', position='after')
+        chords[1].add_grace_chord(A(5), type='16th', position='after')
 
         for ch in chords:
             part.add_chord(ch)

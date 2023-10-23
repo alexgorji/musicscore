@@ -32,6 +32,7 @@ def untie(*notes):
 class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     """
     Parent type: :obj:`~musicscore.chord.Chord`
+
     Child type: :obj:`~musicscore.midi.Midi`
     """
 
@@ -303,9 +304,9 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         """
         return self.get_parent_chord().get_voice_number()
 
-    def remove_tie(self, type_: Optional[str] = None) -> None:
+    def remove_tie(self, type: Optional[str] = None) -> None:
         """
-        :param type_: 'start', 'stop', None: if None and note has :obj:`~musicxml.xmlelement.xmlelement.XMLTie` objects with both types
+        :param type: 'start', 'stop', None: if None and note has :obj:`~musicxml.xmlelement.xmlelement.XMLTie` objects with both types
                       ValueError is raised.
         :return: None
         """
@@ -314,16 +315,16 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         if len(ties) == 0:
             pass
         elif len(ties) == 1:
-            if type_ is None:
+            if type is None:
                 tie_to_be_removed = ties[0]
             else:
-                tie_to_be_removed = ties[0] if ties[0].type == type_ else None
+                tie_to_be_removed = ties[0] if ties[0].type == type else None
         elif len(ties) == 2:
-            if type_ is None:
+            if type is None:
                 raise ValueError(
-                    'Note has stop and start ties. Specify type_=start or type_=stop to decide which one should be removed')
+                    'Note has stop and start ties. Specify type=start or type=stop to decide which one should be removed')
             else:
-                tie_to_be_removed = [t for t in ties if t.type == type_]
+                tie_to_be_removed = [t for t in ties if t.type == type]
                 tie_to_be_removed = None if not tie_to_be_removed else tie_to_be_removed[0]
         else:
             raise NotImplementedError

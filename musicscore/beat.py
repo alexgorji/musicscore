@@ -193,6 +193,7 @@ def _beam_chord_group(chord_group: List['Chord']) -> None:
 class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
     """
     Parent type: :obj:`~musicscore.voice.Voice`
+
     Child type: :obj:`~musicscore.chord.Chord`
 
     Beat is the direct ancestor of chords. Each :obj:`~musicscore.chord.Chord` is placed with an offset between 0 and beat's

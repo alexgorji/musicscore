@@ -746,24 +746,24 @@ class TestAddGraceChord(ChordTestCase):
         assert [m.value for m in gch.midis] == [62, 63]
         g4 = gch = ch.add_grace_chord(64)
         assert gch.midis[0].value == 64
-        g5 = gch = ch.add_grace_chord(midis_or_grace_chord=65, type_='16th')
+        g5 = gch = ch.add_grace_chord(midis_or_grace_chord=65, type='16th')
         assert gch.midis[0].value == 65
-        assert gch.type_.value_ == '16th'
-        in_gch = GraceChord(61, type_='16th')
+        assert gch.type.value_ == '16th'
+        in_gch = GraceChord(61, type='16th')
         g6 = gch = ch.add_grace_chord(midis_or_grace_chord=in_gch)
         assert gch == in_gch
-        assert gch.type_.value_ == '16th'
+        assert gch.type.value_ == '16th'
         with self.assertRaises(ValueError):
-            ch.add_grace_chord(midis_or_grace_chord=GraceChord(66, type_='quarter'), type_='16th')
-        g7 = gch = ch.add_grace_chord(67, type_='16th')
+            ch.add_grace_chord(midis_or_grace_chord=GraceChord(66, type='quarter'), type='16th')
+        g7 = gch = ch.add_grace_chord(67, type='16th')
         assert gch.midis[0].value == 67
-        assert gch.type_.value_ == '16th'
-        g8 = gch = ch.add_grace_chord(68, type_='16th', position='after')
+        assert gch.type.value_ == '16th'
+        g8 = gch = ch.add_grace_chord(68, type='16th', position='after')
         assert gch.position == 'after'
         assert gch.midis[0].value == 68
-        assert gch.type_.value_ == '16th'
+        assert gch.type.value_ == '16th'
         with self.assertRaises(ValueError):
-            ch.add_grace_chord(GraceChord(66, type_='quarter'), position='after')
+            ch.add_grace_chord(GraceChord(66, type='quarter'), position='after')
         assert ch.get_grace_chords(position='before') == [g1, g2, g3, g4, g5, g6, g7]
         assert ch.get_grace_chords(position='after') == [g8]
 
@@ -784,12 +784,12 @@ class TestAddGraceChord(ChordTestCase):
         with self.assertRaises(TypeError):
             ch.add_grace_chord()
         gc1 = ch.add_grace_chord(60)
-        gc2 = ch.add_grace_chord(61, type_='quarter')
+        gc2 = ch.add_grace_chord(61, type='quarter')
         gc3 = ch.add_grace_chord(GraceChord(midis=[62, 64]))
-        gc4 = ch.add_grace_chord(GraceChord(63, type_='16th'))
+        gc4 = ch.add_grace_chord(GraceChord(63, type='16th'))
         all_gcs = [gc1, gc2, gc3, gc4]
         assert [[m.value for m in gc.midis] for gc in all_gcs] == [[60], [61], [62, 64], [63]]
-        assert [gc.type_.value_ if gc.type_ else None for gc in all_gcs] == [None, 'quarter', None, '16th']
+        assert [gc.type.value_ if gc.type else None for gc in all_gcs] == [None, 'quarter', None, '16th']
 
     def test_add_grace_chord_finalize(self):
         part = Part('p1')
@@ -852,12 +852,12 @@ class TestAddX(ChordTestCase):
         ch.add_x(XML_DIRECTION_TYPE_CLASSES[0]())
 
     def test_add_x_placement(self):
-        def add_type_and_placement(type_, xml_object=None):
-            above_part = Part(f"above-{type_}-{xml_object.name}") if xml_object else Part(f"above-{type_}")
-            below_part = Part(f"below-{type_}-{xml_object.name}") if xml_object else Part(f"below-{type_}")
+        def add_type_and_placement(type, xml_object=None):
+            above_part = Part(f"above-{type}-{xml_object.name}") if xml_object else Part(f"above-{type}")
+            below_part = Part(f"below-{type}-{xml_object.name}") if xml_object else Part(f"below-{type}")
             if not xml_object:
-                above_objects = create_test_objects(type_)
-                below_objects = create_test_objects(type_)
+                above_objects = create_test_objects(type)
+                below_objects = create_test_objects(type)
             else:
                 above_objects = [xml_object]
                 below_objects = [xml_object.__deepcopy__()]
@@ -865,21 +865,21 @@ class TestAddX(ChordTestCase):
             for obj in above_objects:
                 ch = Chord(60, 1)
                 try:
-                    ch.add_x(obj, placement='above', parent_type=type_)
+                    ch.add_x(obj, placement='above', parent_type=type)
                 except ChordAddXPlacementException:
-                    ch.add_x(obj, placement=None, parent_type=type_)
+                    ch.add_x(obj, placement=None, parent_type=type)
                 above_part.add_chord(ch)
             for obj in below_objects:
                 ch = Chord(60, 1)
                 try:
-                    ch.add_x(obj, placement='below', parent_type=type_)
+                    ch.add_x(obj, placement='below', parent_type=type)
                 except ChordAddXPlacementException:
-                    ch.add_x(obj, placement=None, parent_type=type_)
+                    ch.add_x(obj, placement=None, parent_type=type)
                 below_part.add_chord(ch)
 
             above_part.finalize()
             below_part.finalize()
-            if type_ == 'direction_type':
+            if type == 'direction_type':
                 for p in ['above', 'below']:
                     directions = [d for m in eval(f"{p}_part.get_children()") for d in
                                   [c for c in m.xml_object.get_children() if isinstance(c, XMLDirection)]]
@@ -887,7 +887,7 @@ class TestAddX(ChordTestCase):
                     for x in directions:
                         assert x.placement == p
 
-            elif type_ in ['technical', 'ornament', 'articulation']:
+            elif type in ['technical', 'ornament', 'articulation']:
                 for p in ['above', 'below']:
                     notations = [notation for measure in eval(f'{p}_part').get_children() for note in
                                  [x for x in measure.xml_object.get_children() if isinstance(x, XMLNote)] for notation
@@ -898,7 +898,7 @@ class TestAddX(ChordTestCase):
                         if x.get_children()[0].get_children()[0].__class__ not in [XMLFret, XMLBend]:
                             assert x.get_children()[0].get_children()[0].placement == p
             else:
-                raise NotImplementedError(f'testing type_ {type_}')
+                raise NotImplementedError(f'testing type {type}')
 
         # direction_type objects
         add_type_and_placement('direction_type')

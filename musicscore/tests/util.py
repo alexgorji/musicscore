@@ -216,9 +216,9 @@ def generate_path(frame):
     return path
 
 
-def create_test_objects(type_):
+def create_test_objects(type):
     output = []
-    if type_ == 'direction_type':
+    if type == 'direction_type':
         for cl in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
             if cl == XMLSymbol:
                 obj = cl('0')
@@ -261,7 +261,7 @@ def create_test_objects(type_):
                 obj = cl()
             output.append(obj)
 
-    elif type_ == 'technical':
+    elif type == 'technical':
         needed_values = {XMLFret: 1, XMLString: 1, XMLHandbell: 'belltree', XMLFingering: '2', XMLPluck: 'something',
                          XMLTap: '2', XMLHarmonClosed: 'yes', XMLOtherTechnical: 'something'}
         needed_types = {XMLHammerOn: 'start', XMLPullOff: 'start'}
@@ -279,7 +279,7 @@ def create_test_objects(type_):
                 obj = cl()
             output.append(obj)
 
-    elif type_ == 'ornament':
+    elif type == 'ornament':
         for cl in XML_ORNAMENT_AND_OTHER_NOTATIONS + XML_ORNAMENT_CLASSES:
             if cl == XMLAccidentalMark:
                 obj = cl('sharp')
@@ -289,7 +289,7 @@ def create_test_objects(type_):
                 obj = cl()
             output.append(obj)
 
-    elif type_ == 'notation':
+    elif type == 'notation':
         for cl in XML_OTHER_NOTATIONS + XML_ORNAMENT_AND_OTHER_NOTATIONS:
             if cl == XMLAccidentalMark:
                 obj = cl('sharp')
@@ -297,16 +297,16 @@ def create_test_objects(type_):
                 obj = cl()
             output.append(obj)
 
-    elif type_ == 'articulation':
+    elif type == 'articulation':
         for cl in XML_ARTICULATION_CLASSES:
             obj = cl()
             output.append(obj)
-    elif type_ == 'dynamics':
+    elif type == 'dynamics':
         for cl in XML_DYNAMIC_CLASSES:
             obj = cl()
             output.append(obj)
     else:
-        raise NotImplementedError(f"type_ {type_}")
+        raise NotImplementedError(f"type {type}")
     return output
 
 

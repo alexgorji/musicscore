@@ -1,14 +1,13 @@
-from typing import Optional, Set, List
-
-from musicscore.finalize import FinalizeMixin
-from musicscore.quantize import QuantizeMixin
-from musicxml.xmlelement.xmlelement import XMLStaff
+from typing import Optional, Set
 
 from musicscore.clef import Clef
 from musicscore.exceptions import StaffHasNoParentError, AlreadyFinalizedError, AddChordError
+from musicscore.finalize import FinalizeMixin
 from musicscore.musictree import MusicTree
+from musicscore.quantize import QuantizeMixin
 from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
+from musicxml.xmlelement.xmlelement import XMLStaff
 
 __all__ = ['Staff']
 
@@ -16,6 +15,7 @@ __all__ = ['Staff']
 class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     """
     Parent type: :obj:`~musicscore.measure.Measure`
+
     Child type: :obj:`~musicscore.voice.Voice`
     """
     _ATTRIBUTES = {'clef', 'default_clef', 'number'}

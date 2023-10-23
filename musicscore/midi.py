@@ -75,6 +75,7 @@ def get_accidental_mode(midi_value: Union[float, int], accidental_sign: Optional
 class Midi(MusicTree):
     """
     Parent type: :obj:`~musicscore.note.Note`
+
     Child type: :obj:`~musicscore.accidental.Accidental`
 
     Midi is the representation of a Pitch with its midi value, and accidental sign. This object is used to create a Chord
@@ -252,29 +253,28 @@ class Midi(MusicTree):
 
     # //public methods
     def add_child(self, child: [Accidental]) -> Accidental:
-        if not isinstance(child, Accidental):
-            raise TypeError(f'child {child} must be of type Accidental.')
+        """
+        child's _update method will be called after adding.
+        
+        :param child:
+        :return: child
+        :rtype: :obj:`~musicscore.accidental.Accidental`
+        """
         if self.parent_chord and self.parent_chord._finalized is True:
             raise AlreadyFinalizedError(self, 'add_child')
         super().add_child(child)
         child._update()
         return child
 
-    def add_tie(self, type_):
-        if type_ not in ['start', 'stop']:
+    def add_tie(self, type: str) -> None:
+        """
+        :param type: ``start``, ``stop``
+        :exception: ValueError
+        """
+        if type not in ['start', 'stop']:
             raise ValueError
-        self._ties.add(type_)
+        self._ties.add(type)
         if self.parent_note:
-            self.parent_note._update_ties()
-
-    def remove_tie(self, type_):
-        removed = False
-        try:
-            self._ties.remove(type_)
-            removed = True
-        except KeyError:
-            pass
-        if removed and self.parent_note:
             self.parent_note._update_ties()
 
     def get_pitch_or_rest(self) -> Union['XMLPitch', 'XMLRest']:
@@ -286,15 +286,29 @@ class Midi(MusicTree):
     def get_staff_number(self):
         return self._staff_number
 
+    def remove_tie(self, type: str) -> None:
+        """
+        :param type: ``start``, ``stop``
+        :exception: ValueError
+        """
+        removed = False
+        try:
+            self._ties.remove(type)
+            removed = True
+        except KeyError:
+            pass
+        if removed and self.parent_note:
+            self.parent_note._update_ties()
+
+    def set_staff_number(self, val):
+        self._staff_number = val
+
     def transpose(self, val: float) -> 'Midi':
         """
         Adds val to value and returns self
         """
         self.value += val
         return self
-
-    def set_staff_number(self, val):
-        self._staff_number = val
 
     # //operators
     def __lt__(self, other):  # For x < y

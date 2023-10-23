@@ -15,9 +15,9 @@ class TestLily33a(IdTestCase):
         part.add_measure(time=(6, 8))
         simple_format = SimpleFormat(quarter_durations=[1, 1 / 4, 1 / 4, 1.5], midis=[E(5), F(5, '#'), G(5), A(5)])
         chord = simple_format.chords[-1]
-        chord.add_grace_chord(B(5), type_='16th')
-        g = chord.add_grace_chord(G(5), type_='16th', position='after')
-        chord.add_grace_chord(A(5), type_='16th', position='after')
+        chord.add_grace_chord(B(5), type='16th')
+        g = chord.add_grace_chord(G(5), type='16th', position='after')
+        chord.add_grace_chord(A(5), type='16th', position='after')
         trill_chords(chords=[chord, g], relative_y=15)
         for ch in simple_format.chords:
             part.add_chord(ch)

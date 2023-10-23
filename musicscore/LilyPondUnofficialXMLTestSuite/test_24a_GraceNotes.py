@@ -44,10 +44,10 @@ class TestLily24a(IdTestCase):
 
         measure_3_chords[0].add_grace_chord(E(5), '16th')
 
-        measure_3_chords[1].add_grace_chord(GraceChord(D(5, '#'), type_='quarter'))
+        measure_3_chords[1].add_grace_chord(GraceChord(D(5, '#'), type='quarter'))
 
-        measure_3_chords[2].add_grace_chord(GraceChord(D(5, 'b'), type_='quarter'))
-        measure_3_chords[2].add_grace_chord(GraceChord(A(4, 'b'), type_='quarter'))
+        measure_3_chords[2].add_grace_chord(GraceChord(D(5, 'b'), type='quarter'))
+        measure_3_chords[2].add_grace_chord(GraceChord(A(4, 'b'), type='quarter'))
 
         for chord in measure_1_chords + measure_2_chords + measure_3_chords:
             p.add_chord(chord)

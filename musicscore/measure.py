@@ -22,6 +22,7 @@ __all__ = ['Measure', 'generate_measures']
 class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     """
     Parent type: :obj:`~musicscore.part.Part`
+
     Child type: :obj:`~musicscore.staff.Staff`
     """
 

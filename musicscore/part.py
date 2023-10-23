@@ -125,6 +125,7 @@ class ScorePart(XMLWrapper):
 class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     """
     Parent type: :obj:`~musicscore.score.Score`
+
     Child type: :obj:`~musicscore.measure.Measure`
     """
 

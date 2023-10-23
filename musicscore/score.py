@@ -32,7 +32,8 @@ POSSIBLE_SUBDIVISIONS = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [
 
 class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     """
-    Parent type: None
+    Parent type: ``None``
+
     Child type: :obj:`~musicscore.part.Part`
     """
     _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout'}

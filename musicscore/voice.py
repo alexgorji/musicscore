@@ -16,6 +16,7 @@ __all__ = ['Voice']
 class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     """
     Parent type: :obj:`~musicscore.staff.Staff`
+
     Child type: :obj:`~musicscore.beat.Beat`
     """
     _ATTRIBUTES = {'number', 'leftover_chord', 'is_filled'}

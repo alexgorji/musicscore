@@ -137,37 +137,37 @@ class TestUtils(TestCase):
 class TestTestObjects(TestCase):
 
     def test_direction_type_test_objects(self):
-        test_object = create_test_objects(type_='direction_type')
+        test_object = create_test_objects(type='direction_type')
         assert len(XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS) == len(test_object)
         for obj in test_object:
             assert obj.__class__ in XML_DIRECTION_TYPE_CLASSES or obj.__class__ in XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
 
     def test_ornament_test_objects(self):
-        test_object = create_test_objects(type_='ornament')
+        test_object = create_test_objects(type='ornament')
         assert len(XML_ORNAMENT_CLASSES + XML_ORNAMENT_AND_OTHER_NOTATIONS) == len(test_object)
         for obj in test_object:
             assert obj.__class__ in XML_ORNAMENT_CLASSES + XML_ORNAMENT_AND_OTHER_NOTATIONS
 
     def test_technical_test_objects(self):
-        test_object = create_test_objects(type_='technical')
+        test_object = create_test_objects(type='technical')
         assert len(XML_TECHNICAL_CLASSES) == len(test_object)
         for obj in test_object:
             assert obj.__class__ in XML_TECHNICAL_CLASSES
 
     def test_articulation_test_objects(self):
-        test_object = create_test_objects(type_='articulation')
+        test_object = create_test_objects(type='articulation')
         assert len(XML_ARTICULATION_CLASSES) == len(test_object)
         for obj in test_object:
             assert obj.__class__ in XML_ARTICULATION_CLASSES
 
     def test_other_notation_test_objects(self):
-        test_object = create_test_objects(type_='notation')
+        test_object = create_test_objects(type='notation')
         assert len(XML_OTHER_NOTATIONS + XML_ORNAMENT_AND_OTHER_NOTATIONS) == len(test_object)
         for obj in test_object:
             assert obj.__class__ in XML_OTHER_NOTATIONS + XML_ORNAMENT_AND_OTHER_NOTATIONS
 
     def test_dynamics_test_objects(self):
-        test_object = create_test_objects(type_='dynamics')
+        test_object = create_test_objects(type='dynamics')
         assert len(XML_DYNAMIC_CLASSES) == len(test_object)
         for obj in test_object:
             assert obj.__class__ in XML_DYNAMIC_CLASSES

@@ -53,6 +53,7 @@ _all_other_notations = Union[
 class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     """
     Parent type: :obj:`~musicscore.beat.Beat`
+
     Child type: :obj:`~musicscore.note.Note`
 
     Chord is a sequence of one or more :obj:`~musicxml.xmlelement.xmlelement.XMLNote` s which occur at the same time in a :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` of a :obj:`~musicxml.xmlelement.xmlelement.XMLPart`.
@@ -99,13 +100,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             self._update_xml_articulations()
 
     def _add_child(self, child: Note) -> Note:
-        """
-        Check and add child to list of children. Child's parent is set to self.
-
-        :param child: :obj:`~musicscore.note.Note`
-        :return: child
-        :rtype: :obj:`~musicscore.note.Note`
-        """
         return super().add_child(child)
 
     def _add_direction_type(self, direction_type, placement=None):
@@ -625,19 +619,19 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
         return dynamics_object_list
 
-    def add_grace_chord(self, midis_or_grace_chord, type_=None, *, position=None):
+    def add_grace_chord(self, midis_or_grace_chord, type=None, *, position=None):
         if self.up:
             raise ChordException(f'Chord {self} is already added to a measure. No grace chords can be added anymore.')
         if isinstance(midis_or_grace_chord, GraceChord):
-            if type_:
-                raise ValueError(f'Use GraceNote.type_ to set the type.')
+            if type:
+                raise ValueError(f'Use GraceNote.type to set the type.')
             if position:
                 raise ValueError(f'Use GraceNote.position to set the position.')
             gch = midis_or_grace_chord
         else:
             if not position:
                 position = 'before'
-            gch = GraceChord(midis_or_grace_chord, type_=type_, position=position)
+            gch = GraceChord(midis_or_grace_chord, type=type, position=position)
 
         if gch.position == 'before':
             self._grace_chords['before'].append(gch)
@@ -646,17 +640,17 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         gch.parent_chord = self
         return gch
 
-    def add_tie(self, type_: str) -> None:
+    def add_tie(self, type: str) -> None:
         """
         Chord's tie list is used to add ties to or _update ties of all midis and consequently :obj:`musicscore.note.Note`
         objects which are to be or are already created.
 
-        :param type_: 'start' or 'stop'
+        :param type: 'start' or 'stop'
         :return: None
         """
 
         for midi in self.midis:
-            midi.add_tie(type_=type_)
+            midi.add_tie(type=type)
         self._update_ties()
 
     def add_lyric(self, text: Union[Any, XMLLyric], **kwargs):
@@ -819,28 +813,28 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def get_grace_chords(self, position='before'):
         return self._grace_chords[position]
 
-    def get_x(self, type_):
-        if type_ == XMLDynamics:
-            raise NotImplementedError(f'get_x of type_ {type_} not Implemented.')
-        elif type_ in XML_DIRECTION_TYPE_CLASSES:
+    def get_x(self, type):
+        if type == XMLDynamics:
+            raise NotImplementedError(f'get_x of type {type} not Implemented.')
+        elif type in XML_DIRECTION_TYPE_CLASSES:
             output = []
-            output += [x for x in self._xml_direction_types['above'] if isinstance(x, type_)]
-            output += [x for x in self._xml_direction_types['below'] if isinstance(x, type_)]
+            output += [x for x in self._xml_direction_types['above'] if isinstance(x, type)]
+            output += [x for x in self._xml_direction_types['below'] if isinstance(x, type)]
             return output
-        elif type_ in XML_ORNAMENT_CLASSES:
-            return [x for x in self._xml_ornaments if isinstance(x, type_)]
-        elif type_ in XML_TECHNICAL_CLASSES:
-            return [x for x in self._xml_technicals if isinstance(x, type_)]
-        elif type_ in XML_ARTICULATION_CLASSES:
-            return [x for x in self._xml_articulations if isinstance(x, type_)]
-        elif type_ in XML_OTHER_NOTATIONS:
-            return [x for x in self._xml_other_notations if isinstance(x, type_)]
-        elif type_ in XML_ORNAMENT_AND_OTHER_NOTATIONS:
-            return [x for x in self._xml_ornaments if isinstance(x, type_)] + [x for x in
+        elif type in XML_ORNAMENT_CLASSES:
+            return [x for x in self._xml_ornaments if isinstance(x, type)]
+        elif type in XML_TECHNICAL_CLASSES:
+            return [x for x in self._xml_technicals if isinstance(x, type)]
+        elif type in XML_ARTICULATION_CLASSES:
+            return [x for x in self._xml_articulations if isinstance(x, type)]
+        elif type in XML_OTHER_NOTATIONS:
+            return [x for x in self._xml_other_notations if isinstance(x, type)]
+        elif type in XML_ORNAMENT_AND_OTHER_NOTATIONS:
+            return [x for x in self._xml_ornaments if isinstance(x, type)] + [x for x in
                                                                                self._xml_other_notations if
-                                                                               isinstance(x, type_)]
+                                                                               isinstance(x, type)]
         else:
-            raise NotImplementedError(f'get_x of type_ {type_} not Implemented.')
+            raise NotImplementedError(f'get_x of type {type} not Implemented.')
 
     def get_parent_measure(self) -> 'Measure':
         """
@@ -996,14 +990,14 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
 
 class GraceChord(Chord):
-    _ATTRIBUTES = Chord._ATTRIBUTES.union({'type_', 'parent_chord', 'position'})
+    _ATTRIBUTES = Chord._ATTRIBUTES.union({'type', 'parent_chord', 'position'})
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None, *,
-                 type_=None, position='before', **kwargs):
+                 type=None, position='before', **kwargs):
         super().__init__(midis=midis, quarter_duration=0, **kwargs)
         self._type = None
         self._position = None
-        self.type_ = type_
+        self.type = type
         self.position = position
 
     @Chord.quarter_duration.setter
@@ -1015,7 +1009,7 @@ class GraceChord(Chord):
 
     def _update_xml_type(self):
         for n in self.notes:
-            n.xml_object.xml_type = self.type_
+            n.xml_object.xml_type = self.type
 
     @property
     def position(self):
@@ -1030,11 +1024,11 @@ class GraceChord(Chord):
             self._position = val
 
     @property
-    def type_(self):
+    def type(self):
         return self._type
 
-    @type_.setter
-    def type_(self, val):
+    @type.setter
+    def type(self, val):
         if val is None:
             self._type = None
         else:
@@ -1043,7 +1037,7 @@ class GraceChord(Chord):
             else:
                 self._type = val
 
-    def add_grace_chord(self, midis_or_grace_chord, type_=None, *, position=None):
+    def add_grace_chord(self, midis_or_grace_chord, type=None, *, position=None):
         raise GraceChordCannotHaveGraceNotes
 
     def get_grace_chords(self, position='before'):
