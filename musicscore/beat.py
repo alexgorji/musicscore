@@ -192,6 +192,9 @@ def _beam_chord_group(chord_group: List['Chord']) -> None:
 
 class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
     """
+    Parent type: :obj:`~musicscore.voice.Voice`
+    Child type: :obj:`~musicscore.chord.Chord`
+
     Beat is the direct ancestor of chords. Each :obj:`~musicscore.chord.Chord` is placed with an offset between 0 and beat's
     quarter duration inside the beat as its child .
 
@@ -513,8 +516,9 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         """
         finalize can only be called once.
 
-        - It calls :obj:`~musicscore.chord.Chord.finalize()` method of all :obj:`~musicscore.chord.Chord` children.
-        - Following updates are triggered: update_note_tuplets_and_dots, update_note_beams, quantize_quarter_durations (if get_quantized is
+        - It calls finalize method of all :obj:`~musicscore.chord.Chord` children.
+
+        - Following updates are triggered: _update_note_tuplets_and_dots, _update_note_beams, quantize_quarter_durations (if get_quantized is
           True), _split_not_writable_chords
         """
         if self._finalized:
@@ -529,20 +533,6 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             self._update_note_beams()
 
         self._finalized = True
-
-    def get_children(self) -> List[Chord]:
-        """
-        :return: list of added children.
-        :rtype: List[:obj:`~musicscore.chord.Chord`]
-        """
-        return super().get_children()
-
-    def get_parent(self) -> 'Voice':
-        """
-        :return: parent
-        :rtype: :obj:`~musicscore.voice.Voice`
-        """
-        return super().get_parent()
 
     def quantize_quarter_durations(self):
         """

@@ -16,7 +16,7 @@ class FinalizeMixin:
 
         finalize can only be called once.
 
-        It calls finalize' method of all children.
+        It calls finalize method of all children.
         """
         if self._finalized:
             raise AlreadyFinalizedError(self)

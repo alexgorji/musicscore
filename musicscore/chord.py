@@ -52,6 +52,9 @@ _all_other_notations = Union[
 
 class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     """
+    Parent type: :obj:`~musicscore.beat.Beat`
+    Child type: :obj:`~musicscore.note.Note`
+
     Chord is a sequence of one or more :obj:`~musicxml.xmlelement.xmlelement.XMLNote` s which occur at the same time in a :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` of a :obj:`~musicxml.xmlelement.xmlelement.XMLPart`.
 
     :param midis: :obj:`~musicscore.midi.Midi`, Midi.value, [Midi, Midi.value], 0 or [0] for a rest.
@@ -813,13 +816,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def get_brackets(self):
         return self.get_x(XMLBracket)
 
-    def get_children(self) -> List[Note]:
-        """
-        :return: list of added children.
-        :rtype: List[:obj:`~musicscore.note.Note`]
-        """
-        return super().get_children()
-
     def get_grace_chords(self, position='before'):
         return self._grace_chords[position]
 
@@ -845,13 +841,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
                                                                                isinstance(x, type_)]
         else:
             raise NotImplementedError(f'get_x of type_ {type_} not Implemented.')
-
-    def get_parent(self) -> 'Beat':
-        """
-        :return: parent
-        :rtype: :obj:`~musicscore.beat.Beat`
-        """
-        return super().get_parent()
 
     def get_parent_measure(self) -> 'Measure':
         """

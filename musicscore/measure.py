@@ -20,6 +20,11 @@ __all__ = ['Measure', 'generate_measures']
 
 
 class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
+    """
+    Parent type: :obj:`~musicscore.part.Part`
+    Child type: :obj:`~musicscore.staff.Staff`
+    """
+
     _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration', 'barline_style', 'new_system'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
@@ -437,13 +442,6 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :return: ``value_`` of existing :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions`
         """
         return self.xml_object.xml_attributes.xml_divisions.value_
-
-    def get_parent(self) -> 'Part':
-        """
-        :return: parent
-        :rtype: :obj:`~musicscore.part.Part`
-        """
-        return super().get_parent()
 
     def remove(self, child) -> None:
         number = child.value

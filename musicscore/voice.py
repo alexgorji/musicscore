@@ -14,6 +14,10 @@ __all__ = ['Voice']
 
 
 class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
+    """
+    Parent type: :obj:`~musicscore.staff.Staff`
+    Child type: :obj:`~musicscore.beat.Beat`
+    """
     _ATTRIBUTES = {'number', 'leftover_chord', 'is_filled'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
@@ -120,20 +124,6 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         if not self.up:
             raise VoiceHasNoParentError('A child Beat can only be added to a Voice if voice has a Staff parent.')
         return super().add_child(child)
-
-    def get_children(self) -> List[Beat]:
-        """
-        :return: list of added children.
-        :rtype: List[:obj:`~musicscore.beat.Beat`]
-        """
-        return super().get_children()
-
-    def get_parent(self) -> 'Staff':
-        """
-        :return: parent
-        :rtype: :obj:`~musicscore.staff.Staff`
-        """
-        return super().get_parent()
 
     def get_current_beat(self) -> 'Beat':
         """

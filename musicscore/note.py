@@ -30,6 +30,11 @@ def untie(*notes):
 
 
 class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
+    """
+    Parent type: :obj:`~musicscore.chord.Chord`
+    Child type: :obj:`~musicscore.midi.Midi`
+    """
+
     _ATTRIBUTES = {'midi', 'quarter_duration', 'parent_chord', 'number_of_dots', 'is_tied', 'is_tied_to_previous'}
 
     XMLClass = XMLNote
@@ -262,20 +267,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             self._update_xml_type()
         else:
             self.xml_object.xml_duration = None
-
-    def get_children(self) -> List[Midi]:
-        """
-        :return: list of added children.
-        :rtype: List[:obj:`~musicscore.midi.Midi`]
-        """
-        return super().get_children()
-
-    def get_parent(self) -> 'Chord':
-        """
-        :return: parent
-        :rtype: :obj:`~musicscore.chord.Chord`
-        """
-        return super().get_parent()
 
     def get_parent_chord(self):
         return self.parent_chord

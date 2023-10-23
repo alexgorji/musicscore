@@ -1,16 +1,15 @@
-from typing import List, Optional, Union, Iterator, Tuple
+from typing import List, Optional, Union, Tuple
 
 from musicscore import Chord
-from musicscore.finalize import FinalizeMixin
-from musicscore.quantize import QuantizeMixin
-from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
-
 from musicscore.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsFullError, \
     AlreadyFinalizedError
+from musicscore.finalize import FinalizeMixin
 from musicscore.measure import Measure
 from musicscore.musictree import MusicTree
+from musicscore.quantize import QuantizeMixin
 from musicscore.time import Time
 from musicscore.xmlwrapper import XMLWrapper
+from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
 __all__ = ['Id', 'ScorePart', 'Part']
 
@@ -124,6 +123,11 @@ class ScorePart(XMLWrapper):
 
 
 class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
+    """
+    Parent type: :obj:`~musicscore.score.Score`
+    Child type: :obj:`~musicscore.measure.Measure`
+    """
+
     _ATTRIBUTES = {'id_', 'name', 'abbreviation'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
@@ -343,16 +347,6 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             return self._current_measures[staff_number][voice_number]
         except KeyError:
             return self._set_first_current_measure(staff_number=staff_number, voice_number=voice_number)
-
-    def get_children(self) -> List['Measure']:
-        return super().get_children()
-
-    def get_parent(self) -> 'Score':
-        """
-        :return: parent
-        :rtype: :obj:`~musicscore.score.Score`
-        """
-        return super().get_parent()
 
     def set_current_measure(self, staff_number: int, voice_number: int, measure: Measure) -> None:
         """

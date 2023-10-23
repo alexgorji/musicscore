@@ -189,6 +189,9 @@ SIGNS = {-2: 'flat-flat',
 
 class Accidental(MusicTree, XMLWrapper):
     """
+    Parent type: :obj:`~musicscore.midi.Midi`
+    Child type: None
+
     Accidental is the class for managing :obj:`musicscore.midi.Midi`'s accidental sign and its pitch parameters: step, alter, octave.
     The parameter mode ('standard', 'enharmonic', 'flat', 'sharp', 'force-flat', 'force-sharp') can be used to set different enharmonic variants of the same
     pitch.
@@ -299,13 +302,6 @@ class Accidental(MusicTree, XMLWrapper):
                 self.up.up._update_xml_accidental()
             except AttributeError:
                 pass
-
-    def get_parent(self) -> 'Midi':
-        """
-        :return: parent
-        :rtype: :obj:`~musicscore.midi.Midi`
-        """
-        return super().get_parent()
 
     def get_pitch_parameters(self, midi_value: Optional[float] = None) -> Optional[tuple]:
         """

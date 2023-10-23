@@ -31,6 +31,10 @@ POSSIBLE_SUBDIVISIONS = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [
 
 
 class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
+    """
+    Parent type: None
+    Child type: :obj:`~musicscore.part.Part`
+    """
     _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
@@ -318,13 +322,6 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
                 measure = part.get_measure(measure_number)
                 for ch in measure.get_chords():
                     ch.notes[0].xml_rest.measure = 'yes'
-
-    def get_children(self) -> List['Part']:
-        """
-        :return: list of added children.
-        :rtype: List[:obj:`~musicscore.part.Part`]
-        """
-        return super().get_children()
 
     def group_parts(self, number: Union[int, str], start_part_number: int, end_part_number: int, symbol: str = 'square',
                     name: Optional[str] = None, abbreviation: Optional[str] = None,

@@ -14,6 +14,10 @@ __all__ = ['Staff']
 
 
 class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
+    """
+    Parent type: :obj:`~musicscore.measure.Measure`
+    Child type: :obj:`~musicscore.voice.Voice`
+    """
     _ATTRIBUTES = {'clef', 'default_clef', 'number'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
@@ -123,20 +127,6 @@ class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
         voice_object.update_beats()
         return voice_object
-
-    def get_children(self) -> List[Voice]:
-        """
-        :return: list of added children.
-        :rtype: List[:obj:`~musicscore.voice.Voice`]
-        """
-        return super().get_children()
-
-    def get_parent(self) -> 'Measure':
-        """
-        :return: parent
-        :rtype: :obj:`~musicscore.measure.Measure`
-        """
-        return super().get_parent()
 
     def get_previous_staff(self) -> Optional['Staff']:
         """

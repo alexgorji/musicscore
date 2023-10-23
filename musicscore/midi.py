@@ -74,6 +74,9 @@ def get_accidental_mode(midi_value: Union[float, int], accidental_sign: Optional
 
 class Midi(MusicTree):
     """
+    Parent type: :obj:`~musicscore.note.Note`
+    Child type: :obj:`~musicscore.accidental.Accidental`
+
     Midi is the representation of a Pitch with its midi value, and accidental sign. This object is used to create a Chord
     consisting of one or more pitches. The midi representation of a rest is a Midi object with value 0.
     """
@@ -273,20 +276,6 @@ class Midi(MusicTree):
             pass
         if removed and self.parent_note:
             self.parent_note._update_ties()
-
-    def get_children(self) -> List[Accidental]:
-        """
-        :return: list of added children.
-        :rtype: List[:obj:`~musicscore.accidental.Accidental`]
-        """
-        return super().get_children()
-
-    def get_parent(self) -> 'Note':
-        """
-        :return: parent
-        :rtype: :obj:`~musicscore.note.Note`
-        """
-        return super().get_parent()
 
     def get_pitch_or_rest(self) -> Union['XMLPitch', 'XMLRest']:
         """
