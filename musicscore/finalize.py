@@ -12,7 +12,7 @@ class FinalizeMixin:
 
     def finalize(self) -> None:
         """
-        :obj:`~musicscore.fianlize.FinalizeMixin` method
+        :obj:`~musicscore.finalize.FinalizeMixin` method
 
         finalize can only be called once.
 
@@ -29,9 +29,9 @@ class FinalizeMixin:
 
     def to_string(self, *args, **kwargs):
         """
-        :obj:`~musicscore.fianlize.FinalizeMixin` method
+        :obj:`~musicscore.finalize.FinalizeMixin` method
 
-        It triggers ``self.finalize()`` first before calling parent's ``to_string()`` method. If no xml_object exists (it means there is no direct MusicXML equavalent of this class) a
+        It triggers :obj:`~finalize()` first before calling parent's ``xml_object.to_string()`` method. If no xml_object exists (it means there is no direct MusicXML equavalent of this class) a
         :obj:`~musicscore.exceptions.ClassHasNoMusicXMLEquivalentError` is thrown.
         """
 

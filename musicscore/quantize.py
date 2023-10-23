@@ -25,10 +25,10 @@ class QuantizeMixin:
         """
         :obj:`~musicscore.quantize.QuantizeMixin` property
 
-        - If get_quantized is set to None the first get_quantized of ancestors which is ``False`` or ``True`` will be returned.
-        - If :obj:`~musicscore.score.Score`.get_quantized is set to None it will be converted to ``False``
-        - :obj:`~musicscore.measure.Measure`.finalize() loops over all beats. If :obj:`~musicscore.beat.Beat`.get_quantized returns True
-          :obj:`~musicscore.beat.Beat`.quantize_quarter_durations() is called.
+        - If ``get_quantized`` is set to None the first ``get_quantized`` of ancestors which is ``False`` or ``True`` will be returned.
+        - If :obj:`musicscore.score.Score.get_quantized` is set to None it will be converted to ``False``
+        - :obj:`musicscore.measure.Measure.finalize()` loops over all beats. If :obj:`musicscore.beat.Beat.get_quantized` returns ``True``
+          :obj:`musicscore.beat.Beat.quantize_quarter_durations()` is called.
 
         :type: Optional[bool]
         :rtype: bool

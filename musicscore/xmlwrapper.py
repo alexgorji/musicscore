@@ -1,14 +1,16 @@
 class XMLWrapper:
     """
     XMLWrapper contains an xml object at its core. It is the place where all the intuitive stuff is translated to attributes and children of
-    xml objects. All attributes and properties which are not listed in _ATTRIBUTES will be set to or get from core xml object.
+    xml objects.
+
+    All attributes and properties which are not listed in _ATTRIBUTES will be set to or get from core xml object.
     """
     _ATTRIBUTES = {}
 
     XMLClass = None
 
     @property
-    def xml_object(self) -> 'self.XMLClass':
+    def xml_object(self) -> 'XMLElement':
         """
         :obj:`~musicscore.xmlwrapper.XMLWrapper` method
 
@@ -17,7 +19,7 @@ class XMLWrapper:
         If an attribute is not found directly in the main class, it wll be passed on to ``__get_attribute__`` or ``__set__attribute__`` methods of ``self.xml_object``.
         It can also use the short cut attributes of :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to get or set the first child.
 
-        :return: wrapped MusicXML element of type :obj:`self.XMLClass`
+        :return: wrapped MusicXML element of type :obj:`~XMLClass`
         """
         return self._xml_object
 

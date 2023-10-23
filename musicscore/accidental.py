@@ -190,6 +190,7 @@ SIGNS = {-2: 'flat-flat',
 class Accidental(MusicTree, XMLWrapper):
     """
     Parent type: :obj:`~musicscore.midi.Midi`
+
     Child type: None
 
     Accidental is the class for managing :obj:`musicscore.midi.Midi`'s accidental sign and its pitch parameters: step, alter, octave.
