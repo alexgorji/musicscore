@@ -1,12 +1,8 @@
 from pathlib import Path
 
-from musicscore.beat import Beat
 from musicscore.chord import Chord
-from musicscore.measure import Measure
 from musicscore.part import Part
 from musicscore.score import Score
-from musicscore.staff import Staff
-from musicscore.voice import Voice
 
 """
 Hello World as musicxml means having a C4 pitch as a whole in a 4/4 measure with treble clef.
