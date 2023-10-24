@@ -92,10 +92,6 @@ class ChordHasNoQuarterDurationError(ChordException):
     pass
 
 
-class ChordNotesAreAlreadyCreatedError(ChordException):
-    pass
-
-
 class ChordQuarterDurationAlreadySetError(ChordException):
     pass
 

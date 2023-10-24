@@ -3,14 +3,14 @@ from fractions import Fraction
 from typing import Union, List, Optional, Any, Dict
 
 from musicscore.clef import Clef
-from musicscore.musictree import MusicTree
 from musicscore.dynamics import Dynamics
 from musicscore.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
-    ChordQuarterDurationAlreadySetError, AlreadyFinalizedError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
-    ChordException, NotationException, ChordAddXException, ChordAddXPlacementException, RestCannotSetMidiError, \
+    ChordQuarterDurationAlreadySetError, AlreadyFinalizedError, DeepCopyException, ChordException, NotationException, \
+    ChordAddXException, ChordAddXPlacementException, RestCannotSetMidiError, \
     RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotes
 from musicscore.finalize import FinalizeMixin
 from musicscore.midi import Midi
+from musicscore.musictree import MusicTree
 from musicscore.note import Note
 from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
 from musicscore.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_ORNAMENT_CLASSES, XML_DYNAMIC_CLASSES, \
@@ -48,6 +48,11 @@ _all_other_notations = Union[
     "XMLArpeggiate", "XMLFermata", "XMLFootnote", "XMLGlissando", "XMLLevel", "XMLNonArpeggiate", "XMLOtherNotation", "XMLSlide",
     "XMLSlur", "XMLAccidentalMark"
 ]
+
+_all_direction_types = Union[
+    "XMLRehearsal", "XMLSegno", "XMLCoda", "XMLWords", "XMLSymbol", "XMLWedge", "XMLDashes", "XMLBracket", "XMLPedal",
+    "XMLMetronome", "XMLOctaveShift", "XMLHarpPedals", "XMLDamp", "XMLDampAll", "XMLEyeglasses", "XMLStringMute", "XMLScordatura",
+    "XMLPrincipalVoice", "XMLPercussion", "XMLAccordionRegistration", "XMLStaffDivide", "XMLOtherDirection"]
 
 
 class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
@@ -94,7 +99,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             try:
                 articulation.placement = placement
             except AttributeError:
-                raise ChordAddXPlacementException(f'{articulation} has to placement attribute.')
+                raise ChordAddXPlacementException(f'{articulation} has no placement attribute.')
         self._xml_articulations.append(articulation)
         if self.notes:
             self._update_xml_articulations()
@@ -186,8 +191,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._midis = sorted(self._midis)
 
     def _update_notes(self):
-        if self._notes_are_set:
-            raise ChordNotesAreAlreadyCreatedError()
+        # if self._notes_are_set:
+        #     raise ChordNotesAreAlreadyCreatedError()
         for index, midi in enumerate(self.midis):
             try:
                 self.get_children()[index].midi = midi
@@ -219,21 +224,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         # _update ties of already created notes
         for note in self.notes:
             note._update_ties()
-
-    def _update_xml_notations_arpeggiate(self):
-        if self.arpeggio:
-            for n in self.notes:
-                if not n.xml_notations:
-                    n.xml_notations = XMLNotations()
-                if self.arpeggio != 'none':
-                    n.xml_notations.xml_arpeggiate = XMLArpeggiate()
-                    if self.arpeggio != 'normal' and n == self.notes[0]:
-                        n.xml_notations.xml_arpeggiate.direction = self.arpeggio
-                else:
-                    if n == self.notes[0]:
-                        n.xml_notations.xml_non_arpeggiate = XMLNonArpeggiate(type='bottom')
-                    elif n == self.notes[-1]:
-                        n.xml_notations.xml_non_arpeggiate = XMLNonArpeggiate(type='top')
 
     def _update_xml_articulations(self):
         def _get_note_xml_articulations():
@@ -313,6 +303,25 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             dt.add_child(self.metronome.xml_object)
             if self.metronome.sound:
                 d.add_child(self.metronome.sound)
+
+    def _update_xml_notations_arpeggiate(self):
+        if self.arpeggio:
+            for n in self.notes:
+                if not n.xml_notations:
+                    n.xml_notations = XMLNotations()
+                if self.arpeggio != 'none':
+                    n.xml_notations.xml_arpeggiate = XMLArpeggiate()
+                    if self.arpeggio != 'normal' and n == self.notes[0]:
+                        n.xml_notations.xml_arpeggiate.direction = self.arpeggio
+                else:
+                    if n == self.notes[0]:
+                        n.xml_notations.xml_non_arpeggiate = XMLNonArpeggiate(type='bottom')
+                    elif n == self.notes[-1]:
+                        n.xml_notations.xml_non_arpeggiate = XMLNonArpeggiate(type='top')
+
+    def _update_xml_type(self):
+        for n in self.notes:
+            n.xml_object.xml_type = self.type
 
     def _update_xml_ornaments(self):
         def _get_note_xml_ornaments():
@@ -598,7 +607,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         return self._xml_lyrics
 
     @property
-    def xml_technicals(self) -> List[_all_articulations]:
+    def xml_technicals(self) -> List[_all_technicals]:
         """
         :return: list of xml technicals to be added to self.notes
         """
@@ -608,6 +617,10 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def add_direction_type(self, direction_type: XMLElement, placement: Optional[str] = None):
         """
         Adds a :obj:`~musicxml.xmlelement.xmlelement.XMLDirectionType` to a private dictionary ``_xml_direction_types`` with placement keys: ``below`` and ``above``. This dictionary is used during the finalization to add :obj:`~musicxml.xmlelement.xmlelement.XMLDirection` objects to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` before this :obj:`~musicscore.chord.Chord`
+
+        .. seealso::
+           :obj:`~add_x`
+
 
         :param direction_type: Permitted direction types are found in :obj:`~musicscore.util.XML_DIRECTION_TYPE_CLASSES` and :obj:`~musicscore.util.XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS`
         :param placement: ``None``, ``below``, ``above``
@@ -635,6 +648,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         .. seealso::
            :obj:`~add_direction_type`
+           :obj:`~add_x`
+
 
         :param dynamics: str, :obj:`~musicscore.dynamics.Dynamics` of a list of Dynamics to be added to directions
         :param placement: ``above`` or ``below``
@@ -687,28 +702,37 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         gch.parent_chord = self
         return gch
 
-    def add_lyric(self, text: Union[Any, XMLLyric], **kwargs):
+    def add_lyric(self, text: Union[Any, XMLLyric], **kwargs) -> XMLLyric:
         """
         This method is used to add :obj:`~musicxml.xmlelement.xmlelement.XMLLyric` to chord's private ``_xml_lyrics`` list.
-        This list is used to add lyrics to or update lyrics of the first :obj:`~musicscore.note.Note` object of chord`s notes
-        which are to be or are already created .
+        This list is used to add lyrics the first :obj:`~musicscore.note.Note` object of chord`s notes during finalization.
 
         :param text: if not of type :obj:`~musicxml.xmlelement.xmlelement.XMLLyric` a string conversion will be applied to text.
-        :return: :obj:`~musicxml.xmlelement.xmlelement.XMLLyric`
+        :parm kwargs: passed on to :obj:`~musicxml.xmlelement.xmlelement.XMLLyric` if it has to be created.
+        :return: added :obj:`~musicxml.xmlelement.xmlelement.XMLLyric`
+        :exception: :obj:`~musicscore.exceptions.AlreadyFinalizedError`
         """
+        if self._finalized is True:
+            raise AlreadyFinalizedError(self, 'add_lyric')
+
         if isinstance(text, XMLLyric):
             l = text
         else:
             l = XMLLyric(**kwargs)
             l.xml_text = str(text)
         self._xml_lyrics.append(l)
-        if self.notes:
-            self._update_xml_lyrics()
         return l
 
-    def add_midi(self, midi):
-        if self._notes_are_set:
-            raise ChordNotesAreAlreadyCreatedError('Chord.add_midi cannot be used after creation of notes.')
+    def add_midi(self, midi: Union[float, int, 'Midi']) -> 'Midi':
+        """
+        This method adds a new :obj:`~musicscore.midi.Midi` to the chord and sorts its midis afterwards.
+
+        :param: a :obj:`~musicscore.midi.Midi` or a valid midi value.
+        :return: added :obj:`~musicscore.midi.Midi`
+        :exception: :obj:`~musicscore.exceptions.AlreadyFinalizedError`
+        """
+        if self._finalized is True:
+            raise AlreadyFinalizedError(self, 'add_midi')
         if not isinstance(midi, Midi):
             midi = Midi(midi)
         midi._set_parent_chord(self)
@@ -721,7 +745,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         Chord's tie list is used to add ties to or _update ties of all midis and consequently :obj:`musicscore.note.Note`
         objects which are to be or are already created.
 
-        :param type: 'start' or 'stop'
+        :param type: ``start`` or ``stop``
         :return: None
         """
 
@@ -731,21 +755,37 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def add_wedge(self, wedge: Union['XMLWedge', str], placement: str = 'below') -> 'XMLWedge':
         """
-        This method is used to add one :obj:`~musicxml.xmlelement.xmlelement.XMLWedge` object to chord's private
-        dictionary _xml_direction_types This list is used to create or _update directions of the first
-        :obj:`~musicscore.note.Note` object of chord`s notes which are to be or are already created .
+        This method is used to add one or more :obj:`~musicxml.xmlelement.xmlelement.XMLWedge` objects to chord's private dictionary ``_xml_direction_types``
 
-        :param wedge: str, XMLWedge to be added to directions
-        :param placement: above or below
-        :return: :obj:`~musicxml.xmlelement.xmlelement.XMLWedge`
+        .. seealso::
+           :obj:`~add_direction_type`
+           :obj:`~add_x`
+           :obj:`~musicscore.util.wedge_chords`
+
+        :param wedge: str, :obj:`~musicxml.xmlelement.xmlelement.XMLWedge` to be added to directions
+        :param placement: ``above`` or ``below``
+        :return: added :obj:`~musicxml.xmlelement.xmlelement.XMLWedge`
+        :exception: :obj:`~musicscore.exceptions.AlreadyFinalizedError`
         """
         if self._finalized is True:
             raise AlreadyFinalizedError(self, 'add_wedge')
         wedge = XMLWedge(type=wedge) if isinstance(wedge, str) else wedge
-        self.add_direction_type(wedge, placement=placement)
-        return wedge
+        return self.add_direction_type(wedge, placement=placement)
 
     def add_words(self, words: Union['XMLWords', str], placement: str = 'above', **kwargs) -> 'XMLWords':
+        """
+        This method is used to add one or more :obj:`~musicxml.xmlelement.xmlelement.XMLWords` objects to chord's private dictionary ``_xml_direction_types``
+
+        .. seealso::
+           :obj:`~add_direction_type`
+           :obj:`~add_x`
+
+        :param words: str, :obj:`~musicxml.xmlelement.xmlelement.XMLWords` to be added to directions
+        :param placement: ``above`` or ``below``
+        :param kwargs:  passed on to :obj:`~musicxml.xmlelement.xmlelement.XMLWords` if it has to be created.
+        :return: added :obj:`~musicxml.xmlelement.xmlelement.XMLWords`
+        :exception: :obj:`~musicscore.exceptions.AlreadyFinalizedError`
+        """
         if self._finalized is True:
             raise AlreadyFinalizedError(self, 'add_words')
 
@@ -756,16 +796,38 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
                 setattr(words, key, kwargs[key])
         return self.add_direction_type(words, placement=placement)
 
-    def add_x(self, x: Union[_all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations],
-              *, placement=None, parent_type=None):
+    def add_x(self, x: Union[
+        _all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations, _all_direction_types],
+              *, placement: str = None, parent_type: str = None) -> 'XMLElement':
         """
-        This method is used to add one xml object to a chord's private xml object lists (like _xml_articulations, xml_technicals
-        etc.). These lists are used to add or _update articulations, technicals etc. of the first :obj:`~musicscore.note.Note` object of
-        chord`s notes which are to be or are already created.
+        This method is used to add one :obj:`~musicxml.xmlelement.xmlelement.XMLElement` object to a chord's private xml object lists (like _xml_articulations, xml_technicals
+        etc.). These lists are used to add or update articulations, technicals etc. of the first :obj:`~musicscore.note.Note` object of
+        chord`s notes which are to be or are already created. In case of direction types the object is added before the first note to the measure.
 
-        :param x: musicxml articulation element, musicxml technical element, musicxml ornament element, musicxml dynamic element, musicxml other notations
+        .. seealso::
+            :obj:`~add_direction_type`
+            :obj:`~musicscore.util.bracket_chords`
+            :obj:`~musicscore.util.octave_chords`
+            :obj:`~musicscore.util.slur_chords`
+            :obj:`~musicscore.util.trill_chords`
+            :obj:`~musicscore.util.wedge_chords`
 
-        :return: x
+        :param x: MusicXML articulation, technical, ornament, dynamics, other notations or direction type element.
+        :param placement: ``None``, ``above``, ``below``. If this value is set and x does not accept placement an error is raised.
+        :param parent_type: ``None, ``articulation``, ``technical``, ``ornament``, ``notation``, ``direction_type``. If ``None`` the right parent type will be tried to determined. If x's parent is ambivalent an error is raised.
+        :return: added ``x``
+        :exception: :obj:`~musicscore.exceptions.NotationException`, :obj:`~musicscore.exceptions.ChordAddXPlacementException`, :obj:`~musicscore.exceptions.ChordAddXException`
+
+        .. seealso::
+            :obj:`~musicscore.util.XML_ARTICULATION_CLASSES`
+            :obj:`~musicscore.util.XML_TECHNICAL_CLASSES`
+            :obj:`~musicscore.util.XML_ORNAMENT_CLASSES`
+            :obj:`~musicscore.util.XML_OTHER_NOTATIONS`
+            :obj:`~musicscore.util.XML_DIRECTION_TYPE_CLASSES`
+            :obj:`~musicscore.util.XML_ORNAMENT_AND_OTHER_NOTATIONS`
+            :obj:`~musicscore.util.XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS`
+            :obj:`~musicscore.util.XML_DYNAMIC_CLASSES`
+
         """
         if parent_type is None:
             if x.__class__ in XML_ARTICULATION_CLASSES:
@@ -845,26 +907,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._update_xml_notations_arpeggiate()
         self._finalized = True
 
-    def has_same_pitches(self, other: 'Chord') -> bool:
-        """
-        Only for chords with pitches. Rest chords cannot use this method.
-
-        :param other: Other chord to which the comparison takes place
-        :return: `True` if pitches of self and other chord has the same pitch parameters and accidental values else `False`
-        """
-        if not isinstance(other, Chord):
-            raise TypeError
-        if self.is_rest or other.is_rest:
-            raise TypeError('Rest cannot use method has_same_pitches.')
-        if [m.value for m in self.midis] != [m.value for m in other.midis]:
-            return False
-        for m1, m2 in zip(self.midis, other.midis):
-            #     if m1.accidental.show != m2.accidental.show:
-            #         return False
-            if m1.accidental.get_pitch_parameters() != m2.accidental.get_pitch_parameters():
-                return False
-        return True
-
     def get_brackets(self):
         return self.get_x(XMLBracket)
 
@@ -927,6 +969,26 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def get_words(self):
         return self.get_x(XMLWords)
+
+    def has_same_pitches(self, other: 'Chord') -> bool:
+        """
+        Only for chords with pitches. Rest chords cannot use this method.
+
+        :param other: Other chord to which the comparison takes place
+        :return: `True` if pitches of self and other chord has the same pitch parameters and accidental values else `False`
+        """
+        if not isinstance(other, Chord):
+            raise TypeError
+        if self.is_rest or other.is_rest:
+            raise TypeError('Rest cannot use method has_same_pitches.')
+        if [m.value for m in self.midis] != [m.value for m in other.midis]:
+            return False
+        for m1, m2 in zip(self.midis, other.midis):
+            #     if m1.accidental.show != m2.accidental.show:
+            #         return False
+            if m1.accidental.get_pitch_parameters() != m2.accidental.get_pitch_parameters():
+                return False
+        return True
 
     def set_possible_subdivisions(self):
         raise TypeError
@@ -1064,10 +1126,6 @@ class GraceChord(Chord):
             raise ChordException('quarter_duration of a GraceChord is always 0 and cannot be set')
         else:
             self._quarter_duration = 0
-
-    def _update_xml_type(self):
-        for n in self.notes:
-            n.xml_object.xml_type = self.type
 
     @property
     def position(self):

@@ -1,5 +1,5 @@
 from musicscore import Part, Chord, Measure, Beat, Voice, Score, Staff, Accidental
-from musicscore.exceptions import AlreadyFinalizedError, ChordNotesAreAlreadyCreatedError, AddChordError
+from musicscore.exceptions import AlreadyFinalizedError, AddChordError
 from musicscore.tests.util import IdTestCase
 from musicxml.xmlelement.xmlelement import XMLCoda, XMLSegno
 
@@ -49,7 +49,7 @@ class TestAddExceptions(IdTestCase):
         ch.add_midi(63)
         assert [m.value for m in ch.midis] == [60, 63]
         ch.finalize()
-        with self.assertRaises(ChordNotesAreAlreadyCreatedError):
+        with self.assertRaises(AlreadyFinalizedError):
             ch.add_midi(65)
 
     def test_add_dynamics_to_chord(self):
@@ -79,8 +79,8 @@ class TestAddExceptions(IdTestCase):
         ch = Chord(60, 1)
         p.add_chord(ch)
         lyrics1 = ch.add_lyric('one')
-        ch.finalize()
         lyrics2 = ch.add_lyric('two')
+        ch.finalize()
         assert ch.notes[0].find_children('XMLLyric') == [lyrics1, lyrics2]
 
     def test_add_wedge_to_chord(self):

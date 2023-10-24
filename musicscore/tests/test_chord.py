@@ -7,9 +7,10 @@ from musicscore import BassClef, Score, Part
 from musicscore.accidental import Accidental
 from musicscore.beat import Beat
 from musicscore.chord import Chord, _split_copy, _group_chords, GraceChord, Rest
-from musicscore.exceptions import ChordHasNoParentError, DeepCopyException, ChordNotesAreAlreadyCreatedError, \
-    ChordException, MusicTreeException, ChordAddXPlacementException, RestCannotSetMidiError, \
-    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotes
+from musicscore.exceptions import ChordHasNoParentError, DeepCopyException, ChordException, MusicTreeException, \
+    ChordAddXPlacementException, RestCannotSetMidiError, \
+    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotes, \
+    AlreadyFinalizedError
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDuration
 from musicscore.tests.util import ChordTestCase, create_test_objects, IdTestCase
@@ -352,14 +353,6 @@ class TestTreeChord(ChordTestCase):
         assert ch.notes[0].xml_lyric is not None
         assert ch.notes[0].xml_lyric.xml_text.value_ == 'test'
 
-    def test_add_lyrics_after_creating_notes(self):
-        ch = Chord(60, 1)
-        ch._parent = self.mock_beat
-        lyrics1 = ch.add_lyric('one')
-        ch.finalize()
-        lyrics2 = ch.add_lyric('two')
-        assert ch.notes[0].find_children('XMLLyric') == [lyrics1, lyrics2]
-
     def test_get_staff_number(self):
         ch = Chord(60, 2)
         ch._parent = self.mock_beat
@@ -416,7 +409,7 @@ class TestTreeChord(ChordTestCase):
 
         chord._parent = self.mock_beat
         chord.finalize()
-        with self.assertRaises(ChordNotesAreAlreadyCreatedError):
+        with self.assertRaises(AlreadyFinalizedError):
             chord.add_midi(80)
 
     def test_add_direction_type(self):
