@@ -81,7 +81,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._metronome = None
         self._grace_chords = {'before': [], 'after': []}
         self._arpeggio = None
-        self._after_notes_xml_objects = []
+        self._after_notes_xml_elements = []
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
         self.split = False
@@ -414,21 +414,36 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     # public properties
     @property
-    def all_midis_are_tied_to_next(self):
+    def all_midis_are_tied_to_next(self) -> bool:
+        """
+        :return: ``True``if the property :obj:`~musicscore.midi.Midi.is_tied_to_next` of all midi children of Chord are return ``True``, otherwise ``False``
+        """
         if set([m.is_tied_to_next for m in self.midis]) == {True}:
             return True
         else:
             return False
 
     @property
-    def all_midis_are_tied_to_previous(self):
+    def all_midis_are_tied_to_previous(self) -> bool:
+        """
+        :return: ``True``if the property :obj:`~musicscore.midi.Midi.is_tied_to_previous` of all midi children of Chord are return ``True``, otherwise ``False``
+        """
         if set([m.is_tied_to_previous for m in self.midis]) == {True}:
             return True
         else:
             return False
 
     @property
-    def arpeggio(self):
+    def arpeggio(self) -> str:
+        """
+        Set and get ``arpeggio`` value. Permitted values are ``None``, ``normal``, ``up``, ``down``, ``none``
+
+        After finalizing:
+          - ``none`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLNonArpeggiate` child to each :obj:`~musicscore.note.Note`\'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
+          - ``normal`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLArpeggiate` child to each :obj:`~musicscore.note.Note`\'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
+          - ``up`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLArpeggiate` child with direction ``up`` to each :obj:`~musicscore.note.Note`\'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
+          - ``down`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLArpeggiate` child with direction ``down`` to each :obj:`~musicscore.note.Note`\'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
+        """
         return self._arpeggio
 
     @arpeggio.setter
@@ -441,7 +456,10 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._arpeggio = val
 
     @property
-    def clef(self):
+    def clef(self) -> 'Clef':
+        """
+        Set or get :obj:`~musicscore.clef.Clef` object to be added to :obj:`~musicscore.measure.Measure` before this :obj:`~musicscore.chord.Chord`
+        """
         return self._clef
 
     @clef.setter
@@ -463,10 +481,16 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     @property
     def is_tied_to_previous(self):
+        """
+        Same as :obj:`~all_midis_are_tied_to_previous`
+        """
         return self.all_midis_are_tied_to_previous
 
     @property
     def is_tied_to_next(self):
+        """
+        Same as :obj:`~all_midis_are_tied_to_next`
+        """
         return self.all_midis_are_tied_to_next
 
     @property
@@ -581,10 +605,14 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         return self._xml_technicals
 
     # public methods
-    def add_after_note_xml_objects(self, xml_object):
-        self._after_notes_xml_objects.append(xml_object)
-
     def add_direction_type(self, direction_type: XMLElement, placement: Optional[str] = None):
+        """
+        Adds a :obj:`~musicxml.xmlelement.xmlelement.XMLDirectionType` to a private dictionary ``_xml_direction_types`` with placement keys: ``below`` and ``above``. This dictionary is used during the finalization to add :obj:`~musicxml.xmlelement.xmlelement.XMLDirection` objects to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` before this :obj:`~musicscore.chord.Chord`
+
+        :param direction_type: Permitted direction types are found in :obj:`~musicscore.util.XML_DIRECTION_TYPE_CLASSES` and :obj:`~musicscore.util.XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS`
+        :param placement: ``None``, ``below``, ``above``
+        :return: added direction_type
+        """
         if not placement:
             if isinstance(direction_type, XMLPedal) or isinstance(direction_type, XMLWedge):
                 placement = 'below'
@@ -603,14 +631,17 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             List['Dynamics']:
 
         """
-        This method is used to add one or more :obj:`musicscore.dynamics.Dynamics` objects to chord's private dictionary _xml_direction_types
-        This list is used to create or _update directions of the first :obj:`~musicscore.note.Note` object of chord`s notes
-        which are to be or are already created .
+        This method is used to add one or more :obj:`musicscore.dynamics.Dynamics` objects to chord's private dictionary ``_xml_direction_types``
 
-        :param dynamics: str, Dynamics of a list of Dynamics to be added to directions
-        :param placement: above or below
+        .. seealso::
+           :obj:`~add_direction_type`
+
+        :param dynamics: str, :obj:`~musicscore.dynamics.Dynamics` of a list of Dynamics to be added to directions
+        :param placement: ``above`` or ``below``
         :return: List[:obj:`~musicscore.dynamics.Dynamics`]
+        :exception: :obj:`~musicscore.exceptions.AlreadyFinalizedError`
         """
+
         if self._finalized is True:
             raise AlreadyFinalizedError(self, 'add_dynamics')
         dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(
@@ -619,7 +650,23 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
         return dynamics_object_list
 
-    def add_grace_chord(self, midis_or_grace_chord, type=None, *, position=None):
+    def add_grace_chord(self, midis_or_grace_chord: Union[List['Midi'], 'GraceChord'],
+                        type: Optional[str] = None, *, position: Optional[str] = None):
+        """
+        This method is used to add :obj:`~musicscore.midi.Midi`\s or :obj:`~musicscore.chord.GraceChord` object to the private dictionary ``_grace_chords`` with two position kyes ``before`` and ``after``. The midis or grace chords will be positioned in :obj:`~musicscore.measure.Measure` before or after this :obj:`~musicscore.chord.Chord`
+
+        A :obj:`~musicscore.chord.GraceChord` or a :obj:`~musicscore.chord.Chord` with :obj:`~musicscore.chord.Chord.quarter_duration` ``0`` can be added directly to a :obj:`~musicscore.beat.Beat` too.
+
+        :param midis_or_grace_chord: :obj:`~musicscore.midi.Midi`\s or :obj:`~musicscore.chord.GraceChord`
+
+        :param type: :obj:`~musicscore.chord.GraceChord.type` value of the :obj:`~musicscore.chord.GraceChord` to be created if ``midis_or_grace_chord`` is a list of midis. It specifices the not type of the grace note. For permitted values see: :obj:`~musicxml.xmlelement.xmlelement.XMLType`
+
+        :param position: ``None``, ``before``, ``after``. :obj:`~musicscore.chord.GraceChord.position` value of the :obj:`musicscore.chord.GraceChord` to be created if ``midis_or_grace_chord`` is a list of midis.
+
+        .. caution::
+           ``midis_or_grace_chord`` is of type :obj:`~musicscore.chord.GraceChord`, use :obj:`musicscore.chord.GraceChord.type` for setting its note type and :obj:`musicscore.chord.GraceChord.position` for setting its position instead of using type and position arguments.
+
+        """
         if self.up:
             raise ChordException(f'Chord {self} is already added to a measure. No grace chords can be added anymore.')
         if isinstance(midis_or_grace_chord, GraceChord):
@@ -640,23 +687,10 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         gch.parent_chord = self
         return gch
 
-    def add_tie(self, type: str) -> None:
-        """
-        Chord's tie list is used to add ties to or _update ties of all midis and consequently :obj:`musicscore.note.Note`
-        objects which are to be or are already created.
-
-        :param type: 'start' or 'stop'
-        :return: None
-        """
-
-        for midi in self.midis:
-            midi.add_tie(type=type)
-        self._update_ties()
-
     def add_lyric(self, text: Union[Any, XMLLyric], **kwargs):
         """
-        This method is used to add :obj:`~musicxml.xmlelement.xmlelement.XMLLyric` to chord's private _xml_lyricx list.
-        This list is used to add lyrics to or _update lyrics of the first :obj:`~musicscore.note.Note` object of chord`s notes
+        This method is used to add :obj:`~musicxml.xmlelement.xmlelement.XMLLyric` to chord's private ``_xml_lyrics`` list.
+        This list is used to add lyrics to or update lyrics of the first :obj:`~musicscore.note.Note` object of chord`s notes
         which are to be or are already created .
 
         :param text: if not of type :obj:`~musicxml.xmlelement.xmlelement.XMLLyric` a string conversion will be applied to text.
@@ -681,6 +715,19 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._midis.append(midi)
         self._sort_midis()
         return midi
+
+    def add_tie(self, type: str) -> None:
+        """
+        Chord's tie list is used to add ties to or _update ties of all midis and consequently :obj:`musicscore.note.Note`
+        objects which are to be or are already created.
+
+        :param type: 'start' or 'stop'
+        :return: None
+        """
+
+        for midi in self.midis:
+            midi.add_tie(type=type)
+        self._update_ties()
 
     def add_wedge(self, wedge: Union['XMLWedge', str], placement: str = 'below') -> 'XMLWedge':
         """
@@ -754,6 +801,17 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             raise NotImplementedError(f'parent_type: {parent_type} not implemented.')
 
         return x
+
+    def add_xml_element_after_notes(self, xml_element: XMLElement) -> XMLElement:
+        """
+        This method adds an :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to a list of elements to be added to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` during finalization and after adding this :obj:`~musicscore.chord.Chord`\'s :obj:`~musicscore.note.Note`\s to it.
+
+        :param: :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to be added after :obj:`~musicxml.xmlelement.xmlelement.XMLNotes`\s to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`
+        :return: added :obj:`~musicxml.xmlelement.xmlelement.XMLElement`
+
+        """
+        self._after_notes_xml_elements.append(xml_element)
+        return xml_element
 
     def finalize(self):
         """
@@ -831,8 +889,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             return [x for x in self._xml_other_notations if isinstance(x, type)]
         elif type in XML_ORNAMENT_AND_OTHER_NOTATIONS:
             return [x for x in self._xml_ornaments if isinstance(x, type)] + [x for x in
-                                                                               self._xml_other_notations if
-                                                                               isinstance(x, type)]
+                                                                              self._xml_other_notations if
+                                                                              isinstance(x, type)]
         else:
             raise NotImplementedError(f'get_x of type {type} not Implemented.')
 

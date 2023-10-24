@@ -22,7 +22,7 @@ class TestLily46b(IdTestCase):
         [p.add_chord(ch) for ch in chords]
         b = XMLBarline(location='middle')
         b.xml_bar_style = 'dashed'
-        chords[1].add_after_note_xml_objects(b)
+        chords[1].add_xml_element_after_notes(b)
         score.finalize()
 
         xml_path = Path(__file__).with_suffix('.xml')

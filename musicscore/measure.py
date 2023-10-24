@@ -10,7 +10,7 @@ from musicscore.key import Key
 from musicscore.quantize import QuantizeMixin
 from musicscore.staff import Staff
 from musicscore.time import Time, flatten_times
-from musicscore.util import lcm, chord_is_in_a_repetition
+from musicscore.util import lcm, _chord_is_in_a_repetition
 from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup, XMLBarline, XMLPrint, \
@@ -111,7 +111,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
                                 else:
                                     midi.accidental.show = False
                             else:
-                                if chord_is_in_a_repetition(chord):
+                                if _chord_is_in_a_repetition(chord):
                                     midi.accidental.show = False
                                 else:
                                     midi.accidental.show = True
@@ -201,7 +201,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             for voice in staff.get_children():
                 voice.update_beats()
 
-    def _update_xml_backup_note_direction(self):
+    def _update_xml_notes_backup_and_more(self):
         def add_backup():
             b = XMLBackup()
             d = self.quarter_duration * self.get_divisions()
@@ -227,7 +227,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
                         attributes.add_child(chord.clef.xml_object)
                     for note in chord.notes:
                         self.xml_object.add_child(note.xml_object)
-                    for xml_object in chord._after_notes_xml_objects:
+                    for xml_object in chord._after_notes_xml_elements:
                         self.xml_object.add_child(xml_object)
 
     @property
@@ -417,7 +417,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
                 st.finalize()
 
         self._update_accidentals()
-        self._update_xml_backup_note_direction()
+        self._update_xml_notes_backup_and_more()
         self._update_right_barline()
         self._finalized = True
 

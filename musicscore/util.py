@@ -50,10 +50,12 @@ note_types = {(1, 12): '32nd',
               (12, 1): 'breve'
               }
 
+#:
 XML_ARTICULATION_CLASSES = [XMLAccent, XMLStrongAccent, XMLStaccato, XMLTenuto, XMLDetachedLegato, XMLStaccatissimo,
                             XMLSpiccato, XMLScoop, XMLPlop, XMLDoit, XMLFalloff, XMLBreathMark, XMLCaesura, XMLStress,
                             XMLUnstress]
 
+#:
 XML_TECHNICAL_CLASSES = [XMLUpBow, XMLDownBow, XMLHarmonic, XMLOpenString, XMLThumbPosition, XMLFingering, XMLPluck,
                          XMLDoubleTongue,
                          XMLTripleTongue, XMLStopped, XMLSnapPizzicato, XMLFret, XMLString, XMLHammerOn, XMLPullOff,
@@ -62,35 +64,35 @@ XML_TECHNICAL_CLASSES = [XMLUpBow, XMLDownBow, XMLHarmonic, XMLOpenString, XMLTh
                          XMLSmear, XMLOpen,
                          XMLHalfMuted, XMLHarmonMute, XMLGolpe, XMLOtherTechnical]
 
+#:
 XML_ORNAMENT_CLASSES = [XMLDelayedInvertedTurn, XMLDelayedTurn, XMLHaydn, XMLInvertedMordent,
                         XMLInvertedTurn,
                         XMLInvertedVerticalTurn, XMLMordent, XMLOtherOrnament, XMLSchleifer, XMLShake, XMLTremolo,
                         XMLTrillMark, XMLTurn,
                         XMLVerticalTurn, XMLWavyLine]
 
+#:
 XML_DYNAMIC_CLASSES = [XMLF, XMLFf, XMLFff, XMLFfff, XMLFffff, XMLFfffff, XMLFp, XMLFz, XMLMf, XMLMp, XMLP, XMLPf,
                        XMLPp, XMLPpp, XMLPppp,
                        XMLPpppp, XMLPppppp, XMLRf, XMLRfz, XMLSf, XMLSffz, XMLSfp, XMLSfpp, XMLSfz, XMLSfzp,
                        XMLOtherDynamics]
 
+#:
 XML_OTHER_NOTATIONS = [XMLArpeggiate, XMLFermata, XMLFootnote, XMLGlissando, XMLLevel, XMLNonArpeggiate,
                        XMLOtherNotation, XMLSlide,
                        XMLSlur]
 
-# XML_DIRECTION_TYPE_CLASSES = [
-#     XMLRehearsal, XMLSegno, XMLCoda, XMLWords, XMLSymbol, XMLWedge, XMLDashes, XMLBracket, XMLPedal,
-#     XMLMetronome, XMLOctaveShift, XMLHarpPedals, XMLDamp, XMLDampAll, XMLEyeglasses, XMLStringMute, XMLScordatura,
-#     XMLImage, XMLPrincipalVoice, XMLPercussion, XMLAccordionRegistration, XMLStaffDivide, XMLOtherDirection
-# ]
-
+#:
 XML_DIRECTION_TYPE_CLASSES = [
     XMLRehearsal, XMLSegno, XMLCoda, XMLWords, XMLSymbol, XMLWedge, XMLDashes, XMLBracket, XMLPedal,
     XMLMetronome, XMLOctaveShift, XMLHarpPedals, XMLDamp, XMLDampAll, XMLEyeglasses, XMLStringMute, XMLScordatura,
     XMLPrincipalVoice, XMLPercussion, XMLAccordionRegistration, XMLStaffDivide, XMLOtherDirection
 ]
 
+#:
 XML_ORNAMENT_AND_OTHER_NOTATIONS = [XMLAccidentalMark]
 
+#:
 XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS = [XMLDynamics]
 
 
@@ -132,7 +134,7 @@ def isinstance_as_string(child: object, parent_class_names: Union[str, List[str]
     return True
 
 
-def chord_is_in_a_repetition(chord):
+def _chord_is_in_a_repetition(chord):
     my_index = chord.up.up.get_chords().index(chord)
     if my_index > 0 and not chord.is_tied_to_previous:
         all_previous_chords = [chord.up.up.get_chords()[my_index - i] for i in range(1, my_index + 1)]
@@ -195,8 +197,6 @@ def octave_chords(chords, type='down', size=8, number=1):
         placement = 'above'
     else:
         placement = 'below'
-    # if len(chords) < 2:
-    #     raise WrongNumberOfChordsError('util.octave_chords needs at list two chords.')
 
     chords[0].add_x(XMLOctaveShift(type=type, size=size, number=number), placement=placement)
     chords[-1].add_x(XMLOctaveShift(type='stop', size=size, number=number), placement=placement)

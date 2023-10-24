@@ -17,6 +17,7 @@ from musicscore.util import lcm
 
 __all__ = ['SPLITTABLES', 'Beat', '_beam_chord_group']
 
+#: This dictionary is used to split chords which are because of their position inside the beat and their quarter duration not writable into two writable chords {Position in Beat: {Quarter duration: [Split quarter durations]}}
 SPLITTABLES = {
     QuarterDuration(0): {
         QuarterDuration(5, 6): [QuarterDuration(3, 6), QuarterDuration(2, 6)],

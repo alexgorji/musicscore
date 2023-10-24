@@ -27,6 +27,7 @@ musicscore API
    finalize
    quarterduration
    quantize
+   util
    exceptions
 
 

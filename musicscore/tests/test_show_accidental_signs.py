@@ -2,7 +2,7 @@ import inspect
 
 from musicscore import Score, Part, Time, Chord, C
 from musicscore.tests.util import IdTestCase, generate_repetitions, generate_path
-from musicscore.util import chord_is_in_a_repetition
+from musicscore.util import _chord_is_in_a_repetition
 
 
 # MyXMLTestSuite test_cautionary
@@ -65,9 +65,9 @@ class TestShowAccidentalSigns(IdTestCase):
         s.export_xml(generate_path(inspect.currentframe()))
         for index, chord in enumerate(p.get_chords()):
             if index == 0:
-                assert chord_is_in_a_repetition(chord) is False
+                assert _chord_is_in_a_repetition(chord) is False
             else:
-                assert chord_is_in_a_repetition(chord) is True
+                assert _chord_is_in_a_repetition(chord) is True
 
         for index, chord in enumerate(p.get_chords()):
             if index == 0:

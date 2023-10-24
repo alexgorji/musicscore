@@ -1093,7 +1093,7 @@ class TestAddAfterNotes(IdTestCase):
         [part.add_chord(ch) for ch in chords]
         b = XMLBarline(location='middle')
         b.xml_bar_style = 'dashed'
-        chords[0].add_after_note_xml_objects(b)
+        chords[0].add_xml_element_after_notes(b)
         part.finalize()
         m = part.get_measure(1)
         expected = """<measure number="1">
