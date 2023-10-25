@@ -54,89 +54,7 @@ class QuarterDuration(numbers.Rational):
         self._value = None
         self.value = value
 
-    @property
-    def numerator(self):
-        """
-        :return: Fraction's numerator.
-        :rtype: int
-
-        >>> QuarterDuration(1, 6).numerator
-        1
-        """
-        return self.value.numerator
-
-    @property
-    def denominator(self):
-        """
-        :return: Fraction's denominator.
-        :rtype: int
-
-        >>> QuarterDuration(1, 6).denominator
-        6
-        """
-        return self.value.denominator
-
-    @property
-    def value(self):
-        """
-        :return: QuarterDuration's value
-        :rtype: quicktions.Fraction() with limit_denominator(1000)
-
-        >>> QuarterDuration(3, 7).value
-        Fraction(3, 7)
-        >>> QuarterDuration(0.2).value
-        Fraction(1, 5)
-        >>> QuarterDuration(Fraction(1, 5)).value
-        Fraction(1, 5)
-        >>> QuarterDuration(1/5).value
-        Fraction(1, 5)
-        """
-        return self._value
-
-    @value.setter
-    def value(self, val):
-        if val is None or val == ():
-            self._value = None
-        elif isinstance(val, Fraction):
-            self._value = val
-        elif isinstance(val, str):
-            self._value = Fraction(val).limit_denominator(1000)
-        elif hasattr(val, '__iter__'):
-            if len(val) == 1:
-                self._value = Fraction(val[0]).limit_denominator(1000)
-            elif len(val) == 2:
-                self._value = Fraction(*val).limit_denominator(1000)
-            else:
-                raise ValueError
-
-    def _get_type_and_dots(self):
-        type = _note_simple_types.get(self.as_integer_ratio())
-        if type:
-            return type, 0
-        else:
-            qd = QuarterDuration(self.value * 2 / 3)
-            type = _note_simple_types.get(qd.as_integer_ratio())
-            if type:
-                return type, 1
-            else:
-                qd = QuarterDuration(self.value * 4 / 7)
-                type = _note_simple_types.get(qd.as_integer_ratio())
-                if type:
-                    return type, 2
-                else:
-                    raise QuarterDurationIsNotWritable(f'quarter duration {self} is not writable.')
-
-    def as_integer_ratio(self):
-        """
-        :return: (numerator, denominator)
-        :rtype: tuple
-
-        >>> QuarterDuration(1, 5).as_integer_ratio()
-        (1, 5)
-        """
-        return self.value.as_integer_ratio()
-
-    def get_beatwise_sections(self, beats: List['Beat'], offset: Union[int, float, 'QuarterDuration', 'Fraction'] = 0):
+    def _get_beatwise_sections(self, beats: List['Beat'], offset: Union[int, float, 'QuarterDuration', 'Fraction'] = 0):
         """
         :param beats:
         :param offset: offset in the first beat
@@ -190,11 +108,99 @@ class QuarterDuration(numbers.Rational):
 
         return output
 
-    def get_type(self):
-        return self._get_type_and_dots()[0]
+    def _get_type_and_dots(self):
+        type = _note_simple_types.get(self.as_integer_ratio())
+        if type:
+            return type, 0
+        else:
+            qd = QuarterDuration(self.value * 2 / 3)
+            type = _note_simple_types.get(qd.as_integer_ratio())
+            if type:
+                return type, 1
+            else:
+                qd = QuarterDuration(self.value * 4 / 7)
+                type = _note_simple_types.get(qd.as_integer_ratio())
+                if type:
+                    return type, 2
+                else:
+                    raise QuarterDurationIsNotWritable(f'quarter duration {self} is not writable.')
+
+    @property
+    def denominator(self):
+        """
+        :return: Fraction's denominator.
+        :rtype: int
+
+        >>> QuarterDuration(1, 6).denominator
+        6
+        """
+        return self.value.denominator
+
+    @property
+    def numerator(self):
+        """
+        :return: Fraction's numerator.
+        :rtype: int
+
+        >>> QuarterDuration(1, 6).numerator
+        1
+        """
+        return self.value.numerator
+
+    @property
+    def value(self):
+        """
+        :return: QuarterDuration's value
+        :rtype: quicktions.Fraction with limit_denominator(1000)
+
+        >>> QuarterDuration(3, 7).value
+        Fraction(3, 7)
+        >>> QuarterDuration(0.2).value
+        Fraction(1, 5)
+        >>> QuarterDuration(Fraction(1, 5)).value
+        Fraction(1, 5)
+        >>> QuarterDuration(1/5).value
+        Fraction(1, 5)
+        """
+        return self._value
+
+    @value.setter
+    def value(self, val):
+        if val is None or val == ():
+            self._value = None
+        elif isinstance(val, Fraction):
+            self._value = val
+        elif isinstance(val, str):
+            self._value = Fraction(val).limit_denominator(1000)
+        elif hasattr(val, '__iter__'):
+            if len(val) == 1:
+                self._value = Fraction(val[0]).limit_denominator(1000)
+            elif len(val) == 2:
+                self._value = Fraction(*val).limit_denominator(1000)
+            else:
+                raise ValueError
+
+    def as_integer_ratio(self):
+        """
+        :return: (numerator, denominator)
+        :rtype: tuple
+
+        >>> QuarterDuration(1, 5).as_integer_ratio()
+        (1, 5)
+        """
+        return self.value.as_integer_ratio()
 
     def get_number_of_dots(self):
+        """
+        :return: Number of note dots associated with quarter duration
+        """
         return self._get_type_and_dots()[1]
+
+    def get_type(self) -> str:
+        """
+        :return: Note type associated with quarter duration
+        """
+        return self._get_type_and_dots()[0]
 
     def __repr__(self):
         return f'{self.value.numerator}/{self.value.denominator}'
@@ -352,9 +358,9 @@ class QuarterDurationMixin:
     @property
     def quarter_duration(self) -> QuarterDuration:
         """
-        Duration measured in quarters.
+        Sets and gets the duration measured in quarters.
 
-        val type: Optional[int, float, Fraction, QuarterDuration]
+        Setting value can be of types int, float, quicktions.Fraction, :obj:`~musicscore.quarterduration.QuarterDuration`
         """
         return self._quarter_duration
 

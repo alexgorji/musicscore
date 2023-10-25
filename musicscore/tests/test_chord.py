@@ -9,7 +9,7 @@ from musicscore.beat import Beat
 from musicscore.chord import Chord, _split_copy, _group_chords, GraceChord, Rest
 from musicscore.exceptions import ChordHasNoParentError, DeepCopyException, ChordException, MusicTreeException, \
     ChordAddXPlacementException, RestCannotSetMidiError, \
-    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotes, \
+    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotesError, \
     AlreadyFinalizedError
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDuration
@@ -721,7 +721,7 @@ class TestSplit(TestCase):
 
         ch = Chord(midis=60, quarter_duration=5)
         beats = [Beat(1), Beat(1), Beat(1), Beat(1)]
-        quarter_durations = ch.quarter_duration.get_beatwise_sections(beats=beats)
+        quarter_durations = ch.quarter_duration._get_beatwise_sections(beats=beats)
         ch.quarter_duration = quarter_durations[0][0]
         copied = _split_copy(ch, quarter_durations[1])
         assert [ch.quarter_duration, copied.quarter_duration] == [4, 1]
@@ -822,7 +822,7 @@ class TestAddGraceChord(ChordTestCase):
 
     def test_error_grace_chord_add_grace_chord(self):
         gch = GraceChord(60)
-        with self.assertRaises(GraceChordCannotHaveGraceNotes):
+        with self.assertRaises(GraceChordCannotHaveGraceNotesError):
             gch.add_grace_chord(80)
 
     def test_grace_chords_after_to_right_beat(self):

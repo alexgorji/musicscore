@@ -102,7 +102,10 @@ class GraceChordException(ChordException):
     pass
 
 
-class GraceChordCannotHaveGraceNotes(GraceChordException):
+class GraceChordCannotHaveGraceNotesError(GraceChordException):
+    pass
+
+class GraceChordCannotSetQuarterDurationError(GraceChordException):
     pass
 
 

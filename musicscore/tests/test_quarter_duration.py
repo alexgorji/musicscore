@@ -63,24 +63,24 @@ class TestQuarterDuration(TestCase):
 
     def test_split_quarter_duration(self):
         """
-        Test if get_beatwise_sections can split quarter duration to writable sections.
+        Test if _get_beatwise_sections can split quarter duration to writable sections.
         """
-        assert QuarterDuration(4).get_beatwise_sections(beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [[4], None]
-        assert QuarterDuration(3.5).get_beatwise_sections(beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [[3, 0.5],
-                                                                                                          None]
-        assert QuarterDuration(3.5).get_beatwise_sections(offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [
+        assert QuarterDuration(4)._get_beatwise_sections(beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [[4], None]
+        assert QuarterDuration(3.5)._get_beatwise_sections(beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [[3, 0.5],
+                                                                                                           None]
+        assert QuarterDuration(3.5)._get_beatwise_sections(offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [
             [0.5, 3], None]
-        assert QuarterDuration(4).get_beatwise_sections(offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [
+        assert QuarterDuration(4)._get_beatwise_sections(offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [
             [0.5, 3], 0.5]
-        assert QuarterDuration(4).get_beatwise_sections(offset=0.25, beats=[Beat(1), Beat(1), Beat(1)]) == [[0.75, 2],
-                                                                                                            1.25]
-        assert QuarterDuration(4).get_beatwise_sections(offset=0.5,
-                                                        beats=[Beat(1), Beat(1.5), Beat(1.5), Beat(0.5)]) == [
+        assert QuarterDuration(4)._get_beatwise_sections(offset=0.25, beats=[Beat(1), Beat(1), Beat(1)]) == [[0.75, 2],
+                                                                                                             1.25]
+        assert QuarterDuration(4)._get_beatwise_sections(offset=0.5,
+                                                         beats=[Beat(1), Beat(1.5), Beat(1.5), Beat(0.5)]) == [
                    [0.5, 3, 0.5],
                    None]
-        assert QuarterDuration(3).get_beatwise_sections(offset=0.5, beats=[Beat(1), Beat(1), Beat(0.5), Beat(0.5)]) == [
+        assert QuarterDuration(3)._get_beatwise_sections(offset=0.5, beats=[Beat(1), Beat(1), Beat(0.5), Beat(0.5)]) == [
             [0.5, 2], 0.5]
-        assert QuarterDuration(4).get_beatwise_sections(offset=0.15, beats=[Beat(0.5), Beat(1.5), Beat(1)]) == [
+        assert QuarterDuration(4)._get_beatwise_sections(offset=0.15, beats=[Beat(0.5), Beat(1.5), Beat(1)]) == [
             [0.35, 1.5, 1], 1.15]
 
     def test_copy_quarter_duration(self):

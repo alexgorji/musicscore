@@ -465,7 +465,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         """
         If child's quarter duration is less than beat's remaining quarter duration: child is added to the beat.
 
-        If child's quarter duration is greater than beat's remaining quarter duration: :obj:`~musicscore.chord.Chord`'s :obj:`~musicscore.chord.Chord.split_and_add_beatwise` is
+        If child's quarter duration is greater than beat's remaining quarter duration: :obj:`~musicscore.chord.Chord`'s :obj:`~musicscore.chord.Chord._split_and_add_beatwise` is
         method called. It is possible to add a chord with a quarter duration exceeding the beat's quarter duration without splitting the chord.
         For example if the first beat in a 4/4 measure gets a chord with quarter duration 3, the chord will be added to this first beat as a
         child and the following two beats will be set to filled without having a child themselves and the parent
@@ -509,7 +509,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 return [child]
             else:
                 beats = self.up.get_children()[self.up.get_children().index(self):]
-                return child.split_and_add_beatwise(beats)
+                return child._split_and_add_beatwise(beats)
 
     def add_chord(self, *args, **kwargs):
         raise AddChordError

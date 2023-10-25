@@ -7,7 +7,8 @@ from musicscore.dynamics import Dynamics
 from musicscore.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, AlreadyFinalizedError, DeepCopyException, ChordException, NotationException, \
     ChordAddXException, ChordAddXPlacementException, RestCannotSetMidiError, \
-    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotes
+    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotesError, \
+    GraceChordCannotSetQuarterDurationError
 from musicscore.finalize import FinalizeMixin
 from musicscore.midi import Midi
 from musicscore.musictree import MusicTree
@@ -425,7 +426,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     @property
     def all_midis_are_tied_to_next(self) -> bool:
         """
-        :return: ``True``if the property :obj:`~musicscore.midi.Midi.is_tied_to_next` of all midi children of Chord are return ``True``, otherwise ``False``
+        :return: ``True`` if the property :obj:`~musicscore.midi.Midi.is_tied_to_next` of all midi children of Chord are return ``True``, otherwise ``False``
         """
         if set([m.is_tied_to_next for m in self.midis]) == {True}:
             return True
@@ -435,7 +436,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     @property
     def all_midis_are_tied_to_previous(self) -> bool:
         """
-        :return: ``True``if the property :obj:`~musicscore.midi.Midi.is_tied_to_previous` of all midi children of Chord are return ``True``, otherwise ``False``
+        :return: ``True`` if the property :obj:`~musicscore.midi.Midi.is_tied_to_previous` of all midi children of Chord are return ``True``, otherwise ``False``
         """
         if set([m.is_tied_to_previous for m in self.midis]) == {True}:
             return True
@@ -504,6 +505,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     @property
     def metronome(self):
+        """
+        Get and set the :obj:`~musicscore.metronome.Metronome` object associated with this :obj:`~musicscore.chord.Chord`
+        """
         return self._metronome
 
     @metronome.setter
@@ -585,31 +589,28 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     @property
     def xml_articulations(self) -> List[_all_articulations]:
         """
-        :return: list of xml articulations to be added to self.notes
+        :return: list of xml articulations to be added to this :obj:`~musicscore.chord.Chord` during finalization.
         """
         return self._xml_articulations
 
     @property
     def xml_direction_types(self) -> Dict:
         """
-        :return: dict of xml direction types to be added to self.notes.
-
-        .. todo::
-           Better documentation. Which types can be added?  Example?
+        :return: dict of xml direction types to be added to this :obj:`~musicscore.chord.Chord` during finalization.
         """
         return self._xml_direction_types
 
     @property
     def xml_lyrics(self) -> List['XMLLyric']:
         """
-        :return: list of xml lyrics to be added to self.notes
+        :return: list of xml lyrics to be added to this :obj:`~musicscore.chord.Chord` during finalization.
         """
         return self._xml_lyrics
 
     @property
     def xml_technicals(self) -> List[_all_technicals]:
         """
-        :return: list of xml technicals to be added to self.notes
+        :return: list of xml technicals to be added to this :obj:`~musicscore.chord.Chord` during finalization.
         """
         return self._xml_technicals
 
@@ -866,7 +867,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def add_xml_element_after_notes(self, xml_element: XMLElement) -> XMLElement:
         """
-        This method adds an :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to a list of elements to be added to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` during finalization and after adding this :obj:`~musicscore.chord.Chord`\'s :obj:`~musicscore.note.Note`\s to it.
+        This method adds an :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to a list of elements to be added to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` during finalization after adding this :obj:`~musicscore.chord.Chord`\'s :obj:`~musicscore.note.Note`\s to it.
 
         :param: :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to be added after :obj:`~musicxml.xmlelement.xmlelement.XMLNotes`\s to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`
         :return: added :obj:`~musicxml.xmlelement.xmlelement.XMLElement`
@@ -881,9 +882,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         object will be prepared for returning a musicxml snippet or a whole musicxml file.
 
         - Check if parent :obj:`~musicscore.beat.Beat` exists.
-        - Ancestor :obj:`~musicscore.measure.Measure._update_divisions()` is called to _update :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`'s :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions` attribute.
-        - Following updates are triggered: update_notes, update_xml_chord, update_notes_quarter_durations, update_xml_lyrics,
-          update_xml_directions, update_xml_articulations, update_technicals
+        - Ancestors :obj:`~musicscore.measure.Measure._update_divisions()` is called to update :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`'s :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions` attribute.
+        - Following updates are triggered: _update_notes, _update_xml_chord, _update_notes_quarter_durations, _update_xml_lyrics, _update_ties, _update_xml_directions, _update_xml_metronome, _update_xml_articulations, _update_technicals, _update_xml_ornaments, _update_xml_dynamics, _update_xml_other_notations, _update_xml_notations_arpeggiate
         """
         if self._finalized:
             raise AlreadyFinalizedError(self)
@@ -907,13 +907,39 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._update_xml_notations_arpeggiate()
         self._finalized = True
 
-    def get_brackets(self):
+    def get_brackets(self) -> List["XMLBracket"]:
+        """
+        Get :obj:`~musicxml.xmlelement.xmlelement.XMLBracket` objects associated with this :obj:`~musicscore.chord.Chord`
+
+        .. seealso::
+          :obj:`~get_x()`
+
+
+        :return: list of :obj:`~musicxml.xmlelement.xmlelement.XMLBracket`
+        """
         return self.get_x(XMLBracket)
 
-    def get_grace_chords(self, position='before'):
+    def get_grace_chords(self, position: str = 'before') -> List["GraceChord"]:
+        """
+        Get :obj:`~musicscore.chord.GraceChord` objects associated with this :obj:`~musicscore.chord.Chord`
+
+        :param position: ``before``, ``after``
+        :return: list of positioned :obj:`~musicscore.chord.GraceChord`
+        """
+
         return self._grace_chords[position]
 
-    def get_x(self, type):
+    def get_x(self, type: "type") -> List[Union[
+        _all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations, _all_direction_types]]:
+
+        """
+        Get different direction_type, ornament, technical, articulation, dynamics or other notations objects objects associated with this :obj:`~musicscore.chord.Chord`
+
+        .. seealso::
+           :obj:`~add_x()`
+
+        :param type: type of XMLElement to look for.
+        """
         if type == XMLDynamics:
             raise NotImplementedError(f'get_x of type {type} not Implemented.')
         elif type in XML_DIRECTION_TYPE_CLASSES:
@@ -938,14 +964,25 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def get_parent_measure(self) -> 'Measure':
         """
-        :return: parent measure
+        :return: parent :obj:`~musicscore.measure.Measure`
         """
         return self.up.up.up.up
 
-    def get_slurs(self):
+    def get_slurs(self) -> List["XMLSlur"]:
+        """
+        Get :obj:`~musicxml.xmlelement.xmlelement.XMLSlur` objects associated with this :obj:`~musicscore.chord.Chord`
+
+        .. seealso::
+          :obj:`~get_x()`
+
+        :return: list of :obj:`~musicxml.xmlelement.xmlelement.XMLSlur`
+        """
         return self.get_x(XMLSlur)
 
-    def get_staff_number(self):
+    def get_staff_number(self) -> Optional[int]:
+        """
+        :return: number of parent :obj:`~musicscore.staff.Staff`
+        """
         try:
             return self.up.up.up.number
         except AttributeError:
@@ -954,20 +991,37 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def get_voice(self):
         raise TypeError
 
-    def get_voice_number(self) -> int:
+    def get_voice_number(self) -> Optional[int]:
         """
-        :return: parent voice number
-        :rtype: positive int
+        :return: number of parent :obj:`~musicscore.voice.Voice`
         """
         try:
             return self.up.up.number
         except AttributeError:
             return None
 
-    def get_wedges(self):
+    def get_wedges(self) -> List["XMLWedge"]:
+        """
+        Get :obj:`~musicxml.xmlelement.xmlelement.XMLWedge` objects associated with this :obj:`~musicscore.chord.Chord`
+
+        .. seealso::
+          :obj:`~get_x()`
+
+
+        :return: list of :obj:`~musicxml.xmlelement.xmlelement.XMLWedge`
+        """
         return self.get_x(XMLWedge)
 
-    def get_words(self):
+    def get_words(self) -> List["XMLWords"]:
+        """
+        Get :obj:`~musicxml.xmlelement.xmlelement.XMLWords` objects associated with this :obj:`~musicscore.chord.Chord`
+
+        .. seealso::
+          :obj:`~get_x()`
+
+
+        :return: list of :obj:`~musicxml.xmlelement.xmlelement.XMLWords`
+        """
         return self.get_x(XMLWords)
 
     def has_same_pitches(self, other: 'Chord') -> bool:
@@ -975,7 +1029,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         Only for chords with pitches. Rest chords cannot use this method.
 
         :param other: Other chord to which the comparison takes place
-        :return: `True` if pitches of self and other chord has the same pitch parameters and accidental values else `False`
+        :return: ``True`` if pitches of self and other chord has the same pitch parameters and accidental values else ``False``
         """
         if not isinstance(other, Chord):
             raise TypeError
@@ -993,12 +1047,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def set_possible_subdivisions(self):
         raise TypeError
 
-    def split_and_add_beatwise(self, beats: List['Beat']) -> List['Chord']:
+    def _split_and_add_beatwise(self, beats: List['Beat']) -> List['Chord']:
         """
-        All betas must have a voice parent
-
-        :param beats:
-        :return:
+        This method is used to split the chord into a list of tied chords with proper quarter durations according to ``beats`` All beats must have the same :obj:`~musicscore.voice.Voice` parent and
         """
         voice_set = {beat.up for beat in beats}
         if len(voice_set) != 1:
@@ -1016,7 +1067,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             raise ChordAlreadySplitError('First beat must be the next beat in voice which can accept chords.')
         if beats[-1] != voice.get_children()[-1]:
             raise ChordAlreadySplitError('Last beat must be the last beat in voice.')
-        quarter_durations = self.quarter_duration.get_beatwise_sections(
+        quarter_durations = self.quarter_duration._get_beatwise_sections(
             offset=beats[0].filled_quarter_duration, beats=beats)
         self.quarter_duration = quarter_durations[0][0]
         self.split = True
@@ -1110,25 +1161,48 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
 
 class GraceChord(Chord):
+    """
+    .. seealso::
+       :obj:`~Chord` for inherited methods and properties
+
+    """
     _ATTRIBUTES = Chord._ATTRIBUTES.union({'type', 'parent_chord', 'position'})
 
     def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None, *,
                  type=None, position='before', **kwargs):
+        if 'quarter_duration' in kwargs.keys():
+            raise GraceChordCannotSetQuarterDurationError(
+                'quarter_duration of a GraceChord is always 0 and cannot be set')
         super().__init__(midis=midis, quarter_duration=0, **kwargs)
         self._type = None
         self._position = None
         self.type = type
         self.position = position
 
+    @Chord.quarter_duration.getter
+    def quarter_duration(self) -> QuarterDuration:
+        """
+        Is always zero and Cannot be set.
+        :exception: :obj:`~musicscore.exceptions.GraceChordCannotSetQuarterDurationError`
+        """
+        return super().quarter_duration
+
     @Chord.quarter_duration.setter
     def quarter_duration(self, val):
         if val != 0:
-            raise ChordException('quarter_duration of a GraceChord is always 0 and cannot be set')
+            raise GraceChordCannotSetQuarterDurationError(
+                'quarter_duration of a GraceChord is always 0 and cannot be set')
         else:
             self._quarter_duration = 0
 
     @property
     def position(self):
+        """
+        Set and get position (``before``, ``after``) of this :obj:`~musicscore.chord.GraceChord`. It is relevant if it would be added to a :obj:`~musicscore.chord.Chord`.
+
+        .. seealso::
+           :obj:`musicscore.chord.Chord.add_grace_chord()`
+        """
         return self._position
 
     @position.setter
@@ -1141,6 +1215,9 @@ class GraceChord(Chord):
 
     @property
     def type(self):
+        """
+        Set and get note type of this :obj:`~musicscore.chord.GraceChord`. For permitted values see: :obj:`~musicxml.xmlelement.xmlelement.XMLType`
+        """
         return self._type
 
     @type.setter
@@ -1154,10 +1231,16 @@ class GraceChord(Chord):
                 self._type = val
 
     def add_grace_chord(self, midis_or_grace_chord, type=None, *, position=None):
-        raise GraceChordCannotHaveGraceNotes
+        """
+        :exception: :obj:`~musicscore.exceptions.GraceChordCannotHaveGraceNotesError`
+        """
+        raise GraceChordCannotHaveGraceNotesError
 
     def get_grace_chords(self, position='before'):
-        raise GraceChordCannotHaveGraceNotes
+        """
+        :exception: :obj:`~musicscore.exceptions.GraceChordCannotHaveGraceNotesError`
+        """
+        raise GraceChordCannotHaveGraceNotesError
 
     def finalize(self):
         super().finalize()
@@ -1165,11 +1248,15 @@ class GraceChord(Chord):
 
 
 class Rest(Chord):
+    """
+    .. seealso::
+      :obj:`~Chord` for inherited methods and properties
+    """
     _ATTRIBUTES = Chord._ATTRIBUTES.union({'display_step', 'display_octave', 'measure'})
 
     def __init__(self, quarter_duration, display_step=None, display_octave=None, measure=None, **kwargs):
         if 'midis' in kwargs.keys():
-            raise RestCannotSetMidiError
+            raise RestCannotSetMidiError('midis value of a GraceChord is always 0 and cannot be set')
         super().__init__(midis=0, quarter_duration=quarter_duration, **kwargs)
         self._display_step = None
         self._display_octave = None
@@ -1180,6 +1267,10 @@ class Rest(Chord):
 
     @property
     def display_step(self):
+        """
+        Set and get  :obj:`~musicxml.xmlelement.xmlelement.XMLDisplayStep` child of :obj:`~musicxml.xmlelement.xmlelement.XMLRest`.
+        Permitted values are ``None``, ``A``, ``B``, ``C``, ``D``, ``E``, ``F``, ``G``
+        """
         return self._display_step
 
     @display_step.setter
@@ -1191,6 +1282,10 @@ class Rest(Chord):
 
     @property
     def display_octave(self):
+        """
+        Set and get :obj:`~musicxml.xmlelement.xmlelement.XMLDisplayOctave` child of :obj:`~musicxml.xmlelement.xmlelement.XMLRest`.
+        Permitted are ``None`` and positive int
+        """
         return self._display_octave
 
     @display_octave.setter
@@ -1201,11 +1296,32 @@ class Rest(Chord):
 
     @property
     def measure(self):
+        """
+        Set or get measure attribute of :obj:`~musicxml.xmlelement.xmlelement.XMLRest`.
+        Permitted values are ``None``, ``yes`` and ``no``. If ``yes``, this indicates this is a complete measure rest.
+
+        """
         return self._measure
 
     @measure.setter
     def measure(self, val):
         self._measure = val
+
+    @Chord.midis.getter
+    def midis(self) -> List['Midi']:
+        """
+        Is always zero and Cannot be set.
+        :exception: :obj:`~musicscore.exceptions.RestCannotSetMidiError`
+        """
+        return super().midis
+
+    @Chord.midis.setter
+    def midis(self, val):
+
+        if val != 0:
+            raise RestCannotSetMidiError('midis value of a GraceChord is always 0 and cannot be set')
+        else:
+            self._midis = 0
 
     def finalize(self):
         if self.display_step and not self.display_octave:

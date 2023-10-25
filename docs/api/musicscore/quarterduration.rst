@@ -6,3 +6,4 @@ musicscore.quarterduration
    :undoc-members:
    :show-inheritance:
    :inherited-members:
+   :exclude-members: conjugate, imag, real
