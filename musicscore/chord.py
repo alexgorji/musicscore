@@ -1,4 +1,5 @@
 import copy
+import warnings
 from fractions import Fraction
 from typing import Union, List, Optional, Any, Dict
 
@@ -615,6 +616,15 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         return self._xml_technicals
 
     # public methods
+    def add_after_note_xml_objects(self, xml_element):
+        """
+        .. deprecated::
+            This method is deprecated.
+            Use :obj:`add_xml_element_after_notes()` instead.
+        """
+        warnings.warn("This method is deprecated. Use add_xml_element_after_notes() instead.")
+        return self.add_xml_element_after_notes(xml_element)
+
     def add_direction_type(self, direction_type: XMLElement, placement: Optional[str] = None):
         """
         Adds a :obj:`~musicxml.xmlelement.xmlelement.XMLDirectionType` to a private dictionary ``_xml_direction_types`` with placement keys: ``below`` and ``above``. This dictionary is used during the finalization to add :obj:`~musicxml.xmlelement.xmlelement.XMLDirection` objects to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` before this :obj:`~musicscore.chord.Chord`
@@ -666,7 +676,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
         return dynamics_object_list
 
-    def add_grace_chord(self, midis_or_grace_chord: Union[List['Midi'], 'GraceChord'],
+    def add_grace_chord(self, midis_or_grace_chord: Union[
+        'Midi', List['Midi'], int, float, List[Union[int, float]], 'GraceChord'],
                         type: Optional[str] = None, *, position: Optional[str] = None):
         """
         This method is used to add :obj:`~musicscore.midi.Midi`\s or :obj:`~musicscore.chord.GraceChord` object to the private dictionary ``_grace_chords`` with two position kyes ``before`` and ``after``. The midis or grace chords will be positioned in :obj:`~musicscore.measure.Measure` before or after this :obj:`~musicscore.chord.Chord`
