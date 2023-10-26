@@ -281,7 +281,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     @property
     def time(self) -> Time:
         """
-        Sets and gets time. After setting value, parent_measure is set to self and method :obj:`musicscore.voice.Voice.update_beats(
+        Set and get time. After setting value, parent_measure is set to self and method :obj:`musicscore.voice.Voice.update_beats(
         )` of descendent voices is called.
 
         :type: Optional[:obj:`~musicscore.time.Time`]

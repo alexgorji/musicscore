@@ -105,7 +105,7 @@ class Margins:
     @property
     def bottom(self):
         """
-        Sets and gets :obj:`~musicxml.xmlelement.xmlelement.XMLBottomMargin` value of parent.
+        Set and get :obj:`~musicxml.xmlelement.xmlelement.XMLBottomMargin` value of parent.
         """
         return self._bottom
 
@@ -117,7 +117,7 @@ class Margins:
     @property
     def left(self) -> Union[int, float]:
         """
-        Sets and gets :obj:`~musicxml.xmlelement.xmlelement.XMLLeftMargin` value of parent.
+        Set and get :obj:`~musicxml.xmlelement.xmlelement.XMLLeftMargin` value of parent.
         """
         return self._left
 
@@ -146,7 +146,7 @@ class Margins:
     @property
     def right(self) -> Union[int, float]:
         """
-        Sets and gets :obj:`~musicxml.xmlelement.xmlelement.XMLRightMargin` value of parent.
+        Set and get :obj:`~musicxml.xmlelement.xmlelement.XMLRightMargin` value of parent.
         """
         return self._right
 
@@ -158,7 +158,7 @@ class Margins:
     @property
     def top(self) -> Union[int, float]:
         """
-        Sets and gets :obj:`~musicxml.xmlelement.xmlelement.XMLTopMargin` value of parent.
+        Set and get :obj:`~musicxml.xmlelement.xmlelement.XMLTopMargin` value of parent.
         """
         return self._top
 
@@ -190,7 +190,7 @@ class Scaling(XMLWrapper):
     @property
     def millimeters(self) -> Union[int, float]:
         """
-        Sets and gets millimeters value of scaling object. After setting value, parent :obj:`~musicscore.score.Score`'s :obj:`PageLayout` is
+        Set and get millimeters value of scaling object. After setting value, parent :obj:`~musicscore.score.Score`'s :obj:`PageLayout` is
         updated to reflect the changes.
 
         :return: millimeters
@@ -208,7 +208,7 @@ class Scaling(XMLWrapper):
     @property
     def score(self):
         """
-        Sets and gets parent :obj:`~musicscore.score.Score`. After setting score, its :obj:`~musicxml.xmlelement.xmlelement.XMLScaling`
+        Set and get parent :obj:`~musicscore.score.Score`. After setting score, its :obj:`~musicxml.xmlelement.xmlelement.XMLScaling`
         and :obj:`~musicxml.xmlelement.xmlelement.XMLDefaults` are created if needed.
 
         :return: parent score
@@ -226,7 +226,7 @@ class Scaling(XMLWrapper):
     @property
     def tenths(self) -> Union[int, float]:
         """
-        Sets and gets tenths value of scaling object. After setting value, parent :obj:`~musicscore.score.Score`'s :obj:`PageLayout` is updated to reflect the
+        Set and get tenths value of scaling object. After setting value, parent :obj:`~musicscore.score.Score`'s :obj:`PageLayout` is updated to reflect the
         changes.
 
         :return: tenths
@@ -302,7 +302,7 @@ class PageLayout(XMLWrapper, LayoutMixin):
     @property
     def orientation(self) -> str:
         """
-        Sets and gets orientation. Permitted values are ['portrait', 'landscape']. After setting value, if parent and size already
+        Set and get orientation. Permitted values are ['portrait', 'landscape']. After setting value, if parent and size already
         exist, page's height and width are set.
 
         :return: 'portrait', 'landscape'
@@ -331,7 +331,7 @@ class PageLayout(XMLWrapper, LayoutMixin):
     @property
     def size(self) -> str:
         """
-        Sets and gets orientation. Permitted values are keys of obj:`PAGE_SIZES`. After setting value, if parent and orientation already
+        Set and get orientation. Permitted values are keys of obj:`PAGE_SIZES`. After setting value, if parent and orientation already
         exist, page's height and width are set.
 
         :return: sizes in :obj:`PAGE_SIZES`
@@ -378,7 +378,7 @@ class SystemLayout(XMLWrapper, LayoutMixin):
     @property
     def system_distance(self) -> Optional[Union[int, float]]:
         """
-        Sets and gets ``value`` of :obj:`~musicxml.xmlelement.xmlelement.XMLSystemDistance`.
+        Set and get ``value`` of :obj:`~musicxml.xmlelement.xmlelement.XMLSystemDistance`.
 
         :return: ``self.xml_object.xml_system_distance.value_``
         :rtype: int, float, None
@@ -393,7 +393,7 @@ class SystemLayout(XMLWrapper, LayoutMixin):
     @property
     def top_system_distance(self) -> Optional[Union[int, float]]:
         """
-        Sets and gets ``value`` of :obj:`~musicxml.xmlelement.xmlelement.XMLTopSystemDistance`.
+        Set and get ``value`` of :obj:`~musicxml.xmlelement.xmlelement.XMLTopSystemDistance`.
 
         :return: ``self.xml_object.xml_top_system_distance.value_``
         :rtype: int, float, None
@@ -418,7 +418,7 @@ class StaffLayout(XMLWrapper, LayoutMixin):
     @property
     def staff_distance(self) -> Optional[Union[int, float]]:
         """
-        Sets and gets ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLStaffDistance`.
+        Set and get ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLStaffDistance`.
 
         :return: ``self.xml_object.xml_staff_distance.value_``
         :rtype: int, float, None

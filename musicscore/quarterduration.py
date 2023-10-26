@@ -358,9 +358,9 @@ class QuarterDurationMixin:
     @property
     def quarter_duration(self) -> QuarterDuration:
         """
-        Sets and gets the duration measured in quarters.
+        Set and get the duration measured in quarters.
 
-        Setting value can be of types int, float, quicktions.Fraction, :obj:`~musicscore.quarterduration.QuarterDuration`
+        Setting value can be of types ``int``, ``float``, ``quicktions.Fraction``, :obj:`~musicscore.quarterduration.QuarterDuration`
         """
         return self._quarter_duration
 

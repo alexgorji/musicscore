@@ -12,6 +12,11 @@ __all__ = ['Note', 'tie', 'untie']
 
 
 def tie(*notes):
+    """
+    Tie notes.
+    """
+    if hasattr(notes[0], '__iter__'):
+        notes = notes[0]
     notes[0].start_tie()
     if len(notes) > 1:
         for note in notes[1:-1]:
@@ -21,6 +26,11 @@ def tie(*notes):
 
 
 def untie(*notes):
+    """
+    Untie notes.
+    """
+    if hasattr(notes[0], '__iter__'):
+        notes = notes[0]
     notes[0].remove_tie('start')
     if len(notes) > 1:
         for note in notes[1:-1]:
@@ -226,7 +236,9 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     @property
     def midi(self) -> Midi:
         """
-        val must be a Midi object with a parent Chord. Midi with value 0 means rest.
+        :obj:`~musicscore.chord.Chord`.midi property must be a :obj:`~musicscore.midi.Midi` object with a parent :obj:`~musicscore.chord.Chord`. :obj:`~musicscore.midi.Midi` with value `0` means rest.
+        Setting this property will set :obj:`~musicscore.midi.Midi`\s :obj:`~musicscore.midi.Midi.parent_note` to self.
+
         :return: note's :obj:`~musicscore.midi.Midi`.
         """
         return self._midi
@@ -254,7 +266,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     def parent_chord(self) -> 'Chord':
         """
         :return: notes parent. Same as self.up
-        :rtype: :obj:`musicscore.chord.Chord`
         """
         return self._parent_chord
 
@@ -270,6 +281,9 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             self.xml_object.xml_duration = None
 
     def get_parent_chord(self):
+        """
+        returns :obj:`~parent_chord`
+        """
         return self.parent_chord
 
     def get_or_create_xml_notations(self) -> 'XMLNotations':
@@ -284,13 +298,13 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     def get_parent_measure(self) -> 'Measure':
         """
-        :return: :obj:`~musicscore.measure.Measure` in note's ancestors
+        :return: parent :obj:`~musicscore.measure.Measure`
         """
         return self.parent_chord.get_parent_measure()
 
     def get_staff_number(self) -> int:
         """
-        :return: number of :obj:`~musicscore.staff.Staff` in note's ancestors
+        :return: number of parent :obj:`~musicscore.staff.Staff`
         """
         midi_staff_number = self.midi.get_staff_number()
         if midi_staff_number:
@@ -300,7 +314,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     def get_voice_number(self) -> int:
         """
-        :return: number of :obj:`~musicscore.voice.Voice` in note's ancestors
+        :return: number of parent :obj:`~musicscore.voice.Voice`
         """
         return self.get_parent_chord().get_voice_number()
 
@@ -343,7 +357,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     def start_tie(self) -> None:
         """
-        Start a tie if not already started. Update xml_tie and xml_tied if necessary.
+        Start a tie if not already started.
         """
         if not self.is_tied:
             self.xml_object.add_child(XMLTie(type='start'))
@@ -352,7 +366,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     def stop_tie(self) -> None:
         """
-        Stop a tie if not already stopped. Update xml_tie and xml_tied if necessary.
+        Stop a tie if not already stopped.
         """
         if self.is_tied_to_previous:
             pass
@@ -370,17 +384,15 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         Set or change number of dots
 
         :param number_of_dots: positiv int
-        :return: None
         """
         self._number_of_dots = number_of_dots
         self._update_xml_dots(number_of_dots)
 
     def update_type(self, val: Optional[str] = None) -> None:
         """
-        If val is None: type will be set according to note's quarter_duration.
+        If val is ``None``: type will be set according to note's ``quarter_duration``.
 
         :param val: [‘1024th’, ‘512th’, ‘256th’, ‘128th’, ‘64th’, ‘32nd’, ‘16th’, ‘eighth’, ‘quarter’, ‘half’, ‘whole’, ‘breve’, ‘long’, ‘maxima’]
-        :return: None
         """
         self._type = val
         if val is None:

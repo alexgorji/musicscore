@@ -1,11 +1,15 @@
-from typing import List
+from typing import List, Optional
 
 from musicscore.exceptions import TimeActualSignaturesNotValidError
 from musicscore.quarterduration import QuarterDuration
+from musicscore.util import isinstance_as_string
 from musicxml.xmlelement.xmlelement import XMLTime, XMLBeats, XMLBeatType
 from musicscore.xmlwrapper import XMLWrapper
 
-__all__ = ['Time', 'flatten_times']
+__all__ = ['Time', 'flatten_times', 'CONVERSION_DICTIONARY']
+
+#: If :obj:`Time.actual_signatures` is not set manually first this dictionary is used to create actual signature.
+CONVERSION_DICTIONARY = {'2/8': [2, 8], '4/8': [2, 8, 2, 8], '5/8': [3, 8, 2, 8], '7/8': [4, 8, 3, 8]}
 
 
 def _convert_signatures_to_ints(signatures):
@@ -46,7 +50,7 @@ class Time(XMLWrapper):
     def __init__(self, *signatures, show=True, **kwargs):
         super().__init__()
         self._xml_object = self.XMLClass(**kwargs)
-        self.parent_measure = None
+        self._parent_measure = None
 
         self._signatures = None
         self._actual_signatures = None
@@ -57,14 +61,13 @@ class Time(XMLWrapper):
         self.show = show
 
     def _calculate_actual_signatures(self):
-        map = {'2/8': [2, 8], '4/8': [2, 8, 2, 8], '5/8': [3, 8, 2, 8], '7/8': [4, 8, 3, 8]}
         signatures = _convert_signatures_to_ints(self.signatures)
         signatures = [signatures[i:i + 2] for i in range(0, len(signatures), 2)]
         self._intern_actual_signatures = []
         for signature in signatures:
             key = "/".join([str(x) for x in signature])
-            if key in map:
-                self._intern_actual_signatures.extend(map[key])
+            if key in CONVERSION_DICTIONARY:
+                self._intern_actual_signatures.extend(CONVERSION_DICTIONARY[key])
             elif signature[1] % 8 == 0 and signature[0] % 3 == 0:
                 self._intern_actual_signatures.extend([3, signature[1]] * (signature[0] // 3))
             else:
@@ -96,12 +99,13 @@ class Time(XMLWrapper):
     @property
     def actual_signatures(self) -> List[int]:
         """
-        Set and gets actual signatures. If parent measure exists its beats inside voices will be updated.
+        Set and gets actual signatures. If :obj:`parent_measure` exists its beats inside voices will be updated.
 
-        :type: Optional[List[int]]
         :return: A list of int representing actual time signatures. If not set manually, it is calculated internally. For example a 4/4 time
                  signature gets automatically [1, 4, 1, 4, 1, 4, 1, 4] as actual_signatures if not set otherwise.
-        :rtype: List[int]
+
+        .. seealso::
+           :obj:`CONVERSION_DICTIONARY`
         """
         if self._actual_signatures is None:
             if self._intern_actual_signatures is None:
@@ -118,14 +122,24 @@ class Time(XMLWrapper):
             self.parent_measure._update_voice_beats()
 
     @property
+    def parent_measure(self) -> Optional["Measure"]:
+        """
+        Set and get parent :obj:`~musicscore.measure.Measure`.
+        """
+        return self._parent_measure
+
+    @parent_measure.setter
+    def parent_measure(self, val):
+        if not val and not isinstance_as_string(val, "Measure"):
+            raise TypeError
+        self._parent_measure = val
+
+    @property
     def signatures(self) -> List[int]:
         """
-        Set and gets signatures. If parent measure exists, beats inside its voices will be updated. If val is None, a 4/4 signature is set.
+        Set and gets signatures. If :obj:`~parent_measure` exists, beats inside its voices will be updated. If it is set to ``None`` a 4/4 signature will be used.
 
-        :type: Optional[List[int]]
-        :return: A list of int representing time signature. If not set manually, it is calculated internally. For example a 4/4 time
-                 signature gets automatically [1, 4, 1, 4, 1, 4, 1, 4] as actual_signatures if not set otherwise.
-        :rtype: List[int]
+        :return: A list of int representing time signature.
         """
         return self._signatures
 

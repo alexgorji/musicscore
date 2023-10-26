@@ -128,7 +128,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     @property
     def page_layout(self) -> PageLayout:
         """
-        Sets and gets page layout. After setting value, page layout's parent is set to self.
+        Set and get page layout. After setting value, page layout's parent is set to self.
 
         :type: :obj:`~musicscore.pagelayout.PageLayout`
         :return: :obj:`~musicscore.pagelayout.PageLayout`
@@ -160,7 +160,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     @property
     def staff_layout(self):
         """
-        Sets and gets staff layout. After setting value, staff layout's parent is set to self.
+        Set and get staff layout. After setting value, staff layout's parent is set to self.
 
         :type: :obj:`~musicscore.stafflayout.StaffLayout`
         :return: :obj:`~musicscore.stafflayout.StaffLayout`
@@ -208,7 +208,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     @property
     def system_layout(self):
         """
-        Sets and gets system layout. After setting value, system layout's parent is set to self.
+        Set and get system layout. After setting value, system layout's parent is set to self.
 
         :type: :obj:`~musicscore.systemlayout.SystemLayout`
         :return: :obj:`~musicscore.systemlayout.SystemLayout`

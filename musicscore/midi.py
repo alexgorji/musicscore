@@ -30,11 +30,11 @@ def frequency_to_midi(frequency, a4=440):
 
 
 def get_accidental_mode(midi_value: Union[float, int], accidental_sign: Optional[str] = None) -> str:
-    """'
+    """
     :param midi_value: a valid midi value in half steps (int or float)
-    :param accidental_sign: 'double-flat', 'flat-flat', 'bb', 'ff' – 'three-quarters-flat' – 'flat', 'b', 'f' – 'quarter-flat' – None, 'natural' – 'quarter-sharp' – 'sharp', '#', 's' – 'three-quarters-sharp' – 'double-sharp', 'sharp-sharp', 'x', '##', 'ss'
-    :return: accidental_mode: 'standard', 'enharmonic', 'flat', 'sharp', 'force-flat', 'force-sharp'
-    '"""
+    :param accidental_sign: ``double-flat``, ``flat-flat``, ``bb``, ``ff`` – ``three-quarters-flat`` – ``flat``, ``b``, ``f`` – ``quarter-flat`` – ``None``, ``natural`` – ``quarter-sharp`` – ``sharp``, ``#``, ``s`` – ``three-quarters-sharp`` – ``double-sharp``, ``sharp-sharp``, ``x``, ``##``, ``ss``
+    :return: accidental_mode: ``standard``, ``enharmonic``, ``flat``, ``sharp``, ``force-flat``, ``force-sharp``
+    """
     # midi value is valid
     Midi(midi_value)
     if accidental_sign in [None, 'natural']:
@@ -146,7 +146,10 @@ class Midi(MusicTree):
 
     # //public properties
     @property
-    def accidental(self):
+    def accidental(self) -> "Accidental":
+        """
+        Set or get :obj:`~musicscore.accidental.Accidental` object associated with this midi. If it is set to ``None`` an :obj:`~musicscore.accidental.Accidental` object will be created.
+        """
         return self._accidental
 
     @accidental.setter
@@ -160,7 +163,31 @@ class Midi(MusicTree):
             self._accidental.parent_midi = self
 
     @property
-    def notehead(self):
+    def is_tied_to_next(self) -> bool:
+        """
+        :return: ``True`` if this midi adds a :obj:`~musicxml.xmlelement.xmlelement.XMLTie` object of type ``start`` :obj:`~musicscore.note.Note`.
+        """
+        if 'start' in self._ties:
+            return True
+        else:
+            return False
+
+    @property
+    def is_tied_to_previous(self):
+        """
+        :return: ``True`` if this midi adds a :obj:`~musicxml.xmlelement.xmlelement.XMLTie` object of type ``stop`` :obj:`~musicscore.note.Note`.
+
+        """
+        if 'stop' in self._ties:
+            return True
+        else:
+            return False
+
+    @property
+    def notehead(self) -> Optional["XMLNotehead"]:
+        """
+        Set or get notedhead property. This can be ``None`` or an :obj:`~musicxml.xmlelement.xmlelement.XMLNotehead` object. It is possible to set this property with a valid notehead value of type str. For permitted values see :obj:`~musicxml.xmlelement.xmlelement.XMLNotehead`.
+        """
         return self._notehead
 
     @notehead.setter
@@ -176,29 +203,24 @@ class Midi(MusicTree):
             self._notehead = val
 
     @property
-    def is_tied_to_next(self):
-        if 'start' in self._ties:
-            return True
-        else:
-            return False
-
-    @property
-    def is_tied_to_previous(self):
-        if 'stop' in self._ties:
-            return True
-        else:
-            return False
-
-    @property
-    def octave(self):
+    def octave(self) -> int:
+        """
+        :return: octave number of this midi.
+        """
         return int(self.value / 12) - 1
 
     @property
-    def parent_chord(self):
+    def parent_chord(self) -> "Chord":
+        """
+        Set or get parent :obj:`~musicscore.chord.Chord` object.
+        """
         return self._parent_chord
 
     @property
-    def parent_note(self):
+    def parent_note(self) -> "Note":
+        """
+        Set or get parent :obj:`~musicscore.note.Note` object.
+        """
         return self._parent_note
 
     @parent_note.setter
@@ -209,7 +231,10 @@ class Midi(MusicTree):
         self._parent = value
 
     @property
-    def value(self):
+    def value(self) -> Union[float, int]:
+        """
+        Set and get value of midi. A valid value must be of type ``float`` or ``int`` and can be between ``12`` and ``127``.
+        """
         return self._value
 
     @value.setter
@@ -223,9 +248,9 @@ class Midi(MusicTree):
         self._update_pitch_or_rest()
 
     @property
-    def name(self):
+    def name(self) -> str:
         """
-        :returns a string like C#3 consisting of step, accidental sign (or value) and octave. Midi with value 0 returns 'rest' as its name.
+        :return: a string like ``C#3`` consisting of ``step``, ``accidental sign`` (or value) and ``octave``. Midi with value 0 returns ``rest`` as its name.
         """
         if self.value == 0:
             return 'rest'
@@ -268,6 +293,8 @@ class Midi(MusicTree):
 
     def add_tie(self, type: str) -> None:
         """
+        A :obj:`~musicxml.xmlelement.xmlelement.XMLTie` child of type ``start`` or ``stop``  will be added to :obj:`~parent_note` object
+
         :param type: ``start``, ``stop``
         :exception: ValueError
         """
@@ -279,11 +306,14 @@ class Midi(MusicTree):
 
     def get_pitch_or_rest(self) -> Union['XMLPitch', 'XMLRest']:
         """
-        :return: XMLPitch with appropriate children.
+        :return: :obj:`~musicxml.xmlelement.xmlelement.XMLPitch` or :obj:`~musicxml.xmlelement.xmlelement.XMLRest` object associated with this :obj:`~musicscore.midi.Midi`.
         """
         return self._pitch_or_rest
 
     def get_staff_number(self):
+        """
+        :return: get manually set staff number (necessary for cross-staff notation)
+        """
         return self._staff_number
 
     def remove_tie(self, type: str) -> None:
@@ -301,6 +331,9 @@ class Midi(MusicTree):
             self.parent_note._update_ties()
 
     def set_staff_number(self, val):
+        """
+        Set staff number manually (necessary for cross-staff notation).
+        """
         self._staff_number = val
 
     def transpose(self, val: float) -> 'Midi':

@@ -11,11 +11,10 @@ musicscore.midi
    :members:
    :undoc-members:
    :show-inheritance:
-   :inherited-members:
+
 
 .. automodule:: musicscore.midi
    :members:
    :undoc-members:
    :show-inheritance:
-   :inherited-members:
    :exclude-members: Midi, MidiNote

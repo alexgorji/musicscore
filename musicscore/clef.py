@@ -25,7 +25,7 @@ class Clef(XMLWrapper):
     @property
     def line(self) -> Optional[int]:
         """
-        Sets and gets ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLLine`
+        Set and get ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLLine`
 
         :return: ``self.xml_object.xml_line.value_``
         :rtype: int, None
@@ -40,10 +40,9 @@ class Clef(XMLWrapper):
     @property
     def octave_change(self) -> Optional[int]:
         """
-        Sets and gets ``value_`` (int) of :obj:`~musicxml.xmlelement.xmlelement.XMLClefOctaveChange`and indicates how
-        many octaves to add to get from written pitch to sounding pitch.
+        Set and get ``value_`` (int) of :obj:`~musicxml.xmlelement.xmlelement.XMLOctaveChange` child object of associated :obj:`~musicxml.xmlelement.xmlelement.XMLClef` which indicates how many octaves must be added to get from written pitch to the sounding pitch.
+
         :return: ``self.xml_object.xml_clef_octave_change.value_``
-        :rtype: int, None
         """
 
         if self.xml_object.xml_clef_octave_change:
@@ -56,7 +55,7 @@ class Clef(XMLWrapper):
     @property
     def sign(self) -> Optional[str]:
         """
-        Sets and gets ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLSign`
+        Set and get ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLSign` child object of associated :obj:`~musicxml.xmlelement.xmlelement.XMLClef`
 
         :return: ``self.xml_object.xml_sign.value_``
         :rtype: str, None
@@ -71,7 +70,7 @@ class Clef(XMLWrapper):
     @property
     def show(self) -> bool:
         """
-        Sets and gets show attribute. If ``False`` :obj:`Clef` element is not shown.
+        Set and get show attribute. If ``False`` :obj:`Clef` element is not shown.
         """
         return self._show
 

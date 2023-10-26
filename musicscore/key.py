@@ -21,10 +21,9 @@ class Key(XMLWrapper):
     @property
     def fifths(self) -> Optional[int]:
         """
-        Sets and gets ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLFifths`
+        Set and get ``value_`` of :obj:`~musicxml.xmlelement.xmlelement.XMLFifths` child object of associated :obj:`~musicxml.xmlelement.xmlelement.XMLKey`
 
         :return: ``self.xml_object.xml_fifths.value_``
-        :rtype: int, None
         """
         if self.xml_object.xml_fifths:
             return self.xml_object.xml_fifths.value_
@@ -36,7 +35,7 @@ class Key(XMLWrapper):
     @property
     def show(self) -> bool:
         """
-        Sets and gets show attribute. If ``False`` :obj:`Key` object is not shown.
+        Set and get show attribute. If ``False`` :obj:`Key` object is not shown.
         """
         return self._show
 

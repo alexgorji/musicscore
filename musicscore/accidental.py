@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 
 from musicxml.xmlelement.xmlelement import XMLAccidental
 
@@ -270,7 +270,7 @@ class Accidental(MusicTree, XMLWrapper):
     @property
     def sign(self) -> Optional[str]:
         """
-        Converts ``alter`` into sign depending on mode. ``parent_midi`` must be set first.
+        Converts ``alter`` parameter of :obj:`~get_pitch_parameters` into an actual ``sign`` depending on :obj:`~mode`. :obj:`~parent_midi` must be set first.
 
         :return: Possible values: ``flat-flat``, ``three-quarters-flat``, ``flat``, ``quarter-flat``, ``natural``,
                  ``quarter-sharp``, ``sharp``, ``three-quarters-sharp``, ``double-sharp``
@@ -304,13 +304,14 @@ class Accidental(MusicTree, XMLWrapper):
             except AttributeError:
                 pass
 
-    def get_pitch_parameters(self, midi_value: Optional[float] = None) -> Optional[tuple]:
+    def get_pitch_parameters(self, midi_value: Optional[Union[int, float]] = None) -> Optional[tuple]:
         """
+        :param: a valid midi value or ``None``. If ``midi_value == 0`` (for a rest) return value is ``None``. If ``midi_value is None`` and a :obj:`~parent_midi` exists, parent_midi's value will be used.
+
         :return: A tuple consisting of pitch step name, alter value and octave value: ``(step, alter, octave)``
 
-                If ``midi_value == 0`` (for a rest) return value is ``None``.
-
-                If ``midi_value is None`` and a parent_midi exists, parent_midi's value will be used.
+        .. seealso::
+           :obj:`~mode`
         """
 
         if midi_value is None:
