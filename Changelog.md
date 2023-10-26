@@ -12,4 +12,4 @@ Chord.add_grace_chord(): type_ argument renamed to type to avoid autodoc conflic
 GraceChord: type_ property renamed to type to avoid autodoc conflicts.
 QuarterDuration.get_beatwise_sections renamed to private method _get_beatwise_sections
 util.chord_is_in_a_repetition renamed to private function _chord_is_in_a_repetition
-Score.new_system added. This will be set to True if a measure sets Measure.new_system to True. encoding supports in score will have an attribute new-system if Score.new_system is set to True.
+Score.new_system added. It will be automatically set to True if a Measure sets its Measure.new_system to True. <encoding> in XMLScore`\'s <identification> will have a <support> child with attribute 'new-system' if Score.new_system is set to True.

@@ -127,10 +127,14 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     @property
     def new_system(self) -> bool:
+        """
+        Set or get new_system property. It will be automatically set to ``True`` if a :obj:`~musicscore.measure.Measure` sets its :obj:`musicscore.measure.Measure.new_system` to ``True``. ``<encoding>`` in :obj:`~musicxml.xmlelement.xmlelement.XMLScorePartwise`\'s ``<identification>`` will have a ``<support>`` child with attribute ``new-system`` if :obj:`musicscore.score.Score.new_system` is set to ``True``.
+        """
         return self._new_system
 
     @new_system.setter
     def new_system(self, val):
+
         if isinstance(val, bool):
             self._new_system = val
         else:
