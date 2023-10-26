@@ -1,3 +1,4 @@
+import warnings
 from typing import List, Optional, Union
 
 from math import trunc
@@ -10,7 +11,7 @@ from musicscore.key import Key
 from musicscore.quantize import QuantizeMixin
 from musicscore.staff import Staff
 from musicscore.time import Time, flatten_times
-from musicscore.util import lcm, _chord_is_in_a_repetition
+from musicscore.util import lcm, _chord_is_in_a_repetition, isinstance_as_string
 from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup, XMLBarline, XMLPrint, \
@@ -196,6 +197,16 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             if self.xml_object.xml_print:
                 self.xml_object.xml_print.new_system = 'no'
 
+    def _update_score_encoding(self):
+        if self.new_system:
+            if not isinstance_as_string(self.get_root(), "Score"):
+                warnings.warn(
+                    f"Measure number {self.number} sets new_system to True but hat no Score as root. Score.new_system must be True for measure's new_system to take effect.")
+            else:
+                self.get_root().new_system = True
+        else:
+            self.get_root().new_system = False
+
     def _update_voice_beats(self):
         for staff in self.get_children():
             for voice in staff.get_children():
@@ -267,7 +278,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     @property
     def new_system(self) -> bool:
         """
-        If ``True``: ``new_system`` attribute of self.xml_object's child :obj:`~musicxml.xmlelement.xmlelement.XMLPrint` will be set to ``yes``
+        If ``True``: ``new_system`` attribute of self.xml_object's child :obj:`~musicxml.xmlelement.xmlelement.XMLPrint` will be set to ``yes``.
         """
         return self._new_system
 
@@ -277,6 +288,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             raise TypeError
         self._new_system = val
         self._update_print()
+        self._update_score_encoding()
 
     @property
     def time(self) -> Time:

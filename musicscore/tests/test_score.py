@@ -133,16 +133,14 @@ class TestScore(IdTestCase):
         s.staff_layout.staff_distance = 100
         assert s.xml_object.xml_defaults.xml_staff_layout.xml_staff_distance.value_ == 100
 
-    def test_score_identification(self):
+    def test_score_identification_and_new_system(self):
         s = Score()
         assert s.xml_object.xml_identification is not None
         assert s.xml_object.xml_identification.xml_encoding is not None
         all_supports = s.xml_object.xml_identification.xml_encoding.find_children('XMLSupports')
-        assert len(all_supports) == 5
+        assert len(all_supports) == 3
         expected = """<identification>
     <encoding>
-      <supports attribute="new-system" element="print" type="yes" value="yes" />
-      <supports attribute="new-page" element="print" type="yes" value="yes" />
       <supports element="accidental" type="yes" />
       <supports element="beam" type="yes" />
       <supports element="stem" type="yes" />
@@ -150,7 +148,27 @@ class TestScore(IdTestCase):
   </identification>
 """
         assert s.xml_object.xml_identification.to_string() == expected
-
+        s.new_system = True
+        expected = """<identification>
+    <encoding>
+      <supports element="accidental" type="yes" />
+      <supports element="beam" type="yes" />
+      <supports element="stem" type="yes" />
+      <supports attribute="new-system" element="print" type="yes" value="yes" />
+    </encoding>
+  </identification>
+"""
+        assert s.xml_object.xml_identification.to_string() == expected
+        s.new_system = False
+        expected = """<identification>
+    <encoding>
+      <supports element="accidental" type="yes" />
+      <supports element="beam" type="yes" />
+      <supports element="stem" type="yes" />
+    </encoding>
+  </identification>
+"""
+        assert s.xml_object.xml_identification.to_string() == expected
     def test_group_parts_wrong_number(self):
         score = Score()
         [score.add_part(f'p-{i}') for i in range(1, 3)]

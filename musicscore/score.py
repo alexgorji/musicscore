@@ -1,19 +1,18 @@
-from typing import List, Union, Optional
+from typing import Union, Optional
 
 from musicscore import Part, Chord
 from musicscore.chord import Rest
 from musicscore.exceptions import AlreadyFinalizedError, ScoreMultiMeasureRestError
 from musicscore.finalize import FinalizeMixin
+from musicscore.layout import Scaling, PageLayout, SystemLayout, StaffLayout
+from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
+from musicscore.quarterduration import QuarterDuration
+from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, \
     XMLEncoding, \
     XMLSupports, XMLScorePart, XMLPartGroup, XMLGroupSymbol, XMLGroupBarline, XMLGroupName, XMLGroupAbbreviation, \
     XMLMeasureStyle
-
-from musicscore.musictree import MusicTree
-from musicscore.quarterduration import QuarterDuration
-from musicscore.xmlwrapper import XMLWrapper
-from musicscore.layout import Scaling, PageLayout, SystemLayout, StaffLayout
 
 __all__ = ['TITLE', 'SUBTITLE', 'POSSIBLE_SUBDIVISIONS', 'Score']
 #:
@@ -36,13 +35,15 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     Child type: :obj:`~musicscore.part.Part`
     """
-    _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout'}
+    _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout',
+                   'new_system'}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
 
     XMLClass = XMLScorePartwise
 
-    def __init__(self, version='4.0', title=None, subtitle=None, get_quantized=False, *args, **kwargs):
+    def __init__(self, version='4.0', title=None, subtitle=None, get_quantized=False, new_system=False, *args,
+                 **kwargs):
 
         super().__init__(get_quantized=get_quantized)
         self._xml_object = self.XMLClass(*args, **kwargs)
@@ -54,6 +55,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._system_layout = None
         self._staff_layout = None
         self._scaling = None
+        self._new_system = None
 
         self.scaling = Scaling()
         self.page_layout = PageLayout()
@@ -61,6 +63,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self.version = version
         self.title = title
         self.subtitle = subtitle
+        self.new_system = new_system
         self._possible_subdivisions = POSSIBLE_SUBDIVISIONS.copy()
 
         self._measure_numbers_within_multi_measure_rests = set()
@@ -118,12 +121,30 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self.xml_object.xml_part_list = XMLPartList()
         self.xml_object.xml_identification = XMLIdentification()
         encoding = self.xml_object.xml_identification.xml_encoding = XMLEncoding()
-        encoding.add_child(XMLSupports(attribute='new-system', element='print', type='yes', value='yes'))
-        encoding.add_child(XMLSupports(attribute='new-page', element='print', type='yes', value='yes'))
-
         encoding.add_child(XMLSupports(element='accidental', type='yes'))
         encoding.add_child(XMLSupports(element='beam', type='yes'))
         encoding.add_child(XMLSupports(element='stem', type='yes'))
+
+    @property
+    def new_system(self) -> bool:
+        return self._new_system
+
+    @new_system.setter
+    def new_system(self, val):
+        if isinstance(val, bool):
+            self._new_system = val
+        else:
+            raise TypeError(f"new_system {val} must be of type bool and not {val.__class__}")
+        encoding = self.xml_object.xml_identification.xml_encoding
+        new_system_supports = [sup for sup in encoding.get_children_of_type(XMLSupports) if
+                               sup.attribute == 'new-system']
+        if self.new_system:
+            if not new_system_supports:
+                self.xml_object.xml_identification.xml_encoding.add_child(
+                    XMLSupports(attribute='new-system', element='print', type='yes', value='yes'))
+        else:
+            if new_system_supports:
+                self.xml_object.xml_identification.xml_encoding.remove(new_system_supports[0])
 
     @property
     def page_layout(self) -> PageLayout:

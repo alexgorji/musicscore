@@ -448,11 +448,16 @@ class TestMeasure(IdTestCase):
         assert len(v.get_children()) == 4
 
     def test_new_system(self):
-        m = Measure(1)
+        s = Score()
+        p = s.add_part('part1')
+        p.add_chord(Chord(quarter_duration=4 * 4 * 4, midis=60))
+        m = p.get_measure(1)
         assert m.new_system is False
         m.new_system = True
         assert m.new_system is True
         assert m.xml_object.xml_print.new_system == 'yes'
+        s.finalize()
+        s.xml_object._final_checks()
 
     def test_add_repeat_left(self):
         m = Measure(1)
