@@ -9,7 +9,7 @@ All example files can be found on GitHub under `examples <https://github.com/ale
 Hello World (1)
 ---------------
 
-  In this example one note is added to score step by step. At first you need to install musicscore (s. :doc:`usage`).
+  In this example one note is added to score step by step. At first you need to install musicscore (s. :doc:`installation`).
   After that follow the steps to create a simple musicxml file:
 
    #. import :obj:`musicscore.score.Score`, :obj:`musicscore.part.Part`, :obj:`musicscore.measure.Measure`,
