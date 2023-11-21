@@ -391,11 +391,36 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             return next(iter(denominators))
 
     def _remove_zero_quarter_durations(self):
+        """
+        todo
+        chord.get_previous_in_part()
+        chord.get_next_in_part()
+        """
         zeros = [ch for ch in self.get_children() if ch.quarter_duration == 0]
         for ch in zeros:
             if ch.all_midis_are_tied_to_next:
-                pass
+                ch.up.remove(ch)
+
             elif ch.all_midis_are_tied_to_previous:
+                # previous_chord = ch.previous
+                # if not previous_chord:
+                #     previous_beat = ch.up.previous
+                #     if not previous_beat:
+                #         previous_measure = ch.up.up.up.up.previous
+                #         staff_number = ch.up.up.up.number
+                #         if not staff_number:
+                #             staff_number = 1
+                #         voice_number = ch.up.up.number
+                #         previous_voice = previous_measure.get_voice(staff_number, voice_number)
+                #         previous_beat = previous_voice.get_children()[-1]
+                #         print(previous_beat.get_children())
+                #         # previous_chord = previous_beat.get_children()[-1]
+                # else:
+                #     print(previous_chord)
+                # if not previous_chord:
+                #     previous_chord = ch.up.previous.get_children()[-1]
+                # for m in previous_chord.midis:
+                #     m.remove_ties(type='start')
                 ch.up.remove(ch)
             else:
                 pass

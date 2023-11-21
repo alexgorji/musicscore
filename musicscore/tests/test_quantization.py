@@ -1,3 +1,7 @@
+import random
+from pathlib import Path
+
+from musicscore import SimpleFormat
 from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.quarterduration import QuarterDuration
@@ -100,7 +104,6 @@ class TestQuantization(IdTestCase):
         s = Score()
         s.set_possible_subdivisions([2, 3, 4, 6, 8])
         p = s.add_child(Part('p1'))
-        import random
         random.seed(11)
         quarter_durations = []
         while sum(quarter_durations) < 40:
