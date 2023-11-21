@@ -89,7 +89,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
                 note_types[self._quarter_duration.as_integer_ratio()]
             except KeyError:
                 msg = f"A note with quarter_duration {self._quarter_duration} and offset {self.up.offset} is not writable and must be " \
-                      f"split."
+                      f"split. See beat.SPLITTABLES"
                 self._quarter_duration = old_quarter_duration
                 raise NoteTypeError(msg)
 

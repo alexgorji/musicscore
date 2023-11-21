@@ -62,6 +62,10 @@ SPLITTABLES = {
         QuarterDuration(3, 6): [QuarterDuration(2, 6), QuarterDuration(1, 6)],
         QuarterDuration(5, 6): [QuarterDuration(2, 6), QuarterDuration(3, 6)],
     },
+    QuarterDuration(5, 9): {
+        QuarterDuration(4, 9): [QuarterDuration(1, 9), QuarterDuration(4, 9)]
+    },
+
 }
 
 
