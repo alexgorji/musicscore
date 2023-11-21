@@ -22,6 +22,7 @@ musicscore API
    key
    layout
    time
+   metronome
    musictree
    xmlwrapper
    finalize

@@ -9,6 +9,6 @@ Content
    :maxdepth: 2
 
    musicscore_intro
-   usage
+   installation
    examples
    api
