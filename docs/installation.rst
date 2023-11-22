@@ -1,5 +1,5 @@
-Usage
-=====
+Installation
+============
 
 .. warning::
    This documentation is still under construction!
