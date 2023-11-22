@@ -973,6 +973,14 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         else:
             raise NotImplementedError(f'get_x of type {type} not Implemented.')
 
+    def get_next_in_part(self) -> Optional["Chord"]:
+        """
+        Get the next chord in part with same voice and staff number
+
+        :raises: ~:obj:`~musicscore.exceptions.ChordHasNoParentPartError`
+        """
+        pass
+
     def get_parent_measure(self) -> 'Measure':
         """
         :return: parent :obj:`~musicscore.measure.Measure`

@@ -15,6 +15,7 @@ class AddChordError(MusicTreeException):
         msg = f"Use Part.add_chord() instead!"
         super().__init__(msg)
 
+
 class AlreadyFinalizedError(MusicTreeException):
     def __init__(self, object_, method_=None):
         msg = f"{object_.__class__.__name__} is already finalized."
@@ -87,6 +88,10 @@ class ChordHasNoParentError(ChordException):
     pass
 
 
+class ChordHasNoParentPartError(ChordException):
+    pass
+
+
 class ChordHasNoQuarterDurationError(ChordException):
     pass
 
@@ -103,6 +108,7 @@ class GraceChordException(ChordException):
 
 class GraceChordCannotHaveGraceNotesError(GraceChordException):
     pass
+
 
 class GraceChordCannotSetQuarterDurationError(GraceChordException):
     pass
