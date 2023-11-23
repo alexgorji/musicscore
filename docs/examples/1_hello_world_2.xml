@@ -5,8 +5,6 @@
 <score-partwise version="4.0">
   <identification>
     <encoding>
-      <supports attribute="new-system" element="print" type="yes" value="yes" />
-      <supports attribute="new-page" element="print" type="yes" value="yes" />
       <supports element="accidental" type="yes" />
       <supports element="beam" type="yes" />
       <supports element="stem" type="yes" />
@@ -36,12 +34,16 @@
       <top-system-distance>117</top-system-distance>
     </system-layout>
   </defaults>
+  <credit page="1">
+    <credit-type>title</credit-type>
+    <credit-words font-size="24" default-x="616" default-y="1573" justify="center" valign="top">Hello World 2</credit-words>
+  </credit>
   <part-list>
-    <score-part id="P1">
-      <part-name>Part 1</part-name>
+    <score-part id="hw2">
+      <part-name>HW2</part-name>
     </score-part>
   </part-list>
-  <part id="P1">
+  <part id="hw2">
     <measure number="1">
       <attributes>
         <divisions>1</divisions>
