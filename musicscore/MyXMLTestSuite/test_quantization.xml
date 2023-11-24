@@ -405,21 +405,27 @@
       <attributes>
         <divisions>7</divisions>
       </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words>7</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>21</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <dot />
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
+        <lyric>
+          <text>3.6</text>
+        </lyric>
       </note>
       <note>
         <pitch>
@@ -1421,18 +1427,22 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>26</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop" />
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
+        <lyric>
+          <text>1.01</text>
+        </lyric>
       </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
@@ -1740,19 +1750,22 @@
       <attributes>
         <divisions>2</divisions>
       </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words>7</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>6</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <dot />
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -2631,18 +2644,19 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>26</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop" />
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
@@ -2735,21 +2749,20 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>3</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>3</duration>
-        <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <dot />
-        <notations>
-          <tied type="stop" />
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="3">
@@ -2860,19 +2873,22 @@
       <attributes>
         <divisions>2</divisions>
       </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words>7</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>6</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <dot />
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -3021,14 +3037,10 @@
           <octave>4</octave>
         </pitch>
         <duration>3</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <dot />
         <beam number="1">end</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="6">
@@ -3363,18 +3375,21 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>19</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>8</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -3438,12 +3453,10 @@
         </pitch>
         <duration>8</duration>
         <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <notations>
           <tied type="stop" />
-          <tied type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -3563,18 +3576,19 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>26</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop" />
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
@@ -3667,21 +3681,20 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>3</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>3</duration>
-        <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <dot />
-        <notations>
-          <tied type="stop" />
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="3">
@@ -3785,19 +3798,22 @@
       <attributes>
         <divisions>2</divisions>
       </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words>7</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>6</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <dot />
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -3879,13 +3895,9 @@
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">end</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -3898,12 +3910,8 @@
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -3916,12 +3924,8 @@
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="6">
@@ -3974,18 +3978,21 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>13</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -4055,19 +4062,20 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>15</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop" />
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -4123,6 +4131,19 @@
       </note>
       <direction placement="above">
         <direction-type>
+          <words>17</words>
+        </direction-type>
+      </direction>
+      <note>
+        <grace />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+      </note>
+      <direction placement="above">
+        <direction-type>
           <words>18</words>
         </direction-type>
       </direction>
@@ -4172,18 +4193,21 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>19</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -4245,12 +4269,10 @@
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <notations>
           <tied type="stop" />
-          <tied type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -4366,18 +4388,19 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>26</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop" />
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
@@ -4411,13 +4434,9 @@
           <octave>4</octave>
         </pitch>
         <duration>3</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <dot />
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -4455,21 +4474,20 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>3</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>3</duration>
-        <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <dot />
-        <notations>
-          <tied type="stop" />
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="3">
@@ -4507,18 +4525,21 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>5</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -4553,19 +4574,22 @@
       <attributes>
         <divisions>1</divisions>
       </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words>7</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>3</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <dot />
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -4587,18 +4611,21 @@
       <attributes>
         <divisions>1</divisions>
       </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words>8</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -4614,6 +4641,19 @@
         <notations>
           <tied type="stop" />
         </notations>
+      </note>
+      <direction placement="above">
+        <direction-type>
+          <words>9</words>
+        </direction-type>
+      </direction>
+      <note>
+        <grace />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
       </note>
       <direction placement="above">
         <direction-type>
@@ -4626,12 +4666,8 @@
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -4644,12 +4680,8 @@
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="6">
@@ -4702,20 +4734,19 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>13</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied type="stop" />
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="7">
@@ -4770,6 +4801,19 @@
       </note>
       <direction placement="above">
         <direction-type>
+          <words>15</words>
+        </direction-type>
+      </direction>
+      <note>
+        <grace />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
+      </note>
+      <direction placement="above">
+        <direction-type>
           <words>16</words>
         </direction-type>
       </direction>
@@ -4818,6 +4862,19 @@
         <notations>
           <tied type="stop" />
         </notations>
+      </note>
+      <direction placement="above">
+        <direction-type>
+          <words>17</words>
+        </direction-type>
+      </direction>
+      <note>
+        <grace />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <voice>1</voice>
       </note>
       <direction placement="above">
         <direction-type>
@@ -4870,18 +4927,21 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>19</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -4916,20 +4976,19 @@
       <attributes>
         <divisions>1</divisions>
       </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words>21</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
-        <notations>
-          <tied type="stop" />
-          <tied type="start" />
-        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -4955,12 +5014,8 @@
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -4981,18 +5036,21 @@
       <attributes>
         <divisions>1</divisions>
       </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words>25</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -5009,18 +5067,19 @@
           <tied type="stop" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words>26</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
-        <tie type="stop" />
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
