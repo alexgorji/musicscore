@@ -391,36 +391,84 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             return next(iter(denominators))
 
     def _remove_zero_quarter_durations(self):
-        """
-        todo
-        chord.get_previous_in_part()
-        chord.get_next_in_part()
-        """
+        def _get_next_chord(chord):
+            next_chord = chord.next
+            if not next_chord:
+                next_beat = chord.up.next
+                while next_beat and not next_chord:
+                    try:
+                        next_chord = next_beat.get_children()[0]
+                    except IndexError:
+                        next_beat = next_beat.next
+            if not next_chord:
+                voice_number = chord.up.up.number
+                staff_number = chord.up.up.up.number
+                if not staff_number:
+                    staff_number = 1
+                next_measure = chord.up.up.up.up.next
+                if next_measure:
+                    next_measure_voice = next_measure.get_chord(staff_number=staff_number,
+                                                                voice_number=voice_number)
+                    if next_measure_voice:
+                        next_beat = next_measure_voice.get_children()[0]
+                        while next_beat and not next_chord:
+                            try:
+                                next_chord = next_beat.get_children()[0]
+                            except IndexError:
+                                next_beat = next_beat.next
+
+            return next_chord
+
+        def _get_previous_chord(chord):
+            previous_chord = chord.previous
+            if not previous_chord:
+                previous_beat = chord.up.previous
+                while previous_beat and not previous_chord:
+                    try:
+                        previous_chord = previous_beat.get_children()[-1]
+                    except IndexError:
+                        previous_beat = previous_beat.previous
+            if not previous_chord:
+                voice_number = chord.up.up.number
+                staff_number = chord.up.up.up.number
+                if not staff_number:
+                    staff_number = 1
+                previous_measure = chord.up.up.up.up.previous
+                if previous_measure:
+                    previous_measure_voice = previous_measure.get_chord(staff_number=staff_number,
+                                                                        voice_number=voice_number)
+                    if previous_measure_voice:
+                        previous_beat = previous_measure_voice.get_children()[-1]
+                        while previous_beat and not previous_chord:
+                            try:
+                                previous_chord = previous_beat.get_children()[-1]
+                            except IndexError:
+                                previous_beat = previous_beat.previous
+
+            return previous_chord
+
         zeros = [ch for ch in self.get_children() if ch.quarter_duration == 0]
         for ch in zeros:
             if ch.all_midis_are_tied_to_next:
+                next_chord = _get_next_chord(ch)
+                # next_chord.add_lyric('I am next')
+                if next_chord:
+                    [m.remove_tie('stop') for m in next_chord.midis]
+                    next_chord._xml_direction_types = ch._xml_direction_types
+                    next_chord._xml_directions = ch._xml_directions
+                    next_chord._xml_lyrics = ch._xml_lyrics
+                    next_chord._xml_articulations = ch._xml_articulations
+                    next_chord._xml_technicals = ch._xml_technicals
+                    next_chord._xml_ornaments = ch._xml_ornaments
+                    next_chord._xml_dynamics = ch._xml_dynamics
+                    next_chord._xml_other_notations = ch._xml_other_notations
+                    next_chord._note_attributes = ch._note_attributes
                 ch.up.remove(ch)
 
             elif ch.all_midis_are_tied_to_previous:
-                # previous_chord = ch.previous
-                # if not previous_chord:
-                #     previous_beat = ch.up.previous
-                #     if not previous_beat:
-                #         previous_measure = ch.up.up.up.up.previous
-                #         staff_number = ch.up.up.up.number
-                #         if not staff_number:
-                #             staff_number = 1
-                #         voice_number = ch.up.up.number
-                #         previous_voice = previous_measure.get_voice(staff_number, voice_number)
-                #         previous_beat = previous_voice.get_children()[-1]
-                #         print(previous_beat.get_children())
-                #         # previous_chord = previous_beat.get_children()[-1]
-                # else:
-                #     print(previous_chord)
-                # if not previous_chord:
-                #     previous_chord = ch.up.previous.get_children()[-1]
-                # for m in previous_chord.midis:
-                #     m.remove_ties(type='start')
+                previous_chord = _get_previous_chord(ch)
+                if previous_chord:
+                    [m.remove_tie('start') for m in previous_chord.midis]
                 ch.up.remove(ch)
             else:
                 pass

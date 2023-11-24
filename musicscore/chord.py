@@ -1164,10 +1164,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._xml_technicals = []
         self._xml_ornaments = []
         self._xml_dynamics = []
-        self._xml_articulations_kwargs = {}
-        self._xml_technicals_kwargs = {}
-        self._xml_ornaments_kwargs = {}
-        self._xml_dynamics_kwargs = {}
         self._xml_other_notations = []
         self._note_attributes = kwargs
         self.split

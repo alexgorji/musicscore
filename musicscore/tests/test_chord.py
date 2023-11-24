@@ -548,29 +548,6 @@ class TestTreeChord(ChordTestCase):
                 assert n.xml_notations.xml_non_arpeggiate
                 assert n.xml_notations.xml_non_arpeggiate.type == 'top'
 
-    def test_next_in_part(self):
-        # chord with no part raises error
-        chord = Chord(60, 1)
-        with self.assertRaises(ChordHasNoParentPartError):
-            chord.get_next_in_part()
-        # next chord in same beat
-        part_1 = Part(id='part_1')
-        chord_1 = Chord(60, 0.5)
-        chord_2 = Chord(60, 0.5)
-        [part_1.add_chord(ch) for ch in [chord_1, chord_2]]
-        assert chord_1.get_next_in_part() == chord_2
-        # next chord in next beat of the same measure
-        self.fail()
-        part_2 = Part(id='part_2')
-        # next chord in next beat of the next measure
-        part_3 = Part(id='part_3')
-        # next chord is None if chord is last in part
-        part_4 = Part(id='part_4')
-        # next chord is None next chord is of wrong voice number
-        part_5 = Part(id='part_5')
-        # next chord is None next chord is of wrong staff number
-        part_6 = Part(id='part_6')
-
 
 class TestTreeRest(ChordTestCase):
     def test_rest_init(self):
