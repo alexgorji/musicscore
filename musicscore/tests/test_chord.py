@@ -10,7 +10,7 @@ from musicscore.chord import Chord, _split_copy, _group_chords, GraceChord, Rest
 from musicscore.exceptions import ChordHasNoParentError, DeepCopyException, ChordException, MusicTreeException, \
     ChordAddXPlacementException, RestCannotSetMidiError, \
     RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotesError, \
-    AlreadyFinalizedError
+    AlreadyFinalizedError, ChordHasNoParentPartError
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDuration
 from musicscore.tests.util import ChordTestCase, create_test_objects, IdTestCase

@@ -366,3 +366,10 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             self._current_measures[staff_number][voice_number] = measure
         else:
             self._current_measures[staff_number] = {voice_number: measure}
+
+    def finalize(self) -> None:
+        for beat in self.get_beats():
+            if beat.get_quantized:
+                beat.quantize_quarter_durations()
+        super().finalize()
+            # beat._split_not_writable_chords()

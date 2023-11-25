@@ -26,4 +26,4 @@ The main classes of **musicscore** are arranged in a tree structure which is rou
         - :obj:`~musicscore.accidental.Accidental` (9th layer)
 
 
-See also :ref:`usage` and :ref:`examples`.
+See also :ref:`installation` and :ref:`examples`.

@@ -9,20 +9,36 @@ All example files can be found on GitHub under `examples <https://github.com/ale
 Hello World (1)
 ---------------
 
-  In this example one note is added to score step by step. At first you need to install musicscore (s. :doc:`usage`).
+  In this example one note is added to score step by step. At first you need to install musicscore (s. :doc:`installation`).
   After that follow the steps to create a simple musicxml file:
 
-   #. import :obj:`musicscore.score.Score`, :obj:`musicscore.part.Part`, :obj:`musicscore.measure.Measure`,
+   #. import ``pathlib.Path and`` :obj:`musicscore.score.Score`, :obj:`musicscore.part.Part`, :obj:`musicscore.measure.Measure`,
       :obj:`musicscore.staff.Staff`, :obj:`musicscore.voice.Voice`, :obj:`musicscore.beat.Beat` and
       :obj:`musicscore.chord.Chord`.
 
+       .. code-block::
+
+          from pathlib import Path
+
+          from musicscore.beat import Beat
+          from musicscore.chord import Chord
+          from musicscore.measure import Measure
+          from musicscore.part import Part
+          from musicscore.score import Score
+          from musicscore.staff import Staff
+          from musicscore.voice import Voice
+
       Alternatively you can import all classes via ``from musicscore import *``
+          .. code-block::
+
+            from pathlib import Path
+            from musicscore import *
 
    #. Create a :obj:`~musicscore.score.Score`
 
        .. code-block::
 
-          s = Score()
+          s = Score(title="Hello World 1")
 
    #. Create and add a :obj:`~musicscore.part.Part` to score. For creating a :obj:`~musicscore.part.Part` object you
       have to pass a unique ``id`` (see :obj:`~musicxml.xsd.xsdsimpletype.XSDSimpleTypeIDREF` for further
@@ -30,7 +46,7 @@ Hello World (1)
 
        .. code-block::
 
-          p = s.add_child(Part('P1', name='Part 1'))
+          p = s.add_child(Part('hw1', name='HW1'))
 
    #. Create and add a :obj:`~musicscore.measure.Measure` to part. ``number`` is required during initializing a measure
       object. Alternatively you can use part's method obj:`~musicscore.part.Part.add_measure()` which takes care of
@@ -96,13 +112,13 @@ Hello World (2)
 
        .. code-block::
 
-          s = Score()
+          s = Score(title="Hello World 2")
 
    #. Create and add a :obj:`~musicscore.part.Part` to score.
 
        .. code-block::
 
-          p = s.add_child(Part('P1', name='Part 1'))
+          p = s.add_child(Part('hw2', name='HW2'))
 
    #. Create and add a :obj:`~musicscore.chord.Chord` with midi value 60 (C4) and quarter duration 4 as chord to the part
       (:obj:`~musicscore.part.Part.add_chord()`).
