@@ -1,23 +1,23 @@
 from typing import List
 
 from math import trunc
-
-from musicscore.quantize import QuantizeMixin
-from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 from quicktions import Fraction
 
 from musicscore.chord import _split_copy, _group_chords, Chord
-from musicscore.musictree import MusicTree
 from musicscore.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
     ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError
 from musicscore.finalize import FinalizeMixin
+from musicscore.musictree import MusicTree
+from musicscore.quantize import QuantizeMixin
 from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
 from musicscore.util import lcm
+from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 
-__all__ = ['SPLITTABLES', 'Beat', '_beam_chord_group']
+__all__ = ['Beat', '_beam_chord_group', 'SPLITTABLES']
+#: This dictionary is used for example to split unwritable chords into two writable ones. A chord may be unwritable because of its position inside the beat and its quarter duration. Sometimes are chords split only because of better readability. The structure of this dictionary is as follows: {position in Beat (or offset): {duration: [split durations]}}
 
-#: This dictionary is used to split chords which are because of their position inside the beat and their quarter duration not writable into two writable chords {Position in Beat: {Quarter duration: [Split quarter durations]}}
+
 SPLITTABLES = {
     QuarterDuration(0): {
         QuarterDuration(5, 6): [QuarterDuration(3, 6), QuarterDuration(2, 6)],
@@ -65,7 +65,6 @@ SPLITTABLES = {
     QuarterDuration(5, 9): {
         QuarterDuration(4, 9): [QuarterDuration(1, 9), QuarterDuration(4, 9)]
     },
-
 }
 
 

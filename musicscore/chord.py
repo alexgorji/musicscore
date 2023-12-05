@@ -321,10 +321,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
                     elif n == self.notes[-1]:
                         n.xml_notations.xml_non_arpeggiate = XMLNonArpeggiate(type='top')
 
-    def _update_xml_type(self):
-        for n in self.notes:
-            n.xml_object.xml_type = self.type
-
     def _update_xml_ornaments(self):
         def _get_note_xml_ornaments():
             try:
@@ -1193,6 +1189,10 @@ class GraceChord(Chord):
         self._position = None
         self.type = type
         self.position = position
+
+    def _update_xml_type(self):
+        for n in self.notes:
+            n.xml_object.xml_type = self.type
 
     @Chord.quarter_duration.getter
     def quarter_duration(self) -> QuarterDuration:

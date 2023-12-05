@@ -2,14 +2,14 @@ from typing import List, Union
 from quicktions import Fraction
 import numbers
 
-__all__ = ['BEATWISE_EXCEPTIONS', 'QuarterDuration', 'QuarterDurationMixin']
-
+__all__ = ['BEATWISE_EXCEPTIONS', 'QuarterDuration', 'QuarterDurationMixin', 'NOTETYPES']
 from musicscore.exceptions import QuarterDurationIsNotWritable
 
 #: {offset: {quarter_duration: return value(s), ... }, ...}
 BEATWISE_EXCEPTIONS = {0: {5: (3, 2), 6: (6,)}}
+# BEATWISE_EXCEPTIONS = {0: {5: (3, 2)}}
 
-_note_simple_types = {
+NOTETYPES = {
     (1, 12): '32nd',
     (1, 11): '32nd',
     (2, 11): '16th',
@@ -109,17 +109,17 @@ class QuarterDuration(numbers.Rational):
         return output
 
     def _get_type_and_dots(self):
-        type = _note_simple_types.get(self.as_integer_ratio())
+        type = NOTETYPES.get(self.as_integer_ratio())
         if type:
             return type, 0
         else:
             qd = QuarterDuration(self.value * 2 / 3)
-            type = _note_simple_types.get(qd.as_integer_ratio())
+            type = NOTETYPES.get(qd.as_integer_ratio())
             if type:
                 return type, 1
             else:
                 qd = QuarterDuration(self.value * 4 / 7)
-                type = _note_simple_types.get(qd.as_integer_ratio())
+                type = NOTETYPES.get(qd.as_integer_ratio())
                 if type:
                     return type, 2
                 else:
