@@ -4,6 +4,7 @@ from math import trunc
 from quicktions import Fraction
 
 from musicscore.chord import _split_copy, _group_chords, Chord
+from musicscore.config import SPLITTABLES
 from musicscore.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
     ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError
@@ -14,59 +15,7 @@ from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
 from musicscore.util import lcm
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 
-__all__ = ['Beat', '_beam_chord_group', 'SPLITTABLES']
-#: This dictionary is used for example to split unwritable chords into two writable ones. A chord may be unwritable because of its position inside the beat and its quarter duration. Sometimes are chords split only because of better readability. The structure of this dictionary is as follows: {position in Beat (or offset): {duration: [split durations]}}
-
-
-SPLITTABLES = {
-    QuarterDuration(0): {
-        QuarterDuration(5, 6): [QuarterDuration(3, 6), QuarterDuration(2, 6)],
-        QuarterDuration(5, 7): [QuarterDuration(3, 7), QuarterDuration(2, 7)],
-        QuarterDuration(5, 8): [QuarterDuration(4, 8), QuarterDuration(1, 8)],
-        QuarterDuration(5, 9): [QuarterDuration(3, 9), QuarterDuration(2, 9)],
-        QuarterDuration(5, 11): [QuarterDuration(4, 11), QuarterDuration(1, 11)],
-
-        QuarterDuration(7, 8): [QuarterDuration(4, 8), QuarterDuration(3, 8)],
-        QuarterDuration(7, 9): [QuarterDuration(4, 9), QuarterDuration(3, 9)],
-        QuarterDuration(7, 10): [QuarterDuration(5, 10), QuarterDuration(2, 10)],
-        QuarterDuration(7, 11): [QuarterDuration(4, 11), QuarterDuration(3, 11)],
-    },
-    QuarterDuration(1, 8): {
-        QuarterDuration(4, 8): [QuarterDuration(3, 8), QuarterDuration(1, 8)],
-        QuarterDuration(5, 8): [QuarterDuration(3, 8), QuarterDuration(2, 8)],
-        QuarterDuration(6, 8): [QuarterDuration(3, 8), QuarterDuration(3, 8)],
-        QuarterDuration(7, 8): [QuarterDuration(3, 8), QuarterDuration(4, 8)],
-    },
-    QuarterDuration(2, 8): {
-        QuarterDuration(3, 8): [QuarterDuration(2, 8), QuarterDuration(1, 8)],
-        QuarterDuration(5, 8): [QuarterDuration(2, 8), QuarterDuration(3, 8)],
-    },
-    QuarterDuration(3, 8): {
-        QuarterDuration(2, 8): [QuarterDuration(1, 8), QuarterDuration(1, 8)],
-        QuarterDuration(3, 8): [QuarterDuration(1, 8), QuarterDuration(2, 8)],
-        QuarterDuration(4, 8): [QuarterDuration(1, 8), QuarterDuration(3, 8)],
-        QuarterDuration(5, 8): [QuarterDuration(1, 8), QuarterDuration(4, 8)],
-    },
-    QuarterDuration(1, 7): {
-        QuarterDuration(5, 7): [QuarterDuration(3, 7), QuarterDuration(2, 7)],
-        QuarterDuration(6, 7): [QuarterDuration(3, 7), QuarterDuration(3, 7)],
-    },
-    QuarterDuration(2, 7): {
-        QuarterDuration(5, 7): [QuarterDuration(3, 7), QuarterDuration(2, 7)],
-    },
-    QuarterDuration(1, 6): {
-        QuarterDuration(4, 6): [QuarterDuration(2, 6), QuarterDuration(2, 6)],
-        QuarterDuration(5, 6): [QuarterDuration(2, 6), QuarterDuration(3, 6)],
-    },
-    QuarterDuration(2, 6): {
-        QuarterDuration(3, 6): [QuarterDuration(2, 6), QuarterDuration(1, 6)],
-        QuarterDuration(5, 6): [QuarterDuration(2, 6), QuarterDuration(3, 6)],
-    },
-    QuarterDuration(5, 9): {
-        QuarterDuration(4, 9): [QuarterDuration(1, 9), QuarterDuration(4, 9)]
-    },
-}
-
+__all__ = ['Beat', '_beam_chord_group']
 
 def _find_nearest_quantized_value(quantized_values, values):
     output = []
@@ -308,9 +257,10 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         return output
 
     def _split_not_writable(self, chord, offset):
-        if SPLITTABLES.get(offset):
-            quarter_durations = SPLITTABLES.get(offset).get(chord.quarter_duration)
+        if SPLITTABLES.get(offset.as_integer_ratio()):
+            quarter_durations = SPLITTABLES.get(offset.as_integer_ratio()).get(chord.quarter_duration.as_integer_ratio())
             if quarter_durations:
+                quarter_durations = [QuarterDuration(*qd) for qd in quarter_durations]
                 return self._split_chord(chord, quarter_durations)
 
     def _update_dots(self, chord_group, actual_notes):

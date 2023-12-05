@@ -2,44 +2,10 @@ from typing import List, Union
 from quicktions import Fraction
 import numbers
 
-__all__ = ['BEATWISE_EXCEPTIONS', 'QuarterDuration', 'QuarterDurationMixin', 'NOTETYPES']
+__all__ = ['QuarterDuration', 'QuarterDurationMixin']
+
+from musicscore.config import NOTETYPES, BEATWISE_EXCEPTIONS
 from musicscore.exceptions import QuarterDurationIsNotWritable
-
-#: {offset: {quarter_duration: return value(s), ... }, ...}
-BEATWISE_EXCEPTIONS = {0: {5: (3, 2), 6: (6,)}}
-# BEATWISE_EXCEPTIONS = {0: {5: (3, 2)}}
-
-NOTETYPES = {
-    (1, 12): '32nd',
-    (1, 11): '32nd',
-    (2, 11): '16th',
-    (4, 11): 'eighth',
-    (8, 11): 'quarter',
-    (1, 10): '32nd',
-    (1, 9): '32nd',
-    (2, 9): '16th',
-    (4, 9): 'eighth',
-    (8, 9): 'quarter',
-    (1, 8): '32nd',
-    (1, 7): '16th',
-    (2, 7): 'eighth',
-    (4, 7): 'quarter',
-    (1, 6): '16th',
-    (1, 5): '16th',
-    (2, 5): 'eighth',
-    (4, 5): 'quarter',
-    (8, 5): 'half',
-    (1, 4): '16th',
-    (2, 4): 'eighth',
-    (1, 3): 'eighth',
-    (2, 3): 'quarter',
-    (4, 3): 'half',
-    (1, 2): 'eighth',
-    (1, 1): 'quarter',
-    (2, 1): 'half',
-    (4, 1): 'whole',
-    (8, 1): 'breve',
-}
 
 
 class QuarterDuration(numbers.Rational):
