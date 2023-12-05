@@ -6,7 +6,8 @@ from musicscore import Part, Time
 from musicscore.chord import Chord
 from musicscore.measure import Measure
 from musicscore.tests.test_beat import create_voice
-from musicscore.tests.util import generate_all_quintuplets, generate_all_triplets, generate_all_sextuplets, IdTestCase
+from musicscore.tests.util import IdTestCase
+from musicscore.tests.util_subdivisions import generate_all_quintuplets_manually, generate_all_sextuplets_manually, generate_all_triplets_manually
 
 
 class TestTuplets(IdTestCase):
@@ -78,7 +79,7 @@ class TestTuplets(IdTestCase):
 
     def test_chord_quintuplet(self):
         measures = []
-        for index, quintuplet in enumerate(generate_all_quintuplets()):
+        for index, quintuplet in enumerate(generate_all_quintuplets_manually()):
             m = Measure(index + 1)
             for q in quintuplet:
                 m._add_chord(Chord(midis=60, quarter_duration=q))
@@ -135,7 +136,7 @@ class TestTuplets(IdTestCase):
 
     def test_chord_sextuplets(self):
         measures = []
-        for index, sextuplet in enumerate(generate_all_sextuplets()):
+        for index, sextuplet in enumerate(generate_all_sextuplets_manually()):
             m = Measure(index + 1)
             for q in sextuplet:
                 m._add_chord(Chord(midis=60, quarter_duration=q))
@@ -195,7 +196,7 @@ class TestTuplets(IdTestCase):
     def test_group_beams_triplets(self):
         v1 = create_voice()
         beats = v1.update_beats(1, 1, 1)
-        for quarter_duration in [q for group in generate_all_triplets() for q in group]:
+        for quarter_duration in [q for group in generate_all_triplets_manually() for q in group]:
             v1._add_chord(Chord(60, quarter_duration))
         v1.up.up._update_divisions()
         for index, beat in enumerate(beats):

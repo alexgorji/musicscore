@@ -3,8 +3,9 @@ from pathlib import Path
 from musicscore import Time
 from musicscore.chord import Chord
 from musicscore.score import Score
-from musicscore.tests.util import IdTestCase, generate_all_triplets, generate_all_quintuplets, generate_all_sextuplets, \
-    generate_all_septuplets
+from musicscore.tests.util import IdTestCase
+from musicscore.tests.util_subdivisions import generate_all_quintuplets_manually, generate_all_sextuplets_manually, \
+    generate_all_septuplets_manually, generate_all_triplets_manually
 
 
 class TestTuplets2(IdTestCase):
@@ -14,7 +15,7 @@ class TestTuplets2(IdTestCase):
         t = Time(4, 4)
         t.actual_signatures = [1, 2, 1, 2]
         part.add_measure(t)
-        tuplets = generate_all_triplets() + generate_all_quintuplets()
+        tuplets = generate_all_triplets_manually() + generate_all_quintuplets_manually()
 
 
         tuplets = [x * 2 for t in tuplets for x in t]

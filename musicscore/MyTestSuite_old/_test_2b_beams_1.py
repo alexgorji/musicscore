@@ -5,7 +5,8 @@ from quicktions import Fraction
 from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.score import Score
-from musicscore.tests.util import IdTestCase, generate_all_16ths, generate_all_32nds
+from musicscore.tests.util import IdTestCase
+from musicscore.tests.util_subdivisions import generate_all_16ths_manually, generate_all_32nds_manually
 
 
 class TestHelloTBeams1(IdTestCase):
@@ -28,7 +29,7 @@ class TestHelloTBeams1(IdTestCase):
         """
         All possible combinations are:
         """
-        groups = [(Fraction(1, 2), Fraction(1, 2))] + generate_all_16ths() + generate_all_32nds()
+        groups = [(Fraction(1, 2), Fraction(1, 2))] + generate_all_16ths_manually() + generate_all_32nds_manually()
         for group in groups:
             for qd in group:
                 p.add_chord(Chord(60, qd))

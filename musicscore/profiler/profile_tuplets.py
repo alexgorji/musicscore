@@ -5,7 +5,8 @@ from pathlib import Path
 from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.score import Score
-from musicscore.tests.util import generate_all_quintuplets, generate_all_sextuplets, generate_all_triplets, generate_all_septuplets
+from musicscore.tests.util_subdivisions import generate_all_quintuplets_manually, generate_all_sextuplets_manually, \
+    generate_all_septuplets_manually, generate_all_triplets_manually
 
 
 def p():
@@ -27,8 +28,8 @@ def p():
     """
     All possible combinations are:
     """
-    triplets = generate_all_triplets()
-    tuplets = triplets + generate_all_quintuplets() + generate_all_sextuplets() + generate_all_septuplets()
+    triplets = generate_all_triplets_manually()
+    tuplets = triplets + generate_all_quintuplets_manually() + generate_all_sextuplets_manually() + generate_all_septuplets_manually()
     for tuplet_list in tuplets:
         for tuplet in tuplet_list:
             p.add_chord(Chord(60, tuplet))
