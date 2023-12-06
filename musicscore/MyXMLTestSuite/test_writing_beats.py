@@ -47,5 +47,4 @@ class TestWritingBeats(IdTestCase):
         assert [ch.quarter_duration.get_number_of_dots() for ch in beat.get_chords()] == [0, 1, 0, 0]
         assert [len(ch.get_children()[0].xml_object.get_children_of_type(XMLDot)) for ch in beat.get_chords()] == [0, 1,
                                                                                                                    0, 0]
-
-        """beams"""
+        """beams: Beat.beam_chord_group() Too complicated. Can it be simplified? """
