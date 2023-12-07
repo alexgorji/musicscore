@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Optional
 from quicktions import Fraction
 import numbers
 
@@ -10,7 +10,7 @@ from musicscore.exceptions import QuarterDurationIsNotWritable
 
 class QuarterDuration(numbers.Rational):
     """
-    A Class specifically designed for durations measured in quarters. The core of this class is a value of type quicktions.Fraction with a
+    A Class specifically designed for durations measured in quarters. The core of this class is a value of type ''quicktions.Fraction'' with a
     denominator limit of 1000, thus it can manage conversion of floats to fractions without usual inaccuracies of quintuples etc. See
     value property for more information.
     QuarterDuration has all needed magic methods for numeral comparison and conversion.
@@ -75,6 +75,8 @@ class QuarterDuration(numbers.Rational):
         return output
 
     def _get_type_and_dots(self):
+        if self.value == 0:
+            return None, 0
         type = NOTETYPES.get(self.as_integer_ratio())
         if type:
             return type, 0
@@ -156,13 +158,13 @@ class QuarterDuration(numbers.Rational):
         """
         return self.value.as_integer_ratio()
 
-    def get_number_of_dots(self):
+    def get_number_of_dots(self) -> Optional[int]:
         """
         :return: Number of note dots associated with quarter duration
         """
         return self._get_type_and_dots()[1]
 
-    def get_type(self) -> str:
+    def get_type(self) -> Optional[str]:
         """
         :return: Note type associated with quarter duration
         """

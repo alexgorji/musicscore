@@ -69,7 +69,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     :param quarter_duration: int, float, Fraction, :obj:`~musicscore.quarterduration.QuarterDuration` for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
     _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef', 'metronome', 'arpeggio',
-                   'type'}
+                   'type', 'number_of_dots'}
 
     def __init__(self, midis: Union[List[Union[float, int]], List[Midi], float, int, Midi],
                  quarter_duration: Union[float, int, 'Fraction', QuarterDuration], **kwargs):
@@ -91,6 +91,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._arpeggio = None
         self._after_notes_xml_elements = []
         self._type = None
+        self._number_of_dots = None
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
         self.split = False
@@ -195,13 +196,10 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._midis = sorted(self._midis)
 
     def _update_notes(self):
-        # if self._notes_are_set:
-        #     raise ChordNotesAreAlreadyCreatedError()
+        if self._notes_are_set:
+            raise ChordAlreadyHasNotesError('updating notes not possible.')
         for index, midi in enumerate(self.midis):
-            try:
-                self.get_children()[index].midi = midi
-            except IndexError:
-                self._add_child(Note(midi=midi, **self._note_attributes))
+            self._add_child(Note(midi=midi, quarter_duration=self.quarter_duration, **self._note_attributes))
         self._notes_are_set = True
 
     def _update_notes_pitch_or_rest(self):
@@ -404,12 +402,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         n._update_xml_notations()
 
-    def _update_xml_types(self):
-        if not self.notes:
-            raise ChordHasNoNotesError
-        for note in self.notes:
-            note.xml_type = self.type
-
     def _update_xml_lyrics(self):
 
         n = self.notes[0]
@@ -554,6 +546,19 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         return self.get_children()
 
     @property
+    def number_of_dots(self) -> Optional[int]:
+        """
+        Set and get number of dots to be added to the notes. If None ~:obj:`musicscore.quarterdurataion.Quarterdurataion.get_number_of_dots()`is called.
+        """
+        return self._number_of_dots if self._number_of_dots else self.quarter_duration.get_number_of_dots()
+
+    @number_of_dots.setter
+    def number_of_dots(self, val):
+        if self._notes_are_set and val != self._number_of_dots:
+            raise ChordAlreadyHasNotesError('After creating Notes it is not possible to change number of dots.')
+        self._number_of_dots = val
+
+    @property
     def offset(self) -> QuarterDuration:
         """
         :return: Offset in Chord's parent :obj:`~musicscore.beat.Beat`
@@ -569,19 +574,21 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     @property
     def type(self) -> Optional[str]:
         """
-        Set and get ```XMLNoteType.value_``` associated with this chord. If None QuarterDuration.get_type() is called.
+        Set and get ```XMLNoteType.value_``` associated with this chord. If None ~:obj:`musicscore.quarterdurataion.Quarterdurataion.get_type()` is called. QuarterDuration 0 returns None.
         :param val: [‘1024th’, ‘512th’, ‘256th’, ‘128th’, ‘64th’, ‘32nd’, ‘16th’, ‘eighth’, ‘quarter’, ‘half’, ‘whole’, ‘breve’, ‘long’, ‘maxima’]
         """
-        return self._type if self._type else self.quarter_duration.get_type() if self.quarter_duration != 0 else None
+        return self._type if self._type else self.quarter_duration.get_type()
 
     @type.setter
     def type(self, val):
-        if self.notes and val != self._type:
+        if self._notes_are_set and val != self._type:
             raise ChordAlreadyHasNotesError('After creating Notes it is not possible to change the type.')
         self._type = val
 
     @QuarterDurationMixin.quarter_duration.setter
     def quarter_duration(self, val):
+        if self._notes_are_set:
+            raise ChordAlreadyHasNotesError('quarter duration of the chord cannot be changed anymore.')
         if self._quarter_duration is not None and self.up:
             raise ChordQuarterDurationAlreadySetError(
                 'Chord is already attached to a Beat. Quarter Duration cannot be changed any more.')
@@ -589,8 +596,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             if self.midis and self.is_rest and val == 0:
                 raise ValueError('A rest cannot be a grace note')
             self._set_quarter_duration(val)
-            if self._notes_are_set:
-                self._update_notes_quarter_duration()
 
     @property
     def voice_number(self) -> int:
@@ -922,8 +927,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         self._update_notes()
         self._update_xml_chord()
-
-        self._update_notes_quarter_duration()
         self._update_xml_lyrics()
         self._update_ties()
         self._update_xml_directions()
@@ -1211,7 +1214,6 @@ class GraceChord(Chord):
         self.type = type
         self.position = position
 
-
     @Chord.quarter_duration.getter
     def quarter_duration(self) -> QuarterDuration:
         """
@@ -1226,7 +1228,7 @@ class GraceChord(Chord):
             raise GraceChordCannotSetQuarterDurationError(
                 'quarter_duration of a GraceChord is always 0 and cannot be set')
         else:
-            self._quarter_duration = 0
+            self._quarter_duration = QuarterDuration(0)
 
     @property
     def position(self):

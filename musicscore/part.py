@@ -372,4 +372,3 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             if beat.get_quantized:
                 beat.quantize_quarter_durations()
         super().finalize()
-            # beat._split_not_writable_chords()

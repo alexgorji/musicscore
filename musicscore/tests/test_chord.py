@@ -1149,6 +1149,7 @@ class TestAddAfterNotes(IdTestCase):
 
 class TestTypeAndNumberOfDots(IdTestCase):
     def test_chord_type_attribute_with_update(self):
+        p = Part('p1')
         ch = Chord([60, 61], 1)
         assert ch._type is None
         assert ch.type == 'quarter'
@@ -1159,33 +1160,67 @@ class TestTypeAndNumberOfDots(IdTestCase):
         assert ch._type == 'half'
         assert ch.type == 'half'
         ch._type = None
-        assert ch.type == 'whole'
-        with self.assertRaises(ChordHasNoNotesError):
-            ch._update_xml_types()
-        ch._update_notes()
-        ch._update_xml_types()
+        p.add_chord(ch)
+        p.finalize()
         assert ch.get_children()[0].xml_type.value_ == 'whole'
         assert ch.get_children()[1].xml_type.value_ == 'whole'
         with self.assertRaises(ChordAlreadyHasNotesError):
             ch.type = 'half'
         gch = Chord([60, 61], 0)
         assert gch.type is None
-        gch._update_notes()
-        gch._update_xml_types()
+        p = Part('p2')
+        p.add_chord(gch)
+        p.finalize()
         assert gch.get_children()[0].xml_type is None
         assert gch.get_children()[1].xml_type is None
 
+        p = Part('p3')
+        p.add_chord(Chord(60, 1))
         gch = GraceChord([60, 61])
         assert gch.type is None
-        gch._update_notes()
-        gch._update_xml_types()
+        p.add_chord(gch)
+        p.finalize()
+
         assert gch.get_children()[0].xml_type is None
         assert gch.get_children()[1].xml_type is None
 
+        p = Part('p4')
         gch = GraceChord([60, 61])
         gch.type = 'half'
         assert gch.type == 'half'
-        gch._update_notes()
-        gch._update_xml_types()
+        p.add_chord(gch)
+        p.finalize()
         assert gch.get_children()[0].xml_type.value_ == 'half'
         assert gch.get_children()[1].xml_type.value_ == 'half'
+
+    def test_chord_number_of_dots_with_update(self):
+        p = Part('p1')
+        ch = Chord([60, 61], 1)
+        assert ch._number_of_dots is None
+        assert ch.number_of_dots == 0
+        ch.number_of_dots = 2
+        assert ch._number_of_dots == 2
+        assert ch.number_of_dots == 2
+        ch.quarter_duration = 3
+        assert ch._number_of_dots == 2
+        assert ch.number_of_dots == 2
+        ch.number_of_dots = None
+        assert ch.number_of_dots == 1
+        p.add_chord(ch)
+        p.finalize()
+        assert len(ch.get_children()[0].xml_object.get_children_of_type(XMLDot)) == 1
+        assert len(ch.get_children()[1].xml_object.get_children_of_type(XMLDot)) == 1
+        with self.assertRaises(ChordAlreadyHasNotesError):
+            ch.number_of_dots = 3
+
+        gch = Chord([60, 61], 0)
+        assert gch.number_of_dots == 0
+
+        p = Part('p2')
+        gch = GraceChord([60, 61])
+        gch.number_of_dots = 3
+        assert gch.number_of_dots == 3
+        p.add_chord(gch)
+        p.finalize()
+        assert len(gch.get_children()[0].xml_object.get_children_of_type(XMLDot)) == 3
+        assert len(gch.get_children()[1].xml_object.get_children_of_type(XMLDot)) == 3

@@ -260,6 +260,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             self._set_quarter_duration(value)
             self._update_xml_duration()
             self._update_xml_type()
+            # self._update_xml_dots()
         else:
             self.xml_object.xml_duration = None
 
