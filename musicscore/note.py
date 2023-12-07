@@ -54,7 +54,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self._midi = None
         self._parent_chord = midi.parent_chord
         self._xml_object = self.XMLClass(*args, **kwargs)
-        self._type = None
         self._number_of_dots = None
 
         super().__init__(quarter_duration=quarter_duration)
@@ -80,18 +79,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         :rtype: :obj:`~musicscore.midi.Midi`
         """
         return super().add_child(child)
-
-    def _set_quarter_duration(self, val):
-        old_quarter_duration = self._quarter_duration
-        super()._set_quarter_duration(val)
-        if self._type is None and self._quarter_duration != 0:
-            try:
-                note_types[self._quarter_duration.as_integer_ratio()]
-            except KeyError:
-                msg = f"A note with quarter_duration {self._quarter_duration} and offset {self.up.offset} is not writable and must be " \
-                      f"split. See beat.SPLITTABLES"
-                self._quarter_duration = old_quarter_duration
-                raise NoteTypeError(msg)
 
     def _set_xml_tied(self, val):
         if not self.xml_notations:
@@ -164,11 +151,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self.xml_object.xml_staff = self.get_staff_number()
 
     def _update_xml_type(self):
-        if self._type is None:
-            if self.quarter_duration != 0:
-                self.xml_type = self.quarter_duration.get_type()
-            else:
-                self.xml_type = None
+        self.xml_type = self.parent_chord.type
 
     def _update_xml_voice(self):
         self.xml_object.xml_voice = str(self.get_voice_number())
@@ -387,15 +370,3 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         """
         self._number_of_dots = number_of_dots
         self._update_xml_dots(number_of_dots)
-
-    def update_type(self, val: Optional[str] = None) -> None:
-        """
-        If val is ``None``: type will be set according to note's ``quarter_duration``.
-
-        :param val: [‘1024th’, ‘512th’, ‘256th’, ‘128th’, ‘64th’, ‘32nd’, ‘16th’, ‘eighth’, ‘quarter’, ‘half’, ‘whole’, ‘breve’, ‘long’, ‘maxima’]
-        """
-        self._type = val
-        if val is None:
-            self._update_xml_type()
-        else:
-            self.xml_object.xml_type = val

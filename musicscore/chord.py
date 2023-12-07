@@ -9,7 +9,7 @@ from musicscore.exceptions import ChordAlreadySplitError, ChordCannotSplitError,
     ChordQuarterDurationAlreadySetError, AlreadyFinalizedError, DeepCopyException, ChordException, NotationException, \
     ChordAddXException, ChordAddXPlacementException, RestCannotSetMidiError, \
     RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotesError, \
-    GraceChordCannotSetQuarterDurationError
+    GraceChordCannotSetQuarterDurationError, ChordHasNoNotesError, ChordAlreadyHasNotesError
 from musicscore.finalize import FinalizeMixin
 from musicscore.midi import Midi
 from musicscore.musictree import MusicTree
@@ -68,10 +68,11 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     :param midis: :obj:`~musicscore.midi.Midi`, Midi.value, [Midi, Midi.value], 0 or [0] for a rest.
     :param quarter_duration: int, float, Fraction, :obj:`~musicscore.quarterduration.QuarterDuration` for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef', 'metronome', 'arpeggio'}
+    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef', 'metronome', 'arpeggio',
+                   'type'}
 
-    def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None,
-                 quarter_duration: Optional[Union[float, int, 'Fraction', QuarterDuration]] = None, **kwargs):
+    def __init__(self, midis: Union[List[Union[float, int]], List[Midi], float, int, Midi],
+                 quarter_duration: Union[float, int, 'Fraction', QuarterDuration], **kwargs):
         self._midis = None
         self._xml_direction_types = {'above': [], 'below': []}
 
@@ -89,6 +90,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._grace_chords = {'before': [], 'after': []}
         self._arpeggio = None
         self._after_notes_xml_elements = []
+        self._type = None
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
         self.split = False
@@ -253,6 +255,11 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             n.xml_notations.xml_articulations.remove(art)
         n._update_xml_notations()
 
+    def _update_xml_chord(self):
+        for n in self.notes[1:]:
+            if not n.xml_object.xml_chord:
+                n.xml_object.add_child(XMLChord())
+
     def _update_xml_directions(self):
         def _add_dynamics(list_of_dynamics, xml_direction):
             for dynamics in list_of_dynamics:
@@ -397,6 +404,12 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         n._update_xml_notations()
 
+    def _update_xml_types(self):
+        if not self.notes:
+            raise ChordHasNoNotesError
+        for note in self.notes:
+            note.xml_type = self.type
+
     def _update_xml_lyrics(self):
 
         n = self.notes[0]
@@ -413,11 +426,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         for lyric in note_lyrics_not_in_chord:
             n.xml_object.remove(lyric)
-
-    def _update_xml_chord(self):
-        for n in self.notes[1:]:
-            if not n.xml_object.xml_chord:
-                n.xml_object.add_child(XMLChord())
 
     # public properties
     @property
@@ -557,6 +565,20 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             return 0
         else:
             return self.previous.offset + self.previous.quarter_duration
+
+    @property
+    def type(self) -> Optional[str]:
+        """
+        Set and get ```XMLNoteType.value_``` associated with this chord. If None QuarterDuration.get_type() is called.
+        :param val: [‘1024th’, ‘512th’, ‘256th’, ‘128th’, ‘64th’, ‘32nd’, ‘16th’, ‘eighth’, ‘quarter’, ‘half’, ‘whole’, ‘breve’, ‘long’, ‘maxima’]
+        """
+        return self._type if self._type else self.quarter_duration.get_type() if self.quarter_duration != 0 else None
+
+    @type.setter
+    def type(self, val):
+        if self.notes and val != self._type:
+            raise ChordAlreadyHasNotesError('After creating Notes it is not possible to change the type.')
+        self._type = val
 
     @QuarterDurationMixin.quarter_duration.setter
     def quarter_duration(self, val):
@@ -1177,22 +1199,18 @@ class GraceChord(Chord):
        :obj:`~Chord` for inherited methods and properties
 
     """
-    _ATTRIBUTES = Chord._ATTRIBUTES.union({'type', 'parent_chord', 'position'})
+    _ATTRIBUTES = Chord._ATTRIBUTES.union({'parent_chord', 'position'})
 
-    def __init__(self, midis: Optional[Union[List[Union[float, int]], List[Midi], float, int, Midi]] = None, *,
+    def __init__(self, midis: Union[List[Union[float, int]], List[Midi], float, int, Midi], *,
                  type=None, position='before', **kwargs):
         if 'quarter_duration' in kwargs.keys():
             raise GraceChordCannotSetQuarterDurationError(
                 'quarter_duration of a GraceChord is always 0 and cannot be set')
         super().__init__(midis=midis, quarter_duration=0, **kwargs)
-        self._type = None
         self._position = None
         self.type = type
         self.position = position
 
-    def _update_xml_type(self):
-        for n in self.notes:
-            n.xml_object.xml_type = self.type
 
     @Chord.quarter_duration.getter
     def quarter_duration(self) -> QuarterDuration:
@@ -1228,23 +1246,6 @@ class GraceChord(Chord):
         else:
             self._position = val
 
-    @property
-    def type(self):
-        """
-        Set and get note type of this :obj:`~musicscore.chord.GraceChord`. For permitted values see: :obj:`~musicxml.xmlelement.xmlelement.XMLType`
-        """
-        return self._type
-
-    @type.setter
-    def type(self, val):
-        if val is None:
-            self._type = None
-        else:
-            if not isinstance(val, XMLType):
-                self._type = XMLType(val)
-            else:
-                self._type = val
-
     def add_grace_chord(self, midis_or_grace_chord, type=None, *, position=None):
         """
         :exception: :obj:`~musicscore.exceptions.GraceChordCannotHaveGraceNotesError`
@@ -1256,10 +1257,6 @@ class GraceChord(Chord):
         :exception: :obj:`~musicscore.exceptions.GraceChordCannotHaveGraceNotesError`
         """
         raise GraceChordCannotHaveGraceNotesError
-
-    def finalize(self):
-        super().finalize()
-        self._update_xml_type()
 
 
 class Rest(Chord):

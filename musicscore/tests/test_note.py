@@ -19,6 +19,7 @@ class NoteTestCase(TestCase):
         self.mock_measure = Mock()
         self.mock_measure.get_divisions.return_value = 1
         self.mock_chord.get_parent_measure.return_value = self.mock_measure
+        self.mock_chord.type = 'quarter'
 
     def tearDown(self):
         patch.stopall()
@@ -46,6 +47,7 @@ class TestNote(NoteTestCase):
 
     def test_note_init(self):
         n = Note(midi=self.set_parent_chord(71))
+        self.mock_chord.type = 'half'
         n.quarter_duration = 2
         n.midi.accidental.show = False
         expected = """<note>
@@ -90,6 +92,7 @@ class TestNote(NoteTestCase):
         assert n.xml_duration.value_ == 2
 
     def test_note_type(self):
+        self.mock_chord.type = 'half'
         n = Note(midi=self.set_parent_chord(60), quarter_duration=2)
         n.midi.accidental.show = False
         expected = """<note>
@@ -103,32 +106,6 @@ class TestNote(NoteTestCase):
 </note>
 """
         assert n.to_string() == expected
-        n.update_type('whole')
-        expected = """<note>
-  <pitch>
-    <step>C</step>
-    <octave>4</octave>
-  </pitch>
-  <duration>2</duration>
-  <voice>1</voice>
-  <type>whole</type>
-</note>
-"""
-        assert n.to_string() == expected
-        n.update_type()
-        expected = """<note>
-  <pitch>
-    <step>C</step>
-    <octave>4</octave>
-  </pitch>
-  <duration>2</duration>
-  <voice>1</voice>
-  <type>half</type>
-</note>
-"""
-        assert n.to_string() == expected
-        with self.assertRaises(ValueError):
-            n.type = n.update_type('bla')
 
     def test_note_dots(self):
         self.mock_measure.get_divisions.return_value = 2
@@ -161,6 +138,7 @@ class TestNote(NoteTestCase):
 
     def test_change_midi_or_duration(self):
         self.mock_chord.get_voice_number.return_value = 2
+        self.mock_chord.type = 'half'
         n = Note(midi=self.set_parent_chord(61), quarter_duration=2, default_x=10)
         n.midi.accidental.show = True
         n.xml_notehead = 'square'
@@ -240,6 +218,7 @@ class TestNote(NoteTestCase):
     <octave>5</octave>
   </pitch>
   <voice>2</voice>
+  <type>half</type>
   <accidental>flat</accidental>
 </note>
 """
@@ -248,6 +227,7 @@ class TestNote(NoteTestCase):
             n.midi = self.set_parent_chord(Midi(0))
 
     def test_grace_note(self):
+        self.mock_chord.type = None
         n = Note(midi=self.set_parent_chord(61), quarter_duration=0, default_x=10)
         n.midi.accidental.show = True
         n.xml_notehead = XMLNotehead('square')
@@ -266,6 +246,7 @@ class TestNote(NoteTestCase):
         assert n.xml_object.to_string() == expected
 
     def test_cue_note(self):
+        self.mock_chord.type = 'half'
         n = Note(midi=self.set_parent_chord(Midi(61)), quarter_duration=2)
         n.midi.accidental.show = True
         n.xml_cue = XMLCue()

@@ -10,7 +10,7 @@ from musicscore.chord import Chord, _split_copy, _group_chords, GraceChord, Rest
 from musicscore.exceptions import ChordHasNoParentError, DeepCopyException, ChordException, MusicTreeException, \
     ChordAddXPlacementException, RestCannotSetMidiError, \
     RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotesError, \
-    AlreadyFinalizedError, ChordHasNoParentPartError
+    AlreadyFinalizedError, ChordAlreadyHasNotesError, ChordHasNoNotesError
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDuration
 from musicscore.tests.util import ChordTestCase, create_test_objects, IdTestCase
@@ -28,7 +28,7 @@ class TestTreeChord(ChordTestCase):
     def test_mocks(self):
         assert self.mock_voice.number == 1
         assert self.mock_beat.up.number == 1
-        ch = Chord()
+        ch = Chord(60, 1)
         ch._parent = self.mock_beat
         assert ch.up == self.mock_beat
         assert ch.up.up == self.mock_voice
@@ -595,7 +595,7 @@ class TestTreeRest(ChordTestCase):
 class TestTies(ChordTestCase):
 
     def test_add_tie_ties_midis(self):
-        ch = Chord(midis=[60, 63])
+        ch = Chord([60, 63], 1)
         ch._parent = self.mock_beat
         ch.add_tie('start')
         for midi in ch.midis:
@@ -608,7 +608,7 @@ class TestTies(ChordTestCase):
         m1.add_tie('start')
         m2 = Midi(61)
         m2.add_tie('start')
-        ch = Chord(midis=[m1, m2])
+        ch = Chord([m1, m2], 1)
         ch._parent = self.mock_beat
         ch.finalize()
         assert [n.is_tied for n in ch.notes] == [True, True]
@@ -619,8 +619,8 @@ class TestTies(ChordTestCase):
         assert ch.midis[0]._ties == copied.midis[0]._ties == set()
 
     def test_tie_one_note(self):
-        ch1 = Chord(midis=[60, 63])
-        ch2 = Chord(midis=[60, 65])
+        ch1 = Chord([60, 63], 1)
+        ch2 = Chord([60, 65], 1)
         ch1.midis[0].add_tie('start')
         ch2.midis[0].add_tie('stop')
         ch1._parent = self.mock_beat
@@ -631,7 +631,7 @@ class TestTies(ChordTestCase):
         assert [n.is_tied_to_previous for n in ch2.notes] == [True, False]
 
     def test_untie_one_note(self):
-        ch = Chord(midis=[60, 61])
+        ch = Chord([60, 61], 1)
         ch.add_tie('start')
         ch._parent = self.mock_beat
         ch.finalize()
@@ -641,8 +641,8 @@ class TestTies(ChordTestCase):
         assert [n.is_tied for n in ch.notes] == [False, True]
 
     def test_chord_tie_untie(self):
-        ch1 = Chord(midis=[60, 61])
-        ch2 = Chord(midis=[60, 61])
+        ch1 = Chord([60, 61], 1)
+        ch2 = Chord([60, 61], 1)
         ch1.add_tie('start')
         ch2.add_tie('stop')
         ch1._parent = self.mock_beat
@@ -654,8 +654,8 @@ class TestTies(ChordTestCase):
         assert [n.is_tied_to_previous for n in ch2.notes] == [True, True]
 
     def test_chord_change_tie_after_finalizing(self):
-        ch1 = Chord(midis=[60, 61])
-        ch2 = Chord(midis=[60, 61])
+        ch1 = Chord([60, 61], 1)
+        ch2 = Chord([60, 61], 1)
         ch1._parent = self.mock_beat
         ch2._parent = self.mock_beat
         ch1.finalize()
@@ -669,7 +669,7 @@ class TestTies(ChordTestCase):
         assert [n.is_tied_to_previous for n in ch2.notes] == [False, True]
 
     def test_chord_all_midis_tied_to_next_or_previous(self):
-        ch = Chord([60, 61, 62])
+        ch = Chord([60, 61, 62], 1)
         for m in ch.midis:
             m.add_tie('start')
         assert ch.all_midis_are_tied_to_next
@@ -741,20 +741,20 @@ class TestAddGraceChord(ChordTestCase):
         assert gch.midis[0].value == 64
         g5 = gch = ch.add_grace_chord(midis_or_grace_chord=65, type='16th')
         assert gch.midis[0].value == 65
-        assert gch.type.value_ == '16th'
+        assert gch.type == '16th'
         in_gch = GraceChord(61, type='16th')
         g6 = gch = ch.add_grace_chord(midis_or_grace_chord=in_gch)
         assert gch == in_gch
-        assert gch.type.value_ == '16th'
+        assert gch.type == '16th'
         with self.assertRaises(ValueError):
             ch.add_grace_chord(midis_or_grace_chord=GraceChord(66, type='quarter'), type='16th')
         g7 = gch = ch.add_grace_chord(67, type='16th')
         assert gch.midis[0].value == 67
-        assert gch.type.value_ == '16th'
+        assert gch.type == '16th'
         g8 = gch = ch.add_grace_chord(68, type='16th', position='after')
         assert gch.position == 'after'
         assert gch.midis[0].value == 68
-        assert gch.type.value_ == '16th'
+        assert gch.type == '16th'
         with self.assertRaises(ValueError):
             ch.add_grace_chord(GraceChord(66, type='quarter'), position='after')
         assert ch.get_grace_chords(position='before') == [g1, g2, g3, g4, g5, g6, g7]
@@ -782,7 +782,7 @@ class TestAddGraceChord(ChordTestCase):
         gc4 = ch.add_grace_chord(GraceChord(63, type='16th'))
         all_gcs = [gc1, gc2, gc3, gc4]
         assert [[m.value for m in gc.midis] for gc in all_gcs] == [[60], [61], [62, 64], [63]]
-        assert [gc.type.value_ if gc.type else None for gc in all_gcs] == [None, 'quarter', None, '16th']
+        assert [gc.type for gc in all_gcs] == [None, 'quarter', None, '16th']
 
     def test_add_grace_chord_finalize(self):
         part = Part('p1')
@@ -1145,3 +1145,47 @@ class TestAddAfterNotes(IdTestCase):
   </measure>
 """
         assert m.to_string() == expected
+
+
+class TestTypeAndNumberOfDots(IdTestCase):
+    def test_chord_type_attribute_with_update(self):
+        ch = Chord([60, 61], 1)
+        assert ch._type is None
+        assert ch.type == 'quarter'
+        ch.type = 'half'
+        assert ch._type == 'half'
+        assert ch.type == 'half'
+        ch.quarter_duration = 4
+        assert ch._type == 'half'
+        assert ch.type == 'half'
+        ch._type = None
+        assert ch.type == 'whole'
+        with self.assertRaises(ChordHasNoNotesError):
+            ch._update_xml_types()
+        ch._update_notes()
+        ch._update_xml_types()
+        assert ch.get_children()[0].xml_type.value_ == 'whole'
+        assert ch.get_children()[1].xml_type.value_ == 'whole'
+        with self.assertRaises(ChordAlreadyHasNotesError):
+            ch.type = 'half'
+        gch = Chord([60, 61], 0)
+        assert gch.type is None
+        gch._update_notes()
+        gch._update_xml_types()
+        assert gch.get_children()[0].xml_type is None
+        assert gch.get_children()[1].xml_type is None
+
+        gch = GraceChord([60, 61])
+        assert gch.type is None
+        gch._update_notes()
+        gch._update_xml_types()
+        assert gch.get_children()[0].xml_type is None
+        assert gch.get_children()[1].xml_type is None
+
+        gch = GraceChord([60, 61])
+        gch.type = 'half'
+        assert gch.type == 'half'
+        gch._update_notes()
+        gch._update_xml_types()
+        assert gch.get_children()[0].xml_type.value_ == 'half'
+        assert gch.get_children()[1].xml_type.value_ == 'half'

@@ -64,7 +64,7 @@ class TestVoice(TestCase):
         v._parent = mock_staff
 
         with self.assertRaises(VoiceHasNoBeatsError):
-            v._add_chord(Chord())
+            v._add_chord(Chord(60, 1))
         v.update_beats(1, 1, 1, 1)
         v._add_chord(Chord(quarter_duration=1.5, midis=60))
         v._add_chord(Chord(quarter_duration=2, midis=60))

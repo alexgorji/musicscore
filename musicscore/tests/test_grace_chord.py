@@ -7,7 +7,7 @@ from musicxml.xmlelement.xmlelement import XMLType
 
 class TestGraceChord(IdTestCase):
     def test_grace_chord_init(self):
-        gch = GraceChord()
+        gch = GraceChord(60)
         assert gch.quarter_duration == 0
         gch.quarter_duration = 0
         with self.assertRaises(ChordException):
@@ -16,13 +16,6 @@ class TestGraceChord(IdTestCase):
     def test_grace_chord_type(self):
         p = Part('p1')
         gch = GraceChord(60)
-
-        gch.type = '16th'
-        assert isinstance(gch.type, XMLType)
-        gch.type = XMLType('eighth')
-        assert isinstance(gch.type, XMLType)
-        gch.type = None
-        assert gch.type is None
 
         gch.type = '16th'
         p.add_chord(gch)

@@ -43,7 +43,7 @@ class TestGetPart(IdTestCase):
             b.get_part()
 
     def test_chord_get_part(self):
-        ch = Chord()
+        ch = Chord(60, 1)
         with self.assertRaises(TypeError):
             ch.get_part()
 
@@ -86,7 +86,7 @@ class TestGetMeasure(IdTestCase):
             b.get_measure()
 
     def test_chord_get_measure(self):
-        ch = Chord()
+        ch = Chord(60, 1)
         with self.assertRaises(TypeError):
             ch.get_measure()
 
@@ -130,7 +130,7 @@ class TestGetStaff(IdTestCase):
             b.get_staff()
 
     def test_chord_get_staff(self):
-        ch = Chord()
+        ch = Chord(60, 1)
         with self.assertRaises(TypeError):
             ch.get_staff()
 
@@ -181,7 +181,7 @@ class TestGetVoice(IdTestCase):
             b.get_voice()
 
     def test_chord_get_voice(self):
-        ch = Chord()
+        ch = Chord(60, 1)
         with self.assertRaises(TypeError):
             ch.get_voice()
 
@@ -233,7 +233,7 @@ class TestGetBeat(IdTestCase):
             b.get_beat()
 
     def test_chord_get_beat(self):
-        ch = Chord()
+        ch = Chord(60, 1)
         with self.assertRaises(TypeError):
             ch.get_beat()
 
@@ -291,7 +291,7 @@ class TestGetChord(IdTestCase):
         assert b.get_chord(1) == ch
 
     def test_chord_get_chord(self):
-        ch = Chord()
+        ch = Chord(60, 1)
         with self.assertRaises(TypeError):
             ch.get_chord()
 
@@ -347,6 +347,6 @@ class TestGetBeats(IdTestCase):
             b.get_beats()
 
     def test_chord_get_beats(self):
-        ch = Chord()
+        ch = Chord(60, 1)
         with self.assertRaises(TypeError):
             ch.get_beats()

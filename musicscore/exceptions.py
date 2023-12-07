@@ -76,6 +76,10 @@ class ChordAlreadySplitError(ChordException):
     pass
 
 
+class ChordAlreadyHasNotesError(ChordException):
+    pass
+
+
 class ChordCannotSplitError(ChordException):
     pass
 
@@ -89,6 +93,10 @@ class ChordHasNoParentError(ChordException):
 
 
 class ChordHasNoParentPartError(ChordException):
+    pass
+
+
+class ChordHasNoNotesError(ChordException):
     pass
 
 

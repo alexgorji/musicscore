@@ -161,7 +161,7 @@ class TestSimpleFormat(IdTestCase):
 
     def test_add_chord(self):
         sf = SimpleFormat(quarter_durations=[1], midis=[60])
-        chords = [Chord(midis=midis) for midis in [[61, 62], 63]]
+        chords = [Chord(midis, 1) for midis in [[61, 62], 63]]
         for chord in chords:
             sf.add_chord(chord)
         assert sf.chords[1:] == chords

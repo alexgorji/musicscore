@@ -79,7 +79,7 @@ class TestMusicTree(IdTestCase):
         s = Staff()
         v = Voice()
         b = Beat()
-        c = Chord()
+        c = Chord(60, 1)
         for object_ in [p, m, s, v, b, c]:
             with self.assertRaises(TypeError):
                 object_.get_part()
