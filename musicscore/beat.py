@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from math import trunc
 from quicktions import Fraction
@@ -7,7 +7,7 @@ from musicscore.chord import _split_copy, _group_chords, Chord
 from musicscore.config import SPLITTABLES
 from musicscore.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
     ChordHasNoQuarterDurationError, \
-    ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError
+    ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError, QuarterDurationIsNotWritable
 from musicscore.finalize import FinalizeMixin
 from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
@@ -16,6 +16,18 @@ from musicscore.util import lcm
 from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
 
 __all__ = ['Beat', 'beam_chord_group']
+
+
+def _convert_to_quarter_duration_splittables_dictionary(simple_splittalbes):
+    output = {}
+    for key, value in simple_splittalbes.items():
+        output[QuarterDuration(*key)] = {
+            QuarterDuration(*k): [QuarterDuration(*qd) for qd in v] for k, v in value.items()
+        }
+    return output
+
+
+_SPLITTABLE_QUARTER_DURATIONS = _convert_to_quarter_duration_splittables_dictionary(SPLITTABLES)
 
 
 def _find_nearest_quantized_value(quantized_values, values):
@@ -183,9 +195,11 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
     def _add_child(self, child):
         child._parent = self
         self._children.append(child)
-        if self.up.up.up.up:
+        try:
             self.up.up.up.up.set_current_measure(staff_number=self.up.up.number, voice_number=self.up.number,
                                                  measure=self.up.up.up)
+        except AttributeError:
+            pass
 
     def _add_chord(self, chord=None):
         if chord is None:
@@ -265,21 +279,31 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         return output
 
     def _split_not_writable(self, chord, offset):
-        if SPLITTABLES.get(offset.as_integer_ratio()):
-            quarter_durations = SPLITTABLES.get(offset.as_integer_ratio()).get(
-                chord.quarter_duration.as_integer_ratio())
+        if _SPLITTABLE_QUARTER_DURATIONS.get(offset):
+            quarter_durations = _SPLITTABLE_QUARTER_DURATIONS.get(offset).get(
+                chord.quarter_duration)
             if quarter_durations:
-                quarter_durations = [QuarterDuration(*qd) for qd in quarter_durations]
+                quarter_durations = [QuarterDuration(qd) for qd in quarter_durations]
                 return self._split_chord(chord, quarter_durations)
 
-    def _update_dots(self, chord_group, actual_notes):
-        for ch in chord_group:
-            if ch.quarter_duration == Fraction(1, 2) and actual_notes == 6 and ch._number_of_dots is None:
-                for note in ch.get_children():
-                    note.update_dots(number_of_dots=1)
-            else:
-                for note in ch.get_children():
-                    note.update_dots(ch.number_of_dots)
+    def _update_chord_types(self):
+        for ch in self.get_chords():
+            if not ch.type:
+                try:
+                    ch.type = ch.quarter_duration.get_type()
+                except QuarterDurationIsNotWritable as err:
+                    raise QuarterDurationIsNotWritable(f'Chord with offset {ch.offset}: {err}')
+
+    def _update_chord_number_of_dots(self):
+        if not self.is_filled:
+            raise BeatNotFullError()
+        actual_notes = self._get_actual_subdivision(self.get_chords())
+        for ch in self.get_chords():
+            if not ch.number_of_dots:
+                if ch.quarter_duration == Fraction(1, 2) and actual_notes == 6:
+                    ch.number_of_dots = 1
+                else:
+                    ch.number_of_dots = ch.quarter_duration.get_number_of_dots()
 
     def _update_tuplets(self, chord_group, actual_notes, factor=1):
         def add_bracket_to_notes(chord, type_, number=1):
@@ -315,16 +339,16 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 else:
                     pass
 
-    def _update_note_tuplets_and_dots(self):
-        actual_notes = self._get_actual_notes(self.get_children())
+    def _update_note_tuplets(self):
+        actual_notes = self._get_actual_subdivision(self.get_children())
         if not actual_notes:
             if self.quarter_duration == 1:
                 grouped_chords = _group_chords(self.get_children(), [1 / 2, 1 / 2])
                 if grouped_chords:
                     for g in grouped_chords:
-                        actual_notes = self._get_actual_notes(g)
+                        actual_notes = self._get_actual_subdivision(g)
                         self._update_tuplets(g, actual_notes, 1 / 2)
-                        self._update_dots(g, actual_notes)
+                        # self._update_dots(g)
                     return
                 else:
                     raise NotImplementedError(
@@ -334,14 +358,14 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     'Beat with quarter_duration other than one cannot manage more than one group of chords.')
 
         self._update_tuplets(self.get_children(), actual_notes)
-        self._update_dots(self.get_children(), actual_notes)
+        # self._update_dots(self.get_children())
 
     def _update_note_beams(self):
         if self.get_children():
             beam_chord_group(chord_group=self.get_children())
 
     @staticmethod
-    def _get_actual_notes(chords):
+    def _get_actual_subdivision(chords):
         denominators = list(dict.fromkeys([ch.quarter_duration.denominator for ch in chords]))
         if len(denominators) > 1:
             l_c_m = lcm(denominators)
@@ -549,24 +573,34 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
     def add_chord(self, *args, **kwargs):
         raise AddChordError
 
+    def fill_with_rests(self) -> None:
+        """
+        If :obj:`~musicscore.beat.Beat` is not filled, it will be filled with rest(s)
+        """
+        if not self.is_filled:
+            self._add_chord(Chord(0, self.quarter_duration - sum([ch.quarter_duration for ch in self.get_chords()])))
+
     def finalize(self):
         """
         finalize can only be called once.
 
         - It calls finalize method of all :obj:`~musicscore.chord.Chord` children.
 
-        - Following updates are triggered: _update_note_tuplets_and_dots, _update_note_beams, quantize_quarter_durations (if get_quantized is
+        - Following updates are triggered: _update_note_tuplets, _update_note_beams, quantize_quarter_durations (if get_quantized is
           True), _split_not_writable_chords
         """
         if self._finalized:
             raise AlreadyFinalizedError(self)
         if self.is_filled is False:
-            BeatNotFullError()
+            self.fill_with_rests()
+            # raise BeatNotFullError
 
         if self.get_children():
+            self._update_chord_types()
+            self._update_chord_number_of_dots()
             for chord in self.get_children():
                 chord.finalize()
-            self._update_note_tuplets_and_dots()
+            self._update_note_tuplets()
             self._update_note_beams()
 
         self._finalized = True
@@ -578,7 +612,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
 
         """
         if self.get_possible_subdivisions() and self.get_children():
-            if self._get_actual_notes(self.get_children()) in self.get_possible_subdivisions():
+            if self._get_actual_subdivision(self.get_children()) in self.get_possible_subdivisions():
                 pass
             else:
                 quarter_durations = [chord.quarter_duration for chord in self.get_children()]

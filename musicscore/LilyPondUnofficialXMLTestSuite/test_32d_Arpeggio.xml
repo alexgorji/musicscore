@@ -324,6 +324,12 @@
           <arpeggiate />
         </notations>
       </note>
+      <note>
+        <rest />
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>

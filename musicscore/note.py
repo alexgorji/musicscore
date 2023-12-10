@@ -46,7 +46,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     Child type: :obj:`~musicscore.midi.Midi`
     """
 
-    _ATTRIBUTES = {'midi', 'quarter_duration', 'parent_chord', 'number_of_dots', 'is_tied', 'is_tied_to_previous'}
+    _ATTRIBUTES = {'midi', 'quarter_duration', 'parent_chord', 'is_tied', 'is_tied_to_previous'}
 
     XMLClass = XMLNote
 
@@ -54,7 +54,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self._midi = None
         self._parent_chord = midi.parent_chord
         self._xml_object = self.XMLClass(*args, **kwargs)
-        self._number_of_dots = None
 
         super().__init__(quarter_duration=quarter_duration)
         self.midi = midi
@@ -62,6 +61,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self._update_xml_notehead()
         self._update_xml_voice()
         self._update_xml_staff()
+        self._update_xml_dots()
 
     @staticmethod
     def _check_xml_duration_value(duration):
@@ -106,7 +106,10 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
     def _update_xml_accidental(self):
         self.xml_object.xml_accidental = self.midi.accidental.xml_object
 
-    def _update_xml_dots(self, number_of_dots):
+    def _update_xml_dots(self):
+        number_of_dots = self.parent_chord.number_of_dots
+        if number_of_dots is None:
+            number_of_dots = 0
         dots = self.xml_object.find_children('XMLDot')
         if number_of_dots > len(dots):
             diff = number_of_dots - len(dots)
@@ -238,14 +241,6 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self._update_xml_accidental()
 
     @property
-    def number_of_dots(self) -> int:
-        """
-        :return: number of dots
-        :rtype: positive int
-        """
-        return self._number_of_dots
-
-    @property
     def parent_chord(self) -> 'Chord':
         """
         :return: notes parent. Same as self.up
@@ -362,12 +357,3 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
             self.xml_object.add_child(XMLTie(type='stop'))
             self._set_xml_tied('stop')
         self.midi._ties.add('stop')
-
-    def update_dots(self, number_of_dots: int) -> None:
-        """
-        Set or change number of dots
-
-        :param number_of_dots: positiv int
-        """
-        self._number_of_dots = number_of_dots
-        self._update_xml_dots(number_of_dots)

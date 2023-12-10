@@ -546,16 +546,20 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         return self.get_children()
 
     @property
-    def number_of_dots(self) -> Optional[int]:
+    def number_of_dots(self) -> int:
         """
-        Set and get number of dots to be added to the notes. If None ~:obj:`musicscore.quarterdurataion.Quarterdurataion.get_number_of_dots()`is called.
+        Set and get number of dots to be added to the notes. If not set manually ~:obj:`musicscore.beat.Beat.finalize()` will set it usually via calling ~:obj:`~musicscore.quarterduration.QuarterDuration.get_number_of_dots()`.
         """
-        return self._number_of_dots if self._number_of_dots else self.quarter_duration.get_number_of_dots()
+        return self._number_of_dots
 
     @number_of_dots.setter
     def number_of_dots(self, val):
         if self._notes_are_set and val != self._number_of_dots:
             raise ChordAlreadyHasNotesError('After creating Notes it is not possible to change number of dots.')
+        if not isinstance(val, int):
+            raise TypeError()
+        if val < 0:
+            raise ValueError
         self._number_of_dots = val
 
     @property
@@ -574,15 +578,19 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     @property
     def type(self) -> Optional[str]:
         """
-        Set and get ```XMLNoteType.value_``` associated with this chord. If None ~:obj:`musicscore.quarterdurataion.Quarterdurataion.get_type()` is called. QuarterDuration 0 returns None.
+        Set and get ```XMLNoteType.value_``` associated with this chord. If not set manually ~:obj:`musicscore.beat.Beat.finalize()` will set it usually via calling ~:obj:`~musicscore.quarterduration.QuarterDuration.get_type()`.  ~:obj:`~musicscore.quarterduration.QuarterDuration` ``0`` returns ``None``.
         :param val: [‘1024th’, ‘512th’, ‘256th’, ‘128th’, ‘64th’, ‘32nd’, ‘16th’, ‘eighth’, ‘quarter’, ‘half’, ‘whole’, ‘breve’, ‘long’, ‘maxima’]
         """
-        return self._type if self._type else self.quarter_duration.get_type()
+        return self._type
 
     @type.setter
     def type(self, val):
+        permitted = ['1024th', '512th', '256th', '128th', '64th', '32nd', '16th', 'eighth', 'quarter', 'half', 'whole',
+                     'breve', 'long', 'maxima']
         if self._notes_are_set and val != self._type:
             raise ChordAlreadyHasNotesError('After creating Notes it is not possible to change the type.')
+        if val is not None and val not in permitted:
+            raise ValueError(f'Chord.type can only be None or {permitted}')
         self._type = val
 
     @QuarterDurationMixin.quarter_duration.setter
@@ -1378,7 +1386,8 @@ def _group_chords(chords: List[Chord], quarter_durations: List[Union[QuarterDura
     :return: Optional[List[List[:obj:`Chord`]]]
     """
     if sum(c.quarter_duration for c in chords) != sum(quarter_durations):
-        raise ValueError
+        raise ValueError(
+            f'chords quarter durations ({[c.quarter_duration for c in chords]}) and arg quarter_duration {quarter_durations} does not match.')
     output = []
     for _ in quarter_durations:
         output.append([])

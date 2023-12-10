@@ -25,10 +25,21 @@ class TestMeasure(IdTestCase):
       <beats>4</beats>
       <beat-type>4</beat-type>
     </time>
+    <clef>
+      <sign>G</sign>
+      <line>2</line>
+    </clef>
   </attributes>
+  <note>
+    <rest />
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
+  </note>
 </measure>
 """
         m = Measure(1)
+        print(m.to_string())
         assert m.to_string() == expected
 
     def test_number(self):
@@ -350,13 +361,23 @@ class TestMeasure(IdTestCase):
       <beats>4</beats>
       <beat-type>4</beat-type>
     </time>
+    <clef>
+      <sign>G</sign>
+      <line>2</line>
+    </clef>
   </attributes>
+  <note>
+    <rest />
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
+  </note>
   <barline location="right">
     <bar-style>light-light</bar-style>
   </barline>
 </measure>
 """
-        # print(m.to_string())
+        print(m.to_string())
         assert m.to_string() == expected
 
     def test_update_beats_from_parent_measure(self):
@@ -539,7 +560,12 @@ class TestMeasure(IdTestCase):
 """
         assert m.to_string() == expected
 
-
+    def test_measure_fill_with_rests(self):
+        m = Measure(1)
+        m.fill_with_rests()
+        ch = m.get_chords()[0]
+        assert ch.is_rest
+        assert ch.quarter_duration == 4
 class TestUpdateAccidentals(IdTestCase):
     def test_update_accidentals_simple(self):
         m = Measure(1)
@@ -632,6 +658,12 @@ class TestMeasureAttributes(TestCase):
       <line>2</line>
     </clef>
   </attributes>
+  <note>
+    <rest />
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
+  </note>
 </measure>
 """
         m = Measure(1)
@@ -746,6 +778,12 @@ class TestMeasureAttributes(TestCase):
       <line>2</line>
     </clef>
   </attributes>
+  <note>
+    <rest />
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
+  </note>
 </measure>
 """
         m = Measure(1)
@@ -766,6 +804,12 @@ class TestMeasureAttributes(TestCase):
       <line>2</line>
     </clef>
   </attributes>
+  <note>
+    <rest />
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
+  </note>
 </measure>
 """
         m = Measure(1)
@@ -786,6 +830,12 @@ class TestMeasureAttributes(TestCase):
       <beat-type>4</beat-type>
     </time>
   </attributes>
+  <note>
+    <rest />
+    <duration>4</duration>
+    <voice>1</voice>
+    <type>whole</type>
+  </note>
 </measure>
 """
         m = Measure(1)

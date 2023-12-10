@@ -121,6 +121,7 @@ class TestAddExceptions(IdTestCase):
         ch = Chord(60, 1)
         self.part.add_chord(ch)
         ch.midis[0].add_child(Accidental())
+        ch.number_of_dots = 1
         ch.finalize()
         with self.assertRaises(AlreadyFinalizedError):
             ch.midis[0].add_child(Accidental())

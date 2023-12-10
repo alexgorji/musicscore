@@ -192,6 +192,12 @@
         <voice>1</voice>
         <type>quarter</type>
       </note>
+      <note>
+        <rest />
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>

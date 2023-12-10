@@ -381,6 +381,13 @@
           <tied type="stop" />
         </notations>
       </note>
+      <note>
+        <rest />
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <staff>1</staff>
+      </note>
       <backup>
         <duration>4</duration>
       </backup>
@@ -419,6 +426,13 @@
         <accidental>flat</accidental>
         <staff>2</staff>
       </note>
+      <note>
+        <rest />
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <staff>2</staff>
+      </note>
       <backup>
         <duration>4</duration>
       </backup>
@@ -471,6 +485,13 @@
         <accidental>flat</accidental>
         <staff>3</staff>
       </note>
+      <note>
+        <rest />
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <staff>3</staff>
+      </note>
       <backup>
         <duration>4</duration>
       </backup>
@@ -510,6 +531,13 @@
         <voice>1</voice>
         <type>half</type>
         <accidental>flat</accidental>
+        <staff>4</staff>
+      </note>
+      <note>
+        <rest />
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
         <staff>4</staff>
       </note>
       <barline location="right">

@@ -128,6 +128,10 @@ class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         voice_object.update_beats()
         return voice_object
 
+    def fill_with_rests(self):
+        for voice in self.get_children():
+            voice.fill_with_rests()
+
     def get_previous_staff(self) -> Optional['Staff']:
         """
         :return: :obj:`Staff` with the same number in previous :obj:`~musicscore.measure.Measure` if existing else ``None``

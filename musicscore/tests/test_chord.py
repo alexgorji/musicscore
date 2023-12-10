@@ -114,6 +114,7 @@ class TestTreeChord(ChordTestCase):
         c = Chord(70, 4, relative_x=10)
         c.midis[0].accidental.show = True
         c._parent = self.mock_beat
+        c.type = 'whole'
         c.finalize()
         expected = """<note relative-x="10">
   <pitch>
@@ -129,6 +130,7 @@ class TestTreeChord(ChordTestCase):
 """
         assert c.notes[0].to_string() == expected
         c.midis[0].value = 72
+        c.type = 'whole'
         expected = """<note relative-x="10">
   <pitch>
     <step>C</step>
@@ -157,6 +159,7 @@ class TestTreeChord(ChordTestCase):
         # change chord's duration (not zero)
         c.quarter_duration = 1
         c._parent = self.mock_beat
+        c.type = 'quarter'
         c.finalize()
         expected = """<note>
   <rest />
@@ -236,6 +239,7 @@ class TestTreeChord(ChordTestCase):
         """
         chord = Chord(0, 2)
         chord._parent = self.mock_beat
+        chord.type = 'half'
         expected = """<note>
   <rest />
   <duration>2</duration>
@@ -264,6 +268,7 @@ class TestTreeChord(ChordTestCase):
     def test_chord_to_rest(self):
         chord = Chord(60, 2)
         chord._parent = self.mock_beat
+        chord.type = chord.quarter_duration.get_type()
         chord.finalize()
         chord.to_rest()
         expected = """<note>
@@ -285,6 +290,7 @@ class TestTreeChord(ChordTestCase):
         chord.midis[1].accidental.show = True
         chord.midis[2].accidental.show = True
         chord._parent = self.mock_beat
+        chord.type = chord.quarter_duration.get_type()
         chord.finalize()
         chord.xml_stem = 'up'
         expected_1 = """<note>
@@ -806,7 +812,7 @@ class TestAddGraceChord(ChordTestCase):
         gch2 = ch.add_grace_chord(90, position='after')
         part.add_chord(ch, staff_number=2, voice_number=2)
         part.finalize()
-        assert part.get_chords() == [gch1, ch, gch2]
+        assert part.get_voice(1, 2, 2).get_chords() == [gch1, ch, gch2]
         for c in [gch1, ch, gch2]:
             assert c.voice_number == 2
             assert c.get_staff_number() == 2
@@ -1148,18 +1154,30 @@ class TestAddAfterNotes(IdTestCase):
 
 
 class TestTypeAndNumberOfDots(IdTestCase):
+    def test_chord_type_error(self):
+        ch = Chord(60, 1)
+        with self.assertRaises(ValueError):
+            ch.type = 'bla'
+
+    def test_chord_number_of_dots_error(self):
+        ch = Chord(60, 1)
+        with self.assertRaises(TypeError):
+            ch.number_of_dots = None
+        with self.assertRaises(TypeError):
+            ch.number_of_dots = '1'
+        with self.assertRaises(ValueError):
+            ch.number_of_dots = -1
+
     def test_chord_type_attribute_with_update(self):
+        p = Part('p0')
+        ch = Chord([60, 61], 2)
+        p.add_chord(ch)
+        p.finalize()
+        assert ch.get_children()[0].xml_type.value_ == 'half'
+        assert ch.get_children()[1].xml_type.value_ == 'half'
         p = Part('p1')
-        ch = Chord([60, 61], 1)
-        assert ch._type is None
-        assert ch.type == 'quarter'
-        ch.type = 'half'
-        assert ch._type == 'half'
-        assert ch.type == 'half'
-        ch.quarter_duration = 4
-        assert ch._type == 'half'
-        assert ch.type == 'half'
-        ch._type = None
+        ch = Chord([60, 61], 2)
+        ch.type = 'whole'
         p.add_chord(ch)
         p.finalize()
         assert ch.get_children()[0].xml_type.value_ == 'whole'
@@ -1170,7 +1188,10 @@ class TestTypeAndNumberOfDots(IdTestCase):
         assert gch.type is None
         p = Part('p2')
         p.add_chord(gch)
+        print(p.get_beats()[0])
+        print(p.get_beats()[0].is_filled)
         p.finalize()
+
         assert gch.get_children()[0].xml_type is None
         assert gch.get_children()[1].xml_type is None
 
@@ -1195,31 +1216,19 @@ class TestTypeAndNumberOfDots(IdTestCase):
 
     def test_chord_number_of_dots_with_update(self):
         p = Part('p1')
-        ch = Chord([60, 61], 1)
-        assert ch._number_of_dots is None
-        assert ch.number_of_dots == 0
-        ch.number_of_dots = 2
-        assert ch._number_of_dots == 2
-        assert ch.number_of_dots == 2
-        ch.quarter_duration = 3
-        assert ch._number_of_dots == 2
-        assert ch.number_of_dots == 2
-        ch.number_of_dots = None
-        assert ch.number_of_dots == 1
-        p.add_chord(ch)
+        [p.add_chord(Chord([60, 61], qd)) for qd in [1, 0.75, 0.25]]
+        assert {ch.number_of_dots for ch in p.get_chords()} == {None}
         p.finalize()
+        assert [ch.number_of_dots for ch in p.get_chords()[:3]] == [0, 1, 0]
+        ch = p.get_chords()[1]
         assert len(ch.get_children()[0].xml_object.get_children_of_type(XMLDot)) == 1
         assert len(ch.get_children()[1].xml_object.get_children_of_type(XMLDot)) == 1
         with self.assertRaises(ChordAlreadyHasNotesError):
             ch.number_of_dots = 3
 
-        gch = Chord([60, 61], 0)
-        assert gch.number_of_dots == 0
-
         p = Part('p2')
         gch = GraceChord([60, 61])
         gch.number_of_dots = 3
-        assert gch.number_of_dots == 3
         p.add_chord(gch)
         p.finalize()
         assert len(gch.get_children()[0].xml_object.get_children_of_type(XMLDot)) == 3

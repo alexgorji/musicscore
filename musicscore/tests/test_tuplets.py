@@ -87,14 +87,15 @@ class TestTuplets(IdTestCase):
             measures.append(m)
 
         for m in measures:
-            for ch in m.get_chords():
+            chords = [chord for chord in m.get_chords() if not chord.is_rest]
+            for ch in chords:
                 note = ch.notes[0]
                 assert note.xml_time_modification is not None
                 assert note.xml_time_modification.xml_actual_notes.value_ == 5
                 assert note.xml_time_modification.xml_normal_notes.value_ == 4
                 assert note.xml_time_modification.xml_normal_type.value_ == '16th'
-            first_note = m.get_chords()[0].notes[0]
-            last_note = m.get_chords()[-1].notes[0]
+            first_note = chords[0].notes[0]
+            last_note = chords[-1].notes[0]
             t1, t2 = first_note.xml_notations.xml_tuplet, last_note.xml_notations.xml_tuplet
             assert t1.type == 'start'
             assert t2.type == 'stop'
@@ -107,8 +108,8 @@ class TestTuplets(IdTestCase):
         m1._split_not_writable_chords()
         m1.finalize()
         b = m1.get_voice(staff_number=1, voice_number=1).get_children()[0]
-        assert b.get_children() == m1.get_chords()
-        n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()]
+        assert b.get_children() == m1.get_chords()[:3]
+        n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()[:3]]
         # print([n.quarter_duration for n in [n1, n2, n3]])
         assert n1.xml_notations.xml_tuplet.type == 'start'
         assert n3.xml_notations.xml_tuplet.type == 'stop'
@@ -125,7 +126,7 @@ class TestTuplets(IdTestCase):
             m1._add_chord(Chord(midis=60, quarter_duration=q))
         m1._split_not_writable_chords()
         m1.finalize()
-        n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()]
+        n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()[:3]]
         assert n1.xml_notations.xml_tuplet.type == 'start'
         assert n3.xml_notations.xml_tuplet.type == 'stop'
         assert n1.is_tied
@@ -145,14 +146,15 @@ class TestTuplets(IdTestCase):
             measures.append(m)
 
         for m in measures:
-            for ch in m.get_chords():
+            chords = [chord for chord in m.get_chords() if not chord.is_rest]
+            for ch in chords:
                 note = ch.notes[0]
                 assert note.xml_time_modification is not None
                 assert note.xml_time_modification.xml_actual_notes.value_ == 6
                 assert note.xml_time_modification.xml_normal_notes.value_ == 4
                 assert note.xml_time_modification.xml_normal_type.value_ == '16th'
-            first_note = m.get_chords()[0].notes[0]
-            last_note = m.get_chords()[-1].notes[0]
+            first_note = chords[0].notes[0]
+            last_note = chords[-1].notes[0]
             t1, t2 = first_note.xml_notations.xml_tuplet, last_note.xml_notations.xml_tuplet
             assert t1.type == 'start'
             assert t2.type == 'stop'

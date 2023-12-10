@@ -118,5 +118,5 @@ class TestMidiNoteNoteHead(IdTestCase):
         p.add_chord(ch)
         path = generate_path(inspect.currentframe())
         s.export_xml(path)
-        assert p.get_chords()[-1].midis[0].notehead.value_ == 'square'
-        assert p.get_chords()[-1].midis[0].parent_note.xml_notehead.value_ == 'square'
+        assert p.get_chords()[1].midis[0].notehead.value_ == 'square'
+        assert p.get_chords()[1].midis[0].parent_note.xml_notehead.value_ == 'square'

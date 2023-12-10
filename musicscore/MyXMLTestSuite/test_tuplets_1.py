@@ -24,7 +24,7 @@ class TestTuplets1(IdTestCase):
         p.add_measure(time=(1, 4))
 
         rhythmic_patterns = []
-        for subdivision in range(8, 9):
+        for subdivision in range(1, 9):
             rhythmic_patterns.extend(generate_all_subdivision_patterns(subdivision, True))
 
         for rhythmic_pattern in rhythmic_patterns:

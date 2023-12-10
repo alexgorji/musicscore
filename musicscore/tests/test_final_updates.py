@@ -80,19 +80,19 @@ class TestFinalUpdates(IdTestCase):
 
     def test_measure_finalize(self):
         self.measure.finalize()
-        self.check_note_values(self.measure.get_chords())
+        self.check_note_values(self.voice.get_chords())
         with self.assertRaises(AlreadyFinalizedError):
             self.measure.finalize()
 
     def test_part_finalize(self):
         self.part.finalize()
-        self.check_note_values(self.part.get_chords())
+        self.check_note_values(self.voice.get_chords())
         with self.assertRaises(AlreadyFinalizedError):
             self.part.finalize()
 
     def test_score_finalize(self):
         self.score.finalize()
-        self.check_note_values(self.score.get_chords())
+        self.check_note_values(self.voice.get_chords())
         with self.assertRaises(AlreadyFinalizedError):
             self.score.finalize()
 

@@ -1,7 +1,7 @@
 from typing import Optional, Union, List
 
 from musicscore.beat import Beat
-from musicscore.chord import GraceChord
+from musicscore.chord import GraceChord, Chord
 from musicscore.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsFullError, \
     AddChordError, AlreadyFinalizedError
 from musicscore.musictree import MusicTree
@@ -125,6 +125,12 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         if not self.up:
             raise VoiceHasNoParentError('A child Beat can only be added to a Voice if voice has a Staff parent.')
         return super().add_child(child)
+
+    def fill_with_rests(self):
+        if not self.is_filled:
+            if not self.get_children():
+                self.update_beats()
+            self._add_chord(Chord(0, sum([b.quarter_duration for b in self.get_beats()]) - sum([ch.quarter_duration for ch in self.get_chords()])))
 
     def get_current_beat(self) -> 'Beat':
         """

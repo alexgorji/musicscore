@@ -401,6 +401,15 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             return staff_object.add_voice(voice_number=voice_number)
         return voice_object
 
+    def fill_with_rests(self):
+        """
+        If :obj:`~musicscore.measure.Measure` is not completely filled, it will be filled with rest(s)
+        """
+        if not self.get_children():
+            self.add_staff()
+        for staff in self.get_children():
+            staff.fill_with_rests()
+
     def finalize(self):
         """
         finalize can only be called once.
@@ -414,6 +423,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         if self._finalized:
             raise AlreadyFinalizedError(self)
 
+        self.fill_with_rests()
         self._update_attributes()
         self._update_left_barline()
         # self.quantize

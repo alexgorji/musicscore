@@ -69,6 +69,7 @@ class TestMidi(TestCase):
         Test if a midi object which is being contained in a note can access it via its parent_note attribute.
         """
         mock_chord.get_staff_number.return_value = None
+        mock_chord.number_of_dots = 0
         m = Midi(70)
         m._set_parent_chord(mock_chord)
         assert m.parent_note is None
@@ -149,6 +150,7 @@ class TestMidi(TestCase):
     @patch('musicscore.chord.Chord', spec=Chord)
     def test_midi_up_note(self, mock_chord):
         mock_chord.get_staff_number.return_value = None
+        mock_chord.number_of_dots = 0
         m = Midi(70)
         m._set_parent_chord(mock_chord)
         n = Note(midi=m)
@@ -218,6 +220,6 @@ class TestMidiNoteHead(IdTestCase):
         p.add_chord(ch)
         path = generate_path(inspect.currentframe())
         s.export_xml(path)
-        assert p.get_chords()[-1].midis[0].notehead.value_ == 'square'
-        assert p.get_chords()[-1].midis[0].parent_note.xml_notehead.value_ == 'square'
+        assert p.get_chords()[1].midis[0].notehead.value_ == 'square'
+        assert p.get_chords()[1].midis[0].parent_note.xml_notehead.value_ == 'square'
 
