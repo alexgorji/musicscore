@@ -100,7 +100,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -120,7 +120,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -145,7 +145,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -165,7 +165,7 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -191,7 +191,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -230,7 +230,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -518,7 +518,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>4</text>
@@ -538,7 +538,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -563,7 +563,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -583,7 +583,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>4</text>
@@ -610,7 +610,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -631,7 +631,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -657,7 +657,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -679,7 +679,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -706,7 +706,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -747,7 +747,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -773,7 +773,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -814,7 +814,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -841,7 +841,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -882,7 +882,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -908,7 +908,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -948,7 +948,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -974,7 +974,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -1014,7 +1014,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -1040,7 +1040,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1079,7 +1079,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -1105,7 +1105,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -1165,7 +1165,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1191,7 +1191,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1250,7 +1250,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1277,7 +1277,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1336,7 +1336,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1363,7 +1363,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1422,7 +1422,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -1449,7 +1449,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1528,7 +1528,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1556,8 +1556,8 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
           <tied type="start" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>5</text>
@@ -1598,7 +1598,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1624,7 +1624,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1669,8 +1669,8 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
           <tied type="stop" />
+          <tuplet number="1" type="stop" />
         </notations>
       </note>
     </measure>
@@ -1692,7 +1692,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>4</text>
@@ -1733,7 +1733,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1759,7 +1759,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1822,7 +1822,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1849,7 +1849,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1888,7 +1888,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>4</text>
@@ -1915,7 +1915,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -1955,7 +1955,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -1982,7 +1982,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -2022,7 +2022,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -2048,7 +2048,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -2112,7 +2112,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -2138,7 +2138,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -2179,7 +2179,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -2205,7 +2205,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -2245,7 +2245,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -2271,7 +2271,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -2311,7 +2311,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -2338,7 +2338,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -2398,7 +2398,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -2424,7 +2424,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -2484,7 +2484,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -2511,7 +2511,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -2594,7 +2594,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -2621,7 +2621,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -2681,7 +2681,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -2707,7 +2707,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -2766,7 +2766,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -2792,7 +2792,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -2851,7 +2851,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -2877,7 +2877,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -2936,7 +2936,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -2962,7 +2962,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3020,7 +3020,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3046,7 +3046,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3104,7 +3104,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -3131,7 +3131,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3189,7 +3189,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -3215,7 +3215,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -3294,7 +3294,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3320,7 +3320,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3398,7 +3398,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3425,7 +3425,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3503,7 +3503,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3530,7 +3530,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3608,7 +3608,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3635,7 +3635,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3713,7 +3713,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -3740,7 +3740,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3838,7 +3838,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3864,7 +3864,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>6</text>
@@ -3884,7 +3884,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3910,7 +3910,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -3956,8 +3956,8 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
           <tied type="stop" />
+          <tuplet number="1" type="stop" />
         </notations>
       </note>
     </measure>
@@ -3982,8 +3982,8 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
           <tied type="start" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>5</text>
@@ -4023,7 +4023,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -4049,7 +4049,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -4094,8 +4094,8 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
           <tied type="stop" />
+          <tuplet number="1" type="stop" />
         </notations>
       </note>
     </measure>
@@ -4120,8 +4120,8 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
           <tied type="start" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>5</text>
@@ -4181,7 +4181,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -4207,7 +4207,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -4271,7 +4271,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -4298,7 +4298,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -4362,8 +4362,8 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
           <tied type="stop" />
+          <tuplet number="1" type="stop" />
         </notations>
       </note>
     </measure>
@@ -4385,7 +4385,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>4</text>
@@ -4406,7 +4406,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -4432,7 +4432,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -4452,7 +4452,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>4</text>
@@ -4477,7 +4477,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>4</text>
@@ -4517,7 +4517,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -4542,7 +4542,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>4</text>
@@ -4581,7 +4581,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -4606,7 +4606,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -4643,7 +4643,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -4669,7 +4669,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -4708,7 +4708,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>4</text>
@@ -4733,7 +4733,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -4770,7 +4770,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -4796,7 +4796,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -4834,7 +4834,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>4</text>
@@ -4859,7 +4859,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>4</text>
@@ -4919,7 +4919,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -4944,7 +4944,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -5002,7 +5002,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -5029,7 +5029,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -5087,7 +5087,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -5114,7 +5114,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -5172,7 +5172,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>4</text>
@@ -5199,7 +5199,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -5240,7 +5240,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -5267,7 +5267,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -5308,7 +5308,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -5334,7 +5334,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -5375,7 +5375,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -5402,7 +5402,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -5441,7 +5441,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -5467,7 +5467,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -5507,7 +5507,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -5533,7 +5533,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -5573,7 +5573,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -5600,7 +5600,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -5659,7 +5659,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -5686,7 +5686,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -5745,7 +5745,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -5772,7 +5772,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -5831,7 +5831,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -5857,7 +5857,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -5917,7 +5917,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -5943,7 +5943,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -6003,7 +6003,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6029,7 +6029,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -6089,7 +6089,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -6115,7 +6115,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6174,7 +6174,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6200,7 +6200,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6259,7 +6259,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -6285,7 +6285,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6344,7 +6344,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6370,7 +6370,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6429,7 +6429,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -6456,7 +6456,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6515,7 +6515,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -6542,7 +6542,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6601,7 +6601,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -6628,7 +6628,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>3</text>
@@ -6707,7 +6707,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6733,7 +6733,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6812,7 +6812,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6839,7 +6839,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6918,7 +6918,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -6945,7 +6945,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -7024,7 +7024,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -7051,7 +7051,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -7130,7 +7130,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3</text>
@@ -7156,7 +7156,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -7214,7 +7214,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -7240,7 +7240,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -7298,7 +7298,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -7324,7 +7324,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -7382,7 +7382,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -7408,7 +7408,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -7465,7 +7465,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -7491,7 +7491,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -7569,7 +7569,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -7595,7 +7595,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -7673,7 +7673,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -7699,7 +7699,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -7777,7 +7777,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -7803,7 +7803,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -7881,7 +7881,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -7907,7 +7907,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -7984,7 +7984,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8010,7 +8010,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8087,7 +8087,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8113,7 +8113,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8190,7 +8190,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -8217,7 +8217,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8294,7 +8294,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8321,7 +8321,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8398,7 +8398,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -8425,7 +8425,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8502,7 +8502,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -8528,7 +8528,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>2</text>
@@ -8626,7 +8626,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8652,7 +8652,7 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8749,7 +8749,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8776,7 +8776,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8873,7 +8873,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8900,7 +8900,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -8997,7 +8997,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -9024,7 +9024,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -9121,7 +9121,7 @@
         <beam number="1">end</beam>
         <beam number="2">backward hook</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>
@@ -9148,7 +9148,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -9245,7 +9245,7 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2</text>
@@ -9272,7 +9272,7 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="1" bracket="yes" />
+          <tuplet bracket="yes" number="1" type="start" />
         </notations>
         <lyric>
           <text>1</text>
@@ -9389,7 +9389,7 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="1" />
+          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1</text>

@@ -55,7 +55,7 @@ class BeatHasNoParentError(BeatException):
     pass
 
 
-class BeatHasWrongTupletError(BeatException):
+class BeatUpdateChordTupletsError(BeatException):
     pass
 
 
@@ -250,6 +250,16 @@ class TimeException(MusicTreeException):
 
 
 class TimeActualSignaturesNotValidError(TimeException):
+    pass
+
+
+# Tuplet exceptions
+
+class TupletException(MusicTreeException):
+    pass
+
+
+class TupletNormalTypeError(TupletException):
     pass
 
 

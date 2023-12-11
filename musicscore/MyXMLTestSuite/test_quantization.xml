@@ -105,8 +105,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -129,8 +129,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1.45</text>
@@ -289,9 +289,9 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
           <tied type="start" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <note>
@@ -334,8 +334,8 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2.09</text>
@@ -371,8 +371,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -394,7 +394,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
-          <tuplet number="1" type="stop" />
+          <tuplet type="stop" number="1" />
         </notations>
         <lyric>
           <text>0.14</text>
@@ -442,8 +442,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -467,8 +467,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1.96</text>
@@ -546,8 +546,8 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -595,8 +595,8 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="stop" />
-          <tuplet number="1" type="stop" />
         </notations>
       </note>
       <note>
@@ -614,8 +614,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -638,8 +638,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>0.88</text>
@@ -734,8 +734,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -758,8 +758,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>1.44</text>
@@ -801,8 +801,8 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -849,8 +849,8 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="stop" />
-          <tuplet number="1" type="stop" />
         </notations>
       </note>
       <note>
@@ -883,8 +883,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -907,8 +907,8 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>0.5</text>
@@ -929,8 +929,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -953,8 +953,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2.46</text>
@@ -1034,8 +1034,8 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -1082,8 +1082,8 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="stop" />
-          <tuplet number="1" type="stop" />
         </notations>
       </note>
       <note>
@@ -1192,8 +1192,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -1237,8 +1237,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>2.4</text>
@@ -1337,8 +1337,8 @@
         </time-modification>
         <beam number="1">begin</beam>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -1387,8 +1387,8 @@
         </time-modification>
         <beam number="1">end</beam>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
         <lyric>
           <text>3.47</text>
@@ -2097,8 +2097,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -2121,8 +2121,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
       </note>
       <note>
@@ -2208,8 +2208,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -2232,8 +2232,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
       </note>
     </measure>
@@ -2444,8 +2444,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
-          <tuplet bracket="yes" number="1" type="start" />
         </notations>
       </note>
       <direction placement="above">
@@ -2486,8 +2486,8 @@
           <normal-type>eighth</normal-type>
         </time-modification>
         <notations>
+          <tuplet type="stop" number="1" />
           <tied type="start" />
-          <tuplet number="1" type="stop" />
         </notations>
       </note>
     </measure>

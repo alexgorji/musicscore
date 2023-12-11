@@ -69,7 +69,7 @@
           <normal-type>quarter</normal-type>
         </time-modification>
         <notations>
-          <tuplet bracket="yes" number="1" type="start" />
+          <tuplet type="start" number="1" bracket="yes" />
         </notations>
       </note>
       <note>
@@ -100,7 +100,7 @@
           <normal-type>quarter</normal-type>
         </time-modification>
         <notations>
-          <tuplet number="1" type="stop" />
+          <tuplet type="stop" number="1" />
         </notations>
       </note>
       <note>

@@ -15,6 +15,7 @@ from musicscore.midi import Midi
 from musicscore.musictree import MusicTree
 from musicscore.note import Note
 from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
+from musicscore.tuplet import Tuplet
 from musicscore.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_ORNAMENT_CLASSES, XML_DYNAMIC_CLASSES, \
     XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, \
     XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, isinstance_as_string
@@ -69,7 +70,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     :param quarter_duration: int, float, Fraction, :obj:`~musicscore.quarterduration.QuarterDuration` for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
     _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef', 'metronome', 'arpeggio',
-                   'type', 'number_of_dots'}
+                   'type', 'number_of_dots', 'tuplet'}
 
     def __init__(self, midis: Union[List[Union[float, int]], List[Midi], float, int, Midi],
                  quarter_duration: Union[float, int, 'Fraction', QuarterDuration], **kwargs):
@@ -92,6 +93,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._after_notes_xml_elements = []
         self._type = None
         self._number_of_dots = None
+        self._tuplet = None
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
         self.split = False
@@ -574,6 +576,16 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             return 0
         else:
             return self.previous.offset + self.previous.quarter_duration
+
+    @property
+    def tuplet(self) -> Optional['Tuplet']:
+        return self._tuplet
+
+    @tuplet.setter
+    def tuplet(self, val):
+        if val is not None and not isinstance(val, Tuplet):
+            raise TypeError
+        self._tuplet = val
 
     @property
     def type(self) -> Optional[str]:

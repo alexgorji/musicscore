@@ -39,7 +39,6 @@ class TestMeasure(IdTestCase):
 </measure>
 """
         m = Measure(1)
-        print(m.to_string())
         assert m.to_string() == expected
 
     def test_number(self):
@@ -377,7 +376,6 @@ class TestMeasure(IdTestCase):
   </barline>
 </measure>
 """
-        print(m.to_string())
         assert m.to_string() == expected
 
     def test_update_beats_from_parent_measure(self):

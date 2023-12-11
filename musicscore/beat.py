@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 
 from math import trunc
 from quicktions import Fraction
@@ -7,15 +7,17 @@ from musicscore.chord import _split_copy, _group_chords, Chord
 from musicscore.config import SPLITTABLES
 from musicscore.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
     ChordHasNoQuarterDurationError, \
-    ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError, QuarterDurationIsNotWritable
+    ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError, QuarterDurationIsNotWritable, \
+    BeatUpdateChordTupletsError
 from musicscore.finalize import FinalizeMixin
 from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
 from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
+from musicscore.tuplet import Tuplet
 from musicscore.util import lcm
-from musicxml.xmlelement.xmlelement import XMLNotations, XMLTuplet, XMLTimeModification, XMLBeam
+from musicxml.xmlelement.xmlelement import XMLBeam
 
-__all__ = ['Beat', 'beam_chord_group']
+__all__ = ['Beat', 'beam_chord_group', 'get_chord_group_subdivision']
 
 
 def _convert_to_quarter_duration_splittables_dictionary(simple_splittalbes):
@@ -52,6 +54,33 @@ def _find_quantized_locations(duration, subdivision):
     fr = duration / subdivision
     output = [x * fr for x in output]
     return output
+
+
+def get_chord_group_subdivision(chords):
+    qds = [ch.quarter_duration for ch in chords if ch.quarter_duration != 0]
+    if len(qds) == 1:
+        return qds[0].denominator
+    qd_sum = sum(qds)
+    if qd_sum in [3 / 2, 3 / 4, 3, 6]:
+        denominators = list(dict.fromkeys([qd.denominator for qd in qds]))
+        l_c_m = lcm(denominators)
+        if l_c_m not in [1, 2, 4, 8, 16]:
+            raise NotImplementedError
+        else:
+            return l_c_m
+    permitted_sums = [1 / 4, 1 / 2, 1, 2, 4, 8]
+    if qd_sum not in permitted_sums:
+        raise ValueError(f'sum of chords {qd_sum} must be in {permitted_sums}')
+    qds = [qd / qd_sum for qd in qds]
+    denominators = list(dict.fromkeys([qd.denominator for qd in qds]))
+    if len(denominators) > 1:
+        l_c_m = lcm(denominators)
+        if l_c_m not in denominators:
+            return None
+        else:
+            return l_c_m
+    else:
+        return next(iter(denominators))
 
 
 def beam_chord_group(chord_group: List['Chord']) -> None:
@@ -297,58 +326,41 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
     def _update_chord_number_of_dots(self):
         if not self.is_filled:
             raise BeatNotFullError()
-        actual_notes = self._get_actual_subdivision(self.get_chords())
         for ch in self.get_chords():
             if not ch.number_of_dots:
-                if ch.quarter_duration == Fraction(1, 2) and actual_notes == 6:
+                if ch.quarter_duration == Fraction(1, 2) and self.quarter_duration == 1 and get_chord_group_subdivision(
+                        self.get_chords()) == 6:
                     ch.number_of_dots = 1
                 else:
                     ch.number_of_dots = ch.quarter_duration.get_number_of_dots()
 
-    def _update_tuplets(self, chord_group, actual_notes, factor=1):
-        def add_bracket_to_notes(chord, type_, number=1):
-            for note in chord.notes:
-                if not note.xml_notations:
-                    note.xml_notations = XMLNotations()
-                t = note.xml_notations.xml_tuplet = XMLTuplet()
-                if type_ == 'start':
-                    t.bracket = 'yes'
-                t.number = number
-                t.type = type_
+    def _update_chord_tuplets(self):
+        if {ch.tuplet for ch in self.get_chords()} != {None}:
+            raise BeatUpdateChordTupletsError(
+                'Beat cannot manage tuplets automatically if it contains chords with manually set tuplet properties.')
 
-        normals = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
-        types = {8: '32nd', 4: '16th', 2: 'eighth', 1: 'quarter', 0.5: 'half'}
+        def _update_tuplets(chord_group, actual_notes, quarter_duration=1):
+            if actual_notes <= 16:
+                if actual_notes not in [1, 2, 4, 8, 16]:
+                    for chord in chord_group:
+                        chord.tuplet = Tuplet(actual_notes=actual_notes, quarter_duration=quarter_duration)
+                        if chord == chord_group[0]:
+                            chord.tuplet.bracket_type = 'start'
+                        elif chord == chord_group[-1]:
+                            chord.tuplet.bracket_type = 'stop'
+                        else:
+                            pass
+            else:
+                raise NotImplementedError('tuplets of actual_notes > 16 cannot be implemented.')
 
-        actual_notes *= factor
-        if int(actual_notes) != actual_notes:
-            raise ValueError
-        actual_notes = int(actual_notes)
-        if actual_notes in normals:
-            normal = normals[actual_notes]
-            type_ = types[(normal / factor / self.quarter_duration.value)]
-            for chord in chord_group:
-                for note in chord.notes:
-                    note.xml_time_modification = XMLTimeModification()
-                    note.xml_time_modification.xml_actual_notes = actual_notes
-                    note.xml_time_modification.xml_normal_notes = normal
-                    note.xml_time_modification.xml_normal_type = type_
-                if chord == chord_group[0]:
-                    add_bracket_to_notes(chord, type_='start')
-                elif chord == chord_group[-1]:
-                    add_bracket_to_notes(chord, type_='stop')
-                else:
-                    pass
-
-    def _update_note_tuplets(self):
-        actual_notes = self._get_actual_subdivision(self.get_children())
+        actual_notes = get_chord_group_subdivision(self.get_children())
         if not actual_notes:
             if self.quarter_duration == 1:
                 grouped_chords = _group_chords(self.get_children(), [1 / 2, 1 / 2])
                 if grouped_chords:
                     for g in grouped_chords:
-                        actual_notes = self._get_actual_subdivision(g)
-                        self._update_tuplets(g, actual_notes, 1 / 2)
-                        # self._update_dots(g)
+                        actual_notes = get_chord_group_subdivision(g)
+                        _update_tuplets(g, actual_notes, 1 / 2)
                     return
                 else:
                     raise NotImplementedError(
@@ -357,24 +369,11 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 raise NotImplementedError(
                     'Beat with quarter_duration other than one cannot manage more than one group of chords.')
 
-        self._update_tuplets(self.get_children(), actual_notes)
-        # self._update_dots(self.get_children())
+        _update_tuplets(self.get_children(), actual_notes, self.quarter_duration)
 
     def _update_note_beams(self):
         if self.get_children():
             beam_chord_group(chord_group=self.get_children())
-
-    @staticmethod
-    def _get_actual_subdivision(chords):
-        denominators = list(dict.fromkeys([ch.quarter_duration.denominator for ch in chords]))
-        if len(denominators) > 1:
-            l_c_m = lcm(denominators)
-            if l_c_m not in denominators:
-                return None
-            else:
-                return l_c_m
-        else:
-            return next(iter(denominators))
 
     def _remove_zero_quarter_durations(self):
         def _get_next_chord(chord):
@@ -593,14 +592,13 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             raise AlreadyFinalizedError(self)
         if self.is_filled is False:
             self.fill_with_rests()
-            # raise BeatNotFullError
 
         if self.get_children():
             self._update_chord_types()
             self._update_chord_number_of_dots()
+            self._update_chord_tuplets()
             for chord in self.get_children():
                 chord.finalize()
-            self._update_note_tuplets()
             self._update_note_beams()
 
         self._finalized = True
@@ -612,7 +610,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
 
         """
         if self.get_possible_subdivisions() and self.get_children():
-            if self._get_actual_subdivision(self.get_children()) in self.get_possible_subdivisions():
+            if get_chord_group_subdivision(self.get_children()) in self.get_possible_subdivisions():
                 pass
             else:
                 quarter_durations = [chord.quarter_duration for chord in self.get_children()]

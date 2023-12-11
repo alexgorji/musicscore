@@ -178,7 +178,7 @@ class TestLily321(IdTestCase):
         ch = Chord(60, 1)
         for o, p in zip(objects, placements):
             ch.add_x(o, placement=p)
-            print(o.placement)
+            # print(o.placement)
         part.add_chord(ch)
 
         xml_path = Path(__file__).with_suffix('.xml')

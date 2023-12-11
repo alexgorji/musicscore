@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from musicscore import Part
-from musicscore.beat import Beat, _convert_to_quarter_duration_splittables_dictionary
+from musicscore.beat import Beat, _convert_to_quarter_duration_splittables_dictionary, get_chord_group_subdivision
 from musicscore.chord import Chord
 from musicscore.config import SPLITTABLES
 from musicscore.exceptions import AddChordError, VoiceIsFullError, BeatNotFullError
@@ -67,6 +67,14 @@ class TestBeat(TestCase):
         b.fill_with_rests()
         assert b.is_filled
 
+    def test_get_chord_groups_subdivision(self):
+        assert get_chord_group_subdivision([Chord(60, qd) for qd in [2 / 5, 2 / 5, 1 / 5]]) == 5
+        assert get_chord_group_subdivision([Chord(60, qd) for qd in [4 / 5, 4 / 5, 2 / 5]]) == 5
+        assert get_chord_group_subdivision([Chord(60, qd) for qd in [1 / 5, 1 / 5, 1 / 10]]) == 5
+        assert get_chord_group_subdivision(
+            [Chord(60, qd) for qd in [1 / 6, 1 / 6, 1 / 6, 1 / 10, 3 / 10, 1 / 10]]) is None
+
+
 class TestBeatUpdateChords(IdTestCase):
     def test_beat_update_chord_types(self):
         p = Part('p1')
@@ -99,8 +107,8 @@ class TestBeatUpdateChords(IdTestCase):
         beat._update_chord_number_of_dots()
         assert beat.get_chords()[0].number_of_dots == 3
 
-    def test_beat_update_chord_tuplets(self):
-        self.fail()
+    # def test_beat_update_chord_tuplets(self):
+    #     self.fail()
 
 
 class TestBeatUpdateChordBeams(TestCase):

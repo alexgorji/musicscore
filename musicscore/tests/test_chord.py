@@ -1188,8 +1188,8 @@ class TestTypeAndNumberOfDots(IdTestCase):
         assert gch.type is None
         p = Part('p2')
         p.add_chord(gch)
-        print(p.get_beats()[0])
-        print(p.get_beats()[0].is_filled)
+        # print(p.get_beats()[0])
+        # print(p.get_beats()[0].is_filled)
         p.finalize()
 
         assert gch.get_children()[0].xml_type is None

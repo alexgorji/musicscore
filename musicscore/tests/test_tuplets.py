@@ -7,7 +7,8 @@ from musicscore.chord import Chord
 from musicscore.measure import Measure
 from musicscore.tests.test_beat import create_voice
 from musicscore.tests.util import IdTestCase
-from musicscore.tests.util_subdivisions import generate_all_quintuplets_manually, generate_all_sextuplets_manually, generate_all_triplets_manually
+from musicscore.tests.util_subdivisions import generate_all_quintuplets_manually, generate_all_sextuplets_manually, \
+    generate_all_triplets_manually
 
 
 class TestTuplets(IdTestCase):
@@ -27,7 +28,7 @@ class TestTuplets(IdTestCase):
       <normal-type>eighth</normal-type>
     </time-modification>
     <notations>
-      <tuplet bracket="yes" number="1" type="start" />
+      <tuplet type="start" number="1" bracket="yes" />
     </notations>
   </note>
 """
@@ -45,7 +46,7 @@ class TestTuplets(IdTestCase):
       <normal-type>eighth</normal-type>
     </time-modification>
     <notations>
-      <tuplet number="1" type="stop" />
+      <tuplet type="stop" number="1" />
     </notations>
   </note>
 """

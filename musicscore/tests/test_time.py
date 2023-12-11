@@ -1,8 +1,7 @@
+from fractions import Fraction
 from unittest import TestCase
 
-from fractions import Fraction
-
-from musicscore import Part, Chord, Measure
+from musicscore import Part, Chord
 from musicscore.tests.util import IdTestCase
 from musicscore.time import Time, flatten_times, _convert_signatures_to_ints
 
