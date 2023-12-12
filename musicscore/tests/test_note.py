@@ -18,6 +18,7 @@ class NoteTestCase(TestCase):
         self.mock_chord.get_staff_number.return_value = None
         self.mock_chord.number_of_dots = 0
         self.mock_chord.tuplet = None
+        self.mock_chord.beams = {}
         self.mock_measure = Mock()
         self.mock_measure.get_divisions.return_value = 1
         self.mock_chord.get_parent_measure.return_value = self.mock_measure

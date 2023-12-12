@@ -8,7 +8,7 @@ from musicscore.config import SPLITTABLES
 from musicscore.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
     ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError, QuarterDurationIsNotWritable, \
-    BeatUpdateChordTupletsError
+    BeatUpdateChordTupletsError, ChordTypeNotSetError
 from musicscore.finalize import FinalizeMixin
 from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
@@ -86,19 +86,18 @@ def get_chord_group_subdivision(chords):
 def beam_chord_group(chord_group: List['Chord']) -> None:
     """
     Function for setting beams of a list of chords (chord_group). This function is used to create or update beams inside a beat.
+    Chord types must be set first.
+
     """
     chord_group = [ch for ch in chord_group if ch.quarter_duration != 0]
+    for ch in chord_group:
+        if ch.type is None:
+            raise ChordTypeNotSetError('Beaming chord groups not possible if chord types are not set.')
 
-    # valid vlues for XMLBeam are: 'begin', 'continue', 'end', 'forward hook', 'backward hook'
-    def add_xml_beam_to_notes(chord, number, value):
-        # if value is hook it should be converted to valid values 'backward hook' or 'forward hook'
-        if value == 'hook':
-            if chord.quarter_duration == QuarterDuration(1, 6) and chord.offset == QuarterDuration(1, 3):
-                value = 'backward hook'
-            else:
-                value = 'forward hook'
-        for note in chord.notes:
-            note.xml_object.add_child(XMLBeam(number=number, value_=value))
+    # valid values for XMLBeam are: 'begin', 'continue', 'end', 'forward hook', 'backward hook'
+    def add_beam_to_chord(chord, number, value):
+        if not chord.beams.get(number):
+            chord.add_beam(number, value)
 
     def add_last_beam(chord, last_number_of_beams, current_number_of_beams, cont=False):
         """
@@ -106,33 +105,37 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
         """
         if last_number_of_beams <= current_number_of_beams:
             if cont:
-                add_xml_beam_to_notes(chord, 1, 'continue')
+                add_beam_to_chord(chord, 1, 'continue')
                 for n in range(2, last_number_of_beams + 1):
-                    add_xml_beam_to_notes(chord, n, 'end')
+                    add_beam_to_chord(chord, n, 'end')
             else:
                 for n in range(1, last_number_of_beams + 1):
-                    add_xml_beam_to_notes(chord, n, 'end')
+                    add_beam_to_chord(chord, n, 'end')
         else:
             if current_number_of_beams != 0:
                 if cont:
-                    add_xml_beam_to_notes(chord, 1, 'continue')
+                    add_beam_to_chord(chord, 1, 'continue')
                     for n in range(2, current_number_of_beams + 1):
-                        add_xml_beam_to_notes(chord, n, 'end')
+                        add_beam_to_chord(chord, n, 'end')
                 else:
                     for n in range(1, current_number_of_beams + 1):
-                        add_xml_beam_to_notes(chord, n, 'end')
+                        add_beam_to_chord(chord, n, 'end')
                 for n in range(current_number_of_beams + 1, last_number_of_beams + 1):
-                    add_xml_beam_to_notes(chord, n, 'backward hook')
+                    add_beam_to_chord(chord, n, 'backward')
 
     # number of beams:
     beams = {'eighth': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
     current_number_of_beams = 0
+
     # adding all necessary beams to all notes save the notes of the last chord. For last chord add_last_beam() will be used.
     for index in range(len(chord_group) - 1):
         chord = chord_group[index]
+        # if chord.is_rest:
+        #     continue
         next_chord = chord_group[index + 1]
         # number of beams of this and next chord. The number of beams of the previous chord equals current_number_of_beams
-        b1, b2 = beams.get(chord.notes[0].xml_type.value_), beams.get(next_chord.notes[0].xml_type.value_)
+        b1, b2 = beams.get(chord.type), beams.get(next_chord.type)
+
         # types is a list of tuples with three values: (beam value, number of the begining beam, number of the ending beam)
         types = []
         if b1 and b2:
@@ -155,7 +158,11 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
                 else:
                     types.append(('continue', 1, current_number_of_beams))
                     types.append(('begin', current_number_of_beams + 1, b2))
-                    types.append(('hook', b2 + 1, b1))
+                    if chord.quarter_duration == QuarterDuration(1, 6) and chord.offset == QuarterDuration(1, 3):
+                        types.append(('backward', b2 + 1, b1))
+                    else:
+                        types.append(('forward', b2 + 1, b1))
+
                 current_number_of_beams = b1
             elif b2 == b1 <= current_number_of_beams:
                 types.append(('continue', 1, b1))
@@ -186,8 +193,8 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
             pass
 
         for t in types:
-            for n in range(t[1], t[2] + 1):
-                add_xml_beam_to_notes(chord, n, t[0])
+            for num in range(t[1], t[2] + 1):
+                add_beam_to_chord(chord, num, t[0])
         if index == len(chord_group) - 2 and b2:
             add_last_beam(next_chord, b2, current_number_of_beams)
 
@@ -371,9 +378,13 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
 
         _update_tuplets(self.get_children(), actual_notes, self.quarter_duration)
 
-    def _update_note_beams(self):
+    def update_chord_beams(self):
         if self.get_children():
-            beam_chord_group(chord_group=self.get_children())
+            try:
+                beam_chord_group(chord_group=self.get_children())
+            except ChordTypeNotSetError:
+                self._update_chord_types()
+                beam_chord_group(chord_group=self.get_children())
 
     def _remove_zero_quarter_durations(self):
         def _get_next_chord(chord):
@@ -585,7 +596,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
 
         - It calls finalize method of all :obj:`~musicscore.chord.Chord` children.
 
-        - Following updates are triggered: _update_note_tuplets, _update_note_beams, quantize_quarter_durations (if get_quantized is
+        - Following updates are triggered: _update_note_tuplets, update_chord_beams, quantize_quarter_durations (if get_quantized is
           True), _split_not_writable_chords
         """
         if self._finalized:
@@ -597,9 +608,9 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             self._update_chord_types()
             self._update_chord_number_of_dots()
             self._update_chord_tuplets()
+            self.update_chord_beams()
             for chord in self.get_children():
                 chord.finalize()
-            self._update_note_beams()
 
         self._finalized = True
 

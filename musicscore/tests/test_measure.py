@@ -564,6 +564,8 @@ class TestMeasure(IdTestCase):
         ch = m.get_chords()[0]
         assert ch.is_rest
         assert ch.quarter_duration == 4
+
+
 class TestUpdateAccidentals(IdTestCase):
     def test_update_accidentals_simple(self):
         m = Measure(1)

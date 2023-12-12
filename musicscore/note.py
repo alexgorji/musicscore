@@ -6,7 +6,7 @@ from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDurationMixin
 from musicscore.util import note_types
 from musicscore.xmlwrapper import XMLWrapper
-from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied
+from musicxml.xmlelement.xmlelement import XMLNote, XMLDot, XMLGrace, XMLRest, XMLTie, XMLNotations, XMLTied, XMLBeam
 
 __all__ = ['Note', 'tie', 'untie']
 
@@ -64,6 +64,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self._update_xml_dots()
         self._update_xml_time_modification()
         self._update_xml_tuplet()
+        self._update_xml_beams()
 
     @staticmethod
     def _check_xml_duration_value(duration):
@@ -107,6 +108,13 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
 
     def _update_xml_accidental(self):
         self.xml_object.xml_accidental = self.midi.accidental.xml_object
+
+    def _update_xml_beams(self):
+        if self.parent_chord:
+            for number, value in self.parent_chord.beams.items():
+                if value in ['forward', 'backward']:
+                    value += ' hook'
+                self.xml_object.add_child(XMLBeam(number=number, value_=value))
 
     def _update_xml_dots(self):
         number_of_dots = self.parent_chord.number_of_dots

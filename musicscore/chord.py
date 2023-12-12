@@ -70,7 +70,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     :param quarter_duration: int, float, Fraction, :obj:`~musicscore.quarterduration.QuarterDuration` for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
     _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef', 'metronome', 'arpeggio',
-                   'type', 'number_of_dots', 'tuplet'}
+                   'type', 'number_of_dots', 'tuplet', 'beams'}
 
     def __init__(self, midis: Union[List[Union[float, int]], List[Midi], float, int, Midi],
                  quarter_duration: Union[float, int, 'Fraction', QuarterDuration], **kwargs):
@@ -94,6 +94,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._type = None
         self._number_of_dots = None
         self._tuplet = None
+        self._beams = {}
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
         self.split = False
@@ -463,6 +464,10 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         if self._finalized:
             raise AlreadyFinalizedError(self, 'arpeggio.setter')
         self._arpeggio = val
+
+    @property
+    def beams(self):
+        return self._beams
 
     @property
     def clef(self) -> 'Clef':
@@ -1106,6 +1111,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def set_possible_subdivisions(self):
         raise TypeError
+
+    def add_beam(self, number, value):
+        self._beams[number] = value
 
     def _split_and_add_beatwise(self, beats: List['Beat']) -> List['Chord']:
         """
