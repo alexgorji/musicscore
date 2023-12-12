@@ -94,6 +94,25 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
         if ch.type is None:
             raise ChordTypeNotSetError('Beaming chord groups not possible if chord types are not set.')
 
+    def remove_rests_from_both_ends(chords):
+        is_rest_list = [ch.is_rest for ch in chords]
+        if False not in is_rest_list:
+            return []
+        if True in is_rest_list:
+            first_non_chord_index = is_rest_list.index(False)
+            output = chords[first_non_chord_index:]
+            is_rest_list = is_rest_list[first_non_chord_index:]
+            if is_rest_list[-1] is True:
+                last_non_chord_index = next(i for i in reversed((range(len(is_rest_list)))) if is_rest_list[i] is True)
+                output = output[:last_non_chord_index]
+            return output
+        else:
+            return chords
+
+    chord_group = remove_rests_from_both_ends(chord_group)
+    if not chord_group:
+        return
+
     # valid values for XMLBeam are: 'begin', 'continue', 'end', 'forward hook', 'backward hook'
     def add_beam_to_chord(chord, number, value):
         if not chord.beams.get(number):
@@ -124,79 +143,99 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
                     add_beam_to_chord(chord, n, 'backward')
 
     # number of beams:
-    beams = {'eighth': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
+    number_of_beams = {'eighth': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
     current_number_of_beams = 0
 
     # adding all necessary beams to all notes save the notes of the last chord. For last chord add_last_beam() will be used.
-    for index in range(len(chord_group) - 1):
+    index = 0
+    while index != len(chord_group) - 1:
         chord = chord_group[index]
-        # if chord.is_rest:
-        #     continue
         next_chord = chord_group[index + 1]
-        # number of beams of this and next chord. The number of beams of the previous chord equals current_number_of_beams
-        b1, b2 = beams.get(chord.type), beams.get(next_chord.type)
-
         # types is a list of tuples with three values: (beam value, number of the begining beam, number of the ending beam)
         types = []
-        if b1 and b2:
-            # 32nd groups with an eighth beam in the middle
-            if next_chord.offset == QuarterDuration(1, 2) \
-                    and current_number_of_beams != 0 \
-                    and (b1 == 3 or b2 == 3
-                         or current_number_of_beams == 3
-                         or chord.quarter_duration == QuarterDuration(3, 8)
-                         or next_chord.quarter_duration == QuarterDuration(3, 8)):
-                add_last_beam(chord, b1, current_number_of_beams, True)
-                current_number_of_beams = 1
-            elif b2 < b1 <= current_number_of_beams:
-                types.append(('continue', 1, b2))
-                types.append(('end', b2 + 1, current_number_of_beams))
-                current_number_of_beams = b1
-            elif b2 < b1 > current_number_of_beams:
-                if current_number_of_beams == 0:
-                    types.append(('begin', 1, b2))
-                else:
-                    types.append(('continue', 1, current_number_of_beams))
-                    types.append(('begin', current_number_of_beams + 1, b2))
-                    if chord.quarter_duration == QuarterDuration(1, 6) and chord.offset == QuarterDuration(1, 3):
-                        types.append(('backward', b2 + 1, b1))
-                    else:
-                        types.append(('forward', b2 + 1, b1))
-
-                current_number_of_beams = b1
-            elif b2 == b1 <= current_number_of_beams:
-                types.append(('continue', 1, b1))
-                current_number_of_beams = b1
-
-            elif b2 == b1 > current_number_of_beams:
-                if current_number_of_beams == 0:
-                    types.append(('begin', 1, b2))
-                else:
-                    types.append(('continue', 1, current_number_of_beams))
-                    types.append(('begin', current_number_of_beams + 1, b2))
-                current_number_of_beams = b1
-
-            elif b2 > b1 <= current_number_of_beams:
-                types.append(('continue', 1, b1))
-                current_number_of_beams = b1
-
-            elif b2 > b1 > current_number_of_beams:
-                if current_number_of_beams == 0:
-                    types.append(('begin', 1, b1))
-                else:
-                    types.append(('continue', 1, current_number_of_beams))
-                    types.append(('begin', current_number_of_beams + 1, b1))
-                current_number_of_beams = b1
-        elif b1 and not b2:
-            add_last_beam(chord, b1, current_number_of_beams)
-        else:
+        b1, b2 = number_of_beams.get(chord.type), number_of_beams.get(next_chord.type)
+        if chord.is_rest:
             pass
+            'do nothing'
+        else:
+            if not b1:
+                pass
+                'do nothing'
+            elif next_chord.is_rest:
+                if current_number_of_beams == 0:
+                    types.append(('begin', 1, 1))
+                    if b1 > 1:
+                        types.append(('forward', 1, b1))
+                else:
+                    types.append(('continue', 1, 1))
+                    if b1 > 1:
+                        if b1 <= current_number_of_beams:
+                            types.append(('end', 2, b1))
+                        else:
+                            types.append(('end', 2, current_number_of_beams))
+                            types.append(('forward', current_number_of_beams + 1, b1))
 
+                current_number_of_beams = 1
+            else:
+                'do something regular'
+                if b1 and not b2:
+                    add_last_beam(chord, b1, current_number_of_beams)
+                else:
+                    # 32nd groups with an eighth beam in the middle
+                    if next_chord.offset == QuarterDuration(1, 2) \
+                            and current_number_of_beams != 0 \
+                            and (b1 == 3 or b2 == 3
+                                 or current_number_of_beams == 3
+                                 or chord.quarter_duration == QuarterDuration(3, 8)
+                                 or next_chord.quarter_duration == QuarterDuration(3, 8)):
+                        add_last_beam(chord, b1, current_number_of_beams, True)
+                        current_number_of_beams = 1
+                    elif b2 < b1 <= current_number_of_beams:
+                        types.append(('continue', 1, b2))
+                        types.append(('end', b2 + 1, current_number_of_beams))
+                        current_number_of_beams = b1
+                    elif b2 < b1 > current_number_of_beams:
+                        if current_number_of_beams == 0:
+                            types.append(('begin', 1, b2))
+                        else:
+                            types.append(('continue', 1, current_number_of_beams))
+                            types.append(('begin', current_number_of_beams + 1, b2))
+                            if chord.quarter_duration == QuarterDuration(1, 6) and chord.offset == QuarterDuration(1,
+                                                                                                                   3):
+                                types.append(('backward', b2 + 1, b1))
+                            else:
+                                types.append(('forward', b2 + 1, b1))
+
+                        current_number_of_beams = b1
+                    elif b2 == b1 <= current_number_of_beams:
+                        types.append(('continue', 1, b1))
+                        current_number_of_beams = b1
+
+                    elif b2 == b1 > current_number_of_beams:
+                        if current_number_of_beams == 0:
+                            types.append(('begin', 1, b2))
+                        else:
+                            types.append(('continue', 1, current_number_of_beams))
+                            types.append(('begin', current_number_of_beams + 1, b2))
+                        current_number_of_beams = b1
+
+                    elif b2 > b1 <= current_number_of_beams:
+                        types.append(('continue', 1, b1))
+                        current_number_of_beams = b1
+
+                    elif b2 > b1 > current_number_of_beams:
+                        if current_number_of_beams == 0:
+                            types.append(('begin', 1, b1))
+                        else:
+                            types.append(('continue', 1, current_number_of_beams))
+                            types.append(('begin', current_number_of_beams + 1, b1))
+                        current_number_of_beams = b1
+        if index == len(chord_group) - 2 and b2:
+            add_last_beam(next_chord, b2, current_number_of_beams)
         for t in types:
             for num in range(t[1], t[2] + 1):
                 add_beam_to_chord(chord, num, t[0])
-        if index == len(chord_group) - 2 and b2:
-            add_last_beam(next_chord, b2, current_number_of_beams)
+        index += 1
 
 
 class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
