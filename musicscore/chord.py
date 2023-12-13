@@ -467,7 +467,14 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     @property
     def beams(self):
+        """
+        A dictionary like: {1:'continue', 2:'begin'}. Keys are beam numbers. Default is {}. :obj:`~musicscore.beam.Beam.update_chord_beams` sets a beam only if beam is not None and beam is not set manually.
+        """
         return self._beams
+
+    @beams.setter
+    def beams(self, val):
+        self._beams = val
 
     @property
     def clef(self) -> 'Clef':
@@ -1112,7 +1119,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def set_possible_subdivisions(self):
         raise TypeError
 
-    def add_beam(self, number, value):
+    def set_beam(self, number, value):
         self._beams[number] = value
 
     def _split_and_add_beatwise(self, beats: List['Beat']) -> List['Chord']:

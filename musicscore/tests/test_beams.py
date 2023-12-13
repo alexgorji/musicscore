@@ -8,7 +8,8 @@ class TestBeams16th(TestCase):
     def setUp(self) -> None:
         super().setUp()
         self.beat = Beat()
-        self.beat._parent = Mock()
+        self.measure = Mock()
+        self.beat._parent = self.measure
         [self.beat._add_chord(Chord(60, qd)) for qd in 4 * [1 / 4]]
         self.chords = self.beat.get_chords()
 
@@ -89,6 +90,16 @@ class TestBeams16th(TestCase):
         self.beat.update_chord_beams()
         assert [ch.beams for ch in self.chords] == [{1: 'begin', 2: 'begin'}, {1: 'end', 2: 'end'},
                                                     {}, {}]
+
+    def test_manually_set_beams_to_None(self):
+        for chord in self.chords:
+            chord.beams = None
+        self.beat.update_chord_beams()
+        assert {ch.beams for ch in self.chords} == {None}
+        ch = self.chords[0]
+        ch.get_parent_measure().get_divisions.return_value = 4
+        ch.up.up.up.number = 1
+        self.chords[0].finalize()
 
 
 class TestBeams32th(TestCase):

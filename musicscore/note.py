@@ -110,7 +110,7 @@ class Note(MusicTree, XMLWrapper, QuarterDurationMixin):
         self.xml_object.xml_accidental = self.midi.accidental.xml_object
 
     def _update_xml_beams(self):
-        if self.parent_chord:
+        if self.parent_chord and self.parent_chord.beams is not None:
             for number, value in self.parent_chord.beams.items():
                 if value in ['forward', 'backward']:
                     value += ' hook'

@@ -115,8 +115,8 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
 
     # valid values for XMLBeam are: 'begin', 'continue', 'end', 'forward hook', 'backward hook'
     def add_beam_to_chord(chord, number, value):
-        if not chord.beams.get(number):
-            chord.add_beam(number, value)
+        if chord.beams is not None and not chord.beams.get(number):
+            chord.set_beam(number, value)
 
     def add_last_beam(chord, last_number_of_beams, current_number_of_beams, cont=False):
         """
