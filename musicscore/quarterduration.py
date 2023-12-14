@@ -7,6 +7,9 @@ __all__ = ['QuarterDuration', 'QuarterDurationMixin']
 from musicscore.config import NOTETYPES, BEATWISE_EXCEPTIONS
 from musicscore.exceptions import QuarterDurationIsNotWritable
 
+TUPLETRATIO = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
+DOTEDTUPLETRATIO = {2: 3, 4: 3, 5: 3, 7: 6, 8: 6}
+
 
 class QuarterDuration(numbers.Rational):
     """
@@ -74,7 +77,7 @@ class QuarterDuration(numbers.Rational):
 
         return output
 
-    def _get_type_and_dots(self):
+    def _get_type_and_dots(self, subdivision=None, beat_quarter_duration=None):
         if self.value == 0:
             return None, 0
         type = NOTETYPES.get(self.as_integer_ratio())
@@ -158,17 +161,43 @@ class QuarterDuration(numbers.Rational):
         """
         return self.value.as_integer_ratio()
 
-    def get_number_of_dots(self) -> Optional[int]:
+    def get_number_of_dots(self, subdivision=None, beat_quarter_duration=1) -> Optional[int]:
         """
         :return: Number of note dots associated with quarter duration
         """
-        return self._get_type_and_dots()[1]
+        if not subdivision:
+            subdivision = self.denominator
+        return self._get_type_and_dots(subdivision, beat_quarter_duration)[1]
 
-    def get_type(self) -> Optional[str]:
+    def get_tuplet_ratio(self, subdivision=None, beat_quarter_duration=1) -> Optional[tuple]:
+        if self.value == 0:
+            return None
+        if not subdivision:
+            subdivision = self.denominator
+        if beat_quarter_duration % 3 == 0:
+            if subdivision > 9:
+                raise NotImplementedError('Beats with dotted quarter duration and subdivision > 9')
+            else:
+                tupletratio = DOTEDTUPLETRATIO.get(subdivision)
+                if tupletratio:
+                    return subdivision, tupletratio
+                else:
+                    return None
+        else:
+            if subdivision > 16:
+                raise NotImplementedError('Beats subdivision > 16')
+            else:
+                tupletratio = TUPLETRATIO.get(subdivision)
+                if tupletratio:
+                    return subdivision, tupletratio
+                else:
+                    return None
+
+    def get_type(self, subdivision=None, beat_quarter_duration=1) -> Optional[str]:
         """
         :return: Note type associated with quarter duration
         """
-        return self._get_type_and_dots()[0]
+        return self._get_type_and_dots(subdivision, beat_quarter_duration)[0]
 
     def __repr__(self):
         return f'{self.value.numerator}/{self.value.denominator}'

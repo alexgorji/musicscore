@@ -346,10 +346,13 @@ class TestBeatSplitChord(TestCase):
                 if remaining_qd > 0:
                     qds.append(remaining_qd)
                 for qd in qds:
-                    p.add_chord(Chord(70, qd))
+                    if qd:
+                        p.add_chord(Chord(70, qd))
                 p.finalize()
                 expected = [qds[0]]
                 expected.extend([QuarterDuration(*qd) for qd in v])
                 if len(qds) > 2:
                     expected.append(qds[-1])
+                if expected[0] == 0:
+                    expected = expected[1:]
                 assert expected == [ch.quarter_duration for ch in p.get_beats()[0].get_chords()]
