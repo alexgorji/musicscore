@@ -6,15 +6,13 @@ from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.score import Score
 from musicscore.tests.util import IdTestCase
-from musicscore.tests.util_subdivisions import generate_all_quintuplets_manually, generate_all_sextuplets_manually, \
-    generate_all_septuplets_manually, generate_all_triplets_manually, generate_all_subdivisions, \
-    generate_all_subdivision_patterns
+from musicscore.tests.util_subdivisions import generate_all_subdivision_patterns
 
 
 class TestTuplets1(IdTestCase):
     def test_tuplets_1(self):
         """
-        Write all possible tuplet combinations up until 32nds
+        Write all possible tuplet combinations up until septuplets
         """
 
         s = Score()
@@ -33,5 +31,44 @@ class TestTuplets1(IdTestCase):
                 ch = Chord(60, Fraction(x, subdivision))
                 ch.add_lyric(x)
                 p.add_chord(ch)
-        xml_path = Path(__file__).with_suffix('.xml')
+        xml_path = Path(__file__).stem+'_upto_7.xml'
+        s.export_xml(xml_path)
+    def test_tuplets_8(self):
+        """
+        Write all possible tuplet combinations of 32nd
+        """
+
+        s = Score()
+
+        p = s.add_child(Part('P1', name='Music'))
+
+        p.add_measure(time=(1, 4))
+
+        subdivision = 8
+        rhythmic_patterns = generate_all_subdivision_patterns(subdivision, True)
+        for x in [d for rp in rhythmic_patterns for d in rp ]:
+            ch = Chord(60, Fraction(x, subdivision))
+            ch.add_lyric(x)
+            p.add_chord(ch)
+        xml_path = Path(__file__).stem+'_8.xml'
+        s.export_xml(xml_path)
+
+    def test_tuplets_9(self):
+        """
+        Write all possible tuplet combinations of nonuplets
+        """
+
+        s = Score()
+
+        p = s.add_child(Part('P1', name='Music'))
+
+        p.add_measure(time=(1, 4))
+
+        subdivision = 9
+        rhythmic_patterns = generate_all_subdivision_patterns(subdivision, True)
+        for x in [d for rp in rhythmic_patterns for d in rp ]:
+            ch = Chord(60, Fraction(x, subdivision))
+            ch.add_lyric(x)
+            p.add_chord(ch)
+        xml_path = Path(__file__).stem+'_9.xml'
         s.export_xml(xml_path)
