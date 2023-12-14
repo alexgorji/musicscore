@@ -22,7 +22,7 @@ class TestTuplets1(IdTestCase):
         p.add_measure(time=(1, 4))
 
         rhythmic_patterns = []
-        for subdivision in range(1, 9):
+        for subdivision in range(1, 8):
             rhythmic_patterns.extend(generate_all_subdivision_patterns(subdivision, True))
 
         for rhythmic_pattern in rhythmic_patterns:
@@ -31,8 +31,9 @@ class TestTuplets1(IdTestCase):
                 ch = Chord(60, Fraction(x, subdivision))
                 ch.add_lyric(x)
                 p.add_chord(ch)
-        xml_path = Path(__file__).stem+'_upto_7.xml'
+        xml_path = Path(__file__).stem + '_upto_7.xml'
         s.export_xml(xml_path)
+
     def test_tuplets_8(self):
         """
         Write all possible tuplet combinations of 32nd
@@ -46,11 +47,11 @@ class TestTuplets1(IdTestCase):
 
         subdivision = 8
         rhythmic_patterns = generate_all_subdivision_patterns(subdivision, True)
-        for x in [d for rp in rhythmic_patterns for d in rp ]:
+        for x in [d for rp in rhythmic_patterns for d in rp]:
             ch = Chord(60, Fraction(x, subdivision))
             ch.add_lyric(x)
             p.add_chord(ch)
-        xml_path = Path(__file__).stem+'_8.xml'
+        xml_path = Path(__file__).stem + '_8.xml'
         s.export_xml(xml_path)
 
     def test_tuplets_9(self):
@@ -66,9 +67,9 @@ class TestTuplets1(IdTestCase):
 
         subdivision = 9
         rhythmic_patterns = generate_all_subdivision_patterns(subdivision, True)
-        for x in [d for rp in rhythmic_patterns for d in rp ]:
+        for x in [d for rp in rhythmic_patterns for d in rp]:
             ch = Chord(60, Fraction(x, subdivision))
             ch.add_lyric(x)
             p.add_chord(ch)
-        xml_path = Path(__file__).stem+'_9.xml'
+        xml_path = Path(__file__).stem + '_9.xml'
         s.export_xml(xml_path)
