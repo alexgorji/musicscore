@@ -266,6 +266,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         super().__init__(quarter_duration=quarter_duration)
         self._filled_quarter_duration = 0
         self.leftover_chord = None
+        self._subdivision = None
 
     def _add_child(self, child):
         child._parent = self
@@ -362,24 +363,20 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 return self._split_chord(chord, quarter_durations)
 
     def _update_chord_types(self):
-        subdivision = get_chord_group_subdivision(self.get_chords())
         for ch in self.get_chords():
             if not ch.type:
-                if subdivision:
-                    ch.quarter_duration.beat_subdivision = subdivision
+                if self.get_subdivision() and not ch.quarter_duration.beat_subdivision:
+                    ch.quarter_duration.beat_subdivision = self.get_subdivision()
                 try:
                     ch.type = ch.quarter_duration.get_type()
                 except QuarterDurationIsNotWritable as err:
                     raise QuarterDurationIsNotWritable(f'Chord with offset {ch.offset}: {err}')
 
     def _update_chord_number_of_dots(self):
-        if not self.is_filled:
-            raise BeatNotFullError()
-        subdivision = get_chord_group_subdivision(self.get_chords())
         for ch in self.get_chords():
             if not ch.number_of_dots:
-                if subdivision:
-                    ch.quarter_duration.beat_subdivision = subdivision
+                if self.get_subdivision() and not ch.quarter_duration.beat_subdivision:
+                    ch.quarter_duration.beat_subdivision = self.get_subdivision()
                 ch.number_of_dots = ch.quarter_duration.get_number_of_dots()
 
     def _update_chord_tuplets(self):
@@ -654,6 +651,13 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 chord.finalize()
 
         self._finalized = True
+
+    def get_subdivision(self):
+        if self._subdivision is None:
+            if not self.is_filled:
+                raise BeatNotFullError()
+            self._subdivision = get_chord_group_subdivision(self.get_chords())
+        return self._subdivision
 
     def quantize_quarter_durations(self):
         """

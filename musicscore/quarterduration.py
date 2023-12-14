@@ -21,6 +21,7 @@ class QuarterDuration(numbers.Rational):
         self.value = value
         self._beat_subdivision = None
         self._beat_quarter_duration = 1
+        self._type_and_dots = None
 
     def _get_beatwise_sections(self, beats: List['Beat'], offset: Union[int, float, 'QuarterDuration', 'Fraction'] = 0):
         """
@@ -82,14 +83,18 @@ class QuarterDuration(numbers.Rational):
         if not self.beat_subdivision:
             self.beat_subdivision = self.denominator
         if self.beat_quarter_duration == 1:
-            if self.value == 1 / 2 and self.beat_subdivision in [6, 12]:
+            if self.beat_subdivision == 6 and self.value == 1 / 2:
                 return 'eighth', 1
-            elif self.as_integer_ratio() == (1, 3) and self.beat_subdivision == 9:
-                return '16th', 1
-            elif self.as_integer_ratio() == (2, 3) and self.beat_subdivision == 9:
-                return 'eighth', 1
-            elif self.value == 1 / 4 and self.beat_subdivision == 12:
-                return '16th', 1
+            elif self.beat_subdivision == 12:
+                if self.value == 1 / 2:
+                    return 'eighth', 1
+                elif self.value == 1 / 4:
+                    return '16th', 1
+            elif self.beat_subdivision == 9:
+                if self.as_integer_ratio() == (1, 3):
+                    return '16th', 1
+                elif self.as_integer_ratio() == (2, 3):
+                    return 'eighth', 1
 
         type = NOTETYPES.get(self.as_integer_ratio())
         if type:
@@ -114,6 +119,7 @@ class QuarterDuration(numbers.Rational):
     @beat_subdivision.setter
     def beat_subdivision(self, val):
         self._beat_subdivision = val
+        self._type_and_dots = None
 
     @property
     def beat_quarter_duration(self):
@@ -122,6 +128,7 @@ class QuarterDuration(numbers.Rational):
     @beat_quarter_duration.setter
     def beat_quarter_duration(self, val):
         self._beat_quarter_duration = val
+        self._type_and_dots = None
 
     @property
     def denominator(self):
@@ -144,6 +151,12 @@ class QuarterDuration(numbers.Rational):
         1
         """
         return self.value.numerator
+
+    @property
+    def type_and_dots(self):
+        if self._type_and_dots is None:
+            self._type_and_dots = self._get_type_and_dots()
+        return self._type_and_dots
 
     @property
     def value(self):
@@ -192,7 +205,7 @@ class QuarterDuration(numbers.Rational):
         """
         :return: Number of note dots associated with quarter duration
         """
-        return self._get_type_and_dots()[1]
+        return self.type_and_dots[1]
 
     def get_tuplet_ratio(self) -> Optional[tuple]:
         if self.value == 0:
@@ -222,7 +235,7 @@ class QuarterDuration(numbers.Rational):
         """
         :return: Note type associated with quarter duration
         """
-        return self._get_type_and_dots()[0]
+        return self.type_and_dots[0]
 
     def __repr__(self):
         return f'{self.value.numerator}/{self.value.denominator}'
