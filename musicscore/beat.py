@@ -362,8 +362,11 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 return self._split_chord(chord, quarter_durations)
 
     def _update_chord_types(self):
+        subdivision = get_chord_group_subdivision(self.get_chords())
         for ch in self.get_chords():
             if not ch.type:
+                if subdivision:
+                    ch.quarter_duration.beat_subdivision = subdivision
                 try:
                     ch.type = ch.quarter_duration.get_type()
                 except QuarterDurationIsNotWritable as err:
@@ -372,13 +375,12 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
     def _update_chord_number_of_dots(self):
         if not self.is_filled:
             raise BeatNotFullError()
+        subdivision = get_chord_group_subdivision(self.get_chords())
         for ch in self.get_chords():
             if not ch.number_of_dots:
-                if ch.quarter_duration == Fraction(1, 2) and self.quarter_duration == 1 and get_chord_group_subdivision(
-                        self.get_chords()) == 6:
-                    ch.number_of_dots = 1
-                else:
-                    ch.number_of_dots = ch.quarter_duration.get_number_of_dots()
+                if subdivision:
+                    ch.quarter_duration.beat_subdivision = subdivision
+                ch.number_of_dots = ch.quarter_duration.get_number_of_dots()
 
     def _update_chord_tuplets(self):
         if {ch.tuplet for ch in self.get_chords()} != {None}:
