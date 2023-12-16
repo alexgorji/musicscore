@@ -4,12 +4,14 @@ from fractions import Fraction
 from typing import Union, List, Optional, Any, Dict
 
 from musicscore.clef import Clef
+from musicscore.config import NUMBEROFBEAMS
 from musicscore.dynamics import Dynamics
 from musicscore.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
     ChordQuarterDurationAlreadySetError, AlreadyFinalizedError, DeepCopyException, ChordException, NotationException, \
     ChordAddXException, ChordAddXPlacementException, RestCannotSetMidiError, \
     RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotesError, \
-    GraceChordCannotSetQuarterDurationError, ChordHasNoNotesError, ChordAlreadyHasNotesError
+    GraceChordCannotSetQuarterDurationError, ChordHasNoNotesError, ChordAlreadyHasNotesError, ChordTestError, \
+    ChordTypeNotSetError
 from musicscore.finalize import FinalizeMixin
 from musicscore.midi import Midi
 from musicscore.musictree import MusicTree
@@ -197,6 +199,67 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def _sort_midis(self):
         self._midis = sorted(self._midis)
+
+    def _split_and_add_beatwise(self, beats: List['Beat']) -> List['Chord']:
+        """
+        This method is used to split the chord into a list of tied chords with proper quarter durations according to ``beats`` All beats must have the same :obj:`~musicscore.voice.Voice` parent and
+        """
+        voice_set = {beat.up for beat in beats}
+        if len(voice_set) != 1:
+            raise ChordCannotSplitError('Beats have must have a single Voice as common ancestor.')
+
+        voice = voice_set.pop()
+        if voice is None:
+            raise ChordCannotSplitError('Beats have no parent.')
+
+        if voice.get_children()[
+           voice.get_children().index(beats[0]): voice.get_children().index(beats[-1]) + 1] != beats:
+            raise ChordCannotSplitError("Beats as Voice's children has another order as input list of beats")
+
+        if beats[0] != voice.get_current_beat():
+            raise ChordAlreadySplitError('First beat must be the next beat in voice which can accept chords.')
+        if beats[-1] != voice.get_children()[-1]:
+            raise ChordAlreadySplitError('Last beat must be the last beat in voice.')
+        quarter_durations = self.quarter_duration._get_beatwise_sections(
+            offset=beats[0].filled_quarter_duration, beats=beats)
+        self.quarter_duration = quarter_durations[0][0]
+        self.split = True
+
+        if self._original_starting_ties is None:
+            self._set_original_starting_ties(self)
+        voice.get_current_beat().add_child(self)
+        current_chord = self
+        output = [self]
+        for qd in quarter_durations[0][1:]:
+            copied = _split_copy(self, qd)
+            copied.split = True
+            voice.get_current_beat().add_child(copied)
+
+            current_chord.add_tie('start')
+            copied.add_tie('stop')
+            for midi in copied.midis:
+                midi.accidental.show = False
+            current_chord = copied
+            output.append(current_chord)
+        if quarter_durations[1]:
+            # left over
+            leftover_chord = _split_copy(self, quarter_durations[1])
+            current_chord.add_tie('start')
+            leftover_chord.add_tie('stop')
+            for midi in leftover_chord.midis:
+                midi.accidental.show = False
+        else:
+            leftover_chord = None
+        self.up.up.leftover_chord = leftover_chord
+        if not leftover_chord and output[-1]._original_starting_ties:
+            for ties, midi in zip(output[-1]._original_starting_ties, output[-1].midis):
+                if 'start' in ties:
+                    midi.add_tie('start')
+        if leftover_chord and leftover_chord._original_starting_ties:
+            for ties, midi in zip(leftover_chord._original_starting_ties, leftover_chord.midis):
+                if 'start' in ties:
+                    midi.add_tie('start')
+        return output
 
     def _update_notes(self):
         if self._notes_are_set:
@@ -558,6 +621,12 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :rtype: List[:obj:`~musicscore.note.Note`]
         """
         return self.get_children()
+
+    @property
+    def number_of_beams(self) -> Optional[int]:
+        if not self.type:
+            raise ChordTypeNotSetError('Number of beams cannot be determined if chord.type is not set.')
+        return NUMBEROFBEAMS[self.type]
 
     @property
     def number_of_dots(self) -> int:
@@ -1122,66 +1191,25 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def set_beam(self, number, value):
         self._beams[number] = value
 
-    def _split_and_add_beatwise(self, beats: List['Beat']) -> List['Chord']:
-        """
-        This method is used to split the chord into a list of tied chords with proper quarter durations according to ``beats`` All beats must have the same :obj:`~musicscore.voice.Voice` parent and
-        """
-        voice_set = {beat.up for beat in beats}
-        if len(voice_set) != 1:
-            raise ChordCannotSplitError('Beats have must have a single Voice as common ancestor.')
-
-        voice = voice_set.pop()
-        if voice is None:
-            raise ChordCannotSplitError('Beats have no parent.')
-
-        if voice.get_children()[
-           voice.get_children().index(beats[0]): voice.get_children().index(beats[-1]) + 1] != beats:
-            raise ChordCannotSplitError("Beats as Voice's children has another order as input list of beats")
-
-        if beats[0] != voice.get_current_beat():
-            raise ChordAlreadySplitError('First beat must be the next beat in voice which can accept chords.')
-        if beats[-1] != voice.get_children()[-1]:
-            raise ChordAlreadySplitError('Last beat must be the last beat in voice.')
-        quarter_durations = self.quarter_duration._get_beatwise_sections(
-            offset=beats[0].filled_quarter_duration, beats=beats)
-        self.quarter_duration = quarter_durations[0][0]
-        self.split = True
-
-        if self._original_starting_ties is None:
-            self._set_original_starting_ties(self)
-        voice.get_current_beat().add_child(self)
-        current_chord = self
-        output = [self]
-        for qd in quarter_durations[0][1:]:
-            copied = _split_copy(self, qd)
-            copied.split = True
-            voice.get_current_beat().add_child(copied)
-
-            current_chord.add_tie('start')
-            copied.add_tie('stop')
-            for midi in copied.midis:
-                midi.accidental.show = False
-            current_chord = copied
-            output.append(current_chord)
-        if quarter_durations[1]:
-            # left over
-            leftover_chord = _split_copy(self, quarter_durations[1])
-            current_chord.add_tie('start')
-            leftover_chord.add_tie('stop')
-            for midi in leftover_chord.midis:
-                midi.accidental.show = False
-        else:
-            leftover_chord = None
-        self.up.up.leftover_chord = leftover_chord
-        if not leftover_chord and output[-1]._original_starting_ties:
-            for ties, midi in zip(output[-1]._original_starting_ties, output[-1].midis):
-                if 'start' in ties:
-                    midi.add_tie('start')
-        if leftover_chord and leftover_chord._original_starting_ties:
-            for ties, midi in zip(leftover_chord._original_starting_ties, leftover_chord.midis):
-                if 'start' in ties:
-                    midi.add_tie('start')
-        return output
+    def test_number_of_beams(self):
+        if self.type is None:
+            raise ChordTypeNotSetError('Chord.type must be set before testing its number of beams.')
+        if self.beams:
+            if self.number_of_beams == 0:
+                raise ChordTestError(f'Chord with number_of_beams 0 cannot have any beams.')
+            else:
+                diff = set(range(1, self.number_of_beams + 1)).difference(set(self.beams.keys()))
+                if diff:
+                    raise ChordTestError(
+                        f'Chord with number_of_beams {self.number_of_beams} has wrong beam numbers as keys of its beams dictionary. Diff: {diff}.')
+                try:
+                    max_num = max(self.beams.keys())
+                except ValueError:
+                    max_num = 0
+                if max_num != self.number_of_beams:
+                    raise ChordTestError(
+                        f'Chord with number_of_beams {self.number_of_beams} must set same number of beams in its beams dictionary ({max_num} are set.).')
+        return True
 
     def to_rest(self) -> None:
         """

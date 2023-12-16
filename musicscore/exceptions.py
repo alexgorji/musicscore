@@ -108,6 +108,10 @@ class ChordQuarterDurationAlreadySetError(ChordException):
     pass
 
 
+class ChordTestError(ChordException):
+    pass
+
+
 class ChordTypeNotSetError(ChordException):
     pass
 

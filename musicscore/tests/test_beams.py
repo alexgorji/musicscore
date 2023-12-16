@@ -1,7 +1,38 @@
 from unittest import TestCase, skip
 from unittest.mock import Mock
 
-from musicscore import Chord, Beat
+from musicscore import Chord, Beat, Part
+from musicscore.exceptions import ChordTypeNotSetError, ChordTestError
+from musicscore.tests.util import IdTestCase
+
+
+class TestTestChordNumberOfBeams(TestCase):
+    def setUp(self) -> None:
+        super().setUp()
+        self.chord = Chord(60, 1 / 8)
+
+    def test_chord_has_no_type(self):
+        with self.assertRaises(ChordTypeNotSetError):
+            self.chord.test_number_of_beams()
+
+    def test_chord_without_beam(self):
+        self.chord.type = 'quarter'
+        assert self.chord.test_number_of_beams()
+        self.chord.type = '32nd'
+        assert self.chord.test_number_of_beams()
+        self.chord.beams = {}
+        assert self.chord.test_number_of_beams()
+        self.chord.beams = {1: 'begin'}
+        with self.assertRaises(ChordTestError):
+            self.chord.test_number_of_beams()
+        self.chord.beams = {1: 'begin', 3: 'forward'}
+        with self.assertRaises(ChordTestError):
+            self.chord.test_number_of_beams()
+        self.chord.beams = {1: 'begin', 2: 'begin', 3: 'forward'}
+        assert self.chord.test_number_of_beams()
+        self.chord.beams = {1: 'begin', 2: 'begin', 3: 'begin', 4: 'forward'}
+        with self.assertRaises(ChordTestError):
+            self.chord.test_number_of_beams()
 
 
 class TestBeams16th(TestCase):
@@ -92,17 +123,17 @@ class TestBeams16th(TestCase):
                                                     {}, {}]
 
     def test_manually_set_beams_to_None(self):
-        for chord in self.chords:
-            chord.beams = None
+        for ch in self.chords:
+            ch.beams = None
         self.beat.update_chord_beams()
-        assert {ch.beams for ch in self.chords} == {None}
+        # assert [ch.beams for ch in self.chords] == [{}, {}, {}, {}]
         ch = self.chords[0]
         ch.get_parent_measure().get_divisions.return_value = 4
         ch.up.up.up.number = 1
         self.chords[0].finalize()
 
 
-class TestBeams32th(TestCase):
+class TestBeams32th(IdTestCase):
     def setUp(self) -> None:
         super().setUp()
         self.beat = Beat()
@@ -120,3 +151,23 @@ class TestBeams32th(TestCase):
                                                     {1: 'continue', 2: 'continue', 3: 'continue'},
                                                     {1: 'continue', 2: 'continue', 3: 'continue'},
                                                     {1: 'end', 2: 'end', 3: 'end'}]
+
+    def test_32nd_two_chords(self):
+        p = Part('p1')
+        p.add_measure([1, 8])
+        qds = [1 / 8, 3 / 8]
+        [p.add_chord(Chord(71, qd)) for qd in qds]
+        p.finalize()
+        chords = p.get_chords()
+        assert [ch.beams for ch in chords] == [{1: 'begin', 2: 'begin', 3: 'forward'}, {1: 'end', 2: 'end'}]
+
+        p = Part('p2')
+        p.add_measure([1, 4])
+        qds = [1 / 8, 3 / 8, 1 / 2]
+        [p.add_chord(Chord(71, qd)) for qd in qds]
+        p.finalize()
+        chords = p.get_chords()
+        print([ch.beams for ch in chords])
+        print([ch.type for ch in chords])
+        assert [ch.beams for ch in chords] == [{1: 'begin', 2: 'begin', 3: 'forward'}, {1: 'continue', 2: 'end'},
+                                               {1: 'end'}]

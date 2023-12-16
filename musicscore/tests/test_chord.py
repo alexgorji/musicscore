@@ -10,7 +10,7 @@ from musicscore.chord import Chord, _split_copy, _group_chords, GraceChord, Rest
 from musicscore.exceptions import ChordHasNoParentError, DeepCopyException, ChordException, MusicTreeException, \
     ChordAddXPlacementException, RestCannotSetMidiError, \
     RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotesError, \
-    AlreadyFinalizedError, ChordAlreadyHasNotesError, ChordHasNoNotesError
+    AlreadyFinalizedError, ChordAlreadyHasNotesError, ChordHasNoNotesError, ChordTypeNotSetError
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDuration
 from musicscore.tests.util import ChordTestCase, create_test_objects, IdTestCase
@@ -1233,3 +1233,12 @@ class TestTypeAndNumberOfDots(IdTestCase):
         p.finalize()
         assert len(gch.get_children()[0].xml_object.get_children_of_type(XMLDot)) == 3
         assert len(gch.get_children()[1].xml_object.get_children_of_type(XMLDot)) == 3
+
+    def test_number_of_beams(self):
+        chord = Chord(60, 1)
+        with self.assertRaises(ChordTypeNotSetError):
+            chord.number_of_beams
+        chord.type = 'quarter'
+        assert chord.number_of_beams == 0
+        chord.type = '32nd'
+        assert chord.number_of_beams == 3
