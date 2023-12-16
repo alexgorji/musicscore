@@ -94,6 +94,10 @@ class Tuplet:
                 raise ValueError
         self._bracket_number = val
 
+    @property
+    def ratio(self):
+        return (self.actual_notes, self.normal_notes)
+
     def get_xml_time_modification(self) -> 'XMLTimeModification':
         output = XMLTimeModification()
         output.xml_actual_notes = self.actual_notes

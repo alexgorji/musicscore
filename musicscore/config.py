@@ -1,4 +1,6 @@
 #: This dictionary is used for example to split unwritable chords into two writable ones. A chord may be unwritable because of its position inside the beat and its quarter duration. Sometimes are chords split only because of better readability. The structure of this dictionary is as follows: {position in Beat (or offset): {duration: [split durations]}}
+from fractions import Fraction
+
 SPLITTABLES = {
     (0, 1): {
         (4, 9): [(3, 9), (1, 9)],
@@ -115,4 +117,16 @@ TUPLETRATIO = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 
 DOTEDTUPLETRATIO = {2: 3, 4: 3, 5: 3, 7: 6, 8: 6}
 
 # number of beams:
-NUMBEROFBEAMS = {'quarter': 0, 'eighth': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
+NUMBEROFBEAMS = {'eighth': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
+
+TYPEDURATION = {
+    'breve': 8,
+    'whole': 4,
+    'half': 2,
+    'quarter': 1,
+    'eighth': 1/2,
+    '16th': 1/4,
+    '32nd': 1/8,
+    '64th': 1/16,
+    '128th': 1/32,
+}

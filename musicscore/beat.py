@@ -83,6 +83,7 @@ def get_chord_group_subdivision(chords):
 
 
 def beam_chord_group(chord_group: List['Chord']) -> None:
+    # print('setting beams', [ch.quarter_duration for ch in chord_group])
     """
     Function for setting beams of a list of chords (chord_group). This function is used to create or update beams inside a beat.
     Chord types must be set first.
@@ -146,11 +147,15 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
     # adding all necessary beams to all notes save the notes of the last chord. For last chord add_last_beam() will be used.
     index = 0
     while index != len(chord_group) - 1:
+        # print('index', index)
+        # print('current', current_number_of_beams)
         chord = chord_group[index]
         next_chord = chord_group[index + 1]
         # types is a list of tuples with three values: (beam value, number of the begining beam, number of the ending beam)
         types = []
         b1, b2 = chord.number_of_beams, next_chord.number_of_beams
+        # print(chord.quarter_duration, next_chord.quarter_duration)
+        # print(b1, b2, current_number_of_beams)
         if chord.is_rest:
             pass
             'do nothing'
@@ -179,26 +184,40 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
                     add_last_beam(chord, b1, current_number_of_beams)
                 else:
                     if b2 < b1 <= current_number_of_beams:
+                        # print('huhu')
                         types.append(('continue', 1, b2))
-                        types.append(('end', b2 + 1, current_number_of_beams))
-                        current_number_of_beams = b1
+                        types.append(('end', b2 + 1, b1))
                     elif b2 < b1 > current_number_of_beams:
                         if current_number_of_beams == 0:
                             types.append(('begin', 1, b2))
                             types.append(('forward', b2 + 1, b1))
                         else:
-                            types.append(('continue', 1, current_number_of_beams))
-                            types.append(('begin', current_number_of_beams + 1, b2))
-                            if chord.quarter_duration == QuarterDuration(1, 6) and chord.offset == QuarterDuration(1,
-                                                                                                                   3):
-                                types.append(('backward', b2 + 1, b1))
-                            else:
+                            if current_number_of_beams > b2:
+                                types.append(('continue', 1, b2))
+                                types.append(('end', b2 + 1, current_number_of_beams))
+                                types.append(('backward', current_number_of_beams + 1, b1))
+                            elif current_number_of_beams < b2:
+                                types.append(('continue', 1, current_number_of_beams))
+                                types.append(('begin', current_number_of_beams + 1, b2))
                                 types.append(('forward', b2 + 1, b1))
+                            else:
+                                types.append(('continue', 1, b2))
+                                types.append(('forward', b2 + 1, b1))
+                            #
+                            # if (chord.quarter_duration == QuarterDuration(1, 6) and chord.offset == QuarterDuration(1,
+                            #                                                                                         3)
+                            # ) or (
+                            #         chord.quarter_duration == QuarterDuration(1, 8) and chord.offset == QuarterDuration(
+                            #     3, 8)
+                            # ):
+                            #     types.append(('backward', b2 + 1, b1))
+                            # else:
+                            #     types.append(('forward', b2 + 1, b1))
 
-                        current_number_of_beams = b1
+                        # current_number_of_beams = b1
                     elif b2 == b1 <= current_number_of_beams:
                         types.append(('continue', 1, b1))
-                        current_number_of_beams = b1
+                        # current_number_of_beams = b1
 
                     elif b2 == b1 > current_number_of_beams:
                         if current_number_of_beams == 0:
@@ -206,11 +225,9 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
                         else:
                             types.append(('continue', 1, current_number_of_beams))
                             types.append(('begin', current_number_of_beams + 1, b2))
-                        current_number_of_beams = b1
 
                     elif b2 > b1 <= current_number_of_beams:
                         types.append(('continue', 1, b1))
-                        current_number_of_beams = b1
 
                     elif b2 > b1 > current_number_of_beams:
                         if current_number_of_beams == 0:
@@ -218,12 +235,14 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
                         else:
                             types.append(('continue', 1, current_number_of_beams))
                             types.append(('begin', current_number_of_beams + 1, b1))
-                        current_number_of_beams = b1
-        if index == len(chord_group) - 2 and b2:
-            add_last_beam(next_chord, b2, current_number_of_beams)
         for t in types:
             for num in range(t[1], t[2] + 1):
                 add_beam_to_chord(chord, num, t[0])
+        if chord.beams:
+            current_number_of_beams = len([v for v in chord.beams.values() if v in ['continue', 'begin']])
+            # print('setting current to', current_number_of_beams)
+        if index == len(chord_group) - 2 and b2:
+            add_last_beam(next_chord, b2, current_number_of_beams)
         index += 1
 
 
@@ -405,7 +424,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
 
         _update_tuplets(self.get_children(), actual_notes, self.quarter_duration)
 
-    def update_chord_beams(self):
+    def _update_chord_beams(self):
         chords = self.get_chords()
         if chords:
             for ch in chords:
@@ -413,14 +432,15 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     self._update_chord_types()
             chord_groups = None
             if self.get_subdivision() == 8 and self.quarter_duration == 1:
+                # pass
                 chord_groups = _group_chords(chords, [1 / 2, 1 / 2])
                 if chord_groups:
                     for group in chord_groups:
                         if len(group) == 1:
                             chord_groups = None
                             break
-            elif self.get_subdivision() == 9 and self.quarter_duration == 1:
-                chord_groups = _group_chords(chords, [Fraction(1, 3), Fraction(1, 3), Fraction(1, 3)])
+            # elif self.get_subdivision() == 9 and self.quarter_duration == 1:
+            #     chord_groups = _group_chords(chords, [Fraction(1, 3), Fraction(1, 3), Fraction(1, 3)])
             if chord_groups:
                 for index, group in enumerate(chord_groups):
                     beam_chord_group(group)
@@ -642,7 +662,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
 
         - It calls finalize method of all :obj:`~musicscore.chord.Chord` children.
 
-        - Following updates are triggered: _update_note_tuplets, update_chord_beams, quantize_quarter_durations (if get_quantized is
+        - Following updates are triggered: _update_note_tuplets, _update_chord_beams, quantize_quarter_durations (if get_quantized is
           True), _split_not_writable_chords
         """
         if self._finalized:
@@ -654,7 +674,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             self._update_chord_types()
             self._update_chord_number_of_dots()
             self._update_chord_tuplets()
-            self.update_chord_beams()
+            self._update_chord_beams()
             for chord in self.get_children():
                 chord.finalize()
 

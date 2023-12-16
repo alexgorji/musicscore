@@ -88,7 +88,7 @@ class ChordHasNoMidisError(ChordException):
     pass
 
 
-class ChordHasNoParentError(ChordException):
+class ChordHasNoParentBeamError(ChordException):
     pass
 
 
@@ -101,6 +101,14 @@ class ChordHasNoNotesError(ChordException):
 
 
 class ChordHasNoQuarterDurationError(ChordException):
+    pass
+
+
+class ChordNumberOfDotsNotSetError(ChordException):
+    pass
+
+
+class ChordParentBeamError(ChordException):
     pass
 
 

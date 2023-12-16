@@ -1,5 +1,6 @@
 import copy
 from unittest import skip, TestCase
+from unittest.mock import Mock
 
 from quicktions import Fraction
 
@@ -7,13 +8,15 @@ from musicscore import BassClef, Score, Part
 from musicscore.accidental import Accidental
 from musicscore.beat import Beat
 from musicscore.chord import Chord, _split_copy, _group_chords, GraceChord, Rest
-from musicscore.exceptions import ChordHasNoParentError, DeepCopyException, ChordException, MusicTreeException, \
+from musicscore.exceptions import ChordHasNoParentBeamError, DeepCopyException, ChordException, MusicTreeException, \
     ChordAddXPlacementException, RestCannotSetMidiError, \
     RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotesError, \
-    AlreadyFinalizedError, ChordAlreadyHasNotesError, ChordHasNoNotesError, ChordTypeNotSetError
+    AlreadyFinalizedError, ChordAlreadyHasNotesError, ChordHasNoNotesError, ChordTypeNotSetError, \
+    ChordNumberOfDotsNotSetError, ChordTestError, ChordParentBeamError
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDuration
 from musicscore.tests.util import ChordTestCase, create_test_objects, IdTestCase
+from musicscore.tuplet import Tuplet
 from musicscore.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, XML_ORNAMENT_CLASSES, \
     XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES
 from musicxml.xmlelement.xmlelement import *
@@ -62,7 +65,7 @@ class TestTreeChord(ChordTestCase):
 
     def test_chord_needs_parent_error(self):
         ch = Chord(70, 1)
-        with self.assertRaises(ChordHasNoParentError):
+        with self.assertRaises(ChordHasNoParentBeamError):
             ch.finalize()
         ch._parent = self.mock_beat
         ch.finalize()
@@ -1242,3 +1245,30 @@ class TestTypeAndNumberOfDots(IdTestCase):
         assert chord.number_of_beams == 0
         chord.type = '32nd'
         assert chord.number_of_beams == 3
+
+    def test_test_quarter_duration(self):
+        chord = Chord(60, 1 / 3)
+        with self.assertRaises(ChordHasNoParentBeamError):
+            chord.test_printed_duration()
+        chord._parent = Mock()
+        chord._parent.quarter_duration = None
+        with self.assertRaises(ChordParentBeamError):
+            chord.test_printed_duration()
+        chord._parent.quarter_duration = 1
+        chord._parent.get_subdivision.return_value = None
+        with self.assertRaises(ChordParentBeamError):
+            chord.test_printed_duration()
+        chord._parent.get_subdivision.return_value = 3
+        with self.assertRaises(ChordTypeNotSetError):
+            chord.test_printed_duration()
+        chord.type = 'eighth'
+        with self.assertRaises(ChordNumberOfDotsNotSetError):
+            chord.test_printed_duration()
+        chord.number_of_dots = 0
+        with self.assertRaises(ChordTestError):
+            assert chord.test_printed_duration()
+        chord.tuplet = Tuplet(3, 2)
+        assert chord.test_printed_duration()
+        chord.type = 'quarter'
+        with self.assertRaises(ChordTestError):
+            assert chord.test_printed_duration()

@@ -4,14 +4,14 @@ from fractions import Fraction
 from typing import Union, List, Optional, Any, Dict
 
 from musicscore.clef import Clef
-from musicscore.config import NUMBEROFBEAMS
+from musicscore.config import NUMBEROFBEAMS, TYPEDURATION
 from musicscore.dynamics import Dynamics
-from musicscore.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentError, \
+from musicscore.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentBeamError, \
     ChordQuarterDurationAlreadySetError, AlreadyFinalizedError, DeepCopyException, ChordException, NotationException, \
     ChordAddXException, ChordAddXPlacementException, RestCannotSetMidiError, \
     RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotesError, \
     GraceChordCannotSetQuarterDurationError, ChordHasNoNotesError, ChordAlreadyHasNotesError, ChordTestError, \
-    ChordTypeNotSetError
+    ChordTypeNotSetError, ChordNumberOfDotsNotSetError, ChordParentBeamError
 from musicscore.finalize import FinalizeMixin
 from musicscore.midi import Midi
 from musicscore.musictree import MusicTree
@@ -531,7 +531,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     @property
     def beams(self):
         """
-        A dictionary like: {1:'continue', 2:'begin'}. Keys are beam numbers. Default is {}. :obj:`~musicscore.beam.Beam.update_chord_beams` sets a beam only if beam is not None and beam is not set manually.
+        A dictionary like: {1:'continue', 2:'begin'}. Keys are beam numbers. Default is {}. :obj:`~musicscore.beam.Beam._update_chord_beams` sets a beam only if beam is not None and beam is not set manually.
         """
         return self._beams
 
@@ -626,7 +626,11 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def number_of_beams(self) -> Optional[int]:
         if not self.type:
             raise ChordTypeNotSetError('Number of beams cannot be determined if chord.type is not set.')
-        return NUMBEROFBEAMS[self.type]
+        output = NUMBEROFBEAMS.get(self.type)
+        if not output:
+            return 0
+        else:
+            return output
 
     @property
     def number_of_dots(self) -> int:
@@ -705,7 +709,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :rtype: positive int
         """
         if not self.up:
-            raise ChordHasNoParentError()
+            raise ChordHasNoParentBeamError()
         if self.up and self.up.up:
             return self.up.up.number
         else:
@@ -1024,7 +1028,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             raise AlreadyFinalizedError(self)
 
         if not self.up:
-            raise ChordHasNoParentError('Chord needs a parent Beat to create notes.')
+            raise ChordHasNoParentBeamError('Chord needs a parent Beat to create notes.')
 
         self._update_notes()
         self._update_xml_chord()
@@ -1210,6 +1214,45 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
                     raise ChordTestError(
                         f'Chord with number_of_beams {self.number_of_beams} must set same number of beams in its beams dictionary ({max_num} are set.).')
         return True
+
+    def test_printed_duration(self):
+        if not self.get_parent():
+            raise ChordHasNoParentBeamError(
+                ('Chord needs information of its parent beat before testing its quarter duration.'))
+        beat_quarter_duration = self.get_parent().quarter_duration
+        beat_subdivision = self.get_parent().get_subdivision()
+        if beat_quarter_duration is None:
+            raise ChordParentBeamError('Parent beat quarter duration is None.')
+        if beat_subdivision is None:
+            raise ChordParentBeamError('Parent beat subdivision is None.')
+        if self.type is None:
+            raise ChordTypeNotSetError('Chord.type must be set before testing its quarter duration.')
+        if self.number_of_dots is None:
+            raise ChordNumberOfDotsNotSetError('Chord.number_of_dots must be set before testing its quarter duration.')
+
+        self.quarter_duration.beat_quarter_duration = beat_quarter_duration
+        self.quarter_duration.beat_subdivision = beat_subdivision
+        tuplet_ratio = self.quarter_duration.get_tuplet_ratio()
+        if tuplet_ratio:
+            if not self.tuplet:
+                raise ChordTestError(f'Chord has a tuplet ratio of {tuplet_ratio} but its tuplet property is not set.')
+            else:
+                if self.tuplet.ratio != tuplet_ratio:
+                    raise ChordTestError(
+                        f'Chord has a tuplet ratio of {tuplet_ratio} but its tuplet property has ratio {self.tuplet.ratio}.')
+
+        if tuplet_ratio:
+            ratio = Fraction(tuplet_ratio[1], tuplet_ratio[0])
+        else:
+            ratio = 1
+        printed_duration = QuarterDuration(TYPEDURATION[self.type])
+        for i in range(self.number_of_dots):
+            printed_duration += printed_duration / 2
+        printed_duration *= ratio
+        if printed_duration == self.quarter_duration:
+            return True
+        else:
+            raise ChordTestError(f'printed duration {printed_duration} != quarter duration {self.quarter_duration}')
 
     def to_rest(self) -> None:
         """
