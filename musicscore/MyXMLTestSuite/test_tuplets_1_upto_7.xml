@@ -283,6 +283,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <lyric>
           <text>1</text>
         </lyric>
@@ -361,6 +362,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <lyric>
           <text>1</text>
         </lyric>
@@ -772,6 +774,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -1039,6 +1042,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -1190,6 +1194,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -1623,6 +1628,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -1758,6 +1764,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -2135,7 +2142,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <beam number="2">backward hook</beam>
+        <beam number="2">forward hook</beam>
         <lyric>
           <text>1</text>
         </lyric>
@@ -2181,6 +2188,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -2247,6 +2255,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -2400,6 +2409,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -2766,7 +2776,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <beam number="2">backward hook</beam>
+        <beam number="2">forward hook</beam>
         <lyric>
           <text>1</text>
         </lyric>
@@ -2915,6 +2925,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -2999,6 +3010,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -3273,6 +3285,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -3863,6 +3876,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -4160,6 +4174,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -4516,6 +4531,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <lyric>
           <text>1</text>
         </lyric>
@@ -4749,6 +4765,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -5038,8 +5055,6 @@
           <normal-notes>4</normal-notes>
           <normal-type>16th</normal-type>
         </time-modification>
-        <beam number="1">end</beam>
-        <beam number="2">end</beam>
         <notations>
           <tuplet type="stop" number="1" />
         </notations>
@@ -5287,6 +5302,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -6068,6 +6084,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -6153,6 +6170,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -6238,6 +6256,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -6323,6 +6342,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -6686,6 +6706,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -7361,6 +7382,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -7860,6 +7882,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -7963,6 +7986,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -8066,6 +8090,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -8605,6 +8630,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>

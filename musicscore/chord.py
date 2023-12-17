@@ -1015,6 +1015,65 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._after_notes_xml_elements.append(xml_element)
         return xml_element
 
+    def check_number_of_beams(self):
+        if self.type is None:
+            raise ChordTypeNotSetError('Chord.type must be set before testing its number of beams.')
+        if self.beams:
+            if self.number_of_beams == 0:
+                raise ChordTestError(f'Chord with number_of_beams 0 cannot have any beams.')
+            else:
+                diff = set(range(1, self.number_of_beams + 1)).difference(set(self.beams.keys()))
+                if diff:
+                    raise ChordTestError(
+                        f'Chord with number_of_beams {self.number_of_beams} has wrong beam numbers as keys of its beams dictionary. Diff: {diff}.')
+                try:
+                    max_num = max(self.beams.keys())
+                except ValueError:
+                    max_num = 0
+                if max_num != self.number_of_beams:
+                    raise ChordTestError(
+                        f'Chord with number_of_beams {self.number_of_beams} must set same number of beams in its beams dictionary ({max_num} are set.).')
+        return True
+
+    def check_printed_duration(self):
+        if not self.get_parent():
+            raise ChordHasNoParentBeamError(
+                ('Chord needs information of its parent beat before testing its quarter duration.'))
+        beat_quarter_duration = self.get_parent().quarter_duration
+        beat_subdivision = self.get_parent().get_subdivision()
+        if beat_quarter_duration is None:
+            raise ChordParentBeamError('Parent beat quarter duration is None.')
+        if beat_subdivision is None:
+            raise ChordParentBeamError('Parent beat subdivision is None.')
+        if self.type is None:
+            raise ChordTypeNotSetError('Chord.type must be set before testing its quarter duration.')
+        if self.number_of_dots is None:
+            raise ChordNumberOfDotsNotSetError('Chord.number_of_dots must be set before testing its quarter duration.')
+
+        self.quarter_duration.beat_quarter_duration = beat_quarter_duration
+        self.quarter_duration.beat_subdivision = beat_subdivision
+        tuplet_ratio = self.quarter_duration.get_tuplet_ratio()
+        if tuplet_ratio:
+            if not self.tuplet:
+                raise ChordTestError(f'Chord has a tuplet ratio of {tuplet_ratio} but its tuplet property is not set.')
+            else:
+                if self.tuplet.ratio != tuplet_ratio:
+                    raise ChordTestError(
+                        f'Chord has a tuplet ratio of {tuplet_ratio} but its tuplet property has ratio {self.tuplet.ratio}.')
+
+        if tuplet_ratio:
+            ratio = Fraction(tuplet_ratio[1], tuplet_ratio[0])
+        else:
+            ratio = 1
+        printed_duration = QuarterDuration(TYPEDURATION[self.type])
+        for i in range(self.number_of_dots):
+            printed_duration += printed_duration / 2
+        printed_duration *= ratio
+        if printed_duration == self.quarter_duration:
+            return True
+        else:
+            raise ChordTestError(f'printed duration {printed_duration} != quarter duration {self.quarter_duration}')
+
     def finalize(self):
         """
         Finalize can be called only once. All necessary updates and xmlelement object creations will take place and the MusicTree
@@ -1194,65 +1253,6 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def set_beam(self, number, value):
         self._beams[number] = value
-
-    def test_number_of_beams(self):
-        if self.type is None:
-            raise ChordTypeNotSetError('Chord.type must be set before testing its number of beams.')
-        if self.beams:
-            if self.number_of_beams == 0:
-                raise ChordTestError(f'Chord with number_of_beams 0 cannot have any beams.')
-            else:
-                diff = set(range(1, self.number_of_beams + 1)).difference(set(self.beams.keys()))
-                if diff:
-                    raise ChordTestError(
-                        f'Chord with number_of_beams {self.number_of_beams} has wrong beam numbers as keys of its beams dictionary. Diff: {diff}.')
-                try:
-                    max_num = max(self.beams.keys())
-                except ValueError:
-                    max_num = 0
-                if max_num != self.number_of_beams:
-                    raise ChordTestError(
-                        f'Chord with number_of_beams {self.number_of_beams} must set same number of beams in its beams dictionary ({max_num} are set.).')
-        return True
-
-    def test_printed_duration(self):
-        if not self.get_parent():
-            raise ChordHasNoParentBeamError(
-                ('Chord needs information of its parent beat before testing its quarter duration.'))
-        beat_quarter_duration = self.get_parent().quarter_duration
-        beat_subdivision = self.get_parent().get_subdivision()
-        if beat_quarter_duration is None:
-            raise ChordParentBeamError('Parent beat quarter duration is None.')
-        if beat_subdivision is None:
-            raise ChordParentBeamError('Parent beat subdivision is None.')
-        if self.type is None:
-            raise ChordTypeNotSetError('Chord.type must be set before testing its quarter duration.')
-        if self.number_of_dots is None:
-            raise ChordNumberOfDotsNotSetError('Chord.number_of_dots must be set before testing its quarter duration.')
-
-        self.quarter_duration.beat_quarter_duration = beat_quarter_duration
-        self.quarter_duration.beat_subdivision = beat_subdivision
-        tuplet_ratio = self.quarter_duration.get_tuplet_ratio()
-        if tuplet_ratio:
-            if not self.tuplet:
-                raise ChordTestError(f'Chord has a tuplet ratio of {tuplet_ratio} but its tuplet property is not set.')
-            else:
-                if self.tuplet.ratio != tuplet_ratio:
-                    raise ChordTestError(
-                        f'Chord has a tuplet ratio of {tuplet_ratio} but its tuplet property has ratio {self.tuplet.ratio}.')
-
-        if tuplet_ratio:
-            ratio = Fraction(tuplet_ratio[1], tuplet_ratio[0])
-        else:
-            ratio = 1
-        printed_duration = QuarterDuration(TYPEDURATION[self.type])
-        for i in range(self.number_of_dots):
-            printed_duration += printed_duration / 2
-        printed_duration *= ratio
-        if printed_duration == self.quarter_duration:
-            return True
-        else:
-            raise ChordTestError(f'printed duration {printed_duration} != quarter duration {self.quarter_duration}')
 
     def to_rest(self) -> None:
         """

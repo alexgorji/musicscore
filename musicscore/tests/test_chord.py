@@ -1249,26 +1249,26 @@ class TestTypeAndNumberOfDots(IdTestCase):
     def test_test_quarter_duration(self):
         chord = Chord(60, 1 / 3)
         with self.assertRaises(ChordHasNoParentBeamError):
-            chord.test_printed_duration()
+            chord.check_printed_duration()
         chord._parent = Mock()
         chord._parent.quarter_duration = None
         with self.assertRaises(ChordParentBeamError):
-            chord.test_printed_duration()
+            chord.check_printed_duration()
         chord._parent.quarter_duration = 1
         chord._parent.get_subdivision.return_value = None
         with self.assertRaises(ChordParentBeamError):
-            chord.test_printed_duration()
+            chord.check_printed_duration()
         chord._parent.get_subdivision.return_value = 3
         with self.assertRaises(ChordTypeNotSetError):
-            chord.test_printed_duration()
+            chord.check_printed_duration()
         chord.type = 'eighth'
         with self.assertRaises(ChordNumberOfDotsNotSetError):
-            chord.test_printed_duration()
+            chord.check_printed_duration()
         chord.number_of_dots = 0
         with self.assertRaises(ChordTestError):
-            assert chord.test_printed_duration()
+            assert chord.check_printed_duration()
         chord.tuplet = Tuplet(3, 2)
-        assert chord.test_printed_duration()
+        assert chord.check_printed_duration()
         chord.type = 'quarter'
         with self.assertRaises(ChordTestError):
-            assert chord.test_printed_duration()
+            assert chord.check_printed_duration()

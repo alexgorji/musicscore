@@ -1,14 +1,4 @@
-Look at the following features and try to simplify the process. How can a user influence the notation of note types, dots,
-beams in a beat or change or extend the default behaviour in such cases and split the unwritable quarter durations.
-    * SPLITTALBES
-    * is_writable
-    * type
-    * dot
-    * beam
-
-Let's try to understand all main steps of writing a beat with following quarter durations: 1/8 5/8 2/8
-(see writing beats)
-
+For tuplets larger than 16: Only error if user themselves did not set type, number_of_dots and tuplet manually
 
 measure.new_system
 
@@ -33,9 +23,6 @@ inconsistency: part.add_measure(): adds a staff, add_staff()
 quarter duration only to: 32nd (64th and 128th must be supported too)
 
 check _is_writable
-Manually set type and number of dots (for example if is_writable is False and for 64th or 128th)
-Manually set tuplets
-
 chord.add_direction : add direction objects to a list (don't use {'above':[], 'below':[]} dictionary like it is now to preserve order of added directions)
 
 

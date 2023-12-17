@@ -200,6 +200,26 @@ def generate_all_subdivision_patterns(subdivision, remove_larger_subdivisions=Fa
     return output
 
 
+
 def generate_all_subdivisions(subdivision, remove_larger_subdivisions=False):
     return [tuple([Fraction(x, subdivision) for x in pat]) for pat in
             generate_all_subdivision_patterns(subdivision, remove_larger_subdivisions)]
+
+
+def generate_subdivsion_test_patterns(subdivision, remove_larger_subdivision=False):
+    def get_last_element():
+        return subdivision - x - offset
+
+    offset = 0
+    while offset < subdivision:
+        x = 1
+        while get_last_element():
+            if offset:
+                pattern = (offset, x, get_last_element())
+            else:
+                pattern = (x, get_last_element())
+            x += 1
+            if remove_larger_subdivision and (min(pattern) != 1 and math.gcd(*pattern) != 1):
+                continue
+            yield pattern
+        offset += 1

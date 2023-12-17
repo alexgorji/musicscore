@@ -4,7 +4,7 @@ from math import trunc
 from quicktions import Fraction
 
 from musicscore.chord import _split_copy, _group_chords, Chord
-from musicscore.config import SPLITTABLES
+from musicscore.config import SPLITTABLES, GENERALSPLITTABLES, SPLITTEXCEPTIONS
 from musicscore.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
     ChordHasNoQuarterDurationError, \
     ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError, QuarterDurationIsNotWritable, \
@@ -74,12 +74,12 @@ def get_chord_group_subdivision(chords):
     denominators = list(dict.fromkeys([qd.denominator for qd in qds]))
     if len(denominators) > 1:
         l_c_m = lcm(denominators)
-        if l_c_m not in denominators:
+        if l_c_m not in denominators and l_c_m > 16:
             return None
         else:
             return l_c_m
     else:
-        return next(iter(denominators))
+        return denominators[0]
 
 
 def beam_chord_group(chord_group: List['Chord']) -> None:
@@ -363,12 +363,26 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         return output
 
     def _split_not_writable(self, chord, offset):
-        if _SPLITTABLE_QUARTER_DURATIONS.get(offset):
+        if _SPLITTABLE_QUARTER_DURATIONS.get(offset) and _SPLITTABLE_QUARTER_DURATIONS.get(offset).get(
+                chord.quarter_duration):
             quarter_durations = _SPLITTABLE_QUARTER_DURATIONS.get(offset).get(
                 chord.quarter_duration)
             if quarter_durations:
                 quarter_durations = [QuarterDuration(qd) for qd in quarter_durations]
                 return self._split_chord(chord, quarter_durations)
+        elif GENERALSPLITTABLES.get(chord.quarter_duration.numerator):
+            quarter_durations = [QuarterDuration(x, chord.quarter_duration.denominator) for x in
+                                 GENERALSPLITTABLES.get(chord.quarter_duration.numerator)]
+            return self._split_chord(chord, quarter_durations)
+        else:
+            try:
+                split_qds = SPLITTEXCEPTIONS.get(self.quarter_duration.value).get(self.get_subdivision()).get(
+                    chord.quarter_duration.as_integer_ratio())
+                if split_qds:
+                    quarter_durations = [QuarterDuration(qd[0], qd[1]) for qd in split_qds]
+                    return self._split_chord(chord, quarter_durations)
+            except AttributeError:
+                pass
 
     def _update_chord_types(self):
         for ch in self.get_chords():
@@ -393,8 +407,8 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 'Beat cannot manage tuplets automatically if it contains chords with manually set tuplet properties.')
 
         def _update_tuplets(chord_group, actual_notes, quarter_duration=1):
-            if actual_notes <= 16:
-                if actual_notes not in [1, 2, 4, 8, 16]:
+            if actual_notes <= 16 or actual_notes == 32:
+                if actual_notes not in [1, 2, 4, 8, 16, 32]:
                     for chord in chord_group:
                         chord.tuplet = Tuplet(actual_notes=actual_notes, quarter_duration=quarter_duration)
                         if chord == chord_group[0]:
@@ -432,7 +446,6 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     self._update_chord_types()
             chord_groups = None
             if self.get_subdivision() == 8 and self.quarter_duration == 1:
-                # pass
                 chord_groups = _group_chords(chords, [1 / 2, 1 / 2])
                 if chord_groups:
                     for group in chord_groups:

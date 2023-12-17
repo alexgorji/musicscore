@@ -13,26 +13,26 @@ class TestTestChordNumberOfBeams(TestCase):
 
     def test_chord_has_no_type(self):
         with self.assertRaises(ChordTypeNotSetError):
-            self.chord.test_number_of_beams()
+            self.chord.check_number_of_beams()
 
     def test_chord_without_beam(self):
         self.chord.type = 'quarter'
-        assert self.chord.test_number_of_beams()
+        assert self.chord.check_number_of_beams()
         self.chord.type = '32nd'
-        assert self.chord.test_number_of_beams()
+        assert self.chord.check_number_of_beams()
         self.chord.beams = {}
-        assert self.chord.test_number_of_beams()
+        assert self.chord.check_number_of_beams()
         self.chord.beams = {1: 'begin'}
         with self.assertRaises(ChordTestError):
-            self.chord.test_number_of_beams()
+            self.chord.check_number_of_beams()
         self.chord.beams = {1: 'begin', 3: 'forward'}
         with self.assertRaises(ChordTestError):
-            self.chord.test_number_of_beams()
+            self.chord.check_number_of_beams()
         self.chord.beams = {1: 'begin', 2: 'begin', 3: 'forward'}
-        assert self.chord.test_number_of_beams()
+        assert self.chord.check_number_of_beams()
         self.chord.beams = {1: 'begin', 2: 'begin', 3: 'begin', 4: 'forward'}
         with self.assertRaises(ChordTestError):
-            self.chord.test_number_of_beams()
+            self.chord.check_number_of_beams()
 
 
 class TestBeams16th(TestCase):
@@ -169,7 +169,7 @@ class TestBeams32th(IdTestCase):
         p.finalize()
         chords = p.get_chords()
         for ch in chords:
-            ch.test_number_of_beams()
+            ch.check_number_of_beams()
         assert [ch.beams for ch in chords] == [{1: 'begin', 2: 'begin', 3: 'forward'}, {1: 'continue', 2: 'end'},
                                                {1: 'end'}]
 
@@ -190,7 +190,7 @@ class TestBeams32th(IdTestCase):
         p.finalize()
         chords = p.get_chords()
         for ch in chords:
-            ch.test_number_of_beams()
+            ch.check_number_of_beams()
         assert [ch.beams for ch in chords] == [{1: 'begin', 2: 'begin'}, {1: 'continue', 2: 'end', 3: 'backward'},
                                                {1: 'end'}]
 
@@ -202,6 +202,6 @@ class TestBeams32th(IdTestCase):
         p.finalize()
         chords = p.get_chords()
         for ch in chords:
-            ch.test_number_of_beams()
+            ch.check_number_of_beams()
         assert [ch.beams for ch in chords] == [{1: 'begin'}, {1: 'continue', 2: 'begin', 3: 'forward'},
                                                {1: 'end', 2: 'end'}]

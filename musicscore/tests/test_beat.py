@@ -1,3 +1,4 @@
+import uuid
 from unittest import TestCase
 
 from musicscore import Part
@@ -335,7 +336,6 @@ class TestBeatSplitChord(TestCase):
         assert expected == _convert_to_quarter_duration_splittables_dictionary(SPLITTABLES)
 
     def test_all_splits(self):
-        import uuid
         for key, value in SPLITTABLES.items():
             for k, v in value.items():
                 p = Part(f'p{uuid.uuid4()}')
@@ -350,3 +350,4 @@ class TestBeatSplitChord(TestCase):
                         p.add_chord(Chord(70, qd))
                 p.finalize()
                 assert sum([ch.quarter_duration for ch in p.get_beats()[0].get_chords() if not ch.is_rest]) == 1
+

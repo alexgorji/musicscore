@@ -4,7 +4,7 @@ import numbers
 
 __all__ = ['QuarterDuration', 'QuarterDurationMixin']
 
-from musicscore.config import NOTETYPES, BEATWISE_EXCEPTIONS, TUPLETRATIO, DOTEDTUPLETRATIO
+from musicscore.config import NOTETYPES, BEATWISE_EXCEPTIONS, TUPLETRATIO, DOTEDTUPLETRATIO, TYPEANDDOTEXCEPTIONS
 from musicscore.exceptions import QuarterDurationIsNotWritable
 
 
@@ -82,20 +82,12 @@ class QuarterDuration(numbers.Rational):
             return None, 0
         if not self.beat_subdivision:
             self.beat_subdivision = self.denominator
-        if self.beat_quarter_duration == 1:
-            if self.beat_subdivision == 6 and self.value == 1 / 2:
-                return 'eighth', 1
-            elif self.beat_subdivision == 12:
-                if self.value == 1 / 2:
-                    return 'eighth', 1
-                elif self.value == 1 / 4:
-                    return '16th', 1
-            elif self.beat_subdivision == 9:
-                if self.as_integer_ratio() == (1, 3):
-                    return '16th', 1
-                elif self.as_integer_ratio() == (2, 3):
-                    return 'eighth', 1
-
+        try:
+            type_and_dots = TYPEANDDOTEXCEPTIONS.get(self.beat_quarter_duration).get(self.beat_subdivision).get(self.as_integer_ratio())
+            if type_and_dots:
+                return type_and_dots
+        except AttributeError:
+            pass
         type = NOTETYPES.get(self.as_integer_ratio())
         if type:
             return type, 0
@@ -222,7 +214,7 @@ class QuarterDuration(numbers.Rational):
                 else:
                     return None
         else:
-            if self.beat_subdivision > 16:
+            if self.beat_subdivision > 16 and not self.beat_subdivision == 32:
                 raise NotImplementedError('Beats subdivision > 16')
             else:
                 tupletratio = TUPLETRATIO.get(self.beat_subdivision)

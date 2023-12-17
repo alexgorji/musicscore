@@ -229,6 +229,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -545,6 +546,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
@@ -661,6 +663,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -1033,6 +1036,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
           <tied type="stop" />
@@ -1275,6 +1279,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -1360,7 +1365,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <beam number="2">backward hook</beam>
+        <beam number="2">forward hook</beam>
         <lyric>
           <text>0.21</text>
         </lyric>
@@ -1607,6 +1612,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -1866,6 +1872,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -1915,6 +1922,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -1955,6 +1963,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -2302,6 +2311,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -2521,6 +2531,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -2988,6 +2999,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -3022,6 +3034,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -3145,6 +3158,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -3229,6 +3243,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>
@@ -3318,6 +3333,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tied type="stop" />
         </notations>

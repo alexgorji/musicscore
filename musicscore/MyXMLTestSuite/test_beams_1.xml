@@ -175,6 +175,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -248,6 +249,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -491,6 +493,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -1435,6 +1438,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -1530,6 +1534,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -1604,6 +1609,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -1678,6 +1684,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -2254,7 +2261,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
+        <beam number="2">end</beam>
       </note>
       <note>
         <pitch>
@@ -2265,7 +2272,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
+        <beam number="2">begin</beam>
       </note>
       <note>
         <pitch>
@@ -2658,6 +2665,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -2740,6 +2748,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -2822,6 +2831,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -3022,6 +3032,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -4015,6 +4026,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -4078,6 +4090,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -4141,6 +4154,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -4204,6 +4218,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -4286,6 +4301,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -4349,6 +4365,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -5453,6 +5470,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -5503,6 +5521,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -5572,6 +5591,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -5821,6 +5841,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -5873,6 +5894,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -6239,6 +6261,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -6683,6 +6706,7 @@
         <voice>1</voice>
         <type>16th</type>
         <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -6855,6 +6879,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -6926,6 +6951,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -6997,6 +7023,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -7068,6 +7095,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -7395,6 +7423,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -7455,6 +7484,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -7564,6 +7594,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -8011,6 +8042,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -8069,6 +8101,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -8260,6 +8293,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
@@ -8407,6 +8441,7 @@
         <type>32nd</type>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
+        <beam number="3">forward hook</beam>
       </note>
       <note>
         <pitch>
