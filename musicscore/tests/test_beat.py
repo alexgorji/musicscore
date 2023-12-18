@@ -5,11 +5,12 @@ from musicscore import Part
 from musicscore.beat import Beat, _convert_to_quarter_duration_splittables_dictionary, get_chord_group_subdivision
 from musicscore.chord import Chord
 from musicscore.config import SPLITTABLES
-from musicscore.exceptions import AddChordError, VoiceIsFullError, BeatNotFullError
+from musicscore.exceptions import AddChordError, VoiceIsFullError, BeatNotFullError, QuarterDurationIsNotWritable
 from musicscore.measure import Measure
 from musicscore.quarterduration import QuarterDuration
 from musicscore.staff import Staff
 from musicscore.tests.util import IdTestCase
+from musicscore.tuplet import Tuplet
 from musicscore.voice import Voice
 
 
@@ -351,3 +352,37 @@ class TestBeatSplitChord(TestCase):
                 p.finalize()
                 assert sum([ch.quarter_duration for ch in p.get_beats()[0].get_chords() if not ch.is_rest]) == 1
 
+
+class TestNotImplementedTuplets(IdTestCase):
+    def test_writing_subdivision_17(self):
+        factors = [1, 2, 3, 4, 4, 3]
+        qds = [QuarterDuration(x, 17) for x in factors]
+        chords = [Chord(60, qd) for qd in qds]
+        [ch.add_lyric(x) for ch, x in zip(chords, factors)]
+        p = Part('p1')
+        [p.add_chord(ch) for ch in chords]
+        with self.assertRaises(QuarterDurationIsNotWritable):
+            p.finalize()
+        for ch in chords:
+            if ch.quarter_duration == QuarterDuration(1, 17):
+                ch.type = '64th'
+                ch.number_of_dots = 0
+            elif ch.quarter_duration == QuarterDuration(2, 17):
+                ch.type = '32nd'
+                ch.number_of_dots = 0
+            elif ch.quarter_duration == QuarterDuration(3, 17):
+                ch.type = '32nd'
+                ch.number_of_dots = 1
+            elif ch.quarter_duration == QuarterDuration(4, 17):
+                ch.type = '16th'
+                ch.number_of_dots = 0
+
+            ch.tuplet = Tuplet(17, 16, '64th')
+
+        p = Part('p2')
+        [p.add_chord(ch) for ch in chords]
+        p.finalize()
+        beat = p.get_beats()[0]
+        for ch in beat.get_chords():
+            ch.check_printed_duration()
+            ch.check_number_of_beams()

@@ -177,7 +177,7 @@ TYPEANDDOTEXCEPTIONS = {
 
 #: {offset: {quarter_duration: return value(s), ... }, ...}
 BEATWISE_EXCEPTIONS = {0: {5: (3, 2), 6: (6,)}}
-TUPLETRATIO = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
+
 DOTEDTUPLETRATIO = {2: 3, 4: 3, 5: 3, 7: 6, 8: 6}
 
 # number of beams:

@@ -4,7 +4,7 @@ import numbers
 
 __all__ = ['QuarterDuration', 'QuarterDurationMixin']
 
-from musicscore.config import NOTETYPES, BEATWISE_EXCEPTIONS, TUPLETRATIO, DOTEDTUPLETRATIO, TYPEANDDOTEXCEPTIONS
+from musicscore.config import NOTETYPES, BEATWISE_EXCEPTIONS, DOTEDTUPLETRATIO, TYPEANDDOTEXCEPTIONS
 from musicscore.exceptions import QuarterDurationIsNotWritable
 
 
@@ -83,7 +83,8 @@ class QuarterDuration(numbers.Rational):
         if not self.beat_subdivision:
             self.beat_subdivision = self.denominator
         try:
-            type_and_dots = TYPEANDDOTEXCEPTIONS.get(self.beat_quarter_duration).get(self.beat_subdivision).get(self.as_integer_ratio())
+            type_and_dots = TYPEANDDOTEXCEPTIONS.get(self.beat_quarter_duration).get(self.beat_subdivision).get(
+                self.as_integer_ratio())
             if type_and_dots:
                 return type_and_dots
         except AttributeError:
@@ -214,14 +215,19 @@ class QuarterDuration(numbers.Rational):
                 else:
                     return None
         else:
-            if self.beat_subdivision > 16 and not self.beat_subdivision == 32:
-                raise NotImplementedError('Beats subdivision > 16')
+            if self.beat_subdivision < 3:
+                return None
+            elif self.beat_subdivision > 64:
+                raise NotImplementedError('Beats subdivision > 64')
+            normal_notes = [2, 4, 8, 16, 32]
+            if self.beat_subdivision in normal_notes:
+                return None
             else:
-                tupletratio = TUPLETRATIO.get(self.beat_subdivision)
-                if tupletratio:
-                    return self.beat_subdivision, tupletratio
-                else:
-                    return None
+                for normal in reversed(normal_notes):
+                    if self.beat_subdivision > normal:
+                        return self.beat_subdivision, normal
+        raise NotImplementedError(
+            f'Quarter duration {self} in a beat with {self.beat_subdivision} and quarter duration {self.beat_quarter_duration}')
 
     def get_type(self) -> Optional[str]:
         """

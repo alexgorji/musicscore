@@ -392,16 +392,19 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 try:
                     ch.type = ch.quarter_duration.get_type()
                 except QuarterDurationIsNotWritable as err:
-                    raise QuarterDurationIsNotWritable(f'Chord with offset {ch.offset}: {err}')
+                    raise QuarterDurationIsNotWritable(
+                        f'Chord {ch.get_coordinates_in_tree()} with offset {ch.offset}: {err} Consider setting type, number_of_dots and tuplet properties of the chord manually or splitting it into writable chords.')
 
     def _update_chord_number_of_dots(self):
         for ch in self.get_chords():
-            if not ch.number_of_dots:
+            if ch.number_of_dots is None:
                 if self.get_subdivision() and not ch.quarter_duration.beat_subdivision:
                     ch.quarter_duration.beat_subdivision = self.get_subdivision()
                 ch.number_of_dots = ch.quarter_duration.get_number_of_dots()
 
     def _update_chord_tuplets(self):
+        if None not in {ch.tuplet for ch in self.get_chords()}:
+            return
         if {ch.tuplet for ch in self.get_chords()} != {None}:
             raise BeatUpdateChordTupletsError(
                 'Beat cannot manage tuplets automatically if it contains chords with manually set tuplet properties.')
@@ -699,6 +702,9 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 raise BeatNotFullError()
             self._subdivision = get_chord_group_subdivision(self.get_chords())
         return self._subdivision
+
+    def set_subdivision(self, val):
+        self._subdivision = val
 
     def quantize_quarter_durations(self):
         """
