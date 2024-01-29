@@ -1,5 +1,4 @@
-#: This dictionary is used for example to split unwritable chords into two writable ones. A chord may be unwritable because of its position inside the beat and its quarter duration. Sometimes are chords split only because of better readability. The structure of this dictionary is as follows: {position in Beat (or offset): {duration: [split durations]}}
-
+#: This dictionary is used to split unwritable chords into two writable ones. A chord may be unwritable because of its position inside the beat and its quarter duration. Sometimes are chords split only because of better readability. The structure of this dictionary is as follows: {position in Beat (or offset): {duration: [split durations]}}
 SPLITTABLES = {
     (0, 1): {
         # (4, 9): [(3, 9), (1, 9)],
@@ -99,7 +98,8 @@ GENERALSPLITTABLES = {
     30: (16, 8, 6),
     31: (16, 8, 4, 3),
 }
-# {beat_duration: {beat_subdivision: {quarter_duration as integer ratio: [split durations]}}
+
+#: {beat_duration: {beat_subdivision: {quarter_duration as integer ratio: [split durations]}}
 SPLITTEXCEPTIONS = {
     1: {
         10: {(1, 2): [(3, 10), (2, 10)]},
@@ -114,6 +114,7 @@ SPLITTEXCEPTIONS = {
 
 }
 
+#:
 NOTETYPES = {
     (1, 32): '128th',
     (1, 16): '64th',
@@ -157,6 +158,7 @@ NOTETYPES = {
     (8, 1): 'breve',
 }
 
+#:
 TYPEANDDOTEXCEPTIONS = {
     1: {
         6: {(1, 2): ('eighth', 1)},
@@ -175,14 +177,16 @@ TYPEANDDOTEXCEPTIONS = {
     }
 }
 
-#: {offset: {quarter_duration: return value(s), ... }, ...}
+#:
 BEATWISE_EXCEPTIONS = {0: {5: (3, 2), 6: (6,)}}
 
+#:
 DOTEDTUPLETRATIO = {2: 3, 4: 3, 5: 3, 7: 6, 8: 6}
 
-# number of beams:
+#:
 NUMBEROFBEAMS = {'eighth': 1, '16th': 2, '32nd': 3, '64th': 4, '128th': 5}
 
+#:
 TYPEDURATION = {
     'breve': 8,
     'whole': 4,

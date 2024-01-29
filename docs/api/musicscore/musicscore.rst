@@ -22,9 +22,11 @@ musicscore API
    key
    layout
    time
+   tuplet
    metronome
    musictree
    xmlwrapper
+   config
    finalize
    quarterduration
    quantize

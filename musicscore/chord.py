@@ -746,7 +746,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     # public methods
     def add_after_note_xml_objects(self, xml_element):
         """
-        .. deprecated::
+        .. deprecated:: 2.0.2
             This method is deprecated.
             Use :obj:`add_xml_element_after_notes()` instead.
         """
