@@ -106,7 +106,12 @@ Hello World (2)
 ---------------
 
   In this example one note is added to score using part's :obj:`~musicscore.part.Part.add_chord()` method. This method
-  takes care of creating and adding all needed objects. The result is exactly the same as in ``Hello World (1)``
+  takes care of creating and adding all needed objects. The result is exactly the same as in ``Hello World (1)``,
+  except for the updated ``hw2``-related IDs and no ``<staff>1</staff>`` element associated with the note. The latter is
+  not implicitly added by default via :obj:`~musicscore.part.Part.add_chord()`, and is unnecessary for single-part
+  XMLs in general (refer to the `MusicXML documentation for staff elements <1_>`_).
+
+  .. _1: https://www.w3.org/2021/06/musicxml40/musicxml-reference/elements/staff/
 
    #. Create a :obj:`~musicscore.score.Score`
 
