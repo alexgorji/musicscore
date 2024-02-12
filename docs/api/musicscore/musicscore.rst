@@ -31,6 +31,7 @@ musicscore API
    quarterduration
    quantize
    util
+   simpleformat
    exceptions
 
 
