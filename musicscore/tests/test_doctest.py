@@ -45,9 +45,9 @@ class A:
         >>> a.midi = m
         >>> a.midi.value
         40
-        >>> ch = Chord(midis=[60, 50])
+        >>> ch = Chord(quarter_duration=1, midis=[60, 50])
         >>> [m.value for m in ch.midis]
-        [60, 50]
+        [50, 60]
         """
         return self._midi
 

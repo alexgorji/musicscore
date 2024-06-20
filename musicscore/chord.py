@@ -66,7 +66,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     Child type: :obj:`~musicscore.note.Note`
 
-    Chord is a sequence of one or more :obj:`~musicxml.xmlelement.xmlelement.XMLNote` s which occur at the same time in a :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` of a :obj:`~musicxml.xmlelement.xmlelement.XMLPart`.
+    Chord is a sequence of one or more :obj:`~musicxml.xmlelement.xmlelement.XMLNote`'s which occur at the same time in a :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` of a :obj:`~musicxml.xmlelement.xmlelement.XMLPart`.
 
     :param midis: :obj:`~musicscore.midi.Midi`, Midi.value, [Midi, Midi.value], 0 or [0] for a rest.
     :param quarter_duration: int, float, Fraction, :obj:`~musicscore.quarterduration.QuarterDuration` for duration counted in quarters (crotchets). 0 for grace note (or chord).
@@ -512,10 +512,10 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         Set and get ``arpeggio`` value. Permitted values are ``None``, ``normal``, ``up``, ``down``, ``none``
 
         After finalizing:
-          - ``none`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLNonArpeggiate` child to each :obj:`~musicscore.note.Note`\'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
-          - ``normal`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLArpeggiate` child to each :obj:`~musicscore.note.Note`\'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
-          - ``up`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLArpeggiate` child with direction ``up`` to each :obj:`~musicscore.note.Note`\'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
-          - ``down`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLArpeggiate` child with direction ``down`` to each :obj:`~musicscore.note.Note`\'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
+          - ``none`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLNonArpeggiate` child to each :obj:`~musicscore.note.Note`'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
+          - ``normal`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLArpeggiate` child to each :obj:`~musicscore.note.Note`'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
+          - ``up`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLArpeggiate` child with direction ``up`` to each :obj:`~musicscore.note.Note`'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
+          - ``down`` adds an :obj:`~musicxml.xmlelement.xmlelement.XMLArpeggiate` child with direction ``down`` to each :obj:`~musicscore.note.Note`'s :obj:`~musicxml.xmlelement.xmlelement.XMLNotations`
         """
         return self._arpeggio
 
@@ -595,15 +595,15 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
         :return: list of midis
 
-        >>> ch = Chord(midis=60)
+        >>> ch = Chord(quarter_duration=1, midis=60)
         >>> [type(m) for m in ch.midis]
         [<class 'musicscore.midi.Midi'>]
         >>> [m.value for m in ch.midis]
         [60]
-        >>> ch = Chord(midis=[60, Midi(40)])
+        >>> ch = Chord(quarter_duration=1,midis=[60, Midi(40)])
         >>> [m.value for m in ch.midis]
-        [60, 40]
-        >>> Chord([0, 60])
+        [40, 60]
+        >>> Chord(quarter_duration=1, midis=[0, 60])
         Traceback (most recent call last):
         ...
         ValueError: Chord cannot accept a mixed list of midis of rests and pitches or a list of more than one rests.
@@ -808,11 +808,11 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         'Midi', List['Midi'], int, float, List[Union[int, float]], 'GraceChord'],
                         type: Optional[str] = None, *, position: Optional[str] = None):
         """
-        This method is used to add :obj:`~musicscore.midi.Midi`\s or :obj:`~musicscore.chord.GraceChord` object to the private dictionary ``_grace_chords`` with two position kyes ``before`` and ``after``. The midis or grace chords will be positioned in :obj:`~musicscore.measure.Measure` before or after this :obj:`~musicscore.chord.Chord`
+        This method is used to add :obj:`~musicscore.midi.Midi`'s or :obj:`~musicscore.chord.GraceChord` object to the private dictionary ``_grace_chords`` with two position kyes ``before`` and ``after``. The midis or grace chords will be positioned in :obj:`~musicscore.measure.Measure` before or after this :obj:`~musicscore.chord.Chord`
 
         A :obj:`~musicscore.chord.GraceChord` or a :obj:`~musicscore.chord.Chord` with :obj:`~musicscore.chord.Chord.quarter_duration` ``0`` can be added directly to a :obj:`~musicscore.beat.Beat` too.
 
-        :param midis_or_grace_chord: :obj:`~musicscore.midi.Midi`\s or :obj:`~musicscore.chord.GraceChord`
+        :param midis_or_grace_chord: :obj:`~musicscore.midi.Midi`'s or :obj:`~musicscore.chord.GraceChord`
 
         :param type: :obj:`~musicscore.chord.GraceChord.type` value of the :obj:`~musicscore.chord.GraceChord` to be created if ``midis_or_grace_chord`` is a list of midis. It specifices the not type of the grace note. For permitted values see: :obj:`~musicxml.xmlelement.xmlelement.XMLType`
 
@@ -1006,9 +1006,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def add_xml_element_after_notes(self, xml_element: XMLElement) -> XMLElement:
         """
-        This method adds an :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to a list of elements to be added to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` during finalization after adding this :obj:`~musicscore.chord.Chord`\'s :obj:`~musicscore.note.Note`\s to it.
+        This method adds an :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to a list of elements to be added to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` during finalization after adding this :obj:`~musicscore.chord.Chord`'s :obj:`~musicscore.note.Note`'s to it.
 
-        :param: :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to be added after :obj:`~musicxml.xmlelement.xmlelement.XMLNotes`\s to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`
+        :param: :obj:`~musicxml.xmlelement.xmlelement.XMLElement` to be added after :obj:`~musicxml.xmlelement.xmlelement.XMLNotes`'s to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure`
         :return: added :obj:`~musicxml.xmlelement.xmlelement.XMLElement`
 
         """
