@@ -473,6 +473,7 @@ class TestAddChordToPart(TestCase):
         assert ch2.notes[0].xml_staff.value_ == 2
 
     def test_add_chord_with_clef(self):
+        print('huhu')
         path = Path(__file__).stem + '_add_chord_with_clef.xml'
         expected = Path(__file__).stem + '_add_chord_with_clef_expected.xml'
         sf1 = SimpleFormat(midis=[60, (61, 66), 62], quarter_durations=[1, 2, 3])

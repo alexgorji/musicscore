@@ -1,6 +1,6 @@
 from typing import Optional, Union
 
-from musicxml.xmlelement.xmlelement import XMLAccidental
+from musicxml import XMLAccidental
 
 from musicscore.musictree import MusicTree
 from musicscore.xmlwrapper import XMLWrapper

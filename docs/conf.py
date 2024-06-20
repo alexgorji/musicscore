@@ -13,9 +13,10 @@
 from pathlib import Path
 import sys
 
-sys.path.insert(0, Path(__file__).parents[1].resolve().as_posix())
-# sys.path.insert(0, (Path(__file__).parents[1].resolve()/'musicscore').as_posix())
-sys.path.insert(0, (Path(__file__).parents[1].resolve()/'musicxml').as_posix())
+first_path = Path(__file__).parents[1].resolve().as_posix()
+second_path = (Path(__file__).parents[1].resolve()/'musicxml').as_posix()
+sys.path.insert(0, first_path)
+sys.path.insert(0, second_path)
 
 # -- Project information -----------------------------------------------------
 
