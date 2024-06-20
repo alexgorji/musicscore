@@ -30,11 +30,6 @@ class TestUtils(TestCase):
         assert isinstance_as_string(C(4), 'C')
         assert not isinstance_as_string(C(4), 'str')
 
-    def test_create_expected_path(self):
-        path = Path(__file__).parent / 'test_util_diff_xml.xml'
-        expected_path = _create_expected_path(path)
-        assert expected_path == Path(__file__).parent / 'test_util_diff_xml_expected.xml'
-
     def test_diff_xml_no_diff(self):
         path = Path(__file__).parent / 'test_util_diff_xml.xml'
         assert diff_xml(path) == []

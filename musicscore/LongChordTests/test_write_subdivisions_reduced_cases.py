@@ -3,8 +3,10 @@ from pathlib import Path
 
 from musicscore import QuarterDurationIsNotWritable, Part, QuarterDuration, Chord, Score
 from musicscore.exceptions import ChordTestError
-from musicscore.tests.util import IdTestCase
+from musicscore.tests.util import IdTestCase, create_test_xml_paths
 from musicscore.tests.util_subdivisions import generate_subdivsion_test_patterns
+
+path = Path(__file__)
 
 
 class TestWritingSubdivisions(IdTestCase):
@@ -116,7 +118,7 @@ class TestWritingSubdivisions(IdTestCase):
 
 
 class TestWriteScoreWithSubdivisions(IdTestCase):
-    def write_subdivision_to_file(self, subdivision, path=None):
+    def write_subdivision_to_file(self, subdivision):
         score = Score()
         p = score.add_part('p1')
         p.add_measure([1, 4])
@@ -124,9 +126,8 @@ class TestWriteScoreWithSubdivisions(IdTestCase):
             chords = [Chord(60, qd) for qd in [QuarterDuration(x, subdivision) for x in pattern]]
             [ch.add_lyric(x) for ch, x in zip(chords, pattern)]
             [p.add_chord(ch) for ch in chords]
-        if not path:
-            path = Path(__file__).stem + f'_{subdivision}.xml'
-        score.export_xml(path)
+        xml_path = create_test_xml_paths(path, f'{subdivision}')[0]
+        score.export_xml(xml_path)
 
     def test_write_quarter_32nd(self):
         self.write_subdivision_to_file(8)

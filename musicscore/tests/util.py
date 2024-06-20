@@ -79,8 +79,8 @@ def get_xml_elements_diff(el1, el2):
     return DeepDiff(xmltodict.parse(ET.tostring(el1)), xmltodict.parse(ET.tostring(el2)))
 
 
-def get_xml_diff_part(expected, path, file_path):
-    el1 = ET.parse(file_path.parent / path).getroot().find("part[@id='part-1']")
+def get_xml_diff_part(expected, xml_path, file_path):
+    el1 = ET.parse(file_path.parent / xml_path).getroot().find("part[@id='part-1']")
     el2 = ET.parse(file_path.parent / expected).getroot().find("part[@id='part-1']")
     diff = get_xml_elements_diff(el1=el1, el2=el2)
     if diff:
@@ -108,6 +108,11 @@ def generate_path(frame):
     f = str(inspect.getframeinfo(frame).function) + '.xml'
     path = Path(inspect.getframeinfo(frame).filename).parent / f
     return path
+
+
+def create_test_xml_paths(path, test_name):
+    return path.parent.joinpath(f'{path.stem}_{test_name}.xml'), path.parent.joinpath(
+        f'{path.stem}_{test_name}_expected.xml')
 
 
 def create_test_objects(type):

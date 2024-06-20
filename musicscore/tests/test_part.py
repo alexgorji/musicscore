@@ -1,7 +1,7 @@
+import math
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-import math
 import xmltodict
 
 from musicscore import Time, SimpleFormat, BassClef, TrebleClef
@@ -14,7 +14,9 @@ from musicscore.quarterduration import QuarterDuration
 from musicscore.score import Score
 from musicscore.tests.test_metronome import TestCase
 from musicscore.tests.util import get_xml_elements_diff, XMLsDifferException, get_xml_diff_part, \
-    generate_xml_file
+    generate_xml_file, create_test_xml_paths
+
+path = Path(__file__)
 
 
 class TestId(TestCase):
@@ -346,7 +348,7 @@ class TestAddChordToPart(TestCase):
                                                                                                                  None)
 
     def test_add_one_chord_quarter_duration_4(self):
-        xml_file = Path(__file__).stem + '_add_quarter_duration_4.xml'
+        xml_file = create_test_xml_paths(path, 'add_one_chord_quarter_duration_4')[0]
         p = self.score.add_part(id='part1')
         chord = Chord(60, 4)
         p.add_chord(chord)
@@ -473,9 +475,7 @@ class TestAddChordToPart(TestCase):
         assert ch2.notes[0].xml_staff.value_ == 2
 
     def test_add_chord_with_clef(self):
-        print('huhu')
-        path = Path(__file__).stem + '_add_chord_with_clef.xml'
-        expected = Path(__file__).stem + '_add_chord_with_clef_expected.xml'
+        xml_path, expected_path = create_test_xml_paths(path, 'add_chord_with_clef')
         sf1 = SimpleFormat(midis=[60, (61, 66), 62], quarter_durations=[1, 2, 3])
         sf2 = SimpleFormat(midis=[60, (61, 66), 62], quarter_durations=[1, 2, 3])
         sf1.chords[1].clef = BassClef()
@@ -488,18 +488,17 @@ class TestAddChordToPart(TestCase):
             for chord in simpleformat.chords:
                 part.add_chord(chord, staff_number=index + 1)
         part.get_staff(1, 2).clef = TrebleClef()
-        score.export_xml(path)
+        score.export_xml(xml_path)
 
-        get_xml_diff_part(expected, path, Path(__file__))
+        get_xml_diff_part(expected_path, xml_path, Path(__file__))
 
     def test_add_first_chord_with_clef(self):
-        path = Path(__file__).stem + '_add_first_chord_with_clef.xml'
-        expected = Path(__file__).stem + '_add_first_chord_with_clef_expected.xml'
+        xml_path, expected_path = create_test_xml_paths(path, 'add_first_chord_with_clef')
         sf1 = SimpleFormat(midis=[60, (61, 66), 62], quarter_durations=[2, 6, 4])
         sf1.chords[0].clef = BassClef()
         sf1.chords[2].clef = TrebleClef()
-        generate_xml_file(Score(), sf1, path=path)
-        get_xml_diff_part(expected, path, Path(__file__))
+        generate_xml_file(Score(), sf1, path=xml_path)
+        get_xml_diff_part(expected_path, xml_path, Path(__file__))
 
 
 class TestSplitQdAndTime(TestCase):
@@ -659,6 +658,7 @@ class TestSplitQdAndTime(TestCase):
         assert not ch3.all_midis_are_tied_to_next
 
     def test_add_chords_with_partially_tied_notes(self):
+        xml_path, expected_path = create_test_xml_paths(path, 'add_chords_with_partially_tied_notes')
         midis = [[60, 63], [61, 63], [62, 64], [62, 65]]
         quarter_durations = [1, 2, 2, 1]
         chords = [Chord(ms, qd) for ms, qd in zip(midis, quarter_durations)]
@@ -669,14 +669,13 @@ class TestSplitQdAndTime(TestCase):
         p = Part(id='part-1')
         for chord in chords:
             p.add_chord(chord)
-        path = Path(__file__).stem + '_add_chords_with_partially_tied_notes.xml'
-        expected = Path(__file__).stem + '_add_chords_with_partially_tied_notes_expected.xml'
         score = Score()
         score.add_child(p)
-        score.export_xml(path)
-        get_xml_diff_part(expected, path, Path(__file__))
+        score.export_xml(xml_path)
+        get_xml_diff_part(expected_path, xml_path, Path(__file__))
 
     def test_add_chords_with_partially_tied_notes_simplified(self):
+        xml_path, expected_path = create_test_xml_paths(path, 'add_chords_with_partially_tied_notes_simplified')
         midis = [[62, 64], [62, 65]]
         quarter_durations = [3, 1]
         chords = [Chord(ms, qd) for ms, qd in zip(midis, quarter_durations)]
@@ -686,13 +685,11 @@ class TestSplitQdAndTime(TestCase):
         p.add_measure(Time(2, 4))
         for chord in chords:
             p.add_chord(chord)
-        path = Path(__file__).stem + '_add_chords_with_partially_tied_notes_simplified.xml'
-        expected = Path(__file__).stem + '_add_chords_with_partially_tied_notes_simplified_expected.xml'
         score = Score()
         score.add_child(p)
-        score.export_xml(path)
-        el1 = ET.parse(Path(__file__).parent / path).getroot().find("part[@id='part-1']")
-        el2 = ET.parse(Path(__file__).parent / expected).getroot().find("part[@id='part-1']")
+        score.export_xml(xml_path)
+        el1 = ET.parse(Path(__file__).parent / xml_path).getroot().find("part[@id='part-1']")
+        el2 = ET.parse(Path(__file__).parent / expected_path).getroot().find("part[@id='part-1']")
         diff = get_xml_elements_diff(el1=el1, el2=el2)
         if diff:
             raise XMLsDifferException(diff)

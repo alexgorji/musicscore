@@ -5,8 +5,10 @@ from quicktions import Fraction
 from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.score import Score
-from musicscore.tests.util import IdTestCase
+from musicscore.tests.util import IdTestCase, create_test_xml_paths
 from musicscore.tests.util_subdivisions import generate_all_subdivision_patterns
+
+path = Path(__file__)
 
 
 class TestTuplets1(IdTestCase):
@@ -31,7 +33,7 @@ class TestTuplets1(IdTestCase):
                 ch = Chord(60, Fraction(x, subdivision))
                 ch.add_lyric(x)
                 p.add_chord(ch)
-        xml_path = Path(__file__).stem + '_upto_7.xml'
+        xml_path = create_test_xml_paths(path, 'upto_7')[0]
         s.export_xml(xml_path)
 
     def test_tuplets_8(self):
@@ -51,7 +53,7 @@ class TestTuplets1(IdTestCase):
             ch = Chord(60, Fraction(x, subdivision))
             ch.add_lyric(x)
             p.add_chord(ch)
-        xml_path = Path(__file__).stem + '_8.xml'
+        xml_path = create_test_xml_paths(path, '8')[0]
         s.export_xml(xml_path)
 
     def test_tuplets_9(self):
@@ -71,5 +73,5 @@ class TestTuplets1(IdTestCase):
             ch = Chord(60, Fraction(x, subdivision))
             ch.add_lyric(x)
             p.add_chord(ch)
-        xml_path = Path(__file__).stem + '_9.xml'
+        xml_path = create_test_xml_paths(path, '9')[0]
         s.export_xml(xml_path)
