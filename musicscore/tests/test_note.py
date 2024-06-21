@@ -521,7 +521,7 @@ class TestNoteTie(NoteTestCase):
         """
         Test if parent chord of a note is its parent in the musicscore
         """
-        p = Part('p1')
+        p = Part('test_note_parent_chord')
         ch = Chord(60, 1)
         p.add_chord(ch)
         ch.finalize()
