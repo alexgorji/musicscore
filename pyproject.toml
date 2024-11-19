@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "musicscore"
+version = "2.2.0beta"
+description = "Generating musicxml files."
+authors = ["Alex Gorji"]
+readme = "README.rst"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.12"
+musicxml = "^1.4"
+quicktions = "^1.18"
+
+
+[tool.poetry.group.test.dependencies]
+mypy = "^1.13.0"
+pytest-xdist = "^3.6.1"
+pytest-cov = "^6.0.0"
+xmltodict = "^0.14.2"
+deepdiff = "^8.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
