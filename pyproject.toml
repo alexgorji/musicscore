@@ -6,7 +6,7 @@ authors = ["Alex Gorji"]
 readme = "README.rst"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.12"
+python = ">=3.9,<3.13"
 musicxml = "^1.4"
 quicktions = "^1.18"
 
