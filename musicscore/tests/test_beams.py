@@ -93,28 +93,25 @@ class TestBeams16th(TestCase):
         self.beat._update_chord_beams()
         assert [ch.beams for ch in self.chords] == [{}, {}, {}, {}]
 
-    @skip
     def test_break_all_beams(self):
         for ch in self.chords:
             ch.break_beam()
         self.beat._update_chord_beams()
         assert [ch.beams for ch in self.chords] == [{}, {}, {}, {}]
 
-    @skip
+
     def test_break_last_beam(self):
         self.chords[-1].break_beam()
         self.beat._update_chord_beams()
         assert [ch.beams for ch in self.chords] == [{1: 'begin', 2: 'begin'}, {1: 'continue', 2: 'continue'},
                                                     {1: 'end', 2: 'end'}, {}]
 
-    @skip
     def test_break_third_beam(self):
         self.chords[2].break_beam()
         self.beat._update_chord_beams()
         assert [ch.beams for ch in self.chords] == [{1: 'begin', 2: 'begin'}, {1: 'end', 2: 'end'},
                                                     {1: 'begin', 2: 'begin'}, {1: 'end', 2: 'end'}]
 
-    @skip
     def test_break_third_and_fourth_beam(self):
         self.chords[2].break_beam()
         self.chords[3].break_beam()

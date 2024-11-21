@@ -14,7 +14,7 @@ from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
 from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
 from musicscore.tuplet import Tuplet
-from musicscore.util import lcm
+from musicscore.util import lcm, split_list
 
 __all__ = ['Beat', 'beam_chord_group', 'get_chord_group_subdivision']
 
@@ -444,29 +444,38 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
     def _update_chord_beams(self):
         chords = self.get_chords()
         if chords:
+            ## update types
             for ch in chords:
                 if ch.type is None:
                     self._update_chord_types()
+            ## group chords
             chord_groups = None
+            continue_eighth_beam = False
+            # group inside beat
             if self.get_subdivision() == 8 and self.quarter_duration == 1:
                 chord_groups = _group_chords(chords, [1 / 2, 1 / 2])
-                if chord_groups:
-                    for group in chord_groups:
-                        if len(group) == 1:
-                            chord_groups = None
-                            break
-            # elif self.get_subdivision() == 9 and self.quarter_duration == 1:
-            #     chord_groups = _group_chords(chords, [Fraction(1, 3), Fraction(1, 3), Fraction(1, 3)])
-            if chord_groups:
-                for index, group in enumerate(chord_groups):
-                    beam_chord_group(group)
-                    if index < len(chord_groups) - 1:
+                if chord_groups and not 1 in {len(group) for group in chord_groups}:
+                    continue_eighth_beam = True
+                else:
+                    chord_groups = None
+            if not chord_groups:
+                chord_groups = [chords]
+            # break beams
+            broken_chord_groups = []
+            for group in chord_groups:
+                split_indices = [index for index, chord in enumerate(group) if chord.broken_beam]
+                for broken_group in split_list(group, split_indices):
+                    broken_chord_groups.append(broken_group)
+            # create beams
+            for group in broken_chord_groups:
+                beam_chord_group(group)
+            # continue eighth beam
+            if continue_eighth_beam and 1 not in {len(group) for group in broken_chord_groups}:
+                for index, group in enumerate(broken_chord_groups):
+                    if index < len(broken_chord_groups) - 1:
                         group[-1].beams[1] = 'continue'
                     if index > 0:
                         group[0].beams[1] = 'continue'
-
-            else:
-                beam_chord_group(chord_group=chords)
 
     def _remove_zero_quarter_durations(self):
         def _get_next_chord(chord):

@@ -72,7 +72,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     :param quarter_duration: int, float, Fraction, :obj:`~musicscore.quarterduration.QuarterDuration` for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
     _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef', 'metronome', 'arpeggio',
-                   'type', 'number_of_dots', 'tuplet', 'beams'}
+                   'type', 'number_of_dots', 'tuplet', 'beams', 'broken_beam'}
 
     def __init__(self, midis: Union[List[Union[float, int]], List[Midi], float, int, Midi],
                  quarter_duration: Union[float, int, 'Fraction', QuarterDuration], **kwargs):
@@ -93,10 +93,11 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._grace_chords = {'before': [], 'after': []}
         self._arpeggio = None
         self._after_notes_xml_elements = []
+        self._beams = {}
+        self._broken_beam = False
         self._type = None
         self._number_of_dots = None
         self._tuplet = None
-        self._beams = {}
         super().__init__(quarter_duration=quarter_duration)
         self._set_midis(midis)
         self.split = False
@@ -538,6 +539,17 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     @beams.setter
     def beams(self, val):
         self._beams = val
+
+    @property
+    def broken_beam(self):
+        """
+        If true the beam will be broken at this position
+        """
+        return self._broken_beam
+    
+    @broken_beam.setter
+    def broken_beam(self, val):
+        self._broken_beam = val
 
     @property
     def clef(self) -> 'Clef':
@@ -1014,6 +1026,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
         self._after_notes_xml_elements.append(xml_element)
         return xml_element
+
+    def break_beam(self):
+        self.broken_beam = True
 
     def check_number_of_beams(self):
         if self.type is None:

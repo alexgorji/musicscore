@@ -378,6 +378,16 @@ class TestTreeChord(ChordTestCase):
         with self.assertRaises(TypeError):
             ch.clef = 'bla'
 
+    def test_break_beam(self):
+        ch = Chord(60, 2)
+        self.assertFalse(ch.broken_beam)
+        ch.broken_beam = True
+        self.assertTrue(ch.broken_beam)
+        ch = Chord(60, 2)
+        self.assertFalse(ch.broken_beam)
+        ch.break_beam()
+        self.assertTrue(ch.broken_beam)
+
     @skip
     def test_percussion_notation(self):
         self.fail('Incomplete')
