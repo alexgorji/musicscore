@@ -9,7 +9,7 @@ from musicscore.score import Score
 from musicscore.tests.util import diff_xml, _create_expected_path, create_test_objects
 from musicscore.util import lcm, isinstance_as_string, XML_DYNAMIC_CLASSES, XML_ARTICULATION_CLASSES, \
     XML_ORNAMENT_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, XML_TECHNICAL_CLASSES, XML_OTHER_NOTATIONS, \
-    XML_DIRECTION_TYPE_CLASSES, XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, slur_chords, wedge_chords, \
+    XML_DIRECTION_TYPE_CLASSES, XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, slur_chords, split_list, wedge_chords, \
     trill_chords, bracket_chords, octave_chords
 from musicxml import XMLTrillMark, XMLWavyLine, XMLOctaveShift
 
@@ -128,6 +128,10 @@ class TestUtils(TestCase):
             assert ch.get_x(XMLOctaveShift)[0].size == 15
             assert ch.get_x(XMLOctaveShift)[0].number == 2
 
+    def test_split_list(self):
+        original_list = [1, 2, 3, 4, 5, 6]
+        split_indices = [2, 5]
+        self.assertListEqual(split_list(original_list, split_indices), [[1, 2], [3, 4, 5], [6]])
 
 class TestTestObjects(TestCase):
 
@@ -166,3 +170,4 @@ class TestTestObjects(TestCase):
         assert len(XML_DYNAMIC_CLASSES) == len(test_object)
         for obj in test_object:
             assert obj.__class__ in XML_DYNAMIC_CLASSES
+

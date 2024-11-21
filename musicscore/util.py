@@ -283,3 +283,12 @@ def _generate_lyrics(lyrics, number=1, show_number=False, mode='list', **kwargs)
 
         output[0] = first
     return output
+
+def split_list(original_list, split_indices):
+    if not split_indices:
+        return [original_list]
+    
+    if split_indices[0] == 0:
+        split_indices = split_indices[1:]
+
+    return [original_list[i:j] for i, j in zip([0] + split_indices, split_indices + [None])]
