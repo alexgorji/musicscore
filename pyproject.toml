@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "musicscore"
-version = "2.2.1beta"
+version = "2.2.2beta"
 description = "Generating musicxml files."
 authors = ["Alex Gorji <aligorji@hotmail.com>"]
 license = "MIT"
