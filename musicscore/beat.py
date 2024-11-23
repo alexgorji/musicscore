@@ -393,7 +393,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     ch.type = ch.quarter_duration.get_type()
                 except QuarterDurationIsNotWritable as err:
                     raise QuarterDurationIsNotWritable(
-                        f'Chord {ch.get_coordinates_in_tree()} with offset {ch.offset}: {err} Consider setting type, number_of_dots and tuplet properties of the chord manually or splitting it into writable chords.')
+                        f'Chord {ch.get_position_in_tree()} with offset {ch.offset}: {err} Consider setting type, number_of_dots and tuplet properties of the chord manually or splitting it into writable chords.')
 
     def _update_chord_number_of_dots(self):
         for ch in self.get_chords():

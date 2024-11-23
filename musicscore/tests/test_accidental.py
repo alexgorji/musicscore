@@ -119,7 +119,7 @@ class TestAccidental(TestCase):
 
     def test_get_leaves(self):
         a = Accidental()
-        assert a.get_leaves() == []
+        assert a.get_leaves() == [a]
 
     def test_not_implemented_inherited_methods(self):
         a = Accidental()

@@ -2,7 +2,7 @@ from typing import List
 
 from musicscore.exceptions import MusicTreeTypeError
 from musicscore.util import isinstance_as_string
-from tree.tree import Tree
+from verysimpletree.tree import Tree
 
 __all__ = ['MusicTree']
 
