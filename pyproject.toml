@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "musicscore"
-version = "2.2.2beta"
+version = "2.2.2"
 description = "Generating musicxml files."
 authors = ["Alex Gorji <aligorji@hotmail.com>"]
 license = "MIT"
@@ -24,6 +24,11 @@ pytest-xdist = "^3.6.1"
 pytest-cov = "^6.0.0"
 xmltodict = "^0.14.2"
 deepdiff = "^8.0.1"
+
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
 
 [build-system]
 requires = ["poetry-core"]
