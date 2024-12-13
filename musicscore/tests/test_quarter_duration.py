@@ -134,3 +134,8 @@ class TestQuarterDuration(TestCase):
                 QuarterDuration(value).get_type()
             with self.assertRaises(QuarterDurationIsNotWritable):
                 QuarterDuration(value).get_number_of_dots()
+
+    def test_set_value(self):
+        qt = QuarterDuration(2)
+        qt.value = 3
+        self.assertEqual(qt.value, 3)

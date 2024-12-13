@@ -183,6 +183,11 @@ class QuarterDuration(numbers.Rational):
                 self._value = Fraction(*val).limit_denominator(1000)
             else:
                 raise ValueError
+        else:
+            try:
+                self._value = Fraction(val).limit_denominator(1000)
+            except TypeError:
+                raise TypeError('Wrong type for QuarterDuration.value')
 
     def as_integer_ratio(self):
         """

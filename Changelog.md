@@ -59,3 +59,6 @@ Tuplets upto 15 and also 64th and 128th are implemented.
 # Version 2.3.0
 Use python native library fractions instead of quicktions package
 
+# Version 2.3.1
+Buf fix: QuarterDurtion.value accepts also int and float. A TypeError is raised if value cannot be set.
+
