@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from quicktions import Fraction
+from fractions import Fraction
 
 from musicscore import Part, Time
 from musicscore.chord import Chord

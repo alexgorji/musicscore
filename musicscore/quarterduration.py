@@ -1,5 +1,5 @@
 from typing import List, Union, Optional
-from quicktions import Fraction
+from fractions import Fraction
 import numbers
 
 __all__ = ['QuarterDuration', 'QuarterDurationMixin']
@@ -10,7 +10,7 @@ from musicscore.exceptions import QuarterDurationIsNotWritable
 
 class QuarterDuration(numbers.Rational):
     """
-    A Class specifically designed for durations measured in quarters. The core of this class is a value of type ''quicktions.Fraction'' with a
+    A Class specifically designed for durations measured in quarters. The core of this class is a value of type ''fractions.Fraction'' with a
     denominator limit of 1000, thus it can manage conversion of floats to fractions without usual inaccuracies of quintuples etc. See
     value property for more information.
     QuarterDuration has all needed magic methods for numeral comparison and conversion.
@@ -155,7 +155,7 @@ class QuarterDuration(numbers.Rational):
     def value(self):
         """
         :return: QuarterDuration's value
-        :rtype: quicktions.Fraction with limit_denominator(1000)
+        :rtype: fractions.Fraction with limit_denominator(1000)
 
         >>> QuarterDuration(3, 7).value
         Fraction(3, 7)
@@ -393,7 +393,7 @@ class QuarterDurationMixin:
         """
         Set and get the duration measured in quarters.
 
-        Setting value can be of types ``int``, ``float``, ``quicktions.Fraction``, :obj:`~musicscore.quarterduration.QuarterDuration`
+        Setting value can be of types ``int``, ``float``, ``fractions.Fraction``, :obj:`~musicscore.quarterduration.QuarterDuration`
         """
         return self._quarter_duration
 

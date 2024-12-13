@@ -1,7 +1,7 @@
 from typing import List
 
 from math import trunc
-from quicktions import Fraction
+from fractions import Fraction
 
 from musicscore.chord import _split_copy, _group_chords, Chord
 from musicscore.config import SPLITTABLES, GENERALSPLITTABLES, SPLITTEXCEPTIONS

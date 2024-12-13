@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch, Mock
 
-from quicktions import Fraction
+from fractions import Fraction
 
 from musicscore.chord import Chord
 from musicscore.exceptions import NoteMidiHasNoParentChordError

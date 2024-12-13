@@ -56,3 +56,6 @@ Chord.check_printed_duration and check_number_of_beams added (for testing reason
 
 Tuplets upto 15 and also 64th and 128th are implemented. 
 
+# Version 2.3.0
+Use python native library fractions instead of quicktions package
+

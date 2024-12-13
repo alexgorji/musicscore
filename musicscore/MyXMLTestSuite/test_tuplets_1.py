@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from quicktions import Fraction
+from fractions import Fraction
 
 from musicscore.chord import Chord
 from musicscore.part import Part

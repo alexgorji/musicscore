@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "musicscore"
-version = "2.2.2"
+version = "2.3.0"
 description = "Generating musicxml files."
 authors = ["Alex Gorji <aligorji@hotmail.com>"]
 license = "MIT"
@@ -15,7 +15,6 @@ classifiers = [
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
 musicxml = "^1.4.2"
-quicktions = "^1.18"
 
 
 [tool.poetry.group.test.dependencies]

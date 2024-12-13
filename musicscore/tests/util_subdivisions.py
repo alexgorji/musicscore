@@ -1,7 +1,7 @@
 import itertools
 import math
 
-from quicktions import Fraction
+from fractions import Fraction
 
 
 def _permute(l):

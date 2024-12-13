@@ -2,7 +2,7 @@ import copy
 from unittest import skip, TestCase
 from unittest.mock import Mock
 
-from quicktions import Fraction
+from fractions import Fraction
 
 from musicscore import BassClef, Score, Part
 from musicscore.accidental import Accidental
