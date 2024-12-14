@@ -7,7 +7,9 @@ class Lyrics:
         self._word_groups = word_groups
         self._number = number
         self._show_number = show_number
-        self._xml_lyrics = _generate_lyrics(word_groups, number=number, show_number=show_number, **kwargs)
+        self._xml_lyrics = _generate_lyrics(
+            word_groups, number=number, show_number=show_number, **kwargs
+        )
 
     @property
     def number(self):
@@ -28,7 +30,8 @@ class Lyrics:
     def add_to_chords(self, chords):
         if len(chords) != len(self.xml_lyrics):
             raise LyricsWrongNumberOfChordsError(
-                f'number of chords: {len(chords)}, number of xml_lyrics: {len(self.xml_lyrics)}')
+                f"number of chords: {len(chords)}, number of xml_lyrics: {len(self.xml_lyrics)}"
+            )
 
         for ch, xl in zip(chords, self.xml_lyrics):
             if xl:

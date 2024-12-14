@@ -18,6 +18,3 @@ from musicscore.staff import *
 from musicscore.time import *
 from musicscore.voice import *
 from musicscore.simpleformat import *
-
-
-

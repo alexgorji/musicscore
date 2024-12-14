@@ -4,11 +4,11 @@ from musicxml.xmlelement.xmlelement import XMLKey
 
 from musicscore.xmlwrapper import XMLWrapper
 
-__all__ = ['Key']
+__all__ = ["Key"]
 
 
 class Key(XMLWrapper):
-    _ATTRIBUTES = {'fifths', 'show'}
+    _ATTRIBUTES = {"fifths", "show"}
     XMLClass = XMLKey
 
     def __init__(self, fifths: int = 0, show: bool = True, *args, **kwargs):

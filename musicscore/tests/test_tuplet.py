@@ -7,11 +7,17 @@ from musicxml import XMLTimeModification
 
 class TestTuplet(TestCase):
     def test_init(self):
-        t = Tuplet(actual_notes=3, normal_notes=2, normal_type='eighth', bracket_type='start', bracket_number=1)
+        t = Tuplet(
+            actual_notes=3,
+            normal_notes=2,
+            normal_type="eighth",
+            bracket_type="start",
+            bracket_number=1,
+        )
         assert t.actual_notes == 3
         assert t.normal_notes == 2
-        assert t.normal_type == 'eighth'
-        assert t.bracket_type == 'start'
+        assert t.normal_type == "eighth"
+        assert t.bracket_type == "start"
         assert t.bracket_number == 1
 
     def test_property_exceptions(self):
@@ -25,7 +31,7 @@ class TestTuplet(TestCase):
         with self.assertRaises(TypeError):
             t.actual_notes = None
         with self.assertRaises(TypeError):
-            t.actual_notes = '1'
+            t.actual_notes = "1"
 
         with self.assertRaises(ValueError):
             t.normal_notes = -1
@@ -35,26 +41,26 @@ class TestTuplet(TestCase):
             t.normal_notes = 1
 
         with self.assertRaises(TypeError):
-            t.normal_notes = '1'
+            t.normal_notes = "1"
 
         with self.assertRaises(ValueError):
-            t.normal_type = 'bla'
+            t.normal_type = "bla"
 
         with self.assertRaises(ValueError):
-            t.bracket_type = 'bla'
+            t.bracket_type = "bla"
 
         with self.assertRaises(ValueError):
             t.bracket_number = -1
         with self.assertRaises(ValueError):
             t.bracket_number = 0
         with self.assertRaises(TypeError):
-            t.bracket_number = '1'
+            t.bracket_number = "1"
 
     def test_default_values(self):
         t = Tuplet()
         assert t.actual_notes == 3
         assert t.normal_notes == 2
-        assert t.normal_type == 'eighth'
+        assert t.normal_type == "eighth"
         assert t.bracket_type is None
         assert t.bracket_number is None
 
@@ -70,9 +76,9 @@ class TestTuplet(TestCase):
         t = Tuplet()
         assert t.get_xml_tuplet() is None
         assert t.bracket_number is None
-        t.bracket_type = 'start'
+        t.bracket_type = "start"
         assert t.bracket_number == 1
-        assert t.get_xml_tuplet().bracket == 'yes'
+        assert t.get_xml_tuplet().bracket == "yes"
         assert t.get_xml_tuplet().type == t.bracket_type
         assert t.get_xml_tuplet().number == 1
         t.bracket_number = 2
@@ -88,6 +94,6 @@ class TestTuplet(TestCase):
 
     def test_tuplet_automatic_type(self):
         t = Tuplet(quarter_duration=2)
-        assert t.normal_type == 'quarter'
+        assert t.normal_type == "quarter"
         t.quarter_duration = 1 / 2
-        assert t.normal_type == '16th'
+        assert t.normal_type == "16th"

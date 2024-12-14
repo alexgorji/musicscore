@@ -12,7 +12,7 @@ class ClassHasNoMusicXMLEquivalentError(MusicTreeException, AttributeError):
 
 class AddChordError(MusicTreeException):
     def __init__(self):
-        msg = f"Use Part.add_chord() instead!"
+        msg = "Use Part.add_chord() instead!"
         super().__init__(msg)
 
 
@@ -20,7 +20,7 @@ class AlreadyFinalizedError(MusicTreeException):
     def __init__(self, object_, method_=None):
         msg = f"{object_.__class__.__name__} is already finalized."
         if method_:
-            msg += f' Method {object_.__class__.__name__}.{method_}() cannot be called after finalization.'
+            msg += f" Method {object_.__class__.__name__}.{method_}() cannot be called after finalization."
         super().__init__(msg)
 
 
@@ -126,6 +126,7 @@ class ChordTypeNotSetError(ChordException):
 
 # GraceChord Exceptions
 
+
 class GraceChordException(ChordException):
     pass
 
@@ -140,6 +141,7 @@ class GraceChordCannotSetQuarterDurationError(GraceChordException):
 
 # Id exceptions (see Part)
 
+
 class IdException(MusicTreeException):
     pass
 
@@ -153,6 +155,7 @@ class IdWithSameValueExistsError(IdException):
 
 
 # Lyrics exceptions
+
 
 class LyricsException(MusicTreeException):
     pass
@@ -221,6 +224,7 @@ class QuarterDurationIsNotWritable(QuarterDurationException):
 
 # Rest exceptions
 
+
 class RestException(MusicTreeException):
     pass
 
@@ -270,6 +274,7 @@ class TimeActualSignaturesNotValidError(TimeException):
 
 
 # Tuplet exceptions
+
 
 class TupletException(MusicTreeException):
     pass

@@ -3,13 +3,32 @@ from typing import Optional
 from musicscore.exceptions import TupletNormalTypeError
 from musicxml import XMLTimeModification, XMLTuplet
 
-TUPLETACTUALTONORMALNOTES = {3: 2, 5: 4, 6: 4, 7: 4, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8}
-TUPLETNORMALTYPES = {8: '32nd', 4: '16th', 2: 'eighth', 1: 'quarter', 0.5: 'half'}
+TUPLETACTUALTONORMALNOTES = {
+    3: 2,
+    5: 4,
+    6: 4,
+    7: 4,
+    9: 8,
+    10: 8,
+    11: 8,
+    12: 8,
+    13: 8,
+    14: 8,
+    15: 8,
+}
+TUPLETNORMALTYPES = {8: "32nd", 4: "16th", 2: "eighth", 1: "quarter", 0.5: "half"}
 
 
 class Tuplet:
-    def __init__(self, actual_notes=3, normal_notes=None, normal_type=None, bracket_type=None, bracket_number=None,
-                 quarter_duration=1):
+    def __init__(
+        self,
+        actual_notes=3,
+        normal_notes=None,
+        normal_type=None,
+        bracket_type=None,
+        bracket_number=None,
+        quarter_duration=1,
+    ):
         self._actual_notes = None
         self._normal_notes = None
         self._normal_type = None
@@ -57,15 +76,31 @@ class Tuplet:
                 return TUPLETNORMALTYPES[self.normal_notes / self.quarter_duration]
             except KeyError:
                 raise TupletNormalTypeError(
-                    f'Cannot find normal type of normal_notes {self.normal_notes} with quarter_duration {self.quarter_duration}. You can set normal_type manually.')
+                    f"Cannot find normal type of normal_notes {self.normal_notes} with quarter_duration {self.quarter_duration}. You can set normal_type manually."
+                )
         return self._normal_type
 
     @normal_type.setter
     def normal_type(self, val):
-        permitted = [None, '1024th', '512th', '256th', '128th', '64th', '32nd', '16th', 'eighth', 'quarter', 'half',
-                     'whole', 'breve', 'long', 'maxima']
+        permitted = [
+            None,
+            "1024th",
+            "512th",
+            "256th",
+            "128th",
+            "64th",
+            "32nd",
+            "16th",
+            "eighth",
+            "quarter",
+            "half",
+            "whole",
+            "breve",
+            "long",
+            "maxima",
+        ]
         if val not in permitted:
-            raise ValueError(f'Permitted type values are: {permitted}')
+            raise ValueError(f"Permitted type values are: {permitted}")
         self._normal_type = val
 
     @property
@@ -74,9 +109,9 @@ class Tuplet:
 
     @bracket_type.setter
     def bracket_type(self, val):
-        permitted = [None, 'start', 'stop']
+        permitted = [None, "start", "stop"]
         if val not in permitted:
-            raise ValueError(f'Permitted bracket_type values are: {permitted}')
+            raise ValueError(f"Permitted bracket_type values are: {permitted}")
         self._bracket_type = val
 
     @property
@@ -98,7 +133,7 @@ class Tuplet:
     def ratio(self):
         return (self.actual_notes, self.normal_notes)
 
-    def get_xml_time_modification(self) -> 'XMLTimeModification':
+    def get_xml_time_modification(self) -> "XMLTimeModification":
         output = XMLTimeModification()
         output.xml_actual_notes = self.actual_notes
         output.xml_normal_notes = self.normal_notes
@@ -108,6 +143,6 @@ class Tuplet:
     def get_xml_tuplet(self) -> XMLTuplet:
         if self.bracket_type:
             output = XMLTuplet(type=self.bracket_type, number=self.bracket_number)
-            if self.bracket_type == 'start':
-                output.bracket = 'yes'
+            if self.bracket_type == "start":
+                output.bracket = "yes"
             return output

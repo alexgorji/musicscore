@@ -1,4 +1,7 @@
-from musicscore.exceptions import AlreadyFinalizedError, ClassHasNoMusicXMLEquivalentError
+from musicscore.exceptions import (
+    AlreadyFinalizedError,
+    ClassHasNoMusicXMLEquivalentError,
+)
 
 
 class FinalizeMixin:
@@ -42,4 +45,5 @@ class FinalizeMixin:
             return super().to_string(*args, **kwargs)
         except AttributeError:
             raise ClassHasNoMusicXMLEquivalentError(
-                f'{self.__class__} has no direct equivalent in MusicXML and cannot be converted to string.')
+                f"{self.__class__} has no direct equivalent in MusicXML and cannot be converted to string."
+            )

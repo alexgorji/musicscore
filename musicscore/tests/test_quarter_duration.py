@@ -36,13 +36,16 @@ class TestQuarterDuration(TestCase):
         assert QuarterDuration(6, 5) == 1.2
         assert QuarterDuration(1.2) == QuarterDuration(6, 5)
         assert QuarterDuration(Fraction(6 / 5)) == 6 / 5
-        assert [QuarterDuration(7, 20), [QuarterDuration(3, 2), QuarterDuration(1)], QuarterDuration(23, 20)] == [0.35,
-                                                                                                                  [1.5,
-                                                                                                                   1],
-                                                                                                                  1.15]
-        assert [QuarterDuration(0.35), [QuarterDuration(1.5), QuarterDuration(1)], QuarterDuration(1.15)] == [0.35,
-                                                                                                              [1.5, 1],
-                                                                                                              1.15]
+        assert [
+            QuarterDuration(7, 20),
+            [QuarterDuration(3, 2), QuarterDuration(1)],
+            QuarterDuration(23, 20),
+        ] == [0.35, [1.5, 1], 1.15]
+        assert [
+            QuarterDuration(0.35),
+            [QuarterDuration(1.5), QuarterDuration(1)],
+            QuarterDuration(1.15),
+        ] == [0.35, [1.5, 1], 1.15]
 
     def test_add_etc(self):
         assert isinstance(1 / 6 + QuarterDuration(1, 6), QuarterDuration)
@@ -65,23 +68,30 @@ class TestQuarterDuration(TestCase):
         """
         Test if _get_beatwise_sections can split quarter duration to writable sections.
         """
-        assert QuarterDuration(4)._get_beatwise_sections(beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [[4], None]
-        assert QuarterDuration(3.5)._get_beatwise_sections(beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [[3, 0.5],
-                                                                                                           None]
-        assert QuarterDuration(3.5)._get_beatwise_sections(offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [
-            [0.5, 3], None]
-        assert QuarterDuration(4)._get_beatwise_sections(offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)]) == [
-            [0.5, 3], 0.5]
-        assert QuarterDuration(4)._get_beatwise_sections(offset=0.25, beats=[Beat(1), Beat(1), Beat(1)]) == [[0.75, 2],
-                                                                                                             1.25]
-        assert QuarterDuration(4)._get_beatwise_sections(offset=0.5,
-                                                         beats=[Beat(1), Beat(1.5), Beat(1.5), Beat(0.5)]) == [
-                   [0.5, 3, 0.5],
-                   None]
-        assert QuarterDuration(3)._get_beatwise_sections(offset=0.5, beats=[Beat(1), Beat(1), Beat(0.5), Beat(0.5)]) == [
-            [0.5, 2], 0.5]
-        assert QuarterDuration(4)._get_beatwise_sections(offset=0.15, beats=[Beat(0.5), Beat(1.5), Beat(1)]) == [
-            [0.35, 1.5, 1], 1.15]
+        assert QuarterDuration(4)._get_beatwise_sections(
+            beats=[Beat(1), Beat(1), Beat(1), Beat(1)]
+        ) == [[4], None]
+        assert QuarterDuration(3.5)._get_beatwise_sections(
+            beats=[Beat(1), Beat(1), Beat(1), Beat(1)]
+        ) == [[3, 0.5], None]
+        assert QuarterDuration(3.5)._get_beatwise_sections(
+            offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)]
+        ) == [[0.5, 3], None]
+        assert QuarterDuration(4)._get_beatwise_sections(
+            offset=0.5, beats=[Beat(1), Beat(1), Beat(1), Beat(1)]
+        ) == [[0.5, 3], 0.5]
+        assert QuarterDuration(4)._get_beatwise_sections(
+            offset=0.25, beats=[Beat(1), Beat(1), Beat(1)]
+        ) == [[0.75, 2], 1.25]
+        assert QuarterDuration(4)._get_beatwise_sections(
+            offset=0.5, beats=[Beat(1), Beat(1.5), Beat(1.5), Beat(0.5)]
+        ) == [[0.5, 3, 0.5], None]
+        assert QuarterDuration(3)._get_beatwise_sections(
+            offset=0.5, beats=[Beat(1), Beat(1), Beat(0.5), Beat(0.5)]
+        ) == [[0.5, 2], 0.5]
+        assert QuarterDuration(4)._get_beatwise_sections(
+            offset=0.15, beats=[Beat(0.5), Beat(1.5), Beat(1)]
+        ) == [[0.35, 1.5, 1], 1.15]
 
     def test_copy_quarter_duration(self):
         qd = QuarterDuration(3, 4)
@@ -97,26 +107,26 @@ class TestQuarterDuration(TestCase):
         assert _check_quarter_duration_value(QuarterDuration(1, 3))
 
     def test_get_type_and_dots(self):
-        assert QuarterDuration(1)._get_type_and_dots() == ('quarter', 0)
-        assert QuarterDuration(1.5)._get_type_and_dots() == ('quarter', 1)
-        assert QuarterDuration(1.75)._get_type_and_dots() == ('quarter', 2)
+        assert QuarterDuration(1)._get_type_and_dots() == ("quarter", 0)
+        assert QuarterDuration(1.5)._get_type_and_dots() == ("quarter", 1)
+        assert QuarterDuration(1.75)._get_type_and_dots() == ("quarter", 2)
 
-        assert QuarterDuration(0.75)._get_type_and_dots() == ('eighth', 1)
-        assert QuarterDuration(2 + 2 / 2 + 2 / 4)._get_type_and_dots() == ('half', 2)
+        assert QuarterDuration(0.75)._get_type_and_dots() == ("eighth", 1)
+        assert QuarterDuration(2 + 2 / 2 + 2 / 4)._get_type_and_dots() == ("half", 2)
 
-        assert QuarterDuration(1 / 3)._get_type_and_dots() == ('eighth', 0)
-        assert QuarterDuration(2 / 3)._get_type_and_dots() == ('quarter', 0)
+        assert QuarterDuration(1 / 3)._get_type_and_dots() == ("eighth", 0)
+        assert QuarterDuration(2 / 3)._get_type_and_dots() == ("quarter", 0)
 
     def test_get_type(self):
-        assert QuarterDuration(1).get_type() == 'quarter'
-        assert QuarterDuration(1.5).get_type() == 'quarter'
-        assert QuarterDuration(1.75).get_type() == 'quarter'
+        assert QuarterDuration(1).get_type() == "quarter"
+        assert QuarterDuration(1.5).get_type() == "quarter"
+        assert QuarterDuration(1.75).get_type() == "quarter"
 
-        assert QuarterDuration(0.75).get_type() == 'eighth'
-        assert QuarterDuration(2 + 2 / 2 + 2 / 4).get_type() == 'half'
+        assert QuarterDuration(0.75).get_type() == "eighth"
+        assert QuarterDuration(2 + 2 / 2 + 2 / 4).get_type() == "half"
 
-        assert QuarterDuration(1 / 3).get_type() == 'eighth'
-        assert QuarterDuration(2 / 3).get_type() == 'quarter'
+        assert QuarterDuration(1 / 3).get_type() == "eighth"
+        assert QuarterDuration(2 / 3).get_type() == "quarter"
 
     def test_get_dots(self):
         assert QuarterDuration(1).get_number_of_dots() == 0

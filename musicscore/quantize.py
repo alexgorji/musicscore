@@ -5,7 +5,7 @@ from musicscore.util import isinstance_as_string
 
 
 class QuantizeMixin:
-    _ATTRIBUTES = {'get_quantized'}
+    _ATTRIBUTES = {"get_quantized"}
 
     def __init__(self, get_quantized=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -14,7 +14,7 @@ class QuantizeMixin:
         self.get_quantized = get_quantized
 
     def _get_beat_quarter_duration(self):
-        if isinstance_as_string(self, 'Beat'):
+        if isinstance_as_string(self, "Beat"):
             beat_quarter_duration = self.quarter_duration
         else:
             beat_quarter_duration = QuarterDuration(1)
@@ -44,7 +44,9 @@ class QuantizeMixin:
     def get_quantized(self, val):
         self._get_quantized = val
 
-    def get_possible_subdivisions(self, beat_quarter_duration: Optional[QuarterDuration] = None) -> List[int]:
+    def get_possible_subdivisions(
+        self, beat_quarter_duration: Optional[QuarterDuration] = None
+    ) -> List[int]:
         """
         :obj:`~musicscore.quantize.QuantizeMixin` method
 
@@ -68,13 +70,19 @@ class QuantizeMixin:
         if beat_quarter_duration is None:
             beat_quarter_duration = self._get_beat_quarter_duration()
         subdivisions = self._possible_subdivisions.get(beat_quarter_duration)
-        if subdivisions is None and self.up is not None and self.up.get_possible_subdivisions(
-                beat_quarter_duration) is not None:
+        if (
+            subdivisions is None
+            and self.up is not None
+            and self.up.get_possible_subdivisions(beat_quarter_duration) is not None
+        ):
             subdivisions = self.up.get_possible_subdivisions(beat_quarter_duration)[:]
         return subdivisions
 
-    def set_possible_subdivisions(self, subdivisions: list[int],
-                                  beat_quarter_duration: Optional[QuarterDuration] = None) -> None:
+    def set_possible_subdivisions(
+        self,
+        subdivisions: list[int],
+        beat_quarter_duration: Optional[QuarterDuration] = None,
+    ) -> None:
         """
         :obj:`~musicscore.quantize.QuantizeMixin` method
 
@@ -88,9 +96,13 @@ class QuantizeMixin:
         """
         if beat_quarter_duration is None:
             beat_quarter_duration = self._get_beat_quarter_duration()
-        elif isinstance_as_string(self, 'Beat') and beat_quarter_duration != self.quarter_duration:
+        elif (
+            isinstance_as_string(self, "Beat")
+            and beat_quarter_duration != self.quarter_duration
+        ):
             raise ValueError(
-                f"beat_quarter_duration '{beat_quarter_duration}' must be None or equal to the beat quarter_duration '{self.quarter_duration}'")
+                f"beat_quarter_duration '{beat_quarter_duration}' must be None or equal to the beat quarter_duration '{self.quarter_duration}'"
+            )
 
         if not isinstance(beat_quarter_duration, QuarterDuration):
             beat_quarter_duration = QuarterDuration(beat_quarter_duration)

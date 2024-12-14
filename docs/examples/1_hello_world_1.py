@@ -20,7 +20,7 @@ s = Score(title="Hello World 1")
 """
 Add a part:
 """
-p = s.add_child(Part('hw1', name='HW1'))
+p = s.add_child(Part("hw1", name="HW1"))
 """
 Add a measure:
 """
@@ -50,5 +50,5 @@ beat.add_child(Chord(60, 4))
 """
 ... and export
 """
-xml_path = Path(__file__).with_suffix('.xml')
+xml_path = Path(__file__).with_suffix(".xml")
 s.export_xml(xml_path)

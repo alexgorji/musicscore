@@ -1,7 +1,11 @@
 from typing import Optional, Set
 
 from musicscore.clef import Clef
-from musicscore.exceptions import StaffHasNoParentError, AlreadyFinalizedError, AddChordError
+from musicscore.exceptions import (
+    StaffHasNoParentError,
+    AlreadyFinalizedError,
+    AddChordError,
+)
 from musicscore.finalize import FinalizeMixin
 from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
@@ -9,7 +13,7 @@ from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLStaff
 
-__all__ = ['Staff']
+__all__ = ["Staff"]
 
 
 class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
@@ -18,7 +22,8 @@ class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     Child type: :obj:`~musicscore.voice.Voice`
     """
-    _ATTRIBUTES = {'clef', 'default_clef', 'number'}
+
+    _ATTRIBUTES = {"clef", "default_clef", "number"}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
     XMLClass = XMLStaff
@@ -83,14 +88,18 @@ class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :return: added :obj:`~musicscore.voice.Voice`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_child')
+            raise AlreadyFinalizedError(self, "add_child")
         self._check_child_to_be_added(child)
 
         if not self.up:
-            raise StaffHasNoParentError('A child Voice can only be added to a Staff if staff has a Measure parent.')
+            raise StaffHasNoParentError(
+                "A child Voice can only be added to a Staff if staff has a Measure parent."
+            )
 
         if child.number is not None and child.number != len(self.get_children()) + 1:
-            raise ValueError(f'Voice number must be None or {len(self.get_children()) + 1}')
+            raise ValueError(
+                f"Voice number must be None or {len(self.get_children()) + 1}"
+            )
         if child.number is None:
             child.number = len(self.get_children()) + 1
         else:
@@ -113,7 +122,7 @@ class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :return: new :obj:`~musicscore.voice.Voice`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_voice')
+            raise AlreadyFinalizedError(self, "add_voice")
         if voice_number is None:
             voice_number = len(self.get_children()) + 1
 
@@ -132,7 +141,7 @@ class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         for voice in self.get_children():
             voice.fill_with_rests()
 
-    def get_previous_staff(self) -> Optional['Staff']:
+    def get_previous_staff(self) -> Optional["Staff"]:
         """
         :return: :obj:`Staff` with the same number in previous :obj:`~musicscore.measure.Measure` if existing else ``None``
         """
@@ -156,7 +165,7 @@ class Staff(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
                 last_chord = v.get_chords()[-1]
                 if not last_chord.is_rest:
                     for m in last_chord.midis:
-                        if m.accidental.sign != 'natural':
+                        if m.accidental.sign != "natural":
                             step = m.accidental.get_pitch_parameters()[0]
                             if step not in output:
                                 output.add(step)

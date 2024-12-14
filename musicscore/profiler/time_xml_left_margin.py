@@ -14,6 +14,6 @@ def time_hello_xml_left_margin():
     print(timeit.timeit(hello_xml_left_margin, number=1000))
 
 
-with open(str(Path(__file__)) + 'xml_left_margin.txt', '+w') as f:
+with open(str(Path(__file__)) + "xml_left_margin.txt", "+w") as f:
     with redirect_stdout(f):
-        cProfile.run('time_hello_xml_left_margin()', sort="tottime")
+        cProfile.run("time_hello_xml_left_margin()", sort="tottime")

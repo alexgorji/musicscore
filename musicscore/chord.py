@@ -6,58 +6,186 @@ from typing import Union, List, Optional, Any, Dict
 from musicscore.clef import Clef
 from musicscore.config import NUMBEROFBEAMS, TYPEDURATION
 from musicscore.dynamics import Dynamics
-from musicscore.exceptions import ChordAlreadySplitError, ChordCannotSplitError, ChordHasNoParentBeamError, \
-    ChordQuarterDurationAlreadySetError, AlreadyFinalizedError, DeepCopyException, ChordException, NotationException, \
-    ChordAddXException, ChordAddXPlacementException, RestCannotSetMidiError, \
-    RestWithDisplayStepHasNoDisplayOctave, RestWithDisplayOctaveHasNoDisplayStep, GraceChordCannotHaveGraceNotesError, \
-    GraceChordCannotSetQuarterDurationError, ChordHasNoNotesError, ChordAlreadyHasNotesError, ChordTestError, \
-    ChordTypeNotSetError, ChordNumberOfDotsNotSetError, ChordParentBeamError
+from musicscore.exceptions import (
+    ChordAlreadySplitError,
+    ChordCannotSplitError,
+    ChordHasNoParentBeamError,
+    ChordQuarterDurationAlreadySetError,
+    AlreadyFinalizedError,
+    DeepCopyException,
+    ChordException,
+    NotationException,
+    ChordAddXException,
+    ChordAddXPlacementException,
+    RestCannotSetMidiError,
+    RestWithDisplayStepHasNoDisplayOctave,
+    RestWithDisplayOctaveHasNoDisplayStep,
+    GraceChordCannotHaveGraceNotesError,
+    GraceChordCannotSetQuarterDurationError,
+    ChordAlreadyHasNotesError,
+    ChordTestError,
+    ChordTypeNotSetError,
+    ChordNumberOfDotsNotSetError,
+    ChordParentBeamError,
+)
 from musicscore.finalize import FinalizeMixin
 from musicscore.midi import Midi
 from musicscore.musictree import MusicTree
 from musicscore.note import Note
 from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
 from musicscore.tuplet import Tuplet
-from musicscore.util import XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_ORNAMENT_CLASSES, XML_DYNAMIC_CLASSES, \
-    XML_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_ORNAMENT_AND_OTHER_NOTATIONS, \
-    XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, isinstance_as_string
+from musicscore.util import (
+    XML_ARTICULATION_CLASSES,
+    XML_TECHNICAL_CLASSES,
+    XML_ORNAMENT_CLASSES,
+    XML_DYNAMIC_CLASSES,
+    XML_OTHER_NOTATIONS,
+    XML_DIRECTION_TYPE_CLASSES,
+    XML_ORNAMENT_AND_OTHER_NOTATIONS,
+    XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS,
+    isinstance_as_string,
+)
 from musicxml.xmlelement.xmlelement import *
 
-__all__ = ['Chord', 'Rest', 'GraceChord']
+__all__ = ["Chord", "Rest", "GraceChord"]
 
 from musicxml.xmlelement.xmlelement import XMLElement
 
 _all_articulations = Union[
-    'XMLAccent', 'XMLStrongAccent', 'XMLStaccato', 'XMLTenuto', 'XMLDetachedLegato', 'XMLStaccatissimo',
-    'XMLSpiccato', 'XMLScoop', 'XMLPlop', 'XMLDoit', 'XMLFalloff', 'XMLBreathMark', 'XMLCaesura', 'XMLStress',
-    'XMLUnstress']
+    "XMLAccent",
+    "XMLStrongAccent",
+    "XMLStaccato",
+    "XMLTenuto",
+    "XMLDetachedLegato",
+    "XMLStaccatissimo",
+    "XMLSpiccato",
+    "XMLScoop",
+    "XMLPlop",
+    "XMLDoit",
+    "XMLFalloff",
+    "XMLBreathMark",
+    "XMLCaesura",
+    "XMLStress",
+    "XMLUnstress",
+]
 
 _all_technicals = Union[
-    "XMLUpBow", "XMLDownBow", "XMLHarmonic", "XMLOpenString", "XMLThumbPosition", "XMLFingering", "XMLPluck", "XMLDoubleTongue",
-    "XMLTripleTongue", "XMLStopped", "XMLSnapPizzicato", "XMLFret", "XMLString", "XMLHammerOn", "XMLPullOff", "XMLBend", "XMLTap",
-    "XMLHeel", "XMLToe", "XMLFingernails", "XMLHole", "XMLArrow", "XMLHandbell", "XMLBrassBend", "XMLFlip", "XMLSmear", "XMLOpen",
-    "XMLHalfMuted", "XMLHarmonMute", "XMLGolpe", "XMLOtherTechnical"]
+    "XMLUpBow",
+    "XMLDownBow",
+    "XMLHarmonic",
+    "XMLOpenString",
+    "XMLThumbPosition",
+    "XMLFingering",
+    "XMLPluck",
+    "XMLDoubleTongue",
+    "XMLTripleTongue",
+    "XMLStopped",
+    "XMLSnapPizzicato",
+    "XMLFret",
+    "XMLString",
+    "XMLHammerOn",
+    "XMLPullOff",
+    "XMLBend",
+    "XMLTap",
+    "XMLHeel",
+    "XMLToe",
+    "XMLFingernails",
+    "XMLHole",
+    "XMLArrow",
+    "XMLHandbell",
+    "XMLBrassBend",
+    "XMLFlip",
+    "XMLSmear",
+    "XMLOpen",
+    "XMLHalfMuted",
+    "XMLHarmonMute",
+    "XMLGolpe",
+    "XMLOtherTechnical",
+]
 
 _all_ornaments = Union[
-    "XMLDelayedInvertedTurn", "XMLDelayedTurn", "XMLHaydn", "XMLInvertedMordent", "XMLInvertedTurn",
-    "XMLInvertedVerticalTurn", "XMLMordent", "XMLOtherOrnament", "XMLSchleifer", "XMLShake", "XMLTremolo", "XMLTrillMark", "XMLTurn",
-    "XMLVerticalTurn", "XMLWavyLine"
+    "XMLDelayedInvertedTurn",
+    "XMLDelayedTurn",
+    "XMLHaydn",
+    "XMLInvertedMordent",
+    "XMLInvertedTurn",
+    "XMLInvertedVerticalTurn",
+    "XMLMordent",
+    "XMLOtherOrnament",
+    "XMLSchleifer",
+    "XMLShake",
+    "XMLTremolo",
+    "XMLTrillMark",
+    "XMLTurn",
+    "XMLVerticalTurn",
+    "XMLWavyLine",
 ]
 
 _all_dynamics = Union[
-    "XMLF", "XMLFf", "XMLFff", "XMLFfff", "XMLFffff", "XMLFfffff", "XMLFp", "XMLFz", "XMLMf", "XMLMp", "XMLP", "XMLPf", "XMLPp", "XMLPpp", "XMLPppp",
-    "XMLPpppp", "XMLPppppp", "XMLRf", "XMLRfz", "XMLSf", "XMLSffz", "XMLSfp", "XMLSfpp", "XMLSfz", "XMLSfzp"
+    "XMLF",
+    "XMLFf",
+    "XMLFff",
+    "XMLFfff",
+    "XMLFffff",
+    "XMLFfffff",
+    "XMLFp",
+    "XMLFz",
+    "XMLMf",
+    "XMLMp",
+    "XMLP",
+    "XMLPf",
+    "XMLPp",
+    "XMLPpp",
+    "XMLPppp",
+    "XMLPpppp",
+    "XMLPppppp",
+    "XMLRf",
+    "XMLRfz",
+    "XMLSf",
+    "XMLSffz",
+    "XMLSfp",
+    "XMLSfpp",
+    "XMLSfz",
+    "XMLSfzp",
 ]
 
 _all_other_notations = Union[
-    "XMLArpeggiate", "XMLFermata", "XMLFootnote", "XMLGlissando", "XMLLevel", "XMLNonArpeggiate", "XMLOtherNotation", "XMLSlide",
-    "XMLSlur", "XMLAccidentalMark"
+    "XMLArpeggiate",
+    "XMLFermata",
+    "XMLFootnote",
+    "XMLGlissando",
+    "XMLLevel",
+    "XMLNonArpeggiate",
+    "XMLOtherNotation",
+    "XMLSlide",
+    "XMLSlur",
+    "XMLAccidentalMark",
 ]
 
 _all_direction_types = Union[
-    "XMLRehearsal", "XMLSegno", "XMLCoda", "XMLWords", "XMLSymbol", "XMLWedge", "XMLDashes", "XMLBracket", "XMLPedal",
-    "XMLMetronome", "XMLOctaveShift", "XMLHarpPedals", "XMLDamp", "XMLDampAll", "XMLEyeglasses", "XMLStringMute", "XMLScordatura",
-    "XMLPrincipalVoice", "XMLPercussion", "XMLAccordionRegistration", "XMLStaffDivide", "XMLOtherDirection"]
+    "XMLRehearsal",
+    "XMLSegno",
+    "XMLCoda",
+    "XMLWords",
+    "XMLSymbol",
+    "XMLWedge",
+    "XMLDashes",
+    "XMLBracket",
+    "XMLPedal",
+    "XMLMetronome",
+    "XMLOctaveShift",
+    "XMLHarpPedals",
+    "XMLDamp",
+    "XMLDampAll",
+    "XMLEyeglasses",
+    "XMLStringMute",
+    "XMLScordatura",
+    "XMLPrincipalVoice",
+    "XMLPercussion",
+    "XMLAccordionRegistration",
+    "XMLStaffDivide",
+    "XMLOtherDirection",
+]
 
 
 class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
@@ -71,13 +199,32 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     :param midis: :obj:`~musicscore.midi.Midi`, Midi.value, [Midi, Midi.value], 0 or [0] for a rest.
     :param quarter_duration: int, float, Fraction, :obj:`~musicscore.quarterduration.QuarterDuration` for duration counted in quarters (crotchets). 0 for grace note (or chord).
     """
-    _ATTRIBUTES = {'midis', 'quarter_duration', 'notes', 'offset', 'split', 'voice', 'clef', 'metronome', 'arpeggio',
-                   'type', 'number_of_dots', 'tuplet', 'beams', 'broken_beam'}
 
-    def __init__(self, midis: Union[List[Union[float, int]], List[Midi], float, int, Midi],
-                 quarter_duration: Union[float, int, 'Fraction', QuarterDuration], **kwargs):
+    _ATTRIBUTES = {
+        "midis",
+        "quarter_duration",
+        "notes",
+        "offset",
+        "split",
+        "voice",
+        "clef",
+        "metronome",
+        "arpeggio",
+        "type",
+        "number_of_dots",
+        "tuplet",
+        "beams",
+        "broken_beam",
+    }
+
+    def __init__(
+        self,
+        midis: Union[List[Union[float, int]], List[Midi], float, int, Midi],
+        quarter_duration: Union[float, int, "Fraction", QuarterDuration],
+        **kwargs,
+    ):
         self._midis = None
-        self._xml_direction_types = {'above': [], 'below': []}
+        self._xml_direction_types = {"above": [], "below": []}
 
         self._xml_directions = []
         self._xml_lyrics = []
@@ -90,7 +237,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._notes_are_set = False
         self._clef = None
         self._metronome = None
-        self._grace_chords = {'before': [], 'after': []}
+        self._grace_chords = {"before": [], "after": []}
         self._arpeggio = None
         self._after_notes_xml_elements = []
         self._beams = {}
@@ -105,12 +252,14 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def _add_articulation(self, articulation, placement=None):
         if articulation.__class__ not in XML_ARTICULATION_CLASSES:
-            raise ChordAddXException(f'{articulation} is not an articulation object.')
+            raise ChordAddXException(f"{articulation} is not an articulation object.")
         if placement:
             try:
                 articulation.placement = placement
             except AttributeError:
-                raise ChordAddXPlacementException(f'{articulation} has no placement attribute.')
+                raise ChordAddXPlacementException(
+                    f"{articulation} has no placement attribute."
+                )
         self._xml_articulations.append(articulation)
         if self.notes:
             self._update_xml_articulations()
@@ -123,8 +272,13 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             d = XMLDynamics()
             d.add_child(direction_type)
             direction_type = d
-        if direction_type.__class__ not in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
-            raise ChordAddXException(f'{direction_type} is not a direction type object.')
+        if (
+            direction_type.__class__
+            not in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
+        ):
+            raise ChordAddXException(
+                f"{direction_type} is not a direction type object."
+            )
         if placement:
             self.add_direction_type(direction_type, placement=placement)
         else:
@@ -136,51 +290,66 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             d.add_child(notation)
             notation = d
         elif isinstance(notation, XMLFermata):
-            if placement == 'above':
-                notation.type = 'upright'
-            elif placement == 'below':
-                notation.type = 'inverted'
-        elif notation.__class__ not in XML_OTHER_NOTATIONS + XML_ORNAMENT_AND_OTHER_NOTATIONS + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
-            raise ChordAddXException(f'{notation} is not a notation type object.')
+            if placement == "above":
+                notation.type = "upright"
+            elif placement == "below":
+                notation.type = "inverted"
+        elif (
+            notation.__class__
+            not in XML_OTHER_NOTATIONS
+            + XML_ORNAMENT_AND_OTHER_NOTATIONS
+            + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
+        ):
+            raise ChordAddXException(f"{notation} is not a notation type object.")
         elif placement:
             raise ChordAddXPlacementException(
-                f'Chord.add_x({notation}) of parent_type notations cannot have a placement argument.')
+                f"Chord.add_x({notation}) of parent_type notations cannot have a placement argument."
+            )
 
         self._xml_other_notations.append(notation)
         if self.notes:
             self._update_xml_other_notations()
 
     def _add_ornament(self, ornament, placement=None):
-        if ornament.__class__ not in XML_ORNAMENT_CLASSES + XML_ORNAMENT_AND_OTHER_NOTATIONS:
-            raise ChordAddXException(f'{ornament} is not an ornament type object.')
+        if (
+            ornament.__class__
+            not in XML_ORNAMENT_CLASSES + XML_ORNAMENT_AND_OTHER_NOTATIONS
+        ):
+            raise ChordAddXException(f"{ornament} is not an ornament type object.")
         if placement:
             try:
                 ornament.placement = placement
             except AttributeError:
-                raise ChordAddXPlacementException(f'{ornament} has to placement attribute.')
+                raise ChordAddXPlacementException(
+                    f"{ornament} has to placement attribute."
+                )
         self._xml_ornaments.append(ornament)
         if self.notes:
             self._update_xml_ornaments()
 
     def _add_technical(self, technical, placement=None):
         if technical.__class__ not in XML_TECHNICAL_CLASSES:
-            raise ChordAddXException(f'{technical} is not a technical object.')
+            raise ChordAddXException(f"{technical} is not a technical object.")
         if placement:
             try:
                 technical.placement = placement
             except AttributeError:
-                raise ChordAddXPlacementException(f'{technical} has to placement attribute.')
+                raise ChordAddXPlacementException(
+                    f"{technical} has to placement attribute."
+                )
         self._xml_technicals.append(technical)
         if self.notes:
             self._update_xml_technicals()
 
     def _set_original_starting_ties(self, original_chord):
-        self._original_starting_ties = [copy.copy(midi._ties) for midi in original_chord.midis]
+        self._original_starting_ties = [
+            copy.copy(midi._ties) for midi in original_chord.midis
+        ]
 
     def _set_midis(self, midis):
         if isinstance(midis, str):
             raise TypeError
-        if hasattr(midis, '__iter__'):
+        if hasattr(midis, "__iter__"):
             pass
         elif midis is None:
             midis = []
@@ -188,10 +357,11 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             midis = [midis]
         if len(midis) > 1 and 0 in midis:
             raise ValueError(
-                'Chord cannot accept a mixed list of midis of rests and pitches or a list of more than one rests.')
+                "Chord cannot accept a mixed list of midis of rests and pitches or a list of more than one rests."
+            )
 
         if 0 in midis and self.quarter_duration == 0:
-            raise ValueError('A rest cannot be a grace note')
+            raise ValueError("A rest cannot be a grace note")
         self._midis = [Midi(v) if not isinstance(v, Midi) else v for v in midis]
         self._sort_midis()
         for midi in self._midis:
@@ -201,28 +371,42 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def _sort_midis(self):
         self._midis = sorted(self._midis)
 
-    def _split_and_add_beatwise(self, beats: List['Beat']) -> List['Chord']:
+    def _split_and_add_beatwise(self, beats: List["Beat"]) -> List["Chord"]:
         """
         This method is used to split the chord into a list of tied chords with proper quarter durations according to ``beats`` All beats must have the same :obj:`~musicscore.voice.Voice` parent and
         """
         voice_set = {beat.up for beat in beats}
         if len(voice_set) != 1:
-            raise ChordCannotSplitError('Beats have must have a single Voice as common ancestor.')
+            raise ChordCannotSplitError(
+                "Beats have must have a single Voice as common ancestor."
+            )
 
         voice = voice_set.pop()
         if voice is None:
-            raise ChordCannotSplitError('Beats have no parent.')
+            raise ChordCannotSplitError("Beats have no parent.")
 
-        if voice.get_children()[
-           voice.get_children().index(beats[0]): voice.get_children().index(beats[-1]) + 1] != beats:
-            raise ChordCannotSplitError("Beats as Voice's children has another order as input list of beats")
+        if (
+            voice.get_children()[
+                voice.get_children().index(beats[0]) : voice.get_children().index(
+                    beats[-1]
+                )
+                + 1
+            ]
+            != beats
+        ):
+            raise ChordCannotSplitError(
+                "Beats as Voice's children has another order as input list of beats"
+            )
 
         if beats[0] != voice.get_current_beat():
-            raise ChordAlreadySplitError('First beat must be the next beat in voice which can accept chords.')
+            raise ChordAlreadySplitError(
+                "First beat must be the next beat in voice which can accept chords."
+            )
         if beats[-1] != voice.get_children()[-1]:
-            raise ChordAlreadySplitError('Last beat must be the last beat in voice.')
+            raise ChordAlreadySplitError("Last beat must be the last beat in voice.")
         quarter_durations = self.quarter_duration._get_beatwise_sections(
-            offset=beats[0].filled_quarter_duration, beats=beats)
+            offset=beats[0].filled_quarter_duration, beats=beats
+        )
         self.quarter_duration = quarter_durations[0][0]
         self.split = True
 
@@ -236,8 +420,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             copied.split = True
             voice.get_current_beat().add_child(copied)
 
-            current_chord.add_tie('start')
-            copied.add_tie('stop')
+            current_chord.add_tie("start")
+            copied.add_tie("stop")
             for midi in copied.midis:
                 midi.accidental.show = False
             current_chord = copied
@@ -245,8 +429,8 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         if quarter_durations[1]:
             # left over
             leftover_chord = _split_copy(self, quarter_durations[1])
-            current_chord.add_tie('start')
-            leftover_chord.add_tie('stop')
+            current_chord.add_tie("start")
+            leftover_chord.add_tie("stop")
             for midi in leftover_chord.midis:
                 midi.accidental.show = False
         else:
@@ -254,19 +438,27 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self.up.up.leftover_chord = leftover_chord
         if not leftover_chord and output[-1]._original_starting_ties:
             for ties, midi in zip(output[-1]._original_starting_ties, output[-1].midis):
-                if 'start' in ties:
-                    midi.add_tie('start')
+                if "start" in ties:
+                    midi.add_tie("start")
         if leftover_chord and leftover_chord._original_starting_ties:
-            for ties, midi in zip(leftover_chord._original_starting_ties, leftover_chord.midis):
-                if 'start' in ties:
-                    midi.add_tie('start')
+            for ties, midi in zip(
+                leftover_chord._original_starting_ties, leftover_chord.midis
+            ):
+                if "start" in ties:
+                    midi.add_tie("start")
         return output
 
     def _update_notes(self):
         if self._notes_are_set:
-            raise ChordAlreadyHasNotesError('updating notes not possible.')
+            raise ChordAlreadyHasNotesError("updating notes not possible.")
         for index, midi in enumerate(self.midis):
-            self._add_child(Note(midi=midi, quarter_duration=self.quarter_duration, **self._note_attributes))
+            self._add_child(
+                Note(
+                    midi=midi,
+                    quarter_duration=self.quarter_duration,
+                    **self._note_attributes,
+                )
+            )
         self._notes_are_set = True
 
     def _update_notes_pitch_or_rest(self):
@@ -303,10 +495,16 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         n = self.notes[0]
 
-        note_articulations_not_in_chord = [art for art in _get_note_xml_articulations() if art not in
-                                           self._xml_articulations]
-        chord_articulations_not_in_note = [art for art in self._xml_articulations if
-                                           art not in _get_note_xml_articulations()]
+        note_articulations_not_in_chord = [
+            art
+            for art in _get_note_xml_articulations()
+            if art not in self._xml_articulations
+        ]
+        chord_articulations_not_in_note = [
+            art
+            for art in self._xml_articulations
+            if art not in _get_note_xml_articulations()
+        ]
 
         if chord_articulations_not_in_note:
             n.get_or_create_xml_notations()
@@ -337,7 +535,10 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             for direction_type in direction_types:
                 d = XMLDirection(placement=placement)
                 self._xml_directions.append(d)
-                if hasattr(direction_type, '__iter__') and direction_type[0] == 'dynamics':
+                if (
+                    hasattr(direction_type, "__iter__")
+                    and direction_type[0] == "dynamics"
+                ):
                     _add_dynamics(list_of_dynamics=direction_type[1], xml_direction=d)
                 else:
                     dt = d.add_child(XMLDirectionType())
@@ -352,9 +553,12 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         n = self.notes[0]
 
-        note_dynamics_not_in_chord = [art for art in _get_note_xml_dynamics() if art not in
-                                      self._xml_dynamics]
-        chord_dynamics_not_in_note = [art for art in self._xml_dynamics if art not in _get_note_xml_dynamics()]
+        note_dynamics_not_in_chord = [
+            art for art in _get_note_xml_dynamics() if art not in self._xml_dynamics
+        ]
+        chord_dynamics_not_in_note = [
+            art for art in self._xml_dynamics if art not in _get_note_xml_dynamics()
+        ]
 
         if chord_dynamics_not_in_note:
             n.get_or_create_xml_notations()
@@ -371,7 +575,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def _update_xml_metronome(self):
         if self.metronome:
-            d = XMLDirection(placement='above')
+            d = XMLDirection(placement="above")
             self._xml_directions.append(d)
             dt = d.add_child(XMLDirectionType())
             dt.add_child(self.metronome.xml_object)
@@ -383,15 +587,19 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             for n in self.notes:
                 if not n.xml_notations:
                     n.xml_notations = XMLNotations()
-                if self.arpeggio != 'none':
+                if self.arpeggio != "none":
                     n.xml_notations.xml_arpeggiate = XMLArpeggiate()
-                    if self.arpeggio != 'normal' and n == self.notes[0]:
+                    if self.arpeggio != "normal" and n == self.notes[0]:
                         n.xml_notations.xml_arpeggiate.direction = self.arpeggio
                 else:
                     if n == self.notes[0]:
-                        n.xml_notations.xml_non_arpeggiate = XMLNonArpeggiate(type='bottom')
+                        n.xml_notations.xml_non_arpeggiate = XMLNonArpeggiate(
+                            type="bottom"
+                        )
                     elif n == self.notes[-1]:
-                        n.xml_notations.xml_non_arpeggiate = XMLNonArpeggiate(type='top')
+                        n.xml_notations.xml_non_arpeggiate = XMLNonArpeggiate(
+                            type="top"
+                        )
 
     def _update_xml_ornaments(self):
         def _get_note_xml_ornaments():
@@ -402,9 +610,12 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         n = self.notes[0]
 
-        note_ornaments_not_in_chord = [o for o in _get_note_xml_ornaments() if o not in
-                                       self._xml_ornaments]
-        chord_ornaments_not_in_note = [o for o in self._xml_ornaments if o not in _get_note_xml_ornaments()]
+        note_ornaments_not_in_chord = [
+            o for o in _get_note_xml_ornaments() if o not in self._xml_ornaments
+        ]
+        chord_ornaments_not_in_note = [
+            o for o in self._xml_ornaments if o not in _get_note_xml_ornaments()
+        ]
 
         if chord_ornaments_not_in_note:
             n.get_or_create_xml_notations()
@@ -422,16 +633,26 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     def _update_xml_other_notations(self):
         def _get_note_xml_other_notations():
             try:
-                return [ch for ch in n.xml_notations.get_children(ordered=False) if ch.__class__ in XML_OTHER_NOTATIONS]
+                return [
+                    ch
+                    for ch in n.xml_notations.get_children(ordered=False)
+                    if ch.__class__ in XML_OTHER_NOTATIONS
+                ]
             except AttributeError:
                 return []
 
         n = self.notes[0]
 
-        note_other_notations_not_in_chord = [on for on in _get_note_xml_other_notations() if on not in
-                                             self._xml_other_notations]
-        chord_other_notations_not_in_note = [on for on in self._xml_other_notations if
-                                             on not in _get_note_xml_other_notations()]
+        note_other_notations_not_in_chord = [
+            on
+            for on in _get_note_xml_other_notations()
+            if on not in self._xml_other_notations
+        ]
+        chord_other_notations_not_in_note = [
+            on
+            for on in self._xml_other_notations
+            if on not in _get_note_xml_other_notations()
+        ]
 
         if chord_other_notations_not_in_note:
             n.get_or_create_xml_notations()
@@ -452,9 +673,16 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         n = self.notes[0]
 
-        note_technicals_not_in_chord = [tech for tech in get_note_xml_technical() if tech not in
-                                        self._xml_technicals]
-        chord_technicals_not_in_note = [tech for tech in self._xml_technicals if tech not in get_note_xml_technical()]
+        note_technicals_not_in_chord = [
+            tech
+            for tech in get_note_xml_technical()
+            if tech not in self._xml_technicals
+        ]
+        chord_technicals_not_in_note = [
+            tech
+            for tech in self._xml_technicals
+            if tech not in get_note_xml_technical()
+        ]
 
         if chord_technicals_not_in_note:
             n.get_or_create_xml_notations()
@@ -470,16 +698,20 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         n._update_xml_notations()
 
     def _update_xml_lyrics(self):
-
         n = self.notes[0]
 
-        note_lyrics_not_in_chord = [lyric for lyric in n.xml_object.find_children('XMLLyric') if lyric not in
-                                    self._xml_lyrics]
-        chord_lyrics_not_in_note = [lyric for lyric in self._xml_lyrics if
-                                    lyric not in n.xml_object.find_children('XMLLyric')]
+        note_lyrics_not_in_chord = [
+            lyric
+            for lyric in n.xml_object.find_children("XMLLyric")
+            if lyric not in self._xml_lyrics
+        ]
+        chord_lyrics_not_in_note = [
+            lyric
+            for lyric in self._xml_lyrics
+            if lyric not in n.xml_object.find_children("XMLLyric")
+        ]
 
         if chord_lyrics_not_in_note:
-
             for xml_lyric in chord_lyrics_not_in_note:
                 n.xml_object.add_child(xml_lyric)
 
@@ -522,11 +754,13 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     @arpeggio.setter
     def arpeggio(self, val):
-        permitted = [None, 'normal', 'up', 'down', 'none']
+        permitted = [None, "normal", "up", "down", "none"]
         if val not in permitted:
-            raise ValueError(f'arpeggio value {val} must be in permitted list: {permitted}')
+            raise ValueError(
+                f"arpeggio value {val} must be in permitted list: {permitted}"
+            )
         if self._finalized:
-            raise AlreadyFinalizedError(self, 'arpeggio.setter')
+            raise AlreadyFinalizedError(self, "arpeggio.setter")
         self._arpeggio = val
 
     @property
@@ -546,13 +780,13 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         If true the beam will be broken at this position
         """
         return self._broken_beam
-    
+
     @broken_beam.setter
     def broken_beam(self, val):
         self._broken_beam = val
 
     @property
-    def clef(self) -> 'Clef':
+    def clef(self) -> "Clef":
         """
         Set or get :obj:`~musicscore.clef.Clef` object to be added to :obj:`~musicscore.measure.Measure` before this :obj:`~musicscore.chord.Chord`
         """
@@ -598,12 +832,12 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     @metronome.setter
     def metronome(self, val):
-        if not isinstance_as_string(val, 'Metronome'):
+        if not isinstance_as_string(val, "Metronome"):
             raise TypeError
         self._metronome = val
 
     @property
-    def midis(self) -> List['Midi']:
+    def midis(self) -> List["Midi"]:
         """
         :return: list of midis
 
@@ -627,7 +861,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._set_midis(val)
 
     @property
-    def notes(self) -> List['Note']:
+    def notes(self) -> List["Note"]:
         """
         :return: :obj:`musicscore.chord.get_children` which are of type :obj:`musicscore.note.Note`.
         :rtype: List[:obj:`~musicscore.note.Note`]
@@ -637,7 +871,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     @property
     def number_of_beams(self) -> Optional[int]:
         if not self.type:
-            raise ChordTypeNotSetError('Number of beams cannot be determined if chord.type is not set.')
+            raise ChordTypeNotSetError(
+                "Number of beams cannot be determined if chord.type is not set."
+            )
         output = NUMBEROFBEAMS.get(self.type)
         if not output:
             return 0
@@ -654,7 +890,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
     @number_of_dots.setter
     def number_of_dots(self, val):
         if self._notes_are_set and val != self._number_of_dots:
-            raise ChordAlreadyHasNotesError('After creating Notes it is not possible to change number of dots.')
+            raise ChordAlreadyHasNotesError(
+                "After creating Notes it is not possible to change number of dots."
+            )
         if not isinstance(val, int):
             raise TypeError()
         if val < 0:
@@ -675,7 +913,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             return self.previous.offset + self.previous.quarter_duration
 
     @property
-    def tuplet(self) -> Optional['Tuplet']:
+    def tuplet(self) -> Optional["Tuplet"]:
         return self._tuplet
 
     @tuplet.setter
@@ -694,24 +932,43 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     @type.setter
     def type(self, val):
-        permitted = ['1024th', '512th', '256th', '128th', '64th', '32nd', '16th', 'eighth', 'quarter', 'half', 'whole',
-                     'breve', 'long', 'maxima']
+        permitted = [
+            "1024th",
+            "512th",
+            "256th",
+            "128th",
+            "64th",
+            "32nd",
+            "16th",
+            "eighth",
+            "quarter",
+            "half",
+            "whole",
+            "breve",
+            "long",
+            "maxima",
+        ]
         if self._notes_are_set and val != self._type:
-            raise ChordAlreadyHasNotesError('After creating Notes it is not possible to change the type.')
+            raise ChordAlreadyHasNotesError(
+                "After creating Notes it is not possible to change the type."
+            )
         if val is not None and val not in permitted:
-            raise ValueError(f'Chord.type can only be None or {permitted}')
+            raise ValueError(f"Chord.type can only be None or {permitted}")
         self._type = val
 
     @QuarterDurationMixin.quarter_duration.setter
     def quarter_duration(self, val):
         if self._notes_are_set:
-            raise ChordAlreadyHasNotesError('quarter duration of the chord cannot be changed anymore.')
+            raise ChordAlreadyHasNotesError(
+                "quarter duration of the chord cannot be changed anymore."
+            )
         if self._quarter_duration is not None and self.up:
             raise ChordQuarterDurationAlreadySetError(
-                'Chord is already attached to a Beat. Quarter Duration cannot be changed any more.')
+                "Chord is already attached to a Beat. Quarter Duration cannot be changed any more."
+            )
         if val is not None:
             if self.midis and self.is_rest and val == 0:
-                raise ValueError('A rest cannot be a grace note')
+                raise ValueError("A rest cannot be a grace note")
             self._set_quarter_duration(val)
 
     @property
@@ -742,7 +999,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         return self._xml_direction_types
 
     @property
-    def xml_lyrics(self) -> List['XMLLyric']:
+    def xml_lyrics(self) -> List["XMLLyric"]:
         """
         :return: list of xml lyrics to be added to this :obj:`~musicscore.chord.Chord` during finalization.
         """
@@ -762,10 +1019,14 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             This method is deprecated.
             Use :obj:`add_xml_element_after_notes()` instead.
         """
-        warnings.warn("This method is deprecated. Use add_xml_element_after_notes() instead.")
+        warnings.warn(
+            "This method is deprecated. Use add_xml_element_after_notes() instead."
+        )
         return self.add_xml_element_after_notes(xml_element)
 
-    def add_direction_type(self, direction_type: XMLElement, placement: Optional[str] = None):
+    def add_direction_type(
+        self, direction_type: XMLElement, placement: Optional[str] = None
+    ):
         """
         Adds a :obj:`~musicxml.xmlelement.xmlelement.XMLDirectionType` to a private dictionary ``_xml_direction_types`` with placement keys: ``below`` and ``above``. This dictionary is used during the finalization to add :obj:`~musicxml.xmlelement.xmlelement.XMLDirection` objects to :obj:`~musicxml.xmlelement.xmlelement.XMLMeasure` before this :obj:`~musicscore.chord.Chord`
 
@@ -778,22 +1039,30 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :return: added direction_type
         """
         if not placement:
-            if isinstance(direction_type, XMLPedal) or isinstance(direction_type, XMLWedge):
-                placement = 'below'
+            if isinstance(direction_type, XMLPedal) or isinstance(
+                direction_type, XMLWedge
+            ):
+                placement = "below"
             else:
-                placement = 'above'
+                placement = "above"
 
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_direction_type')
-        if direction_type.__class__ not in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
+            raise AlreadyFinalizedError(self, "add_direction_type")
+        if (
+            direction_type.__class__
+            not in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
+        ):
             raise TypeError(
-                f'Wrong type {direction_type}. Possible classes: {XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS}')
+                f"Wrong type {direction_type}. Possible classes: {XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS}"
+            )
         self._xml_direction_types[placement].append(direction_type)
         return direction_type
 
-    def add_dynamics(self, dynamics: Union[List['Dynamics'], List['str'], 'Dynamics', str], placement: str = 'below') -> \
-            List['Dynamics']:
-
+    def add_dynamics(
+        self,
+        dynamics: Union[List["Dynamics"], List["str"], "Dynamics", str],
+        placement: str = "below",
+    ) -> List["Dynamics"]:
         """
         This method is used to add one or more :obj:`musicscore.dynamics.Dynamics` objects to chord's private dictionary ``_xml_direction_types``
 
@@ -809,16 +1078,27 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
 
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_dynamics')
-        dynamics_list = [dynamics] if isinstance(dynamics, str) or not hasattr(dynamics, '__iter__') else list(
-            dynamics)
-        dynamics_object_list = [d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list]
-        self._xml_direction_types[placement].append(('dynamics', dynamics_object_list))
+            raise AlreadyFinalizedError(self, "add_dynamics")
+        dynamics_list = (
+            [dynamics]
+            if isinstance(dynamics, str) or not hasattr(dynamics, "__iter__")
+            else list(dynamics)
+        )
+        dynamics_object_list = [
+            d if isinstance(d, Dynamics) else Dynamics(d) for d in dynamics_list
+        ]
+        self._xml_direction_types[placement].append(("dynamics", dynamics_object_list))
         return dynamics_object_list
 
-    def add_grace_chord(self, midis_or_grace_chord: Union[
-        'Midi', List['Midi'], int, float, List[Union[int, float]], 'GraceChord'],
-                        type: Optional[str] = None, *, position: Optional[str] = None):
+    def add_grace_chord(
+        self,
+        midis_or_grace_chord: Union[
+            "Midi", List["Midi"], int, float, List[Union[int, float]], "GraceChord"
+        ],
+        type: Optional[str] = None,
+        *,
+        position: Optional[str] = None,
+    ):
         """
         This method is used to add :obj:`~musicscore.midi.Midi`'s or :obj:`~musicscore.chord.GraceChord` object to the private dictionary ``_grace_chords`` with two position kyes ``before`` and ``after``. The midis or grace chords will be positioned in :obj:`~musicscore.measure.Measure` before or after this :obj:`~musicscore.chord.Chord`
 
@@ -835,22 +1115,24 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         """
         if self.up:
-            raise ChordException(f'Chord {self} is already added to a measure. No grace chords can be added anymore.')
+            raise ChordException(
+                f"Chord {self} is already added to a measure. No grace chords can be added anymore."
+            )
         if isinstance(midis_or_grace_chord, GraceChord):
             if type:
-                raise ValueError(f'Use GraceNote.type to set the type.')
+                raise ValueError("Use GraceNote.type to set the type.")
             if position:
-                raise ValueError(f'Use GraceNote.position to set the position.')
+                raise ValueError("Use GraceNote.position to set the position.")
             gch = midis_or_grace_chord
         else:
             if not position:
-                position = 'before'
+                position = "before"
             gch = GraceChord(midis_or_grace_chord, type=type, position=position)
 
-        if gch.position == 'before':
-            self._grace_chords['before'].append(gch)
-        elif gch.position == 'after':
-            self._grace_chords['after'].append(gch)
+        if gch.position == "before":
+            self._grace_chords["before"].append(gch)
+        elif gch.position == "after":
+            self._grace_chords["after"].append(gch)
         gch.parent_chord = self
         return gch
 
@@ -865,7 +1147,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :exception: :obj:`~musicscore.exceptions.AlreadyFinalizedError`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_lyric')
+            raise AlreadyFinalizedError(self, "add_lyric")
 
         if isinstance(text, XMLLyric):
             l = text
@@ -875,7 +1157,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._xml_lyrics.append(l)
         return l
 
-    def add_midi(self, midi: Union[float, int, 'Midi']) -> 'Midi':
+    def add_midi(self, midi: Union[float, int, "Midi"]) -> "Midi":
         """
         This method adds a new :obj:`~musicscore.midi.Midi` to the chord and sorts its midis afterwards.
 
@@ -884,7 +1166,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :exception: :obj:`~musicscore.exceptions.AlreadyFinalizedError`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_midi')
+            raise AlreadyFinalizedError(self, "add_midi")
         if not isinstance(midi, Midi):
             midi = Midi(midi)
         midi._set_parent_chord(self)
@@ -905,7 +1187,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             midi.add_tie(type=type)
         self._update_ties()
 
-    def add_wedge(self, wedge: Union['XMLWedge', str], placement: str = 'below') -> 'XMLWedge':
+    def add_wedge(
+        self, wedge: Union["XMLWedge", str], placement: str = "below"
+    ) -> "XMLWedge":
         """
         This method is used to add one or more :obj:`~musicxml.xmlelement.xmlelement.XMLWedge` objects to chord's private dictionary ``_xml_direction_types``
 
@@ -920,11 +1204,13 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :exception: :obj:`~musicscore.exceptions.AlreadyFinalizedError`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_wedge')
+            raise AlreadyFinalizedError(self, "add_wedge")
         wedge = XMLWedge(type=wedge) if isinstance(wedge, str) else wedge
         return self.add_direction_type(wedge, placement=placement)
 
-    def add_words(self, words: Union['XMLWords', str], placement: str = 'above', **kwargs) -> 'XMLWords':
+    def add_words(
+        self, words: Union["XMLWords", str], placement: str = "above", **kwargs
+    ) -> "XMLWords":
         """
         This method is used to add one or more :obj:`~musicxml.xmlelement.xmlelement.XMLWords` objects to chord's private dictionary ``_xml_direction_types``
 
@@ -939,7 +1225,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :exception: :obj:`~musicscore.exceptions.AlreadyFinalizedError`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_words')
+            raise AlreadyFinalizedError(self, "add_words")
 
         if not isinstance(words, XMLWords):
             words = XMLWords(words, **kwargs)
@@ -948,9 +1234,20 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
                 setattr(words, key, kwargs[key])
         return self.add_direction_type(words, placement=placement)
 
-    def add_x(self, x: Union[
-        _all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations, _all_direction_types],
-              *, placement: str = None, parent_type: str = None) -> 'XMLElement':
+    def add_x(
+        self,
+        x: Union[
+            _all_articulations,
+            _all_technicals,
+            _all_ornaments,
+            _all_dynamics,
+            _all_other_notations,
+            _all_direction_types,
+        ],
+        *,
+        placement: str = None,
+        parent_type: str = None,
+    ) -> "XMLElement":
         """
         This method is used to add one :obj:`~musicxml.xmlelement.xmlelement.XMLElement` object to a chord's private xml object lists (like _xml_articulations, xml_technicals
         etc.). These lists are used to add or update articulations, technicals etc. of the first :obj:`~musicscore.note.Note` object of
@@ -983,36 +1280,43 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
         if parent_type is None:
             if x.__class__ in XML_ARTICULATION_CLASSES:
-                parent_type = 'articulation'
+                parent_type = "articulation"
             elif x.__class__ in XML_TECHNICAL_CLASSES:
-                parent_type = 'technical'
+                parent_type = "technical"
             elif x.__class__ in XML_ORNAMENT_CLASSES:
-                parent_type = 'ornament'
+                parent_type = "ornament"
             elif x.__class__ in XML_OTHER_NOTATIONS:
-                parent_type = 'notation'
+                parent_type = "notation"
             elif x.__class__ in XML_DIRECTION_TYPE_CLASSES:
-                parent_type = 'direction_type'
+                parent_type = "direction_type"
             elif x.__class__ in XML_ORNAMENT_AND_OTHER_NOTATIONS:
-                permitted_parent_types = ['notation', 'ornament']
-                raise NotationException(f'{x} is ambivalent. Set parent type {permitted_parent_types}.')
-            elif x.__class__ in XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS or x.__class__ in XML_DYNAMIC_CLASSES:
-                permitted_parent_types = ['notations', 'direction_type']
-                raise NotationException(f'{x} is ambivalent. Set parent type {permitted_parent_types}.')
+                permitted_parent_types = ["notation", "ornament"]
+                raise NotationException(
+                    f"{x} is ambivalent. Set parent type {permitted_parent_types}."
+                )
+            elif (
+                x.__class__ in XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS
+                or x.__class__ in XML_DYNAMIC_CLASSES
+            ):
+                permitted_parent_types = ["notations", "direction_type"]
+                raise NotationException(
+                    f"{x} is ambivalent. Set parent type {permitted_parent_types}."
+                )
             else:
-                raise ValueError(f'parent_type of {x} could not be determined.')
+                raise ValueError(f"parent_type of {x} could not be determined.")
 
-        if parent_type == 'articulation':
+        if parent_type == "articulation":
             self._add_articulation(x, placement=placement)
-        elif parent_type == 'technical':
+        elif parent_type == "technical":
             self._add_technical(x, placement=placement)
-        elif parent_type == 'ornament':
+        elif parent_type == "ornament":
             self._add_ornament(x, placement=placement)
-        elif parent_type == 'notation':
+        elif parent_type == "notation":
             self._add_notation(x, placement=placement)
-        elif parent_type == 'direction_type':
+        elif parent_type == "direction_type":
             self._add_direction_type(x, placement=placement)
         else:
-            raise NotImplementedError(f'parent_type: {parent_type} not implemented.')
+            raise NotImplementedError(f"parent_type: {parent_type} not implemented.")
 
         return x
 
@@ -1032,49 +1336,67 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def check_number_of_beams(self):
         if self.type is None:
-            raise ChordTypeNotSetError('Chord.type must be set before testing its number of beams.')
+            raise ChordTypeNotSetError(
+                "Chord.type must be set before testing its number of beams."
+            )
         if self.beams:
             if self.number_of_beams == 0:
-                raise ChordTestError(f'Chord with number_of_beams 0 cannot have any beams.')
+                raise ChordTestError(
+                    "Chord with number_of_beams 0 cannot have any beams."
+                )
             else:
-                diff = set(range(1, self.number_of_beams + 1)).difference(set(self.beams.keys()))
+                diff = set(range(1, self.number_of_beams + 1)).difference(
+                    set(self.beams.keys())
+                )
                 if diff:
                     raise ChordTestError(
-                        f'Chord with number_of_beams {self.number_of_beams} has wrong beam numbers as keys of its beams dictionary. Diff: {diff}.')
+                        f"Chord with number_of_beams {self.number_of_beams} has wrong beam numbers as keys of its beams dictionary. Diff: {diff}."
+                    )
                 try:
                     max_num = max(self.beams.keys())
                 except ValueError:
                     max_num = 0
                 if max_num != self.number_of_beams:
                     raise ChordTestError(
-                        f'Chord with number_of_beams {self.number_of_beams} must set same number of beams in its beams dictionary ({max_num} are set.).')
+                        f"Chord with number_of_beams {self.number_of_beams} must set same number of beams in its beams dictionary ({max_num} are set.)."
+                    )
         return True
 
     def check_printed_duration(self):
         if not self.get_parent():
             raise ChordHasNoParentBeamError(
-                ('Chord needs information of its parent beat before testing its quarter duration.'))
+                (
+                    "Chord needs information of its parent beat before testing its quarter duration."
+                )
+            )
         beat_quarter_duration = self.get_parent().quarter_duration
         beat_subdivision = self.get_parent().get_subdivision()
         if beat_quarter_duration is None:
-            raise ChordParentBeamError('Parent beat quarter duration is None.')
+            raise ChordParentBeamError("Parent beat quarter duration is None.")
         if beat_subdivision is None:
-            raise ChordParentBeamError('Parent beat subdivision is None.')
+            raise ChordParentBeamError("Parent beat subdivision is None.")
         if self.type is None:
-            raise ChordTypeNotSetError('Chord.type must be set before testing its quarter duration.')
+            raise ChordTypeNotSetError(
+                "Chord.type must be set before testing its quarter duration."
+            )
         if self.number_of_dots is None:
-            raise ChordNumberOfDotsNotSetError('Chord.number_of_dots must be set before testing its quarter duration.')
+            raise ChordNumberOfDotsNotSetError(
+                "Chord.number_of_dots must be set before testing its quarter duration."
+            )
 
         self.quarter_duration.beat_quarter_duration = beat_quarter_duration
         self.quarter_duration.beat_subdivision = beat_subdivision
         tuplet_ratio = self.quarter_duration.get_tuplet_ratio()
         if tuplet_ratio:
             if not self.tuplet:
-                raise ChordTestError(f'Chord has a tuplet ratio of {tuplet_ratio} but its tuplet property is not set.')
+                raise ChordTestError(
+                    f"Chord has a tuplet ratio of {tuplet_ratio} but its tuplet property is not set."
+                )
             else:
                 if self.tuplet.ratio != tuplet_ratio:
                     raise ChordTestError(
-                        f'Chord has a tuplet ratio of {tuplet_ratio} but its tuplet property has ratio {self.tuplet.ratio}.')
+                        f"Chord has a tuplet ratio of {tuplet_ratio} but its tuplet property has ratio {self.tuplet.ratio}."
+                    )
 
         if tuplet_ratio:
             ratio = Fraction(tuplet_ratio[1], tuplet_ratio[0])
@@ -1087,7 +1409,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         if printed_duration == self.quarter_duration:
             return True
         else:
-            raise ChordTestError(f'printed duration {printed_duration} != quarter duration {self.quarter_duration}')
+            raise ChordTestError(
+                f"printed duration {printed_duration} != quarter duration {self.quarter_duration}"
+            )
 
     def finalize(self):
         """
@@ -1102,7 +1426,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             raise AlreadyFinalizedError(self)
 
         if not self.up:
-            raise ChordHasNoParentBeamError('Chord needs a parent Beat to create notes.')
+            raise ChordHasNoParentBeamError(
+                "Chord needs a parent Beat to create notes."
+            )
 
         self._update_notes()
         self._update_xml_chord()
@@ -1130,7 +1456,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
         return self.get_x(XMLBracket)
 
-    def get_grace_chords(self, position: str = 'before') -> List["GraceChord"]:
+    def get_grace_chords(self, position: str = "before") -> List["GraceChord"]:
         """
         Get :obj:`~musicscore.chord.GraceChord` objects associated with this :obj:`~musicscore.chord.Chord`
 
@@ -1140,9 +1466,18 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
         return self._grace_chords[position]
 
-    def get_x(self, type: "type") -> List[Union[
-        _all_articulations, _all_technicals, _all_ornaments, _all_dynamics, _all_other_notations, _all_direction_types]]:
-
+    def get_x(
+        self, type: "type"
+    ) -> List[
+        Union[
+            _all_articulations,
+            _all_technicals,
+            _all_ornaments,
+            _all_dynamics,
+            _all_other_notations,
+            _all_direction_types,
+        ]
+    ]:
         """
         Get different direction_type, ornament, technical, articulation, dynamics or other notations objects objects associated with this :obj:`~musicscore.chord.Chord`
 
@@ -1152,11 +1487,15 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         :param type: type of XMLElement to look for.
         """
         if type == XMLDynamics:
-            raise NotImplementedError(f'get_x of type {type} not Implemented.')
+            raise NotImplementedError(f"get_x of type {type} not Implemented.")
         elif type in XML_DIRECTION_TYPE_CLASSES:
             output = []
-            output += [x for x in self._xml_direction_types['above'] if isinstance(x, type)]
-            output += [x for x in self._xml_direction_types['below'] if isinstance(x, type)]
+            output += [
+                x for x in self._xml_direction_types["above"] if isinstance(x, type)
+            ]
+            output += [
+                x for x in self._xml_direction_types["below"] if isinstance(x, type)
+            ]
             return output
         elif type in XML_ORNAMENT_CLASSES:
             return [x for x in self._xml_ornaments if isinstance(x, type)]
@@ -1167,11 +1506,11 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         elif type in XML_OTHER_NOTATIONS:
             return [x for x in self._xml_other_notations if isinstance(x, type)]
         elif type in XML_ORNAMENT_AND_OTHER_NOTATIONS:
-            return [x for x in self._xml_ornaments if isinstance(x, type)] + [x for x in
-                                                                              self._xml_other_notations if
-                                                                              isinstance(x, type)]
+            return [x for x in self._xml_ornaments if isinstance(x, type)] + [
+                x for x in self._xml_other_notations if isinstance(x, type)
+            ]
         else:
-            raise NotImplementedError(f'get_x of type {type} not Implemented.')
+            raise NotImplementedError(f"get_x of type {type} not Implemented.")
 
     def get_next_in_part(self) -> Optional["Chord"]:
         """
@@ -1181,7 +1520,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
         pass
 
-    def get_parent_measure(self) -> 'Measure':
+    def get_parent_measure(self) -> "Measure":
         """
         :return: parent :obj:`~musicscore.measure.Measure`
         """
@@ -1243,7 +1582,7 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
         return self.get_x(XMLWords)
 
-    def has_same_pitches(self, other: 'Chord') -> bool:
+    def has_same_pitches(self, other: "Chord") -> bool:
         """
         Only for chords with pitches. Rest chords cannot use this method.
 
@@ -1253,13 +1592,16 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         if not isinstance(other, Chord):
             raise TypeError
         if self.is_rest or other.is_rest:
-            raise TypeError('Rest cannot use method has_same_pitches.')
+            raise TypeError("Rest cannot use method has_same_pitches.")
         if [m.value for m in self.midis] != [m.value for m in other.midis]:
             return False
         for m1, m2 in zip(self.midis, other.midis):
             #     if m1.accidental.show != m2.accidental.show:
             #         return False
-            if m1.accidental.get_pitch_parameters() != m2.accidental.get_pitch_parameters():
+            if (
+                m1.accidental.get_pitch_parameters()
+                != m2.accidental.get_pitch_parameters()
+            ):
                 return False
         return True
 
@@ -1278,9 +1620,13 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self.midis = [0]
 
     def __setattr__(self, key, value):
-        if key[0] != '_' and key not in self._ATTRIBUTES.union(self._TREE_ATTRIBUTES) and key not in self.__dict__:
+        if (
+            key[0] != "_"
+            and key not in self._ATTRIBUTES.union(self._TREE_ATTRIBUTES)
+            and key not in self.__dict__
+        ):
             if self.notes:
-                if isinstance(value, str) or not hasattr(value, '__iter__'):
+                if isinstance(value, str) or not hasattr(value, "__iter__"):
                     value = [value] * len(self.notes)
                 for n, v in zip(self.notes, value):
                     setattr(n, key, v)
@@ -1289,14 +1635,18 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
 
     def __getattr__(self, item):
         if not self._notes_are_set:
-            raise AttributeError(f"AttributeError: 'Chord' object has no attribute '{item}'")
+            raise AttributeError(
+                f"AttributeError: 'Chord' object has no attribute '{item}'"
+            )
         output = [getattr(n, item) for n in self.notes]
         if output and callable(output[0]):
-            raise AttributeError(f"Chord cannot call Note method {item}. Call this method on each note separately")
+            raise AttributeError(
+                f"Chord cannot call Note method {item}. Call this method on each note separately"
+            )
         return output
 
     def __deepcopy__(self, memodict={}):
-        '''
+        """
         Only midi and quarter_duration are deepcopied. _ties are copied.
         Not included in deepcopy at the moment:
         self._xml_direction_types
@@ -1309,11 +1659,15 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         self._xml_other_notations = []
         self._note_attributes = kwargs
         self.split
-        '''
+        """
         if self._notes_are_set:
-            raise DeepCopyException("After setting notes, Midi cannot be deepcopied anymore. ")
-        copied = self.__class__(midis=[midi.__deepcopy__() for midi in self.midis],
-                                quarter_duration=self.quarter_duration.__deepcopy__())
+            raise DeepCopyException(
+                "After setting notes, Midi cannot be deepcopied anymore. "
+            )
+        copied = self.__class__(
+            midis=[midi.__deepcopy__() for midi in self.midis],
+            quarter_duration=self.quarter_duration.__deepcopy__(),
+        )
         return copied
 
 
@@ -1323,13 +1677,21 @@ class GraceChord(Chord):
        :obj:`~Chord` for inherited methods and properties
 
     """
-    _ATTRIBUTES = Chord._ATTRIBUTES.union({'parent_chord', 'position'})
 
-    def __init__(self, midis: Union[List[Union[float, int]], List[Midi], float, int, Midi], *,
-                 type=None, position='before', **kwargs):
-        if 'quarter_duration' in kwargs.keys():
+    _ATTRIBUTES = Chord._ATTRIBUTES.union({"parent_chord", "position"})
+
+    def __init__(
+        self,
+        midis: Union[List[Union[float, int]], List[Midi], float, int, Midi],
+        *,
+        type=None,
+        position="before",
+        **kwargs,
+    ):
+        if "quarter_duration" in kwargs.keys():
             raise GraceChordCannotSetQuarterDurationError(
-                'quarter_duration of a GraceChord is always 0 and cannot be set')
+                "quarter_duration of a GraceChord is always 0 and cannot be set"
+            )
         super().__init__(midis=midis, quarter_duration=0, **kwargs)
         self._position = None
         self.type = type
@@ -1344,10 +1706,11 @@ class GraceChord(Chord):
         return super().quarter_duration
 
     @Chord.quarter_duration.setter
-    def quarter_duration(self, val):
+    def quarter_duration(self, val): # noqa: F811
         if val != 0:
             raise GraceChordCannotSetQuarterDurationError(
-                'quarter_duration of a GraceChord is always 0 and cannot be set')
+                "quarter_duration of a GraceChord is always 0 and cannot be set"
+            )
         else:
             self._quarter_duration = QuarterDuration(0)
 
@@ -1363,9 +1726,9 @@ class GraceChord(Chord):
 
     @position.setter
     def position(self, val):
-        permitted = ['before', 'after']
+        permitted = ["before", "after"]
         if val not in permitted:
-            raise ValueError(f'Wrong position. Permitted are: {permitted}')
+            raise ValueError(f"Wrong position. Permitted are: {permitted}")
         else:
             self._position = val
 
@@ -1375,7 +1738,7 @@ class GraceChord(Chord):
         """
         raise GraceChordCannotHaveGraceNotesError
 
-    def get_grace_chords(self, position='before'):
+    def get_grace_chords(self, position="before"):
         """
         :exception: :obj:`~musicscore.exceptions.GraceChordCannotHaveGraceNotesError`
         """
@@ -1387,11 +1750,21 @@ class Rest(Chord):
     .. seealso::
       :obj:`~Chord` for inherited methods and properties
     """
-    _ATTRIBUTES = Chord._ATTRIBUTES.union({'display_step', 'display_octave', 'measure'})
 
-    def __init__(self, quarter_duration, display_step=None, display_octave=None, measure=None, **kwargs):
-        if 'midis' in kwargs.keys():
-            raise RestCannotSetMidiError('midis value of a GraceChord is always 0 and cannot be set')
+    _ATTRIBUTES = Chord._ATTRIBUTES.union({"display_step", "display_octave", "measure"})
+
+    def __init__(
+        self,
+        quarter_duration,
+        display_step=None,
+        display_octave=None,
+        measure=None,
+        **kwargs,
+    ):
+        if "midis" in kwargs.keys():
+            raise RestCannotSetMidiError(
+                "midis value of a GraceChord is always 0 and cannot be set"
+            )
         super().__init__(midis=0, quarter_duration=quarter_duration, **kwargs)
         self._display_step = None
         self._display_octave = None
@@ -1410,9 +1783,11 @@ class Rest(Chord):
 
     @display_step.setter
     def display_step(self, val):
-        permitted = [None, 'A', 'B', 'C', 'D', 'E', 'F', 'G']
+        permitted = [None, "A", "B", "C", "D", "E", "F", "G"]
         if val not in permitted:
-            raise TypeError(f'display_step value {val} not in permitted list {permitted}')
+            raise TypeError(
+                f"display_step value {val} not in permitted list {permitted}"
+            )
         self._display_step = val
 
     @property
@@ -1426,7 +1801,9 @@ class Rest(Chord):
     @display_octave.setter
     def display_octave(self, val):
         if val and (not isinstance(val, int) or val < 1):
-            raise TypeError(f'display_octave value {val} can only be None or a positive integer. ')
+            raise TypeError(
+                f"display_octave value {val} can only be None or a positive integer. "
+            )
         self._display_octave = val
 
     @property
@@ -1443,18 +1820,19 @@ class Rest(Chord):
         self._measure = val
 
     @Chord.midis.getter
-    def midis(self) -> List['Midi']:
+    def midis(self) -> List["Midi"]:
         """
         Is always zero and Cannot be set.
         :exception: :obj:`~musicscore.exceptions.RestCannotSetMidiError`
         """
         return super().midis
 
-    @Chord.midis.setter
-    def midis(self, val):
-
+    @Chord.midis.setter 
+    def midis(self, val): # noqa: F811
         if val != 0:
-            raise RestCannotSetMidiError('midis value of a GraceChord is always 0 and cannot be set')
+            raise RestCannotSetMidiError(
+                "midis value of a GraceChord is always 0 and cannot be set"
+            )
         else:
             self._midis = 0
 
@@ -1473,7 +1851,10 @@ class Rest(Chord):
             self.notes[0].xml_rest.measure = self.measure
 
 
-def _split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fraction, int, float] = None) -> Chord:
+def _split_copy(
+    chord: Chord,
+    new_quarter_duration: Union[QuarterDuration, Fraction, int, float] = None,
+) -> Chord:
     """
     This function is used when a chord needs to be split. It creates a copy of the chord with a new quarter_duration object. All midis
     will be deepcopied. No attributes like lyrics, articulations etc. will be added to the copy.
@@ -1484,13 +1865,18 @@ def _split_copy(chord: Chord, new_quarter_duration: Union[QuarterDuration, Fract
     """
     if new_quarter_duration is None:
         new_quarter_duration = chord.quarter_duration.__copy__()
-    new_chord = Chord(midis=[m._copy_for_split() for m in chord.midis], quarter_duration=new_quarter_duration)
+    new_chord = Chord(
+        midis=[m._copy_for_split() for m in chord.midis],
+        quarter_duration=new_quarter_duration,
+    )
     new_chord._original_starting_ties = chord._original_starting_ties
     return new_chord
 
 
-def _group_chords(chords: List[Chord], quarter_durations: List[Union[QuarterDuration, Fraction, int, float]]) -> \
-        Optional[List[List[Chord]]]:
+def _group_chords(
+    chords: List[Chord],
+    quarter_durations: List[Union[QuarterDuration, Fraction, int, float]],
+) -> Optional[List[List[Chord]]]:
     """
     A creates a nested list of chords. Chords can be divided into groups. Each group has its own specific quarter duration sum.
 
@@ -1500,7 +1886,8 @@ def _group_chords(chords: List[Chord], quarter_durations: List[Union[QuarterDura
     """
     if sum(c.quarter_duration for c in chords) != sum(quarter_durations):
         raise ValueError(
-            f'chords quarter durations ({[c.quarter_duration for c in chords]}) and arg quarter_duration {quarter_durations} does not match.')
+            f"chords quarter durations ({[c.quarter_duration for c in chords]}) and arg quarter_duration {quarter_durations} does not match."
+        )
     output = []
     for _ in quarter_durations:
         output.append([])

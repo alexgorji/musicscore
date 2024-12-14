@@ -1,7 +1,5 @@
 import random
-from pathlib import Path
 
-from musicscore import SimpleFormat
 from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.quarterduration import QuarterDuration
@@ -13,7 +11,7 @@ from musicscore.util import lcm
 class TestQuantization(IdTestCase):
     def test_get_and_set_possible_subdivisions(self):
         s = Score()
-        p = s.add_child(Part('p1'))
+        p = s.add_child(Part("p1"))
         m = p.add_measure()
         s = m.get_children()[0]
         v = s.get_children()[0]
@@ -38,7 +36,7 @@ class TestQuantization(IdTestCase):
 
     def test_quantize_attribute(self):
         s = Score()
-        p = s.add_child(Part('p1'))
+        p = s.add_child(Part("p1"))
         m = p.add_measure()
 
         st = m.get_children()[0]
@@ -88,7 +86,7 @@ class TestQuantization(IdTestCase):
 
     def test_simple_quantization(self):
         s = Score()
-        p = s.add_child(Part('p1'))
+        p = s.add_child(Part("p1"))
         p.add_measure()
         p.add_chord(Chord(60, 0.2))
         p.add_chord(Chord(60, 3.8))
@@ -96,24 +94,35 @@ class TestQuantization(IdTestCase):
         b = p.get_measure(1).get_staff(1).get_voice(1).get_beat(1)
         b.set_possible_subdivisions(subdivisions=[2, 3, 4])
         b.quantize_quarter_durations()
-        assert [ch.quarter_duration for ch in p.get_measure(1).get_staff(1).get_voice(1).get_chords()] == [0.25, 0.75,
-                                                                                                           3]
-        assert [ch.offset for ch in p.get_measure(1).get_staff(1).get_voice(1).get_chords()] == [0, 0.25, 0]
+        assert [
+            ch.quarter_duration
+            for ch in p.get_measure(1).get_staff(1).get_voice(1).get_chords()
+        ] == [0.25, 0.75, 3]
+        assert [
+            ch.offset for ch in p.get_measure(1).get_staff(1).get_voice(1).get_chords()
+        ] == [0, 0.25, 0]
 
     def test_complex_quantization(self):
         s = Score()
         s.set_possible_subdivisions([2, 3, 4, 6, 8])
-        p = s.add_child(Part('p1'))
+        p = s.add_child(Part("p1"))
         random.seed(11)
         quarter_durations = []
         while sum(quarter_durations) < 40:
-            quarter_durations.append(QuarterDuration(random.random() + random.randint(0, 3)))
+            quarter_durations.append(
+                QuarterDuration(random.random() + random.randint(0, 3))
+            )
         quarter_durations.append(44 - sum(quarter_durations))
 
         for qd in quarter_durations:
             p.add_chord(Chord(midis=60, quarter_duration=qd))
-        for beat in [b for m in p.get_children() for st in m.get_children() for v in st.get_children() for b in
-                     v.get_children()]:
+        for beat in [
+            b
+            for m in p.get_children()
+            for st in m.get_children()
+            for v in st.get_children()
+            for b in v.get_children()
+        ]:
             beat.quantize_quarter_durations()
         # p.get_quantized = True
         for measure in p.get_children():
@@ -127,11 +136,23 @@ class TestQuantization(IdTestCase):
     def test_part_quantization(self):
         s = Score()
         s.set_possible_subdivisions([2, 3, 4, 6, 8])
-        p = s.add_child(Part('p1'))
+        p = s.add_child(Part("p1"))
         for qd in [2, 2 / 7, 1, 5 / 7]:
             p.add_chord(Chord(60, qd))
         p.get_quantized = True
         p.finalize()
-        assert [ch.quarter_duration for ch in p.get_chords()] == [2, 1 / 4, 3 / 4, 1 / 4, 3 / 4]
+        assert [ch.quarter_duration for ch in p.get_chords()] == [
+            2,
+            1 / 4,
+            3 / 4,
+            1 / 4,
+            3 / 4,
+        ]
         assert p.get_measure(1).get_divisions() == 4
-        assert [ch.notes[0].xml_duration.value_ for ch in p.get_chords()] == [8, 1, 3, 1, 3]
+        assert [ch.notes[0].xml_duration.value_ for ch in p.get_chords()] == [
+            8,
+            1,
+            3,
+            1,
+            3,
+        ]

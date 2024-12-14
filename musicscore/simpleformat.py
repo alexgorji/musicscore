@@ -10,7 +10,9 @@ class SimpleFormat(object):
     It is useful tool to generate list of chords and also do some simple algorithmic changes to it if needed.
     """
 
-    def __init__(self, quarter_durations=None, midis=None, default_midi=71, *args, **kwargs):
+    def __init__(
+        self, quarter_durations=None, midis=None, default_midi=71, *args, **kwargs
+    ):
         super().__init__(*args, **kwargs)
         self._default_midi = None
         self._quarter_durations = None
@@ -26,7 +28,9 @@ class SimpleFormat(object):
     def _check_quarter_duration(quarter_durations):
         for quarter_duration in quarter_durations:
             if quarter_duration < 0:
-                raise ValueError('SimpleFormat(): wrong duration {}'.format(quarter_duration))
+                raise ValueError(
+                    "SimpleFormat(): wrong duration {}".format(quarter_duration)
+                )
 
     def _generate_chords(self):
         self._chords = []
@@ -140,7 +144,9 @@ class SimpleFormat(object):
 
     def get_chord_at_position(self, position):
         chord_index = None
-        for index, (qp, qd) in enumerate(zip(self.get_quarter_positions(), self.get_quarter_durations())):
+        for index, (qp, qd) in enumerate(
+            zip(self.get_quarter_positions(), self.get_quarter_durations())
+        ):
             if qp <= position < qd + qp:
                 chord_index = index
         if chord_index is None:
@@ -194,18 +200,28 @@ class SimpleFormat(object):
     @staticmethod
     def sum(*simple_formats, no_duplicates=False):
         if len(set([sf.quarter_duration for sf in simple_formats])) > 1:
-            raise SimpleFormatException('SimpleFormat.sum() cannot be used on simple_formats with different durations.')
-        for midi in [midi for simple_format in simple_formats for chord in simple_format.chords for midi in
-                     chord.midis]:
+            raise SimpleFormatException(
+                "SimpleFormat.sum() cannot be used on simple_formats with different durations."
+            )
+        for midi in [
+            midi
+            for simple_format in simple_formats
+            for chord in simple_format.chords
+            for midi in chord.midis
+        ]:
             if midi._ties != set():
                 raise SimpleFormatException(
-                    'SimpleFormat.sum() cannot be used on simple_formats containing tied notes.')
+                    "SimpleFormat.sum() cannot be used on simple_formats containing tied notes."
+                )
 
         def extract_chord_midis(i):
             def remove_duplicates(new_midis):
                 def check(m):
                     for nm in newer_midis:
-                        if m.value == nm.value and m.accidental.mode == nm.accidental.mode:
+                        if (
+                            m.value == nm.value
+                            and m.accidental.mode == nm.accidental.mode
+                        ):
                             return False
                     return True
 
@@ -223,13 +239,13 @@ class SimpleFormat(object):
                 try:
                     if chord in ordered_chords[i + 1]:
                         for m in new_ms:
-                            m.add_tie('start')
+                            m.add_tie("start")
                 except IndexError:
                     pass
                 try:
                     if chord in ordered_chords[i - 1]:
                         for m in new_ms:
-                            m.add_tie('stop')
+                            m.add_tie("stop")
                 except IndexError:
                     pass
                 output.extend(new_ms)
@@ -249,7 +265,9 @@ class SimpleFormat(object):
                     combined_positions_and_chords[key] += [chord]
         sum_positions = sorted(combined_positions_and_chords.keys())
         sum_quarter_durations = xToD(sum_positions)
-        ordered_chords = [combined_positions_and_chords[position] for position in sum_positions[:-1]]
+        ordered_chords = [
+            combined_positions_and_chords[position] for position in sum_positions[:-1]
+        ]
         for index, qd in enumerate(sum_quarter_durations):
             midis = extract_chord_midis(index)
             sf.add_chord(Chord(midis, qd))

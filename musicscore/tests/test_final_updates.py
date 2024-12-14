@@ -8,21 +8,25 @@ from musicscore.tests.util import IdTestCase
 
 
 def assert_chord_note_values(chord, expected_values):
-    assert [(note.midi.value, note.quarter_duration) for note in chord.get_children()] == expected_values
+    assert [
+        (note.midi.value, note.quarter_duration) for note in chord.get_children()
+    ] == expected_values
 
 
 class TestFinalUpdates(IdTestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()
-        self.part = self.score.add_child(Part('p1'))
+        self.part = self.score.add_child(Part("p1"))
         self.measure = self.part.add_measure()
         self.staff = self.measure.add_staff()
         self.voice = self.staff.add_voice()
         self.voice.update_beats()
         self.beats = self.voice.get_children()
         self.chord_1 = self.voice._add_chord(Chord(60, QuarterDuration(1, 3)))[0]
-        self.chords_2 = self.voice._add_chord(Chord(61, QuarterDuration(2, 3) + QuarterDuration(3)))
+        self.chords_2 = self.voice._add_chord(
+            Chord(61, QuarterDuration(2, 3) + QuarterDuration(3))
+        )
 
     @staticmethod
     def check_note_values(chords, indices=None):

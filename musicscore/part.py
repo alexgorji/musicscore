@@ -1,8 +1,12 @@
 from typing import List, Optional, Union, Tuple
 
 from musicscore import Chord
-from musicscore.exceptions import IdHasAlreadyParentOfSameTypeError, IdWithSameValueExistsError, VoiceIsFullError, \
-    AlreadyFinalizedError
+from musicscore.exceptions import (
+    IdHasAlreadyParentOfSameTypeError,
+    IdWithSameValueExistsError,
+    VoiceIsFullError,
+    AlreadyFinalizedError,
+)
 from musicscore.finalize import FinalizeMixin
 from musicscore.measure import Measure
 from musicscore.musictree import MusicTree
@@ -11,13 +15,14 @@ from musicscore.time import Time
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
-__all__ = ['Id', 'ScorePart', 'Part']
+__all__ = ["Id", "ScorePart", "Part"]
 
 
 class Id:
     """
     This class uses the class attribute __refs__ of type list to keep track of all :obj:`~musicscore.part.Part` ids of one score to make sure they are unique.
     """
+
     __refs__ = []
 
     def __init__(self, value):
@@ -85,7 +90,7 @@ class Id:
 
 
 class ScorePart(XMLWrapper):
-    _ATTRIBUTES = {'part'}
+    _ATTRIBUTES = {"part"}
 
     XMLClass = XMLScorePart
 
@@ -96,7 +101,7 @@ class ScorePart(XMLWrapper):
         self.part = part
 
     @property
-    def part(self) -> 'Part':
+    def part(self) -> "Part":
         """
         Setting part property updates its :obj:`~musicxml.xmlelement.xmlelement.XMLPartName` and sets or updates its :obj:`~musicscore.part.Id`
 
@@ -129,7 +134,7 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     Child type: :obj:`~musicscore.measure.Measure`
     """
 
-    _ATTRIBUTES = {'id_', 'name', 'abbreviation'}
+    _ATTRIBUTES = {"id_", "name", "abbreviation"}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
     XMLClass = XMLPart
@@ -151,7 +156,9 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             current_measure = current_measure.next
         else:
             current_measure = self.add_measure()
-        current_measure._add_chord(chord, staff_number=staff_number, voice_number=voice_number)
+        current_measure._add_chord(
+            chord, staff_number=staff_number, voice_number=voice_number
+        )
         return current_measure
 
     def _set_first_current_measure(self, staff_number, voice_number):
@@ -204,7 +211,7 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         if self._name is not None:
             return self._name
         else:
-            return ''
+            return ""
 
     @name.setter
     def name(self, val):
@@ -231,12 +238,18 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_child')
+            raise AlreadyFinalizedError(self, "add_child")
         super().add_child(child)
         self.xml_object.add_child(child.xml_object)
         return child
 
-    def add_chord(self, chord: 'Chord', *, staff_number: Optional[int] = None, voice_number: Optional[int] = 1) -> None:
+    def add_chord(
+        self,
+        chord: "Chord",
+        *,
+        staff_number: Optional[int] = None,
+        voice_number: Optional[int] = 1,
+    ) -> None:
         """
         - Adds a chord to the specified voice in current measure (see :obj:`get_current_measure()`).
         - If no current measure is set the first measure is selected.
@@ -252,16 +265,18 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :return: None
         """
         if not isinstance(chord, Chord):
-            raise TypeError(f'{chord} must be of type Chord.')
+            raise TypeError(f"{chord} must be of type Chord.")
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_chord')
+            raise AlreadyFinalizedError(self, "add_chord")
 
-        for gch in chord._grace_chords['before']:
+        for gch in chord._grace_chords["before"]:
             self.add_chord(gch, staff_number=staff_number, voice_number=voice_number)
 
         if staff_number is None:
             staff_number = 1
-        current_measure = self.get_current_measure(staff_number=staff_number, voice_number=voice_number)
+        current_measure = self.get_current_measure(
+            staff_number=staff_number, voice_number=voice_number
+        )
 
         if not current_measure:
             if self.get_children():
@@ -269,21 +284,33 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             else:
                 current_measure = self.add_measure()
         try:
-            current_measure._add_chord(chord, staff_number=staff_number, voice_number=voice_number)
+            current_measure._add_chord(
+                chord, staff_number=staff_number, voice_number=voice_number
+            )
         except VoiceIsFullError:
-            current_measure = self._add_to_next_measure(current_measure, chord, staff_number, voice_number)
+            current_measure = self._add_to_next_measure(
+                current_measure, chord, staff_number, voice_number
+            )
 
-        for gch in chord._grace_chords['after']:
+        for gch in chord._grace_chords["after"]:
             self.add_chord(gch, staff_number=staff_number, voice_number=voice_number)
 
-        leftover_chord = current_measure.get_voice(staff_number=staff_number, voice_number=voice_number).leftover_chord
+        leftover_chord = current_measure.get_voice(
+            staff_number=staff_number, voice_number=voice_number
+        ).leftover_chord
         while leftover_chord:
-            current_measure = self._add_to_next_measure(current_measure, leftover_chord, staff_number,
-                                                        voice_number)
-            leftover_chord = current_measure.get_voice(staff_number=staff_number,
-                                                       voice_number=voice_number).leftover_chord
+            current_measure = self._add_to_next_measure(
+                current_measure, leftover_chord, staff_number, voice_number
+            )
+            leftover_chord = current_measure.get_voice(
+                staff_number=staff_number, voice_number=voice_number
+            ).leftover_chord
 
-    def add_measure(self, time: Optional[Union[Time, List, Tuple]] = None, number: Optional[int] = None) -> Measure:
+    def add_measure(
+        self,
+        time: Optional[Union[Time, List, Tuple]] = None,
+        number: Optional[int] = None,
+    ) -> Measure:
         """
         - Creates and adds a :obj:`~musicscore.measure.Measure` to part.
         - If time is not given last measure's :obj:`~musicscore.time.Time` is copied. Its :obj:`~musicscore.time.Time.show` property is set to
@@ -297,7 +324,7 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :return: created and added :obj:`~musicscore.measure.Measure`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_measure')
+            raise AlreadyFinalizedError(self, "add_measure")
         previous_measure = self.get_children()[-1] if self.get_children() else None
         if not time:
             if previous_measure:
@@ -333,7 +360,9 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
         return child
 
-    def get_current_measure(self, staff_number: Optional[int] = 1, voice_number: int = 1):
+    def get_current_measure(
+        self, staff_number: Optional[int] = 1, voice_number: int = 1
+    ):
         """
         Gets current measure for adding :obj:`~musicscore.chord.Chord` to a specific :obj:`~musicscore.voice.Voice`
 
@@ -347,9 +376,13 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         try:
             return self._current_measures[staff_number][voice_number]
         except KeyError:
-            return self._set_first_current_measure(staff_number=staff_number, voice_number=voice_number)
+            return self._set_first_current_measure(
+                staff_number=staff_number, voice_number=voice_number
+            )
 
-    def set_current_measure(self, staff_number: int, voice_number: int, measure: Measure) -> None:
+    def set_current_measure(
+        self, staff_number: int, voice_number: int, measure: Measure
+    ) -> None:
         """
         Sets current measure for adding :obj:`~musicscore.chord.Chord` to a specific :obj:`~musicscore.voice.Voice`
 

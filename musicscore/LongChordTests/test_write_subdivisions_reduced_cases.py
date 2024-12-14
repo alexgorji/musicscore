@@ -10,7 +10,6 @@ path = Path(__file__)
 
 
 class TestWritingSubdivisions(IdTestCase):
-
     def test_generate_patterns_1(self):
         expected = [
             (1, 4),
@@ -22,7 +21,7 @@ class TestWritingSubdivisions(IdTestCase):
             (1, 3, 1),
             (2, 1, 2),
             (2, 2, 1),
-            (3, 1, 1)
+            (3, 1, 1),
         ]
         assert list(generate_subdivsion_test_patterns(5)) == expected
 
@@ -42,9 +41,12 @@ class TestWritingSubdivisions(IdTestCase):
             (2, 3, 1),
             (3, 1, 2),
             (3, 2, 1),
-            (4, 1, 1)
+            (4, 1, 1),
         ]
-        assert list(generate_subdivsion_test_patterns(6, remove_larger_subdivision=False)) == expected
+        assert (
+            list(generate_subdivsion_test_patterns(6, remove_larger_subdivision=False))
+            == expected
+        )
         expected = [
             (1, 5),
             (5, 1),
@@ -56,13 +58,15 @@ class TestWritingSubdivisions(IdTestCase):
             (2, 3, 1),
             (3, 1, 2),
             (3, 2, 1),
-            (4, 1, 1)
+            (4, 1, 1),
         ]
         assert list(generate_subdivsion_test_patterns(6, True)) == expected
 
     def write_and_test_subdivision(self, subdivision):
-        for pattern in generate_subdivsion_test_patterns(subdivision, remove_larger_subdivision=True):
-            p = Part(f'p{uuid.uuid4()}')
+        for pattern in generate_subdivsion_test_patterns(
+            subdivision, remove_larger_subdivision=True
+        ):
+            p = Part(f"p{uuid.uuid4()}")
             p.add_measure([1, 4])
             qds = [QuarterDuration(x, subdivision) for x in pattern]
             [p.add_chord(Chord(71, qd)) for qd in qds]
@@ -120,13 +124,18 @@ class TestWritingSubdivisions(IdTestCase):
 class TestWriteScoreWithSubdivisions(IdTestCase):
     def write_subdivision_to_file(self, subdivision):
         score = Score()
-        p = score.add_part('p1')
+        p = score.add_part("p1")
         p.add_measure([1, 4])
-        for pattern in generate_subdivsion_test_patterns(subdivision, remove_larger_subdivision=True):
-            chords = [Chord(60, qd) for qd in [QuarterDuration(x, subdivision) for x in pattern]]
+        for pattern in generate_subdivsion_test_patterns(
+            subdivision, remove_larger_subdivision=True
+        ):
+            chords = [
+                Chord(60, qd)
+                for qd in [QuarterDuration(x, subdivision) for x in pattern]
+            ]
             [ch.add_lyric(x) for ch, x in zip(chords, pattern)]
             [p.add_chord(ch) for ch in chords]
-        xml_path = create_test_xml_paths(path, f'{subdivision}')[0]
+        xml_path = create_test_xml_paths(path, f"{subdivision}")[0]
         score.export_xml(xml_path)
 
     def test_write_quarter_32nd(self):

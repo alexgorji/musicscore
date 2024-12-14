@@ -10,20 +10,45 @@ from deepdiff import DeepDiff
 
 from musicscore import generate_measures, Chord, C
 from musicscore.part import Id
-from musicxml.xmlelement.xmlelement import *
-from musicscore.util import XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS, XML_DIRECTION_TYPE_CLASSES, XML_OTHER_NOTATIONS, \
-    XML_ORNAMENT_CLASSES, XML_ARTICULATION_CLASSES, XML_TECHNICAL_CLASSES, XML_DYNAMIC_CLASSES, \
-    XML_ORNAMENT_AND_OTHER_NOTATIONS
+from musicxml.xmlelement.xmlelement import * # noqa: F403
+from musicscore.util import (
+    XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS,
+    XML_DIRECTION_TYPE_CLASSES,
+    XML_OTHER_NOTATIONS,
+    XML_ORNAMENT_CLASSES,
+    XML_ARTICULATION_CLASSES,
+    XML_TECHNICAL_CLASSES,
+    XML_DYNAMIC_CLASSES,
+    XML_ORNAMENT_AND_OTHER_NOTATIONS,
+)
 
 
 class XMLsDifferException(Exception):
     pass
 
 
-notehead_values = ['slash', 'triangle', 'diamond', 'square', 'rectangle', 'cross', 'x', 'circle dot', 'circle-x',
-                   'circled', 'inverted triangle', 'left triangle', 'arrow down', 'arrow up', 'slashed',
-                   'back slashed', 'normal', 'cluster', 'none']
-notehead_aikin_values = ['do', 're', 'mi', 'fa', 'fa up', 'so', 'la', 'ti']
+notehead_values = [
+    "slash",
+    "triangle",
+    "diamond",
+    "square",
+    "rectangle",
+    "cross",
+    "x",
+    "circle dot",
+    "circle-x",
+    "circled",
+    "inverted triangle",
+    "left triangle",
+    "arrow down",
+    "arrow up",
+    "slashed",
+    "back slashed",
+    "normal",
+    "cluster",
+    "none",
+]
+notehead_aikin_values = ["do", "re", "mi", "fa", "fa up", "so", "la", "ti"]
 
 
 def check_notes(notes, midi_values, quarter_durations):
@@ -72,11 +97,13 @@ def diff_xml(path_1, path_2=None):
 
     diff = Differ()
     difference = list(diff.compare(f_1, f_2))
-    return [d for d in difference if d.startswith('-') or d.startswith('+')]
+    return [d for d in difference if d.startswith("-") or d.startswith("+")]
 
 
 def get_xml_elements_diff(el1, el2):
-    return DeepDiff(xmltodict.parse(ET.tostring(el1)), xmltodict.parse(ET.tostring(el2)))
+    return DeepDiff(
+        xmltodict.parse(ET.tostring(el1)), xmltodict.parse(ET.tostring(el2))
+    )
 
 
 def get_xml_diff_part(expected, xml_path, file_path):
@@ -88,7 +115,7 @@ def get_xml_diff_part(expected, xml_path, file_path):
 
 
 def generate_xml_file(score, *simpleformats, path):
-    part = score.add_part(id='part-1')
+    part = score.add_part(id="part-1")
     for index, simpleformat in enumerate(simpleformats):
         for chord in simpleformat.chords:
             part.add_chord(chord, staff_number=index + 1)
@@ -96,76 +123,96 @@ def generate_xml_file(score, *simpleformats, path):
 
 
 def generate_repetitions(part):
-    for m in generate_measures([(3, 8), (3, 4)] + 2 * [(6, 4)] + 3 * [(4, 4)] + [(5, 4)]):
+    for m in generate_measures(
+        [(3, 8), (3, 4)] + 2 * [(6, 4)] + 3 * [(4, 4)] + [(5, 4)]
+    ):
         part.add_child(m)
 
-    for qd in 3 * [0.5] + 3 * [1] + 4 * [1.5] + 3 * [2] + [1, 1, 1, 2, 1, 1, 2, 2, 3, 3, 3, 4, 4, 2, 2, 1.5, 1.5,
-                                                           3.25, 1.75, 1]:
-        part.add_chord(Chord(C(5, '#'), qd))
+    for qd in (
+        3 * [0.5]
+        + 3 * [1]
+        + 4 * [1.5]
+        + 3 * [2]
+        + [1, 1, 1, 2, 1, 1, 2, 2, 3, 3, 3, 4, 4, 2, 2, 1.5, 1.5, 3.25, 1.75, 1]
+    ):
+        part.add_chord(Chord(C(5, "#"), qd))
 
 
 def generate_path(frame):
-    f = str(inspect.getframeinfo(frame).function) + '.xml'
+    f = str(inspect.getframeinfo(frame).function) + ".xml"
     path = Path(inspect.getframeinfo(frame).filename).parent / f
     return path
 
 
 def create_test_xml_paths(path, test_name):
-    return path.parent.joinpath(f'{path.stem}_{test_name}.xml'), path.parent.joinpath(
-        f'{path.stem}_{test_name}_expected.xml')
+    return path.parent.joinpath(f"{path.stem}_{test_name}.xml"), path.parent.joinpath(
+        f"{path.stem}_{test_name}_expected.xml"
+    )
 
 
 def create_test_objects(type):
     output = []
-    if type == 'direction_type':
+    if type == "direction_type":
         for cl in XML_DIRECTION_TYPE_CLASSES + XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS:
             if cl == XMLSymbol:
-                obj = cl('0')
+                obj = cl("0")
             elif cl == XMLWedge:
-                obj = cl(type='crescendo')
+                obj = cl(type="crescendo")
             elif cl == XMLDashes:
-                obj = cl(type='start')
+                obj = cl(type="start")
             elif cl == XMLBracket:
-                obj = cl(type='start', line_end='none')
+                obj = cl(type="start", line_end="none")
             elif cl == XMLPedal:
-                obj = cl(type='start')
+                obj = cl(type="start")
             elif cl == XMLMetronome:
                 obj = cl()
-                obj.add_child(XMLBeatUnit('quarter'))
-                obj.add_child(XMLPerMinute('120'))
+                obj.add_child(XMLBeatUnit("quarter"))
+                obj.add_child(XMLPerMinute("120"))
             elif cl == XMLOctaveShift:
-                obj = cl(type='up')
+                obj = cl(type="up")
             elif cl == XMLHarpPedals:
                 obj = cl()
                 pt = obj.add_child(XMLPedalTuning())
-                pt.add_child(XMLPedalStep('A'))
+                pt.add_child(XMLPedalStep("A"))
                 pt.add_child(XMLPedalAlter(1))
             elif cl == XMLStringMute:
-                obj = cl(type='on')
+                obj = cl(type="on")
             elif cl == XMLScordatura:
                 obj = cl()
                 acc = obj.add_child(XMLAccord())
-                acc.add_child(XMLTuningStep('A'))
+                acc.add_child(XMLTuningStep("A"))
                 acc.add_child(XMLTuningOctave(0))
             # elif cl == XMLImage:
             #     obj = cl(source='www.example.com', type='image/gif')
             elif cl == XMLPrincipalVoice:
-                obj = cl(type='start', symbol='none')
+                obj = cl(type="start", symbol="none")
             elif cl == XMLPercussion:
                 obj = cl()
-                obj.add_child(XMLWood('cabasa'))
+                obj.add_child(XMLWood("cabasa"))
             elif cl == XMLStaffDivide:
-                obj = cl(type='up')
+                obj = cl(type="up")
             else:
                 obj = cl()
             output.append(obj)
 
-    elif type == 'technical':
-        needed_values = {XMLFret: 1, XMLString: 1, XMLHandbell: 'belltree', XMLFingering: '2', XMLPluck: 'something',
-                         XMLTap: '2', XMLHarmonClosed: 'yes', XMLOtherTechnical: 'something'}
-        needed_types = {XMLHammerOn: 'start', XMLPullOff: 'start'}
-        needed_children = {XMLBend: XMLBendAlter(2), XMLHole: XMLHoleClosed('yes'), XMLArrow: XMLArrowDirection('up'),
-                           XMLHarmonMute: XMLHarmonClosed('yes')}
+    elif type == "technical":
+        needed_values = {
+            XMLFret: 1,
+            XMLString: 1,
+            XMLHandbell: "belltree",
+            XMLFingering: "2",
+            XMLPluck: "something",
+            XMLTap: "2",
+            XMLHarmonClosed: "yes",
+            XMLOtherTechnical: "something",
+        }
+        needed_types = {XMLHammerOn: "start", XMLPullOff: "start"}
+        needed_children = {
+            XMLBend: XMLBendAlter(2),
+            XMLHole: XMLHoleClosed("yes"),
+            XMLArrow: XMLArrowDirection("up"),
+            XMLHarmonMute: XMLHarmonClosed("yes"),
+        }
         for cl in XML_TECHNICAL_CLASSES:
             if cl in needed_children:
                 obj = cl()
@@ -178,29 +225,29 @@ def create_test_objects(type):
                 obj = cl()
             output.append(obj)
 
-    elif type == 'ornament':
+    elif type == "ornament":
         for cl in XML_ORNAMENT_AND_OTHER_NOTATIONS + XML_ORNAMENT_CLASSES:
             if cl == XMLAccidentalMark:
-                obj = cl('sharp')
+                obj = cl("sharp")
             elif cl == XMLTremolo:
                 obj = cl(3)
             else:
                 obj = cl()
             output.append(obj)
 
-    elif type == 'notation':
+    elif type == "notation":
         for cl in XML_OTHER_NOTATIONS + XML_ORNAMENT_AND_OTHER_NOTATIONS:
             if cl == XMLAccidentalMark:
-                obj = cl('sharp')
+                obj = cl("sharp")
             else:
                 obj = cl()
             output.append(obj)
 
-    elif type == 'articulation':
+    elif type == "articulation":
         for cl in XML_ARTICULATION_CLASSES:
             obj = cl()
             output.append(obj)
-    elif type == 'dynamics':
+    elif type == "dynamics":
         for cl in XML_DYNAMIC_CLASSES:
             obj = cl()
             output.append(obj)

@@ -11,7 +11,7 @@ from musicscore.tests.util import IdTestCase
 class TestLily413(IdTestCase):
     def test_lily_41e_StaffGroups_InstrumentNames_Linebroken(self):
         score = Score()
-        part = score.add_part('p1')
+        part = score.add_part("p1")
         part.name = """Long
 Staff
 Name        
@@ -25,5 +25,5 @@ Nm.
         for m in part.get_children()[13:]:
             m.width = 80
 
-        xml_path = Path(__file__).with_suffix('.xml')
+        xml_path = Path(__file__).with_suffix(".xml")
         score.export_xml(xml_path)

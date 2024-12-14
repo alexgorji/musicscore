@@ -9,11 +9,11 @@ class TestCautionaryAccidentalSigns(IdTestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()
-        self.part = self.score.add_part('p.')
+        self.part = self.score.add_part("p.")
 
     @skip
     def test_cautionary_signs_repetition_traditional(self):
-        self.part.show_accidental_signs = 'traditional'
+        self.part.show_accidental_signs = "traditional"
         generate_repetitions(self.part)
         path = generate_path(inspect.currentframe())
         self.score.export_xml(path)

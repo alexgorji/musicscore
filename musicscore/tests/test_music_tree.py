@@ -15,13 +15,13 @@ from musicscore.voice import Voice
 
 
 class TestMusicTree(IdTestCase):
-    @patch.object(Chord, 'get_voice_number')
-    @patch.object(Chord, 'get_staff_number')
+    @patch.object(Chord, "get_voice_number")
+    @patch.object(Chord, "get_staff_number")
     def test_add_child_type(self, mock_get_voice_number, mock_get_staff_number):
         mock_get_voice_number.return_value = 1
         mock_get_staff_number.return_value = None
         s = Score()
-        p = Part('P1')
+        p = Part("P1")
         m = Measure(1)
         st = Staff()
         v = Voice()
@@ -59,22 +59,38 @@ class TestMusicTree(IdTestCase):
 
     def test_check_args_kwargs(self):
         with self.assertRaises(ValueError):
-            MusicTree()._check_args_kwargs(args=[1, 2, 3], kwargs={'part_number': 2}, class_name='Score')
-        kwargs = MusicTree()._check_args_kwargs(args=[1, 2, 3], kwargs={}, class_name='Score', get_class_name='Staff')
-        assert kwargs == {'part_number': 1, 'measure_number': 2, 'staff_number': 3}
-        kwargs = MusicTree()._check_args_kwargs(args=[], kwargs={'part_number': 1, 'measure_number': 2, 'staff_number': 3},
-                                                class_name='Score', get_class_name='Staff')
-        assert kwargs == {'part_number': 1, 'measure_number': 2, 'staff_number': 3}
+            MusicTree()._check_args_kwargs(
+                args=[1, 2, 3], kwargs={"part_number": 2}, class_name="Score"
+            )
+        kwargs = MusicTree()._check_args_kwargs(
+            args=[1, 2, 3], kwargs={}, class_name="Score", get_class_name="Staff"
+        )
+        assert kwargs == {"part_number": 1, "measure_number": 2, "staff_number": 3}
+        kwargs = MusicTree()._check_args_kwargs(
+            args=[],
+            kwargs={"part_number": 1, "measure_number": 2, "staff_number": 3},
+            class_name="Score",
+            get_class_name="Staff",
+        )
+        assert kwargs == {"part_number": 1, "measure_number": 2, "staff_number": 3}
         with self.assertRaises(ValueError):
-            MusicTree()._check_args_kwargs(args=[], kwargs={'part_number': 1, 'measure_number': 2, 'beat_number': 3}, class_name='Score')
+            MusicTree()._check_args_kwargs(
+                args=[],
+                kwargs={"part_number": 1, "measure_number": 2, "beat_number": 3},
+                class_name="Score",
+            )
 
-        kwargs = MusicTree()._check_args_kwargs(args=[1, 2, 3], kwargs={}, class_name='Measure', get_class_name='Beat')
-        assert kwargs == {'staff_number': 1, 'voice_number': 2, 'beat_number': 3}
+        kwargs = MusicTree()._check_args_kwargs(
+            args=[1, 2, 3], kwargs={}, class_name="Measure", get_class_name="Beat"
+        )
+        assert kwargs == {"staff_number": 1, "voice_number": 2, "beat_number": 3}
         with self.assertRaises(ValueError):
-            MusicTree()._check_args_kwargs(args=[1, 2, 3], kwargs={}, class_name='Measure', get_class_name='Voice')
+            MusicTree()._check_args_kwargs(
+                args=[1, 2, 3], kwargs={}, class_name="Measure", get_class_name="Voice"
+            )
 
     def test_get_type_errors(self):
-        p = Part('p3')
+        p = Part("p3")
         m = Measure(1)
         s = Staff()
         v = Voice()
@@ -107,10 +123,10 @@ class TestMusicTree(IdTestCase):
     def test_score_get_part(self):
         score = Score()
         assert score.get_part(1) is None
-        p1 = score.add_child(Part('p1'))
+        p1 = score.add_child(Part("p1"))
         assert score.get_part(part_number=1) == p1
         assert score.get_part(part_number=2) is None
-        p2 = score.add_child(Part('p2'))
+        p2 = score.add_child(Part("p2"))
         assert score.get_part(part_number=2) == p2
         assert score.get_part(part_number=3) is None
 
@@ -120,7 +136,7 @@ class TestMusicTree(IdTestCase):
             score.get_part(staff_number=2)
 
     def test_part_get_measure(self):
-        p = Part('p1')
+        p = Part("p1")
         assert p.get_measure(1) is None
         m1 = p.add_measure()
         assert p.get_measure(1) == m1
@@ -153,7 +169,7 @@ class TestMusicTree(IdTestCase):
         with self.assertRaises(ValueError):
             m.get_staff(voice_number=2)
 
-    @patch('musicscore.measure.Measure')
+    @patch("musicscore.measure.Measure")
     def test_staff_get_voice(self, mock_measure):
         st = Staff()
         st._parent = mock_measure

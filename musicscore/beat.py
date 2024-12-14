@@ -5,10 +5,19 @@ from fractions import Fraction
 
 from musicscore.chord import _split_copy, _group_chords, Chord
 from musicscore.config import SPLITTABLES, GENERALSPLITTABLES, SPLITTEXCEPTIONS
-from musicscore.exceptions import BeatWrongDurationError, BeatIsFullError, BeatHasNoParentError, \
-    ChordHasNoQuarterDurationError, \
-    ChordHasNoMidisError, AlreadyFinalizedError, BeatNotFullError, AddChordError, QuarterDurationIsNotWritable, \
-    BeatUpdateChordTupletsError, ChordTypeNotSetError
+from musicscore.exceptions import (
+    BeatWrongDurationError,
+    BeatIsFullError,
+    BeatHasNoParentError,
+    ChordHasNoQuarterDurationError,
+    ChordHasNoMidisError,
+    AlreadyFinalizedError,
+    BeatNotFullError,
+    AddChordError,
+    QuarterDurationIsNotWritable,
+    BeatUpdateChordTupletsError,
+    ChordTypeNotSetError,
+)
 from musicscore.finalize import FinalizeMixin
 from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
@@ -16,25 +25,30 @@ from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
 from musicscore.tuplet import Tuplet
 from musicscore.util import lcm, split_list
 
-__all__ = ['Beat', 'beam_chord_group', 'get_chord_group_subdivision']
+__all__ = ["Beat", "beam_chord_group", "get_chord_group_subdivision"]
 
 
 def _convert_to_quarter_duration_splittables_dictionary(simple_splittalbes):
     output = {}
     for key, value in simple_splittalbes.items():
         output[QuarterDuration(*key)] = {
-            QuarterDuration(*k): [QuarterDuration(*qd) for qd in v] for k, v in value.items()
+            QuarterDuration(*k): [QuarterDuration(*qd) for qd in v]
+            for k, v in value.items()
         }
     return output
 
 
-_SPLITTABLE_QUARTER_DURATIONS = _convert_to_quarter_duration_splittables_dictionary(SPLITTABLES)
+_SPLITTABLE_QUARTER_DURATIONS = _convert_to_quarter_duration_splittables_dictionary(
+    SPLITTABLES
+)
 
 
 def _find_nearest_quantized_value(quantized_values, values):
     output = []
     for value in values:
-        nearest_quantized = min(enumerate(quantized_values), key=lambda x: abs(x[1] - value))[1]
+        nearest_quantized = min(
+            enumerate(quantized_values), key=lambda x: abs(x[1] - value)
+        )[1]
         delta = nearest_quantized - value
         output.append((nearest_quantized, delta))
     return output
@@ -69,7 +83,7 @@ def get_chord_group_subdivision(chords):
             return l_c_m
     permitted_sums = [1 / 4, 1 / 2, 1, 2, 4, 8]
     if qd_sum not in permitted_sums:
-        raise ValueError(f'sum of chords {qd_sum} must be in {permitted_sums}')
+        raise ValueError(f"sum of chords {qd_sum} must be in {permitted_sums}")
     qds = [qd / qd_sum for qd in qds]
     denominators = list(dict.fromkeys([qd.denominator for qd in qds]))
     if len(denominators) > 1:
@@ -82,7 +96,7 @@ def get_chord_group_subdivision(chords):
         return denominators[0]
 
 
-def beam_chord_group(chord_group: List['Chord']) -> None:
+def beam_chord_group(chord_group: List["Chord"]) -> None:
     # print('setting beams', [ch.quarter_duration for ch in chord_group])
     """
     Function for setting beams of a list of chords (chord_group). This function is used to create or update beams inside a beat.
@@ -92,7 +106,9 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
     chord_group = [ch for ch in chord_group if ch.quarter_duration != 0]
     for ch in chord_group:
         if ch.type is None:
-            raise ChordTypeNotSetError('Beaming chord groups not possible if chord types are not set.')
+            raise ChordTypeNotSetError(
+                "Beaming chord groups not possible if chord types are not set."
+            )
 
     def remove_rests_from_both_ends(chords):
         is_rest_list = [ch.is_rest for ch in chords]
@@ -103,7 +119,11 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
             output = chords[first_non_chord_index:]
             is_rest_list = is_rest_list[first_non_chord_index:]
             if is_rest_list[-1] is True:
-                last_non_chord_index = next(i for i in reversed((range(len(is_rest_list)))) if is_rest_list[i] is True)
+                last_non_chord_index = next(
+                    i
+                    for i in reversed((range(len(is_rest_list))))
+                    if is_rest_list[i] is True
+                )
                 output = output[:last_non_chord_index]
             return output
         else:
@@ -124,23 +144,23 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
         """
         if last_number_of_beams <= current_number_of_beams:
             if cont:
-                add_beam_to_chord(chord, 1, 'continue')
+                add_beam_to_chord(chord, 1, "continue")
                 for num in range(2, last_number_of_beams + 1):
-                    add_beam_to_chord(chord, num, 'end')
+                    add_beam_to_chord(chord, num, "end")
             else:
                 for n in range(1, last_number_of_beams + 1):
-                    add_beam_to_chord(chord, n, 'end')
+                    add_beam_to_chord(chord, n, "end")
         else:
             if current_number_of_beams != 0:
                 if cont:
-                    add_beam_to_chord(chord, 1, 'continue')
+                    add_beam_to_chord(chord, 1, "continue")
                     for n in range(2, current_number_of_beams + 1):
-                        add_beam_to_chord(chord, n, 'end')
+                        add_beam_to_chord(chord, n, "end")
                 else:
                     for n in range(1, current_number_of_beams + 1):
-                        add_beam_to_chord(chord, n, 'end')
+                        add_beam_to_chord(chord, n, "end")
                 for n in range(current_number_of_beams + 1, last_number_of_beams + 1):
-                    add_beam_to_chord(chord, n, 'backward')
+                    add_beam_to_chord(chord, n, "backward")
 
     current_number_of_beams = 0
 
@@ -158,51 +178,53 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
         # print(b1, b2, current_number_of_beams)
         if chord.is_rest:
             pass
-            'do nothing'
+            "do nothing"
         else:
             if not b1:
                 pass
-                'do nothing'
+                "do nothing"
             elif next_chord.is_rest:
                 if current_number_of_beams == 0:
-                    types.append(('begin', 1, 1))
+                    types.append(("begin", 1, 1))
                     if b1 > 1:
-                        types.append(('forward', 1, b1))
+                        types.append(("forward", 1, b1))
                 else:
-                    types.append(('continue', 1, 1))
+                    types.append(("continue", 1, 1))
                     if b1 > 1:
                         if b1 <= current_number_of_beams:
-                            types.append(('end', 2, b1))
+                            types.append(("end", 2, b1))
                         else:
-                            types.append(('end', 2, current_number_of_beams))
-                            types.append(('forward', current_number_of_beams + 1, b1))
+                            types.append(("end", 2, current_number_of_beams))
+                            types.append(("forward", current_number_of_beams + 1, b1))
 
                 current_number_of_beams = 1
             else:
-                'do something regular'
+                "do something regular"
                 if b1 and not b2:
                     add_last_beam(chord, b1, current_number_of_beams)
                 else:
                     if b2 < b1 <= current_number_of_beams:
                         # print('huhu')
-                        types.append(('continue', 1, b2))
-                        types.append(('end', b2 + 1, b1))
+                        types.append(("continue", 1, b2))
+                        types.append(("end", b2 + 1, b1))
                     elif b2 < b1 > current_number_of_beams:
                         if current_number_of_beams == 0:
-                            types.append(('begin', 1, b2))
-                            types.append(('forward', b2 + 1, b1))
+                            types.append(("begin", 1, b2))
+                            types.append(("forward", b2 + 1, b1))
                         else:
                             if current_number_of_beams > b2:
-                                types.append(('continue', 1, b2))
-                                types.append(('end', b2 + 1, current_number_of_beams))
-                                types.append(('backward', current_number_of_beams + 1, b1))
+                                types.append(("continue", 1, b2))
+                                types.append(("end", b2 + 1, current_number_of_beams))
+                                types.append(
+                                    ("backward", current_number_of_beams + 1, b1)
+                                )
                             elif current_number_of_beams < b2:
-                                types.append(('continue', 1, current_number_of_beams))
-                                types.append(('begin', current_number_of_beams + 1, b2))
-                                types.append(('forward', b2 + 1, b1))
+                                types.append(("continue", 1, current_number_of_beams))
+                                types.append(("begin", current_number_of_beams + 1, b2))
+                                types.append(("forward", b2 + 1, b1))
                             else:
-                                types.append(('continue', 1, b2))
-                                types.append(('forward', b2 + 1, b1))
+                                types.append(("continue", 1, b2))
+                                types.append(("forward", b2 + 1, b1))
                             #
                             # if (chord.quarter_duration == QuarterDuration(1, 6) and chord.offset == QuarterDuration(1,
                             #                                                                                         3)
@@ -216,30 +238,32 @@ def beam_chord_group(chord_group: List['Chord']) -> None:
 
                         # current_number_of_beams = b1
                     elif b2 == b1 <= current_number_of_beams:
-                        types.append(('continue', 1, b1))
+                        types.append(("continue", 1, b1))
                         # current_number_of_beams = b1
 
                     elif b2 == b1 > current_number_of_beams:
                         if current_number_of_beams == 0:
-                            types.append(('begin', 1, b2))
+                            types.append(("begin", 1, b2))
                         else:
-                            types.append(('continue', 1, current_number_of_beams))
-                            types.append(('begin', current_number_of_beams + 1, b2))
+                            types.append(("continue", 1, current_number_of_beams))
+                            types.append(("begin", current_number_of_beams + 1, b2))
 
                     elif b2 > b1 <= current_number_of_beams:
-                        types.append(('continue', 1, b1))
+                        types.append(("continue", 1, b1))
 
                     elif b2 > b1 > current_number_of_beams:
                         if current_number_of_beams == 0:
-                            types.append(('begin', 1, b1))
+                            types.append(("begin", 1, b1))
                         else:
-                            types.append(('continue', 1, current_number_of_beams))
-                            types.append(('begin', current_number_of_beams + 1, b1))
+                            types.append(("continue", 1, current_number_of_beams))
+                            types.append(("begin", current_number_of_beams + 1, b1))
         for t in types:
             for num in range(t[1], t[2] + 1):
                 add_beam_to_chord(chord, num, t[0])
         if chord.beams:
-            current_number_of_beams = len([v for v in chord.beams.values() if v in ['continue', 'begin']])
+            current_number_of_beams = len(
+                [v for v in chord.beams.values() if v in ["continue", "begin"]]
+            )
             # print('setting current to', current_number_of_beams)
         if index == len(chord_group) - 2 and b2:
             add_last_beam(next_chord, b2, current_number_of_beams)
@@ -280,8 +304,11 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         child._parent = self
         self._children.append(child)
         try:
-            self.up.up.up.up.set_current_measure(staff_number=self.up.up.number, voice_number=self.up.number,
-                                                 measure=self.up.up.up)
+            self.up.up.up.up.set_current_measure(
+                staff_number=self.up.up.number,
+                voice_number=self.up.number,
+                measure=self.up.up.up,
+            )
         except AttributeError:
             pass
 
@@ -311,7 +338,8 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         if sum(quarter_durations) != self.quarter_duration:
             raise ValueError(
                 f"Sum of quarter_durations '{quarter_durations}: {sum(quarter_durations)}' is not equal to beat quarter_duration "
-                f"'{self.quarter_duration}'")
+                f"'{self.quarter_duration}'"
+            )
 
         def _get_positions():
             output = [0]
@@ -322,10 +350,14 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         positions = _get_positions()
         permitted_divs = self.get_possible_subdivisions()[:]
         best_div = permitted_divs.pop(0)
-        last_q_delta = _find_q_delta(self._get_quantized_locations(subdivision=best_div), positions)
+        last_q_delta = _find_q_delta(
+            self._get_quantized_locations(subdivision=best_div), positions
+        )
 
         for div in permitted_divs:
-            current_q_delta = _find_q_delta(self._get_quantized_locations(subdivision=div), positions)
+            current_q_delta = _find_q_delta(
+                self._get_quantized_locations(subdivision=div), positions
+            )
 
             if current_q_delta < last_q_delta:
                 best_div = div
@@ -334,16 +366,19 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             elif (current_q_delta == last_q_delta) and (div < best_div):
                 best_div = div
 
-        quantized_positions = [f[0] for f in
-                               _find_nearest_quantized_value(self._get_quantized_locations(subdivision=best_div),
-                                                             positions)]
+        quantized_positions = [
+            f[0]
+            for f in _find_nearest_quantized_value(
+                self._get_quantized_locations(subdivision=best_div), positions
+            )
+        ]
 
         quantized_durations = []
 
         for i in range(len(quarter_durations)):
             fr = Fraction(
-                quantized_positions[i + 1] - quantized_positions[i]).limit_denominator(
-                trunc(best_div / self.quarter_duration))
+                quantized_positions[i + 1] - quantized_positions[i]
+            ).limit_denominator(trunc(best_div / self.quarter_duration))
             quantized_durations.append(QuarterDuration(fr))
         return quantized_durations
 
@@ -356,30 +391,39 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             output.append(copied)
         for index, ch in enumerate(output[:-1]):
             next_ch = output[index + 1]
-            ch.add_tie('start')
-            next_ch.add_tie('stop')
+            ch.add_tie("start")
+            next_ch.add_tie("stop")
             for midi in next_ch.midis:
                 midi.accidental.show = False
         return output
 
     def _split_not_writable(self, chord, offset):
-        if _SPLITTABLE_QUARTER_DURATIONS.get(offset) and _SPLITTABLE_QUARTER_DURATIONS.get(offset).get(
-                chord.quarter_duration):
+        if _SPLITTABLE_QUARTER_DURATIONS.get(
+            offset
+        ) and _SPLITTABLE_QUARTER_DURATIONS.get(offset).get(chord.quarter_duration):
             quarter_durations = _SPLITTABLE_QUARTER_DURATIONS.get(offset).get(
-                chord.quarter_duration)
+                chord.quarter_duration
+            )
             if quarter_durations:
                 quarter_durations = [QuarterDuration(qd) for qd in quarter_durations]
                 return self._split_chord(chord, quarter_durations)
         elif GENERALSPLITTABLES.get(chord.quarter_duration.numerator):
-            quarter_durations = [QuarterDuration(x, chord.quarter_duration.denominator) for x in
-                                 GENERALSPLITTABLES.get(chord.quarter_duration.numerator)]
+            quarter_durations = [
+                QuarterDuration(x, chord.quarter_duration.denominator)
+                for x in GENERALSPLITTABLES.get(chord.quarter_duration.numerator)
+            ]
             return self._split_chord(chord, quarter_durations)
         else:
             try:
-                split_qds = SPLITTEXCEPTIONS.get(self.quarter_duration.value).get(self.get_subdivision()).get(
-                    chord.quarter_duration.as_integer_ratio())
+                split_qds = (
+                    SPLITTEXCEPTIONS.get(self.quarter_duration.value)
+                    .get(self.get_subdivision())
+                    .get(chord.quarter_duration.as_integer_ratio())
+                )
                 if split_qds:
-                    quarter_durations = [QuarterDuration(qd[0], qd[1]) for qd in split_qds]
+                    quarter_durations = [
+                        QuarterDuration(qd[0], qd[1]) for qd in split_qds
+                    ]
                     return self._split_chord(chord, quarter_durations)
             except AttributeError:
                 pass
@@ -393,7 +437,8 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     ch.type = ch.quarter_duration.get_type()
                 except QuarterDurationIsNotWritable as err:
                     raise QuarterDurationIsNotWritable(
-                        f'Chord {ch.get_position_in_tree()} with offset {ch.offset}: {err} Consider setting type, number_of_dots and tuplet properties of the chord manually or splitting it into writable chords.')
+                        f"Chord {ch.get_position_in_tree()} with offset {ch.offset}: {err} Consider setting type, number_of_dots and tuplet properties of the chord manually or splitting it into writable chords."
+                    )
 
     def _update_chord_number_of_dots(self):
         for ch in self.get_chords():
@@ -407,21 +452,26 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             return
         if {ch.tuplet for ch in self.get_chords()} != {None}:
             raise BeatUpdateChordTupletsError(
-                'Beat cannot manage tuplets automatically if it contains chords with manually set tuplet properties.')
+                "Beat cannot manage tuplets automatically if it contains chords with manually set tuplet properties."
+            )
 
         def _update_tuplets(chord_group, actual_notes, quarter_duration=1):
             if actual_notes <= 16 or actual_notes == 32:
                 if actual_notes not in [1, 2, 4, 8, 16, 32]:
                     for chord in chord_group:
-                        chord.tuplet = Tuplet(actual_notes=actual_notes, quarter_duration=quarter_duration)
+                        chord.tuplet = Tuplet(
+                            actual_notes=actual_notes, quarter_duration=quarter_duration
+                        )
                         if chord == chord_group[0]:
-                            chord.tuplet.bracket_type = 'start'
+                            chord.tuplet.bracket_type = "start"
                         elif chord == chord_group[-1]:
-                            chord.tuplet.bracket_type = 'stop'
+                            chord.tuplet.bracket_type = "stop"
                         else:
                             pass
             else:
-                raise NotImplementedError('tuplets of actual_notes > 16 cannot be implemented.')
+                raise NotImplementedError(
+                    "tuplets of actual_notes > 16 cannot be implemented."
+                )
 
         actual_notes = get_chord_group_subdivision(self.get_children())
         if not actual_notes:
@@ -434,10 +484,12 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     return
                 else:
                     raise NotImplementedError(
-                        'Beat cannot be halved. It cannot manage the necessary grouping of chords.')
+                        "Beat cannot be halved. It cannot manage the necessary grouping of chords."
+                    )
             else:
                 raise NotImplementedError(
-                    'Beat with quarter_duration other than one cannot manage more than one group of chords.')
+                    "Beat with quarter_duration other than one cannot manage more than one group of chords."
+                )
 
         _update_tuplets(self.get_children(), actual_notes, self.quarter_duration)
 
@@ -454,7 +506,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             # group inside beat
             if self.get_subdivision() == 8 and self.quarter_duration == 1:
                 chord_groups = _group_chords(chords, [1 / 2, 1 / 2])
-                if chord_groups and not 1 in {len(group) for group in chord_groups}:
+                if chord_groups and 1 not in {len(group) for group in chord_groups}:
                     continue_eighth_beam = True
                 else:
                     chord_groups = None
@@ -463,19 +515,23 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             # break beams
             broken_chord_groups = []
             for group in chord_groups:
-                split_indices = [index for index, chord in enumerate(group) if chord.broken_beam]
+                split_indices = [
+                    index for index, chord in enumerate(group) if chord.broken_beam
+                ]
                 for broken_group in split_list(group, split_indices):
                     broken_chord_groups.append(broken_group)
             # create beams
             for group in broken_chord_groups:
                 beam_chord_group(group)
             # continue eighth beam
-            if continue_eighth_beam and 1 not in {len(group) for group in broken_chord_groups}:
+            if continue_eighth_beam and 1 not in {
+                len(group) for group in broken_chord_groups
+            }:
                 for index, group in enumerate(broken_chord_groups):
                     if index < len(broken_chord_groups) - 1:
-                        group[-1].beams[1] = 'continue'
+                        group[-1].beams[1] = "continue"
                     if index > 0:
-                        group[0].beams[1] = 'continue'
+                        group[0].beams[1] = "continue"
 
     def _remove_zero_quarter_durations(self):
         def _get_next_chord(chord):
@@ -494,8 +550,9 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     staff_number = 1
                 next_measure = chord.up.up.up.up.next
                 if next_measure:
-                    next_measure_voice = next_measure.get_chord(staff_number=staff_number,
-                                                                voice_number=voice_number)
+                    next_measure_voice = next_measure.get_chord(
+                        staff_number=staff_number, voice_number=voice_number
+                    )
                     if next_measure_voice:
                         next_beat = next_measure_voice.get_children()[0]
                         while next_beat and not next_chord:
@@ -522,8 +579,9 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     staff_number = 1
                 previous_measure = chord.up.up.up.up.previous
                 if previous_measure:
-                    previous_measure_voice = previous_measure.get_chord(staff_number=staff_number,
-                                                                        voice_number=voice_number)
+                    previous_measure_voice = previous_measure.get_chord(
+                        staff_number=staff_number, voice_number=voice_number
+                    )
                     if previous_measure_voice:
                         previous_beat = previous_measure_voice.get_children()[-1]
                         while previous_beat and not previous_chord:
@@ -540,7 +598,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 next_chord = _get_next_chord(ch)
                 # next_chord.add_lyric('I am next')
                 if next_chord:
-                    [m.remove_tie('stop') for m in next_chord.midis]
+                    [m.remove_tie("stop") for m in next_chord.midis]
                     next_chord._xml_direction_types = ch._xml_direction_types
                     next_chord._xml_directions = ch._xml_directions
                     next_chord._xml_lyrics = ch._xml_lyrics
@@ -555,7 +613,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             elif ch.all_midis_are_tied_to_previous:
                 previous_chord = _get_previous_chord(ch)
                 if previous_chord:
-                    [m.remove_tie('start') for m in previous_chord.midis]
+                    [m.remove_tie("start") for m in previous_chord.midis]
                 ch.up.remove(ch)
             else:
                 pass
@@ -579,7 +637,11 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     self._children = self.get_children()[:-1] + split
                 else:
                     index = self.get_children().index(chord)
-                    self._children = self.get_children()[:index] + split + self.get_children()[index + 1:]
+                    self._children = (
+                        self.get_children()[:index]
+                        + split
+                        + self.get_children()[index + 1 :]
+                    )
 
     @property
     def is_filled(self) -> bool:
@@ -621,7 +683,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         else:
             return self.previous.offset + self.previous.quarter_duration
 
-    def add_child(self, child: Chord) -> List['Chord']:
+    def add_child(self, child: Chord) -> List["Chord"]:
         """
         If child's quarter duration is less than beat's remaining quarter duration: child is added to the beat.
 
@@ -638,17 +700,23 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         :return: list of split chords
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_child')
+            raise AlreadyFinalizedError(self, "add_child")
         self._check_child_to_be_added(child)
         if not self.up:
-            raise BeatHasNoParentError('A child Chord can only be added to a beat if it has a voice parent.')
+            raise BeatHasNoParentError(
+                "A child Chord can only be added to a beat if it has a voice parent."
+            )
         if child.quarter_duration is None:
-            raise ChordHasNoQuarterDurationError('Chord with no quarter_duration cannot be added to Beat.')
+            raise ChordHasNoQuarterDurationError(
+                "Chord with no quarter_duration cannot be added to Beat."
+            )
         if not child.midis:
-            raise ChordHasNoMidisError('Chord with no midis cannot be added to Beat.')
+            raise ChordHasNoMidisError("Chord with no midis cannot be added to Beat.")
         if self.is_filled and child.quarter_duration != 0:
             raise BeatIsFullError()
-        diff = child.quarter_duration - (self.quarter_duration - self.filled_quarter_duration)
+        diff = child.quarter_duration - (
+            self.quarter_duration - self.filled_quarter_duration
+        )
         if diff <= 0:
             self._filled_quarter_duration += child.quarter_duration
             self._add_child(child)
@@ -659,16 +727,20 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 current_beat = self
                 while remaining_quarter_duration and current_beat:
                     if current_beat.quarter_duration < remaining_quarter_duration:
-                        current_beat._filled_quarter_duration += current_beat.quarter_duration
+                        current_beat._filled_quarter_duration += (
+                            current_beat.quarter_duration
+                        )
                         remaining_quarter_duration -= current_beat.quarter_duration
                         current_beat = current_beat.next
                     else:
-                        current_beat._filled_quarter_duration += remaining_quarter_duration
+                        current_beat._filled_quarter_duration += (
+                            remaining_quarter_duration
+                        )
                         break
                 self._add_child(child)
                 return [child]
             else:
-                beats = self.up.get_children()[self.up.get_children().index(self):]
+                beats = self.up.get_children()[self.up.get_children().index(self) :]
                 return child._split_and_add_beatwise(beats)
 
     def add_chord(self, *args, **kwargs):
@@ -679,7 +751,13 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         If :obj:`~musicscore.beat.Beat` is not filled, it will be filled with rest(s)
         """
         if not self.is_filled:
-            self._add_chord(Chord(0, self.quarter_duration - sum([ch.quarter_duration for ch in self.get_chords()])))
+            self._add_chord(
+                Chord(
+                    0,
+                    self.quarter_duration
+                    - sum([ch.quarter_duration for ch in self.get_chords()]),
+                )
+            )
 
     def finalize(self):
         """
@@ -722,10 +800,17 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
 
         """
         if self.get_possible_subdivisions() and self.get_children():
-            if get_chord_group_subdivision(self.get_children()) in self.get_possible_subdivisions():
+            if (
+                get_chord_group_subdivision(self.get_children())
+                in self.get_possible_subdivisions()
+            ):
                 pass
             else:
-                quarter_durations = [chord.quarter_duration for chord in self.get_children()]
+                quarter_durations = [
+                    chord.quarter_duration for chord in self.get_children()
+                ]
                 if len([d for d in quarter_durations if d != 0]) > 1:
-                    self._change_children_quarter_durations(self._get_quantized_quarter_durations(quarter_durations))
+                    self._change_children_quarter_durations(
+                        self._get_quantized_quarter_durations(quarter_durations)
+                    )
                     self._remove_zero_quarter_durations()

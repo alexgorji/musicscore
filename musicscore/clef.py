@@ -3,15 +3,23 @@ from typing import Optional
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLClef
 
-__all__ = ['Clef', 'TrebleClef', 'BassClef', 'AltoClef', 'TenorClef']
+__all__ = ["Clef", "TrebleClef", "BassClef", "AltoClef", "TenorClef"]
 
 
 class Clef(XMLWrapper):
-    _ATTRIBUTES = {'show', 'sign', 'line', 'octave_change'}
+    _ATTRIBUTES = {"show", "sign", "line", "octave_change"}
     XMLClass = XMLClef
 
-    def __init__(self, sign: str = 'G', line: Optional[int] = 2, octave_change: int = None, show: bool = True,
-                 default: bool = False, *args, **kwargs):
+    def __init__(
+        self,
+        sign: str = "G",
+        line: Optional[int] = 2,
+        octave_change: int = None,
+        show: bool = True,
+        default: bool = False,
+        *args,
+        **kwargs,
+    ):
         super().__init__()
         self._xml_object = self.XMLClass(*args, **kwargs)
         self._show = None
@@ -96,8 +104,12 @@ class TrebleClef(Clef):
       - line=2
     """
 
-    def __init__(self, show: bool = True, octave_change: Optional[int] = None, **kwargs):
-        super().__init__(sign='G', line=2, show=show, octave_change=octave_change, **kwargs)
+    def __init__(
+        self, show: bool = True, octave_change: Optional[int] = None, **kwargs
+    ):
+        super().__init__(
+            sign="G", line=2, show=show, octave_change=octave_change, **kwargs
+        )
 
 
 class BassClef(Clef):
@@ -107,8 +119,12 @@ class BassClef(Clef):
       - line=4
     """
 
-    def __init__(self, show: bool = True, octave_change: Optional[int] = None, **kwargs):
-        super().__init__(sign='F', line=4, show=show, octave_change=octave_change, **kwargs)
+    def __init__(
+        self, show: bool = True, octave_change: Optional[int] = None, **kwargs
+    ):
+        super().__init__(
+            sign="F", line=4, show=show, octave_change=octave_change, **kwargs
+        )
 
 
 class AltoClef(Clef):
@@ -118,8 +134,12 @@ class AltoClef(Clef):
       - line=3
     """
 
-    def __init__(self, show: bool = True, octave_change: Optional[int] = None, **kwargs):
-        super().__init__(sign='C', line=3, show=show, octave_change=octave_change, **kwargs)
+    def __init__(
+        self, show: bool = True, octave_change: Optional[int] = None, **kwargs
+    ):
+        super().__init__(
+            sign="C", line=3, show=show, octave_change=octave_change, **kwargs
+        )
 
 
 class TenorClef(Clef):
@@ -129,8 +149,12 @@ class TenorClef(Clef):
       - line=4
     """
 
-    def __init__(self, show: bool = True, octave_change: Optional[int] = None, **kwargs):
-        super().__init__(sign='C', line=4, show=show, octave_change=octave_change, **kwargs)
+    def __init__(
+        self, show: bool = True, octave_change: Optional[int] = None, **kwargs
+    ):
+        super().__init__(
+            sign="C", line=4, show=show, octave_change=octave_change, **kwargs
+        )
 
 
 class PercussionClef(Clef):
@@ -140,5 +164,13 @@ class PercussionClef(Clef):
       - line=None
     """
 
-    def __init__(self, show: bool = True, octave_change: Optional[int] = None, **kwargs):
-        super().__init__(sign='percussion', line=None, show=show, octave_change=octave_change, **kwargs)
+    def __init__(
+        self, show: bool = True, octave_change: Optional[int] = None, **kwargs
+    ):
+        super().__init__(
+            sign="percussion",
+            line=None,
+            show=show,
+            octave_change=octave_change,
+            **kwargs,
+        )

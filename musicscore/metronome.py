@@ -1,11 +1,14 @@
 from musicscore.quarterduration import QuarterDuration
-from musicscore.exceptions import QuarterDurationIsNotWritable, MetronomeWrongBeatUnitError
+from musicscore.exceptions import (
+    QuarterDurationIsNotWritable,
+    MetronomeWrongBeatUnitError,
+)
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLMetronome, XMLBeatUnitDot, XMLSound
 
 
 class Metronome(XMLWrapper):
-    _ATTRIBUTES = {'per_minute', 'beat_unit'}
+    _ATTRIBUTES = {"per_minute", "beat_unit"}
     XMLClass = XMLMetronome
 
     def __init__(self, per_minute, beat_unit=1, parenthesis=False, *args, **kwargs):
@@ -39,7 +42,11 @@ class Metronome(XMLWrapper):
 
     def _set_xml_beat_unit_dots(self):
         number_of_dots = self.beat_unit.get_number_of_dots()
-        current_xml_unit_dots = [ch for ch in self.xml_object.get_children() if isinstance(ch, XMLBeatUnitDot)]
+        current_xml_unit_dots = [
+            ch
+            for ch in self.xml_object.get_children()
+            if isinstance(ch, XMLBeatUnitDot)
+        ]
         number_of_superfluous_dots = len(current_xml_unit_dots) - number_of_dots
         if number_of_superfluous_dots > 0:
             for xml_unit_dot in current_xml_unit_dots[:number_of_superfluous_dots]:

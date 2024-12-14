@@ -2,9 +2,14 @@ from typing import List, Union, Optional
 from fractions import Fraction
 import numbers
 
-__all__ = ['QuarterDuration', 'QuarterDurationMixin']
+__all__ = ["QuarterDuration", "QuarterDurationMixin"]
 
-from musicscore.config import NOTETYPES, BEATWISE_EXCEPTIONS, DOTEDTUPLETRATIO, TYPEANDDOTEXCEPTIONS
+from musicscore.config import (
+    NOTETYPES,
+    BEATWISE_EXCEPTIONS,
+    DOTEDTUPLETRATIO,
+    TYPEANDDOTEXCEPTIONS,
+)
 from musicscore.exceptions import QuarterDurationIsNotWritable
 
 
@@ -23,7 +28,11 @@ class QuarterDuration(numbers.Rational):
         self._beat_quarter_duration = 1
         self._type_and_dots = None
 
-    def _get_beatwise_sections(self, beats: List['Beat'], offset: Union[int, float, 'QuarterDuration', 'Fraction'] = 0):
+    def _get_beatwise_sections(
+        self,
+        beats: List["Beat"],
+        offset: Union[int, float, "QuarterDuration", "Fraction"] = 0,
+    ):
         """
         :param beats:
         :param offset: offset in the first beat
@@ -83,8 +92,11 @@ class QuarterDuration(numbers.Rational):
         if not self.beat_subdivision:
             self.beat_subdivision = self.denominator
         try:
-            type_and_dots = TYPEANDDOTEXCEPTIONS.get(self.beat_quarter_duration).get(self.beat_subdivision).get(
-                self.as_integer_ratio())
+            type_and_dots = (
+                TYPEANDDOTEXCEPTIONS.get(self.beat_quarter_duration)
+                .get(self.beat_subdivision)
+                .get(self.as_integer_ratio())
+            )
             if type_and_dots:
                 return type_and_dots
         except AttributeError:
@@ -103,7 +115,9 @@ class QuarterDuration(numbers.Rational):
                 if type:
                     return type, 2
                 else:
-                    raise QuarterDurationIsNotWritable(f'quarter duration {self} is not writable.')
+                    raise QuarterDurationIsNotWritable(
+                        f"quarter duration {self} is not writable."
+                    )
 
     @property
     def beat_subdivision(self):
@@ -176,7 +190,7 @@ class QuarterDuration(numbers.Rational):
             self._value = val
         elif isinstance(val, str):
             self._value = Fraction(val).limit_denominator(1000)
-        elif hasattr(val, '__iter__'):
+        elif hasattr(val, "__iter__"):
             if len(val) == 1:
                 self._value = Fraction(val[0]).limit_denominator(1000)
             elif len(val) == 2:
@@ -187,7 +201,7 @@ class QuarterDuration(numbers.Rational):
             try:
                 self._value = Fraction(val).limit_denominator(1000)
             except TypeError:
-                raise TypeError('Wrong type for QuarterDuration.value')
+                raise TypeError("Wrong type for QuarterDuration.value")
 
     def as_integer_ratio(self):
         """
@@ -212,7 +226,9 @@ class QuarterDuration(numbers.Rational):
             self.beat_subdivision = self.denominator
         if self.beat_quarter_duration % 3 == 0:
             if self.beat_subdivision > 9:
-                raise NotImplementedError('Beats with dotted quarter duration and subdivision > 9')
+                raise NotImplementedError(
+                    "Beats with dotted quarter duration and subdivision > 9"
+                )
             else:
                 tupletratio = DOTEDTUPLETRATIO.get(self.beat_subdivision)
                 if tupletratio:
@@ -223,7 +239,7 @@ class QuarterDuration(numbers.Rational):
             if self.beat_subdivision < 3:
                 return None
             elif self.beat_subdivision > 64:
-                raise NotImplementedError('Beats subdivision > 64')
+                raise NotImplementedError("Beats subdivision > 64")
             normal_notes = [2, 4, 8, 16, 32]
             if self.beat_subdivision in normal_notes:
                 return None
@@ -232,7 +248,8 @@ class QuarterDuration(numbers.Rational):
                     if self.beat_subdivision > normal:
                         return self.beat_subdivision, normal
         raise NotImplementedError(
-            f'Quarter duration {self} in a beat with {self.beat_subdivision} and quarter duration {self.beat_quarter_duration}')
+            f"Quarter duration {self} in a beat with {self.beat_subdivision} and quarter duration {self.beat_quarter_duration}"
+        )
 
     def get_type(self) -> Optional[str]:
         """
@@ -241,10 +258,10 @@ class QuarterDuration(numbers.Rational):
         return self.type_and_dots[0]
 
     def __repr__(self):
-        return f'{self.value.numerator}/{self.value.denominator}'
+        return f"{self.value.numerator}/{self.value.denominator}"
 
     def __str__(self):
-        return f'QuarterDuration: {str(self.value)}'
+        return f"QuarterDuration: {str(self.value)}"
 
     def __abs__(self):
         return QuarterDuration(self.value.__abs__())
@@ -328,7 +345,7 @@ class QuarterDuration(numbers.Rational):
         return self.__class__(self.value)
 
 
-def _is_writable(quarter_duration: Union[float, int, Fraction, 'QuarterDuration']):
+def _is_writable(quarter_duration: Union[float, int, Fraction, "QuarterDuration"]):
     """
     Function to check if a quarter duration is writable or must be split into two durations.
 
@@ -342,25 +359,27 @@ def _is_writable(quarter_duration: Union[float, int, Fraction, 'QuarterDuration'
     >>> _is_writable(3/8)
     True
     """
-    writables = {1 / 64,
-                 1 / 32,
-                 3 / 64,
-                 1 / 16,
-                 3 / 32,
-                 1 / 8,
-                 3 / 16,
-                 1 / 4,
-                 3 / 8,
-                 1 / 2,
-                 3 / 4,
-                 1,
-                 3 / 2,
-                 2,
-                 3,
-                 4,
-                 6,
-                 8,
-                 12}
+    writables = {
+        1 / 64,
+        1 / 32,
+        3 / 64,
+        1 / 16,
+        3 / 32,
+        1 / 8,
+        3 / 16,
+        1 / 4,
+        3 / 8,
+        1 / 2,
+        3 / 4,
+        1,
+        3 / 2,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+    }
 
     if quarter_duration in writables:
         return True
@@ -411,9 +430,13 @@ class QuarterDurationMixin:
 
 
 def _check_quarter_duration_value(val):
-    if not isinstance(val, int) and not isinstance(val, float) and not isinstance(val, Fraction) and not isinstance(val,
-                                                                                                                    QuarterDuration):
-        raise TypeError(f'Wrong type for quarter duration {val}: {type(val)}')
+    if (
+        not isinstance(val, int)
+        and not isinstance(val, float)
+        and not isinstance(val, Fraction)
+        and not isinstance(val, QuarterDuration)
+    ):
+        raise TypeError(f"Wrong type for quarter duration {val}: {type(val)}")
 
     if val < 0:
         raise ValueError()

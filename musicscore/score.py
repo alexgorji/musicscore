@@ -9,24 +9,47 @@ from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
 from musicscore.quarterduration import QuarterDuration
 from musicscore.xmlwrapper import XMLWrapper
-from musicxml.xmlelement.xmlelement import XMLScorePartwise, XMLPartList, XMLCredit, XMLCreditWords, XMLIdentification, \
-    XMLEncoding, \
-    XMLSupports, XMLScorePart, XMLPartGroup, XMLGroupSymbol, XMLGroupBarline, XMLGroupName, XMLGroupAbbreviation, \
-    XMLMeasureStyle
+from musicxml.xmlelement.xmlelement import (
+    XMLScorePartwise,
+    XMLPartList,
+    XMLCredit,
+    XMLCreditWords,
+    XMLIdentification,
+    XMLEncoding,
+    XMLSupports,
+    XMLScorePart,
+    XMLPartGroup,
+    XMLGroupSymbol,
+    XMLGroupBarline,
+    XMLGroupName,
+    XMLGroupAbbreviation,
+    XMLMeasureStyle,
+)
 
-__all__ = ['TITLE', 'SUBTITLE', 'POSSIBLE_SUBDIVISIONS', 'Score']
+__all__ = ["TITLE", "SUBTITLE", "POSSIBLE_SUBDIVISIONS", "Score"]
 #:
-TITLE = {'font_size': 24, 'default_x': {'A4': {'portrait': 616}}, 'default_y': {'A4': {'portrait': 1573}},
-         'justify': 'center',
-         'valign': 'top'}
+TITLE = {
+    "font_size": 24,
+    "default_x": {"A4": {"portrait": 616}},
+    "default_y": {"A4": {"portrait": 1573}},
+    "justify": "center",
+    "valign": "top",
+}
 
 #:
-SUBTITLE = {'font_size': 18, 'default_x': {'A4': {'portrait': 616}}, 'default_y': {'A4': {'portrait': 1508}},
-            'halign': 'center',
-            'valign': 'top'}
+SUBTITLE = {
+    "font_size": 18,
+    "default_x": {"A4": {"portrait": 616}},
+    "default_y": {"A4": {"portrait": 1508}},
+    "halign": "center",
+    "valign": "top",
+}
 #:
-POSSIBLE_SUBDIVISIONS = {QuarterDuration(1, 4): [2, 3], QuarterDuration(1, 2): [2, 3, 4, 5],
-                         QuarterDuration(1): [2, 3, 4, 5, 6, 7, 8]}
+POSSIBLE_SUBDIVISIONS = {
+    QuarterDuration(1, 4): [2, 3],
+    QuarterDuration(1, 2): [2, 3, 4, 5],
+    QuarterDuration(1): [2, 3, 4, 5, 6, 7, 8],
+}
 
 
 class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
@@ -35,16 +58,32 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     Child type: :obj:`~musicscore.part.Part`
     """
-    _ATTRIBUTES = {'version', 'title', 'subtitle', 'scaling', 'page_layout', 'system_layout', 'staff_layout',
-                   'new_system'}
+
+    _ATTRIBUTES = {
+        "version",
+        "title",
+        "subtitle",
+        "scaling",
+        "page_layout",
+        "system_layout",
+        "staff_layout",
+        "new_system",
+    }
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
 
     XMLClass = XMLScorePartwise
 
-    def __init__(self, version='4.0', title=None, subtitle=None, get_quantized=False, new_system=False, *args,
-                 **kwargs):
-
+    def __init__(
+        self,
+        version="4.0",
+        title=None,
+        subtitle=None,
+        get_quantized=False,
+        new_system=False,
+        *args,
+        **kwargs,
+    ):
         super().__init__(get_quantized=get_quantized)
         self._xml_object = self.XMLClass(*args, **kwargs)
         self._update_xml_object()
@@ -72,29 +111,39 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     def _create_missing_measures(self):
         number_of_measures = max([len(p.get_children()) for p in self.get_children()])
-        longest_parts = [p for p in self.get_children() if len(p.get_children()) == number_of_measures]
+        longest_parts = [
+            p
+            for p in self.get_children()
+            if len(p.get_children()) == number_of_measures
+        ]
         for p in set(self.get_children()).difference(set(longest_parts)):
-            for measure_number in range(len(p.get_children()) + 1, number_of_measures + 1):
-                p.add_chord(Rest(longest_parts[0].get_measure(measure_number).quarter_duration))
+            for measure_number in range(
+                len(p.get_children()) + 1, number_of_measures + 1
+            ):
+                p.add_chord(
+                    Rest(longest_parts[0].get_measure(measure_number).quarter_duration)
+                )
 
     def _get_title_attributes(self):
         output = TITLE.copy()
-        output['default_x'] = TITLE['default_x']['A4']['portrait']
-        output['default_y'] = TITLE['default_y']['A4']['portrait']
+        output["default_x"] = TITLE["default_x"]["A4"]["portrait"]
+        output["default_y"] = TITLE["default_y"]["A4"]["portrait"]
         return output
 
     def _get_subtitle_attributes(self):
         output = SUBTITLE.copy()
-        output['default_x'] = SUBTITLE['default_x']['A4']['portrait']
-        output['default_y'] = SUBTITLE['default_y']['A4']['portrait']
+        output["default_x"] = SUBTITLE["default_x"]["A4"]["portrait"]
+        output["default_y"] = SUBTITLE["default_y"]["A4"]["portrait"]
         return output
 
     def _set_last_barline(self):
-        last_measures = [p.get_children()[-1] for p in self.get_children() if p.get_children()]
+        last_measures = [
+            p.get_children()[-1] for p in self.get_children() if p.get_children()
+        ]
         try:
             if not last_measures[0].get_barline():
                 for m in last_measures:
-                    m.set_barline(style='light-heavy')
+                    m.set_barline(style="light-heavy")
         except IndexError:
             pass
 
@@ -103,27 +152,27 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             right_barline = None
             left_barline = None
             for m in measures:
-                if m.get_barline(location='right'):
-                    right_barline = m.get_barline(location='right')
+                if m.get_barline(location="right"):
+                    right_barline = m.get_barline(location="right")
                     break
             for m in measures:
-                if m.get_barline(location='left'):
-                    left_barline = m.get_barline(location='left')
+                if m.get_barline(location="left"):
+                    left_barline = m.get_barline(location="left")
                     break
             if right_barline:
                 for m in measures:
-                    m._barlines['right'] = right_barline
+                    m._barlines["right"] = right_barline
             if left_barline:
                 for m in measures:
-                    m._barlines['left'] = left_barline
+                    m._barlines["left"] = left_barline
 
     def _update_xml_object(self):
         self.xml_object.xml_part_list = XMLPartList()
         self.xml_object.xml_identification = XMLIdentification()
         encoding = self.xml_object.xml_identification.xml_encoding = XMLEncoding()
-        encoding.add_child(XMLSupports(element='accidental', type='yes'))
-        encoding.add_child(XMLSupports(element='beam', type='yes'))
-        encoding.add_child(XMLSupports(element='stem', type='yes'))
+        encoding.add_child(XMLSupports(element="accidental", type="yes"))
+        encoding.add_child(XMLSupports(element="beam", type="yes"))
+        encoding.add_child(XMLSupports(element="stem", type="yes"))
 
     @property
     def new_system(self) -> bool:
@@ -134,21 +183,30 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     @new_system.setter
     def new_system(self, val):
-
         if isinstance(val, bool):
             self._new_system = val
         else:
-            raise TypeError(f"new_system {val} must be of type bool and not {val.__class__}")
+            raise TypeError(
+                f"new_system {val} must be of type bool and not {val.__class__}"
+            )
         encoding = self.xml_object.xml_identification.xml_encoding
-        new_system_supports = [sup for sup in encoding.get_children_of_type(XMLSupports) if
-                               sup.attribute == 'new-system']
+        new_system_supports = [
+            sup
+            for sup in encoding.get_children_of_type(XMLSupports)
+            if sup.attribute == "new-system"
+        ]
         if self.new_system:
             if not new_system_supports:
                 self.xml_object.xml_identification.xml_encoding.add_child(
-                    XMLSupports(attribute='new-system', element='print', type='yes', value='yes'))
+                    XMLSupports(
+                        attribute="new-system", element="print", type="yes", value="yes"
+                    )
+                )
         else:
             if new_system_supports:
-                self.xml_object.xml_identification.xml_encoding.remove(new_system_supports[0])
+                self.xml_object.xml_identification.xml_encoding.remove(
+                    new_system_supports[0]
+                )
 
     @property
     def page_layout(self) -> PageLayout:
@@ -218,8 +276,10 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         if val is not None:
             if self._subtitle is None:
                 credit = self.xml_object.add_child(XMLCredit(page=1))
-                credit.xml_credit_type = 'subtitle'
-                self._subtitle = credit.add_child(XMLCreditWords(value_=val, **self._get_subtitle_attributes()))
+                credit.xml_credit_type = "subtitle"
+                self._subtitle = credit.add_child(
+                    XMLCreditWords(value_=val, **self._get_subtitle_attributes())
+                )
             else:
                 self._subtitle.value_ = val
         else:
@@ -265,8 +325,10 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         if val is not None:
             if self._title is None:
                 credit = self.xml_object.add_child(XMLCredit(page=1))
-                credit.xml_credit_type = 'title'
-                self._title = credit.add_child(XMLCreditWords(value_=val, **self._get_title_attributes()))
+                credit.xml_credit_type = "title"
+                self._title = credit.add_child(
+                    XMLCreditWords(value_=val, **self._get_title_attributes())
+                )
             else:
                 self._title.value_ = val
         else:
@@ -291,7 +353,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._version = str(val)
         self.xml_object.version = self.version
 
-    def add_child(self, child: 'Part') -> 'Part':
+    def add_child(self, child: "Part") -> "Part":
         """
         - Check and add child to list of children. Child's parent is set to self.
         - Part's ``xml_object`` is add to score's ``xml_object`` as child
@@ -302,7 +364,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :rtype: :obj:`~musicscore.part.Part`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_child')
+            raise AlreadyFinalizedError(self, "add_child")
         super().add_child(child)
         self.xml_object.add_child(child.xml_object)
         if not self.xml_part_list:
@@ -311,7 +373,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             self.xml_part_list.add_child(child.score_part.xml_object)
         return child
 
-    def add_part(self, id: str) -> 'Part':
+    def add_part(self, id: str) -> "Part":
         """
         Creates and adds part
 
@@ -319,18 +381,18 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :return: part
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_part')
+            raise AlreadyFinalizedError(self, "add_part")
         p = Part(id)
         return self.add_child(p)
 
-    def export_xml(self, path: 'pathlib.Path') -> None:
+    def export_xml(self, path: "pathlib.Path") -> None:
         """
         Creates a musicxml file
 
         :param path: Output xml file
         :return: None
         """
-        with open(path, '+w') as f:
+        with open(path, "+w") as f:
             f.write("""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE score-partwise PUBLIC
     "-//Recordare//DTD MusicXML 4.0 Partwise//EN"
@@ -347,11 +409,18 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             for part in self.get_children():
                 measure = part.get_measure(measure_number)
                 for ch in measure.get_chords():
-                    ch.notes[0].xml_rest.measure = 'yes'
+                    ch.notes[0].xml_rest.measure = "yes"
 
-    def group_parts(self, number: Union[int, str], start_part_number: int, end_part_number: int, symbol: str = 'square',
-                    name: Optional[str] = None, abbreviation: Optional[str] = None,
-                    **kwargs) -> None:
+    def group_parts(
+        self,
+        number: Union[int, str],
+        start_part_number: int,
+        end_part_number: int,
+        symbol: str = "square",
+        name: Optional[str] = None,
+        abbreviation: Optional[str] = None,
+        **kwargs,
+    ) -> None:
         """
         Adds a XMLPartList child
 
@@ -367,28 +436,43 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         parts = self.get_children_of_type(Part)
         for part_number in [start_part_number, end_part_number]:
             if not 0 < part_number <= len(parts):
-                raise ValueError(f'Wrong part number {part_number}. Permitted between 1 and {len(parts)}')
+                raise ValueError(
+                    f"Wrong part number {part_number}. Permitted between 1 and {len(parts)}"
+                )
         if not start_part_number < end_part_number:
             raise ValueError(
-                f'Wrong part numbers. start_part_number {start_part_number} must be smaller than end_part_number {end_part_number}')
+                f"Wrong part numbers. start_part_number {start_part_number} must be smaller than end_part_number {end_part_number}"
+            )
 
         new_xml_part_list = XMLPartList(xsd_check=False)
         for child in self.xml_part_list.get_children():
-            if isinstance(child, XMLScorePart) and child.id == parts[start_part_number - 1].id_.value:
-                pg = new_xml_part_list.add_child(XMLPartGroup(number=str(number), type='start'))
+            if (
+                isinstance(child, XMLScorePart)
+                and child.id == parts[start_part_number - 1].id_.value
+            ):
+                pg = new_xml_part_list.add_child(
+                    XMLPartGroup(number=str(number), type="start")
+                )
                 pg.add_child(XMLGroupSymbol(symbol, **kwargs))
-                pg.add_child(XMLGroupBarline('yes'))
+                pg.add_child(XMLGroupBarline("yes"))
                 if name:
                     pg.add_child(XMLGroupName(name))
                 if abbreviation:
                     pg.add_child(XMLGroupAbbreviation(abbreviation))
             new_xml_part_list.add_child(child)
-            if isinstance(child, XMLScorePart) and child.id == parts[end_part_number - 1].id_.value:
-                new_xml_part_list.add_child(XMLPartGroup(number=str(number), type='stop'))
+            if (
+                isinstance(child, XMLScorePart)
+                and child.id == parts[end_part_number - 1].id_.value
+            ):
+                new_xml_part_list.add_child(
+                    XMLPartGroup(number=str(number), type="stop")
+                )
 
         self.xml_part_list = new_xml_part_list
 
-    def set_multi_measure_rest(self, first_measure_number: int, last_measure_number: int) -> None:
+    def set_multi_measure_rest(
+        self, first_measure_number: int, last_measure_number: int
+    ) -> None:
         """
         Creates a multi measure rest
 
@@ -398,34 +482,43 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         """
 
         if len(self.get_children()) == 0:
-            raise ScoreMultiMeasureRestError(f'score has no parts.')
+            raise ScoreMultiMeasureRestError("score has no parts.")
         if last_measure_number <= first_measure_number:
             raise ScoreMultiMeasureRestError(
-                f'last_measure_number {last_measure_number} must be larger than first_measure_number {first_measure_number}')
+                f"last_measure_number {last_measure_number} must be larger than first_measure_number {first_measure_number}"
+            )
         for x in range(first_measure_number, last_measure_number + 1):
             if x in self._measure_numbers_within_multi_measure_rests:
-                raise ScoreMultiMeasureRestError(f'measure number {x} is already part of a multiple measure reset')
+                raise ScoreMultiMeasureRestError(
+                    f"measure number {x} is already part of a multiple measure reset"
+                )
         for part in self.get_children():
             for _ in range(last_measure_number - len(part.get_children())):
                 m = part.add_measure()
                 part.add_chord(Chord(0, m.quarter_duration))
 
-            for measure in part.get_children()[first_measure_number - 1:last_measure_number]:
+            for measure in part.get_children()[
+                first_measure_number - 1 : last_measure_number
+            ]:
                 for ch in measure.get_chords():
                     if not ch.is_rest:
                         raise ScoreMultiMeasureRestError(
-                            f'Measures contain not rest chords')
+                            "Measures contain not rest chords"
+                        )
 
             first_measure = part.get_measure(first_measure_number)
             if not first_measure.xml_attributes.xml_measure_style:
                 first_measure.xml_attributes.xml_measure_style = XMLMeasureStyle()
-            first_measure.xml_attributes.xml_measure_style.xml_multiple_rest = last_measure_number - first_measure_number + 1
+            first_measure.xml_attributes.xml_measure_style.xml_multiple_rest = (
+                last_measure_number - first_measure_number + 1
+            )
             if part == self.get_children()[0]:
                 self._measure_numbers_within_multi_measure_rests.update(
-                    {x for x in range(first_measure_number, last_measure_number + 1)})
+                    {x for x in range(first_measure_number, last_measure_number + 1)}
+                )
 
     def write(self, *args, **kwargs):
         """
         Not implemented. Use Score.export_xml instead!
         """
-        raise NotImplementedError('Use Score.export_xml instead!')
+        raise NotImplementedError("Use Score.export_xml instead!")

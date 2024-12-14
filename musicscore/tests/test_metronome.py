@@ -10,26 +10,26 @@ class TestCase(IdTestCase):
         m = Metronome(100)
         assert isinstance(m.beat_unit, QuarterDuration)
         assert m.per_minute == 100
-        assert m.xml_per_minute.value_ == '100'
+        assert m.xml_per_minute.value_ == "100"
         assert m.beat_unit == 1
-        assert m.xml_beat_unit.value_ == 'quarter'
+        assert m.xml_beat_unit.value_ == "quarter"
         assert len(m.get_xml_beat_dot_objects()) == 0
 
     def test_metronome_dotted(self):
         m = Metronome(100, beat_unit=1.5)
-        assert m.xml_beat_unit.value_ == 'quarter'
+        assert m.xml_beat_unit.value_ == "quarter"
         assert len(m.get_xml_beat_dot_objects()) == 1
 
         m = Metronome(100, beat_unit=2 + 1 + 0.5)
-        assert m.xml_beat_unit.value_ == 'half'
+        assert m.xml_beat_unit.value_ == "half"
         assert len(m.get_xml_beat_dot_objects()) == 2
 
     def test_metronome_change_values(self):
         m = Metronome(100)
-        assert m.xml_beat_unit.value_ == 'quarter'
+        assert m.xml_beat_unit.value_ == "quarter"
         assert len(m.get_xml_beat_dot_objects()) == 0
         m.beat_unit = 3
-        assert m.xml_beat_unit.value_ == 'half'
+        assert m.xml_beat_unit.value_ == "half"
         assert len(m.get_xml_beat_dot_objects()) == 1
 
     def test_metronome_wrong_beat_units(self):
@@ -48,7 +48,7 @@ class TestCase(IdTestCase):
         assert m.sound.tempo == 150
 
     def test_add_metronome_to_measure(self):
-        p = Part('p1')
+        p = Part("p1")
         ch = Chord(60, 4)
         p.add_chord(ch)
         ch.metronome = Metronome(100, 1.5)

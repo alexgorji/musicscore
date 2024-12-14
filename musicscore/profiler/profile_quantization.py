@@ -2,7 +2,6 @@ import cProfile
 from pathlib import Path
 
 import random
-from xml.etree import ElementPath
 
 from musicscore import Score, Part, QuarterDuration, Chord
 
@@ -15,12 +14,14 @@ def p():
     """
     He adds a list of complicated quarter_durations
     """
-    p = s.add_child(Part('p1'))
+    p = s.add_child(Part("p1"))
 
     random.seed(11)
     quarter_durations = []
     while sum(quarter_durations) < 40:
-        quarter_durations.append(QuarterDuration(random.random() + random.randint(0, 3)))
+        quarter_durations.append(
+            QuarterDuration(random.random() + random.randint(0, 3))
+        )
     quarter_durations.append(44 - sum(quarter_durations))
     """
     He sets the possible subdivisions for all beats with quarter_duration and omits quintuplets and septuplets:
@@ -40,8 +41,8 @@ def p():
     """
     # ... and exports the xml
     # """
-    xml_path = Path(__file__).with_suffix('.xml')
+    xml_path = Path(__file__).with_suffix(".xml")
     s.export_xml(xml_path)
 
 
-cProfile.run('p()', sort="cumtime")
+cProfile.run("p()", sort="cumtime")

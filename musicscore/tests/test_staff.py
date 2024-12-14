@@ -6,7 +6,6 @@ from musicscore.measure import Measure
 from musicscore.part import Part
 from musicscore.staff import Staff
 from musicscore.voice import Voice
-from musicxml import XMLVoice, XMLStaff
 
 
 class TestStaff(TestCase):
@@ -20,10 +19,10 @@ class TestStaff(TestCase):
         st.number = 2
         assert st.xml_object.value_ == 2
         st.xml_object.value_ = 1
-        assert st.number is 1
+        assert st.number == 1
         assert st.xml_object.value_ == 1
 
-    @patch('musicscore.measure.Measure')
+    @patch("musicscore.measure.Measure")
     def test_add_child(self, mock_measure):
         st = Staff()
         st._parent = mock_measure
@@ -34,7 +33,7 @@ class TestStaff(TestCase):
         assert len(st.get_children()) == 2
         assert [child.number for child in st.get_children()] == [1, 2]
 
-    @patch('musicscore.measure.Measure')
+    @patch("musicscore.measure.Measure")
     def test_add_voice(self, mock_measure):
         st = Staff()
         st._parent = mock_measure
@@ -53,7 +52,7 @@ class TestStaff(TestCase):
         assert [v.number for v in st.get_children()] == [1, 2, 3, 4, 5]
 
     def test_get_previous_staff(self):
-        p = Part('P1')
+        p = Part("P1")
         m1 = p.add_measure()
         m2 = p.add_measure()
         m1.add_staff(2)
@@ -69,14 +68,14 @@ class TestStaff(TestCase):
         m1 = Measure(1)
         m1._add_chord(Chord(midis=[61, 62, 63], quarter_duration=2))
         m1._add_chord(Chord(midis=[63, 64, 66], quarter_duration=2))
-        assert m1.get_staff(1).get_last_pitch_steps_with_accidentals() == {'E', 'F'}
+        assert m1.get_staff(1).get_last_pitch_steps_with_accidentals() == {"E", "F"}
 
     def test_staff_clef(self):
         st = Staff()
         assert st.clef is None
 
     def test_get_staff_number_from_midi(self):
-        part = Part('p1')
+        part = Part("p1")
         ch = Chord([60, 70, 80], 2)
         part.add_chord(ch)
         ch.midis[0].set_staff_number(2)

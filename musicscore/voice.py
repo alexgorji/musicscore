@@ -1,16 +1,23 @@
+from fractions import Fraction
 from typing import Optional, Union, List
 
 from musicscore.beat import Beat
 from musicscore.chord import GraceChord, Chord
-from musicscore.exceptions import VoiceHasNoBeatsError, VoiceHasNoParentError, VoiceIsFullError, \
-    AddChordError, AlreadyFinalizedError
+from musicscore.exceptions import (
+    VoiceHasNoBeatsError,
+    VoiceHasNoParentError,
+    VoiceIsFullError,
+    AddChordError,
+    AlreadyFinalizedError,
+)
 from musicscore.musictree import MusicTree
 from musicscore.finalize import FinalizeMixin
 from musicscore.quantize import QuantizeMixin
+from musicscore.quarterduration import QuarterDuration
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLVoice
 
-__all__ = ['Voice']
+__all__ = ["Voice"]
 
 
 class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
@@ -19,21 +26,22 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     Child type: :obj:`~musicscore.beat.Beat`
     """
-    _ATTRIBUTES = {'number', 'leftover_chord', 'is_filled'}
+
+    _ATTRIBUTES = {"number", "leftover_chord", "is_filled"}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
     XMLClass = XMLVoice
 
     def __init__(self, number=None, *args, **kwargs):
         super().__init__()
-        self._xml_object = self.XMLClass(value_='1', *args, **kwargs)
+        self._xml_object = self.XMLClass(value_="1", *args, **kwargs)
         self._number = None
         self.number = number
         self._current_beat_index = None
         self._leftover_chord = None
         self._final_updated = False
 
-    def _add_chord(self, chord: 'Chord') -> List['Chord']:
+    def _add_chord(self, chord: "Chord") -> List["Chord"]:
         """
         :param chord: :obj:`~musicscore.chord.Chord`, required
         :return: added chord or a list of split chords
@@ -44,9 +52,11 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         try:
             current_beat = self.get_children()[self.get_current_beat_index()]
         except IndexError:
-            raise VoiceIsFullError(f'Voice number {self.value_} of Measure number {self.up.up.number} is full.')
+            raise VoiceIsFullError(
+                f"Voice number {self.value_} of Measure number {self.up.up.number} is full."
+            )
 
-        if isinstance(chord, GraceChord) and chord.position == 'after':
+        if isinstance(chord, GraceChord) and chord.position == "after":
             return current_beat.add_child(chord)
 
         if current_beat.is_filled:
@@ -66,7 +76,7 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             return False
 
     @property
-    def leftover_chord(self) -> Optional['Chord']:
+    def leftover_chord(self) -> Optional["Chord"]:
         """
         :return: None or a :obj:`~musicscore.chord.Chord` which is left over after adding a chord to the voice.
         """
@@ -94,9 +104,14 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         if val is not None:
             self.xml_object.value_ = str(val)
         else:
-            self.xml_object.value_ = '1'
+            self.xml_object.value_ = "1"
 
-    def add_beat(self, beat_quarter_duration: Optional[Union['QuarterDuration', 'Fraction', int, float]] = 1) -> Beat:
+    def add_beat(
+        self,
+        beat_quarter_duration: Optional[
+            Union[QuarterDuration, Fraction, int, float]
+        ] = 1,
+    ) -> Beat:
         """
         Creates and adds a :obj:`~musicscore.beat.Beat` to voice
 
@@ -104,7 +119,7 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :return: :obj:`~musicscore.beat.Beat`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_beat')
+            raise AlreadyFinalizedError(self, "add_beat")
         if beat_quarter_duration is None:
             beat_quarter_duration = 1
         return self.add_child(Beat(beat_quarter_duration))
@@ -121,18 +136,26 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :rtype: :obj:`~musicscore.beat.Beat`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_child')
+            raise AlreadyFinalizedError(self, "add_child")
         if not self.up:
-            raise VoiceHasNoParentError('A child Beat can only be added to a Voice if voice has a Staff parent.')
+            raise VoiceHasNoParentError(
+                "A child Beat can only be added to a Voice if voice has a Staff parent."
+            )
         return super().add_child(child)
 
     def fill_with_rests(self):
         if not self.is_filled:
             if not self.get_children():
                 self.update_beats()
-            self._add_chord(Chord(0, sum([b.quarter_duration for b in self.get_beats()]) - sum([ch.quarter_duration for ch in self.get_chords()])))
+            self._add_chord(
+                Chord(
+                    0,
+                    sum([b.quarter_duration for b in self.get_beats()])
+                    - sum([ch.quarter_duration for ch in self.get_chords()]),
+                )
+            )
 
-    def get_current_beat(self) -> 'Beat':
+    def get_current_beat(self) -> "Beat":
         """
         :return: First not completely filled child of type :obj:`~musicscore.beat.Beat`
         :exception: :obj:`~musicscore.exceptions.VoiceIsFullError` is raised if all beats are already filled.
@@ -151,7 +174,7 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :return: Index of first not completely filled child of type :obj:`~musicscore.beat.Beat`
         """
         if not self.get_children():
-            raise ValueError('Voice has no beats.')
+            raise ValueError("Voice has no beats.")
         else:
             if not self._current_beat_index:
                 self._current_beat_index = 0
@@ -171,7 +194,9 @@ class Voice(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             else:
                 return
         else:
-            if len(quarter_durations) == 1 and hasattr(quarter_durations[0], '__iter__'):
+            if len(quarter_durations) == 1 and hasattr(
+                quarter_durations[0], "__iter__"
+            ):
                 quarter_durations = quarter_durations[0]
 
         self.remove_children()

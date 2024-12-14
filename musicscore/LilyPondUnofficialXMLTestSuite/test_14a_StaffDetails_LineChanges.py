@@ -17,10 +17,10 @@ finale changes staff number of lines only ones. The next changes have no effect.
 class TestLily14a(IdTestCase):
     def test_lily_14a_StaffDetails_LineChanges(self):
         score = Score()
-        p1 = score.add_part('p1')
-        p2 = score.add_part('p2')
-        p1.name = 'Part 1'
-        p2.name = 'Part 2'
+        p1 = score.add_part("p1")
+        p2 = score.add_part("p2")
+        p1.name = "Part 1"
+        p2.name = "Part 2"
 
         [p1.add_chord(Chord(G(4), 4)) for _ in range(4)]
         [p2.add_chord(Chord(G(4), 2)) for _ in range(8)]
@@ -36,5 +36,5 @@ class TestLily14a(IdTestCase):
 
         sd = p2.get_measure(3).xml_attributes.xml_staff_details = XMLStaffDetails()
         sd.xml_staff_lines = 2
-        xml_path = Path(__file__).with_suffix('.xml')
+        xml_path = Path(__file__).with_suffix(".xml")
         score.export_xml(xml_path)

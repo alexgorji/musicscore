@@ -14,32 +14,33 @@ from pathlib import Path
 import sys
 
 first_path = Path(__file__).parents[1].resolve().as_posix()
-second_path = (Path(__file__).parents[1].resolve()/'musicxml').as_posix()
+second_path = (Path(__file__).parents[1].resolve() / "musicxml").as_posix()
 sys.path.insert(0, first_path)
 sys.path.insert(0, second_path)
 
 # -- Project information -----------------------------------------------------
 
-project = 'musicscore'
-copyright = '2023, Alex Gorji'
-author = 'Alex Gorji'
+project = "musicscore"
+copyright = "2023, Alex Gorji"
+author = "Alex Gorji"
 
 # The full version, including alpha/beta/rc tags
-release = '2.0beta'
+release = "2.0beta"
 
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.viewcode',
-              'sphinx.ext.intersphinx',
-              'sphinx.ext.autosummary',
-              'sphinx.ext.autosectionlabel',
-              'sphinx.ext.doctest',
-              'sphinx.ext.todo',
-              ]
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.doctest",
+    "sphinx.ext.todo",
+]
 
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = ['_templates']
@@ -54,7 +55,7 @@ extensions = ['sphinx.ext.autodoc',
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
 # html_theme = 'haiku'
 
 
@@ -63,13 +64,10 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 # html_static_path = ['_static']
 
-autodoc_member_order = 'groupwise'
+autodoc_member_order = "groupwise"
 
-html_theme_options = {
-    "collapse_navigation": True
-}
+html_theme_options = {"collapse_navigation": True}
 
 # autodoc_typehints = "description"
 #
 todo_include_todos = True
-

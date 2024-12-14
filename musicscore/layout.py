@@ -2,40 +2,55 @@ from typing import Union, Optional
 
 from musicscore.util import isinstance_as_string
 from musicscore.xmlwrapper import XMLWrapper
-from musicxml.xmlelement.xmlelement import XMLPageLayout, XMLPageMargins, XMLScaling, XMLDefaults, XMLSystemLayout, \
-    XMLSystemMargins, XMLStaffLayout
+from musicxml.xmlelement.xmlelement import (
+    XMLPageLayout,
+    XMLPageMargins,
+    XMLScaling,
+    XMLDefaults,
+    XMLSystemLayout,
+    XMLSystemMargins,
+    XMLStaffLayout,
+)
 
-__all__ = ['PAGE_MARGINS', 'PAGE_SIZES', 'SYSTEM_MARGINS', 'SYSTEM_LAYOUT', 'STAFF_LAYOUT', 'SCALING', 'Margins',
-           'Scaling',
-           'PageLayout', 'SystemLayout', 'StaffLayout']
+__all__ = [
+    "PAGE_MARGINS",
+    "PAGE_SIZES",
+    "SYSTEM_MARGINS",
+    "SYSTEM_LAYOUT",
+    "STAFF_LAYOUT",
+    "SCALING",
+    "Margins",
+    "Scaling",
+    "PageLayout",
+    "SystemLayout",
+    "StaffLayout",
+]
 #:
 PAGE_MARGINS = {
-    'A4': {
-        'portrait': {'left': 140, 'right': 70, 'top': 70, 'bottom': 70},
-        'landscape': {'left': 111, 'right': 70, 'top': 70, 'bottom': 70}
-    }, 'A3': {
-        'portrait': {'left': 111, 'right': 70, 'top': 70, 'bottom': 70},
-        'landscape': {'left': 111, 'right': 70, 'top': 70, 'bottom': 70}
-    }
+    "A4": {
+        "portrait": {"left": 140, "right": 70, "top": 70, "bottom": 70},
+        "landscape": {"left": 111, "right": 70, "top": 70, "bottom": 70},
+    },
+    "A3": {
+        "portrait": {"left": 111, "right": 70, "top": 70, "bottom": 70},
+        "landscape": {"left": 111, "right": 70, "top": 70, "bottom": 70},
+    },
 }
 
 #:
-PAGE_SIZES = {'A4': (209.991, 297.0389), 'A3': (297.0389, 419.9819)}
+PAGE_SIZES = {"A4": (209.991, 297.0389), "A3": (297.0389, 419.9819)}
 
 #:
-SYSTEM_MARGINS = {'left': 0, 'right': 0}
+SYSTEM_MARGINS = {"left": 0, "right": 0}
 
 #:
-SYSTEM_LAYOUT = {'system_distance': 117, 'top_system_distance': 117}
+SYSTEM_LAYOUT = {"system_distance": 117, "top_system_distance": 117}
 
 #:
-STAFF_LAYOUT = {'staff_distance': 80}
+STAFF_LAYOUT = {"staff_distance": 80}
 
 #:
-SCALING = {
-    'millimeters': 7.2319,
-    'tenths': 40
-}
+SCALING = {"millimeters": 7.2319, "tenths": 40}
 
 
 class LayoutMixin:
@@ -57,18 +72,18 @@ class LayoutMixin:
     def parent(self, val):
         self._parent = val
         if isinstance(self, PageLayout):
-            if isinstance_as_string(self.parent, 'Score'):
+            if isinstance_as_string(self.parent, "Score"):
                 self._update()
                 self.parent.xml_object.xml_defaults.xml_page_layout = self.xml_object
             else:
                 raise NotImplementedError
-        elif isinstance_as_string(self, 'SystemLayout'):
-            if isinstance_as_string(self.parent, 'Score'):
+        elif isinstance_as_string(self, "SystemLayout"):
+            if isinstance_as_string(self.parent, "Score"):
                 self.parent.xml_object.xml_defaults.xml_system_layout = self.xml_object
             else:
                 raise NotImplementedError
-        elif isinstance_as_string(self, 'StaffLayout'):
-            if isinstance_as_string(self.parent, 'Score'):
+        elif isinstance_as_string(self, "StaffLayout"):
+            if isinstance_as_string(self.parent, "Score"):
                 self.parent.xml_object.xml_defaults.xml_staff_layout = self.xml_object
             else:
                 raise NotImplementedError
@@ -77,9 +92,14 @@ class LayoutMixin:
 
 
 class Margins:
-    def __init__(self, parent: Union['PageLayout', 'SystemLayout'], left: Union[float, int] = None,
-                 right: Union[float, int] = None,
-                 top: Union[float, int] = None, bottom: Union[float, int] = None):
+    def __init__(
+        self,
+        parent: Union["PageLayout", "SystemLayout"],
+        left: Union[float, int] = None,
+        right: Union[float, int] = None,
+        top: Union[float, int] = None,
+        bottom: Union[float, int] = None,
+    ):
         self._parent = None
         self._left = None
         self._right = None
@@ -94,9 +114,9 @@ class Margins:
         self.bottom = bottom
 
     def _update_parent(self, side):
-        if side not in ['left', 'right', 'top', 'bottom']:
+        if side not in ["left", "right", "top", "bottom"]:
             raise ValueError
-        if side in ['top', 'bottom'] and isinstance(self.parent, SystemLayout):
+        if side in ["top", "bottom"] and isinstance(self.parent, SystemLayout):
             if eval(f"self.{side}") is not None:
                 raise ValueError
         else:
@@ -112,7 +132,7 @@ class Margins:
     @bottom.setter
     def bottom(self, val):
         self._bottom = val
-        self._update_parent('bottom')
+        self._update_parent("bottom")
 
     @property
     def left(self) -> Union[int, float]:
@@ -124,7 +144,7 @@ class Margins:
     @left.setter
     def left(self, val):
         self._left = val
-        self._update_parent('left')
+        self._update_parent("left")
 
     @property
     def parent(self):
@@ -153,7 +173,7 @@ class Margins:
     @right.setter
     def right(self, val):
         self._right = val
-        self._update_parent('right')
+        self._update_parent("right")
 
     @property
     def top(self) -> Union[int, float]:
@@ -165,15 +185,18 @@ class Margins:
     @top.setter
     def top(self, val) -> Union[int, float]:
         self._top = val
-        self._update_parent('top')
+        self._update_parent("top")
 
 
 class Scaling(XMLWrapper):
-    _ATTRIBUTES = {'millimeters', 'tenths', 'score'}
+    _ATTRIBUTES = {"millimeters", "tenths", "score"}
     XMLClass = XMLScaling
 
-    def __init__(self, millimeters: Union[int, float] = SCALING['millimeters'],
-                 tenths: Union[int, float] = SCALING['tenths']):
+    def __init__(
+        self,
+        millimeters: Union[int, float] = SCALING["millimeters"],
+        tenths: Union[int, float] = SCALING["tenths"],
+    ):
         super().__init__()
         self._xml_object = self.XMLClass()
         self._millimeters = None
@@ -256,14 +279,14 @@ class PageLayout(XMLWrapper, LayoutMixin):
     :param size: :obj:`PAGE_SIZES`
     :param orientation: 'portrait', 'landscape'
     """
-    _ATTRIBUTES = {'scaling', 'size', 'orientation', 'parent'}
+
+    _ATTRIBUTES = {"scaling", "size", "orientation", "parent"}
     XMLClass = XMLPageLayout
 
-    def __init__(self, size: str = 'A4', orientation: str = 'portrait'):
-
+    def __init__(self, size: str = "A4", orientation: str = "portrait"):
         super().__init__()
         self._xml_object = self.XMLClass()
-        self._xml_object.xml_page_margins = XMLPageMargins(type='both')
+        self._xml_object.xml_page_margins = XMLPageMargins(type="both")
 
         self._size = None
         self._orientation = None
@@ -271,15 +294,23 @@ class PageLayout(XMLWrapper, LayoutMixin):
         self.size = size
         self.orientation = orientation
 
-        self._margins = Margins(parent=self, **PAGE_MARGINS[self.size][self.orientation])
+        self._margins = Margins(
+            parent=self, **PAGE_MARGINS[self.size][self.orientation]
+        )
 
     def _get_page_height(self):
-        return self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][1]) if self.orientation == 'portrait' else \
-            self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][0])
+        return (
+            self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][1])
+            if self.orientation == "portrait"
+            else self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][0])
+        )
 
     def _get_page_width(self):
-        return self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][0]) if self.orientation == 'portrait' else \
-            self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][1])
+        return (
+            self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][0])
+            if self.orientation == "portrait"
+            else self.scaling.millimeters_to_tenths(PAGE_SIZES[self.size][1])
+        )
 
     def _set_page_height_and_width(self):
         self.xml_object.xml_page_height = self._get_page_height()
@@ -287,7 +318,9 @@ class PageLayout(XMLWrapper, LayoutMixin):
 
     def _update(self):
         self._set_page_height_and_width()
-        self._margins = Margins(parent=self, **PAGE_MARGINS[self.size][self.orientation])
+        self._margins = Margins(
+            parent=self, **PAGE_MARGINS[self.size][self.orientation]
+        )
 
     @property
     def margins(self) -> Margins:
@@ -312,7 +345,7 @@ class PageLayout(XMLWrapper, LayoutMixin):
 
     @orientation.setter
     def orientation(self, val):
-        _permitted = ['portrait', 'landscape']
+        _permitted = ["portrait", "landscape"]
         if val not in _permitted:
             raise ValueError(f"{val} can only be: {_permitted}")
         if val != self._orientation:
@@ -350,11 +383,14 @@ class PageLayout(XMLWrapper, LayoutMixin):
 
 
 class SystemLayout(XMLWrapper, LayoutMixin):
-    _ATTRIBUTES = {'system_distance', 'top_system_distance', 'parent'}
+    _ATTRIBUTES = {"system_distance", "top_system_distance", "parent"}
     XMLClass = XMLSystemLayout
 
-    def __init__(self, system_distance: Union[int, float] = SYSTEM_LAYOUT['system_distance'],
-                 top_system_distance: Union[int, float] = SYSTEM_LAYOUT['top_system_distance']):
+    def __init__(
+        self,
+        system_distance: Union[int, float] = SYSTEM_LAYOUT["system_distance"],
+        top_system_distance: Union[int, float] = SYSTEM_LAYOUT["top_system_distance"],
+    ):
         super().__init__()
 
         self._xml_object = self.XMLClass()
@@ -407,10 +443,10 @@ class SystemLayout(XMLWrapper, LayoutMixin):
 
 
 class StaffLayout(XMLWrapper, LayoutMixin):
-    _ATTRIBUTES = {'staff_distance', 'parent'}
+    _ATTRIBUTES = {"staff_distance", "parent"}
     XMLClass = XMLStaffLayout
 
-    def __init__(self, staff_distance=STAFF_LAYOUT['staff_distance']):
+    def __init__(self, staff_distance=STAFF_LAYOUT["staff_distance"]):
         super().__init__()
         self._xml_object = self.XMLClass()
         self.staff_distance = staff_distance

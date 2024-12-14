@@ -14,10 +14,18 @@ from musicscore.time import Time, flatten_times
 from musicscore.util import lcm, _chord_is_in_a_repetition, isinstance_as_string
 from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
-from musicxml.xmlelement.xmlelement import XMLMeasure, XMLAttributes, XMLClef, XMLBackup, XMLBarline, XMLPrint, \
-    XMLRepeat, XMLEnding
+from musicxml.xmlelement.xmlelement import (
+    XMLMeasure,
+    XMLAttributes,
+    XMLClef,
+    XMLBackup,
+    XMLBarline,
+    XMLPrint,
+    XMLRepeat,
+    XMLEnding,
+)
 
-__all__ = ['Measure', 'generate_measures']
+__all__ = ["Measure", "generate_measures"]
 
 
 class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
@@ -27,7 +35,15 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     Child type: :obj:`~musicscore.staff.Staff`
     """
 
-    _ATTRIBUTES = {'number', 'time', 'key', 'clefs', 'quarter_duration', 'barline_style', 'new_system'}
+    _ATTRIBUTES = {
+        "number",
+        "time",
+        "key",
+        "clefs",
+        "quarter_duration",
+        "barline_style",
+        "new_system",
+    }
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
     XMLClass = XMLMeasure
@@ -42,10 +58,9 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self.time = time
         self._set_attributes()
         self._new_system = False
-        self._barlines = {'left': None, 'right': None}
+        self._barlines = {"left": None, "right": None}
 
     def _add_chord(self, chord, staff_number=None, voice_number=1):
-
         voice = self.add_voice(staff_number=staff_number, voice_number=voice_number)
         if not voice.get_children():
             voice.update_beats()
@@ -84,30 +99,40 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         """
         Calls :obj:`~musicscore.beat.Beat._split_not_writable_chords()` method of all :obj:`~musicscore.beat.Beat` descendents.
         """
-        for b in [beat for staff in self.get_children() for voice in staff.get_children() for beat in
-                  voice.get_children()]:
+        for b in [
+            beat
+            for staff in self.get_children()
+            for voice in staff.get_children()
+            for beat in voice.get_children()
+        ]:
             b._split_not_writable_chords()
 
     def _update_accidentals(self):
-
         for staff in self.get_children():
-            if staff.show_accidental_signs == 'modern':
+            if staff.show_accidental_signs == "modern":
                 previous_staff = staff.get_previous_staff()
                 steps_with_accidentals = set()
                 relevant_chords = [ch for ch in staff.get_chords() if not ch.is_rest]
-                relevant_chords_not_tied = [ch for ch in relevant_chords if
-                                            True not in set(m.is_tied_to_previous for m in ch.midis)]
+                relevant_chords_not_tied = [
+                    ch
+                    for ch in relevant_chords
+                    if True not in set(m.is_tied_to_previous for m in ch.midis)
+                ]
                 for chord in relevant_chords:
                     for midi in chord.midis:
                         step = midi.accidental.get_pitch_parameters()[0]
                         if midi.accidental.show is None:
-                            if midi.accidental.sign == 'natural':
+                            if midi.accidental.sign == "natural":
                                 if step in steps_with_accidentals:
                                     midi.accidental.show = True
                                     steps_with_accidentals.remove(step)
-                                elif relevant_chords_not_tied and chord == relevant_chords_not_tied[
-                                    0] and previous_staff and step in \
-                                        previous_staff.get_last_pitch_steps_with_accidentals():
+                                elif (
+                                    relevant_chords_not_tied
+                                    and chord == relevant_chords_not_tied[0]
+                                    and previous_staff
+                                    and step
+                                    in previous_staff.get_last_pitch_steps_with_accidentals()
+                                ):
                                     midi.accidental.show = True
                                 else:
                                     midi.accidental.show = False
@@ -118,10 +143,15 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
                                     midi.accidental.show = True
                                     if step not in steps_with_accidentals:
                                         steps_with_accidentals.add(step)
-                        elif midi.accidental.sign != 'natural' and step not in steps_with_accidentals:
+                        elif (
+                            midi.accidental.sign != "natural"
+                            and step not in steps_with_accidentals
+                        ):
                             steps_with_accidentals.add(step)
             else:
-                raise NotImplementedError(f'{staff.show_accidental_signs} not implemented yet.')
+                raise NotImplementedError(
+                    f"{staff.show_accidental_signs} not implemented yet."
+                )
 
     def _update_attributes(self):
         self._set_key()
@@ -130,12 +160,12 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._set_clefs()
 
     def _update_left_barline(self):
-        if self.get_barline(location='left'):
-            self.xml_object.add_child(self.get_barline(location='left'))
+        if self.get_barline(location="left"):
+            self.xml_object.add_child(self.get_barline(location="left"))
 
     def _update_right_barline(self):
-        if self.get_barline(location='right'):
-            self.xml_object.add_child(self.get_barline(location='right'))
+        if self.get_barline(location="right"):
+            self.xml_object.add_child(self.get_barline(location="right"))
 
     def _update_clef_numbers(self):
         if len(self.clefs) == 1:
@@ -174,9 +204,13 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         else:
             for index in range(number_of_children):
                 if index == 0:
-                    _set_default_clef(index + 1, TrebleClef(octave_change=2, default=True))
+                    _set_default_clef(
+                        index + 1, TrebleClef(octave_change=2, default=True)
+                    )
                 elif index == number_of_children - 1:
-                    _set_default_clef(index + 1, BassClef(octave_change=-2, default=True))
+                    _set_default_clef(
+                        index + 1, BassClef(octave_change=-2, default=True)
+                    )
                 elif index < number_of_children / 2:
                     _set_default_clef(index + 1, TrebleClef(default=True))
                 else:
@@ -190,18 +224,19 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     def _update_print(self):
         if self.new_system:
             if self.xml_object.xml_print:
-                self.xml_object.xml_print.new_system = 'yes'
+                self.xml_object.xml_print.new_system = "yes"
             else:
-                self.xml_object.xml_print = XMLPrint(new_system='yes')
+                self.xml_object.xml_print = XMLPrint(new_system="yes")
         else:
             if self.xml_object.xml_print:
-                self.xml_object.xml_print.new_system = 'no'
+                self.xml_object.xml_print.new_system = "no"
 
     def _update_score_encoding(self):
         if self.new_system:
             if not isinstance_as_string(self.get_root(), "Score"):
                 warnings.warn(
-                    f"Measure number {self.number} sets new_system to True but hat no Score as root. Score.new_system must be True for measure's new_system to take effect.")
+                    f"Measure number {self.number} sets new_system to True but hat no Score as root. Score.new_system must be True for measure's new_system to take effect."
+                )
             else:
                 self.get_root().new_system = True
         else:
@@ -242,7 +277,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
                         self.xml_object.add_child(xml_object)
 
     @property
-    def clefs(self) -> List['Clef']:
+    def clefs(self) -> List["Clef"]:
         """
         :return: :obj:`~musicscore.clef.Clef` objects of children staves.
         """
@@ -312,7 +347,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._update_voice_beats()
 
     @property
-    def quarter_duration(self) -> 'QuarterDuration':
+    def quarter_duration(self) -> "QuarterDuration":
         """
         :return: sum of quarter durations defined via property :obj:`time`'s method :obj:`~musicscore.time.Time.get_beats_quarter_durations()`
         :rtype: :obj:`~musicscore.quarterduration.QuarterDuration`
@@ -332,11 +367,13 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :rtype: :obj:`~musicscore.staff.Staff`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_child')
+            raise AlreadyFinalizedError(self, "add_child")
         self._check_child_to_be_added(child)
 
         if child.number is not None and child.number != len(self.get_children()) + 1:
-            raise ValueError(f'Staff number must be None or {len(self.get_children()) + 1}')
+            raise ValueError(
+                f"Staff number must be None or {len(self.get_children()) + 1}"
+            )
         if child.number is None:
             if not self.get_children():
                 pass
@@ -357,7 +394,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     def add_chord(self, *args, **kwargs):
         raise AddChordError
 
-    def add_staff(self, staff_number: Optional[int] = None) -> 'Staff':
+    def add_staff(self, staff_number: Optional[int] = None) -> "Staff":
         """
         - Creates and adds a new :obj:`~musicscore.staff.Staff` object as child to measure if it already does not exist.
         - If staff number is greater than length of children + 1 all missing staves are created and added first.
@@ -366,7 +403,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :return: new :obj:`~musicscore.staff.Staff`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_staff')
+            raise AlreadyFinalizedError(self, "add_staff")
         if staff_number is None:
             staff_number = len(self.get_children()) + 1
         staff_object = self.get_staff(staff_number=staff_number)
@@ -377,7 +414,9 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             return new_staff
         return staff_object
 
-    def add_voice(self, *, staff_number: Optional[int] = None, voice_number: Optional[int] = None) -> Voice:
+    def add_voice(
+        self, *, staff_number: Optional[int] = None, voice_number: Optional[int] = None
+    ) -> Voice:
         """
         - Creates and adds a new :obj:`~musicscore.voice.Voice` object as child to the given :obj:`~musicscore.staff.Staff` if it already
           does not exist.
@@ -390,12 +429,14 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :return: new :obj:`~musicscore.voice.Voice`
         """
         if self._finalized is True:
-            raise AlreadyFinalizedError(self, 'add_voice')
+            raise AlreadyFinalizedError(self, "add_voice")
         if staff_number is None:
             staff_number = 1
         if voice_number is None:
             voice_number = 1
-        voice_object = self.get_voice(staff_number=staff_number, voice_number=voice_number)
+        voice_object = self.get_voice(
+            staff_number=staff_number, voice_number=voice_number
+        )
         if voice_object is None:
             staff_object = self.add_staff(staff_number=staff_number)
             return staff_object.add_voice(voice_number=voice_number)
@@ -443,7 +484,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._update_right_barline()
         self._finalized = True
 
-    def get_barline(self, location: str = 'right') -> Optional['XMLBarline']:
+    def get_barline(self, location: str = "right") -> Optional["XMLBarline"]:
         """
         :param location: 'left' or 'right' barline position.
         :return: None or :obj:`~musicxml.xmlelement.xmlelement.XMLBarline`
@@ -451,7 +492,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         try:
             return self._barlines[location]
         except KeyError:
-            raise ValueError(f'location {location} not permitted')
+            raise ValueError(f"location {location} not permitted")
 
     def get_children(self) -> List[Staff]:
         """
@@ -460,7 +501,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         """
         return super().get_children()
 
-    def get_divisions(self) -> 'musicxml.xsd.xsdsimpletype.XSDSimpleTypeInteger':
+    def get_divisions(self) -> "musicxml.xsd.xsdsimpletype.XSDSimpleTypeInteger":
         """
         :return: ``value_`` of existing :obj:`~musicxml.xmlelement.xmlelement.XMLDivisions`
         """
@@ -471,7 +512,9 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         super().remove(child)
         self.clefs.pop(number - 1)
 
-    def set_barline(self, location: str = 'right', style: Optional[str] = None, **kwargs) -> 'XMLBarline':
+    def set_barline(
+        self, location: str = "right", style: Optional[str] = None, **kwargs
+    ) -> "XMLBarline":
         """
         :param location: 'left' or 'right' barline position.
         :param style: 'regular', 'dotted', 'dashed', 'heavy', 'light-light', 'light-heavy', 'heavy-light', 'heavy-heavy', 'tick', 'short', 'none'
@@ -483,7 +526,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._barlines[location] = bl
         return bl
 
-    def set_repeat_barline(self, location: str = 'right', **kwargs) -> 'XMLBarline':
+    def set_repeat_barline(self, location: str = "right", **kwargs) -> "XMLBarline":
         """
         If barline does not exist a :obj:`~musicxml.xmlelement.xmlelement.XMLBarline` will be added to location. Than a :obj:`~musicxml.xmlelement.xmlelement.XMLRepeat` will be added to it as child.
 
@@ -491,18 +534,20 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :param kwargs: passed on to :obj:`~musicxml.xmlelement.xmlelement.XMLRepeat`
         :return: created or existing :obj:`~musicxml.xmlelement.xmlelement.XMLBarline`
         """
-        if location == 'right':
-            direction = 'backward'
+        if location == "right":
+            direction = "backward"
         else:
-            direction = 'forward'
+            direction = "forward"
         if not self.get_barline(location=location):
             self.set_barline(location=location)
         bl = self.get_barline(location=location)
-        bl.xml_bar_style = 'light-heavy'
+        bl.xml_bar_style = "light-heavy"
         bl.xml_repeat = XMLRepeat(direction=direction, **kwargs)
         return bl
 
-    def set_repeat_ending(self, number: Union[str, int], type: str, **kwargs) -> 'XMLEnding':
+    def set_repeat_ending(
+        self, number: Union[str, int], type: str, **kwargs
+    ) -> "XMLEnding":
         """
         If ``type`` == ``start`` location is set to ``left`` otherwise to ``right``.
         If barline does not exist a :obj:`~musicxml.xmlelement.xmlelement.XMLBarline` will be added to location. Than a :obj:`~musicxml.xmlelement.xmlelement.XMLEnding` will be added to it as child.
@@ -511,10 +556,10 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         :param kwargs: passed on to :obj:`~musicxml.xmlelement.xmlelement.XMLEnding`
         :return: :obj:`~musicxml.xmlelement.xmlelement.XMLEnding`
         """
-        if type == 'start':
-            location = 'left'
+        if type == "start":
+            location = "left"
         else:
-            location = 'right'
+            location = "right"
         if not self.get_barline(location=location):
             self.set_barline(location=location)
         ending = XMLEnding(number=str(number), type=type, **kwargs)
@@ -533,7 +578,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
                     for midi in chord.midis:
                         midi.accidental.show = False
                 for midi in chord.midis:
-                    if midi.accidental.sign == 'natural':
+                    if midi.accidental.sign == "natural":
                         midi.accidental.show = False
 
 

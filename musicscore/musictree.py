@@ -4,7 +4,7 @@ from musicscore.exceptions import MusicTreeTypeError
 from musicscore.util import isinstance_as_string
 from verysimpletree.tree import Tree
 
-__all__ = ['MusicTree']
+__all__ = ["MusicTree"]
 
 
 class MusicTree(Tree):
@@ -22,9 +22,12 @@ class MusicTree(Tree):
           Midi can represent a pitch or a rest (value=0) and controls accidental sign of the pitch if necessary.
         - :obj:`~musicscore.accidental.Accidental` (9th layer)
     """
-    _ATTRIBUTES = {'show_accidental_signs'}
 
-    default_show_accidental_signs = 'modern'  #: Class attribute of :obj:`~musicscore.musictree.MusicTree`
+    _ATTRIBUTES = {"show_accidental_signs"}
+
+    default_show_accidental_signs = (
+        "modern"  #: Class attribute of :obj:`~musicscore.musictree.MusicTree`
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,68 +37,109 @@ class MusicTree(Tree):
     def _check_args_kwargs(args, kwargs, class_name, get_class_name=None):
         for x in args:
             if not isinstance(x, int) or x < 1:
-                raise TypeError(f'args {args} must be positive integers')
+                raise TypeError(f"args {args} must be positive integers")
         for x in kwargs.values():
             if not isinstance(x, int) or x < 1:
-                raise TypeError(f'kwargs values {kwargs} must be positive integers')
+                raise TypeError(f"kwargs values {kwargs} must be positive integers")
 
         def _get_default_keys():
-            default_keys = ['part_number', 'measure_number', 'staff_number', 'voice_number', 'beat_number',
-                            'chord_number']
-            class_names = ['Score', 'Part', 'Measure', 'Staff', 'Voice', 'Beat', 'Chord']
+            default_keys = [
+                "part_number",
+                "measure_number",
+                "staff_number",
+                "voice_number",
+                "beat_number",
+                "chord_number",
+            ]
+            class_names = [
+                "Score",
+                "Part",
+                "Measure",
+                "Staff",
+                "Voice",
+                "Beat",
+                "Chord",
+            ]
             class_index = class_names.index(class_name)
-            get_class_index = -1 if not get_class_name else class_names.index(get_class_name)
+            get_class_index = (
+                -1 if not get_class_name else class_names.index(get_class_name)
+            )
             return default_keys[class_index:get_class_index]
 
         default_keys = _get_default_keys()
         if args and kwargs:
-            raise ValueError('Both args and kwargs cannot be set')
+            raise ValueError("Both args and kwargs cannot be set")
         if args:
             if len(args) != len(default_keys):
-                raise ValueError(f'Wrong number of args {args}. Keys are: {default_keys}')
+                raise ValueError(
+                    f"Wrong number of args {args}. Keys are: {default_keys}"
+                )
             kwargs = {key: value for key, value in zip(default_keys, args)}
         else:
             keys = kwargs.keys()
-            if set(keys) != set(default_keys[:len(keys)]):
+            if set(keys) != set(default_keys[: len(keys)]):
                 raise ValueError(
-                    f'Wrong (number) of keys: {list(keys)} in kwargs. All Keys: {default_keys} must be set.')
+                    f"Wrong (number) of keys: {list(keys)} in kwargs. All Keys: {default_keys} must be set."
+                )
         return kwargs
 
     def _check_child_to_be_added(self, child):
-        if not isinstance_as_string(child, 'MusicTree'):
-            raise MusicTreeTypeError(f'MusicTree child must be of type MusicTree not {child.__class__}')
+        if not isinstance_as_string(child, "MusicTree"):
+            raise MusicTreeTypeError(
+                f"MusicTree child must be of type MusicTree not {child.__class__}"
+            )
 
-        parent_child = {'Score': 'Part', 'Part': 'Measure', 'Measure': 'Staff', 'Staff': 'Voice', 'Voice': 'Beat',
-                        'Beat': 'Chord', 'GraceChord': 'Note', 'Rest': 'Note',
-                        'Chord': 'Note', 'Note': 'Midi', 'Midi': 'Accidental', 'C': 'Accidental', 'D': 'Accidental',
-                        'E': 'Accidental',
-                        'F': 'Accidental', 'G': 'Accidental', 'A': 'Accidental', 'B': 'Accidental'}
+        parent_child = {
+            "Score": "Part",
+            "Part": "Measure",
+            "Measure": "Staff",
+            "Staff": "Voice",
+            "Voice": "Beat",
+            "Beat": "Chord",
+            "GraceChord": "Note",
+            "Rest": "Note",
+            "Chord": "Note",
+            "Note": "Midi",
+            "Midi": "Accidental",
+            "C": "Accidental",
+            "D": "Accidental",
+            "E": "Accidental",
+            "F": "Accidental",
+            "G": "Accidental",
+            "A": "Accidental",
+            "B": "Accidental",
+        }
 
         try:
             if not isinstance_as_string(child, parent_child[self.__class__.__name__]):
                 raise MusicTreeTypeError(
-                    f'{self.__class__.__name__} accepts only children of type {parent_child[self.__class__.__name__]} not '
-                    f'{child.__class__.__name__}')
+                    f"{self.__class__.__name__} accepts only children of type {parent_child[self.__class__.__name__]} not "
+                    f"{child.__class__.__name__}"
+                )
         except KeyError:
-            raise NotImplementedError(f'{self.__class__.__name__} add_child() not implemented.')
+            raise NotImplementedError(
+                f"{self.__class__.__name__} add_child() not implemented."
+            )
 
     def _get_kwargs(self, args_, kwargs_, get_class_name):
-        if isinstance_as_string(self, 'Score'):
-            return self._check_args_kwargs(args_, kwargs_, 'Score', get_class_name)
-        elif isinstance_as_string(self, 'Part'):
-            return self._check_args_kwargs(args_, kwargs_, 'Part', get_class_name)
-        elif isinstance_as_string(self, 'Measure'):
-            return self._check_args_kwargs(args_, kwargs_, 'Measure', get_class_name)
-        elif isinstance_as_string(self, 'Staff'):
-            return self._check_args_kwargs(args_, kwargs_, 'Staff', get_class_name)
-        elif isinstance_as_string(self, 'Voice'):
-            return self._check_args_kwargs(args_, kwargs_, 'Voice', get_class_name)
-        elif isinstance_as_string(self, 'Beat'):
-            return self._check_args_kwargs(args_, kwargs_, 'Beat', get_class_name)
-        elif isinstance_as_string(self, 'Chord'):
-            return self._check_args_kwargs(args_, kwargs_, 'Chord', get_class_name)
+        if isinstance_as_string(self, "Score"):
+            return self._check_args_kwargs(args_, kwargs_, "Score", get_class_name)
+        elif isinstance_as_string(self, "Part"):
+            return self._check_args_kwargs(args_, kwargs_, "Part", get_class_name)
+        elif isinstance_as_string(self, "Measure"):
+            return self._check_args_kwargs(args_, kwargs_, "Measure", get_class_name)
+        elif isinstance_as_string(self, "Staff"):
+            return self._check_args_kwargs(args_, kwargs_, "Staff", get_class_name)
+        elif isinstance_as_string(self, "Voice"):
+            return self._check_args_kwargs(args_, kwargs_, "Voice", get_class_name)
+        elif isinstance_as_string(self, "Beat"):
+            return self._check_args_kwargs(args_, kwargs_, "Beat", get_class_name)
+        elif isinstance_as_string(self, "Chord"):
+            return self._check_args_kwargs(args_, kwargs_, "Chord", get_class_name)
         else:
-            raise MusicTreeTypeError(f'MusicTree descendents of type {self.__class__} cannot use this method.')
+            raise MusicTreeTypeError(
+                f"MusicTree descendents of type {self.__class__} cannot use this method."
+            )
 
     def _get_music_tree_descendent(self, args, kwargs, get_class_name):
         kwargs = self._get_kwargs(args, kwargs, get_class_name)
@@ -138,13 +182,15 @@ class MusicTree(Tree):
 
     @show_accidental_signs.setter
     def show_accidental_signs(self, val):
-        permitted = [None, 'modern', 'traditional']
+        permitted = [None, "modern", "traditional"]
         if val not in permitted:
-            raise ValueError(f'show_accidental_signs {val} not in permitted: {permitted}')
+            raise ValueError(
+                f"show_accidental_signs {val} not in permitted: {permitted}"
+            )
 
         self._show_accidental_signs = val
 
-    def get_beat(self, *args, **kwargs) -> 'Beat':
+    def get_beat(self, *args, **kwargs) -> "Beat":
         """
         :obj:`~musicscore.musictree.MusicTree` method
 
@@ -157,9 +203,9 @@ class MusicTree(Tree):
                        :obj:`~musicscore.score.Score` needs all keyword arguments.
         :rtype: :obj:`~musicscore.beat.Beat`
         """
-        return self._get_music_tree_descendent(args, kwargs, 'Beat')
+        return self._get_music_tree_descendent(args, kwargs, "Beat")
 
-    def get_chord(self, *args, **kwargs) -> 'Chord':
+    def get_chord(self, *args, **kwargs) -> "Chord":
         """
         :obj:`~musicscore.musictree.MusicTree` method
 
@@ -173,9 +219,9 @@ class MusicTree(Tree):
         :rtype: :obj:`~musicscore.chord.Chord`
         """
 
-        return self._get_music_tree_descendent(args, kwargs, 'Chord')
+        return self._get_music_tree_descendent(args, kwargs, "Chord")
 
-    def get_beats(self) -> List['Beat']:
+    def get_beats(self) -> List["Beat"]:
         """
         :obj:`~musicscore.musictree.MusicTree` method
 
@@ -185,18 +231,19 @@ class MusicTree(Tree):
         :return: a flat list of all beats.
         :rtype: List[:obj:`~musicscore.beat.Beat`]
         """
-        if isinstance_as_string(self, 'Voice'):
+        if isinstance_as_string(self, "Voice"):
             return self.get_children()
         else:
             output = [ch for child in self.get_children() for ch in child.get_beats()]
             if not output:
-                for cls_name in ['Beat', 'Chord', 'Note', 'Midi', 'Accidental']:
+                for cls_name in ["Beat", "Chord", "Note", "Midi", "Accidental"]:
                     if isinstance_as_string(self, cls_name):
                         raise MusicTreeTypeError(
-                            f'MusicTree descendents of type {self.__class__} cannot use this method.')
+                            f"MusicTree descendents of type {self.__class__} cannot use this method."
+                        )
             return output
 
-    def get_chords(self) -> List['Chord']:
+    def get_chords(self) -> List["Chord"]:
         """
         :obj:`~musicscore.musictree.MusicTree` method
 
@@ -206,18 +253,19 @@ class MusicTree(Tree):
         :return: a flat list of all chords.
         :rtype: List[:obj:`~musicscore.chord.Chord`]
         """
-        if isinstance_as_string(self, 'Beat'):
+        if isinstance_as_string(self, "Beat"):
             return self.get_children()
         else:
             output = [ch for child in self.get_children() for ch in child.get_chords()]
             if not output:
-                for cls_name in ['Chord', 'Note', 'Midi', 'Accidental']:
+                for cls_name in ["Chord", "Note", "Midi", "Accidental"]:
                     if isinstance_as_string(self, cls_name):
                         raise MusicTreeTypeError(
-                            f'MusicTree descendents of type {self.__class__} cannot use this method.')
+                            f"MusicTree descendents of type {self.__class__} cannot use this method."
+                        )
             return output
 
-    def get_measure(self, *args, **kwargs) -> 'Measure':
+    def get_measure(self, *args, **kwargs) -> "Measure":
         """
         :obj:`~musicscore.musictree.MusicTree` method
 
@@ -228,9 +276,9 @@ class MusicTree(Tree):
         :rtype: :obj:`~musicscore.measure.Measure`
         """
 
-        return self._get_music_tree_descendent(args, kwargs, 'Measure')
+        return self._get_music_tree_descendent(args, kwargs, "Measure")
 
-    def get_part(self, *args, **kwargs) -> 'Part':
+    def get_part(self, *args, **kwargs) -> "Part":
         """
         :obj:`~musicscore.musictree.MusicTree` method
 
@@ -241,9 +289,9 @@ class MusicTree(Tree):
         :rtype: :obj:`~musicscore.part.Part`
         """
 
-        return self._get_music_tree_descendent(args, kwargs, 'Part')
+        return self._get_music_tree_descendent(args, kwargs, "Part")
 
-    def get_staff(self, *args, **kwargs) -> 'Staff':
+    def get_staff(self, *args, **kwargs) -> "Staff":
         """
         :obj:`~musicscore.musictree.MusicTree` method
 
@@ -254,9 +302,9 @@ class MusicTree(Tree):
         :rtype: :obj:`~musicscore.staff.Staff`
         """
 
-        return self._get_music_tree_descendent(args, kwargs, 'Staff')
+        return self._get_music_tree_descendent(args, kwargs, "Staff")
 
-    def get_voice(self, *args, **kwargs) -> 'Voice':
+    def get_voice(self, *args, **kwargs) -> "Voice":
         """
         :obj:`~musicscore.musictree.MusicTree` method
 
@@ -267,4 +315,4 @@ class MusicTree(Tree):
         :param kwargs: ``part_number``, ``measure_number``, ``staff_number``, ``voice_number`` depending on musicscore's class.
         :rtype: :obj:`~musicscore.voice.Voice`
         """
-        return self._get_music_tree_descendent(args, kwargs, 'Voice')
+        return self._get_music_tree_descendent(args, kwargs, "Voice")

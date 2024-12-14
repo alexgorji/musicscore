@@ -1,46 +1,101 @@
-"""
-All <direction> elements defined in MusicXML.
-"""
+
 from pathlib import Path
 
 from musicscore.tests.util import IdTestCase
-from musicxml.xmlelement.xmlelement import XMLRehearsal, XMLDynamics, XMLOtherDynamics, XMLSegno, XMLCoda, XMLWords, \
-    XMLEyeglasses, XMLDashes, XMLBracket, XMLOctaveShift, XMLPedal, XMLMetronome, XMLBeatUnit, XMLPerMinute, \
-    XMLHarpPedals, XMLPedalStep, XMLPedalAlter, XMLPedalTuning, XMLDamp, XMLDampAll, XMLScordatura, XMLAccord, \
-    XMLTuningStep, XMLTuningOctave, XMLTuningAlter, XMLAccordionRegistration, XMLAccordionHigh, XMLAccordionMiddle, \
-    XMLAccordionLow, XMLWedge, XMLPrint, XMLBarline, XMLBarStyle
+from musicxml.xmlelement.xmlelement import (
+    XMLRehearsal,
+    XMLDynamics,
+    XMLOtherDynamics,
+    XMLSegno,
+    XMLCoda,
+    XMLWords,
+    XMLEyeglasses,
+    XMLDashes,
+    XMLBracket,
+    XMLOctaveShift,
+    XMLPedal,
+    XMLMetronome,
+    XMLBeatUnit,
+    XMLPerMinute,
+    XMLHarpPedals,
+    XMLPedalStep,
+    XMLPedalAlter,
+    XMLPedalTuning,
+    XMLDamp,
+    XMLDampAll,
+    XMLScordatura,
+    XMLAccord,
+    XMLTuningStep,
+    XMLTuningOctave,
+    XMLTuningAlter,
+    XMLAccordionRegistration,
+    XMLAccordionHigh,
+    XMLAccordionMiddle,
+    XMLAccordionLow,
+    XMLWedge,
+    XMLPrint,
+    XMLBarline,
+    XMLBarStyle,
+)
+from musicscore import Score, Chord
+
+"""
+All <direction> elements defined in MusicXML.
+"""
 
 """"
 XML_DIRECTION_TYPE_CLASSES = [
     XMLSymbol, XMLStringMute, XMLImage, XMLPrincipalVoice, XMLPercussion, XMLStaffDivide, XMLOtherDirection
 ]
 """
-from musicscore import Score, Chord
 
 
 class TestLily31a(IdTestCase):
     def test_lily_31a_Directions(self):
-
         score = Score(title="MusicXML directions (attached to staff)")
-        part = score.add_part('p1')
+        part = score.add_part("p1")
 
-        for rehearsal, enclosure in zip(['A', 'B', 'Test', 'Crc'], ['square', 'none', 'rectangle', 'circle']):
+        for rehearsal, enclosure in zip(
+            ["A", "B", "Test", "Crc"], ["square", "none", "rectangle", "circle"]
+        ):
             r = XMLRehearsal(rehearsal, enclosure=enclosure)
             ch = Chord(60, 1)
             ch.add_direction_type(r)
             part.add_chord(ch)
 
-        for dt in [XMLSegno(), XMLCoda(), XMLWords('words'), XMLEyeglasses()]:
+        for dt in [XMLSegno(), XMLCoda(), XMLWords("words"), XMLEyeglasses()]:
             ch = Chord(60, 1)
             if isinstance(dt, XMLWords):
-                ch.add_direction_type(dt, 'below')
+                ch.add_direction_type(dt, "below")
             else:
-                ch.add_direction_type(dt, 'above')
+                ch.add_direction_type(dt, "above")
             part.add_chord(ch)
 
-        dynamics = ['p', 'pp', 'ppp', 'pppp', 'ppppp', 'pppppp', 'f', 'ff', 'fff', 'ffff', 'fffff', 'ffffff', 'mp',
-                    'mf',
-                    'sf', 'sfp', 'sfpp', 'fp', 'rf', 'rfz', 'sfz', 'sffz', 'fz']
+        dynamics = [
+            "p",
+            "pp",
+            "ppp",
+            "pppp",
+            "ppppp",
+            "pppppp",
+            "f",
+            "ff",
+            "fff",
+            "ffff",
+            "fffff",
+            "ffffff",
+            "mp",
+            "mf",
+            "sf",
+            "sfp",
+            "sfpp",
+            "fp",
+            "rf",
+            "rfz",
+            "sfz",
+            "sffz",
+            "fz",
+        ]
         for d in dynamics:
             ch = Chord(60, 1)
             ch.add_dynamics(d)
@@ -48,55 +103,57 @@ class TestLily31a(IdTestCase):
 
         ch = Chord(60, 1)
         d = XMLDynamics()
-        d.add_child(XMLOtherDynamics('abc-ffz'))
-        ch.add_direction_type(d, placement='below')
+        d.add_child(XMLOtherDynamics("abc-ffz"))
+        ch.add_direction_type(d, placement="below")
         part.add_chord(ch)
 
-        for w in ['crescendo', 'stop']:
+        for w in ["crescendo", "stop"]:
             ch = Chord(60, 1)
             ch.add_wedge(w)
             part.add_chord(ch)
 
-        for x in ['start', 'stop']:
+        for x in ["start", "stop"]:
             ch = Chord(60, 1)
             ch.add_direction_type(XMLDashes(type=x))
             part.add_chord(ch)
 
-        for x in ['start', 'stop']:
+        for x in ["start", "stop"]:
             ch = Chord(60, 1)
-            ch.add_direction_type(XMLBracket(type=x, line_end='down'))
+            ch.add_direction_type(XMLBracket(type=x, line_end="down"))
             part.add_chord(ch)
 
-        for x in ['down', 'stop']:
+        for x in ["down", "stop"]:
             ch = Chord(60, 1)
             ch.add_direction_type(XMLOctaveShift(type=x))
             part.add_chord(ch)
 
-        for x in ['start', ('stop', 'start'), 'continue', 'stop']:
+        for x in ["start", ("stop", "start"), "continue", "stop"]:
             ch = Chord(60, 1)
             if isinstance(x, tuple):
-                ch.add_direction_type(XMLPedal(type=x[0], relative_x=-25, relative_y=-10), 'below')
-                ch.add_direction_type(XMLPedal(type=x[1], relative_y=-10), 'below')
+                ch.add_direction_type(
+                    XMLPedal(type=x[0], relative_x=-25, relative_y=-10), "below"
+                )
+                ch.add_direction_type(XMLPedal(type=x[1], relative_y=-10), "below")
             else:
-                ch.add_direction_type(XMLPedal(type=x, relative_y=-10), 'below')
+                ch.add_direction_type(XMLPedal(type=x, relative_y=-10), "below")
             part.add_chord(ch)
 
         ch = Chord(60, 1)
         m = XMLMetronome()
-        m.add_child(XMLBeatUnit('quarter'))
-        m.add_child(XMLPerMinute('60'))
+        m.add_child(XMLBeatUnit("quarter"))
+        m.add_child(XMLPerMinute("60"))
         ch.add_direction_type(m)
         part.add_chord(ch)
 
         ch = Chord(60, 1)
-        steps = ['D', 'C', 'B', 'E', 'F', 'G', 'A']
+        steps = ["D", "C", "B", "E", "F", "G", "A"]
         alters = [0, -1, -1, 0, 0, 1, -1]
         hp = XMLHarpPedals(relative_y=-20, font_size=14)
         for s, a in zip(steps, alters):
             pt = hp.add_child(XMLPedalTuning())
             pt.add_child(XMLPedalStep(s))
             pt.add_child(XMLPedalAlter(a))
-        ch.add_direction_type(hp, 'below')
+        ch.add_direction_type(hp, "below")
         part.add_chord(ch)
 
         ch = Chord(60, 1)
@@ -130,7 +187,7 @@ class TestLily31a(IdTestCase):
         """
 
         sc = XMLScordatura()
-        steps = ['E', 'A', 'E', 'A']
+        steps = ["E", "A", "E", "A"]
         alters = [None, None, -1, None]
         octaves = [5, 4, 4, 3]
         for index, (s, a, o) in enumerate(zip(steps, alters, octaves)):
@@ -142,7 +199,7 @@ class TestLily31a(IdTestCase):
 
         ch = Chord(60, 1)
         ch.add_direction_type(sc)
-        ch.add_lyric('Scordatura')
+        ch.add_lyric("Scordatura")
         part.add_chord(ch)
 
         """
@@ -167,18 +224,20 @@ class TestLily31a(IdTestCase):
         part.add_chord(ch)
 
         ch = Chord(60, 1)
-        ch.add_dynamics('p')
-        ch.add_direction_type(XMLWords('subito', font_style='italic', relative_y=-20), placement='below')
+        ch.add_dynamics("p")
+        ch.add_direction_type(
+            XMLWords("subito", font_style="italic", relative_y=-20), placement="below"
+        )
         part.add_chord(ch)
 
         ch = Chord(60, 1)
-        ch.add_dynamics('ppp')
-        ch.add_wedge(XMLWedge(type='crescendo', relative_x=25))
+        ch.add_dynamics("ppp")
+        ch.add_wedge(XMLWedge(type="crescendo", relative_x=25))
         part.add_chord(ch)
 
         ch = Chord(60, 1)
-        ch.add_dynamics('fff')
-        ch.add_wedge(XMLWedge(type='stop', relative_x=-5))
+        ch.add_dynamics("fff")
+        ch.add_wedge(XMLWedge(type="stop", relative_x=-5))
         part.add_chord(ch)
 
         ch = Chord(0, 1)
@@ -186,15 +245,15 @@ class TestLily31a(IdTestCase):
 
         new_systems = [2, 5, 9, 12]
         for m in new_systems:
-            part.get_measure(m).xml_object.add_child(XMLPrint(new_system='yes'))
+            part.get_measure(m).xml_object.add_child(XMLPrint(new_system="yes"))
 
-        barline = XMLBarline(location='right')
-        barline.add_child(XMLBarStyle('light-light'))
+        barline = XMLBarline(location="right")
+        barline.add_child(XMLBarStyle("light-light"))
         part.get_measure(13).xml_object.add_child(barline)
 
-        barline = XMLBarline(location='right')
-        barline.add_child(XMLBarStyle('light-heavy'))
+        barline = XMLBarline(location="right")
+        barline.add_child(XMLBarStyle("light-heavy"))
         part.get_measure(14).xml_object.add_child(barline)
 
-        xml_path = Path(__file__).with_suffix('.xml')
+        xml_path = Path(__file__).with_suffix(".xml")
         score.export_xml(xml_path)

@@ -5,12 +5,13 @@ class XMLWrapper:
 
     All attributes and properties which are not listed in _ATTRIBUTES will be set to or get from core xml object.
     """
+
     _ATTRIBUTES = {}
 
     XMLClass = None
 
     @property
-    def xml_object(self) -> 'XMLElement':
+    def xml_object(self) -> "XMLElement":
         """
         :obj:`~musicscore.xmlwrapper.XMLWrapper` method
 
@@ -34,7 +35,7 @@ class XMLWrapper:
         if self.xml_object:
             return self.xml_object.to_string(*args, **kwargs)
         else:
-            raise ValueError(f'{self.__class__.__name__} has no xml object.')
+            raise ValueError(f"{self.__class__.__name__} has no xml object.")
 
     def __setattr__(self, key, value):
         attributes = self._ATTRIBUTES
@@ -43,15 +44,19 @@ class XMLWrapper:
                 attributes.union(self._TREE_ATTRIBUTES)
         except AttributeError:
             pass
-        if key[0] != '_' and ('_xml_object' in self.__dict__ and key not in attributes and key not in self.__dict__):
+        if key[0] != "_" and (
+            "_xml_object" in self.__dict__
+            and key not in attributes
+            and key not in self.__dict__
+        ):
             setattr(self._xml_object, key, value)
         else:
             super().__setattr__(key, value)
 
     def __getattr__(self, item):
-        if item == '_TREE_ATTRIBUTES':
+        if item == "_TREE_ATTRIBUTES":
             raise AttributeError
-        if item == 'xml_object':
+        if item == "xml_object":
             return super().__getattribute__(item)
         try:
             return self._xml_object.__getattribute__(item)

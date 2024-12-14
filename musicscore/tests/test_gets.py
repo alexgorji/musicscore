@@ -1,4 +1,4 @@
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 from musicscore.beat import Beat
 from musicscore.chord import Chord
@@ -13,12 +13,12 @@ from musicscore.voice import Voice
 class TestGetPart(IdTestCase):
     def test_score_get_part(self):
         s = Score()
-        p = s.add_child(Part('p1'))
+        p = s.add_child(Part("p1"))
         assert s.get_part(1) == p
         assert s.get_part(2) is None
 
     def test_part_get_part(self):
-        p = Part('p1')
+        p = Part("p1")
         with self.assertRaises(TypeError):
             p.get_part()
 
@@ -51,7 +51,7 @@ class TestGetPart(IdTestCase):
 class TestGetMeasure(IdTestCase):
     def test_score_get_measure(self):
         s = Score()
-        p = s.add_child(Part('p1'))
+        p = s.add_child(Part("p1"))
         m = p.add_child(Measure(1))
         assert p.get_measure(1) == m
         assert s.get_part(1).get_measure(1) == m
@@ -60,7 +60,7 @@ class TestGetMeasure(IdTestCase):
         assert s.get_measure(2, 2) is None
 
     def test_part_get_measure(self):
-        p = Part('p1')
+        p = Part("p1")
         m = p.add_child(Measure(1))
         assert p.get_measure(1) == m
         assert p.get_measure(2) is None
@@ -94,7 +94,7 @@ class TestGetMeasure(IdTestCase):
 class TestGetStaff(IdTestCase):
     def test_score_get_staff(self):
         s = Score()
-        p = s.add_child(Part('p1'))
+        p = s.add_child(Part("p1"))
         m = p.add_child(Measure(1))
         st = m.add_child(Staff())
         assert s.get_staff(1, 1, 1) == st
@@ -102,7 +102,7 @@ class TestGetStaff(IdTestCase):
         assert s.get_staff(2, 2, 1) is None
 
     def test_part_get_staff(self):
-        p = Part('p1')
+        p = Part("p1")
         m = p.add_child(Measure(1))
         st = m.add_child(Staff())
         assert p.get_staff(1, 1) == st
@@ -138,19 +138,19 @@ class TestGetStaff(IdTestCase):
 class TestGetVoice(IdTestCase):
     def test_score_get_voice(self):
         s = Score()
-        p1 = s.add_child(Part('p1'))
+        p1 = s.add_child(Part("p1"))
         m1 = p1.add_child(Measure(1))
         st1 = m1.add_child(Staff())
         v1 = st1.add_child(Voice())
         assert s.get_voice(1, 1, 1, 1) == v1
 
-        p2 = s.add_child(Part('p2'))
+        p2 = s.add_child(Part("p2"))
         m2 = p2.add_measure()
         st2 = m2.get_children()[0]
         assert m2.get_staff(1) == st2
 
     def test_part_get_voice(self):
-        p = Part('p1')
+        p = Part("p1")
         m = p.add_child(Measure(1))
         st = m.add_child(Staff())
         v = st.add_child(Voice())
@@ -162,7 +162,7 @@ class TestGetVoice(IdTestCase):
         v = st.add_child(Voice())
         assert m.get_voice(1, 1) == v
 
-    @patch('musicscore.measure.Measure')
+    @patch("musicscore.measure.Measure")
     def test_staff_get_voice(self, mock_measure):
         st = Staff()
         st._parent = mock_measure
@@ -189,7 +189,7 @@ class TestGetVoice(IdTestCase):
 class TestGetBeat(IdTestCase):
     def test_score_get_beat(self):
         s = Score()
-        p = s.add_child(Part('p1'))
+        p = s.add_child(Part("p1"))
         m = p.add_child(Measure(1))
         st = m.add_child(Staff())
         v = st.add_child(Voice())
@@ -197,7 +197,7 @@ class TestGetBeat(IdTestCase):
         assert s.get_beat(1, 1, 1, 1, 1) == b
 
     def test_part_get_beat(self):
-        p = Part('p1')
+        p = Part("p1")
         m = p.add_child(Measure(1))
         st = m.add_child(Staff())
         v = st.add_child(Voice())
@@ -211,7 +211,7 @@ class TestGetBeat(IdTestCase):
         b = v.add_child(Beat())
         assert m.get_beat(1, 1, 1) == b
 
-    @patch('musicscore.measure.Measure')
+    @patch("musicscore.measure.Measure")
     def test_staff_get_beat(self, mock_measure):
         st = Staff()
         st._parent = mock_measure
@@ -220,7 +220,7 @@ class TestGetBeat(IdTestCase):
         assert st.get_beat(1, 1) == b
         assert st.get_beat(2, 2) is None
 
-    @patch('musicscore.staff.Staff')
+    @patch("musicscore.staff.Staff")
     def test_voice_get_beat(self, mock_staff):
         v = Voice()
         v._parent = mock_staff
@@ -241,7 +241,7 @@ class TestGetBeat(IdTestCase):
 class TestGetChord(IdTestCase):
     def test_score_get_chord(self):
         s = Score()
-        p = s.add_child(Part('p1'))
+        p = s.add_child(Part("p1"))
         m = p.add_child(Measure(1))
         st = m.add_child(Staff())
         v = st.add_child(Voice())
@@ -250,7 +250,7 @@ class TestGetChord(IdTestCase):
         assert s.get_chord(1, 1, 1, 1, 1, 1) == ch
 
     def test_part_get_chord(self):
-        p = Part('p1')
+        p = Part("p1")
         m = p.add_child(Measure(1))
         st = m.add_child(Staff())
         v = st.add_child(Voice())
@@ -266,7 +266,7 @@ class TestGetChord(IdTestCase):
         ch = b.add_child(Chord(60, 1))[0]
         assert m.get_chord(1, 1, 1, 1) == ch
 
-    @patch('musicscore.measure.Measure')
+    @patch("musicscore.measure.Measure")
     def test_staff_get_chord(self, mock_measure):
         st = Staff()
         st._parent = mock_measure
@@ -275,7 +275,7 @@ class TestGetChord(IdTestCase):
         ch = b.add_child(Chord(60, 1))[0]
         assert st.get_chord(1, 1, 1) == ch
 
-    @patch('musicscore.staff.Staff')
+    @patch("musicscore.staff.Staff")
     def test_voice_get_chord(self, mock_staff):
         v = Voice()
         v._parent = mock_staff
@@ -283,7 +283,7 @@ class TestGetChord(IdTestCase):
         ch = b.add_child(Chord(60, 1))[0]
         assert v.get_chord(1, 1) == ch
 
-    @patch('musicscore.voice.Voice')
+    @patch("musicscore.voice.Voice")
     def test_beat_get_chord(self, mock_voice):
         b = Beat()
         b._parent = mock_voice
@@ -299,7 +299,7 @@ class TestGetChord(IdTestCase):
 class TestGetBeats(IdTestCase):
     def test_score_get_beats(self):
         s = Score()
-        p = s.add_child(Part('p1'))
+        p = s.add_child(Part("p1"))
         m = p.add_child(Measure(1))
         st = m.add_child(Staff())
         v = st.add_child(Voice())
@@ -308,7 +308,7 @@ class TestGetBeats(IdTestCase):
         assert s.get_beats() == [b1, b2]
 
     def test_part_get_beats(self):
-        p = Part('p1')
+        p = Part("p1")
         m = p.add_child(Measure(1))
         st = m.add_child(Staff())
         v = st.add_child(Voice())
@@ -324,7 +324,7 @@ class TestGetBeats(IdTestCase):
         b2 = v.add_child(Beat())
         assert m.get_beats() == [b1, b2]
 
-    @patch('musicscore.measure.Measure')
+    @patch("musicscore.measure.Measure")
     def test_staff_get_beats(self, mock_measure):
         st = Staff()
         st._parent = mock_measure
@@ -333,7 +333,7 @@ class TestGetBeats(IdTestCase):
         b2 = v.add_child(Beat())
         assert st.get_beats() == [b1, b2]
 
-    @patch('musicscore.staff.Staff')
+    @patch("musicscore.staff.Staff")
     def test_voice_get_beats(self, mock_staff):
         v = Voice()
         v._parent = mock_staff

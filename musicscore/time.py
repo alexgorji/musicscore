@@ -6,10 +6,15 @@ from musicscore.util import isinstance_as_string
 from musicxml.xmlelement.xmlelement import XMLTime, XMLBeats, XMLBeatType
 from musicscore.xmlwrapper import XMLWrapper
 
-__all__ = ['Time', 'flatten_times', 'CONVERSION_DICTIONARY']
+__all__ = ["Time", "flatten_times", "CONVERSION_DICTIONARY"]
 
 #: If :obj:`Time.actual_signatures` is not set manually first this dictionary is used to create actual signature.
-CONVERSION_DICTIONARY = {'2/8': [2, 8], '4/8': [2, 8, 2, 8], '5/8': [3, 8, 2, 8], '7/8': [4, 8, 3, 8]}
+CONVERSION_DICTIONARY = {
+    "2/8": [2, 8],
+    "4/8": [2, 8, 2, 8],
+    "5/8": [3, 8, 2, 8],
+    "7/8": [4, 8, 3, 8],
+}
 
 
 def _convert_signatures_to_ints(signatures):
@@ -18,7 +23,7 @@ def _convert_signatures_to_ints(signatures):
         beat = signatures[i * 2]
         beat_type = signatures[i * 2 + 1]
         if isinstance(beat, str):
-            l = beat.split('+')
+            l = beat.split("+")
             if len(l) == 1:
                 output.append(int(beat))
                 output.append(int(beat_type))
@@ -44,7 +49,7 @@ def _get_quarter_durations_from_ints(signatures):
 
 
 class Time(XMLWrapper):
-    _ATTRIBUTES = {'signatures', 'actual_signatures', 'parent_measure', 'show'}
+    _ATTRIBUTES = {"signatures", "actual_signatures", "parent_measure", "show"}
     XMLClass = XMLTime
 
     def __init__(self, *signatures, show=True, **kwargs):
@@ -62,14 +67,16 @@ class Time(XMLWrapper):
 
     def _calculate_actual_signatures(self):
         signatures = _convert_signatures_to_ints(self.signatures)
-        signatures = [signatures[i:i + 2] for i in range(0, len(signatures), 2)]
+        signatures = [signatures[i : i + 2] for i in range(0, len(signatures), 2)]
         self._intern_actual_signatures = []
         for signature in signatures:
             key = "/".join([str(x) for x in signature])
             if key in CONVERSION_DICTIONARY:
                 self._intern_actual_signatures.extend(CONVERSION_DICTIONARY[key])
             elif signature[1] % 8 == 0 and signature[0] % 3 == 0:
-                self._intern_actual_signatures.extend([3, signature[1]] * (signature[0] // 3))
+                self._intern_actual_signatures.extend(
+                    [3, signature[1]] * (signature[0] // 3)
+                )
             else:
                 self._intern_actual_signatures.extend([1, signature[1]] * signature[0])
         return self._intern_actual_signatures
@@ -82,9 +89,13 @@ class Time(XMLWrapper):
         self._intern_actual_signatures = None
 
     def _update_signature_objects(self):
-        signatures = [self.signatures[i:i + 2] for i in range(0, len(self.signatures), 2)]
-        for beats, beat_type in zip(self._xml_object.find_children('XMLBeats'),
-                                    self._xml_object.find_children('XMLBeatType')):
+        signatures = [
+            self.signatures[i : i + 2] for i in range(0, len(self.signatures), 2)
+        ]
+        for beats, beat_type in zip(
+            self._xml_object.find_children("XMLBeats"),
+            self._xml_object.find_children("XMLBeatType"),
+        ):
             if signatures:
                 signature = signatures.pop(0)
                 beats.value_ = str(signature[0])
@@ -176,8 +187,13 @@ class Time(XMLWrapper):
         """
         :return: List of quarter durations according to :obj:`actual_signatures`
         """
-        return [QuarterDuration(numerator, denominator) * 4 for numerator, denominator in
-                [self.actual_signatures[i:i + 2] for i in range(0, len(self.actual_signatures), 2)]]
+        return [
+            QuarterDuration(numerator, denominator) * 4
+            for numerator, denominator in [
+                self.actual_signatures[i : i + 2]
+                for i in range(0, len(self.actual_signatures), 2)
+            ]
+        ]
 
     def __copy__(self):
         cp = self.__class__(*self.signatures, show=self.show)
@@ -201,7 +217,7 @@ def flatten_times(times) -> List[Time]:
     for time in times:
         if isinstance(time, Time):
             output.append(time)
-        elif hasattr(time, '__iter__'):
+        elif hasattr(time, "__iter__"):
             if {isinstance(t, int) for t in time} == {True}:
                 output.append(Time(*time))
             else:

@@ -19,13 +19,15 @@ class TestTuplets1(IdTestCase):
 
         s = Score()
 
-        p = s.add_child(Part('P1', name='Music'))
+        p = s.add_child(Part("P1", name="Music"))
 
         p.add_measure(time=(1, 4))
 
         rhythmic_patterns = []
         for subdivision in range(1, 8):
-            rhythmic_patterns.extend(generate_all_subdivision_patterns(subdivision, True))
+            rhythmic_patterns.extend(
+                generate_all_subdivision_patterns(subdivision, True)
+            )
 
         for rhythmic_pattern in rhythmic_patterns:
             subdivision = sum(rhythmic_pattern)
@@ -33,7 +35,7 @@ class TestTuplets1(IdTestCase):
                 ch = Chord(60, Fraction(x, subdivision))
                 ch.add_lyric(x)
                 p.add_chord(ch)
-        xml_path = create_test_xml_paths(path, 'upto_7')[0]
+        xml_path = create_test_xml_paths(path, "upto_7")[0]
         s.export_xml(xml_path)
 
     def test_tuplets_8(self):
@@ -43,7 +45,7 @@ class TestTuplets1(IdTestCase):
 
         s = Score()
 
-        p = s.add_child(Part('P1', name='Music'))
+        p = s.add_child(Part("P1", name="Music"))
 
         p.add_measure(time=(1, 4))
 
@@ -53,7 +55,7 @@ class TestTuplets1(IdTestCase):
             ch = Chord(60, Fraction(x, subdivision))
             ch.add_lyric(x)
             p.add_chord(ch)
-        xml_path = create_test_xml_paths(path, '8')[0]
+        xml_path = create_test_xml_paths(path, "8")[0]
         s.export_xml(xml_path)
 
     def test_tuplets_9(self):
@@ -63,7 +65,7 @@ class TestTuplets1(IdTestCase):
 
         s = Score()
 
-        p = s.add_child(Part('P1', name='Music'))
+        p = s.add_child(Part("P1", name="Music"))
 
         p.add_measure(time=(1, 4))
 
@@ -73,5 +75,5 @@ class TestTuplets1(IdTestCase):
             ch = Chord(60, Fraction(x, subdivision))
             ch.add_lyric(x)
             p.add_chord(ch)
-        xml_path = create_test_xml_paths(path, '9')[0]
+        xml_path = create_test_xml_paths(path, "9")[0]
         s.export_xml(xml_path)

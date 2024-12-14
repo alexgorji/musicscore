@@ -25,6 +25,10 @@ xmltodict = "^0.14.2"
 deepdiff = "^8.0.1"
 
 
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.3"
+
 [[tool.poetry.source]]
 name = "PyPI"
 priority = "primary"
@@ -32,4 +36,7 @@ priority = "primary"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff.lint]
+ignore = ["F403", "F405", "E741", "F821"]
 
