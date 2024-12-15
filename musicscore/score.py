@@ -4,6 +4,7 @@ from musicscore import Part, Chord
 from musicscore.chord import Rest
 from musicscore.exceptions import (
     AlreadyFinalizedError,
+    ScoreHasNoPartsError,
     ScoreMultiMeasureRestError,
     ScorePartIdIsNotUniqueError,
 )
@@ -115,6 +116,9 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
 
     def _check_parts(self):
         part_ids = [part.id_ for part in self.get_children()]
+        if not part_ids:
+            raise ScoreHasNoPartsError
+
         if len(set(part_ids)) != len(part_ids):
             raise ScorePartIdIsNotUniqueError
 

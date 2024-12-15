@@ -244,6 +244,10 @@ class ScorePartIdIsNotUniqueError(ScoreException):
     pass
 
 
+class ScoreHasNoPartsError(ScoreException):
+    pass
+
+
 # Staff exceptions
 class StaffException(MusicTreeException):
     pass

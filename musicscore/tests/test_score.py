@@ -1,7 +1,7 @@
 from unittest import TestCase, skip
 
 from musicscore.chord import Chord
-from musicscore.exceptions import ScoreMultiMeasureRestError
+from musicscore.exceptions import ScoreHasNoPartsError, ScoreMultiMeasureRestError
 from musicscore.layout import StaffLayout
 from musicscore.measure import Measure
 from musicscore.part import Part
@@ -24,6 +24,11 @@ class TestScore(TestCase):
         assert s.find_child("XMLPart") == p.xml_object
         assert s.xml_defaults is not None
         s.xml_object._final_checks()
+
+    def test_score_without_part(self):
+        s = Score()
+        with self.assertRaises(ScoreHasNoPartsError):
+            s.finalize()
 
     def test_get_chords(self):
         s = Score()
