@@ -13,9 +13,3 @@ musicscore.part
    :undoc-members:
    :show-inheritance:
    :inherited-members:
-
-.. autoclass:: musicscore.part.Id
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :inherited-members:

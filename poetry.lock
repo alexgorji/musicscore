@@ -401,13 +401,13 @@ files = [
 
 [[package]]
 name = "verysimpletree"
-version = "1.0"
+version = "1.1"
 description = "lightweight tree data structure for musicxml and musicscore"
 optional = false
 python-versions = "<3.13,>=3.9"
 files = [
-    {file = "verysimpletree-1.0-py3-none-any.whl", hash = "sha256:8b7a1f37abb1a0ba55385afb5f7995e2d668c00825357d931cee459065065a9c"},
-    {file = "verysimpletree-1.0.tar.gz", hash = "sha256:6d33cc10e9ab7ade0a58a76c1f74f18fe2407f251cf125f2d129912577950e29"},
+    {file = "verysimpletree-1.1-py3-none-any.whl", hash = "sha256:623b4e22095d278400ef709248aced3139bf18d6e81be70998b4fd90ad49f921"},
+    {file = "verysimpletree-1.1.tar.gz", hash = "sha256:e5c7bff349944417fb0ccbb8268193b4b83a55f211f8348c0c6294e416b913f0"},
 ]
 
 [[package]]
