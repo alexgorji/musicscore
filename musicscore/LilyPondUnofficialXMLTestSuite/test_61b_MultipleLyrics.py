@@ -6,10 +6,10 @@ number attribute in this test case)
 from pathlib import Path
 
 from musicscore import Score, G, Chord, Lyrics
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily61b(IdTestCase):
+class TestLily61b(TestCase):
     def test_lily_61b_Lyrics(self):
         score = Score()
         part = score.add_part("p1")

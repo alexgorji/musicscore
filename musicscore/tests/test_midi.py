@@ -7,7 +7,7 @@ from musicscore.accidental import Accidental
 from musicscore.measure import Measure
 from musicscore.midi import Midi
 from musicscore.note import Note
-from musicscore.tests.util import generate_path, IdTestCase
+from musicscore.tests.util import generate_path
 from musicxml.xmlelement.xmlelement import XMLPitch, XMLRest, XMLNotehead
 
 
@@ -191,7 +191,7 @@ class TestMidi(TestCase):
         assert midi.get_staff_number() == 2
 
 
-class TestMidiNoteHead(IdTestCase):
+class TestMidiNoteHead(TestCase):
     def test_notehead_property(self):
         m = Midi(60)
         m.notehead = "square"

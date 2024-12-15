@@ -1,17 +1,18 @@
 from pathlib import Path
 
 from fractions import Fraction
+from unittest import TestCase
 
 from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.score import Score
-from musicscore.tests.util import IdTestCase, create_test_xml_paths
+from musicscore.tests.util import create_test_xml_paths
 from musicscore.tests.util_subdivisions import generate_all_subdivision_patterns
 
 path = Path(__file__)
 
 
-class TestTuplets1(IdTestCase):
+class TestTuplets1(TestCase):
     def test_tuplets_1(self):
         """
         Write all possible tuplet combinations up until septuplets

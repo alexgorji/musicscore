@@ -6,10 +6,10 @@ notes played. The second tuplet does not have a number attribute set.
 from pathlib import Path
 
 from musicscore import Score, Time, Chord, A, B, C, D, E, F, G
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily23a(IdTestCase):
+class TestLily23a(TestCase):
     def test_lily_23a_Tuplets(self):
         score = Score()
         part = score.add_part("p1")

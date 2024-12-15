@@ -1,14 +1,14 @@
 from pathlib import Path
 
 from musicscore import Score, Time, Chord, Key
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 """
 Various key signature: from 11 flats to 11 sharps
 """
 
 
-class TestLily131(IdTestCase):
+class TestLily131(TestCase):
     def test_lily_13a_KeySignatures(self):
         score = Score()
         part = score.add_part("p1")

@@ -1,11 +1,13 @@
 import inspect
 
 from musicscore import Chord, Score
-from musicscore.tests.util import IdTestCase, generate_path
+from unittest import TestCase
 from musicxml.xmlelement.xmlelement import XMLSlur
 
+from musicscore.tests.util import generate_path
 
-class TestSlurs(IdTestCase):
+
+class TestSlurs(TestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()

@@ -5,11 +5,11 @@ A trill spanner that spans a grace note and ends on an after-grace note at the e
 from pathlib import Path
 
 from musicscore import Score, SimpleFormat, E, F, G, A, B
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.util import trill_chords
 
 
-class TestLily33a(IdTestCase):
+class TestLily33a(TestCase):
     def test_lily_33a_Spanners(self):
         score = Score()
         part = score.add_part("p1")

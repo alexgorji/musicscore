@@ -5,10 +5,10 @@ from pathlib import Path
 
 from musicscore import Score, Chord
 from musicscore.lyrics import Lyrics
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily61k(IdTestCase):
+class TestLily61k(TestCase):
     def test_lily_61h_Lyrics_SprannersExtenders(self):
         score = Score()
         part = score.add_part("p1")

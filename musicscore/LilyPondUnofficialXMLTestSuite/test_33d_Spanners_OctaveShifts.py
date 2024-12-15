@@ -5,11 +5,11 @@ All types of octave shifts (15ma, 15mb, 8va, 8vb)
 from pathlib import Path
 
 from musicscore import Score, Chord, C, A, B
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.util import octave_chords
 
 
-class TestLily33d(IdTestCase):
+class TestLily33d(TestCase):
     def test_lily_33d_Spanners_OctaveShifts(self):
         score = Score()
         part = score.add_part("p1")

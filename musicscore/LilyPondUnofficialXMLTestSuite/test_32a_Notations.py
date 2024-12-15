@@ -5,7 +5,7 @@ All <notation> elements defined in MusicXML. The lyrics show the notation assign
 from pathlib import Path
 
 from musicscore import Score, Chord, C, E, G
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.util import XML_DYNAMIC_CLASSES
 from musicxml.xmlelement.xmlelement import (
     XMLFermata,
@@ -73,7 +73,7 @@ from musicxml.xmlelement.xmlelement import (
 )
 
 
-class TestLily321(IdTestCase):
+class TestLily321(TestCase):
     def test_lily_321_Notations(self):
         score = Score()
         part = score.add_part("p1")

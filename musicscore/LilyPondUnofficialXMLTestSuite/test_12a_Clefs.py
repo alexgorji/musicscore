@@ -6,7 +6,7 @@ from pathlib import Path
 
 from musicscore import AltoClef, TenorClef, BassClef, TrebleClef, Score, Chord
 from musicscore.clef import PercussionClef, Clef
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 clefs = [
     TrebleClef(),
@@ -30,7 +30,7 @@ clefs = [
 ]
 
 
-class TestLily12a(IdTestCase):
+class TestLily12a(TestCase):
     def test_lily_12a_Clefs(self):
         score = Score()
         part = score.add_part("p1")

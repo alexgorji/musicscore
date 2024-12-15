@@ -6,7 +6,7 @@ the middle of the third measure)."""
 from pathlib import Path
 
 from musicscore import Score, Chord, G
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicxml import XMLStaffDetails
 
 """
@@ -14,7 +14,7 @@ finale changes staff number of lines only ones. The next changes have no effect.
 """
 
 
-class TestLily14a(IdTestCase):
+class TestLily14a(TestCase):
     def test_lily_14a_StaffDetails_LineChanges(self):
         score = Score()
         p1 = score.add_part("p1")

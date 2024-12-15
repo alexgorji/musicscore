@@ -3,11 +3,11 @@
 from pathlib import Path
 
 from musicscore import Score, A, Chord, Lyrics, C, E
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.util import slur_chords
 
 
-class TestLily61d(IdTestCase):
+class TestLily61d(TestCase):
     def test_lily_61d_Lyrics_Melisma(self):
         score = Score()
         part = score.add_part("p1")

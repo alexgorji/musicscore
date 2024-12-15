@@ -1,11 +1,10 @@
-
 from fractions import Fraction
+from unittest import TestCase
 
 from musicscore import Time
 from musicscore.chord import Chord
 from musicscore.measure import Measure
 from musicscore.tests.test_beat import create_voice
-from musicscore.tests.util import IdTestCase
 from musicscore.tests.util_subdivisions import (
     generate_all_quintuplets_manually,
     generate_all_sextuplets_manually,
@@ -13,7 +12,7 @@ from musicscore.tests.util_subdivisions import (
 )
 
 
-class TestTuplets(IdTestCase):
+class TestTuplets(TestCase):
     def test_simple_triplet(self):
         expected_1 = """<note>
     <pitch>

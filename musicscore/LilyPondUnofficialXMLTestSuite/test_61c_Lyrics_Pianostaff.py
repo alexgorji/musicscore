@@ -4,10 +4,10 @@ lyrics line."""
 from pathlib import Path
 
 from musicscore import Score, A, Chord, F, Lyrics
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily61c(IdTestCase):
+class TestLily61c(TestCase):
     def test_lily_61c_Lyrics_Pianostaff(self):
         score = Score()
         part = score.add_part("p1")

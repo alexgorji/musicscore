@@ -5,10 +5,10 @@ A simple repeat with two alternative endings (volta brackets).
 from pathlib import Path
 
 from musicscore import Score, Chord
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily45b(IdTestCase):
+class TestLily45b(TestCase):
     def test_lily_45b_RepeatWithAlternatives(self):
         score = Score()
         part = score.add_part("p1")

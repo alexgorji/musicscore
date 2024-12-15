@@ -1,14 +1,14 @@
 import random
+from unittest import TestCase
 
 from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.quarterduration import QuarterDuration
 from musicscore.score import Score
-from musicscore.tests.util import IdTestCase
 from musicscore.util import lcm
 
 
-class TestQuantization(IdTestCase):
+class TestQuantization(TestCase):
     def test_get_and_set_possible_subdivisions(self):
         s = Score()
         p = s.add_child(Part("p1"))

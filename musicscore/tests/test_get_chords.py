@@ -1,10 +1,10 @@
+from unittest import TestCase
 from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.score import Score
-from musicscore.tests.util import IdTestCase
 
 
-class TestGetChords(IdTestCase):
+class TestGetChords(TestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()

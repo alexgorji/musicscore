@@ -1,5 +1,5 @@
 from pathlib import Path
-from unittest import skip
+from unittest import TestCase, skip
 
 from deepdiff import DeepDiff
 
@@ -13,7 +13,6 @@ from musicscore import (
     SimpleFormatException,
 )
 from musicscore.tests.util import (
-    IdTestCase,
     get_xml_diff_part,
     generate_xml_file,
     create_test_xml_paths,
@@ -23,7 +22,7 @@ import xml.etree.ElementTree as ET
 path = Path(__file__)
 
 
-class TestSimpleFormat(IdTestCase):
+class TestSimpleFormat(TestCase):
     def setUp(self) -> None:
         self.score = Score()
         super().setUp()

@@ -1,14 +1,15 @@
 import inspect
+from unittest import TestCase
 
 from musicscore import Score, Time, Chord, C
-from musicscore.tests.util import IdTestCase, generate_path
+from musicscore.tests.util import generate_path
 from musicscore.util import _chord_is_in_a_repetition
 
 
 # MyXMLTestSuite test_cautionary
 
 
-class TestShowAccidentalSigns(IdTestCase):
+class TestShowAccidentalSigns(TestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()

@@ -1,10 +1,12 @@
 import inspect
 
 from musicscore import Chord, Score, beam_chord_group
-from musicscore.tests.util import IdTestCase, generate_path
+from unittest import TestCase
+
+from musicscore.tests.util import generate_path
 
 
-class TestBeams(IdTestCase):
+class TestBeams(TestCase):
     def test_beams_example(self):
         score = Score()
         p = score.add_part("p1")

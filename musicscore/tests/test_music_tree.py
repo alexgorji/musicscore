@@ -1,3 +1,4 @@
+from unittest import TestCase
 from unittest.mock import patch, Mock
 
 from musicscore.accidental import Accidental
@@ -10,11 +11,10 @@ from musicscore.note import Note
 from musicscore.part import Part
 from musicscore.score import Score
 from musicscore.staff import Staff
-from musicscore.tests.util import IdTestCase
 from musicscore.voice import Voice
 
 
-class TestMusicTree(IdTestCase):
+class TestMusicTree(TestCase):
     @patch.object(Chord, "get_voice_number")
     @patch.object(Chord, "get_staff_number")
     def test_add_child_type(self, mock_get_voice_number, mock_get_staff_number):

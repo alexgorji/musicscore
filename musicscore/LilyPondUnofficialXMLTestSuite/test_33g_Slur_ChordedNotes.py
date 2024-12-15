@@ -6,11 +6,11 @@ the slur for all notes – these should be ignored.
 from pathlib import Path
 
 from musicscore import Score, Chord, G, C, A, D
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.util import slur_chords
 
 
-class TestLily33g(IdTestCase):
+class TestLily33g(TestCase):
     def test_lily_33g_Slur_ChordedNotes(self):
         score = Score()
         part = score.add_part("p1")

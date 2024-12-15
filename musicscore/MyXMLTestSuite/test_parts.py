@@ -1,10 +1,10 @@
 from pathlib import Path
 
 from musicscore import Score, Chord
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestParts(IdTestCase):
+class TestParts(TestCase):
     def test_multiple_parts(self):
         """
         Create multiple parts with names

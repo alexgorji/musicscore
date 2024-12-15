@@ -5,10 +5,10 @@ Various time signatures: 2/2 (alla breve), 4/4 (C), 2/2, 3/2, 2/4, 3/4, 4/4, 5/4
 from pathlib import Path
 
 from musicscore import Score, generate_measures, Chord, C
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily11a(IdTestCase):
+class TestLily11a(TestCase):
     def test_lily_11a_TimeSignatures(self):
         score = Score("Time signatures")
         p = score.add_part("ts")

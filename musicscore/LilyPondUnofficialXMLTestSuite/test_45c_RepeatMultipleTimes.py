@@ -5,10 +5,10 @@ Repeats can also be nested.
 from pathlib import Path
 
 from musicscore import Score, Chord
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily45c(IdTestCase):
+class TestLily45c(TestCase):
     def test_lily_45d_RepeatsMultipleTimes(self):
         score = Score()
         p = score.add_part("p1")

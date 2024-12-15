@@ -2,7 +2,6 @@ from fractions import Fraction
 from unittest import TestCase
 
 from musicscore import Part, Chord
-from musicscore.tests.util import IdTestCase
 from musicscore.time import Time, flatten_times, _convert_signatures_to_ints
 
 
@@ -177,7 +176,7 @@ class TestTime(TestCase):
         assert copied.show == t.show
 
 
-class TestActualTime(IdTestCase):
+class TestActualTime(TestCase):
     # def test_actual_time_cannot_change_measure_quarter_duration(self):
     #     t = Time(3, 4)
     #     t.actual_signatures = [4, 4]

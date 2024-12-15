@@ -7,13 +7,12 @@ from musicscore.exceptions import VoiceIsFullError, AddChordError
 from musicscore.measure import Measure, generate_measures
 from musicscore.part import Part
 from musicscore.staff import Staff
-from musicscore.tests.util import IdTestCase
 from musicscore.time import Time
 from musicscore.voice import Voice
 from musicxml.xmlelement.xmlelement import *
 
 
-class TestMeasure(IdTestCase):
+class TestMeasure(TestCase):
     def test_measure_default_init(self):
         expected = """<measure number="1">
   <attributes>
@@ -604,7 +603,7 @@ class TestMeasure(IdTestCase):
         assert ch.quarter_duration == 4
 
 
-class TestUpdateAccidentals(IdTestCase):
+class TestUpdateAccidentals(TestCase):
     def test_update_accidentals_simple(self):
         m = Measure(1)
         midis = [60, 61, 62, 60]

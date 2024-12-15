@@ -1,4 +1,4 @@
-
+from unittest import TestCase
 from musicscore import Part
 from musicscore.clef import (
     Clef,
@@ -8,10 +8,9 @@ from musicscore.clef import (
     AltoClef,
     PercussionClef,
 )
-from musicscore.tests.util import IdTestCase
 
 
-class TestClef(IdTestCase):
+class TestClef(TestCase):
     def test_default_clef(self):
         c = Clef()
         expected = """<clef>

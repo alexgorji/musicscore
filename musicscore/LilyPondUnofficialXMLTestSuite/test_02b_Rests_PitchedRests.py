@@ -6,10 +6,10 @@ from pathlib import Path
 
 from musicscore import Score
 from musicscore.chord import Rest
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily02b(IdTestCase):
+class TestLily02b(TestCase):
     def test_lily_02b_Rests_PitchedRests(self):
         score = Score()
         part = score.add_part("p1")

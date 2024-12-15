@@ -1,14 +1,14 @@
 from pathlib import Path
 
 from musicscore import Score, Chord
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 """
 A simple, repeated measure (repeated 5 times)
 """
 
 
-class TestLily45a(IdTestCase):
+class TestLily45a(TestCase):
     def test_lily_45a_SimpleRepeat(self):
         score = Score()
         part = score.add_part("p1")

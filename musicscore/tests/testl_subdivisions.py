@@ -1,4 +1,3 @@
-
 from musicscore.tests.test_metronome import TestCase
 from musicscore.tests.util_subdivisions import (
     generate_all_subdivisions,

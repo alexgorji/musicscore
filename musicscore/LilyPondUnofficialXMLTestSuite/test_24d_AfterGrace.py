@@ -5,10 +5,10 @@ Some grace notes and after-graces
 from pathlib import Path
 
 from musicscore import Score, Chord, A, E, G
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily24d(IdTestCase):
+class TestLily24d(TestCase):
     def test_lily_24d_AfterGrace(self):
         score = Score()
         part = score.add_part("p1")

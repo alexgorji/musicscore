@@ -6,10 +6,10 @@ from pathlib import Path
 
 from musicscore import Score, Chord
 from musicscore.metronome import Metronome
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily31c(IdTestCase):
+class TestLily31c(TestCase):
     def test_lily_31c_MetronomeMarks(self):
         score = Score()
         part = score.add_part("p1")

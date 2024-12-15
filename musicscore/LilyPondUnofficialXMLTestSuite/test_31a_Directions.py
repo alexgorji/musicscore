@@ -1,7 +1,6 @@
-
 from pathlib import Path
 
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicxml.xmlelement.xmlelement import (
     XMLRehearsal,
     XMLDynamics,
@@ -50,7 +49,7 @@ XML_DIRECTION_TYPE_CLASSES = [
 """
 
 
-class TestLily31a(IdTestCase):
+class TestLily31a(TestCase):
     def test_lily_31a_Directions(self):
         score = Score(title="MusicXML directions (attached to staff)")
         part = score.add_part("p1")

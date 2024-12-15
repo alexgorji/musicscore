@@ -1,11 +1,13 @@
 from musicscore import QuarterDuration, Part, Chord
 from musicscore.exceptions import MetronomeWrongBeatUnitError
 from musicscore.metronome import Metronome
-from musicscore.tests.util import IdTestCase
+
+# from unittest import TestCase
 from musicxml.xmlelement.xmlelement import XMLSound
+from unittest import TestCase
 
 
-class TestCase(IdTestCase):
+class TestCase(TestCase):
     def test_metronome_init(self):
         m = Metronome(100)
         assert isinstance(m.beat_unit, QuarterDuration)

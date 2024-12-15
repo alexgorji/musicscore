@@ -5,10 +5,10 @@ another group (also within parenthesis) goes from staff 3 to 5."""
 from pathlib import Path
 
 from musicscore import Score, Chord
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily41f(IdTestCase):
+class TestLily41f(TestCase):
     def test_lily_41f_StaffGroupOverlapping(self):
         score = Score()
         parts = [score.add_part(f"p-{i}") for i in range(1, 6)]

@@ -1,14 +1,14 @@
 from pathlib import Path
 
 from musicscore import Score, Chord, Midi, Time
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 """
 All pitch intervals in ascending jump size.
 """
 
 
-class TestLily01b(IdTestCase):
+class TestLily01b(TestCase):
     def test_lily_01b_Pitches_Intervals(self):
         score = Score("Various pitches and interval sizes")
         p = score.add_part("intervals")

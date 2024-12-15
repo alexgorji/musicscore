@@ -2,10 +2,12 @@ import inspect
 from unittest import skip
 
 from musicscore import Score
-from musicscore.tests.util import IdTestCase, generate_repetitions, generate_path
+from unittest import TestCase
+
+from musicscore.tests.util import generate_path, generate_repetitions
 
 
-class TestCautionaryAccidentalSigns(IdTestCase):
+class TestCautionaryAccidentalSigns(TestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()

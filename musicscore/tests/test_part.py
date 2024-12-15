@@ -7,12 +7,11 @@ import xmltodict
 from musicscore import Time, SimpleFormat, BassClef, TrebleClef
 from musicscore.chord import Chord
 from musicscore.exceptions import (
-    IdHasAlreadyParentOfSameTypeError,
-    IdWithSameValueExistsError,
+    ScorePartIdIsNotUniqueError,
 )
 from musicscore.key import Key
 from musicscore.measure import Measure
-from musicscore.part import Part, ScorePart, Id
+from musicscore.part import Part, ScorePart
 from musicscore.quarterduration import QuarterDuration
 from musicscore.score import Score
 from musicscore.tests.test_metronome import TestCase
@@ -25,48 +24,6 @@ from musicscore.tests.util import (
 )
 
 path = Path(__file__)
-
-
-class TestId(TestCase):
-    def test_id_refs(self):
-        id1 = Id("p1")
-        id2 = Id("p2")
-        assert Id.__refs__ == [id1, id2]
-        id3 = Id("p3")
-        assert Id.__refs__ == [id1, id2, id3]
-        id3.delete()
-        assert Id.__refs__ == [id1, id2]
-        Id("p3")
-
-    def test_id_unique(self):
-        Id("p1")
-        id2 = Id("p2")
-        with self.assertRaises(IdWithSameValueExistsError):
-            Id("p1")
-        id3 = Id("p3")
-        with self.assertRaises(IdWithSameValueExistsError):
-            Id("p2")
-        with self.assertRaises(IdWithSameValueExistsError):
-            id3.value = "p2"
-        assert id3.value == "p3"
-        id2.delete()
-        id3.value = "p2"
-        assert id3.value == "p2"
-
-    def test_id_parents(self):
-        id_ = Id("p1")
-        assert id_.get_parents() == []
-        p = Part(id=id_)
-        assert id_.get_parents() == [p, p.score_part]
-        with self.assertRaises(IdHasAlreadyParentOfSameTypeError):
-            Part(id=id_)
-        with self.assertRaises(IdHasAlreadyParentOfSameTypeError):
-            ScorePart(part=p)
-        assert p.xml_object.id == p.score_part.xml_object.id == "p1"
-        id_.value = "p2"
-        assert p.xml_object.id == p.score_part.xml_object.id == "p2"
-        p.id_ = "p3"
-        assert p.xml_object.id == p.score_part.xml_object.id == "p3"
 
 
 class TestPart(TestCase):
@@ -273,6 +230,18 @@ class TestScorePart(TestCase):
         p = Part(id="p3", name="Part 3")
         p.abbreviation = "p 3"
         assert p.score_part.xml_part_abbreviation.value_ == p.abbreviation == "p 3"
+
+    def test_score_part_id(self):
+        p = Part(id="p1")
+        assert p.score_part.id == p.score_part.xml_object.id == p.id_ == "p1"
+        p.id_ = "p2"
+        assert p.score_part.id == p.score_part.xml_object.id == p.id_ == "p2"
+        p.score_part.to_string()
+        expected = """<score-part id="p2">
+  <part-name />
+</score-part>
+"""
+        assert p.score_part.to_string() == expected
 
     def test_score_part_to_string(self):
         p = Part(id="p1")
@@ -604,6 +573,17 @@ class TestAddChordToPart(TestCase):
         sf1.chords[2].clef = TrebleClef()
         generate_xml_file(Score(), sf1, path=xml_path)
         get_xml_diff_part(expected_path, xml_path, Path(__file__))
+
+
+class TestPartIdUniqueness(TestCase):
+    def test_part_id_is_unique(self):
+        part_a = Part(id="p1")
+        part_b = Part(id="p1")
+        score = Score()
+        score.add_child(part_a)
+        score.add_child(part_b)
+        with self.assertRaises(ScorePartIdIsNotUniqueError):
+            score.finalize()
 
 
 class TestSplitQdAndTime(TestCase):

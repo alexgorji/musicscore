@@ -5,10 +5,10 @@ A simple piano staff
 from pathlib import Path
 
 from musicscore import Score, F, Chord, B
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily43a(IdTestCase):
+class TestLily43a(TestCase):
     def test_lily_43a_PianoStaff(self):
         score = Score()
         part = score.add_part("p1")

@@ -2,8 +2,6 @@ from typing import List, Optional, Union, Tuple
 
 from musicscore import Chord
 from musicscore.exceptions import (
-    IdHasAlreadyParentOfSameTypeError,
-    IdWithSameValueExistsError,
     VoiceIsFullError,
     AlreadyFinalizedError,
 )
@@ -15,78 +13,7 @@ from musicscore.time import Time
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
-__all__ = ["Id", "ScorePart", "Part"]
-
-
-class Id:
-    """
-    This class uses the class attribute __refs__ of type list to keep track of all :obj:`~musicscore.part.Part` ids of one score to make sure they are unique.
-    """
-
-    __refs__ = []
-
-    def __init__(self, value):
-        self._parents = []
-        self._value = None
-        self.value = value
-        self.__refs__.append(self)
-
-    @classmethod
-    def _check_value(cls, val):
-        for obj in cls.__refs__:
-            if obj.value == val:
-                raise IdWithSameValueExistsError
-
-    @property
-    def value(self) -> str:
-        """
-        - val: a unique id. If not unique IdWithSameValueExistsError is raised.
-        - All parents ids will be updated.
-        """
-        return self._value
-
-    @value.setter
-    def value(self, val):
-        self._check_value(val)
-        self._value = val
-        for parent in self.get_parents():
-            self.update_parents_id(parent)
-
-    def delete(self) -> None:
-        """
-        Removes Id instance from class attribute __refs__ before deleting.
-        """
-        if self in self.__refs__:
-            self.__refs__.remove(self)
-        del self
-
-    def update_parents_id(self, parent: XMLWrapper) -> None:
-        """
-        Sets parent's xml_object.id to self.value
-        """
-        parent.xml_object.id = self.value
-
-    def add_parent(self, obj: XMLWrapper) -> None:
-        """
-        Adds object to Id as parent. Parents id gets updated.
-        """
-        if obj.__class__ in [type(parent) for parent in self.get_parents()]:
-            raise IdHasAlreadyParentOfSameTypeError()
-        self._parents.append(obj)
-        self.update_parents_id(obj)
-
-    def get_parents(self) -> List[XMLWrapper]:
-        """
-        Gets Id's parent objects
-        """
-        return self._parents
-
-    def __repr__(self):
-        return f"{self.__class__}:{self.value} at {id(self)}"
-
-    def __del__(self):
-        if self in self.__refs__:
-            self.__refs__.remove(self)
+__all__ = ["ScorePart", "Part"]
 
 
 class ScorePart(XMLWrapper):
@@ -114,14 +41,15 @@ class ScorePart(XMLWrapper):
         if not isinstance(val, Part):
             raise TypeError
         self._part = val
-        if self in self.part.id_.get_parents():
-            self.part.id_.update_parents_id(self)
-        else:
-            self.part.id_.add_parent(self)
+        self._update_id()
         self._update_name()
+        self._update_abbreviation()
 
     def _update_abbreviation(self):
         self.xml_object.xml_part_abbreviation = self.part.abbreviation
+
+    def _update_id(self):
+        self.xml_object.id = self.part.id_
 
     def _update_name(self):
         self.xml_object.xml_part_name = self.part.name
@@ -144,11 +72,11 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._xml_object = self.XMLClass(*args, **kwargs)
         self._id = None
         self.id_ = id
-        self._score_part = ScorePart(part=self)
         self._name = None
         self.name = name
         self._abbreviation = None
         self.abbreviation = abbreviation
+        self._score_part = ScorePart(part=self)
         self._current_measures = {}
 
     def _add_to_next_measure(self, current_measure, chord, staff_number, voice_number):
@@ -180,25 +108,16 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             pass
 
     @property
-    def id_(self) -> Id:
-        """
-        :rtype: :obj:`~musicscore.part.Id`, str
-        :return: :obj:`~musicscore.part.Id`
-        """
-        return self._id
+    def id_(self) -> str:
+        return self.xml_object.id
 
     @id_.setter
     def id_(self, val):
-        if isinstance(val, Id):
-            self._id = val
-        elif isinstance(self._id, Id):
-            self._id.value = val
-        else:
-            self._id = Id(val)
-        if self in self.id_.get_parents():
-            self.id_.update_parents_id(self)
-        else:
-            self.id_.add_parent(self)
+        self.xml_object.id = val
+        try:
+            self.score_part._update_id()
+        except AttributeError:
+            pass
 
     @property
     def name(self) -> str:

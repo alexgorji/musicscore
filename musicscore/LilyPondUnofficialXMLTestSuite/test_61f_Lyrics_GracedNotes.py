@@ -3,13 +3,13 @@ Grace notes shall not mess up the lyrics, and they shall not be assigned a sylla
 """
 
 from pathlib import Path
+from unittest import TestCase
 
 from musicscore import Score, Chord, G, D, C, E, Lyrics
-from musicscore.tests.util import IdTestCase
 from musicscore.util import slur_chords
 
 
-class TestLily61f(IdTestCase):
+class TestLily61f(TestCase):
     def test_lily_61f_Lyrics_GraceNotes(self):
         score = Score()
         part = score.add_part("p1")

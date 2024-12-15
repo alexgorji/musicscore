@@ -18,7 +18,8 @@ from musicscore.exceptions import (
 from musicscore.measure import Measure
 from musicscore.quarterduration import QuarterDuration
 from musicscore.staff import Staff
-from musicscore.tests.util import IdTestCase
+
+# from unittest import TestCase
 from musicscore.tuplet import Tuplet
 from musicscore.voice import Voice
 
@@ -100,7 +101,7 @@ class TestBeat(TestCase):
         )
 
 
-class TestBeatUpdateChords(IdTestCase):
+class TestBeatUpdateChords(TestCase):
     def test_beat_update_chord_types(self):
         p = Part("p1")
         [p.add_chord(ch) for ch in [Chord(60, 0.5), Chord(70, 0.5)]]
@@ -399,7 +400,7 @@ class TestBeatSplitChord(TestCase):
                 )
 
 
-class TestNotImplementedTuplets(IdTestCase):
+class TestNotImplementedTuplets(TestCase):
     def test_writing_subdivision_17(self):
         factors = [1, 2, 3, 4, 4, 3]
         qds = [QuarterDuration(x, 17) for x in factors]

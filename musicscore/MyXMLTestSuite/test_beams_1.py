@@ -5,14 +5,14 @@ from fractions import Fraction
 from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.score import Score
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.tests.util_subdivisions import (
     generate_all_16ths_manually,
     generate_all_32nds_manually,
 )
 
 
-class TestBeams1(IdTestCase):
+class TestBeams1(TestCase):
     def test_beams_1(self):
         """
         Write all possible combinations of 16ths and 32nds in a beat

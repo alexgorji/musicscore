@@ -6,11 +6,11 @@ note."""
 from pathlib import Path
 
 from musicscore import Score, A, C, G, Chord
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.util import slur_chords
 
 
-class TestLily33c(IdTestCase):
+class TestLily33c(TestCase):
     def test_lily_33c_Spanners_Slurs(self):
         score = Score()
         part = score.add_part("p1")

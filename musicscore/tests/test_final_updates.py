@@ -1,10 +1,10 @@
+from unittest import TestCase
 from musicscore.chord import Chord
 from musicscore.exceptions import AlreadyFinalizedError
 from musicscore.midi import Midi
 from musicscore.part import Part
 from musicscore.quarterduration import QuarterDuration
 from musicscore.score import Score
-from musicscore.tests.util import IdTestCase
 
 
 def assert_chord_note_values(chord, expected_values):
@@ -13,7 +13,7 @@ def assert_chord_note_values(chord, expected_values):
     ] == expected_values
 
 
-class TestFinalUpdates(IdTestCase):
+class TestFinalUpdates(TestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()

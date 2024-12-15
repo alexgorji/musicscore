@@ -1,9 +1,9 @@
-
+from unittest import TestCase
 from musicxml import XMLBarline
 from pathlib import Path
 
 from musicscore import Score, Chord
-from musicscore.tests.util import IdTestCase
+
 """
 Barlines can appear at mid-measure positions, without using an implicit measure!
 """
@@ -13,9 +13,7 @@ MuseScore supports mid-measure barlines
 """
 
 
-
-
-class TestLily46b(IdTestCase):
+class TestLily46b(TestCase):
     def test_lily_46b_MidmeasureBarlines(self):
         score = Score()
         p = score.add_part("p1")

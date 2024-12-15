@@ -5,11 +5,11 @@ Chords as grace notes.
 from pathlib import Path
 
 from musicscore import Score, Chord, C, A, D, F, B
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicxml.xmlelement.xmlelement import XMLSlur
 
 
-class TestLily24b(IdTestCase):
+class TestLily24b(TestCase):
     def test_lily_24b_ChordAsGraceNote(self):
         score = Score()
         part = score.add_part("p1")

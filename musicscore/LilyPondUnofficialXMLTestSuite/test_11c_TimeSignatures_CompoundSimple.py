@@ -5,10 +5,10 @@ Compound time signatures with same denominator: (3+2)/8 and (5+3+1)/4.
 from pathlib import Path
 
 from musicscore import Score, Time, Chord, B
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily11c(IdTestCase):
+class TestLily11c(TestCase):
     def test_lily_11c_TimeSignatures_CompoundSimple(self):
         score = Score()
         part = score.add_part("part")

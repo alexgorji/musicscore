@@ -5,7 +5,7 @@ All different types of glissando defined in MusicXML
 from pathlib import Path
 
 from musicscore import Score, G, Chord, F
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicxml import XMLGlissando, XMLSlide
 
 types = [
@@ -22,7 +22,7 @@ types = [
 ]
 
 
-class TestLily33h(IdTestCase):
+class TestLily33h(TestCase):
     def test_lily_33h_Spanners_Glissando(self):
         score = Score()
         part = score.add_part("p1")

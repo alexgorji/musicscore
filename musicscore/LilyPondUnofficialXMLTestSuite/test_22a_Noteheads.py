@@ -7,10 +7,10 @@ the Aiken note head styles are tested, once with stem up and once with stem down
 from pathlib import Path
 
 from musicscore import Score, Chord, Time, A, B, C, D, E, F, G
-from musicscore.tests.util import notehead_values, notehead_aikin_values, IdTestCase
+from musicscore.tests.util import notehead_values, notehead_aikin_values, TestCase
 
 
-class TestLily22a(IdTestCase):
+class TestLily22a(TestCase):
     def test_lily_22a_Noteheads(self):
         score = Score("Time signatures")
         p = score.add_part("p1")

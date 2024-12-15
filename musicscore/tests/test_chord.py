@@ -27,7 +27,7 @@ from musicscore.exceptions import (
 )
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDuration
-from musicscore.tests.util import ChordTestCase, create_test_objects, IdTestCase
+from musicscore.tests.util import ChordTestCase, create_test_objects
 from musicscore.tuplet import Tuplet
 from musicscore.util import (
     XML_ARTICULATION_CLASSES,
@@ -1211,7 +1211,7 @@ class TestAddX(ChordTestCase):
         assert xml_words.relative_y == 20
 
 
-class TestAddAfterNotes(IdTestCase):
+class TestAddAfterNotes(TestCase):
     def test_add_after_notes(self):
         part = Part("p1")
         chords = [Chord([60, 62], 2), Chord(64, 2)]
@@ -1280,7 +1280,7 @@ class TestAddAfterNotes(IdTestCase):
         assert m.to_string() == expected
 
 
-class TestTypeAndNumberOfDots(IdTestCase):
+class TestTypeAndNumberOfDots(TestCase):
     def test_chord_type_error(self):
         ch = Chord(60, 1)
         with self.assertRaises(ValueError):

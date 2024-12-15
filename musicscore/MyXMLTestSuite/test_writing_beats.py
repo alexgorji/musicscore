@@ -1,9 +1,9 @@
 from musicscore import Chord, Part
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicxml import XMLDot
 
 
-class TestWritingBeats(IdTestCase):
+class TestWritingBeats(TestCase):
     def test_writing_32nds(self):
         # 1, 5, 2
         values = [1, 5, 2]

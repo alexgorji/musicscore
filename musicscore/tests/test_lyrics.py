@@ -1,6 +1,7 @@
+from unittest import TestCase
 from musicscore import Score, Chord
 from musicscore.lyrics import Lyrics
-from musicscore.tests.util import IdTestCase, _generate_xml_lyric
+from musicscore.tests.util import _generate_xml_lyric
 from musicscore.util import _generate_lyrics
 from musicxml import XMLLyric, XMLText, XMLElision, XMLSyllabic
 from musicxml.exceptions import XMLElementChildrenRequired
@@ -28,7 +29,7 @@ def chord_lyric_assertions(chords, expected, number=1):
             assert not ch._xml_lyrics
 
 
-class TestLyrics(IdTestCase):
+class TestLyrics(TestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()

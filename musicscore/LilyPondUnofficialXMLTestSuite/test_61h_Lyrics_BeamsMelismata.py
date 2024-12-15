@@ -1,10 +1,10 @@
-
 from pathlib import Path
 
 from musicscore import Score, Chord, Time
 from musicscore.lyrics import Lyrics
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.util import slur_chords
+
 """Beaming or slurs can indicate melismata for lyrics. Also make sure that notes without an explicit syllable are
 treated as if they were part of a melisma."""
 
@@ -12,7 +12,8 @@ treated as if they were part of a melisma."""
 Chord.break_beam() will be needed. Otherwise breaking the beams like in this test will effect all staves and voices
 """
 
-class TestLily61h(IdTestCase):
+
+class TestLily61h(TestCase):
     def test_lily_61h_BeamsMelismata(self):
         score = Score()
         part = score.add_part("p1")

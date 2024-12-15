@@ -2,7 +2,11 @@ from typing import Union, Optional
 
 from musicscore import Part, Chord
 from musicscore.chord import Rest
-from musicscore.exceptions import AlreadyFinalizedError, ScoreMultiMeasureRestError
+from musicscore.exceptions import (
+    AlreadyFinalizedError,
+    ScoreMultiMeasureRestError,
+    ScorePartIdIsNotUniqueError,
+)
 from musicscore.finalize import FinalizeMixin
 from musicscore.layout import Scaling, PageLayout, SystemLayout, StaffLayout
 from musicscore.musictree import MusicTree
@@ -108,6 +112,11 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         self._measure_numbers_within_multi_measure_rests = set()
 
         self._final_updated = False
+
+    def _check_parts(self):
+        part_ids = [part.id_ for part in self.get_children()]
+        if len(set(part_ids)) != len(part_ids):
+            raise ScorePartIdIsNotUniqueError
 
     def _create_missing_measures(self):
         number_of_measures = max([len(p.get_children()) for p in self.get_children()])
@@ -401,6 +410,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             f.write(self.to_string())
 
     def finalize(self) -> None:
+        self._check_parts()
         self._create_missing_measures()
         self._set_missing_barlines()
         self._set_last_barline()
@@ -448,7 +458,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         for child in self.xml_part_list.get_children():
             if (
                 isinstance(child, XMLScorePart)
-                and child.id == parts[start_part_number - 1].id_.value
+                and child.id == parts[start_part_number - 1].id_
             ):
                 pg = new_xml_part_list.add_child(
                     XMLPartGroup(number=str(number), type="start")
@@ -462,7 +472,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
             new_xml_part_list.add_child(child)
             if (
                 isinstance(child, XMLScorePart)
-                and child.id == parts[end_part_number - 1].id_.value
+                and child.id == parts[end_part_number - 1].id_
             ):
                 new_xml_part_list.add_child(
                     XMLPartGroup(number=str(number), type="stop")

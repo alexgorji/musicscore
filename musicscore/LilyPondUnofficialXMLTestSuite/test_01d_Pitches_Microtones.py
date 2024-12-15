@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from musicscore import Score, C, D, E, F, Chord, Midi
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 """
 Some microtones: c flat-and-a-half, d half-flat, e half-sharp, f sharp-and-a half. Once in the
@@ -9,7 +9,7 @@ lower and once in the upper region of the staff.
 """
 
 
-class TestLily01d(IdTestCase):
+class TestLily01d(TestCase):
     def test_lily_01d_Pitches_Microtones(self):
         score = Score("Microtones")
         p = score.add_part("microtones")

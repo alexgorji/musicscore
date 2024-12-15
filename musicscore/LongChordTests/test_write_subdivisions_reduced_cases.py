@@ -1,15 +1,16 @@
+from unittest import TestCase
 import uuid
 from pathlib import Path
 
 from musicscore import QuarterDurationIsNotWritable, Part, QuarterDuration, Chord, Score
 from musicscore.exceptions import ChordTestError
-from musicscore.tests.util import IdTestCase, create_test_xml_paths
+from musicscore.tests.util import create_test_xml_paths
 from musicscore.tests.util_subdivisions import generate_subdivsion_test_patterns
 
 path = Path(__file__)
 
 
-class TestWritingSubdivisions(IdTestCase):
+class TestWritingSubdivisions(TestCase):
     def test_generate_patterns_1(self):
         expected = [
             (1, 4),
@@ -121,7 +122,7 @@ class TestWritingSubdivisions(IdTestCase):
         self.write_and_test_subdivision(32)
 
 
-class TestWriteScoreWithSubdivisions(IdTestCase):
+class TestWriteScoreWithSubdivisions(TestCase):
     def write_subdivision_to_file(self, subdivision):
         score = Score()
         p = score.add_part("p1")

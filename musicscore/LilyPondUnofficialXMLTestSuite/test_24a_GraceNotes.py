@@ -7,11 +7,11 @@ from pathlib import Path
 
 from musicscore import Score, C, Chord, F, E, D, A
 from musicscore.chord import GraceChord
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicxml.xmlelement.xmlelement import XMLSlur
 
 
-class TestLily24a(IdTestCase):
+class TestLily24a(TestCase):
     def test_lily_24a_GraceNote(self):
         score = Score()
         p = score.add_part("p1")

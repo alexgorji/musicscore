@@ -6,10 +6,10 @@ the attributes in the middle of the measure.
 from pathlib import Path
 
 from musicscore import Score, Chord, Clef, TrebleClef
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily46c(IdTestCase):
+class TestLily46c(TestCase):
     def test_lily_46c_Midmeasure_Clef(self):
         score = Score()
         part = score.add_part("p1")

@@ -1,10 +1,10 @@
+from unittest import TestCase
 from musicscore import Part, QuarterDuration
 from musicscore.chord import GraceChord
 from musicscore.exceptions import ChordException
-from musicscore.tests.util import IdTestCase
 
 
-class TestGraceChord(IdTestCase):
+class TestGraceChord(TestCase):
     def test_grace_chord_init(self):
         gch = GraceChord(60)
         assert gch.quarter_duration == 0

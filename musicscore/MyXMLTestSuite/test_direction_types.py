@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from musicscore import Score, Chord
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.util import XML_DIRECTION_TYPE_CLASSES
 from musicxml.xmlelement.xmlelement import (
     XMLSymbol,
@@ -31,7 +31,7 @@ from musicxml.xmlelement.xmlelement import (
 )
 
 
-class TestDynamics(IdTestCase):
+class TestDynamics(TestCase):
     def test_direction_types(self):
         score = Score(title="Directions")
         p = score.add_part("part-1")

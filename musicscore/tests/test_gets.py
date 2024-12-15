@@ -1,3 +1,4 @@
+from unittest import TestCase
 from unittest.mock import patch
 
 from musicscore.beat import Beat
@@ -6,11 +7,10 @@ from musicscore.measure import Measure
 from musicscore.part import Part
 from musicscore.score import Score
 from musicscore.staff import Staff
-from musicscore.tests.util import IdTestCase
 from musicscore.voice import Voice
 
 
-class TestGetPart(IdTestCase):
+class TestGetPart(TestCase):
     def test_score_get_part(self):
         s = Score()
         p = s.add_child(Part("p1"))
@@ -48,7 +48,7 @@ class TestGetPart(IdTestCase):
             ch.get_part()
 
 
-class TestGetMeasure(IdTestCase):
+class TestGetMeasure(TestCase):
     def test_score_get_measure(self):
         s = Score()
         p = s.add_child(Part("p1"))
@@ -91,7 +91,7 @@ class TestGetMeasure(IdTestCase):
             ch.get_measure()
 
 
-class TestGetStaff(IdTestCase):
+class TestGetStaff(TestCase):
     def test_score_get_staff(self):
         s = Score()
         p = s.add_child(Part("p1"))
@@ -135,7 +135,7 @@ class TestGetStaff(IdTestCase):
             ch.get_staff()
 
 
-class TestGetVoice(IdTestCase):
+class TestGetVoice(TestCase):
     def test_score_get_voice(self):
         s = Score()
         p1 = s.add_child(Part("p1"))
@@ -186,7 +186,7 @@ class TestGetVoice(IdTestCase):
             ch.get_voice()
 
 
-class TestGetBeat(IdTestCase):
+class TestGetBeat(TestCase):
     def test_score_get_beat(self):
         s = Score()
         p = s.add_child(Part("p1"))
@@ -238,7 +238,7 @@ class TestGetBeat(IdTestCase):
             ch.get_beat()
 
 
-class TestGetChord(IdTestCase):
+class TestGetChord(TestCase):
     def test_score_get_chord(self):
         s = Score()
         p = s.add_child(Part("p1"))
@@ -296,7 +296,7 @@ class TestGetChord(IdTestCase):
             ch.get_chord()
 
 
-class TestGetBeats(IdTestCase):
+class TestGetBeats(TestCase):
     def test_score_get_beats(self):
         s = Score()
         p = s.add_child(Part("p1"))

@@ -6,7 +6,7 @@ hammer-on, pull-off, pedal (down, change, up)."""
 from pathlib import Path
 
 from musicscore import Score, Time, Chord, F, C
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.util import (
     slur_chords,
     wedge_chords,
@@ -26,7 +26,7 @@ from musicxml import (
 )
 
 
-class TestLily33a(IdTestCase):
+class TestLily33a(TestCase):
     def test_lily_33a_Spanners(self):
         score = Score()
         part = score.add_part("p1")

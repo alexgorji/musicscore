@@ -1,6 +1,6 @@
 from musicscore.midi import Midi
 from musicscore.quarterduration import QuarterDuration
-from musicscore.chord import Chord # noqa: F401
+from musicscore.chord import Chord  # noqa: F401
 
 
 def something():

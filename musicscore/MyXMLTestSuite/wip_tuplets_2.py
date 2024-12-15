@@ -1,16 +1,16 @@
 from pathlib import Path
+from unittest import TestCase
 
 from musicscore import Time
 from musicscore.chord import Chord
 from musicscore.score import Score
-from musicscore.tests.util import IdTestCase
 from musicscore.tests.util_subdivisions import (
     generate_all_quintuplets_manually,
     generate_all_triplets_manually,
 )
 
 
-class TestTuplets2(IdTestCase):
+class TestTuplets2(TestCase):
     def test_quarter_tuplets(self):
         score = Score()
         part = score.add_part("p1")

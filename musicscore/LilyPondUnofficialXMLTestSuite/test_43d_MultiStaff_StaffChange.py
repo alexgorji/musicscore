@@ -6,10 +6,10 @@ final two chords have some notes on the first, some on the second staff.
 from pathlib import Path
 
 from musicscore import Score, Chord, C, A, E, Time, G
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily43a(IdTestCase):
+class TestLily43a(TestCase):
     def test_lily_43a_MultiStaff_StaffChange(self):
         score = Score()
         part = score.add_part("p1")

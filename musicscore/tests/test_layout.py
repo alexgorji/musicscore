@@ -1,11 +1,11 @@
+from unittest import TestCase
 from musicxml.xmlelement.xmlelement import XMLScaling
 
 from musicscore.layout import PageLayout, SystemLayout, StaffLayout, Scaling
 from musicscore.score import Score
-from musicscore.tests.util import IdTestCase
 
 
-class TestScaling(IdTestCase):
+class TestScaling(TestCase):
     def test_scaling_init(self):
         sc = Scaling()
         assert sc.tenths == 40
@@ -18,7 +18,7 @@ class TestScaling(IdTestCase):
         assert sc.xml_object.xml_tenths.value_ == sc.tenths
 
 
-class TestPageLayout(IdTestCase):
+class TestPageLayout(TestCase):
     def setUp(self):
         self.score = Score()
 
@@ -70,7 +70,7 @@ class TestPageLayout(IdTestCase):
         assert pl.xml_page_height.value_ == round(1643 * 5 / 4)
 
 
-class TestSystemLayout(IdTestCase):
+class TestSystemLayout(TestCase):
     def test_style_layout_default(self):
         sl = SystemLayout()
         assert sl.xml_system_distance.value_ == 117
@@ -79,7 +79,7 @@ class TestSystemLayout(IdTestCase):
         assert sl.xml_system_margins.xml_right_margin.value_ == 0
 
 
-class TestStaffLayout(IdTestCase):
+class TestStaffLayout(TestCase):
     def test_staff_layout_default(self):
         sl = StaffLayout()
         assert sl.xml_staff_distance.value_ == 80

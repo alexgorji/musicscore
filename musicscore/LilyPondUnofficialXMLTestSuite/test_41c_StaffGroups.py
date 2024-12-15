@@ -8,11 +8,11 @@ from pathlib import Path
 
 from musicscore import Score, Chord, TrebleClef, BassClef
 from musicscore.clef import PercussionClef, AltoClef
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicxml import XMLTranspose
 
 
-class TestLily41c(IdTestCase):
+class TestLily41c(TestCase):
     def test_lily_41c_StaffGroups(self):
         score = Score()
         score.page_layout.size = "A4"

@@ -5,10 +5,10 @@ Nested repeats, each with alternative endings.
 from pathlib import Path
 
 from musicscore import Score, Chord
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily45d(IdTestCase):
+class TestLily45d(TestCase):
     def test_lily_45d_Repeats_Nested_Alternatives(self):
         score = Score()
         p = score.add_part("p1")

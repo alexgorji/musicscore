@@ -2,7 +2,9 @@ import inspect
 from itertools import permutations
 
 from musicscore import Score, Time, C, Chord
-from musicscore.tests.util import IdTestCase, generate_path
+from unittest import TestCase
+
+from musicscore.tests.util import generate_path
 
 patterns = [
     (1, 1),
@@ -26,7 +28,7 @@ patterns = [
 permuted_patterns = [list(set(list(permutations(pattern)))) for pattern in patterns]
 
 
-class TestBeams(IdTestCase):
+class TestBeams(TestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()

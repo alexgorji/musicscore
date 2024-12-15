@@ -6,10 +6,10 @@ and another group (with a curly bracket) goes from staff 3 to 4.
 from pathlib import Path
 
 from musicscore import Score, Chord
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily41d(IdTestCase):
+class TestLily41d(TestCase):
     def test_lily_41d_StaffGroups(self):
         score = Score()
         parts = [score.add_part(f"p-{i}") for i in range(1, 6)]

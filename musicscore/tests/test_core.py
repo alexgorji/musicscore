@@ -1,8 +1,8 @@
+from unittest import TestCase
 from musicscore import Score
-from musicscore.tests.util import IdTestCase
 
 
-class TestCore(IdTestCase):
+class TestCore(TestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()

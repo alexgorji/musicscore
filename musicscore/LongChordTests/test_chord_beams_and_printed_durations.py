@@ -1,10 +1,9 @@
-
 from musicscore import Chord, QuarterDuration, Part
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.tests.util_subdivisions import generate_all_subdivision_patterns
 
 
-class TestBeamsAndPrintedDurations(IdTestCase):
+class TestBeamsAndPrintedDurations(TestCase):
     def test_quarter_32th(self):
         p = Part("p1")
         p.add_measure([1, 4])

@@ -139,21 +139,6 @@ class GraceChordCannotSetQuarterDurationError(GraceChordException):
     pass
 
 
-# Id exceptions (see Part)
-
-
-class IdException(MusicTreeException):
-    pass
-
-
-class IdHasAlreadyParentOfSameTypeError(IdException):
-    pass
-
-
-class IdWithSameValueExistsError(IdException):
-    pass
-
-
 # Lyrics exceptions
 
 
@@ -252,6 +237,10 @@ class ScoreException(MusicTreeException):
 
 
 class ScoreMultiMeasureRestError(ScoreException):
+    pass
+
+
+class ScorePartIdIsNotUniqueError(ScoreException):
     pass
 
 

@@ -1,14 +1,14 @@
 from pathlib import Path
 
 from musicscore import Score, Time, Chord, B
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 """
 Compound time signatures of mixed type: (3+2)/8+3/4.
 """
 
 
-class TestLily11e(IdTestCase):
+class TestLily11e(TestCase):
     def test_lily_11e_TimeSignatures_CompoundMixed(self):
         score = Score()
         part = score.add_part("part")

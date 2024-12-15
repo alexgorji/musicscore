@@ -5,10 +5,10 @@ Part names and abbreviations can contain line breaks.
 from pathlib import Path
 
 from musicscore import Score, Chord, B
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily413(IdTestCase):
+class TestLily413(TestCase):
     def test_lily_41e_StaffGroups_InstrumentNames_Linebroken(self):
         score = Score()
         part = score.add_part("p1")

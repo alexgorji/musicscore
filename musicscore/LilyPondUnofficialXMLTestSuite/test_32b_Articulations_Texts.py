@@ -12,10 +12,10 @@ Normal, Small, Colored, Below
 from pathlib import Path
 
 from musicscore import Score, Time, Chord, G, F
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily32b(IdTestCase):
+class TestLily32b(TestCase):
     def test_lily_32b_Articulations_Texts(self):
         score = Score()
         part = score.add_part("p1")

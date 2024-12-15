@@ -5,10 +5,10 @@ Different Arpeggio directions (normal, up, down, non-arpeggiate)
 from pathlib import Path
 
 from musicscore import Score, Chord, C, E, G
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily32d(IdTestCase):
+class TestLily32d(TestCase):
     def test_lily_32d_Arpeggio(self):
         score = Score()
         part = score.add_part("p1")

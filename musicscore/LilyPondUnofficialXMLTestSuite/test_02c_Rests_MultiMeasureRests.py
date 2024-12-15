@@ -5,10 +5,10 @@ Four multi-measure rests: 3 measures, 15 measures, 1 measure, and 12 measures.
 from pathlib import Path
 
 from musicscore import Score
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily61a(IdTestCase):
+class TestLily61a(TestCase):
     def test_lily_61a_Lyrics(self):
         score = Score()
         score.add_part("p1")

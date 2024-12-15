@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from musicscore import Score, G, A, B, C, D, E, F, Chord, Midi
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 """
 All pitches from G to c”” in ascending steps; First without accidentals, then with a sharp and then with a flat 
@@ -9,7 +9,7 @@ accidental. Double alterations and cautionary accidentals are tested at the end.
 """
 
 
-class TestLily01a(IdTestCase):
+class TestLily01a(TestCase):
     def test_lily_01a_Pitches_Pitches(self):
         score = Score("Pitches and accidentals")
         p = score.add_part("pitches")

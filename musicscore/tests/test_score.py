@@ -1,4 +1,4 @@
-from unittest import skip
+from unittest import TestCase, skip
 
 from musicscore.chord import Chord
 from musicscore.exceptions import ScoreMultiMeasureRestError
@@ -6,11 +6,10 @@ from musicscore.layout import StaffLayout
 from musicscore.measure import Measure
 from musicscore.part import Part
 from musicscore.score import Score, TITLE, SUBTITLE
-from musicscore.tests.util import IdTestCase
 from musicxml import XMLNote
 
 
-class TestScore(IdTestCase):
+class TestScore(TestCase):
     def test_score_version(self):
         s = Score(version=3.1)
         assert s.version == "3.1"

@@ -1,13 +1,13 @@
 from pathlib import Path
 
 from musicscore import Score, C, Chord, Time
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 """Accidentals can be cautionary or editorial. Each measure has a normal accidental, an editorial, a cautionary and 
 an editorial and cautionary accidental."""
 
 
-class TestLily01e(IdTestCase):
+class TestLily01e(TestCase):
     def test_lily_01e_Pitches_ParenthesizedAccidentals(self):
         score = Score("cautionary accidentals")
         p = score.add_part("cautionary")

@@ -6,10 +6,10 @@ and an incomplete measure (containg 3/4)
 from pathlib import Path
 
 from musicscore import Score, Time, Chord, E, F, G, A, B, C, D
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestLily46d(IdTestCase):
+class TestLily46d(TestCase):
     def test_lily_46d_PicupMeasure_ImplicitMeasure(self):
         score = Score()
         part = score.add_part("p1")

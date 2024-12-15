@@ -1,14 +1,14 @@
 from pathlib import Path
 
 from musicscore import Score, Time, Chord, B
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 """
 Compound time signatures with separate fractions displayed: 3/8+2/8+3/4 and 5/2+1/8.
 """
 
 
-class TestLily11d(IdTestCase):
+class TestLily11d(TestCase):
     def test_lily_11d_TimeSignatures_CompoundMultiple(self):
         score = Score()
         part = score.add_part("part")

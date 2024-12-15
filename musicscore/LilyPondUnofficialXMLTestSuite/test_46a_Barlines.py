@@ -6,11 +6,11 @@ heavy-light, heavy-heavy, tick, short, none.
 from pathlib import Path
 
 from musicscore import Score, Chord
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicxml.xmlelement.xmlelement import XMLWords
 
 
-class TestLily46a(IdTestCase):
+class TestLily46a(TestCase):
     def test_lily_46a_Barlines(self):
         score = Score()
         p = score.add_part("p1")

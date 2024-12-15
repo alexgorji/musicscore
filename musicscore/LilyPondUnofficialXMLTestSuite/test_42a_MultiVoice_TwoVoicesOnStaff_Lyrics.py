@@ -6,12 +6,12 @@ from pathlib import Path
 
 from musicscore import Score, A, Chord, Lyrics, C, E, D, B, G
 from musicscore.chord import Rest
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 from musicscore.util import slur_chords
 from musicxml import XMLFermata, XMLAccent
 
 
-class TestLily42a(IdTestCase):
+class TestLily42a(TestCase):
     def test_lily_42a_MultiVoice_TwoVoicesOnStaff_Lyrics(self):
         score = Score()
         part = score.add_part("p1")

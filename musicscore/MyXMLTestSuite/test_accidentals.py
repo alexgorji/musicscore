@@ -1,10 +1,10 @@
 from pathlib import Path
 
 from musicscore import Score, Chord, Midi
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 
-class TestAccidentals(IdTestCase):
+class TestAccidentals(TestCase):
     def test_modes_in_quarter_steps(self):
         """
         All pitches from c4 to c5 in ascending quarter steps; different Accidental.mode: standard, enharmonic, sharp,

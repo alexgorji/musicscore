@@ -3,7 +3,6 @@ from unittest.mock import Mock
 
 from musicscore import Chord, Beat, Part
 from musicscore.exceptions import ChordTypeNotSetError, ChordTestError
-from musicscore.tests.util import IdTestCase
 
 
 class TestTestChordNumberOfBeams(TestCase):
@@ -165,7 +164,7 @@ class TestBeams16th(TestCase):
         self.chords[0].finalize()
 
 
-class TestBeams32th(IdTestCase):
+class TestBeams32th(TestCase):
     def setUp(self) -> None:
         super().setUp()
         self.beat = Beat()

@@ -1,10 +1,10 @@
+from unittest import TestCase
 from musicscore import Part, Chord, Measure, Beat, Voice, Score, Staff, Accidental
 from musicscore.exceptions import AlreadyFinalizedError, AddChordError
-from musicscore.tests.util import IdTestCase
 from musicxml.xmlelement.xmlelement import XMLCoda, XMLSegno
 
 
-class TestAddExceptions(IdTestCase):
+class TestAddExceptions(TestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()

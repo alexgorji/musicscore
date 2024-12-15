@@ -1706,7 +1706,7 @@ class GraceChord(Chord):
         return super().quarter_duration
 
     @Chord.quarter_duration.setter
-    def quarter_duration(self, val): # noqa: F811
+    def quarter_duration(self, val):  # noqa: F811
         if val != 0:
             raise GraceChordCannotSetQuarterDurationError(
                 "quarter_duration of a GraceChord is always 0 and cannot be set"
@@ -1827,8 +1827,8 @@ class Rest(Chord):
         """
         return super().midis
 
-    @Chord.midis.setter 
-    def midis(self, val): # noqa: F811
+    @Chord.midis.setter
+    def midis(self, val):  # noqa: F811
         if val != 0:
             raise RestCannotSetMidiError(
                 "midis value of a GraceChord is always 0 and cannot be set"

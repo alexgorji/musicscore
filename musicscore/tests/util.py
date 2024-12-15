@@ -9,8 +9,7 @@ import xmltodict
 from deepdiff import DeepDiff
 
 from musicscore import generate_measures, Chord, C
-from musicscore.part import Id
-from musicxml.xmlelement.xmlelement import * # noqa: F403
+from musicxml.xmlelement.xmlelement import *  # noqa: F403
 from musicscore.util import (
     XML_DIRECTION_TYPE_AND_OTHER_NOTATIONS,
     XML_DIRECTION_TYPE_CLASSES,
@@ -59,12 +58,7 @@ def check_notes(notes, midi_values, quarter_durations):
         assert n.quarter_duration == qd
 
 
-class IdTestCase(TestCase):
-    def setUp(self):
-        Id.__refs__.clear()
-
-
-class ChordTestCase(IdTestCase):
+class ChordTestCase(TestCase):
     def setUp(self) -> None:
         super().setUp()
         self.mock_beat = Mock()

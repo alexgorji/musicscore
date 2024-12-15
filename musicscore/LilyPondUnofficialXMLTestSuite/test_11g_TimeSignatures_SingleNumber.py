@@ -1,14 +1,14 @@
 from pathlib import Path
 
 from musicscore import Score, Time, Chord, B
-from musicscore.tests.util import IdTestCase
+from unittest import TestCase
 
 """
 Time signature displayed as a single number.
 """
 
 
-class TestLily11g(IdTestCase):
+class TestLily11g(TestCase):
     def test_lily_11g_TimeSignatures_SingleNumber(self):
         score = Score()
         part = score.add_part("part")

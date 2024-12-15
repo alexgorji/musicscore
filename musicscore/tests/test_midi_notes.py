@@ -1,7 +1,8 @@
 import inspect
+from unittest import TestCase
 
 from musicscore import C, B, G, Part, Chord, Score, Time
-from musicscore.tests.util import TestCase, generate_path, IdTestCase
+from musicscore.tests.util import generate_path
 from musicxml.xmlelement.xmlelement import XMLNotehead
 
 
@@ -98,7 +99,7 @@ class TestMidiNotes(TestCase):
         # assert m.accidental.show == copied.accidental.show
 
 
-class TestMidiNoteNoteHead(IdTestCase):
+class TestMidiNoteNoteHead(TestCase):
     def test_notehead_property(self):
         m = C(4)
         m.notehead = "square"
