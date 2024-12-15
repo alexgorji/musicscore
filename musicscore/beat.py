@@ -448,9 +448,12 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 ch.number_of_dots = ch.quarter_duration.get_number_of_dots()
 
     def _update_chord_tuplets(self):
-        if None not in {ch.tuplet for ch in self.get_chords()}:
+        non_grace_chords = [
+            chord for chord in self.get_chords() if chord.quarter_duration != 0
+        ]
+        if None not in {ch.tuplet for ch in non_grace_chords}:
             return
-        if {ch.tuplet for ch in self.get_chords()} != {None}:
+        if {ch.tuplet for ch in non_grace_chords} != {None}:
             raise BeatUpdateChordTupletsError(
                 "Beat cannot manage tuplets automatically if it contains chords with manually set tuplet properties."
             )
@@ -473,7 +476,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     "tuplets of actual_notes > 16 cannot be implemented."
                 )
 
-        actual_notes = get_chord_group_subdivision(self.get_children())
+        actual_notes = get_chord_group_subdivision(non_grace_chords)
         if not actual_notes:
             if self.quarter_duration == 1:
                 grouped_chords = _group_chords(self.get_children(), [1 / 2, 1 / 2])
@@ -491,7 +494,7 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     "Beat with quarter_duration other than one cannot manage more than one group of chords."
                 )
 
-        _update_tuplets(self.get_children(), actual_notes, self.quarter_duration)
+        _update_tuplets(non_grace_chords, actual_notes, self.quarter_duration)
 
     def _update_chord_beams(self):
         chords = self.get_chords()

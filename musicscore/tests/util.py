@@ -250,6 +250,77 @@ def create_test_objects(type):
     return output
 
 
+def create_test_path(path, test_name):
+    return path.parent.joinpath(f"{path.stem}_{test_name}")
+
+
+class FilePath:
+    def __init__(self, unittest, parent_path, name, extension):
+        self._unittest = None
+        self._parent_path = None
+        self.unittest = unittest
+        self.parent_path = parent_path
+        self.name = name
+        self.extension = extension
+        self.out_path = None
+
+    @property
+    def unittest(self):
+        return self._unittest
+
+    @unittest.setter
+    def unittest(self, val):
+        self._unittest = val
+
+    @property
+    def parent_path(self):
+        return self._parent_path
+
+    @parent_path.setter
+    def parent_path(self, val):
+        if not isinstance(val, Path):
+            raise TypeError(
+                f"parent_path.value must be of type {type(Path)} not{type(val)}"
+            )
+        self._parent_path = val
+
+    def __enter__(self):
+        self.out_path = create_test_path(
+            self.parent_path, self.name + "." + self.extension
+        )
+        return self.out_path
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.unittest.assertCompareFiles(self.out_path)
+
+
+class XMLTestCase(TestCase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def _compare_contents(self, actual_file_path, expected_file_path):
+        with open(actual_file_path, "r") as myfile:
+            result = myfile.read()
+
+        with open(expected_file_path, "r") as myfile:
+            expected = myfile.read()
+
+        self.assertEqual(expected, result)
+
+    def assertCompareFiles(self, actual_file_path, expected_file_path=None):
+        if not expected_file_path:
+            expected_file_path = (
+                actual_file_path.parent
+                / f"{actual_file_path.stem}_expected{actual_file_path.suffix}"
+            )
+
+        self._compare_contents(actual_file_path, expected_file_path)
+
+    def file_path(self, parent_path, name):
+        tfp = FilePath(self, parent_path, name, "xml")
+        return tfp
+
+
 def _generate_xml_lyric(text=None, number=1, syllabic=None, extend=None, **kwargs):
     xl = XMLLyric(number=str(number), **kwargs)
     xl.xml_text = text
