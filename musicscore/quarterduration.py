@@ -272,6 +272,9 @@ class QuarterDuration(numbers.Rational):
     def __ceil__(self):
         return QuarterDuration(self.value.__ceil__())
 
+    def __eq__(self, other):
+        return self.value.__eq__(_convert_other(other))
+
     def __floor__(self):
         return QuarterDuration(self.value.__floor__())
 
@@ -305,8 +308,8 @@ class QuarterDuration(numbers.Rational):
     def __pos__(self):
         return self.value.__pos__()
 
-    def __pow__(self, power, modulo=None):
-        return QuarterDuration(self.value.__pos__(power, modulo))
+    def __pow__(self, power):
+        return QuarterDuration(self.value.__pow__(power))
 
     def __radd__(self, other):
         return QuarterDuration(self.value.__radd__(_convert_other(other)))
@@ -334,9 +337,6 @@ class QuarterDuration(numbers.Rational):
 
     def __trunc__(self):
         return self.value.__trunc__()
-
-    def __eq__(self, other):
-        return self.value.__eq__(_convert_other(other))
 
     def __copy__(self):
         return self.__class__(self.value)
@@ -387,11 +387,13 @@ def _is_writable(quarter_duration: Union[float, int, Fraction, "QuarterDuration"
         return False
 
 
-def _convert_other(other):
+def _convert_other(other) -> bool:
     if isinstance(other, QuarterDuration):
         return other.value
-
-    return Fraction(other).limit_denominator(1000)
+    try:
+        return Fraction(other).limit_denominator(1000)
+    except TypeError:
+        return False
 
 
 class QuarterDurationMixin:
