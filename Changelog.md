@@ -77,3 +77,7 @@ True. `<encoding>` in XMLScore's `<identification>` will have a `<support>` chil
 * Check if score has parts before finalization
 
 * Bug fixes
+
+# Version 2.3.3
+
+* Bug fixes
