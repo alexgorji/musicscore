@@ -14,7 +14,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
-musicxml = "^1.4.2"
+musicxml = "^1.6"
 
 
 [tool.poetry.group.test.dependencies]

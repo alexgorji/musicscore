@@ -1664,10 +1664,44 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             raise DeepCopyException(
                 "After setting notes, Midi cannot be deepcopied anymore. "
             )
-        copied = self.__class__(
-            midis=[midi.__deepcopy__() for midi in self.midis],
-            quarter_duration=self.quarter_duration.__deepcopy__(),
-        )
+        if self.quarter_duration != 0:
+            copied = self.__class__(
+                midis=[midi.__deepcopy__() for midi in self.midis],
+                quarter_duration=self.quarter_duration.__deepcopy__(),
+            )
+        else:
+            copied = self.__class__(midis=[midi.__deepcopy__() for midi in self.midis])
+
+        properties = [
+            "_xml_articulations",
+            "_xml_direction_types",
+            "_xml_directions",
+            "_xml_lyrics",
+            "_xml_technicals",
+            "_xml_ornaments",
+            "_xml_dynamics",
+            "_xml_other_notations",
+            "_note_attributes",
+            "_clef",
+            "_metronome",
+            "_grace_chords",
+            "_arpeggio",
+            "_after_notes_xml_elements",
+            "_beams",
+            "_broken_beam",
+            "_type",
+            "_number_of_dots",
+            "_tuplet",
+            "_original_starting_ties",
+        ]
+        for property in properties:
+            # print('deepcopieng', property)
+            setattr(copied, property, copy.deepcopy(getattr(self, property)))
+        # for grace_chord in self.get_grace_chords("before"):
+        #     copied.add_grace_chord(copy.deepcopy(grace_chord), position="before")
+        # for grace_chord in self.get_grace_chords("after"):
+        #     copied.add_grace_chord(copy.deepcopy(grace_chord), position="after")
+
         return copied
 
 

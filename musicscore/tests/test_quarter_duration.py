@@ -285,7 +285,7 @@ class TestMagics(TestCase):
         assert d.__eq__(Fraction(10, 3))
         assert d == Fraction(10, 3)
         assert a is not None
-        assert a != None # noqa
+        assert a != None  # noqa
 
     def test_round(self):
         assert self.cl(70.7) == self.cl(70.7)

@@ -1396,3 +1396,110 @@ class TestTypeAndNumberOfDots(TestCase):
         chord.type = "quarter"
         with self.assertRaises(ChordTestError):
             assert chord.check_printed_duration()
+
+
+class TestDeepcopyChord(ChordTestCase):
+    def test_deepcopy_chord_simple(self):
+        chord = Chord([60, 62], 2)
+        copied = copy.deepcopy(chord)
+        assert [midi.value for midi in copied.midis] == [
+            midi.value for midi in chord.midis
+        ]
+        assert [id(midi) for midi in copied.midis] != [id(midi) for midi in chord.midis]
+        assert chord.quarter_duration.value == copied.quarter_duration.value
+        assert id(chord.quarter_duration) != id(copied.quarter_duration)
+        chord._parent = self.mock_beat
+        chord.finalize()
+        with self.assertRaises(DeepCopyException):
+            copy.deepcopy(chord)
+
+    def test_deepcopy_chord_complex(self):
+        [
+            "_xml_articulations",
+            "_xml_direction_types",
+            "_xml_directions",
+            "_xml_lyrics",
+            "_xml_technicals",
+            "_xml_ornaments",
+            "_xml_dynamics",
+            "_xml_other_notations",
+            "_note_attributes",
+            "_clef",
+            "_metronome",
+            "_grace_chords",
+            "_arpeggio",
+            "_after_notes_xml_elements",
+            "_beams",
+            "_broken_beam",
+            "_type",
+            "_number_of_dots",
+            "_tuplet",
+            "_original_starting_ties",
+        ]
+        chord = Chord([60, 62], 1)
+        chord.add_dynamics("p")
+        chord.add_lyric("something")
+        chord.add_x(XMLAccent())
+        chord.add_x(XMLUpBow())
+        b = XMLBarline(location="middle")
+        b.xml_bar_style = "dashed"
+        chord.add_xml_element_after_notes(b)
+        chord.add_dynamics("f", placement="above")
+
+        chord.add_grace_chord(midis_or_grace_chord=[60], position="after")
+        chord.add_grace_chord(midis_or_grace_chord=[61], position="after")
+        chord.add_grace_chord(midis_or_grace_chord=[70], position="before")
+
+        chord.add_tie(type="start")
+        chord.add_tie(type="stop")
+        chord.add_wedge(wedge="crescendo")
+        chord.add_wedge(wedge="stop")
+        chord.add_words("something")
+        chord.add_words("something else")
+        chord.break_beam()
+
+        copied = copy.deepcopy(chord)
+
+        assert [lyric.value_ for lyric in copied._xml_lyrics] == [
+            lyric.value_ for lyric in chord._xml_lyrics
+        ]
+        assert [id(lyric) for lyric in copied._xml_lyrics] != [
+            id(lyric) for lyric in chord._xml_lyrics
+        ]
+
+        assert isinstance(copied._after_notes_xml_elements[0], XMLBarline)
+        assert id(copied._after_notes_xml_elements[0]) != id(
+            chord._after_notes_xml_elements[0]
+        )
+
+        assert [gch.midis[0].value for gch in copied.get_grace_chords("after")] == [
+            60,
+            61,
+        ]
+        assert [gch.midis[0].value for gch in copied.get_grace_chords("before")] == [70]
+
+        assert [id(gch) for gch in copied.get_grace_chords("after")] != [
+            id(gch) for gch in chord.get_grace_chords("after")
+        ]
+        assert [id(gch) for gch in copied.get_grace_chords("before")] != [
+            id(gch) for gch in chord.get_grace_chords("before")
+        ]
+
+        assert copied.is_tied_to_previous is True
+        assert copied.is_tied_to_next is True
+
+        assert [wedge.value_ for wedge in copied.get_wedges()] == [
+            wedge.value_ for wedge in chord.get_wedges()
+        ]
+        assert [id(wedge) for wedge in copied.get_wedges()] != [
+            id(wedge) for wedge in chord.get_wedges()
+        ]
+
+        assert [word.value_ for word in copied.get_words()] == [
+            word.value_ for word in chord.get_words()
+        ]
+        assert [id(word) for word in copied.get_words()] != [
+            id(word) for word in chord.get_words()
+        ]
+
+        assert chord.broken_beam == copied.broken_beam
