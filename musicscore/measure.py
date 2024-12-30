@@ -464,7 +464,7 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
         if self._finalized:
             raise AlreadyFinalizedError(self)
 
-        self.fill_with_rests()
+        # self.fill_with_rests()
         self._update_attributes()
         self._update_left_barline()
         # self.quantize

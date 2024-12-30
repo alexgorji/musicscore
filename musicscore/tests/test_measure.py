@@ -38,6 +38,7 @@ class TestMeasure(TestCase):
 </measure>
 """
         m = Measure(1)
+        m.fill_with_rests()
         assert m.to_string() == expected
 
     def test_number(self):
@@ -395,6 +396,7 @@ class TestMeasure(TestCase):
   </barline>
 </measure>
 """
+        m.fill_with_rests()
         assert m.to_string() == expected
 
     def test_update_beats_from_parent_measure(self):
@@ -466,6 +468,7 @@ class TestMeasure(TestCase):
         chord = Chord(60, quarter_duration=2.5)
         chord.add_dynamics(["ppp", "fff"])
         m._add_chord(chord)
+        m.fill_with_rests()
         m.finalize()
         assert m.xml_direction is not None
         expected = """<direction placement="below">
@@ -711,6 +714,7 @@ class TestMeasureAttributes(TestCase):
         m = Measure(1)
         m.add_staff()
         m._update_attributes()
+        m.fill_with_rests()
         assert m.to_string() == expected
 
     def test_measure_clefs(self):
@@ -832,6 +836,7 @@ class TestMeasureAttributes(TestCase):
         m.add_staff()
         m.key.show = False
         m._update_attributes()
+        m.fill_with_rests()
         assert m.to_string() == expected
 
     def test_measure_false_show_time(self):
@@ -858,6 +863,7 @@ class TestMeasureAttributes(TestCase):
         m.add_staff()
         m.time.show = False
         m._update_attributes()
+        m.fill_with_rests()
         assert m.to_string() == expected
 
     def test_measure_false_show_clef(self):
@@ -883,6 +889,7 @@ class TestMeasureAttributes(TestCase):
         m = Measure(1)
         m.add_staff()
         m.clefs[0].show = False
+        m.fill_with_rests()
         assert m.to_string() == expected
 
 
