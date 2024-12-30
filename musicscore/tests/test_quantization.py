@@ -1,3 +1,5 @@
+from fractions import Fraction
+from pathlib import Path
 import random
 from unittest import TestCase
 
@@ -5,6 +7,7 @@ from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.quarterduration import QuarterDuration
 from musicscore.score import Score
+from musicscore.tests.util import XMLTestCase
 from musicscore.util import lcm
 
 
@@ -133,6 +136,16 @@ class TestQuantization(TestCase):
                 if div != 1:
                     assert div in [2, 3, 4, 6, 8]
 
+    def test_add_short_chord(self):
+        s = Score()
+        p = s.add_part("part-1")
+        p.add_chord(Chord(60, 9 / 20))
+        p.get_quantized = True
+        p.finalize()
+        self.assertEqual(
+            [chord.quarter_duration for chord in p.get_chords()], [3 / 7, 4 / 7, 3 / 1]
+        )
+
     def test_part_quantization(self):
         s = Score()
         s.set_possible_subdivisions([2, 3, 4, 6, 8])
@@ -156,3 +169,64 @@ class TestQuantization(TestCase):
             1,
             3,
         ]
+
+
+path = Path(__file__)
+
+
+class TestQuantizationWithAfterGraceNotes(XMLTestCase):
+    def test_quantization_with_grace_notes(self):
+        s = Score()
+        s.get_quantized = True
+        p = s.add_child(Part("p1"))
+        p.set_possible_subdivisions([2, 3, 4])
+        p.add_measure(time=(1, 4))
+        for qd in [0, 0, 1 / 2, 0, 0, 1 / 2 - 1 / 8, 1 / 16, 1 / 16]:
+            p.add_chord(Chord(60, qd))
+        b = p.get_beat(1, 1, 1, 1)
+        b.quantize_quarter_durations()
+        self.assertEqual(
+            [ch.quarter_duration for ch in b.get_chords()],
+            [0, 0, 1 / 2, 0, 0, 1 / 2, 0, 0],
+        )
+        s.finalize()
+        with self.file_path(path, "with_grace_notes") as xml_path:
+            s.export_xml(xml_path)
+
+    def test_quantization_with_grace_notes_complex(self):
+        s = Score()
+        s.get_quantized = True
+        p = s.add_child(Part("p1"))
+        durations = [
+            Fraction(128, 675),
+            Fraction(64, 135),
+            Fraction(64, 675),
+            Fraction(64, 225),
+            Fraction(256, 675),
+            Fraction(256, 675),
+            Fraction(1024, 3375),
+            Fraction(512, 3375),
+            Fraction(256, 3375),
+            Fraction(256, 1125),
+            Fraction(128, 3375),
+            Fraction(256, 3375),
+            Fraction(128, 1125),
+            Fraction(512, 3375),
+            Fraction(128, 675),
+            Fraction(256, 3375),
+            Fraction(64, 1125),
+            Fraction(64, 675),
+            Fraction(128, 3375),
+            Fraction(64, 3375),
+            Fraction(64, 375),
+            Fraction(64, 1125),
+            Fraction(256, 1125),
+            Fraction(64, 225),
+            Fraction(128, 1125),
+            Fraction(16, 375),
+        ]
+        for qd in durations:
+            p.add_chord(Chord(60, qd))
+        # s.finalize()
+        with self.file_path(path, "with_grace_notes_complex") as xml_path:
+            s.export_xml(xml_path)

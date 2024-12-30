@@ -1619,6 +1619,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
         """
         self.midis = [0]
 
+    def __repr__(self):
+        return f"{super().__repr__()}: {self.quarter_duration}"
+
     def __setattr__(self, key, value):
         if (
             key[0] != "_"
@@ -1907,6 +1910,17 @@ def _split_copy(
     return new_chord
 
 
+def _split_last_grace_chords(chords):
+    output = [[], []]
+    for chord in chords:
+        if chord.quarter_duration == 0:
+            output[1].append(chord)
+        else:
+            output[0] += output[1]
+            output[1] = []
+            output[0].append(chord)
+    return output
+
 def _group_chords(
     chords: List[Chord],
     quarter_durations: List[Union[QuarterDuration, Fraction, int, float]],
@@ -1927,7 +1941,8 @@ def _group_chords(
         output.append([])
     index = 0
     current_quarter_duration = quarter_durations[0]
-    for ch in chords:
+    groupable_chords, last_grace_chords = _split_last_grace_chords(chords)
+    for ch in groupable_chords:
         output[index].append(ch)
         current_sum = sum(c.quarter_duration for c in output[index])
         if current_sum < current_quarter_duration:
@@ -1940,4 +1955,5 @@ def _group_chords(
                 current_quarter_duration = quarter_durations[index]
         else:
             return None
+    output[-1] += last_grace_chords
     return output
