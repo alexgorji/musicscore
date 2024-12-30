@@ -85,3 +85,7 @@ True. `<encoding>` in XMLScore's `<identification>` will have a `<support>` chil
 # Version 2.4.0
 
 * Refactor Chord.\\__deepcopy__()
+
+# Version 2.4.1
+
+* Bug fixes
