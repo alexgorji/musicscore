@@ -89,3 +89,7 @@ True. `<encoding>` in XMLScore's `<identification>` will have a `<support>` chil
 # Version 2.4.1
 
 * Bug fixes
+
+# Version 2.4.2
+
+* Bug fixes
