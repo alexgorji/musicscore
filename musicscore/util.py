@@ -252,7 +252,7 @@ def _chord_is_in_a_repetition(chord):
         if set([ch.is_tied_to_previous for ch in all_previous_chords]) == {True}:
             return False
         previous_chord = all_previous_chords[0]
-        if chord.has_same_pitches(previous_chord):
+        if not previous_chord.is_rest and chord.has_same_pitches(previous_chord):
             return True
     return False
 

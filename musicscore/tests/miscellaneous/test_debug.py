@@ -191,3 +191,49 @@ class DebuggingTests(XMLTestCase):
         # print([ch.quarter_duration for ch in part.get_chords()])
         with self.file_path(path, "grouping_problems") as xml_path:
             self.score.export_xml(xml_path)
+
+    def test_update_accidentals_with_rest(self):
+        score = Score()
+        part = score.add_part("p1")
+        qds = [
+            1 / 5,
+            4 / 15,
+            1 / 3,
+            8 / 21,
+            32 / 105,
+            16 / 105,
+            8 / 35,
+            4 / 3,
+            16 / 15,
+            64 / 147,
+            256 / 735,
+            128 / 735,
+            64 / 245,
+            8 / 35,
+            32 / 105,
+            8 / 21,
+            32 / 21,
+            64 / 105,
+            4 / 9,
+            4 / 15,
+            16 / 45,
+            16 / 45,
+            64 / 315,
+            32 / 105,
+            128 / 315,
+            32 / 63,
+            16 / 9,
+            32 / 45,
+            32 / 27,
+            128 / 945,
+            64 / 189,
+            64 / 315,
+            256 / 945,
+        ]
+        for qd in qds:
+            chord = Chord(61, quarter_duration=qd)
+            if qd in [16 / 105, 128 / 735, 64 / 105, 64 / 315, 32 / 45, 128 / 945]:
+                chord.midis = 0
+            part.add_chord(chord)
+        part.get_quantized = True
+        part.finalize()

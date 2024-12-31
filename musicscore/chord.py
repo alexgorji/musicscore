@@ -1921,6 +1921,7 @@ def _split_last_grace_chords(chords):
             output[0].append(chord)
     return output
 
+
 def _group_chords(
     chords: List[Chord],
     quarter_durations: List[Union[QuarterDuration, Fraction, int, float]],
