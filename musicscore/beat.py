@@ -294,8 +294,10 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
 
     _PERMITTED_DURATIONS = {4, 2, 1, 0.5}
 
-    def __init__(self, quarter_duration=1):
+    def __init__(self, quarter_duration=1, simplified_sixtuplets=False):
         super().__init__(quarter_duration=quarter_duration)
+        self._simplified_sixtuplets: bool
+        self.simplified_sixtuplets = simplified_sixtuplets
         self._filled_quarter_duration = 0
         self.leftover_chord = None
         self._subdivision = None
@@ -465,8 +467,10 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         non_grace_chords = [
             chord for chord in self.get_chords() if chord.quarter_duration != 0
         ]
+        # All tuplets are already set manually
         if None not in {ch.tuplet for ch in non_grace_chords}:
             return
+        # Check if there are some manually set tuplets.
         if {ch.tuplet for ch in non_grace_chords} != {None}:
             raise BeatUpdateChordTupletsError(
                 "Beat cannot manage tuplets automatically if it contains chords with manually set tuplet properties."
@@ -475,6 +479,27 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         def _update_tuplets(chord_group, actual_notes, quarter_duration=1):
             if actual_notes <= 16 or actual_notes == 32:
                 if actual_notes not in [1, 2, 4, 8, 16, 32]:
+                    if (
+                        actual_notes == 6
+                        and self.quarter_duration == 1
+                        and self.simplified_sixtuplets
+                    ):
+                        if [ch.quarter_duration * 6 for ch in chord_group] in [
+                            [4, 1, 1],
+                            [1, 1, 4],
+                            [2, 3, 1],
+                            [1, 3, 2],
+                            [1, 3, 1, 1],
+                            [1, 1, 3, 1],
+                            [2, 2, 1, 1],
+                            [2, 1, 1, 2],
+                            [1, 1, 2, 2],
+                            [2, 1, 1, 1, 1],
+                            [1, 1, 2, 1, 1],
+                            [1, 1, 1, 1, 2],
+                        ]:
+                            actual_notes = 3
+
                     for chord in chord_group:
                         chord.tuplet = Tuplet(
                             actual_notes=actual_notes, quarter_duration=quarter_duration
@@ -491,6 +516,22 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                 )
 
         actual_notes = get_chord_group_subdivision(non_grace_chords)
+
+        if (
+            actual_notes == 6
+            and self.quarter_duration == 1
+            and self.simplified_sixtuplets
+        ):
+            qds = [ch.quarter_duration for ch in non_grace_chords]
+            if qds[0] == 1 / 2 or qds[-1] == 1 / 2:
+                grouped_chords = _group_chords(self.get_children(), [1 / 2, 1 / 2])
+                for g in grouped_chords:
+                    actual_notes = get_chord_group_subdivision(g)
+                    _update_tuplets(g, actual_notes, 1 / 2)
+                    if len(g) == 1:
+                        g[0].number_of_dots = 0
+                return
+
         if not actual_notes:
             if self.quarter_duration == 1:
                 grouped_chords = _group_chords(self.get_children(), [1 / 2, 1 / 2])
@@ -699,6 +740,14 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             return 0
         else:
             return self.previous.offset + self.previous.quarter_duration
+
+    @property
+    def simplified_sixtuplets(self) -> bool:
+        return self._simplified_sixtuplets
+
+    @simplified_sixtuplets.setter
+    def simplified_sixtuplets(self, value: bool) -> None:
+        self._simplified_sixtuplets = value
 
     def add_child(self, child: Chord) -> List["Chord"]:
         """

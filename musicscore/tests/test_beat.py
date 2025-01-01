@@ -137,9 +137,6 @@ class TestBeatUpdateChords(TestCase):
         beat._update_chord_number_of_dots()
         assert beat.get_chords()[0].number_of_dots == 3
 
-    # def test_beat_update_chord_tuplets(self):
-    #     self.fail()
-
 
 class TestBeatUpdateChordBeams(TestCase):
     pass
