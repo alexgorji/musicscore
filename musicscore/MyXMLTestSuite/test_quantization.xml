@@ -265,11 +265,13 @@
         </pitch>
         <duration>140</duration>
         <tie type="stop" />
+        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">end</beam>
         <notations>
           <tied type="stop" />
+          <tied type="start" />
         </notations>
       </note>
       <note>
@@ -587,6 +589,7 @@
         </pitch>
         <duration>30</duration>
         <tie type="stop" />
+        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <dot />
@@ -599,6 +602,7 @@
         <notations>
           <tuplet type="stop" number="1" />
           <tied type="stop" />
+          <tied type="start" />
         </notations>
       </note>
       <note>
@@ -699,11 +703,13 @@
         </pitch>
         <duration>28</duration>
         <tie type="stop" />
+        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">end</beam>
         <notations>
           <tied type="stop" />
+          <tied type="start" />
         </notations>
       </note>
       <note>
@@ -843,6 +849,7 @@
         </pitch>
         <duration>30</duration>
         <tie type="stop" />
+        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <time-modification>
@@ -854,6 +861,7 @@
         <notations>
           <tuplet type="stop" number="1" />
           <tied type="stop" />
+          <tied type="start" />
         </notations>
       </note>
       <note>
@@ -1076,6 +1084,7 @@
         </pitch>
         <duration>6</duration>
         <tie type="stop" />
+        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <dot />
@@ -1088,6 +1097,7 @@
         <notations>
           <tuplet type="stop" number="1" />
           <tied type="stop" />
+          <tied type="start" />
         </notations>
       </note>
       <note>
@@ -1640,11 +1650,13 @@
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
+        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">end</beam>
         <notations>
           <tied type="stop" />
+          <tied type="start" />
         </notations>
       </note>
       <note>
@@ -1900,11 +1912,13 @@
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
+        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">end</beam>
         <notations>
           <tied type="stop" />
+          <tied type="start" />
         </notations>
       </note>
       <note>
@@ -1991,11 +2005,13 @@
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
+        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">end</beam>
         <notations>
           <tied type="stop" />
+          <tied type="start" />
         </notations>
       </note>
       <note>
@@ -2339,11 +2355,13 @@
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
+        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <beam number="1">end</beam>
         <notations>
           <tied type="stop" />
+          <tied type="start" />
         </notations>
       </note>
       <note>

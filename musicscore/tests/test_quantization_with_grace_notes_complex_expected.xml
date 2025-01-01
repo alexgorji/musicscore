@@ -472,6 +472,7 @@
         <rest />
         <duration>2</duration>
         <tie type="stop" />
+        <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
         <time-modification>
@@ -482,6 +483,7 @@
         <notations>
           <tuplet type="stop" number="1" />
           <tied type="stop" />
+          <tied type="start" />
         </notations>
       </note>
       <note>

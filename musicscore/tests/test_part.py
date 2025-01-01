@@ -664,9 +664,9 @@ class TestSplitQdAndTime(TestCase):
         p.add_measure((5, 4))
         p.add_chord(chord)
         assert len(p.get_children()) == 2
-        m = p.get_children()[-1]
-        assert len(m.get_chords()) == 1
-        ch = m.get_chords()[0]
+        measure = p.get_children()[-1]
+        assert len(measure.get_chords()) == 1
+        ch = measure.get_chords()[0]
         assert ch.quarter_duration == 1
         assert ch.all_midis_are_tied_to_previous
         assert not ch.all_midis_are_tied_to_next

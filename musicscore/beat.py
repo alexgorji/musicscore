@@ -398,22 +398,27 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
         return output
 
     def _split_not_writable(self, chord, offset):
-        if _SPLITTABLE_QUARTER_DURATIONS.get(
-            offset
-        ) and _SPLITTABLE_QUARTER_DURATIONS.get(offset).get(chord.quarter_duration):
-            quarter_durations = _SPLITTABLE_QUARTER_DURATIONS.get(offset).get(
-                chord.quarter_duration
-            )
-            if quarter_durations:
-                quarter_durations = [QuarterDuration(qd) for qd in quarter_durations]
-                return self._split_chord(chord, quarter_durations)
-        elif GENERALSPLITTABLES.get(chord.quarter_duration.numerator):
-            quarter_durations = [
-                QuarterDuration(x, chord.quarter_duration.denominator)
-                for x in GENERALSPLITTABLES.get(chord.quarter_duration.numerator)
-            ]
-            return self._split_chord(chord, quarter_durations)
-        else:
+        starting_ties = []
+        for midi in chord.midis:
+            starting_ties.append(True if midi.is_tied_to_next else False)
+
+        def _get_quarter_durations():
+            if _SPLITTABLE_QUARTER_DURATIONS.get(
+                offset
+            ) and _SPLITTABLE_QUARTER_DURATIONS.get(offset).get(chord.quarter_duration):
+                quarter_durations = _SPLITTABLE_QUARTER_DURATIONS.get(offset).get(
+                    chord.quarter_duration
+                )
+                if quarter_durations:
+                    return [QuarterDuration(qd) for qd in quarter_durations]
+
+            if GENERALSPLITTABLES.get(chord.quarter_duration.numerator):
+                quarter_durations = [
+                    QuarterDuration(x, chord.quarter_duration.denominator)
+                    for x in GENERALSPLITTABLES.get(chord.quarter_duration.numerator)
+                ]
+                return quarter_durations
+
             try:
                 split_qds = (
                     SPLITTEXCEPTIONS.get(self.quarter_duration.value)
@@ -424,9 +429,18 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
                     quarter_durations = [
                         QuarterDuration(qd[0], qd[1]) for qd in split_qds
                     ]
-                    return self._split_chord(chord, quarter_durations)
+                    return quarter_durations
             except AttributeError:
-                pass
+                return None
+
+        quarter_durations = _get_quarter_durations()
+        if not quarter_durations:
+            return [chord]
+        output = self._split_chord(chord, quarter_durations)
+        for midi, tied in zip(output[-1].midis, starting_ties):
+            if tied is True:
+                midi.add_tie("start")
+        return output
 
     def _update_chord_types(self):
         for ch in self.get_chords():
