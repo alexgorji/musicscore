@@ -23,7 +23,7 @@ from musicscore.finalize import FinalizeMixin
 from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
 from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
-from musicscore.tuplet import SimplifiedSixtuplets, Tuplet
+from musicscore.tuplet import SimplifiedSextuplets, Tuplet
 from musicscore.util import lcm, split_list
 
 __all__ = ["Beat", "beam_chord_group", "get_chord_group_subdivision"]
@@ -252,7 +252,7 @@ def beam_chord_group(chord_group: List["Chord"]) -> None:
 
 
 class Beat(
-    MusicTree, SimplifiedSixtuplets, QuarterDurationMixin, QuantizeMixin, FinalizeMixin
+    MusicTree, SimplifiedSextuplets, QuarterDurationMixin, QuantizeMixin, FinalizeMixin
 ):
     """
     Parent type: :obj:`~musicscore.voice.Voice`
@@ -460,11 +460,11 @@ class Beat(
         def _update_tuplets(chord_group, actual_notes, quarter_duration=1):
             if actual_notes <= 16 or actual_notes == 32:
                 if actual_notes not in [1, 2, 4, 8, 16, 32]:
-                    # simplified sixtuplets
+                    # simplified sextuplets
                     if (
                         actual_notes == 6
                         and self.quarter_duration == 1
-                        and self.simplified_sixtuplets
+                        and self.simplified_sextuplets
                     ):
                         actual_notes = 3
 
@@ -485,11 +485,11 @@ class Beat(
 
         actual_notes = get_chord_group_subdivision(non_grace_chords)
 
-        # simplified sixtuplets
+        # simplified sextuplets
         if (
             actual_notes == 6
             and self.quarter_duration == 1
-            and self.simplified_sixtuplets
+            and self.simplified_sextuplets
         ):
             qds = [ch.quarter_duration for ch in non_grace_chords]
             if 1 / 2 in list(accumulate(qds)):
@@ -533,7 +533,7 @@ class Beat(
             # group inside beat
             subdivisons = self.get_subdivision()
             if (subdivisons == 8 and self.quarter_duration == 1) or (
-                self.simplified_sixtuplets
+                self.simplified_sextuplets
                 and self.quarter_duration == 1
                 and [ch.quarter_duration * 6 for ch in chords]
                 in [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 2], [2, 1, 1, 1, 1], [2, 1, 1, 2]]

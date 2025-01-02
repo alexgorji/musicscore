@@ -14,14 +14,14 @@ from musicscore.musictree import MusicTree
 from musicscore.finalize import FinalizeMixin
 from musicscore.quantize import QuantizeMixin
 from musicscore.quarterduration import QuarterDuration
-from musicscore.tuplet import SimplifiedSixtuplets
+from musicscore.tuplet import SimplifiedSextuplets
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLVoice
 
 __all__ = ["Voice"]
 
 
-class Voice(MusicTree, SimplifiedSixtuplets, QuantizeMixin, FinalizeMixin, XMLWrapper):
+class Voice(MusicTree, SimplifiedSextuplets, QuantizeMixin, FinalizeMixin, XMLWrapper):
     """
     Parent type: :obj:`~musicscore.staff.Staff`
 
@@ -31,7 +31,7 @@ class Voice(MusicTree, SimplifiedSixtuplets, QuantizeMixin, FinalizeMixin, XMLWr
     _ATTRIBUTES = {"number", "leftover_chord", "is_filled"}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
-    _ATTRIBUTES = _ATTRIBUTES.union(SimplifiedSixtuplets._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(SimplifiedSextuplets._ATTRIBUTES)
     XMLClass = XMLVoice
 
     def __init__(self, number=None, *args, **kwargs):

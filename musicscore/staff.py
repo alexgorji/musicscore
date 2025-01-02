@@ -9,7 +9,7 @@ from musicscore.exceptions import (
 from musicscore.finalize import FinalizeMixin
 from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
-from musicscore.tuplet import SimplifiedSixtuplets
+from musicscore.tuplet import SimplifiedSextuplets
 from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLStaff
@@ -17,7 +17,7 @@ from musicxml.xmlelement.xmlelement import XMLStaff
 __all__ = ["Staff"]
 
 
-class Staff(MusicTree, SimplifiedSixtuplets, QuantizeMixin, FinalizeMixin, XMLWrapper):
+class Staff(MusicTree, SimplifiedSextuplets, QuantizeMixin, FinalizeMixin, XMLWrapper):
     """
     Parent type: :obj:`~musicscore.measure.Measure`
 
@@ -27,7 +27,7 @@ class Staff(MusicTree, SimplifiedSixtuplets, QuantizeMixin, FinalizeMixin, XMLWr
     _ATTRIBUTES = {"clef", "default_clef", "number"}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
-    _ATTRIBUTES = _ATTRIBUTES.union(SimplifiedSixtuplets._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(SimplifiedSextuplets._ATTRIBUTES)
     XMLClass = XMLStaff
 
     def __init__(self, number=None, clef=None, **kwargs):

@@ -148,25 +148,25 @@ class Tuplet:
             return output
 
 
-class SimplifiedSixtuplets:
-    _ATTRIBUTES = {"simplified_sixtuplets"}
+class SimplifiedSextuplets:
+    _ATTRIBUTES = {"simplified_sextuplets"}
 
     def __init__(
-        self, simplified_sixtuplets: Optional[bool] = None, *args: Any, **kwargs: Any
+        self, simplified_sextuplets: Optional[bool] = None, *args: Any, **kwargs: Any
     ) -> None:
         super().__init__(*args, **kwargs)
-        self._simplified_sixtuplets = None
-        self.simplified_sixtuplets = simplified_sixtuplets
+        self._simplified_sextuplets = None
+        self.simplified_sextuplets = simplified_sextuplets
 
     @property
-    def simplified_sixtuplets(self) -> bool:
-        if self._simplified_sixtuplets is None:
+    def simplified_sextuplets(self) -> bool:
+        if self._simplified_sextuplets is None:
             if self.up:
-                return self.up.simplified_sixtuplets
+                return self.up.simplified_sextuplets
             else:
                 return False
-        return self._simplified_sixtuplets
+        return self._simplified_sextuplets
 
-    @simplified_sixtuplets.setter
-    def simplified_sixtuplets(self, value: bool) -> None:
-        self._simplified_sixtuplets = value
+    @simplified_sextuplets.setter
+    def simplified_sextuplets(self, value: bool) -> None:
+        self._simplified_sextuplets = value

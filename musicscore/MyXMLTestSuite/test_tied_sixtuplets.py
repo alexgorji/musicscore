@@ -33,7 +33,7 @@ def create_tied_patterns():
     return chord_patterns
 
 
-class TiedSixtupletsTestCase(XMLTestCase):
+class TiedSextupletsTestCase(XMLTestCase):
     def test_generate_all_subdivision_patterns(self):
         self.assertEqual(
             generate_all_subdivision_patterns(6, False),
