@@ -114,7 +114,7 @@ class TiedSextupletsTestCase(XMLTestCase):
             self.assertTrue(pattern[0].is_tied_to_next)
             self.assertTrue(pattern[-1].is_tied_to_previous)
 
-    def test_all_tied_sixtuplts(self):
+    def test_all_tied_sextuplets(self):
         s = Score()
         p = s.add_part("p1")
         p.add_measure(time=(3, 4))
