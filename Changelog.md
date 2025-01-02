@@ -101,3 +101,7 @@ True. `<encoding>` in XMLScore's `<identification>` will have a `<support>` chil
 # Version 2.5.0
 
 * Simplified sextuplets (will be written with triplets)
+
+# Version 2.5.1
+
+* Bug fixes
