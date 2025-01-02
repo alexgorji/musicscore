@@ -386,6 +386,12 @@ class Beat(
             starting_ties.append(True if midi.is_tied_to_next else False)
 
         def _get_quarter_durations():
+            if self.simplified_sextuplets and self.quarter_duration == 1:
+                if offset == 1 / 6 and chord.quarter_duration == 5 / 6:
+                    return [QuarterDuration(1, 6), QuarterDuration(4, 6)]
+                if offset == 0 and chord.quarter_duration == 5 / 6:
+                    return [QuarterDuration(4, 6), QuarterDuration(1, 6)]
+
             if _SPLITTABLE_QUARTER_DURATIONS.get(
                 offset
             ) and _SPLITTABLE_QUARTER_DURATIONS.get(offset).get(chord.quarter_duration):
@@ -492,7 +498,9 @@ class Beat(
             and self.simplified_sextuplets
         ):
             qds = [ch.quarter_duration for ch in non_grace_chords]
-            if 1 / 2 in list(accumulate(qds)):
+            if 1 / 2 in list(accumulate(qds)) and [
+                ch.quarter_duration * 6 for ch in non_grace_chords
+            ] not in [[2, 1, 1, 2], [1, 1, 1, 1, 2], [2, 1, 1, 1, 1]]:
                 grouped_chords = _group_chords(self.get_children(), [1 / 2, 1 / 2])
                 for g in grouped_chords:
                     actual_notes = get_chord_group_subdivision(g)
@@ -535,8 +543,7 @@ class Beat(
             if (subdivisons == 8 and self.quarter_duration == 1) or (
                 self.simplified_sextuplets
                 and self.quarter_duration == 1
-                and [ch.quarter_duration * 6 for ch in chords]
-                in [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 2], [2, 1, 1, 1, 1], [2, 1, 1, 2]]
+                and [ch.quarter_duration * 6 for ch in chords] in [[1, 1, 1, 1, 1, 1]]
             ):
                 chord_groups = _group_chords(chords, [1 / 2, 1 / 2])
                 if chord_groups and 1 not in {len(group) for group in chord_groups}:
