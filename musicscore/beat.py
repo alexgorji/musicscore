@@ -98,7 +98,6 @@ def get_chord_group_subdivision(chords):
 
 
 def beam_chord_group(chord_group: List["Chord"]) -> None:
-    # print('setting beams', [ch.quarter_duration for ch in chord_group])
     """
     Function for setting beams of a list of chords (chord_group). This function is used to create or update beams inside a beat.
     Chord types must be set first.
@@ -168,15 +167,10 @@ def beam_chord_group(chord_group: List["Chord"]) -> None:
     # adding all necessary beams to all notes save the notes of the last chord. For last chord add_last_beam() will be used.
     index = 0
     while index != len(chord_group) - 1:
-        # print('index', index)
-        # print('current', current_number_of_beams)
         chord = chord_group[index]
         next_chord = chord_group[index + 1]
-        # types is a list of tuples with three values: (beam value, number of the begining beam, number of the ending beam)
         types = []
         b1, b2 = chord.number_of_beams, next_chord.number_of_beams
-        # print(chord.quarter_duration, next_chord.quarter_duration)
-        # print(b1, b2, current_number_of_beams)
         if chord.is_rest:
             pass
             "do nothing"
@@ -197,7 +191,6 @@ def beam_chord_group(chord_group: List["Chord"]) -> None:
                         else:
                             types.append(("end", 2, current_number_of_beams))
                             types.append(("forward", current_number_of_beams + 1, b1))
-
                 current_number_of_beams = 1
             else:
                 "do something regular"
@@ -205,7 +198,6 @@ def beam_chord_group(chord_group: List["Chord"]) -> None:
                     add_last_beam(chord, b1, current_number_of_beams)
                 else:
                     if b2 < b1 <= current_number_of_beams:
-                        # print('huhu')
                         types.append(("continue", 1, b2))
                         types.append(("end", b2 + 1, b1))
                     elif b2 < b1 > current_number_of_beams:
@@ -226,21 +218,9 @@ def beam_chord_group(chord_group: List["Chord"]) -> None:
                             else:
                                 types.append(("continue", 1, b2))
                                 types.append(("forward", b2 + 1, b1))
-                            #
-                            # if (chord.quarter_duration == QuarterDuration(1, 6) and chord.offset == QuarterDuration(1,
-                            #                                                                                         3)
-                            # ) or (
-                            #         chord.quarter_duration == QuarterDuration(1, 8) and chord.offset == QuarterDuration(
-                            #     3, 8)
-                            # ):
-                            #     types.append(('backward', b2 + 1, b1))
-                            # else:
-                            #     types.append(('forward', b2 + 1, b1))
 
-                        # current_number_of_beams = b1
                     elif b2 == b1 <= current_number_of_beams:
                         types.append(("continue", 1, b1))
-                        # current_number_of_beams = b1
 
                     elif b2 == b1 > current_number_of_beams:
                         if current_number_of_beams == 0:
@@ -265,7 +245,7 @@ def beam_chord_group(chord_group: List["Chord"]) -> None:
             current_number_of_beams = len(
                 [v for v in chord.beams.values() if v in ["continue", "begin"]]
             )
-            # print('setting current to', current_number_of_beams)
+
         if index == len(chord_group) - 2 and b2:
             add_last_beam(next_chord, b2, current_number_of_beams)
         index += 1
@@ -512,7 +492,7 @@ class Beat(
             and self.simplified_sixtuplets
         ):
             qds = [ch.quarter_duration for ch in non_grace_chords]
-            if 1/2 in list(accumulate(qds)):
+            if 1 / 2 in list(accumulate(qds)):
                 grouped_chords = _group_chords(self.get_children(), [1 / 2, 1 / 2])
                 for g in grouped_chords:
                     actual_notes = get_chord_group_subdivision(g)
@@ -551,7 +531,13 @@ class Beat(
             chord_groups = None
             continue_eighth_beam = False
             # group inside beat
-            if self.get_subdivision() == 8 and self.quarter_duration == 1:
+            subdivisons = self.get_subdivision()
+            if (subdivisons == 8 and self.quarter_duration == 1) or (
+                self.simplified_sixtuplets
+                and self.quarter_duration == 1
+                and [ch.quarter_duration * 6 for ch in chords]
+                in [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 2], [2, 1, 1, 1, 1], [2, 1, 1, 2]]
+            ):
                 chord_groups = _group_chords(chords, [1 / 2, 1 / 2])
                 if chord_groups and 1 not in {len(group) for group in chord_groups}:
                     continue_eighth_beam = True

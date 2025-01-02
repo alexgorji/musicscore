@@ -3149,7 +3149,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <tuplet type="stop" number="1" />
         </notations>
@@ -3168,7 +3168,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <beam number="2">end</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -3459,7 +3459,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <tuplet type="stop" number="1" />
         </notations>
@@ -3478,7 +3478,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -3854,7 +3854,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
+        <beam number="2">end</beam>
         <notations>
           <tuplet type="stop" number="1" />
         </notations>
@@ -3873,7 +3873,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <beam number="2">end</beam>
+        <beam number="2">forward hook</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
@@ -3950,7 +3950,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
+        <beam number="2">end</beam>
         <notations>
           <tuplet type="stop" number="1" />
         </notations>
@@ -3969,7 +3969,7 @@
           <normal-type>16th</normal-type>
         </time-modification>
         <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
+        <beam number="2">begin</beam>
         <notations>
           <tuplet type="start" number="1" bracket="yes" />
         </notations>
