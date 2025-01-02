@@ -11,6 +11,7 @@ from musicscore.key import Key
 from musicscore.quantize import QuantizeMixin
 from musicscore.staff import Staff
 from musicscore.time import Time, flatten_times
+from musicscore.tuplet import SimplifiedSixtuplets
 from musicscore.util import lcm, _chord_is_in_a_repetition, isinstance_as_string
 from musicscore.voice import Voice
 from musicscore.xmlwrapper import XMLWrapper
@@ -28,7 +29,9 @@ from musicxml.xmlelement.xmlelement import (
 __all__ = ["Measure", "generate_measures"]
 
 
-class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
+class Measure(
+    MusicTree, QuantizeMixin, SimplifiedSixtuplets, FinalizeMixin, XMLWrapper
+):
     """
     Parent type: :obj:`~musicscore.part.Part`
 
@@ -46,6 +49,8 @@ class Measure(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     }
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(SimplifiedSixtuplets._ATTRIBUTES)
+
     XMLClass = XMLMeasure
 
     def __init__(self, number, time=None, *args, **kwargs):

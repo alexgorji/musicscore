@@ -22,7 +22,7 @@ from musicscore.finalize import FinalizeMixin
 from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
 from musicscore.quarterduration import QuarterDuration, QuarterDurationMixin
-from musicscore.tuplet import Tuplet
+from musicscore.tuplet import SimplifiedSixtuplets, Tuplet
 from musicscore.util import lcm, split_list
 
 __all__ = ["Beat", "beam_chord_group", "get_chord_group_subdivision"]
@@ -270,7 +270,9 @@ def beam_chord_group(chord_group: List["Chord"]) -> None:
         index += 1
 
 
-class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
+class Beat(
+    MusicTree, SimplifiedSixtuplets, QuarterDurationMixin, QuantizeMixin, FinalizeMixin
+):
     """
     Parent type: :obj:`~musicscore.voice.Voice`
 
@@ -294,10 +296,8 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
 
     _PERMITTED_DURATIONS = {4, 2, 1, 0.5}
 
-    def __init__(self, quarter_duration=1, simplified_sixtuplets=False):
+    def __init__(self, quarter_duration=1):
         super().__init__(quarter_duration=quarter_duration)
-        self._simplified_sixtuplets: bool
-        self.simplified_sixtuplets = simplified_sixtuplets
         self._filled_quarter_duration = 0
         self.leftover_chord = None
         self._subdivision = None
@@ -740,14 +740,6 @@ class Beat(MusicTree, QuarterDurationMixin, QuantizeMixin, FinalizeMixin):
             return 0
         else:
             return self.previous.offset + self.previous.quarter_duration
-
-    @property
-    def simplified_sixtuplets(self) -> bool:
-        return self._simplified_sixtuplets
-
-    @simplified_sixtuplets.setter
-    def simplified_sixtuplets(self, value: bool) -> None:
-        self._simplified_sixtuplets = value
 
     def add_child(self, child: Chord) -> List["Chord"]:
         """

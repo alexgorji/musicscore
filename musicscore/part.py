@@ -10,6 +10,7 @@ from musicscore.measure import Measure
 from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
 from musicscore.time import Time
+from musicscore.tuplet import SimplifiedSixtuplets
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import XMLPart, XMLScorePart
 
@@ -55,7 +56,7 @@ class ScorePart(XMLWrapper):
         self.xml_object.xml_part_name = self.part.name
 
 
-class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
+class Part(MusicTree, SimplifiedSixtuplets, QuantizeMixin, FinalizeMixin, XMLWrapper):
     """
     Parent type: :obj:`~musicscore.score.Score`
 
@@ -65,6 +66,7 @@ class Part(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     _ATTRIBUTES = {"id_", "name", "abbreviation"}
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
+    _ATTRIBUTES = _ATTRIBUTES.union(SimplifiedSixtuplets._ATTRIBUTES)
     XMLClass = XMLPart
 
     def __init__(self, id, name=None, abbreviation=None, *args, **kwargs):

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from musicscore.exceptions import TupletNormalTypeError
 from musicxml import XMLTimeModification, XMLTuplet
@@ -146,3 +146,27 @@ class Tuplet:
             if self.bracket_type == "start":
                 output.bracket = "yes"
             return output
+
+
+class SimplifiedSixtuplets:
+    _ATTRIBUTES = {"simplified_sixtuplets"}
+
+    def __init__(
+        self, simplified_sixtuplets: Optional[bool] = None, *args: Any, **kwargs: Any
+    ) -> None:
+        super().__init__(*args, **kwargs)
+        self._simplified_sixtuplets = None
+        self.simplified_sixtuplets = simplified_sixtuplets
+
+    @property
+    def simplified_sixtuplets(self) -> bool:
+        if self._simplified_sixtuplets is None:
+            if self.up:
+                return self.up.simplified_sixtuplets
+            else:
+                return False
+        return self._simplified_sixtuplets
+
+    @simplified_sixtuplets.setter
+    def simplified_sixtuplets(self, value: bool) -> None:
+        self._simplified_sixtuplets = value

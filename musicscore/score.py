@@ -13,6 +13,7 @@ from musicscore.layout import Scaling, PageLayout, SystemLayout, StaffLayout
 from musicscore.musictree import MusicTree
 from musicscore.quantize import QuantizeMixin
 from musicscore.quarterduration import QuarterDuration
+from musicscore.tuplet import SimplifiedSixtuplets
 from musicscore.xmlwrapper import XMLWrapper
 from musicxml.xmlelement.xmlelement import (
     XMLScorePartwise,
@@ -57,7 +58,7 @@ POSSIBLE_SUBDIVISIONS = {
 }
 
 
-class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
+class Score(MusicTree, QuantizeMixin, SimplifiedSixtuplets, FinalizeMixin, XMLWrapper):
     """
     Parent type: ``None``
 
@@ -76,7 +77,7 @@ class Score(MusicTree, QuantizeMixin, FinalizeMixin, XMLWrapper):
     }
     _ATTRIBUTES = _ATTRIBUTES.union(MusicTree._ATTRIBUTES)
     _ATTRIBUTES = _ATTRIBUTES.union(QuantizeMixin._ATTRIBUTES)
-
+    _ATTRIBUTES = _ATTRIBUTES.union(SimplifiedSixtuplets._ATTRIBUTES)
     XMLClass = XMLScorePartwise
 
     def __init__(
