@@ -277,8 +277,8 @@ class Beat(
 
     _PERMITTED_DURATIONS = {4, 2, 1, 0.5}
 
-    def __init__(self, quarter_duration=1):
-        super().__init__(quarter_duration=quarter_duration)
+    def __init__(self, quarter_duration=1, *args, **kwargs):
+        super().__init__(quarter_duration=quarter_duration, *args, **kwargs)
         self._filled_quarter_duration = 0
         self.leftover_chord = None
         self._subdivision = None
@@ -460,7 +460,7 @@ class Beat(
         def _update_tuplets(chord_group, actual_notes, quarter_duration=1):
             if actual_notes <= 16 or actual_notes == 32:
                 if actual_notes not in [1, 2, 4, 8, 16, 32]:
-                    # simplified sextuplets
+                    # simplified sixtuplets
                     if (
                         actual_notes == 6
                         and self.quarter_duration == 1
@@ -485,7 +485,7 @@ class Beat(
 
         actual_notes = get_chord_group_subdivision(non_grace_chords)
 
-        # simplified sextuplets
+        # simplified sixtuplets
         if (
             actual_notes == 6
             and self.quarter_duration == 1

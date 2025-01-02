@@ -2,14 +2,19 @@ from fractions import Fraction
 from unittest import TestCase
 
 from musicscore import Time
+from musicscore.beat import Beat
 from musicscore.chord import Chord
 from musicscore.measure import Measure
+from musicscore.part import Part
+from musicscore.score import Score
+from musicscore.staff import Staff
 from musicscore.tests.test_beat import create_voice
 from musicscore.tests.util_subdivisions import (
     generate_all_quintuplets_manually,
     generate_all_sextuplets_manually,
     generate_all_triplets_manually,
 )
+from musicscore.voice import Voice
 
 
 class TestTuplets(TestCase):
@@ -358,3 +363,15 @@ class TestTuplets(TestCase):
                 assert tuplet.type == "stop"
             else:
                 assert not n.xml_notations
+
+    def test_init_with_simplified_sextuplets(self):
+        b = Beat(simplified_sextuplets=True)
+        self.assertTrue(b.simplified_sextuplets)
+        v = Voice(simplified_sextuplets=True)
+        self.assertTrue(v.simplified_sextuplets)
+        s = Staff(simplified_sextuplets=True)
+        self.assertTrue(s.simplified_sextuplets)
+        p = Part(id="P1", simplified_sextuplets=True)
+        self.assertTrue(p.simplified_sextuplets)
+        sc = Score(simplified_sextuplets=True)
+        self.assertTrue(sc.simplified_sextuplets)

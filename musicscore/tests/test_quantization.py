@@ -3,15 +3,30 @@ from pathlib import Path
 import random
 from unittest import TestCase
 
+from musicscore.beat import Beat
 from musicscore.chord import Chord
 from musicscore.part import Part
 from musicscore.quarterduration import QuarterDuration
 from musicscore.score import Score
+from musicscore.staff import Staff
 from musicscore.tests.util import XMLTestCase
 from musicscore.util import lcm
+from musicscore.voice import Voice
 
 
 class TestQuantization(TestCase):
+    def test_init_with_get_quantized_argument(self):
+        b = Beat(get_quantized=True)
+        self.assertTrue(b.get_quantized)
+        v = Voice(get_quantized=True)
+        self.assertTrue(v.get_quantized)
+        s = Staff(get_quantized=True)
+        self.assertTrue(s.get_quantized)
+        p = Part(id="P1", get_quantized=True)
+        self.assertTrue(p.get_quantized)
+        sc = Score(get_quantized=True)
+        self.assertTrue(sc.get_quantized)
+
     def test_get_and_set_possible_subdivisions(self):
         s = Score()
         p = s.add_child(Part("p1"))

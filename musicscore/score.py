@@ -86,11 +86,14 @@ class Score(MusicTree, QuantizeMixin, SimplifiedSextuplets, FinalizeMixin, XMLWr
         title=None,
         subtitle=None,
         get_quantized=False,
+        simplified_sextuplets=None,
         new_system=False,
         *args,
         **kwargs,
     ):
-        super().__init__(get_quantized=get_quantized)
+        super().__init__(
+            get_quantized=get_quantized, simplified_sextuplets=simplified_sextuplets
+        )
         self._xml_object = self.XMLClass(*args, **kwargs)
         self._update_xml_object()
         self._version = None

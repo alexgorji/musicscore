@@ -69,8 +69,19 @@ class Part(MusicTree, SimplifiedSextuplets, QuantizeMixin, FinalizeMixin, XMLWra
     _ATTRIBUTES = _ATTRIBUTES.union(SimplifiedSextuplets._ATTRIBUTES)
     XMLClass = XMLPart
 
-    def __init__(self, id, name=None, abbreviation=None, *args, **kwargs):
-        super().__init__()
+    def __init__(
+        self,
+        id,
+        name=None,
+        abbreviation=None,
+        simplified_sextuplets=None,
+        get_quantized=None,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(
+            simplified_sextuplets=simplified_sextuplets, get_quantized=get_quantized
+        )
         self._xml_object = self.XMLClass(*args, **kwargs)
         self._id = None
         self.id_ = id

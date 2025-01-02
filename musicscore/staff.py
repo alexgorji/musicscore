@@ -30,8 +30,17 @@ class Staff(MusicTree, SimplifiedSextuplets, QuantizeMixin, FinalizeMixin, XMLWr
     _ATTRIBUTES = _ATTRIBUTES.union(SimplifiedSextuplets._ATTRIBUTES)
     XMLClass = XMLStaff
 
-    def __init__(self, number=None, clef=None, **kwargs):
-        super().__init__()
+    def __init__(
+        self,
+        number=None,
+        clef=None,
+        simplified_sextuplets=None,
+        get_quantized=None,
+        **kwargs,
+    ):
+        super().__init__(
+            simplified_sextuplets=simplified_sextuplets, get_quantized=get_quantized
+        )
         self._xml_object = self.XMLClass(value_=1, **kwargs)
         self._number = None
         self._clef = None

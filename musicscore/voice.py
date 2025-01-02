@@ -34,8 +34,17 @@ class Voice(MusicTree, SimplifiedSextuplets, QuantizeMixin, FinalizeMixin, XMLWr
     _ATTRIBUTES = _ATTRIBUTES.union(SimplifiedSextuplets._ATTRIBUTES)
     XMLClass = XMLVoice
 
-    def __init__(self, number=None, *args, **kwargs):
-        super().__init__()
+    def __init__(
+        self,
+        number=None,
+        simplified_sextuplets=None,
+        get_quantized=None,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(
+            simplified_sextuplets=simplified_sextuplets, get_quantized=get_quantized
+        )
         self._xml_object = self.XMLClass(value_="1", *args, **kwargs)
         self._number = None
         self.number = number
