@@ -1,3 +1,4 @@
+from itertools import accumulate
 from typing import List
 
 from math import trunc
@@ -479,26 +480,13 @@ class Beat(
         def _update_tuplets(chord_group, actual_notes, quarter_duration=1):
             if actual_notes <= 16 or actual_notes == 32:
                 if actual_notes not in [1, 2, 4, 8, 16, 32]:
+                    # simplified sixtuplets
                     if (
                         actual_notes == 6
                         and self.quarter_duration == 1
                         and self.simplified_sixtuplets
                     ):
-                        if [ch.quarter_duration * 6 for ch in chord_group] in [
-                            [4, 1, 1],
-                            [1, 1, 4],
-                            [2, 3, 1],
-                            [1, 3, 2],
-                            [1, 3, 1, 1],
-                            [1, 1, 3, 1],
-                            [2, 2, 1, 1],
-                            [2, 1, 1, 2],
-                            [1, 1, 2, 2],
-                            [2, 1, 1, 1, 1],
-                            [1, 1, 2, 1, 1],
-                            [1, 1, 1, 1, 2],
-                        ]:
-                            actual_notes = 3
+                        actual_notes = 3
 
                     for chord in chord_group:
                         chord.tuplet = Tuplet(
@@ -517,13 +505,14 @@ class Beat(
 
         actual_notes = get_chord_group_subdivision(non_grace_chords)
 
+        # simplified sixtuplets
         if (
             actual_notes == 6
             and self.quarter_duration == 1
             and self.simplified_sixtuplets
         ):
             qds = [ch.quarter_duration for ch in non_grace_chords]
-            if qds[0] == 1 / 2 or qds[-1] == 1 / 2:
+            if 1 / 2 in list(accumulate(qds)):
                 grouped_chords = _group_chords(self.get_children(), [1 / 2, 1 / 2])
                 for g in grouped_chords:
                     actual_notes = get_chord_group_subdivision(g)
