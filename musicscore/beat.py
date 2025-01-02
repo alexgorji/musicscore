@@ -512,7 +512,7 @@ class Beat(
             and self.simplified_sixtuplets
         ):
             qds = [ch.quarter_duration for ch in non_grace_chords]
-            if 1 / 2 in list(accumulate(qds)):
+            if 1/2 in list(accumulate(qds)):
                 grouped_chords = _group_chords(self.get_children(), [1 / 2, 1 / 2])
                 for g in grouped_chords:
                     actual_notes = get_chord_group_subdivision(g)
@@ -541,7 +541,7 @@ class Beat(
         _update_tuplets(non_grace_chords, actual_notes, self.quarter_duration)
 
     def _update_chord_beams(self):
-        chords = self.get_chords()
+        chords = [ch for ch in self.get_chords() if ch.quarter_duration != 0]
         if chords:
             ## update types
             for ch in chords:
