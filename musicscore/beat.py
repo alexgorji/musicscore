@@ -380,7 +380,7 @@ class Beat(
                 midi.accidental.show = False
         return output
 
-    def _split_not_writable(self, chord, offset):
+    def _split_unwritable(self, chord, offset):
         starting_ties = []
         for midi in chord.midis:
             starting_ties.append(True if midi.is_tied_to_next else False)
@@ -658,7 +658,7 @@ class Beat(
             else:
                 pass
 
-    def _split_not_writable_chords(self) -> None:
+    def _split_unwritable_chords(self) -> None:
         """
         This method checks if the quarter duration of all children chords must be split according to :obj:`~musicscore.beat.SPLITTABLES`
         dictionary. If chord's offset and its quarter duration exist in the dictionary a list of splitting quarter durations can be
@@ -669,7 +669,7 @@ class Beat(
         :obj:`~musicscore.measure.Measure.finalize()` loops over all its beats calls this method.
         """
         for chord in self.get_children()[:]:
-            split = self._split_not_writable(chord, chord.offset)
+            split = self._split_unwritable(chord, chord.offset)
             if split:
                 for ch in split:
                     ch._parent = self
@@ -806,7 +806,7 @@ class Beat(
         - It calls finalize method of all :obj:`~musicscore.chord.Chord` children.
 
         - Following updates are triggered: _update_note_tuplets, _update_chord_beams, quantize_quarter_durations (if get_quantized is
-          True), _split_not_writable_chords
+          True), _split_unwritable_chords
         """
         if self._finalized:
             raise AlreadyFinalizedError(self)

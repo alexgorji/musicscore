@@ -259,13 +259,13 @@ class TestBeatSplitChord(TestCase):
             for ch in all_chords
         ] == ["sharp", "sharp", None, None]
 
-    def test_split_not_writable_chords(self):
+    def test_split_unwritable_chords(self):
         v = create_voice()
         v.update_beats(1)
         v._add_chord(Chord(60, 5 / 6))
         v._add_chord(Chord(60, 1 / 6))
         assert [ch.quarter_duration for ch in v.get_chords()] == [5 / 6, 1 / 6]
-        v.get_beat(1)._split_not_writable_chords()
+        v.get_beat(1)._split_unwritable_chords()
         assert [ch.quarter_duration for ch in v.get_chords()] == [1 / 2, 1 / 3, 1 / 6]
 
     def test_add_child_5_leftover(self):

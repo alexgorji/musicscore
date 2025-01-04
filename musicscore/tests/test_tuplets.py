@@ -109,12 +109,12 @@ class TestTuplets(TestCase):
             assert t1.type == "start"
             assert t2.type == "stop"
 
-    def test_chord_sextuplets_not_writable_1(self):
+    def test_chord_sextuplets_unwritable_1(self):
         m1 = Measure(1)
         quarter_durations = [Fraction(1, 6), Fraction(5, 6)]
         for q in quarter_durations:
             m1._add_chord(Chord(midis=60, quarter_duration=q))
-        m1._split_not_writable_chords()
+        m1._split_unwritable_chords()
         m1.finalize()
         b = m1.get_voice(staff_number=1, voice_number=1).get_children()[0]
         assert b.get_children() == m1.get_chords()[:3]
@@ -128,12 +128,12 @@ class TestTuplets(TestCase):
         assert n3.xml_dot is not None
         assert n3.midi.accidental.show is False
 
-    def test_chord_sextuplets_not_writable_2(self):
+    def test_chord_sextuplets_unwritable_2(self):
         m1 = Measure(1)
         quarter_durations = [Fraction(5, 6), Fraction(1, 6)]
         for q in quarter_durations:
             m1._add_chord(Chord(midis=60, quarter_duration=q))
-        m1._split_not_writable_chords()
+        m1._split_unwritable_chords()
         m1.finalize()
         n1, n2, n3 = [ch.notes[0] for ch in m1.get_chords()[:3]]
         assert n1.xml_notations.xml_tuplet.type == "start"
@@ -150,7 +150,7 @@ class TestTuplets(TestCase):
             m = Measure(index + 1)
             for q in sextuplet:
                 m._add_chord(Chord(midis=60, quarter_duration=q))
-            m._split_not_writable_chords()
+            m._split_unwritable_chords()
             m.finalize()
             measures.append(m)
 

@@ -100,9 +100,9 @@ class Measure(
         else:
             self.xml_object.xml_attributes.xml_time = None
 
-    def _split_not_writable_chords(self):
+    def _split_unwritable_chords(self):
         """
-        Calls :obj:`~musicscore.beat.Beat._split_not_writable_chords()` method of all :obj:`~musicscore.beat.Beat` descendents.
+        Calls :obj:`~musicscore.beat.Beat._split_unwritable_chords()` method of all :obj:`~musicscore.beat.Beat` descendents.
         """
         for b in [
             beat
@@ -110,7 +110,7 @@ class Measure(
             for voice in staff.get_children()
             for beat in voice.get_children()
         ]:
-            b._split_not_writable_chords()
+            b._split_unwritable_chords()
 
     def _update_accidentals(self):
         for staff in self.get_children():
@@ -476,7 +476,7 @@ class Measure(
         for beat in self.get_beats():
             # if beat.get_quantized:
             #     beat.quantize_quarter_durations()
-            beat._split_not_writable_chords()
+            beat._split_unwritable_chords()
 
         self._update_divisions()
 

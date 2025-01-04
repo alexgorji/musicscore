@@ -331,7 +331,7 @@ class TestScorePart(TestCase):
             for b in v.get_children()
         ]:
             beat.quantize_quarter_durations()
-            beat._split_not_writable_chords()
+            beat._split_unwritable_chords()
         expected = [
             QuarterDuration(3, 7),
             QuarterDuration(2, 7),
