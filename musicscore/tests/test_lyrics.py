@@ -1,6 +1,8 @@
 from unittest import TestCase
+
 from musicscore import Score, Chord
 from musicscore.lyrics import Lyrics
+from musicscore.part import Part
 from musicscore.tests.util import _generate_xml_lyric
 from musicscore.util import _generate_lyrics
 from musicxml import XMLLyric, XMLText, XMLElision, XMLSyllabic
@@ -29,7 +31,7 @@ def chord_lyric_assertions(chords, expected, number=1):
             assert not ch._xml_lyrics
 
 
-class TestLyrics(TestCase):
+class TestGenerateLyrics(TestCase):
     def setUp(self):
         super().setUp()
         self.score = Score()
@@ -299,3 +301,141 @@ class TestLyrics(TestCase):
         chords = [Chord(60, 1) for _ in range(len(expected))]
         Lyrics(words, default_y=-10).add_to_chords(chords)
         chord_lyric_assertions(chords, expected)
+
+
+class TestTiedChordsWithExtendedLyrics(TestCase):
+    def setUp(self):
+        self.part = Part(id="P1")
+
+    def get_extend_types(self, chords):
+        output = []
+        for chord in chords:
+            if chord.xml_lyrics and chord.xml_lyrics[0].xml_extend:
+                output.append(chord.xml_lyrics[0].xml_extend.type)
+            else:
+                output.append(None)
+        return output
+
+    def test_extend_start(self):
+        qds = [5 / 4, 3 / 4 + 1, 1 / 2, 1 / 2]
+        lyrics = Lyrics([("one", None, None), "second"])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+        self.assertEqual(
+            self.get_extend_types(chords),
+            ["start", "continue", "stop", None],
+        )
+
+        for chord in chords:
+            self.part.add_chord(chord)
+
+        expected = ["start", "continue", "continue", "continue", "stop", None]
+        self.assertEqual(self.get_extend_types(self.part.get_chords()), expected)
+
+    def test_extend_continue(self):
+        qds = [1 / 4, 1 / 4, 1 / 2, 1 + 1 / 4, 3 / 4, 1]
+        lyrics = Lyrics([("e", "le", "venth", None, None), "second"])
+        chords = [Chord(60, qd) for qd in qds]
+        xml_lyrics = lyrics.xml_lyrics
+        extends = [l.xml_extend.type if l.xml_extend else None for l in xml_lyrics]
+        self.assertEqual(extends, [None, None, "start", "continue", "stop", None])
+
+        lyrics.add_to_chords(chords)
+        self.assertEqual(
+            self.get_extend_types(chords),
+            [None, None, "start", "continue", "stop", None],
+        )
+
+        for chord in chords:
+            self.part.add_chord(chord)
+
+        expected = [None, None, "start", "continue", "continue", "stop", None]
+        self.assertEqual(self.get_extend_types(self.part.get_chords()), expected)
+
+    def test_extend_stop(self):
+        qds = [1, 1 + 1 / 4, 3 / 4, 1]
+        lyrics = Lyrics([("one", None), "second", None])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+
+        self.assertEqual(
+            self.get_extend_types(chords),
+            ["start", "stop", None, None],
+        )
+        for chord in chords:
+            self.part.add_chord(chord)
+
+        expected = ["start", "continue", "stop", None, None]
+
+        self.assertEqual(self.get_extend_types(self.part.get_chords()), expected)
+
+    def test_extend_continue_in_two_measures(self):
+        self.part.add_measure(time=(2, 4))
+        qds = [1 / 4, 1 / 4, 1 / 2, 1 + 1 / 2, 1 / 2, 1]
+        lyrics = Lyrics([("e", "le", "venth", None, None), "second"])
+        chords = [Chord(60, qd) for qd in qds]
+        xml_lyrics = lyrics.xml_lyrics
+        extends = [l.xml_extend.type if l.xml_extend else None for l in xml_lyrics]
+        self.assertEqual(extends, [None, None, "start", "continue", "stop", None])
+
+        lyrics.add_to_chords(chords)
+        self.assertEqual(
+            self.get_extend_types(chords),
+            [None, None, "start", "continue", "stop", None],
+        )
+
+        for chord in chords:
+            self.part.add_chord(chord)
+
+        expected = [None, None, "start", "continue", "continue", "stop", None]
+        self.assertEqual(self.get_extend_types(self.part.get_chords()), expected)
+
+    def test_extend_stop_in_two_measures(self):
+        self.part.add_measure(time=(2, 4))
+        qds = [5 / 4, 3 / 4 + 1, 1 / 2, 1 / 2]
+        lyrics = Lyrics([("one", None, None), "second"])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+        self.assertEqual(
+            self.get_extend_types(chords),
+            ["start", "continue", "stop", None],
+        )
+
+        for chord in chords:
+            self.part.add_chord(chord)
+
+        expected = ["start", "continue", "continue", "continue", "stop", None]
+        self.assertEqual(self.get_extend_types(self.part.get_chords()), expected)
+
+    def test_syllabic_single(self):
+        qds = [1 / 4, 3 / 4 + 1 + 3 / 4, 5 / 4]
+        lyrics = Lyrics([None, "one", None])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+
+        self.assertEqual(
+            self.get_extend_types(chords),
+            [None, None, None],
+        )
+
+        for chord in chords:
+            self.part.add_chord(chord)
+
+        expected = [None, "start", "continue", "stop", None, None]
+        self.assertEqual(self.get_extend_types(self.part.get_chords()), expected)
+
+    def test_syllabic_end(self):
+        qds = [1 / 2, 1 / 2 + 1 + 1 / 4, 3 / 2 + 1 / 4]
+        lyrics = Lyrics([("Thir", "teen"), None])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+
+        self.assertEqual(
+            self.get_extend_types(chords),
+            [None, None, None],
+        )
+
+        for chord in chords:
+            self.part.add_chord(chord)
+        expected = [None, "start", "continue", "stop", None, None]
+        self.assertEqual(self.get_extend_types(self.part.get_chords()), expected)

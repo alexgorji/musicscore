@@ -446,6 +446,10 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             ):
                 if "start" in ties:
                     midi.add_tie("start")
+        if leftover_chord:
+            _update_split_lyrics(output + [leftover_chord])
+        else:
+            _update_split_lyrics(output)
         return output
 
     def _update_notes(self):
@@ -1907,6 +1911,7 @@ def _split_copy(
         quarter_duration=new_quarter_duration,
     )
     new_chord._original_starting_ties = chord._original_starting_ties
+
     return new_chord
 
 
@@ -1920,6 +1925,35 @@ def _split_last_grace_chords(chords):
             output[1] = []
             output[0].append(chord)
     return output
+
+
+def _update_split_lyrics(chords):
+    if len(chords) > 1:
+        for l in chords[0].xml_lyrics:
+            if l.xml_extend:
+                if l.xml_extend.type in ["start", "continue"]:
+                    for chord in chords[1:]:
+                        new_lyrics = copy.deepcopy(l)
+                        new_lyrics.xml_extend.type = "continue"
+                        chord.add_lyric(new_lyrics)
+                else:
+                    l.xml_extend.type = "continue"
+                    for chord in chords[1:-1]:
+                        new_lyrics = copy.deepcopy(l)
+                        new_lyrics.xml_extend.type = "continue"
+                        chord.add_lyric(new_lyrics)
+                    new_lyrics = copy.deepcopy(l)
+                    new_lyrics.xml_extend.type = "stop"
+                    chords[-1].add_lyric(new_lyrics)
+            elif l.xml_syllabic and l.xml_syllabic.value_ in ["single", "end"]:
+                l.xml_extend = XMLExtend(type="start")
+                for chord in chords[1:-1]:
+                    new_lyrics = copy.deepcopy(l)
+                    new_lyrics.xml_extend = XMLExtend(type="continue")
+                    chord.add_lyric(new_lyrics)
+                new_lyrics = copy.deepcopy(l)
+                new_lyrics.xml_extend = XMLExtend(type="stop")
+                chords[-1].add_lyric(new_lyrics)
 
 
 def _group_chords(
