@@ -1928,31 +1928,37 @@ def _split_last_grace_chords(chords):
 
 
 def _update_split_lyrics(chords):
+    def _create_new_lyrics(old_lyrics, extend_type):
+        new_lyrics = copy.deepcopy(old_lyrics)
+        new_lyrics.xml_syllabic = None
+        new_lyrics.xml_text = None
+        if new_lyrics.xml_extend:
+            new_lyrics.xml_extend.type = extend_type
+        else:
+            new_lyrics.xml_extend = XMLExtend(type=extend_type)
+        new_lyrics.xsd_check = False
+        return new_lyrics
+
     if len(chords) > 1:
         for l in chords[0].xml_lyrics:
             if l.xml_extend:
                 if l.xml_extend.type in ["start", "continue"]:
                     for chord in chords[1:]:
-                        new_lyrics = copy.deepcopy(l)
-                        new_lyrics.xml_extend.type = "continue"
+                        new_lyrics = _create_new_lyrics(l, "continue")
                         chord.add_lyric(new_lyrics)
                 else:
                     l.xml_extend.type = "continue"
                     for chord in chords[1:-1]:
-                        new_lyrics = copy.deepcopy(l)
-                        new_lyrics.xml_extend.type = "continue"
+                        new_lyrics = _create_new_lyrics(l, "continue")
                         chord.add_lyric(new_lyrics)
-                    new_lyrics = copy.deepcopy(l)
-                    new_lyrics.xml_extend.type = "stop"
+                    new_lyrics = _create_new_lyrics(l, "stop")
                     chords[-1].add_lyric(new_lyrics)
             elif l.xml_syllabic and l.xml_syllabic.value_ in ["single", "end"]:
                 l.xml_extend = XMLExtend(type="start")
                 for chord in chords[1:-1]:
-                    new_lyrics = copy.deepcopy(l)
-                    new_lyrics.xml_extend = XMLExtend(type="continue")
+                    new_lyrics = _create_new_lyrics(l, "continue")
                     chord.add_lyric(new_lyrics)
-                new_lyrics = copy.deepcopy(l)
-                new_lyrics.xml_extend = XMLExtend(type="stop")
+                new_lyrics = _create_new_lyrics(l, "stop")
                 chords[-1].add_lyric(new_lyrics)
 
 

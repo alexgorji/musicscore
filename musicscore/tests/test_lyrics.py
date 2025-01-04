@@ -439,3 +439,97 @@ class TestTiedChordsWithExtendedLyrics(TestCase):
             self.part.add_chord(chord)
         expected = [None, "start", "continue", "stop", None, None]
         self.assertEqual(self.get_extend_types(self.part.get_chords()), expected)
+
+    def test_unwritables_syllabic_end_1(self):
+        qds = [1 / 6, 5 / 6, 3]
+        lyrics = Lyrics([("Thir", "teen"), None])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+        for chord in chords:
+            self.part.add_chord(chord)
+        self.part.finalize()
+        self.assertEqual(
+            self.get_extend_types(self.part.get_chords()), [None, "start", "stop", None]
+        )
+
+    def test_unwritables_syllabic_end_2(self):
+        qds = [1 / 6, 5 / 6 + 1, 2]
+        lyrics = Lyrics([("Thir", "teen"), None])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+        for chord in chords:
+            self.part.add_chord(chord)
+        self.part.finalize()
+        self.assertEqual(
+            self.get_extend_types(self.part.get_chords()),
+            [None, "start", "continue", "stop", None],
+        )
+
+    def test_unwritables_syllabic_single_1(self):
+        qds = [1 / 6, 5 / 6, 3]
+        lyrics = Lyrics([None, "teen", None])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+        for chord in chords:
+            self.part.add_chord(chord)
+        self.part.finalize()
+        print(self.get_extend_types(self.part.get_chords()))
+        self.assertEqual(
+            self.get_extend_types(self.part.get_chords()), [None, "start", "stop", None]
+        )
+
+    def test_unwritables_syllabic_single_2(self):
+        qds = [1 / 6, 5 / 6 + 1, 2]
+        lyrics = Lyrics([None, "teen", None])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+        for chord in chords:
+            self.part.add_chord(chord)
+        self.part.finalize()
+        print(self.get_extend_types(self.part.get_chords()))
+        self.assertEqual(
+            self.get_extend_types(self.part.get_chords()),
+            [None, "start", "continue", "stop", None],
+        )
+
+    def test_unwritables_extend_start(self):
+        qds = [1 / 6, 5 / 6, 3]
+        lyrics = Lyrics([None, ("one", None)])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+        for chord in chords:
+            self.part.add_chord(chord)
+        self.part.finalize()
+        print(self.get_extend_types(self.part.get_chords()))
+        self.assertEqual(
+            self.get_extend_types(self.part.get_chords()),
+            [None, "start", "continue", "stop"],
+        )
+
+    def test_unwritables_extend_continue(self):
+        qds = [1 / 6, 5 / 6 + 1, 2]
+        lyrics = Lyrics([("one", None), "two"])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+        for chord in chords:
+            self.part.add_chord(chord)
+        self.part.finalize()
+        print(self.get_extend_types(self.part.get_chords()))
+        self.assertEqual(
+            self.get_extend_types(self.part.get_chords()),
+            ["start", "continue", "continue", "stop", None],
+        )
+
+    def test_unwritables_extend_stop(self):
+        qds = [1 / 6, 5 / 6, 3]
+        lyrics = Lyrics([("one", None), None])
+        chords = [Chord(60, qd) for qd in qds]
+        lyrics.add_to_chords(chords)
+        for chord in chords:
+            self.part.add_chord(chord)
+        self.part.finalize()
+        print(self.get_extend_types(self.part.get_chords()))
+        self.assertEqual(
+            self.get_extend_types(self.part.get_chords()),
+            ["start", "continue", "stop", None],
+        )

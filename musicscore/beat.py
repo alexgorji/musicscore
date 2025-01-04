@@ -4,7 +4,7 @@ from typing import List
 from math import trunc
 from fractions import Fraction
 
-from musicscore.chord import _split_copy, _group_chords, Chord
+from musicscore.chord import _split_copy, _group_chords, Chord, _update_split_lyrics
 from musicscore.config import SPLITTABLES, GENERALSPLITTABLES, SPLITTEXCEPTIONS
 from musicscore.exceptions import (
     BeatWrongDurationError,
@@ -251,6 +251,34 @@ def beam_chord_group(chord_group: List["Chord"]) -> None:
         index += 1
 
 
+# def _update_unwritable_lyrics(chords):
+#     for l in chords[0].xml_lyrics:
+#         if l.xml_extend:
+#             if l.xml_extend.type in ["start", "continue"]:
+#                 for chord in chords[1:]:
+#                     new_lyrics = copy.deepcopy(l)
+#                     new_lyrics.xml_extend.type = "continue"
+#                     chord.add_lyric(new_lyrics)
+#             else:
+#                 l.xml_extend.type = "continue"
+#                 for chord in chords[1:-1]:
+#                     new_lyrics = copy.deepcopy(l)
+#                     new_lyrics.xml_extend.type = "continue"
+#                     chord.add_lyric(new_lyrics)
+#                 new_lyrics = copy.deepcopy(l)
+#                 new_lyrics.xml_extend.type = "stop"
+#                 chords[-1].add_lyric(new_lyrics)
+#         elif l.xml_syllabic and l.xml_syllabic.value_ in ["single", "end"]:
+#             l.xml_extend = XMLExtend(type="start")
+#             for chord in chords[1:-1]:
+#                 new_lyrics = copy.deepcopy(l)
+#                 new_lyrics.xml_extend = XMLExtend(type="continue")
+#                 chord.add_lyric(new_lyrics)
+#             new_lyrics = copy.deepcopy(l)
+#             new_lyrics.xml_extend = XMLExtend(type="stop")
+#             chords[-1].add_lyric(new_lyrics)
+
+
 class Beat(
     MusicTree, SimplifiedSextuplets, QuarterDurationMixin, QuantizeMixin, FinalizeMixin
 ):
@@ -429,6 +457,7 @@ class Beat(
         for midi, tied in zip(output[-1].midis, starting_ties):
             if tied is True:
                 midi.add_tie("start")
+        _update_split_lyrics(output)
         return output
 
     def _update_chord_types(self):
