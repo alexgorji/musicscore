@@ -1,6 +1,7 @@
 from fractions import Fraction
 from pathlib import Path
 from musicscore.chord import Chord
+from musicscore.clef import BassClef
 from musicscore.score import Score
 from musicscore.tests.util import XMLTestCase
 
@@ -121,4 +122,35 @@ class DebuggingTests(XMLTestCase):
                 part.add_chord(Chord(61, quarter_duration=qd))
 
         with self.file_path(path, "tied_unwritables") as xml_path:
+            score.export_xml(xml_path)
+
+    def test_accidentals(self):
+        score = Score()
+        score.get_quantized = True
+        score.set_possible_subdivisions([2, 3, 4])
+        part = score.add_part("p1")
+        part.add_measure().get_staff(1).clef = BassClef()
+        midi_qds = [
+            (49.0, Fraction(128, 135)),
+            (51.0, Fraction(32, 27)),
+            (51.0, Fraction(64, 45)),
+            (49.0, Fraction(16, 45)),
+            (50.0, Fraction(16, 9)),
+            (52.0, Fraction(16, 15)),
+            (54.0, Fraction(32, 45)),
+            (52.0, Fraction(64, 105)),
+            (53.0, Fraction(32, 35)),
+            (51.0, Fraction(128, 105)),
+            (54.0, Fraction(32, 21)),
+            (50.0, Fraction(16, 15)),
+            (51.0, Fraction(4, 3)),
+            (54.0, Fraction(16, 15)),
+            (52.0, Fraction(4, 5)),
+        ]
+        score.set_possible_subdivisions([2])
+
+        for midi, qd in midi_qds:
+            part.add_chord(Chord(midi, qd))
+
+        with self.file_path(path, "accidentals") as xml_path:
             score.export_xml(xml_path)

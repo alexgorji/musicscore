@@ -677,6 +677,8 @@ class Beat(
                     next_chord._xml_dynamics = ch._xml_dynamics
                     next_chord._xml_other_notations = ch._xml_other_notations
                     next_chord._note_attributes = ch._note_attributes
+                    for midi, next_midi in zip(ch.midis, next_chord.midis):
+                        next_midi.accidental.show = midi.accidental.show
                 ch.up.remove(ch)
 
             elif ch.all_midis_are_tied_to_previous:
