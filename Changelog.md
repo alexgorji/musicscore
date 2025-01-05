@@ -114,3 +114,6 @@ True. `<encoding>` in XMLScore's `<identification>` will have a `<support>` chil
 
 * Bug fixes
 
+# Version 2.5.4
+
+* Bug fixes
