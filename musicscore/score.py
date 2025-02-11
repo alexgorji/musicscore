@@ -435,6 +435,7 @@ class Score(MusicTree, QuantizeMixin, SimplifiedSextuplets, FinalizeMixin, XMLWr
         start_part_number: int,
         end_part_number: int,
         symbol: str = "square",
+        group_barline: str = "yes",
         name: Optional[str] = None,
         abbreviation: Optional[str] = None,
         **kwargs,
@@ -472,7 +473,7 @@ class Score(MusicTree, QuantizeMixin, SimplifiedSextuplets, FinalizeMixin, XMLWr
                     XMLPartGroup(number=str(number), type="start")
                 )
                 pg.add_child(XMLGroupSymbol(symbol, **kwargs))
-                pg.add_child(XMLGroupBarline("yes"))
+                pg.add_child(XMLGroupBarline(group_barline))
                 if name:
                     pg.add_child(XMLGroupName(name))
                 if abbreviation:

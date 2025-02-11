@@ -117,3 +117,7 @@ True. `<encoding>` in XMLScore's `<identification>` will have a `<support>` chil
 # Version 2.5.4
 
 * Bug fixes
+
+# Version 2.6.0
+
+* Add group_barline argument to score.group_part()

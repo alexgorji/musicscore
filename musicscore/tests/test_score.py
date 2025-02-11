@@ -244,7 +244,7 @@ class TestScore(TestCase):
             p.add_chord(Chord(0, 4))
 
         score.group_parts(1, 2, 4, name="Group 1", symbol="square")
-        score.group_parts(2, 3, 4, name="Group 2", symbol="bracket")
+        score.group_parts(2, 3, 4, name="Group 2", symbol="bracket", group_barline="no")
 
         expected = """<part-list>
     <score-part id="p-1">
@@ -261,7 +261,7 @@ class TestScore(TestCase):
     <part-group number="2" type="start">
       <group-name>Group 2</group-name>
       <group-symbol>bracket</group-symbol>
-      <group-barline>yes</group-barline>
+      <group-barline>no</group-barline>
     </part-group>
     <score-part id="p-3">
       <part-name />
