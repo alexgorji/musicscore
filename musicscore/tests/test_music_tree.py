@@ -37,12 +37,17 @@ class TestMusicTree(TestCase):
         assert b == v.add_child(b)
         assert c == b.add_child(c)[0]
         assert n == c._add_child(n)
+        mi.parent_note = None
         assert mi == n.add_child(mi)
+        mi.parent_note = n
+        assert mi.get_parent() is n
+        with self.assertRaises(ValueError):
+            n.add_child(mi)
         assert acc == mi.add_child(acc)
 
         objects = [s, m, st, v, b, n, mi]
         for parent in objects:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(ValueError if parent is s else TypeError):
                 parent.add_child(s)
         for parent in objects:
             if parent != s:

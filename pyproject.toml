@@ -14,7 +14,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.11"
-musicxml = "^1.6.2"
+musicxml = "^1.6.3"
 
 
 [tool.poetry.group.test.dependencies]
@@ -39,4 +39,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff.lint]
 ignore = ["F403", "F405", "E741", "F821"]
-

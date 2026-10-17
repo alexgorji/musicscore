@@ -340,13 +340,13 @@ files = [
 
 [[package]]
 name = "musicxml"
-version = "1.6.2"
+version = "1.6.3"
 description = "generating musicxml"
 optional = false
 python-versions = ">=3.11"
 files = [
-    {file = "musicxml-1.6.2-py3-none-any.whl", hash = "sha256:e9302dde8d7213aaaeb5a09b12bfa64cf93044b3aac319753e3faf797c02e340"},
-    {file = "musicxml-1.6.2.tar.gz", hash = "sha256:64fef7f47fffa78a4d1e2e52bed2cedef68ca46dffc582aa2a64c841e49e0ae5"},
+    {file = "musicxml-1.6.3-py3-none-any.whl", hash = "sha256:c6a66e591b4219c51d6a27f69759f0531aaa952eea1b337bc5247970d6d84819"},
+    {file = "musicxml-1.6.3.tar.gz", hash = "sha256:ead1ab039429dd67666c6f7a416ef009fa3a168bbfab98cdf400b581c311cf90"},
 ]
 
 [package.dependencies]
@@ -626,4 +626,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11"
-content-hash = "100206e0a7c857b92bcb6406936540af6ac693eab2e51edfabbc1bef4d34e6e7"
+content-hash = "81af81a583b346d68d2c021321f88c16bf3dae7dbcd34e586afb2115a3c020fe"

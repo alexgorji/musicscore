@@ -387,7 +387,7 @@ class Midi(MusicTree):
         return self.value >= other.value
 
     def __copy__(self):
-        copied = self.__class__(value=self.value, accidental=self.accidental)
+        copied = self.__class__(value=self.value, accidental=copy.copy(self.accidental))
         copied._ties = self._ties
         return copied
 
@@ -479,7 +479,7 @@ class MidiNote(Midi):
         return f"{self.name} at {id(self)}"
 
     def __copy__(self):
-        copied = Midi(value=self.value, accidental=self.accidental)
+        copied = Midi(value=self.value, accidental=copy.copy(self.accidental))
         copied._ties = self._ties
         return copied
 

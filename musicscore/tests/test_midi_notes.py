@@ -69,7 +69,13 @@ class TestMidiNotes(TestCase):
         copied = m.__copy__()
         assert m != copied
         assert m.value == copied.value
-        assert id(m.accidental) == id(copied.accidental)
+        assert m.accidental is not copied.accidental
+        assert m.accidental.mode == copied.accidental.mode
+        assert m.accidental.show == copied.accidental.show
+        assert m.accidental.parent_midi is m
+        assert copied.accidental.parent_midi is copied
+        assert m.get_children() == [m.accidental]
+        assert copied.get_children() == [copied.accidental]
         assert id(m._ties) == id(copied._ties)
 
         copied = m.__deepcopy__()
