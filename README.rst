@@ -1,6 +1,6 @@
 musicscore
 ==========
-Tested with python 3.9, 3.10 and 3.11
+Requires Python 3.11 or newer.
 
 **musicscore** is a python library for generating musicxml data in an intuitive and easy but nevertheless comprehensive way. The generated
 files can be imported in several music notation programs and be processed further if necessary. The preferred software is Finale which

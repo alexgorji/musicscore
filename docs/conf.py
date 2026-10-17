@@ -25,7 +25,7 @@ copyright = "2023, Alex Gorji"
 author = "Alex Gorji"
 
 # The full version, including alpha/beta/rc tags
-release = "2.0beta"
+release = "2.6.1"
 
 # -- General configuration ---------------------------------------------------
 

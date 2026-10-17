@@ -121,3 +121,11 @@ True. `<encoding>` in XMLScore's `<identification>` will have a `<support>` chil
 # Version 2.6.0
 
 * Add group_barline argument to score.group_part()
+
+# Version 2.6.1
+
+* Require Python 3.11 or newer and musicxml 1.6.3 or newer for verysimpletree 2.x compatibility.
+* Fix note attachment and prevent duplicate new-system support declarations.
+* Shallow MIDI copies now own separate accidental objects while continuing to share ties.
+* Fix test fixtures with unterminated mock parent chains and update XML child lookups.
+* Test Python 3.11 through 3.14 on Linux and macOS in GitHub Actions.

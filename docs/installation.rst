@@ -5,13 +5,13 @@ Installation
    This documentation is still under construction!
 
 
-Tested with python 3.9, 3.10 and 3.11
+Requires Python 3.11 or newer.
 
 musicscore
 **********
 
-1. Check the version of python on your computer: `python \--version`. This library has been developed under ``python 3.9``. Possibly you
-have to install this version or newer on your system (for example via Homebrew or whatever way you choose.)
+1. Check the version of python on your computer: `python \--version`. This library requires ``python 3.11`` or newer. Possibly you
+have to install a supported version on your system (for example via Homebrew or whatever way you choose.)
 
 2. Make a new folder and create a virtual environment for your project and install musicscore via pip:
     * mkdir <project>
