@@ -209,7 +209,7 @@ class Score(MusicTree, QuantizeMixin, SimplifiedSextuplets, FinalizeMixin, XMLWr
         encoding = self.xml_object.xml_identification.xml_encoding
         new_system_supports = [
             sup
-            for sup in encoding.get_children_of_type(XMLSupports)
+            for sup in encoding.find_children("XMLSupports")
             if sup.attribute == "new-system"
         ]
         if self.new_system:

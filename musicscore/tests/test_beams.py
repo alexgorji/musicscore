@@ -39,6 +39,7 @@ class TestBeams16th(TestCase):
         super().setUp()
         self.beat = Beat()
         self.measure = Mock()
+        self.measure.get_parent.return_value = None
         self.beat._parent = self.measure
         [self.beat._add_chord(Chord(60, qd)) for qd in 4 * [1 / 4]]
         self.chords = self.beat.get_chords()
@@ -169,6 +170,7 @@ class TestBeams32th(TestCase):
         super().setUp()
         self.beat = Beat()
         self.beat._parent = Mock()
+        self.beat._parent.get_parent.return_value = None
         [self.beat._add_chord(Chord(60, qd)) for qd in 8 * [1 / 8]]
         self.chords = self.beat.get_chords()
 

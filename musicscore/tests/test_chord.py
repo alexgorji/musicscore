@@ -1348,8 +1348,8 @@ class TestTypeAndNumberOfDots(TestCase):
         p.finalize()
         assert [ch.number_of_dots for ch in p.get_chords()[:3]] == [0, 1, 0]
         ch = p.get_chords()[1]
-        assert len(ch.get_children()[0].xml_object.get_children_of_type(XMLDot)) == 1
-        assert len(ch.get_children()[1].xml_object.get_children_of_type(XMLDot)) == 1
+        assert len(ch.get_children()[0].xml_object.find_children("XMLDot")) == 1
+        assert len(ch.get_children()[1].xml_object.find_children("XMLDot")) == 1
         with self.assertRaises(ChordAlreadyHasNotesError):
             ch.number_of_dots = 3
 
@@ -1358,8 +1358,8 @@ class TestTypeAndNumberOfDots(TestCase):
         gch.number_of_dots = 3
         p.add_chord(gch)
         p.finalize()
-        assert len(gch.get_children()[0].xml_object.get_children_of_type(XMLDot)) == 3
-        assert len(gch.get_children()[1].xml_object.get_children_of_type(XMLDot)) == 3
+        assert len(gch.get_children()[0].xml_object.find_children("XMLDot")) == 3
+        assert len(gch.get_children()[1].xml_object.find_children("XMLDot")) == 3
 
     def test_number_of_beams(self):
         chord = Chord(60, 1)

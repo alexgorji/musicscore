@@ -321,17 +321,17 @@ class TestScore(TestCase):
         for measure in part.get_children():
             if int(measure.number) in [1, 2, 3, 4, 6, 7, 8]:
                 assert (
-                    measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure
+                    measure.xml_object.find_children("XMLNote")[0].xml_rest.measure
                     == "yes"
                 )
             elif int(measure.number) == 5:
                 assert (
-                    measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure
+                    measure.xml_object.find_children("XMLNote")[0].xml_rest.measure
                     is None
                 )
             else:
                 assert (
-                    measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest is None
+                    measure.xml_object.find_children("XMLNote")[0].xml_rest is None
                 )
 
     def test_set_multiple_measure_rests_multiple_parts(self):
@@ -372,28 +372,28 @@ class TestScore(TestCase):
         for measure in p1.get_children():
             if int(measure.number) in [1, 2, 3, 4, 6, 7, 8]:
                 assert (
-                    measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure
+                    measure.xml_object.find_children("XMLNote")[0].xml_rest.measure
                     == "yes"
                 )
             elif int(measure.number) in [5]:
                 assert (
-                    measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure
+                    measure.xml_object.find_children("XMLNote")[0].xml_rest.measure
                     is None
                 )
             else:
                 assert (
-                    measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest is None
+                    measure.xml_object.find_children("XMLNote")[0].xml_rest is None
                 )
 
         for measure in p2.get_children():
             if int(measure.number) in [1, 2, 3, 4, 6, 7, 8]:
                 assert (
-                    measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure
+                    measure.xml_object.find_children("XMLNote")[0].xml_rest.measure
                     == "yes"
                 )
             else:
                 assert (
-                    measure.xml_object.get_children_of_type(XMLNote)[0].xml_rest.measure
+                    measure.xml_object.find_children("XMLNote")[0].xml_rest.measure
                     is None
                 )
 

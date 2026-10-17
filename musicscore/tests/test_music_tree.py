@@ -171,6 +171,7 @@ class TestMusicTree(TestCase):
 
     @patch("musicscore.measure.Measure")
     def test_staff_get_voice(self, mock_measure):
+        mock_measure.get_parent.return_value = None
         st = Staff()
         st._parent = mock_measure
         assert st.get_voice(1) is None
@@ -191,6 +192,7 @@ class TestMusicTree(TestCase):
     def test_voice_get_beat(self):
         v = Voice()
         v._parent = Mock()
+        v._parent.get_parent.return_value = None
         assert v.get_beat(1) is None
         b1 = v.add_beat()
         assert v.get_beat(1) == b1
@@ -210,6 +212,7 @@ class TestMusicTree(TestCase):
         b = Beat()
         b.get_possible_subdivisions = Mock(return_value=None)
         b._parent = Mock()
+        b._parent.get_parent.return_value = None
         assert b.get_chord(1) is None
         ch1 = b._add_chord(Chord(midis=60, quarter_duration=0.5))[0]
         assert b.get_chord(1) == ch1

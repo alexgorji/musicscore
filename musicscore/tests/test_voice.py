@@ -85,6 +85,7 @@ class TestVoice(TestCase):
 
     @patch("musicscore.staff.Staff")
     def test_add_chord(self, mock_staff):
+        mock_staff.get_parent.return_value = None
         v = Voice()
         v._parent = mock_staff
 

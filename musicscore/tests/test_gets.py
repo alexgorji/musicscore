@@ -164,6 +164,7 @@ class TestGetVoice(TestCase):
 
     @patch("musicscore.measure.Measure")
     def test_staff_get_voice(self, mock_measure):
+        mock_measure.get_parent.return_value = None
         st = Staff()
         st._parent = mock_measure
         v = st.add_child(Voice())
@@ -213,6 +214,7 @@ class TestGetBeat(TestCase):
 
     @patch("musicscore.measure.Measure")
     def test_staff_get_beat(self, mock_measure):
+        mock_measure.get_parent.return_value = None
         st = Staff()
         st._parent = mock_measure
         v = st.add_child(Voice())
@@ -222,6 +224,7 @@ class TestGetBeat(TestCase):
 
     @patch("musicscore.staff.Staff")
     def test_voice_get_beat(self, mock_staff):
+        mock_staff.get_parent.return_value = None
         v = Voice()
         v._parent = mock_staff
         b = v.add_child(Beat())
@@ -268,6 +271,7 @@ class TestGetChord(TestCase):
 
     @patch("musicscore.measure.Measure")
     def test_staff_get_chord(self, mock_measure):
+        mock_measure.get_parent.return_value = None
         st = Staff()
         st._parent = mock_measure
         v = st.add_child(Voice())
@@ -277,6 +281,7 @@ class TestGetChord(TestCase):
 
     @patch("musicscore.staff.Staff")
     def test_voice_get_chord(self, mock_staff):
+        mock_staff.get_parent.return_value = None
         v = Voice()
         v._parent = mock_staff
         b = v.add_child(Beat())
@@ -285,6 +290,7 @@ class TestGetChord(TestCase):
 
     @patch("musicscore.voice.Voice")
     def test_beat_get_chord(self, mock_voice):
+        mock_voice.get_parent.return_value = None
         b = Beat()
         b._parent = mock_voice
         ch = b.add_child(Chord(60, 1))[0]
@@ -326,6 +332,7 @@ class TestGetBeats(TestCase):
 
     @patch("musicscore.measure.Measure")
     def test_staff_get_beats(self, mock_measure):
+        mock_measure.get_parent.return_value = None
         st = Staff()
         st._parent = mock_measure
         v = st.add_child(Voice())
@@ -335,6 +342,7 @@ class TestGetBeats(TestCase):
 
     @patch("musicscore.staff.Staff")
     def test_voice_get_beats(self, mock_staff):
+        mock_staff.get_parent.return_value = None
         v = Voice()
         v._parent = mock_staff
         b1 = v.add_child(Beat())

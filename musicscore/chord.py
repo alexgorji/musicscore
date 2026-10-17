@@ -265,6 +265,9 @@ class Chord(MusicTree, QuarterDurationMixin, FinalizeMixin):
             self._update_xml_articulations()
 
     def _add_child(self, child: Note) -> Note:
+        if child.get_parent() is self and child not in self.get_children():
+            # Notes expose their logical parent chord during initialization.
+            child._parent = None
         return super().add_child(child)
 
     def _add_direction_type(self, direction_type, placement=None):

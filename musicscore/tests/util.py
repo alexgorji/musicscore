@@ -70,6 +70,10 @@ class ChordTestCase(TestCase):
         self.mock_beat.up = self.mock_voice
         self.mock_voice.up = self.mock_staff
         self.mock_staff.up = self.mock_measure
+        self.mock_beat.get_parent.return_value = self.mock_voice
+        self.mock_voice.get_parent.return_value = self.mock_staff
+        self.mock_staff.get_parent.return_value = self.mock_measure
+        self.mock_measure.get_parent.return_value = None
         self.mock_measure.get_divisions.return_value = 1
         self.mock_staff.number = None
 
